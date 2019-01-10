@@ -1,5 +1,5 @@
 # RFGR-Script-Loader
-RFGR Script Loader is a scripting interface for Red Faction Guerrilla Re-mars-tered edition. Using LuaJIT 2.0.5 as the scripting langauge. 
+RFGR Script Loader is a scripting interface for Red Faction Guerrilla Re-mars-tered edition. Using LuaJIT 2.0.5 as the scripting language. 
 
 Normally, modding RFGR involves editing xtbl files which are just xml's with a different extension. The problem with this method is that
 there are many hardcoded values in the xtbl files meaning modders are limited on what they can change. Also the fact that these files do 
