@@ -1,30 +1,9 @@
 #pragma once
 #define PublicMode false
 #define ColorLogMessages false
+#include "PCH.hpp"
 
 /*RFGR Extended Camera Injector*/
-
-#include <windows.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <fstream>
-#include <string>
-#include <ctime>
-#include <iostream>
-#include <iomanip>
-#include <vector>
-#include <map>
-#include <ctype.h>
-#include <tlhelp32.h>
-#include <math.h>
-
-#include <Shlwapi.h>
-#pragma comment(lib, "Shlwapi.lib")
-
-#include <filesystem>
-#include <experimental/filesystem>
-
-#include "nlohmann/json.hpp"
 
 using json = nlohmann::json;
 namespace fs = std::experimental::filesystem;

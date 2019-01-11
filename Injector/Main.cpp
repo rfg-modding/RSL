@@ -1,4 +1,5 @@
-#include "Globals.h"
+#include "PCH.hpp"
+#include "Globals.hpp"
 
 float ProgramVersion = 1.0;
 
@@ -24,7 +25,7 @@ int main()
 
 	while (true)
 	{
-		int PID = GetProcessID("rfg.exe");
+		DWORD PID = GetProcessID("rfg.exe");
 		if (PID != 0)
 		{
 			BringWindowToTop(GetConsoleWindow());
@@ -55,7 +56,7 @@ int main()
 			}
 		}
 		
-		Sleep(800 + rand() % 410);
+		Sleep(800UL + (DWORD)rand() % 410UL);
 		ConsoleLog("Searching for Red Faction: Guerilla Re-mars-tered", LOGMESSAGE, false, true);
 		Sleep(400);
 		ConsoleLog(".", LOGMESSAGE, false, false);

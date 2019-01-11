@@ -1,6 +1,6 @@
 #pragma once
 #include "Functions.h"
-//#include "Globals.h"
+#include "Globals.h"
 #include "MainOverlay.h"
 
 extern MainOverlay Overlay;

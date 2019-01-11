@@ -1,5 +1,6 @@
 #include "Globals.h"
 
+
 bool OpenDebugConsole = false;
 nlohmann::json MainConfig;
 float DefaultFreeCameraSpeed = 0.3f;
