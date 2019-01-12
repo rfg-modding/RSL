@@ -167,7 +167,7 @@ void MainOverlay::Draw(const char* title, bool* p_open)
 		}
 	}
 
-	ImGui::SetNextWindowSize(ImVec2(20, 20), ImGuiCond_FirstUseEver);
+	ImGui::SetNextWindowSize(ImVec2(600.0f, 700.0f), ImGuiCond_FirstUseEver);
 
 	if (!ImGui::Begin(title, p_open, MainOverlayWindowFlags))
 	{
@@ -178,7 +178,7 @@ void MainOverlay::Draw(const char* title, bool* p_open)
 	if (!PlayerPtr) //Same thing as if(PlayerPtr == nullptr)
 	{
 		ImGui::PushItemWidth(300.0f);
-		ImGui::TextWrapped("Please load a save and unpause the game to allow for game data retrieval. Then this gui should be useable.");
+		ImGui::TextWrapped("Please load a save and unpause the game, and reopen this gui to allow for game data retrieval. Then this gui should be useable.");
 		ImGui::End();
 		return;
 	}

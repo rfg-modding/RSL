@@ -140,9 +140,6 @@
     <ClInclude Include="DeepCodeStorage.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="rfg.h">
-      <Filter>Resource Files</Filter>
-    </ClInclude>
     <ClInclude Include="MainOverlay.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -151,6 +148,9 @@
     </ClInclude>
     <ClInclude Include="Includes.hpp">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="rfg.h">
+      <Filter>Resource Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

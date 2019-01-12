@@ -165,14 +165,16 @@ LRESULT __stdcall WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 HRESULT D3D11_DEVICE_CONTEXT_FROM_SWAPCHAIN(IDXGISwapChain * pSwapChain, ID3D11Device ** ppDevice, ID3D11DeviceContext ** ppContext)
 {
-	HRESULT ResultCode = pSwapChain->GetDevice(__uuidof(ID3D11Device), (PVOID*)ppDevice);
+	HRESULT Result = pSwapChain->GetDevice(__uuidof(ID3D11Device), (PVOID*)ppDevice);
 
-	if (ResultCode >= 0) //(SUCCEEDED(ResultCode))
+	if(Result != S_OK)
 	{
-		(*ppDevice)->GetImmediateContext(ppContext);
+		ConsoleLog(std::string("ID3D11SwapChain::GetDevice() failed, return value: " + std::to_string(Result)).c_str(), LOGFATALERROR, false, true, true);
+		return E_FAIL;
 	}
+	(*ppDevice)->GetImmediateContext(ppContext);
 
-	return ResultCode;
+	return Result;
 }
 
 HRESULT __stdcall D3D11PresentHook(IDXGISwapChain * pSwapChain, UINT SyncInterval, UINT Flags)
@@ -184,12 +186,12 @@ HRESULT __stdcall D3D11PresentHook(IDXGISwapChain * pSwapChain, UINT SyncInterva
 #endif
 		HRESULT Result;
 
-		if (FAILED(D3D11_DEVICE_CONTEXT_FROM_SWAPCHAIN(pSwapChain, &D3D11Device, &D3D11Context)))
+		Result = D3D11_DEVICE_CONTEXT_FROM_SWAPCHAIN(pSwapChain, &D3D11Device, &D3D11Context);
+		if (Result != S_OK)
 		{
-			ConsoleLog("Couldn't get device and context from swapchain.", LOGFATALERROR, false, true, true);
+			ConsoleLog(std::string("D3D11DeviceContextFromSwapchain() failed, return value: " + std::to_string(Result)).c_str(), LOGFATALERROR, false, true, true);
 			return E_FAIL;
 		}
-
 		D3D11SwapchainPtr = pSwapChain;
 		//
 		ID3D11Texture2D* BackBuffer;
@@ -197,12 +199,14 @@ HRESULT __stdcall D3D11PresentHook(IDXGISwapChain * pSwapChain, UINT SyncInterva
 		if (Result != S_OK)
 		{
 			ConsoleLog(std::string("GetBuffer() failed, return value: " + std::to_string(Result)).c_str(), LOGFATALERROR, false, true, true);
+			return E_FAIL;
 		}
 
 		Result = D3D11Device->CreateRenderTargetView(BackBuffer, NULL, &MainRenderTargetView);
 		if (Result != S_OK)
 		{
 			ConsoleLog(std::string("CreateRenderTargetView() failed, return value: " + std::to_string(Result)).c_str(), LOGFATALERROR, false, true, true);
+			return E_FAIL;
 		}
 
 		BackBuffer->Release();
@@ -344,9 +348,10 @@ HRESULT __stdcall D3D11PresentHook(IDXGISwapChain * pSwapChain, UINT SyncInterva
 
 		HRESULT Result;
 
-		if (FAILED(D3D11_DEVICE_CONTEXT_FROM_SWAPCHAIN(pSwapChain, &D3D11Device, &D3D11Context)))
+		Result = D3D11_DEVICE_CONTEXT_FROM_SWAPCHAIN(pSwapChain, &D3D11Device, &D3D11Context);
+		if (Result != S_OK)
 		{
-			ConsoleLog("Couldn't get device and context from swapchain.\n", LOGFATALERROR, false, true);
+			ConsoleLog(std::string("D3D11DeviceContextFromSwapchain() failed, return value: " + std::to_string(Result)).c_str(), LOGFATALERROR, false, true, true);
 			return E_FAIL;
 		}
 		D3D11SwapchainPtr = pSwapChain;
@@ -356,12 +361,14 @@ HRESULT __stdcall D3D11PresentHook(IDXGISwapChain * pSwapChain, UINT SyncInterva
 		if (Result != S_OK)
 		{
 			ConsoleLog(std::string("GetBuffer() failed, return value: " + std::to_string(Result)).c_str(), LOGFATALERROR, false, true, true);
+			return E_FAIL;
 		}
 
 		Result = D3D11Device->CreateRenderTargetView(BackBuffer, NULL, &MainRenderTargetView);
 		if (Result != S_OK)
 		{
 			ConsoleLog(std::string("CreateRenderTargetView() failed, return value: " + std::to_string(Result)).c_str(), LOGFATALERROR, false, true, true);
+			return E_FAIL;
 		}
 
 		BackBuffer->Release();
