@@ -1,6 +1,5 @@
 #pragma once
-
-#include "Globals.h"
+///#include "Globals.h"
 #include "SnippetManager.h"
 #include "RFGR_Types_Player.h"
 

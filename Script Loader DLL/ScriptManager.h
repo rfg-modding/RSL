@@ -1,6 +1,6 @@
 #pragma once
-#include "Globals.h"
-#include <chaiscript/chaiscript.hpp>
+///#include "Globals.h"
+///#include <chaiscript/chaiscript.hpp>
 #include "Functions.h"
 
 class ScriptManager

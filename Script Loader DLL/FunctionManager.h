@@ -1,6 +1,5 @@
 #pragma once
-
-#include "Globals.h"
+///#include "Globals.h"
 #include "Functions.h"
 
 class FunctionManager

@@ -1,7 +1,7 @@
-﻿#include "Globals.h"
-#include "SnippetManager.h"
+﻿///#include "Globals.h"
+///#include "SnippetManager.h"
 #include "ProgramManager.h"
-#include "CameraWrapper.h"
+///#include "CameraWrapper.h"
 
 /*Fix these in RFGR_Types.h and RFGR_Types_Player.h
 #define __int8 char

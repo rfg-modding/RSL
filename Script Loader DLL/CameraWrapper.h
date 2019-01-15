@@ -1,6 +1,6 @@
 #pragma once
-#include "Globals.h"
-#include "SnippetManager.h"
+///#include "Globals.h"
+///#include "SnippetManager.h"
 //#include "Hooks.h"
 #include "Functions.h"
 

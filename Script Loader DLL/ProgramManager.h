@@ -1,5 +1,5 @@
 #pragma once
-#include "Globals.h"
+//#include "Globals.h"
 #include "CameraWrapper.h"
 #include "FunctionManager.h"
 #include "ScriptManager.h"

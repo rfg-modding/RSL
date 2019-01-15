@@ -1,7 +1,7 @@
 #pragma once
 //#include "imgui.h"
-#include "Globals.h"
-#include "RFGR_Types_Player.h"
+///#include "Globals.h"
+///#include "RFGR_Types_Player.h"
 #include "Functions.h"
 
 class MainOverlay
