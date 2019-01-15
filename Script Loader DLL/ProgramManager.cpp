@@ -141,7 +141,8 @@ void ProgramManager::ProcessInput()
 	if (GetAsyncKeyState(VK_NUMPAD2))
 	{
 		std::string ExePath = GetEXEPath(false);
-		Lua.script_file(ExePath + "RFGR Script Loader/Scripts/Test2.lua", sol::load_mode::text);
+		Scripts.RunTestScript2();
+		//Lua.script_file(ExePath + "RFGR Script Loader/Scripts/Test2.lua", sol::load_mode::text);
 		Sleep(100);
 	}
 	if (GetAsyncKeyState(VK_F1))
@@ -206,7 +207,7 @@ void ProgramManager::OpenConsole()
 		{
 			PreExistingConsole = false;
 			AllocConsole();
-
+			//std::cout << "AllocConsole()" << std::endl << std::endl;
 		}
 		else
 		{
@@ -221,7 +222,13 @@ void ProgramManager::OpenConsole()
 
 void ProgramManager::SetMemoryLocations()
 {
-	
+	uintptr_t ModuleBase = (uintptr_t)GetModuleHandle(NULL);
+	InMultiplayer = (DWORD*)(*(DWORD*)(ModuleBase + 0x002CA210));
+	if (*(bool*)InMultiplayer)
+	{
+		MessageBoxA(FindTopWindow(GetProcessID("rfg.exe")), "MP usage detected, shutting down!", "Multiplayer mode detected", MB_OK);
+		std::cout << "MP detected. Shutting down!" << std::endl;
+	}
 }
 
 void ProgramManager::CreateGameHooks()
@@ -527,32 +534,58 @@ void ProgramManager::CloseConsole()
 	}
 }
 
-void ProgramManager::LoadDataFromConfig()
+bool ProgramManager::LoadDataFromConfig()
 {
 	std::string ExePath = GetEXEPath(false);
-	
-	if (fs::exists(ExePath + "RFGR Script Loader/Settings.txt"))
+	fs::remove(ExePath + "RFGR Script Loader/Logs/Load Log.txt");
+	std::ofstream LogFile(ExePath + "RFGR Script Loader/Logs/Load Log.txt");
+
+	if (fs::exists(ExePath + "RFGR Script Loader/Settings/Settings.txt"))
 	{
-		std::ifstream Config(ExePath + "RFGR Script Loader/Settings.txt");
-		Config >> MainConfig;
-		Config.close();
+		//LogFile << "Settings.txt found. Loading into string buffer..." << std::endl;
+		std::ifstream Config(ExePath + "RFGR Script Loader/Settings/Settings.txt");
+		//LogFile << "Preparing to parse..." << std::endl;
+
+		try
+		{
+			LogFile << "Parsing settings.txt..." << std::endl;
+			Config >> MainConfig;
+			Config.close();
+			//MainConfig.parse(Buffer);
+			//LogFile << "Done parsing settings.txt" << std::endl;
+		}
+		catch (nlohmann::json::parse_error& Exception)
+		{
+			LogFile << "Exception when parsing settings.txt!" << std::endl;
+			LogFile << Exception.what() << std::endl;
+			std::string ExceptionMessage("Exception when parsing Settings.txt!\n");
+			ExceptionMessage += "Message: ";
+			ExceptionMessage += Exception.what();
+
+			MessageBoxA(find_main_window(GetProcessID("rfg.exe")), ExceptionMessage.c_str(), "Json parsing exception", MB_OK);
+			LogFile << "Failed parse Settings.txt, exiting." << std::endl;
+			return false;
+		}
+		LogFile << "No parse exceptions detected." << std::endl;
 	}
 	else
 	{
-		CreateDirectoryIfNull(ExePath + "RFGR Script Loader/");
-		//std::cout << "Settings.txt not found. Creating from default values." << std::endl;
-		std::ofstream LogFile;
-		LogFile.open(ExePath + "RFGR Script Loader/Start errors.txt");
+		CreateDirectoryIfNull(ExePath + "RFGR Script Loader/Settings/");
 		LogFile << "Settings.txt not found. Creating from default values." << std::endl;
 
 		MainConfig["Open debug console"] = false;
 
-		std::ofstream ConfigOutput(ExePath + "RFGR Script Loader/Settings.txt");
+		std::ofstream ConfigOutput(ExePath + "RFGR Script Loader/Settings/Settings.txt");
 		ConfigOutput << std::setw(4) << MainConfig << std::endl;
 		ConfigOutput.close();
-		LogFile.close();
 	}
+	
+	//LogFile << "Setting internal values." << std::endl;
 
 	OpenDebugConsole = MainConfig["Open debug console"].get<bool>();
+
+	//LogFile << "Returning true and closing log file." << std::endl;
+	LogFile.close();
+	return true;
 }
 

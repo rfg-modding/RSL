@@ -15,7 +15,7 @@ public:
 
 	void Initialize();
 	void OpenConsole();
-	void LoadDataFromConfig();
+	bool LoadDataFromConfig();
 	void SetMemoryLocations();
 
 	void CreateGameHooks();
@@ -52,6 +52,7 @@ public:
 	bool OverlayActive = false;
 	WNDPROC OriginalWndProc;*/
 
+	bool LoadFailed = false;
 	bool PreExistingConsole = true;
 	DWORD PID = 0;
 	uintptr_t ModuleBase = 0;

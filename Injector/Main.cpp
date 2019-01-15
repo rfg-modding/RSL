@@ -5,7 +5,7 @@ float ProgramVersion = 1.0;
 
 DWORD GetProcessID(std::string ProcessName);
 bool InjectDLL(int PID, std::string DLLPath, double Dummy1, double Dummy2, bool Dummy3); 
-void LoadDataFromConfig();
+bool LoadDataFromConfig();
 std::string GetEXEPath(bool IncludeExeInPath);
 void ConsoleLog(const char* Message, LogType Type, bool PrintTimeLabel = false, bool PrintTypeLabel = true);
 void SetConsoleAttributes(WORD Attributes);
@@ -149,14 +149,35 @@ bool InjectDLL(int PID, std::string DLLPath, double Dummy1, double Dummy2, bool 
 	return false;
 }
 
-void LoadDataFromConfig()
+bool LoadDataFromConfig()
 {
 	std::string ExePath = GetEXEPath(false);
-	if (fs::exists(ExePath + "InjectorSettings.txt"))
+	fs::remove(ExePath + "Logs/Injector Load Log.txt");
+	std::ofstream LogFile(ExePath + "Logs/Injector Load Log.txt");
+
+	if (fs::exists(ExePath + "Settings/InjectorSettings.txt"))
 	{
-		std::ifstream Config(ExePath + "InjectorSettings.txt");
-		Config >> InjectorConfig;
-		Config.close();
+		std::ifstream Config(ExePath + "Settings/InjectorSettings.txt");
+
+		try
+		{
+			LogFile << "Parsing InjectorSettings.txt" << std::endl;
+			Config >> InjectorConfig;
+			Config.close();
+		}
+		catch (nlohmann::json::parse_error& Exception)
+		{
+			LogFile << "Exception while parsing InjectorSettings.txt!" << std::endl;
+			LogFile << Exception.what() << std::endl;
+			std::string ExceptionMessage("Exception when parsing InjectorSettings.txt!\n");
+			ExceptionMessage += "Message: ";
+			ExceptionMessage += Exception.what();
+
+			MessageBoxA(find_main_window(GetProcessID("rfg.exe")), ExceptionMessage.c_str(), "Json parsing exception", MB_OK);
+			LogFile << "Failed parse Settings.txt, exiting." << std::endl;
+			return false;
+		}
+		LogFile << "No parse exceptions detected." << std::endl;
 	}
 	else
 	{
@@ -167,13 +188,15 @@ void LoadDataFromConfig()
 		InjectorConfig["ForceInjectorConsoleToTop"] = false;
 		InjectorConfig["AutoStartRFG"] = true;
 
-		std::ofstream ConfigOutput(ExePath + "InjectorSettings.txt");
+		std::ofstream ConfigOutput(ExePath + "Settings/InjectorSettings.txt");
 		ConfigOutput << std::setw(4) << InjectorConfig << std::endl;
 		ConfigOutput.close();
 	}
 
 	ForceInjectorConsoleToTop = InjectorConfig["ForceInjectorConsoleToTop"].get<bool>();
 	AutoStartRFG = InjectorConfig["AutoStartRFG"].get<bool>();
+
+	return true;
 }
 
 std::string GetEXEPath(bool IncludeExeInPath)

@@ -11,6 +11,5 @@ public:
 
 	void Initialize();
 	void RunTestScript();
-
-	chaiscript::ChaiScript ChaiScriptVM;
+	void RunTestScript2();
 };

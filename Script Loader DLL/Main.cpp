@@ -10,34 +10,25 @@
 #define __int64 long long
 */
 
-std::ofstream LogFile;
-
 DWORD WINAPI MainThread(HMODULE hModule)
 {
-	uintptr_t ModuleBase = (uintptr_t)GetModuleHandle(NULL);
-	InMultiplayer = (DWORD*)(*(DWORD*)(ModuleBase + 0x002CA210));
-
-	if (*(bool*)InMultiplayer)
-	{
-		MessageBoxA(FindTopWindow(GetProcessID("rfg.exe")), "MP usage detected, shutting down!", "Multiplayer mode detected", MB_OK);
-		std::cout << "MP detected. Shutting down!" << std::endl;
-	}
-
 	ProgramManager Program(hModule);
-	Program.LoadDataFromConfig();
+	if (!Program.LoadDataFromConfig())
+	{
+		FreeLibraryAndExitThread(hModule, 0);
+		return 0;
+	}
 	Program.OpenConsole();
+	ConsoleLog("Script loader attached to console", LOGSUCCESS, false, true, true);
 	Program.SetMemoryLocations();
 	Program.Initialize();
-	
-	//int Test : 1;
 
 	ConsoleLog("RFGR script loader activated.\n", LOGSUCCESS, true, true);
-
 	GameState RFGRState;
-	while (!Program.ShouldClose()) //Todo: Change to respond to PostQuitMessage(0);
+	while (!Program.ShouldClose()) //Todo: Change to respond to PostQuitMessage(0) in WndProc;
 	{
 		RFGRState = GameseqGetState();
-		if (RFGRState == 0x13 || RFGRState == 0x14 || RFGRState == 0x15 || RFGRState == 0x16 || RFGRState == 0x3B || RFGRState == 0x3C || RFGRState == 0x3F)
+		if (RFGRState == 0x13 || RFGRState == 0x14 || RFGRState == 0x15 || RFGRState == 0x16 || RFGRState == 0x3B || RFGRState == 0x3C || RFGRState == 0x3F) //See GameState enum is RFGR_Types_Player.h for values.
 		{
 			MessageBoxA(FindTopWindow(GetProcessID("rfg.exe")), "MP usage detected, shutting down!", "Multiplayer mode detected", MB_OK);
 			std::cout << "MP detected. Crashing now!" << std::endl;
@@ -61,7 +52,6 @@ DWORD WINAPI MainThread(HMODULE hModule)
 		Program.ProcessInput();
 		Program.Update();
 	}
-
 	ConsoleLog("RFGR script loader deactivated.\n\n", LOGSUCCESS, true, true);
 
 	Program.CloseConsole();

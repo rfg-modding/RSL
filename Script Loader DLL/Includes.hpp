@@ -17,7 +17,6 @@
 #include <utility>
 
 #include <ctype.h>
-#include <tlhelp32.h>
 #include <math.h>
 
 #include <chrono>
