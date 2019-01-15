@@ -318,10 +318,10 @@ HRESULT __stdcall D3D11PresentHook(IDXGISwapChain * pSwapChain, UINT SyncInterva
 		Colors[ImGuiCol_ModalWindowDimBg] = ImVec4(0.80f, 0.80f, 0.80f, 0.35f);*/
 
 		ImGuiStyle& Style = ImGui::GetStyle();
-		Style.WindowBorderSize = 0;
+		Style.WindowBorderSize = 1;
 		Style.ChildBorderSize = 0;
-		Style.PopupBorderSize = 0;
-		Style.FrameBorderSize = 0;
+		Style.PopupBorderSize = 1;
+		Style.FrameBorderSize = 1;
 		Style.TabBorderSize = 0;
 
 		Style.WindowRounding = 3;

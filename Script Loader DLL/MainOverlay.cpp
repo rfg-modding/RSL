@@ -258,13 +258,28 @@ void MainOverlay::Draw(const char* title, bool* p_open)
 	ImGui::Text("Globals:");
 	ImGui::Checkbox("Infinite jetpack", &InfiniteJetpack);
 	ImGui::Checkbox("Invulnerable", &Invulnerable);
-	ImGui::PushItemWidth(232.0f);
-	ImGui::SliderFloat("Global explosion strength multiplier", &GlobalExplosionStrengthMultiplier, 0.01f, 10.0f); 
-	ImGui::SameLine(); ImGui::Checkbox("Use", &UseGlobalExplosionStrengthMultiplier);
-	ImGui::Checkbox("Use explosion radius limits", &UseExplosionRadiusLimits);
-	TooltipOnPrevious("If you turn this off be very very careful with the explosion multipliers. Too high and it's very easy to freeze/crash the game. My game froze at 4x explosions with no radius limits.");
-	ImGui::InputFloat("Minimum explosion radius", &MinimumExplosionRadius, 0.1f, 1.0f, 3);
-	ImGui::InputFloat("Maximum explosion radius", &MaximumExplosionRadius, 0.1f, 1.0f, 3);
+	if (ImGui::CollapsingHeader("Global explosion modifiers##GlobalExplosionModifiersMain"))
+	{
+		if (ImGui::Button("Reset to defaults##GlobalExplosionModifiersMain"))
+		{
+			GlobalExplosionStrengthMultiplier = 1.0f;
+			UseGlobalExplosionStrengthMultiplier = false;
+			UseExplosionRadiusLimits = true;
+			MinimumExplosionRadius = 0.0f;
+			MaximumExplosionRadius = 12.0f;
+		}
+		ImGui::PushItemWidth(232.0f);
+		ImGui::SliderFloat("Global explosion strength multiplier", &GlobalExplosionStrengthMultiplier, 0.01f, 10.0f);
+		ImGui::SameLine(); ImGui::Checkbox("Use", &UseGlobalExplosionStrengthMultiplier);
+		ImGui::Checkbox("Use explosion radius limits", &UseExplosionRadiusLimits);
+		TooltipOnPrevious("If you turn this off be very very careful with the explosion multipliers. Too high and it's very easy to freeze/crash the game. My game froze at 4x explosions with no radius limits.");
+		ImGui::InputFloat("Minimum explosion radius", &MinimumExplosionRadius, 0.1f, 1.0f, 3);
+		ImGui::InputFloat("Maximum explosion radius", &MaximumExplosionRadius, 0.1f, 1.0f, 3);
+	}
+	else
+	{
+		ImGui::SameLine(); ImGui::TextColored(ColorRed, " [Experimental]");
+	}
 
 	ImGui::Separator();
 
