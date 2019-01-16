@@ -13,6 +13,13 @@ public:
 	ProgramManager(HMODULE hModule);
 	~ProgramManager();
 
+	enum TestEnum
+	{
+		One,
+		Two,
+		Three
+	};
+
 	void Initialize();
 	void OpenConsole();
 	bool LoadDataFromConfig();
@@ -30,7 +37,6 @@ public:
 	//HRESULT __stdcall D3D11PresentHook(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT Flags);
 	
 	//LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
-
 	bool ShouldClose();
 	void ProcessInput();
 	void Update();

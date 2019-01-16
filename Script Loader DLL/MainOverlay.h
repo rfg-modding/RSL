@@ -4,6 +4,8 @@
 ///#include "RFGR_Types_Player.h"
 #include "Functions.h"
 
+nlohmann::json GUIConfig;
+
 class MainOverlay
 {
 public:
