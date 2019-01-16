@@ -296,6 +296,10 @@ void MainOverlay::Draw(const char* title, bool* p_open)
 	ImGui::InputScalar("Player aim target duration", ImGuiDataType_U32, &PlayerPtr->aim_target_duration);
 	ImGui::InputFloat3("Player penetrating aim pos", (float*)&PlayerPtr->penetrating_aim_pos, 3);
 	ImGui::InputScalar("Player penetrating aim target", ImGuiDataType_U32, &PlayerPtr->penetrating_aim_target);
+	ImGui::Text("Player frametime multiplier: ");
+	ImGui::SameLine();
+	ImGui::TextColored(SecondaryTextColor, std::to_string(PlayerPtr->FrametimeMultiplier).c_str());
+	ImGui::InputFloat("Target player frametime multiplier", &PlayerPtr->FrametimeMultiplier);
 	ImGui::Separator();
 
 	//ImGui::Text("FPS: ");

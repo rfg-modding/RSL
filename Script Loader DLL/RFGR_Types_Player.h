@@ -2291,7 +2291,7 @@ struct /*__declspec(align(8))*/ Player : Human //5415 + 3961 = 9376 Bytes
 	unsigned int current_mat_fx;  //4
 	PlayerScriptMode script_mode; //4
 	ScriptSpecificData script_data; //8
-	void* Backpack; ///MultiObjectBackpack* backpack; //4 //Todo: Eventually define this one, will be nice to control backpacks.
+	MultiObjectBackpack* Backpack; //4 //Todo: Eventually define this one, will be nice to control backpacks.
 	int mp_respawn_backpack_type; //4
 	GameCommand mp_current_command; //268
 	bool mp_remote_player_fired_this_frame; //1
