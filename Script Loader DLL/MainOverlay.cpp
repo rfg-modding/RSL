@@ -148,6 +148,221 @@ void HumanTeleportSafe(vector NewPosition, int TimeToHover = 5000)
 
 }
 
+bool LoadGUIConfig()
+{
+	std::string ExePath = GetEXEPath(false);
+	std::ofstream LogFile(ExePath + "RFGR Script Loader/Logs/Load Log.txt");
+
+	if (fs::exists(ExePath + "RFGR Script Loader/Settings/GUI Config.txt"))
+	{
+		std::ifstream Config(ExePath + "RFGR Script Loader/Settings/GUI Config.txt");
+		Config >> GUIConfig;
+		Config.close();
+
+		try
+		{
+			LogFile << "Parsing GUI Config.txt..." << std::endl;
+			Config >> MainConfig;
+			Config.close();
+		}
+		catch (nlohmann::json::parse_error& Exception)
+		{
+			LogFile << "Exception when parsing GUI Config.txt!" << std::endl;
+			LogFile << Exception.what() << std::endl;
+			std::string ExceptionMessage("Exception when parsing GUI Config!\n");
+			ExceptionMessage += "Message: ";
+			ExceptionMessage += Exception.what();
+
+			MessageBoxA(find_main_window(GetProcessID("rfg.exe")), ExceptionMessage.c_str(), "Json parsing exception", MB_OK);
+			LogFile << "Failed parse GUI Config, exiting." << std::endl;
+			return false;
+		}
+		LogFile << "No parse exceptions detected." << std::endl;
+	}
+	else
+	{
+		CreateDirectoryIfNull(ExePath + "RFGR Script Loader/Settings/");
+		//std::cout << "Settings.txt not found. Creating from default values." << std::endl;
+		std::ofstream LogFile;
+		LogFile.open(ExePath + "RFGR Script Loader/Logs/Start errors.txt");
+		LogFile << "GUI Settings.txt not found. Creating from default values." << std::endl;
+
+		GUIConfig["Style"]["Alpha"] = 0.95f;
+		GUIConfig["Style"]["AntiAliasedFill"] = true;
+		GUIConfig["Style"]["ButtonTextAlign"][0] = 0.5f;
+		GUIConfig["Style"]["ButtonTextAlign"][1] = 0.5f;
+		GUIConfig["Style"]["ChildBorderSize"] = 0.0f; //Values > 1.0 can cause performance issues.
+		GUIConfig["Style"]["ChildRounding"] = 3.0f;
+		GUIConfig["Style"]["DisplaySafeAreaPadding"][0] = 3.0f;
+		GUIConfig["Style"]["DisplaySafeAreaPadding"][1] = 3.0f;
+		GUIConfig["Style"]["FrameBorderSize"] = 0.0f; //Values > 1.0 can cause performance issues.
+		GUIConfig["Style"]["FramePadding"][0] = 4.0f;
+		GUIConfig["Style"]["FramePadding"][1] = 3.0f;
+		GUIConfig["Style"]["FrameRounding"] = 3.0f;
+		GUIConfig["Style"]["GrabMinSize"] = 10.0f;
+		GUIConfig["Style"]["GrabRounding"] = 3.0f;
+		GUIConfig["Style"]["IndentSpacing"] = 21.0f;
+		GUIConfig["Style"]["ItemInnerSpacing"][0] = 4.0f;
+		GUIConfig["Style"]["ItemInnerSpacing"][1] = 4.0f;
+		GUIConfig["Style"]["ItemSpacing"][0] = 8.0f;
+		GUIConfig["Style"]["ItemSpacing"][1] = 4.0f;
+		GUIConfig["Style"]["PopupBorderSize"] = 1.0f; //Values > 1.0 can cause performance issues.
+		GUIConfig["Style"]["PopupRounding"] = 3.0f;
+		GUIConfig["Style"]["ScrollbarRounding"] = 3.0f;
+		GUIConfig["Style"]["ScrollbarSize"] = 6.0f;
+		GUIConfig["Style"]["TabBorderSize"] = 10.0f;
+		GUIConfig["Style"]["TabRounding"] = 3.0f;
+		GUIConfig["Style"]["TouchExtraPadding"][0] = 0.0f;
+		GUIConfig["Style"]["TouchExtraPadding"][1] = 0.0f;
+		GUIConfig["Style"]["WindowBorderSize"] = 1.0f; //Values > 1.0 can cause performance issues.
+		GUIConfig["Style"]["WindowPadding"][0] = 8.0f;
+		GUIConfig["Style"]["WindowPadding"][1] = 8.0f;
+		GUIConfig["Style"]["WindowRounding"] = 3.0f;
+		GUIConfig["Style"]["WindowTitleAlign"][0] = 0.5f;
+		GUIConfig["Style"]["WindowTitleAlign"][1] = 0.5f;
+
+		/*GUIConfig["Colors"][""] = 1.0f;
+		GUIConfig["Colors"][""] = 1.0f;
+		GUIConfig["Colors"][""] = 1.0f;
+		GUIConfig["Colors"][""] = 1.0f;
+		GUIConfig["Colors"][""] = 1.0f;
+		GUIConfig["Colors"][""] = 1.0f;
+		GUIConfig["Colors"][""] = 1.0f;
+		GUIConfig["Colors"][""] = 1.0f;
+		GUIConfig["Colors"][""] = 1.0f;
+		GUIConfig["Colors"][""] = 1.0f;
+		GUIConfig["Colors"][""] = 1.0f;
+		GUIConfig["Colors"][""] = 1.0f;
+		GUIConfig["Colors"][""] = 1.0f;
+		GUIConfig["Colors"][""] = 1.0f;
+		GUIConfig["Colors"][""] = 1.0f;
+		GUIConfig["Colors"][""] = 1.0f;
+		GUIConfig["Colors"][""] = 1.0f;
+		GUIConfig["Colors"][""] = 1.0f;
+		GUIConfig["Colors"][""] = 1.0f;
+		GUIConfig["Colors"][""] = 1.0f;
+		GUIConfig["Colors"][""] = 1.0f;
+		GUIConfig["Colors"][""] = 1.0f;
+		GUIConfig["Colors"][""] = 1.0f;
+		GUIConfig["Colors"][""] = 1.0f;
+		GUIConfig["Colors"][""] = 1.0f;
+		GUIConfig["Colors"][""] = 1.0f;
+		GUIConfig["Colors"][""] = 1.0f;
+		GUIConfig["Colors"][""] = 1.0f;
+		GUIConfig["Colors"][""] = 1.0f;
+		GUIConfig["Colors"][""] = 1.0f;
+		GUIConfig["Colors"][""] = 1.0f;
+		GUIConfig["Colors"][""] = 1.0f;
+		GUIConfig["Colors"][""] = 1.0f;
+		GUIConfig["Colors"][""] = 1.0f;
+		GUIConfig["Colors"][""] = 1.0f;
+		GUIConfig["Colors"][""] = 1.0f;
+		GUIConfig["Colors"][""] = 1.0f;
+		GUIConfig["Colors"][""] = 1.0f;
+		GUIConfig["Colors"][""] = 1.0f;
+		GUIConfig["Colors"][""] = 1.0f;
+		GUIConfig["Colors"][""] = 1.0f;
+		GUIConfig["Colors"][""] = 1.0f;
+		GUIConfig["Colors"][""] = 1.0f;
+		GUIConfig["Colors"][""] = 1.0f;
+		GUIConfig["Colors"][""] = 1.0f;
+		GUIConfig["Colors"][""] = 1.0f;
+		GUIConfig["Colors"][""] = 1.0f;
+		GUIConfig["Colors"][""] = 1.0f;*/
+
+		std::ofstream ConfigOutput(ExePath + "RFGR Script Loader/Settings/GUI Config.txt");
+		ConfigOutput << std::setw(4) << GUIConfig << std::endl;
+		ConfigOutput.close();
+		LogFile.close();
+	}
+
+	//OpenDebugConsole = MainConfig["Open debug console"].get<bool>();
+
+	ImGuiStyle& Style = ImGui::GetStyle(); //Currently 25 items
+	Style.Alpha = 1.0f;
+	Style.AntiAliasedFill = true;
+	Style.ButtonTextAlign = ImVec2(0.5f, 0.5f);
+	Style.ChildBorderSize = 0.0f;
+	Style.ChildRounding = 3.0f;
+	//Style.ColumnsMinSpacing = 1.0f;
+	//Style.CurveTessellationTol = 1.25f;
+	Style.DisplaySafeAreaPadding = ImVec2(3.0f, 3.0f);
+	//Style.DisplayWindowPadding = ImVec2(1.0, 1.0f);
+	Style.FrameBorderSize = 0.0f;
+	Style.FramePadding = ImVec2(4.0f, 3.0f);
+	Style.FrameRounding = 3.0f;
+	Style.GrabMinSize = 10.0f;
+	Style.GrabRounding = 3.0f;
+	Style.IndentSpacing = 21.0f;
+	Style.ItemInnerSpacing = ImVec2(4.0f, 4.0f);
+	Style.ItemSpacing = ImVec2(8.0f, 4.0f);
+	//Style.MouseCursorScale = 1.0f;
+	Style.PopupBorderSize = 1.0f;
+	Style.PopupRounding = 3.0f;
+	Style.ScrollbarRounding = 3.0f;
+	Style.ScrollbarSize = 16.0f;
+	Style.TabBorderSize = 0.0f;
+	Style.TabRounding = 3.0f;
+	Style.TouchExtraPadding = ImVec2(0.0f, 0.0f);
+	Style.WindowBorderSize = 1.0f;
+	//Style.WindowMinSize = 1.0f;
+	Style.WindowPadding = ImVec2(8.0f, 8.0f);
+	Style.WindowRounding = 3.0f;
+	Style.WindowTitleAlign = ImVec2(0.0f, 0.5f);
+
+	ImVec4* Colors = ImGui::GetStyle().Colors; //48 items
+	Colors[ImGuiCol_Text] = ImVec4(0.98f, 0.98f, 1.00f, 0.95f);
+	Colors[ImGuiCol_TextDisabled] = ImVec4(0.50f, 0.51f, 0.53f, 0.95f);
+	Colors[ImGuiCol_WindowBg] = ImVec4(0.14f, 0.15f, 0.16f, 0.95f);
+	Colors[ImGuiCol_ChildBg] = ImVec4(0.00f, 0.00f, 0.00f, 0.00f);
+	Colors[ImGuiCol_PopupBg] = ImVec4(0.10f, 0.10f, 0.12f, 0.95f);
+	Colors[ImGuiCol_Border] = ImVec4(0.09f, 0.09f, 0.11f, 0.95f);
+	Colors[ImGuiCol_BorderShadow] = ImVec4(0.00f, 0.00f, 0.00f, 0.00f);
+	Colors[ImGuiCol_FrameBg] = ImVec4(0.10f, 0.10f, 0.12f, 0.95f);
+	Colors[ImGuiCol_FrameBgHovered] = ImVec4(0.20f, 0.55f, 0.83f, 0.95f);
+	Colors[ImGuiCol_FrameBgActive] = ImVec4(0.20f, 0.55f, 0.83f, 0.95f);
+	Colors[ImGuiCol_TitleBg] = ImVec4(0.04f, 0.04f, 0.04f, 1.00f);
+	Colors[ImGuiCol_TitleBgActive] = ImVec4(0.10f, 0.40f, 0.75f, 0.95f);
+	Colors[ImGuiCol_TitleBgCollapsed] = ImVec4(0.00f, 0.00f, 0.00f, 0.51f);
+	Colors[ImGuiCol_MenuBarBg] = ImVec4(0.14f, 0.14f, 0.14f, 1.00f);
+	Colors[ImGuiCol_ScrollbarBg] = ImVec4(0.02f, 0.02f, 0.02f, 0.53f);
+	Colors[ImGuiCol_ScrollbarGrab] = ImVec4(0.31f, 0.31f, 0.31f, 1.00f);
+	Colors[ImGuiCol_ScrollbarGrabHovered] = ImVec4(0.41f, 0.41f, 0.41f, 1.00f);
+	Colors[ImGuiCol_ScrollbarGrabActive] = ImVec4(0.51f, 0.51f, 0.51f, 1.00f);
+	Colors[ImGuiCol_CheckMark] = ImVec4(0.10f, 0.40f, 0.75f, 0.95f);
+	Colors[ImGuiCol_SliderGrab] = ImVec4(0.20f, 0.55f, 0.83f, 0.95f);
+	Colors[ImGuiCol_SliderGrabActive] = ImVec4(0.20f, 0.55f, 0.83f, 0.95f);
+	Colors[ImGuiCol_Button] = ImVec4(0.10f, 0.40f, 0.75f, 0.95f);
+	Colors[ImGuiCol_ButtonHovered] = ImVec4(0.20f, 0.55f, 0.98f, 0.95f);
+	Colors[ImGuiCol_ButtonActive] = ImVec4(0.06f, 0.53f, 0.98f, 1.00f);
+	Colors[ImGuiCol_Header] = ImVec4(0.26f, 0.59f, 0.98f, 0.31f);
+	Colors[ImGuiCol_HeaderHovered] = ImVec4(0.26f, 0.59f, 0.98f, 0.80f);
+	Colors[ImGuiCol_HeaderActive] = ImVec4(0.26f, 0.59f, 0.98f, 1.00f);
+	Colors[ImGuiCol_Separator] = ImVec4(0.43f, 0.43f, 0.50f, 0.50f);
+	Colors[ImGuiCol_SeparatorHovered] = ImVec4(0.10f, 0.40f, 0.75f, 0.78f);
+	Colors[ImGuiCol_SeparatorActive] = ImVec4(0.10f, 0.40f, 0.75f, 1.00f);
+	Colors[ImGuiCol_ResizeGrip] = ImVec4(0.26f, 0.59f, 0.98f, 0.25f);
+	Colors[ImGuiCol_ResizeGripHovered] = ImVec4(0.26f, 0.59f, 0.98f, 0.67f);
+	Colors[ImGuiCol_ResizeGripActive] = ImVec4(0.26f, 0.59f, 0.98f, 0.95f);
+	Colors[ImGuiCol_Tab] = ImVec4(0.18f, 0.35f, 0.58f, 0.86f);
+	Colors[ImGuiCol_TabHovered] = ImVec4(0.26f, 0.59f, 0.98f, 0.80f);
+	Colors[ImGuiCol_TabActive] = ImVec4(0.20f, 0.41f, 0.68f, 1.00f);
+	Colors[ImGuiCol_TabUnfocused] = ImVec4(0.07f, 0.10f, 0.15f, 0.97f);
+	Colors[ImGuiCol_TabUnfocusedActive] = ImVec4(0.14f, 0.26f, 0.42f, 1.00f);
+	Colors[ImGuiCol_PlotLines] = ImVec4(0.55f, 0.83f, 1.00f, 0.95f);
+	Colors[ImGuiCol_PlotLinesHovered] = ImVec4(1.00f, 0.43f, 0.35f, 1.00f);
+	Colors[ImGuiCol_PlotHistogram] = ImVec4(0.90f, 0.70f, 0.00f, 1.00f);
+	Colors[ImGuiCol_PlotHistogramHovered] = ImVec4(1.00f, 0.60f, 0.00f, 1.00f);
+	Colors[ImGuiCol_TextSelectedBg] = ImVec4(0.26f, 0.59f, 0.98f, 0.35f);
+	Colors[ImGuiCol_DragDropTarget] = ImVec4(1.00f, 1.00f, 0.00f, 0.90f);
+	Colors[ImGuiCol_NavHighlight] = ImVec4(0.26f, 0.59f, 0.98f, 1.00f);
+	Colors[ImGuiCol_NavWindowingHighlight] = ImVec4(1.00f, 1.00f, 1.00f, 0.70f);
+	Colors[ImGuiCol_NavWindowingDimBg] = ImVec4(0.80f, 0.80f, 0.80f, 0.20f);
+	Colors[ImGuiCol_ModalWindowDimBg] = ImVec4(0.80f, 0.80f, 0.80f, 0.35f);
+
+	return true;
+}
+
 void MainOverlay::Draw(const char* title, bool* p_open)
 {
 	if (!PlayerPtrTargetsInitialized)
