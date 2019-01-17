@@ -177,6 +177,14 @@ bool LoadDataFromConfig()
 			LogFile << "Failed parse Settings.txt, exiting." << std::endl;
 			return false;
 		}
+		catch (...)
+		{
+			LogFile << "Default exception when parsing InjectorSettings.txt!" << std::endl;
+
+			MessageBoxA(find_main_window(GetProcessID("rfg.exe")), "Default exception while parsing InjectorSettings.txt", "Json parsing exception", MB_OK);
+			LogFile << "Failed parse InjectorSettings.txt, exiting." << std::endl;
+			return false;
+		}
 		LogFile << "No parse exceptions detected." << std::endl;
 	}
 	else

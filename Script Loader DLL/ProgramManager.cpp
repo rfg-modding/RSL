@@ -566,6 +566,30 @@ bool ProgramManager::LoadDataFromConfig()
 			LogFile << "Failed parse Settings.txt, exiting." << std::endl;
 			return false;
 		}
+		catch (...)
+		{
+			LogFile << "Default exception when parsing settings.txt!" << std::endl;
+
+			MessageBoxA(find_main_window(GetProcessID("rfg.exe")), "Default exception while parsing Settings.txt", "Json parsing exception", MB_OK);
+			LogFile << "Failed parse Settings.txt, exiting." << std::endl;
+			return false;
+		}
+		/*catch (nlohmann::json::basic_json::invalid_iterator& Exception)
+		{
+
+		}
+		catch (nlohmann::json::basic_json::type_error& Exception)
+		{
+
+		}
+		catch (nlohmann::json::basic_json::out_of_range& Exception)
+		{
+
+		}
+		catch (nlohmann::json::basic_json::other_error& Exception)
+		{
+
+		}*/
 		LogFile << "No parse exceptions detected." << std::endl;
 	}
 	else

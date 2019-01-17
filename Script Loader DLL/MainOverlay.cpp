@@ -174,6 +174,90 @@ ImVec4 JsonGetFloat4(nlohmann::json& Json, const char* FirstKey, const char* Sec
 	return ImVec4(Json[FirstKey][SecondKey][0], Json[FirstKey][SecondKey][1], Json[FirstKey][SecondKey][2], Json[FirstKey][SecondKey][3]);
 }
 
+void SetTeleportLocation(std::string Name, float x, float y, float z, std::string Description)
+{
+	TeleportLocations[Name]["Position"][0] = x;
+	TeleportLocations[Name]["Position"][1] = y;
+	TeleportLocations[Name]["Position"][2] = z;
+	TeleportLocations[Name]["TooltipDescription"] = "Tutorial area at the start of the game. Position: (-2328.29, 30.0, -2317.9)";
+}
+
+bool LoadTeleportLocations()
+{
+	std::string ExePath = GetEXEPath(false);
+	std::ofstream LogFile(ExePath + "RFGR Script Loader/Logs/Load Log.txt");
+
+	if (fs::exists(ExePath + "RFGR Script Loader/Settings/Teleport Locations.txt"))
+	{
+		std::ifstream Config(ExePath + "RFGR Script Loader/Settings/Teleport Locations.txt");
+		Config >> GUIConfig;
+		Config.close();
+
+		try
+		{
+			LogFile << "Parsing \"Teleport Locations.txt\"..." << std::endl;
+			Config >> MainConfig;
+			Config.close();
+		}
+		catch (nlohmann::json::parse_error& Exception)
+		{
+			LogFile << "Exception when parsing \"Teleport Locations.txt\"!" << std::endl;
+			LogFile << Exception.what() << std::endl;
+			std::string ExceptionMessage("Exception when parsing \"Teleport Locations.txt\"\n");
+			ExceptionMessage += "Message: ";
+			ExceptionMessage += Exception.what();
+
+			MessageBoxA(find_main_window(GetProcessID("rfg.exe")), ExceptionMessage.c_str(), "Json parsing exception", MB_OK);
+			LogFile << "Failed parse \"Teleport Locations.txt\", exiting." << std::endl;
+			return false;
+		}
+		catch (...)
+		{
+			LogFile << "Default exception when parsing \"Teleport Locations.txt\"!" << std::endl;
+
+			MessageBoxA(find_main_window(GetProcessID("rfg.exe")), "Default exception while parsing \"Teleport Locations.txt\"", "Json parsing exception", MB_OK);
+			LogFile << "Failed parse \"Teleport Locations.txt\", exiting." << std::endl;
+			return false;
+		}
+		LogFile << "No parse exceptions detected." << std::endl;
+	}
+	else
+	{
+		CreateDirectoryIfNull(ExePath + "RFGR Script Loader/Settings/");
+		//std::cout << "Settings.txt not found. Creating from default values." << std::endl;
+		std::ofstream LogFile;
+		LogFile.open(ExePath + "RFGR Script Loader/Logs/Start errors.txt");
+		LogFile << "\"Teleport Locations.txt\" not found. Creating from default values." << std::endl;
+
+		SetTeleportLocation("Tutorial Area Hilltop", -2328.29f, 30.0f, -2317.9f, "Tutorial area at the start of the game. Position: (-2328.29, 30.0, -2317.9)");
+		SetTeleportLocation("Parker - Safehouse", -1877.77f, 27.0f, -1452.0f, "Game starting safehouse. Near ore processing plant. Position: (-1877.77, 27.0, -1452.0)");
+		SetTeleportLocation("Dust - Northern Safehouse", -387.0f, 38.0f, -820.0f, "Near tharsis wind farm and Dust town hall. Position: (-387.0, 38.0, -820.0)");
+		SetTeleportLocation("Dust - Southern Safehouse", -113.59f, 30.0f, -2449.58f, "Near chemical plant. Position: (-113.59, 30.0, -2449.58)");
+		SetTeleportLocation("Badlands - Safehouse / RFHQ", 2411.90f, 58.0f, -239.77f, "Main safehouse in Badlands. Also the HQ of the Red Faction. Position: (2411.90, 58.0, -239.77)");
+		SetTeleportLocation("Badlands - Mohole", 1420.27f, -28.0f, -734.28f, "Big 'ol hole in the ground used to pull heat from Mars' core for terraforming purposes. There's a smaller one in Dust. Position: (1420.27, -28.0, -734.28)");
+		SetTeleportLocation("Badlands - Harrington Memorial Bridge", 948.14f, -5.0f, -417.68f, "The big one. Position: (948.14, -5.0, -417.68)");
+		SetTeleportLocation("Badlands - EDF Barracks", 899.91f, 2.0f, -885.64f, "EDF Barracks sitting in a hilly area south of the EDF airbase in Badlands. Position: (899.91, 2.0, -885.64)");
+		SetTeleportLocation("Badlands - Marauder Safehouse", 2458.47f, 58.0f, -1210.17f, "Safehouse in marauder territory. Unless you want hostile marauders, wait until you've completed certain missions to go here. Position: (2458.47, 58.0, -1210.17)");
+		SetTeleportLocation("Oasis - Safehouse", 1434.29f, 18.0f, 691.65f, "Near EDF vehicle depot. Position: (1434.29, 18.0, 691.65)");
+		SetTeleportLocation("Free Fire Zone - Artillery Base", -1752.03f, 9.0f, -132.59f, "Base which runs and protects the EDF Artillery Gun. Deadly to be here until the FFZ has been liberated. Position: (-1752.03, 9.0, -132.59)");
+		SetTeleportLocation("Free Fire Zone - Artillery Gun", -1944.92f, 38.0f, -65.49f, "Bottom of the EDF Artillery Gun. Deadly to be here until the FFZ has been liberated. Position: (-1944.92, 38.0, -65.49)");
+		SetTeleportLocation("EOS - Western Safehouse", -1726.0f, 50.0f, 438.0f, "Near FFZ entrance/exit and Eos Memorial Bridge. Position: (-1726.0, 50.0, 438.0)");
+		SetTeleportLocation("EOS - Eastern Safehouse", -1390.95f, 30.0f, 561.08f, "Near construction site. Position: (-1390.95, 30.0, 561.08)");
+		SetTeleportLocation("EOS - Outside EDF Central Command", -1428.61f, 8.0f, 2013.5f, "Right outside the defense shield. Position: (-1428.61, 8.0, 2013.5)");
+		SetTeleportLocation("EOS - Inside EDF Central Command", -1458.75f, 8.0f, 2050.16f, "Right inside past the defense shield. Position: (-1458.75, 8.0, 2050.16)");
+		SetTeleportLocation("EOS - EDF Central Command Main Building", -1474.53f, 38.0f, 2397.49f, "The final building at the peak of the inner valley / cliffsides. Position: (-1474.53, 38.0, 2397.49)");
+		SetTeleportLocation("Mount Vogel - Base", -670.37f, 47.0f, 2423.75f, "Bottom of Mount Vogel and mass accelerator. Several old buildings. Position: (-670.37, 47.0, 2423.75)");
+		SetTeleportLocation("Mount Vogel - Peak", -285.77f, 183.0f, 2423.4f, "Peak of Mount Vogel with mass accelerator exit. Position: (-285.77, 183.0, 2423.4)");
+
+		std::ofstream ConfigOutput(ExePath + "RFGR Script Loader/Settings/Teleport Locations.txt");
+		ConfigOutput << std::setw(4) << GUIConfig << std::endl;
+		ConfigOutput.close();
+		LogFile.close();
+	}
+
+	return true;
+}
+
 bool LoadGUIConfig()
 {
 	std::string ExePath = GetEXEPath(false);
@@ -201,6 +285,14 @@ bool LoadGUIConfig()
 
 			MessageBoxA(find_main_window(GetProcessID("rfg.exe")), ExceptionMessage.c_str(), "Json parsing exception", MB_OK);
 			LogFile << "Failed parse GUI Config, exiting." << std::endl;
+			return false;
+		}
+		catch (...)
+		{
+			LogFile << "Default exception when parsing GUI Config.txt!" << std::endl;
+
+			MessageBoxA(find_main_window(GetProcessID("rfg.exe")), "Default exception while parsing GUI Config.txt", "Json parsing exception", MB_OK);
+			LogFile << "Failed parse GUI Config.txt, exiting." << std::endl;
 			return false;
 		}
 		LogFile << "No parse exceptions detected." << std::endl;

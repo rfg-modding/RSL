@@ -5,6 +5,7 @@
 #include "Functions.h"
 
 nlohmann::json GUIConfig;
+nlohmann::json TeleportLocations;
 
 class MainOverlay
 {
