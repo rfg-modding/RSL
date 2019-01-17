@@ -148,6 +148,32 @@ void HumanTeleportSafe(vector NewPosition, int TimeToHover = 5000)
 
 }
 
+void SetJsonFloat4(nlohmann::json& Json, const char* FirstKey, const char* SecondKey, float r, float g, float b, float a)
+{
+	Json[FirstKey][SecondKey][0] = r;
+	Json[FirstKey][SecondKey][1] = g;
+	Json[FirstKey][SecondKey][2] = b;
+	Json[FirstKey][SecondKey][3] = a;
+}
+
+void SetJsonFloat4(nlohmann::json& Json, const char* FirstKey, const char* SecondKey, ImVec4 Color)
+{
+	Json[FirstKey][SecondKey][0] = Color.x;
+	Json[FirstKey][SecondKey][1] = Color.y;
+	Json[FirstKey][SecondKey][2] = Color.z;
+	Json[FirstKey][SecondKey][3] = Color.w;
+}
+
+ImVec2 JsonGetFloat2(nlohmann::json& Json, const char* FirstKey, const char* SecondKey)
+{
+	return ImVec2(Json[FirstKey][SecondKey][0], Json[FirstKey][SecondKey][1]);
+}
+
+ImVec4 JsonGetFloat4(nlohmann::json& Json, const char* FirstKey, const char* SecondKey)
+{
+	return ImVec4(Json[FirstKey][SecondKey][0], Json[FirstKey][SecondKey][1], Json[FirstKey][SecondKey][2], Json[FirstKey][SecondKey][3]);
+}
+
 bool LoadGUIConfig()
 {
 	std::string ExePath = GetEXEPath(false);
@@ -186,6 +212,11 @@ bool LoadGUIConfig()
 		std::ofstream LogFile;
 		LogFile.open(ExePath + "RFGR Script Loader/Logs/Start errors.txt");
 		LogFile << "GUI Settings.txt not found. Creating from default values." << std::endl;
+		
+		GUIConfig["Theme Info"]["Theme name"] = std::string("Default Dark Theme");
+		GUIConfig["Theme Info"]["Description"] = std::string("The default dark theme for the script loader.");
+		GUIConfig["Theme Info"]["Author"] = std::string("moneyl");
+		GUIConfig["Theme Info"]["Readme"] = std::string("When making your own themes you can use this for extra information such as known bugs or optional settings.");
 
 		GUIConfig["Style"]["Alpha"] = 0.95f;
 		GUIConfig["Style"]["AntiAliasedFill"] = true;
@@ -221,54 +252,54 @@ bool LoadGUIConfig()
 		GUIConfig["Style"]["WindowTitleAlign"][0] = 0.5f;
 		GUIConfig["Style"]["WindowTitleAlign"][1] = 0.5f;
 
-		/*GUIConfig["Colors"][""] = 1.0f;
-		GUIConfig["Colors"][""] = 1.0f;
-		GUIConfig["Colors"][""] = 1.0f;
-		GUIConfig["Colors"][""] = 1.0f;
-		GUIConfig["Colors"][""] = 1.0f;
-		GUIConfig["Colors"][""] = 1.0f;
-		GUIConfig["Colors"][""] = 1.0f;
-		GUIConfig["Colors"][""] = 1.0f;
-		GUIConfig["Colors"][""] = 1.0f;
-		GUIConfig["Colors"][""] = 1.0f;
-		GUIConfig["Colors"][""] = 1.0f;
-		GUIConfig["Colors"][""] = 1.0f;
-		GUIConfig["Colors"][""] = 1.0f;
-		GUIConfig["Colors"][""] = 1.0f;
-		GUIConfig["Colors"][""] = 1.0f;
-		GUIConfig["Colors"][""] = 1.0f;
-		GUIConfig["Colors"][""] = 1.0f;
-		GUIConfig["Colors"][""] = 1.0f;
-		GUIConfig["Colors"][""] = 1.0f;
-		GUIConfig["Colors"][""] = 1.0f;
-		GUIConfig["Colors"][""] = 1.0f;
-		GUIConfig["Colors"][""] = 1.0f;
-		GUIConfig["Colors"][""] = 1.0f;
-		GUIConfig["Colors"][""] = 1.0f;
-		GUIConfig["Colors"][""] = 1.0f;
-		GUIConfig["Colors"][""] = 1.0f;
-		GUIConfig["Colors"][""] = 1.0f;
-		GUIConfig["Colors"][""] = 1.0f;
-		GUIConfig["Colors"][""] = 1.0f;
-		GUIConfig["Colors"][""] = 1.0f;
-		GUIConfig["Colors"][""] = 1.0f;
-		GUIConfig["Colors"][""] = 1.0f;
-		GUIConfig["Colors"][""] = 1.0f;
-		GUIConfig["Colors"][""] = 1.0f;
-		GUIConfig["Colors"][""] = 1.0f;
-		GUIConfig["Colors"][""] = 1.0f;
-		GUIConfig["Colors"][""] = 1.0f;
-		GUIConfig["Colors"][""] = 1.0f;
-		GUIConfig["Colors"][""] = 1.0f;
-		GUIConfig["Colors"][""] = 1.0f;
-		GUIConfig["Colors"][""] = 1.0f;
-		GUIConfig["Colors"][""] = 1.0f;
-		GUIConfig["Colors"][""] = 1.0f;
-		GUIConfig["Colors"][""] = 1.0f;
-		GUIConfig["Colors"][""] = 1.0f;
-		GUIConfig["Colors"][""] = 1.0f;
-		GUIConfig["Colors"][""] = 1.0f;
-		GUIConfig["Colors"][""] = 1.0f;*/
+		SetJsonFloat4(GUIConfig, "Colors", "Text", ImVec4(0.98f, 0.98f, 1.00f, 0.95f));
+		SetJsonFloat4(GUIConfig, "Colors", "TextDisabled", ImVec4(0.50f, 0.51f, 0.53f, 0.95f));
+		SetJsonFloat4(GUIConfig, "Colors", "WindowBackground", ImVec4(0.14f, 0.15f, 0.16f, 0.95f));
+		SetJsonFloat4(GUIConfig, "Colors", "ChildBackground", ImVec4(0.00f, 0.00f, 0.00f, 0.00f));
+		SetJsonFloat4(GUIConfig, "Colors", "PopupBackground", ImVec4(0.10f, 0.10f, 0.12f, 0.95f));
+		SetJsonFloat4(GUIConfig, "Colors", "Border", ImVec4(0.09f, 0.09f, 0.11f, 0.95f));
+		SetJsonFloat4(GUIConfig, "Colors", "BorderShadow", ImVec4(0.00f, 0.00f, 0.00f, 0.00f));
+		SetJsonFloat4(GUIConfig, "Colors", "FrameBackground", ImVec4(0.10f, 0.10f, 0.12f, 0.95f));
+		SetJsonFloat4(GUIConfig, "Colors", "FrameBackgroundHovered", ImVec4(0.20f, 0.55f, 0.83f, 0.95f));
+		SetJsonFloat4(GUIConfig, "Colors", "FrameBackgroundActive", ImVec4(0.20f, 0.55f, 0.83f, 0.95f));
+		SetJsonFloat4(GUIConfig, "Colors", "TitleBackground", ImVec4(0.04f, 0.04f, 0.04f, 1.00f));
+		SetJsonFloat4(GUIConfig, "Colors", "TitleBackgroundActive", ImVec4(0.10f, 0.40f, 0.75f, 0.95f));
+		SetJsonFloat4(GUIConfig, "Colors", "TitleBackgroundCollapsed", ImVec4(0.00f, 0.00f, 0.00f, 0.51f));
+		SetJsonFloat4(GUIConfig, "Colors", "MenuBarBackground", ImVec4(0.14f, 0.14f, 0.14f, 1.00f));
+		SetJsonFloat4(GUIConfig, "Colors", "ScrollbarBackground", ImVec4(0.02f, 0.02f, 0.02f, 0.53f));
+		SetJsonFloat4(GUIConfig, "Colors", "ScrollbarGrab", ImVec4(0.31f, 0.31f, 0.31f, 1.00f));
+		SetJsonFloat4(GUIConfig, "Colors", "ScrollbarGrabHovered", ImVec4(0.41f, 0.41f, 0.41f, 1.00f));
+		SetJsonFloat4(GUIConfig, "Colors", "ScrollbarGrabActive", ImVec4(0.51f, 0.51f, 0.51f, 1.00f));
+		SetJsonFloat4(GUIConfig, "Colors", "CheckMark", ImVec4(0.10f, 0.40f, 0.75f, 0.95f));
+		SetJsonFloat4(GUIConfig, "Colors", "SliderGrab", ImVec4(0.20f, 0.55f, 0.83f, 0.95f));
+		SetJsonFloat4(GUIConfig, "Colors", "SliderGrabActive", ImVec4(0.20f, 0.55f, 0.83f, 0.95f));
+		SetJsonFloat4(GUIConfig, "Colors", "Button", ImVec4(0.10f, 0.40f, 0.75f, 0.95f));
+		SetJsonFloat4(GUIConfig, "Colors", "ButtonHovered", ImVec4(0.20f, 0.55f, 0.98f, 0.95f));
+		SetJsonFloat4(GUIConfig, "Colors", "ButtonActive", ImVec4(0.06f, 0.53f, 0.98f, 1.00f));
+		SetJsonFloat4(GUIConfig, "Colors", "Header", ImVec4(0.26f, 0.59f, 0.98f, 0.31f));
+		SetJsonFloat4(GUIConfig, "Colors", "HeaderHovered", ImVec4(0.26f, 0.59f, 0.98f, 0.80f));
+		SetJsonFloat4(GUIConfig, "Colors", "HeaderActive", ImVec4(0.26f, 0.59f, 0.98f, 1.00f));
+		SetJsonFloat4(GUIConfig, "Colors", "Separator", ImVec4(0.43f, 0.43f, 0.50f, 0.50f));
+		SetJsonFloat4(GUIConfig, "Colors", "SeparatorHovered", ImVec4(0.10f, 0.40f, 0.75f, 0.78f));
+		SetJsonFloat4(GUIConfig, "Colors", "SeparatorActive", ImVec4(0.10f, 0.40f, 0.75f, 1.00f));
+		SetJsonFloat4(GUIConfig, "Colors", "ResizeGrip", ImVec4(0.26f, 0.59f, 0.98f, 0.25f));
+		SetJsonFloat4(GUIConfig, "Colors", "ResizeGripHovered", ImVec4(0.26f, 0.59f, 0.98f, 0.67f));
+		SetJsonFloat4(GUIConfig, "Colors", "ResizeGripActive", ImVec4(0.26f, 0.59f, 0.98f, 0.95f));
+		SetJsonFloat4(GUIConfig, "Colors", "Tab", ImVec4(0.18f, 0.35f, 0.58f, 0.86f));
+		SetJsonFloat4(GUIConfig, "Colors", "TabHovered", ImVec4(0.26f, 0.59f, 0.98f, 0.80f));
+		SetJsonFloat4(GUIConfig, "Colors", "TabActive", ImVec4(0.20f, 0.41f, 0.68f, 1.00f));
+		SetJsonFloat4(GUIConfig, "Colors", "TabUnfocused", ImVec4(0.07f, 0.10f, 0.15f, 0.97f));
+		SetJsonFloat4(GUIConfig, "Colors", "TabUnfocusedActive", ImVec4(0.14f, 0.26f, 0.42f, 1.00f));
+		SetJsonFloat4(GUIConfig, "Colors", "PlotLines", ImVec4(0.55f, 0.83f, 1.00f, 0.95f));
+		SetJsonFloat4(GUIConfig, "Colors", "PlotLinesHovered", ImVec4(1.00f, 0.43f, 0.35f, 1.00f));
+		SetJsonFloat4(GUIConfig, "Colors", "PlotHistogram", ImVec4(0.90f, 0.70f, 0.00f, 1.00f));
+		SetJsonFloat4(GUIConfig, "Colors", "PlotHistogramHovered", ImVec4(1.00f, 0.60f, 0.00f, 1.00f));
+		SetJsonFloat4(GUIConfig, "Colors", "TextSelectedBackground", ImVec4(0.26f, 0.59f, 0.98f, 0.35f));
+		SetJsonFloat4(GUIConfig, "Colors", "DragDropTarget", ImVec4(1.00f, 1.00f, 0.00f, 0.90f));
+		SetJsonFloat4(GUIConfig, "Colors", "NavHighlight", ImVec4(0.26f, 0.59f, 0.98f, 1.00f));
+		SetJsonFloat4(GUIConfig, "Colors", "NavWindowingHighlight", ImVec4(1.00f, 1.00f, 1.00f, 0.70f));
+		SetJsonFloat4(GUIConfig, "Colors", "NavWindowingDimBackground", ImVec4(0.80f, 0.80f, 0.80f, 0.20f));
+		SetJsonFloat4(GUIConfig, "Colors", "ModalWindowDimBackground", ImVec4(0.80f, 0.80f, 0.80f, 0.35f));
 
 		std::ofstream ConfigOutput(ExePath + "RFGR Script Loader/Settings/GUI Config.txt");
 		ConfigOutput << std::setw(4) << GUIConfig << std::endl;
@@ -279,86 +310,86 @@ bool LoadGUIConfig()
 	//OpenDebugConsole = MainConfig["Open debug console"].get<bool>();
 
 	ImGuiStyle& Style = ImGui::GetStyle(); //Currently 25 items
-	Style.Alpha = 1.0f;
-	Style.AntiAliasedFill = true;
-	Style.ButtonTextAlign = ImVec2(0.5f, 0.5f);
-	Style.ChildBorderSize = 0.0f;
-	Style.ChildRounding = 3.0f;
+	Style.Alpha = GUIConfig["Style"]["Alpha"].get<float>();
+	Style.AntiAliasedFill = GUIConfig["Style"]["AntiAliasedFill"].get<bool>();
+	Style.ButtonTextAlign = JsonGetFloat2(GUIConfig, "Style", "ButtonTextAlign");
+	Style.ChildBorderSize = GUIConfig["Style"]["ChildBorderSize"].get<float>();
+	Style.ChildRounding = GUIConfig["Style"]["ChildRounding"].get<float>();
 	//Style.ColumnsMinSpacing = 1.0f;
 	//Style.CurveTessellationTol = 1.25f;
-	Style.DisplaySafeAreaPadding = ImVec2(3.0f, 3.0f);
+	Style.DisplaySafeAreaPadding = JsonGetFloat2(GUIConfig, "Style", "DisplaySafeAreaPadding");
 	//Style.DisplayWindowPadding = ImVec2(1.0, 1.0f);
-	Style.FrameBorderSize = 0.0f;
-	Style.FramePadding = ImVec2(4.0f, 3.0f);
-	Style.FrameRounding = 3.0f;
-	Style.GrabMinSize = 10.0f;
-	Style.GrabRounding = 3.0f;
-	Style.IndentSpacing = 21.0f;
-	Style.ItemInnerSpacing = ImVec2(4.0f, 4.0f);
-	Style.ItemSpacing = ImVec2(8.0f, 4.0f);
+	Style.FrameBorderSize = GUIConfig["Style"]["FrameBorderSize"].get<float>();
+	Style.FramePadding = JsonGetFloat2(GUIConfig, "Style", "FramePadding");
+	Style.FrameRounding = GUIConfig["Style"]["FrameRounding"].get<float>();
+	Style.GrabMinSize = GUIConfig["Style"]["GrabMinSize"].get<float>();
+	Style.GrabRounding = GUIConfig["Style"]["GrabRounding"].get<float>(); 
+	Style.IndentSpacing = GUIConfig["Style"]["IndentSpacing"].get<float>(); 
+	Style.ItemInnerSpacing = JsonGetFloat2(GUIConfig, "Style", "ItemInnerSpacing");
+	Style.ItemSpacing = JsonGetFloat2(GUIConfig, "Style", "ItemSpacing");
 	//Style.MouseCursorScale = 1.0f;
-	Style.PopupBorderSize = 1.0f;
-	Style.PopupRounding = 3.0f;
-	Style.ScrollbarRounding = 3.0f;
-	Style.ScrollbarSize = 16.0f;
-	Style.TabBorderSize = 0.0f;
-	Style.TabRounding = 3.0f;
-	Style.TouchExtraPadding = ImVec2(0.0f, 0.0f);
-	Style.WindowBorderSize = 1.0f;
+	Style.PopupBorderSize = GUIConfig["Style"]["PopupBorderSize"].get<float>(); 
+	Style.PopupRounding = GUIConfig["Style"]["PopupRounding"].get<float>(); 
+	Style.ScrollbarRounding = GUIConfig["Style"]["ScrollbarRounding"].get<float>(); 
+	Style.ScrollbarSize = GUIConfig["Style"]["ScrollbarSize"].get<float>(); 16.0f;
+	Style.TabBorderSize = GUIConfig["Style"]["TabBorderSize"].get<float>(); 0.0f;
+	Style.TabRounding = GUIConfig["Style"]["TabRounding"].get<float>(); 3.0f;
+	Style.TouchExtraPadding = JsonGetFloat2(GUIConfig, "Style", "TouchExtraPadding");
+	Style.WindowBorderSize = GUIConfig["Style"]["WindowBorderSize"].get<float>(); 1.0f;
 	//Style.WindowMinSize = 1.0f;
-	Style.WindowPadding = ImVec2(8.0f, 8.0f);
-	Style.WindowRounding = 3.0f;
-	Style.WindowTitleAlign = ImVec2(0.0f, 0.5f);
+	Style.WindowPadding = JsonGetFloat2(GUIConfig, "Style", "WindowPadding");
+	Style.WindowRounding = GUIConfig["Style"]["WindowRounding"].get<float>(); 3.0f;
+	Style.WindowTitleAlign = JsonGetFloat2(GUIConfig, "Style", "WindowTitleAlign");
 
 	ImVec4* Colors = ImGui::GetStyle().Colors; //48 items
-	Colors[ImGuiCol_Text] = ImVec4(0.98f, 0.98f, 1.00f, 0.95f);
-	Colors[ImGuiCol_TextDisabled] = ImVec4(0.50f, 0.51f, 0.53f, 0.95f);
-	Colors[ImGuiCol_WindowBg] = ImVec4(0.14f, 0.15f, 0.16f, 0.95f);
-	Colors[ImGuiCol_ChildBg] = ImVec4(0.00f, 0.00f, 0.00f, 0.00f);
-	Colors[ImGuiCol_PopupBg] = ImVec4(0.10f, 0.10f, 0.12f, 0.95f);
-	Colors[ImGuiCol_Border] = ImVec4(0.09f, 0.09f, 0.11f, 0.95f);
-	Colors[ImGuiCol_BorderShadow] = ImVec4(0.00f, 0.00f, 0.00f, 0.00f);
-	Colors[ImGuiCol_FrameBg] = ImVec4(0.10f, 0.10f, 0.12f, 0.95f);
-	Colors[ImGuiCol_FrameBgHovered] = ImVec4(0.20f, 0.55f, 0.83f, 0.95f);
-	Colors[ImGuiCol_FrameBgActive] = ImVec4(0.20f, 0.55f, 0.83f, 0.95f);
-	Colors[ImGuiCol_TitleBg] = ImVec4(0.04f, 0.04f, 0.04f, 1.00f);
-	Colors[ImGuiCol_TitleBgActive] = ImVec4(0.10f, 0.40f, 0.75f, 0.95f);
-	Colors[ImGuiCol_TitleBgCollapsed] = ImVec4(0.00f, 0.00f, 0.00f, 0.51f);
-	Colors[ImGuiCol_MenuBarBg] = ImVec4(0.14f, 0.14f, 0.14f, 1.00f);
-	Colors[ImGuiCol_ScrollbarBg] = ImVec4(0.02f, 0.02f, 0.02f, 0.53f);
-	Colors[ImGuiCol_ScrollbarGrab] = ImVec4(0.31f, 0.31f, 0.31f, 1.00f);
-	Colors[ImGuiCol_ScrollbarGrabHovered] = ImVec4(0.41f, 0.41f, 0.41f, 1.00f);
-	Colors[ImGuiCol_ScrollbarGrabActive] = ImVec4(0.51f, 0.51f, 0.51f, 1.00f);
-	Colors[ImGuiCol_CheckMark] = ImVec4(0.10f, 0.40f, 0.75f, 0.95f);
-	Colors[ImGuiCol_SliderGrab] = ImVec4(0.20f, 0.55f, 0.83f, 0.95f);
-	Colors[ImGuiCol_SliderGrabActive] = ImVec4(0.20f, 0.55f, 0.83f, 0.95f);
-	Colors[ImGuiCol_Button] = ImVec4(0.10f, 0.40f, 0.75f, 0.95f);
-	Colors[ImGuiCol_ButtonHovered] = ImVec4(0.20f, 0.55f, 0.98f, 0.95f);
-	Colors[ImGuiCol_ButtonActive] = ImVec4(0.06f, 0.53f, 0.98f, 1.00f);
-	Colors[ImGuiCol_Header] = ImVec4(0.26f, 0.59f, 0.98f, 0.31f);
-	Colors[ImGuiCol_HeaderHovered] = ImVec4(0.26f, 0.59f, 0.98f, 0.80f);
-	Colors[ImGuiCol_HeaderActive] = ImVec4(0.26f, 0.59f, 0.98f, 1.00f);
-	Colors[ImGuiCol_Separator] = ImVec4(0.43f, 0.43f, 0.50f, 0.50f);
-	Colors[ImGuiCol_SeparatorHovered] = ImVec4(0.10f, 0.40f, 0.75f, 0.78f);
-	Colors[ImGuiCol_SeparatorActive] = ImVec4(0.10f, 0.40f, 0.75f, 1.00f);
-	Colors[ImGuiCol_ResizeGrip] = ImVec4(0.26f, 0.59f, 0.98f, 0.25f);
-	Colors[ImGuiCol_ResizeGripHovered] = ImVec4(0.26f, 0.59f, 0.98f, 0.67f);
-	Colors[ImGuiCol_ResizeGripActive] = ImVec4(0.26f, 0.59f, 0.98f, 0.95f);
-	Colors[ImGuiCol_Tab] = ImVec4(0.18f, 0.35f, 0.58f, 0.86f);
-	Colors[ImGuiCol_TabHovered] = ImVec4(0.26f, 0.59f, 0.98f, 0.80f);
-	Colors[ImGuiCol_TabActive] = ImVec4(0.20f, 0.41f, 0.68f, 1.00f);
-	Colors[ImGuiCol_TabUnfocused] = ImVec4(0.07f, 0.10f, 0.15f, 0.97f);
-	Colors[ImGuiCol_TabUnfocusedActive] = ImVec4(0.14f, 0.26f, 0.42f, 1.00f);
-	Colors[ImGuiCol_PlotLines] = ImVec4(0.55f, 0.83f, 1.00f, 0.95f);
-	Colors[ImGuiCol_PlotLinesHovered] = ImVec4(1.00f, 0.43f, 0.35f, 1.00f);
-	Colors[ImGuiCol_PlotHistogram] = ImVec4(0.90f, 0.70f, 0.00f, 1.00f);
-	Colors[ImGuiCol_PlotHistogramHovered] = ImVec4(1.00f, 0.60f, 0.00f, 1.00f);
-	Colors[ImGuiCol_TextSelectedBg] = ImVec4(0.26f, 0.59f, 0.98f, 0.35f);
-	Colors[ImGuiCol_DragDropTarget] = ImVec4(1.00f, 1.00f, 0.00f, 0.90f);
-	Colors[ImGuiCol_NavHighlight] = ImVec4(0.26f, 0.59f, 0.98f, 1.00f);
-	Colors[ImGuiCol_NavWindowingHighlight] = ImVec4(1.00f, 1.00f, 1.00f, 0.70f);
-	Colors[ImGuiCol_NavWindowingDimBg] = ImVec4(0.80f, 0.80f, 0.80f, 0.20f);
-	Colors[ImGuiCol_ModalWindowDimBg] = ImVec4(0.80f, 0.80f, 0.80f, 0.35f);
+	Colors[ImGuiCol_Text] = JsonGetFloat4(GUIConfig, "Colors", "Text");
+	Colors[ImGuiCol_TextDisabled] = JsonGetFloat4(GUIConfig, "Colors", "TextDisabled");
+	Colors[ImGuiCol_WindowBg] = JsonGetFloat4(GUIConfig, "Colors", "WindowBackground");
+	Colors[ImGuiCol_ChildBg] = JsonGetFloat4(GUIConfig, "Colors", "ChildBackground");
+	Colors[ImGuiCol_PopupBg] = JsonGetFloat4(GUIConfig, "Colors", "PopupBackground");
+	Colors[ImGuiCol_Border] = JsonGetFloat4(GUIConfig, "Colors", "Border");
+	Colors[ImGuiCol_BorderShadow] = JsonGetFloat4(GUIConfig, "Colors", "BorderShadow");
+	Colors[ImGuiCol_FrameBg] = JsonGetFloat4(GUIConfig, "Colors", "FrameBackground");
+	Colors[ImGuiCol_FrameBgHovered] = JsonGetFloat4(GUIConfig, "Colors", "FrameBackgroundHovered");
+	Colors[ImGuiCol_FrameBgActive] = JsonGetFloat4(GUIConfig, "Colors", "FrameBackgroundActive");
+	Colors[ImGuiCol_TitleBg] = JsonGetFloat4(GUIConfig, "Colors", "TitleBackground");
+	Colors[ImGuiCol_TitleBgActive] = JsonGetFloat4(GUIConfig, "Colors", "TitleBackgroundActive");
+	Colors[ImGuiCol_TitleBgCollapsed] = JsonGetFloat4(GUIConfig, "Colors", "TitleBackgroundCollapsed");
+	Colors[ImGuiCol_MenuBarBg] = JsonGetFloat4(GUIConfig, "Colors", "MenuBarBackground");
+	Colors[ImGuiCol_ScrollbarBg] = JsonGetFloat4(GUIConfig, "Colors", "ScrollbarBackground");
+	Colors[ImGuiCol_ScrollbarGrab] = JsonGetFloat4(GUIConfig, "Colors", "ScrollbarGrab");
+	Colors[ImGuiCol_ScrollbarGrabHovered] = JsonGetFloat4(GUIConfig, "Colors", "ScrollbarGrabHovered");
+	Colors[ImGuiCol_ScrollbarGrabActive] = JsonGetFloat4(GUIConfig, "Colors", "ScrollbarGrabActive");
+	Colors[ImGuiCol_CheckMark] = JsonGetFloat4(GUIConfig, "Colors", "CheckMark");
+	Colors[ImGuiCol_SliderGrab] = JsonGetFloat4(GUIConfig, "Colors", "SliderGrab");
+	Colors[ImGuiCol_SliderGrabActive] = JsonGetFloat4(GUIConfig, "Colors", "SliderGrabActive");
+	Colors[ImGuiCol_Button] = JsonGetFloat4(GUIConfig, "Colors", "Button");
+	Colors[ImGuiCol_ButtonHovered] = JsonGetFloat4(GUIConfig, "Colors", "ButtonHovered");
+	Colors[ImGuiCol_ButtonActive] = JsonGetFloat4(GUIConfig, "Colors", "ButtonActive");
+	Colors[ImGuiCol_Header] = JsonGetFloat4(GUIConfig, "Colors", "Header");
+	Colors[ImGuiCol_HeaderHovered] = JsonGetFloat4(GUIConfig, "Colors", "HeaderHovered");
+	Colors[ImGuiCol_HeaderActive] = JsonGetFloat4(GUIConfig, "Colors", "HeaderActive");
+	Colors[ImGuiCol_Separator] = JsonGetFloat4(GUIConfig, "Colors", "Separator");
+	Colors[ImGuiCol_SeparatorHovered] = JsonGetFloat4(GUIConfig, "Colors", "SeparatorHovered");
+	Colors[ImGuiCol_SeparatorActive] = JsonGetFloat4(GUIConfig, "Colors", "SeparatorActive");
+	Colors[ImGuiCol_ResizeGrip] = JsonGetFloat4(GUIConfig, "Colors", "ResizeGrip");
+	Colors[ImGuiCol_ResizeGripHovered] = JsonGetFloat4(GUIConfig, "Colors", "ResizeGripHovered");
+	Colors[ImGuiCol_ResizeGripActive] = JsonGetFloat4(GUIConfig, "Colors", "ResizeGripActive");
+	Colors[ImGuiCol_Tab] = JsonGetFloat4(GUIConfig, "Colors", "Tab");
+	Colors[ImGuiCol_TabHovered] = JsonGetFloat4(GUIConfig, "Colors", "TabHovered");
+	Colors[ImGuiCol_TabActive] = JsonGetFloat4(GUIConfig, "Colors", "TabActive");
+	Colors[ImGuiCol_TabUnfocused] = JsonGetFloat4(GUIConfig, "Colors", "TabUnfocused");
+	Colors[ImGuiCol_TabUnfocusedActive] = JsonGetFloat4(GUIConfig, "Colors", "TabUnfocusedActive");
+	Colors[ImGuiCol_PlotLines] = JsonGetFloat4(GUIConfig, "Colors", "PlotLines");
+	Colors[ImGuiCol_PlotLinesHovered] = JsonGetFloat4(GUIConfig, "Colors", "PlotLinesHovered");
+	Colors[ImGuiCol_PlotHistogram] = JsonGetFloat4(GUIConfig, "Colors", "PlotHistogram");
+	Colors[ImGuiCol_PlotHistogramHovered] = JsonGetFloat4(GUIConfig, "Colors", "PlotHistogramHovered");
+	Colors[ImGuiCol_TextSelectedBg] = JsonGetFloat4(GUIConfig, "Colors", "TextSelectedBackground");
+	Colors[ImGuiCol_DragDropTarget] = JsonGetFloat4(GUIConfig, "Colors", "DragDropTarget");
+	Colors[ImGuiCol_NavHighlight] = JsonGetFloat4(GUIConfig, "Colors", "NavHighlight");
+	Colors[ImGuiCol_NavWindowingHighlight] = JsonGetFloat4(GUIConfig, "Colors", "NavWindowingHighlight");
+	Colors[ImGuiCol_NavWindowingDimBg] = JsonGetFloat4(GUIConfig, "Colors", "NavWindowingDimBackground");
+	Colors[ImGuiCol_ModalWindowDimBg] = JsonGetFloat4(GUIConfig, "Colors", "ModalWindowDimBackground");
 
 	return true;
 }
