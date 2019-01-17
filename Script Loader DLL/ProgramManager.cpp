@@ -543,12 +543,13 @@ bool ProgramManager::LoadDataFromConfig()
 	if (fs::exists(ExePath + "RFGR Script Loader/Settings/Settings.txt"))
 	{
 		//LogFile << "Settings.txt found. Loading into string buffer..." << std::endl;
-		std::ifstream Config(ExePath + "RFGR Script Loader/Settings/Settings.txt");
+		
 		//LogFile << "Preparing to parse..." << std::endl;
 
 		try
 		{
 			LogFile << "Parsing settings.txt..." << std::endl;
+			std::ifstream Config(ExePath + "RFGR Script Loader/Settings/Settings.txt");
 			Config >> MainConfig;
 			Config.close();
 			//MainConfig.parse(Buffer);

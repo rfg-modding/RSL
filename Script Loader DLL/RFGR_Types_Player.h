@@ -28,19 +28,6 @@ enum prop_type
 	NUM_PROP_TYPES = 0x14,
 };
 
-/* 617 */
-enum human_teams
-{
-	HUMAN_TEAM_NONE = 0xFFFFFFFF,
-	HUMAN_TEAM_GUERILLA = 0x0,
-	HUMAN_TEAM_EDF = 0x1,
-	HUMAN_TEAM_CIVILIAN = 0x2,
-	HUMAN_TEAM_MP_NEUTRAL = 0x2,
-	HUMAN_TEAM_MARAUDER = 0x3,
-	HUMAN_TEAM_MP_SPECTATOR = 0x3,
-	NUM_HUMAN_TEAMS = 0x4,
-};
-
 /* 712 */
 enum GameState
 {
@@ -162,19 +149,6 @@ enum VoiceLineHandle
 	INVALID_VOICE_LINE_HANDLE = 0xFFFFFFFF,
 	VOICE_LINE_HANDLE_IS_DLC = 0x8000,
 	VOICE_LINE_HANDLE_FORCE_TO_32_BIT = 0x7FFFFFFF,
-};
-
-/* 617 */
-enum HumanTeams
-{
-	HUMAN_TEAM_NONE = 0xFFFFFFFF,
-	HUMAN_TEAM_GUERILLA = 0x0,
-	HUMAN_TEAM_EDF = 0x1,
-	HUMAN_TEAM_CIVILIAN = 0x2,
-	HUMAN_TEAM_MP_NEUTRAL = 0x2,
-	HUMAN_TEAM_MARAUDER = 0x3,
-	HUMAN_TEAM_MP_SPECTATOR = 0x3,
-	NUM_HUMAN_TEAMS = 0x4,
 };
 
 /* 410 */
@@ -1963,10 +1937,20 @@ struct objectVtbl
 	void(__thiscall *pool_free)(object *this);
 }; */
 
+/* 5213 */
+struct human_info_inventory_info //12
+{
+	inv_item_info *i_info; //4
+	int count; //4
+	int slot; //4
+};
+
+struct base_array_human_info_inventory_info_Vtbl;
+
 /* 5211 */
 struct base_array_human_info_inventory_info //16
 {
-  base_array_human_info_inventory_info_Vtbl *vfptr; //4
+  base_array_human_info_inventory_info_Vtbl* vfptr; //4
   human_info_inventory_info *elt; //4
   int array_size; //4
   int num; //4
@@ -1975,15 +1959,7 @@ struct base_array_human_info_inventory_info //16
 /* 5212 */
 struct base_array_human_info_inventory_info_Vtbl //4
 {
-  void* (__thiscall* __vecDelDtor)(base_array_human_info_inventory_info* This, unsigned int); //4
-};
-
-/* 5213 */
-struct human_info_inventory_info //12
-{
-  inv_item_info *i_info; //4
-  int count; //4
-  int slot; //4
+	void* (__thiscall* __vecDelDtor)(base_array_human_info_inventory_info* This, unsigned int); //4
 };
 
 /* 5214 */
@@ -2054,6 +2030,8 @@ struct human_info_flags //19
 	bool driverless_exit_only;
 };
 
+struct base_array_human_voice_persona_pointer_Vtbl;
+
 /* 5194 */
 struct base_array_human_voice_persona_pointer //16
 {
@@ -2092,7 +2070,7 @@ const struct HumanInfo //397
   int slot_id; //4
   float default_height_scale; //4
   float height_scale_variation; //4
-  human_teams default_team; //4, enum
+  HumanTeams default_team; //4, enum
   __int16 hurt_threshold; //2
   int home_district; //4
   float aim_error_pct; //4

@@ -4,8 +4,8 @@
 ///#include "RFGR_Types_Player.h"
 #include "Functions.h"
 
-nlohmann::json GUIConfig;
-nlohmann::json TeleportLocations;
+extern nlohmann::json GUIConfig;
+extern nlohmann::json TeleportLocations;
 
 class MainOverlay
 {

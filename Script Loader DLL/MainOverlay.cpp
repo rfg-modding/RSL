@@ -1,5 +1,8 @@
 #include "MainOverlay.h"
 
+nlohmann::json GUIConfig;
+nlohmann::json TeleportLocations;
+
 static void ShowExampleMenuFile()
 {
 	ImGui::MenuItem("(dummy menu)", NULL, false, false);
@@ -101,30 +104,6 @@ static void TooltipOnPrevious(const char* Description)
 	}
 }
 
-MainOverlay::MainOverlay()
-{
-
-}
-
-MainOverlay::~MainOverlay()
-{
-
-}
-
-void MainOverlay::Initialize()
-{
-	MainOverlayWindowFlags = 0;
-	//MainOverlayWindowFlags |= ImGuiWindowFlags_NoTitleBar;
-	//MainOverlayWindowFlags |= ImGuiWindowFlags_NoScrollbar;
-	MainOverlayWindowFlags |= ImGuiWindowFlags_MenuBar;
-	//MainOverlayWindowFlags |= ImGuiWindowFlags_NoMove;
-	//MainOverlayWindowFlags |= ImGuiWindowFlags_NoResize;
-	MainOverlayWindowFlags |= ImGuiWindowFlags_NoCollapse;
-	//MainOverlayWindowFlags |= ImGuiWindowFlags_NoNav;
-	//MainOverlayWindowFlags |= ImGuiWindowFlags_NoBackground;
-	//MainOverlayWindowFlags |= ImGuiWindowFlags_NoBringToFrontOnFocus;
-}
-
 bool HumanTeleportSafe(float x, float y, float z, int TimeToHover = 5000)
 {
 	if (GlobalPlayerPtr)
@@ -187,36 +166,33 @@ bool LoadTeleportLocations()
 	std::string ExePath = GetEXEPath(false);
 	std::ofstream LogFile(ExePath + "RFGR Script Loader/Logs/Load Log.txt");
 
-	if (fs::exists(ExePath + "RFGR Script Loader/Settings/Teleport Locations.txt"))
+	if (fs::exists(ExePath + "RFGR Script Loader/Settings/Teleport Locations.json"))
 	{
-		std::ifstream Config(ExePath + "RFGR Script Loader/Settings/Teleport Locations.txt");
-		Config >> GUIConfig;
-		Config.close();
-
 		try
 		{
-			LogFile << "Parsing \"Teleport Locations.txt\"..." << std::endl;
-			Config >> MainConfig;
+			std::ifstream Config(ExePath + "RFGR Script Loader/Settings/Teleport Locations.json");
+			LogFile << "Parsing \"Teleport Locations.json\"..." << std::endl;
+			Config >> TeleportLocations;
 			Config.close();
 		}
 		catch (nlohmann::json::parse_error& Exception)
 		{
-			LogFile << "Exception when parsing \"Teleport Locations.txt\"!" << std::endl;
+			LogFile << "Exception when parsing \"Teleport Locations.json\"!" << std::endl;
 			LogFile << Exception.what() << std::endl;
-			std::string ExceptionMessage("Exception when parsing \"Teleport Locations.txt\"\n");
+			std::string ExceptionMessage("Exception when parsing \"Teleport Locations.json\"\n");
 			ExceptionMessage += "Message: ";
 			ExceptionMessage += Exception.what();
 
 			MessageBoxA(find_main_window(GetProcessID("rfg.exe")), ExceptionMessage.c_str(), "Json parsing exception", MB_OK);
-			LogFile << "Failed parse \"Teleport Locations.txt\", exiting." << std::endl;
+			LogFile << "Failed parse \"Teleport Locations.json\", exiting." << std::endl;
 			return false;
 		}
 		catch (...)
 		{
-			LogFile << "Default exception when parsing \"Teleport Locations.txt\"!" << std::endl;
+			LogFile << "Default exception when parsing \"Teleport Locations.json\"!" << std::endl;
 
-			MessageBoxA(find_main_window(GetProcessID("rfg.exe")), "Default exception while parsing \"Teleport Locations.txt\"", "Json parsing exception", MB_OK);
-			LogFile << "Failed parse \"Teleport Locations.txt\", exiting." << std::endl;
+			MessageBoxA(find_main_window(GetProcessID("rfg.exe")), "Default exception while parsing \"Teleport Locations.json\"", "Json parsing exception", MB_OK);
+			LogFile << "Failed parse \"Teleport Locations.json\", exiting." << std::endl;
 			return false;
 		}
 		LogFile << "No parse exceptions detected." << std::endl;
@@ -227,7 +203,7 @@ bool LoadTeleportLocations()
 		//std::cout << "Settings.txt not found. Creating from default values." << std::endl;
 		std::ofstream LogFile;
 		LogFile.open(ExePath + "RFGR Script Loader/Logs/Start errors.txt");
-		LogFile << "\"Teleport Locations.txt\" not found. Creating from default values." << std::endl;
+		LogFile << "\"Teleport Locations.json\" not found. Creating from default values." << std::endl;
 
 		SetTeleportLocation("Tutorial Area Hilltop", -2328.29f, 30.0f, -2317.9f, "Tutorial area at the start of the game. Position: (-2328.29, 30.0, -2317.9)");
 		SetTeleportLocation("Parker - Safehouse", -1877.77f, 27.0f, -1452.0f, "Game starting safehouse. Near ore processing plant. Position: (-1877.77, 27.0, -1452.0)");
@@ -249,8 +225,8 @@ bool LoadTeleportLocations()
 		SetTeleportLocation("Mount Vogel - Base", -670.37f, 47.0f, 2423.75f, "Bottom of Mount Vogel and mass accelerator. Several old buildings. Position: (-670.37, 47.0, 2423.75)");
 		SetTeleportLocation("Mount Vogel - Peak", -285.77f, 183.0f, 2423.4f, "Peak of Mount Vogel with mass accelerator exit. Position: (-285.77, 183.0, 2423.4)");
 
-		std::ofstream ConfigOutput(ExePath + "RFGR Script Loader/Settings/Teleport Locations.txt");
-		ConfigOutput << std::setw(4) << GUIConfig << std::endl;
+		std::ofstream ConfigOutput(ExePath + "RFGR Script Loader/Settings/Teleport Locations.json");
+		ConfigOutput << std::setw(4) << TeleportLocations << std::endl;
 		ConfigOutput.close();
 		LogFile.close();
 	}
@@ -263,36 +239,33 @@ bool LoadGUIConfig()
 	std::string ExePath = GetEXEPath(false);
 	std::ofstream LogFile(ExePath + "RFGR Script Loader/Logs/Load Log.txt");
 
-	if (fs::exists(ExePath + "RFGR Script Loader/Settings/GUI Config.txt"))
+	if (fs::exists(ExePath + "RFGR Script Loader/Settings/GUI Config.json"))
 	{
-		std::ifstream Config(ExePath + "RFGR Script Loader/Settings/GUI Config.txt");
-		Config >> GUIConfig;
-		Config.close();
-
 		try
 		{
-			LogFile << "Parsing GUI Config.txt..." << std::endl;
-			Config >> MainConfig;
+			std::ifstream Config(ExePath + "RFGR Script Loader/Settings/GUI Config.json");
+			LogFile << "Parsing GUI Config.json..." << std::endl;
+			Config >> GUIConfig;
 			Config.close();
 		}
 		catch (nlohmann::json::parse_error& Exception)
 		{
-			LogFile << "Exception when parsing GUI Config.txt!" << std::endl;
+			LogFile << "Exception when parsing GUI Config.json!" << std::endl;
 			LogFile << Exception.what() << std::endl;
-			std::string ExceptionMessage("Exception when parsing GUI Config!\n");
+			std::string ExceptionMessage("Exception when parsing GUI Config.json!\n");
 			ExceptionMessage += "Message: ";
 			ExceptionMessage += Exception.what();
 
 			MessageBoxA(find_main_window(GetProcessID("rfg.exe")), ExceptionMessage.c_str(), "Json parsing exception", MB_OK);
-			LogFile << "Failed parse GUI Config, exiting." << std::endl;
+			LogFile << "Failed parse GUI Config.json, exiting." << std::endl;
 			return false;
 		}
 		catch (...)
 		{
-			LogFile << "Default exception when parsing GUI Config.txt!" << std::endl;
+			LogFile << "Default exception when parsing GUI Config.json!" << std::endl;
 
-			MessageBoxA(find_main_window(GetProcessID("rfg.exe")), "Default exception while parsing GUI Config.txt", "Json parsing exception", MB_OK);
-			LogFile << "Failed parse GUI Config.txt, exiting." << std::endl;
+			MessageBoxA(find_main_window(GetProcessID("rfg.exe")), "Default exception while parsing GUI Config.json", "Json parsing exception", MB_OK);
+			LogFile << "Failed parse GUI Config.json, exiting." << std::endl;
 			return false;
 		}
 		LogFile << "No parse exceptions detected." << std::endl;
@@ -303,7 +276,7 @@ bool LoadGUIConfig()
 		//std::cout << "Settings.txt not found. Creating from default values." << std::endl;
 		std::ofstream LogFile;
 		LogFile.open(ExePath + "RFGR Script Loader/Logs/Start errors.txt");
-		LogFile << "GUI Settings.txt not found. Creating from default values." << std::endl;
+		LogFile << "GUI Settings.json not found. Creating from default values." << std::endl;
 		
 		GUIConfig["Theme Info"]["Theme name"] = std::string("Default Dark Theme");
 		GUIConfig["Theme Info"]["Description"] = std::string("The default dark theme for the script loader.");
@@ -341,7 +314,7 @@ bool LoadGUIConfig()
 		GUIConfig["Style"]["WindowPadding"][0] = 8.0f;
 		GUIConfig["Style"]["WindowPadding"][1] = 8.0f;
 		GUIConfig["Style"]["WindowRounding"] = 3.0f;
-		GUIConfig["Style"]["WindowTitleAlign"][0] = 0.5f;
+		GUIConfig["Style"]["WindowTitleAlign"][0] = 0.0f;
 		GUIConfig["Style"]["WindowTitleAlign"][1] = 0.5f;
 
 		SetJsonFloat4(GUIConfig, "Colors", "Text", ImVec4(0.98f, 0.98f, 1.00f, 0.95f));
@@ -393,7 +366,7 @@ bool LoadGUIConfig()
 		SetJsonFloat4(GUIConfig, "Colors", "NavWindowingDimBackground", ImVec4(0.80f, 0.80f, 0.80f, 0.20f));
 		SetJsonFloat4(GUIConfig, "Colors", "ModalWindowDimBackground", ImVec4(0.80f, 0.80f, 0.80f, 0.35f));
 
-		std::ofstream ConfigOutput(ExePath + "RFGR Script Loader/Settings/GUI Config.txt");
+		std::ofstream ConfigOutput(ExePath + "RFGR Script Loader/Settings/GUI Config.json");
 		ConfigOutput << std::setw(4) << GUIConfig << std::endl;
 		ConfigOutput.close();
 		LogFile.close();
@@ -484,6 +457,33 @@ bool LoadGUIConfig()
 	Colors[ImGuiCol_ModalWindowDimBg] = JsonGetFloat4(GUIConfig, "Colors", "ModalWindowDimBackground");
 
 	return true;
+}
+
+MainOverlay::MainOverlay()
+{
+
+}
+
+MainOverlay::~MainOverlay()
+{
+
+}
+
+void MainOverlay::Initialize()
+{
+	MainOverlayWindowFlags = 0;
+	//MainOverlayWindowFlags |= ImGuiWindowFlags_NoTitleBar;
+	//MainOverlayWindowFlags |= ImGuiWindowFlags_NoScrollbar;
+	MainOverlayWindowFlags |= ImGuiWindowFlags_MenuBar;
+	//MainOverlayWindowFlags |= ImGuiWindowFlags_NoMove;
+	//MainOverlayWindowFlags |= ImGuiWindowFlags_NoResize;
+	MainOverlayWindowFlags |= ImGuiWindowFlags_NoCollapse;
+	//MainOverlayWindowFlags |= ImGuiWindowFlags_NoNav;
+	//MainOverlayWindowFlags |= ImGuiWindowFlags_NoBackground;
+	//MainOverlayWindowFlags |= ImGuiWindowFlags_NoBringToFrontOnFocus;
+
+	LoadGUIConfig();
+	LoadTeleportLocations();
 }
 
 void MainOverlay::Draw(const char* title, bool* p_open)
