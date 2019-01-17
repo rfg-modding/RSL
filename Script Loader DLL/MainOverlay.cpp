@@ -177,14 +177,26 @@ bool LoadTeleportLocations()
 		}
 		catch (nlohmann::json::parse_error& Exception)
 		{
-			LogFile << "Exception when parsing \"Teleport Locations.json\"!" << std::endl;
+			LogFile << "Parse error while parsing \"Teleport Locations.json\"!" << std::endl;
 			LogFile << Exception.what() << std::endl;
-			std::string ExceptionMessage("Exception when parsing \"Teleport Locations.json\"\n");
+			std::string ExceptionMessage("Parse error while parsing \"Teleport Locations.json\"\n");
 			ExceptionMessage += "Message: ";
 			ExceptionMessage += Exception.what();
 
 			MessageBoxA(find_main_window(GetProcessID("rfg.exe")), ExceptionMessage.c_str(), "Json parsing exception", MB_OK);
-			LogFile << "Failed parse \"Teleport Locations.json\", exiting." << std::endl;
+			LogFile << "Failed to parse \"Teleport Locations.json\", exiting." << std::endl;
+			return false;
+		}
+		catch (std::exception& Exception)
+		{
+			LogFile << "General exception when parsing \"Teleport Locations.json\"!" << std::endl;
+			LogFile << Exception.what() << std::endl;
+			std::string ExceptionMessage("General exception when parsing \"Teleport Locations.json\"\n");
+			ExceptionMessage += "Message: ";
+			ExceptionMessage += Exception.what();
+
+			MessageBoxA(find_main_window(GetProcessID("rfg.exe")), ExceptionMessage.c_str(), "Json parsing exception", MB_OK);
+			LogFile << "Failed to parse \"Teleport Locations.json\", exiting." << std::endl;
 			return false;
 		}
 		catch (...)
@@ -192,7 +204,7 @@ bool LoadTeleportLocations()
 			LogFile << "Default exception when parsing \"Teleport Locations.json\"!" << std::endl;
 
 			MessageBoxA(find_main_window(GetProcessID("rfg.exe")), "Default exception while parsing \"Teleport Locations.json\"", "Json parsing exception", MB_OK);
-			LogFile << "Failed parse \"Teleport Locations.json\", exiting." << std::endl;
+			LogFile << "Failed to parse \"Teleport Locations.json\", exiting." << std::endl;
 			return false;
 		}
 		LogFile << "No parse exceptions detected." << std::endl;
@@ -250,14 +262,26 @@ bool LoadGUIConfig()
 		}
 		catch (nlohmann::json::parse_error& Exception)
 		{
-			LogFile << "Exception when parsing GUI Config.json!" << std::endl;
+			LogFile << "Parse error while parsing GUI Config.json!" << std::endl;
 			LogFile << Exception.what() << std::endl;
-			std::string ExceptionMessage("Exception when parsing GUI Config.json!\n");
+			std::string ExceptionMessage("Parse error while parsing GUI Config.json!\n");
 			ExceptionMessage += "Message: ";
 			ExceptionMessage += Exception.what();
 
 			MessageBoxA(find_main_window(GetProcessID("rfg.exe")), ExceptionMessage.c_str(), "Json parsing exception", MB_OK);
-			LogFile << "Failed parse GUI Config.json, exiting." << std::endl;
+			LogFile << "Failed to parse GUI Config.json, exiting." << std::endl;
+			return false;
+		}
+		catch (std::exception& Exception)
+		{
+			LogFile << "General exception when parsing GUI Config.json!" << std::endl;
+			LogFile << Exception.what() << std::endl;
+			std::string ExceptionMessage("General exception when parsing GUI Config.json!\n");
+			ExceptionMessage += "Message: ";
+			ExceptionMessage += Exception.what();
+
+			MessageBoxA(find_main_window(GetProcessID("rfg.exe")), ExceptionMessage.c_str(), "Json parsing exception", MB_OK);
+			LogFile << "Failed to parse GUI Config.json, exiting." << std::endl;
 			return false;
 		}
 		catch (...)
@@ -265,7 +289,7 @@ bool LoadGUIConfig()
 			LogFile << "Default exception when parsing GUI Config.json!" << std::endl;
 
 			MessageBoxA(find_main_window(GetProcessID("rfg.exe")), "Default exception while parsing GUI Config.json", "Json parsing exception", MB_OK);
-			LogFile << "Failed parse GUI Config.json, exiting." << std::endl;
+			LogFile << "Failed to parse GUI Config.json, exiting." << std::endl;
 			return false;
 		}
 		LogFile << "No parse exceptions detected." << std::endl;
