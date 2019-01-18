@@ -101,7 +101,7 @@ namespace kaiko
 		GameSessionResponseId_None = 0xFFFFFFFF,
 	};
 
-	enum kaiko::GameSessionInteractionParameterType
+	enum GameSessionInteractionParameterType
 	{
 		GameSessionInteractionParameterType_PlatformErrorCode = 0x0,
 		GameSessionInteractionParameterType_UserNameString = 0x1,
