@@ -165,6 +165,7 @@
     <ClCompile Include="Hooks.cpp" />
     <ClCompile Include="imgui_impl_dx11.cpp" />
     <ClCompile Include="imgui_impl_win32.cpp" />
+    <ClCompile Include="imgui_stdlib.cpp" />
     <ClCompile Include="include\ImGui\imgui.cpp" />
     <ClCompile Include="include\ImGui\imgui_demo.cpp" />
     <ClCompile Include="include\ImGui\imgui_draw.cpp" />
@@ -196,6 +197,7 @@
     <ClInclude Include="Hooks.h" />
     <ClInclude Include="imgui_impl_dx11.h" />
     <ClInclude Include="imgui_impl_win32.h" />
+    <ClInclude Include="imgui_stdlib.h" />
     <ClInclude Include="include\ImGui\imconfig.h" />
     <ClInclude Include="include\ImGui\imgui.h" />
     <ClInclude Include="include\ImGui\imgui_internal.h" />

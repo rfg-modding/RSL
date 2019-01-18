@@ -153,12 +153,46 @@ ImVec4 JsonGetFloat4(nlohmann::json& Json, const char* FirstKey, const char* Sec
 	return ImVec4(Json[FirstKey][SecondKey][0], Json[FirstKey][SecondKey][1], Json[FirstKey][SecondKey][2], Json[FirstKey][SecondKey][3]);
 }
 
-void SetTeleportLocation(std::string Name, float x, float y, float z, std::string Description)
+bool SetTeleportLocation(std::string Name, float x, float y, float z, std::string Description)
 {
-	TeleportLocations[Name]["Position"][0] = x;
-	TeleportLocations[Name]["Position"][1] = y;
-	TeleportLocations[Name]["Position"][2] = z;
-	TeleportLocations[Name]["TooltipDescription"] = "Tutorial area at the start of the game. Position: (-2328.29, 30.0, -2317.9)";
+	for (size_t i = 0; i < TeleportLocations.size(); i++)
+	{
+		if (TeleportLocations[i]["Name"] == Name)
+		{
+			return false;
+			break;
+		}
+	}
+	size_t Index = TeleportLocations.size();
+	TeleportLocations[Index]["Name"] = Name;
+	TeleportLocations[Index]["Position"][0] = x;
+	TeleportLocations[Index]["Position"][1] = y;
+	TeleportLocations[Index]["Position"][2] = z;
+	TeleportLocations[Index]["TooltipDescription"] = Description;
+	return true;
+}
+
+bool ChangeTeleportLocation(std::string CurrentName, std::string NewName, float NewX, float NewY, float NewZ, std::string NewDescription)
+{
+	int Index = -1;
+	for (size_t i = 0; i < TeleportLocations.size(); i++)
+	{
+		if (TeleportLocations[i]["Name"] == CurrentName)
+		{
+			Index = i;
+			break;
+		}
+	}
+	if (Index < 0)
+	{
+		return false;
+	}
+	TeleportLocations[Index]["Name"] = NewName;
+	TeleportLocations[Index]["Position"][0] = NewX;
+	TeleportLocations[Index]["Position"][1] = NewY;
+	TeleportLocations[Index]["Position"][2] = NewZ;
+	TeleportLocations[Index]["TooltipDescription"] = NewDescription;
+	return true;
 }
 
 bool LoadTeleportLocations()
@@ -219,7 +253,7 @@ bool LoadTeleportLocations()
 
 		SetTeleportLocation("Tutorial Area Hilltop", -2328.29f, 30.0f, -2317.9f, "Tutorial area at the start of the game. Position: (-2328.29, 30.0, -2317.9)");
 		SetTeleportLocation("Parker - Safehouse", -1877.77f, 27.0f, -1452.0f, "Game starting safehouse. Near ore processing plant. Position: (-1877.77, 27.0, -1452.0)");
-		SetTeleportLocation("Dust - Northern Safehouse", -387.0f, 38.0f, -820.0f, "Near tharsis wind farm and Dust town hall. Position: (-387.0, 38.0, -820.0)");
+		SetTeleportLocation("Dust - Northern Safehouse", -387.0f, 38.0f, -820.0f, "Near tharsis point wind farm and Dust town hall. Position: (-387.0, 38.0, -820.0)");
 		SetTeleportLocation("Dust - Southern Safehouse", -113.59f, 30.0f, -2449.58f, "Near chemical plant. Position: (-113.59, 30.0, -2449.58)");
 		SetTeleportLocation("Badlands - Safehouse / RFHQ", 2411.90f, 58.0f, -239.77f, "Main safehouse in Badlands. Also the HQ of the Red Faction. Position: (2411.90, 58.0, -239.77)");
 		SetTeleportLocation("Badlands - Mohole", 1420.27f, -28.0f, -734.28f, "Big 'ol hole in the ground used to pull heat from Mars' core for terraforming purposes. There's a smaller one in Dust. Position: (1420.27, -28.0, -734.28)");
@@ -242,6 +276,23 @@ bool LoadTeleportLocations()
 		ConfigOutput.close();
 		LogFile.close();
 	}
+
+	return true;
+}
+
+bool SaveTeleportLocations()
+{
+	std::string ExePath = GetEXEPath(false);
+
+	//CreateDirectoryIfNull(ExePath + "RFGR Script Loader/Settings/");
+	//std::cout << "Settings.txt not found. Creating from default values." << std::endl;
+	//std::ofstream LogFile(ExePath + "RFGR Script Loader/Logs/Start errors.txt");;
+	//LogFile << "\"Teleport Locations.json\" not found. Creating from default values." << std::endl;
+
+	std::ofstream ConfigOutput(ExePath + "RFGR Script Loader/Settings/Teleport Locations.json");
+	ConfigOutput << std::setw(4) << TeleportLocations << std::endl;
+	ConfigOutput.close();
+	//LogFile.close();
 
 	return true;
 }
@@ -281,7 +332,7 @@ bool LoadGUIConfig()
 			ExceptionMessage += Exception.what();
 
 			MessageBoxA(find_main_window(GetProcessID("rfg.exe")), ExceptionMessage.c_str(), "Json parsing exception", MB_OK);
-			LogFile << "Failed to parse GUI Config.json, exiting." << std::endl;
+			LogFile << "Failed to parse GUI Config.json, exiting." << std::endl;         
 			return false;
 		}
 		catch (...)
@@ -289,7 +340,7 @@ bool LoadGUIConfig()
 			LogFile << "Default exception when parsing GUI Config.json!" << std::endl;
 
 			MessageBoxA(find_main_window(GetProcessID("rfg.exe")), "Default exception while parsing GUI Config.json", "Json parsing exception", MB_OK);
-			LogFile << "Failed to parse GUI Config.json, exiting." << std::endl;
+			LogFile << "Failed to parse GUI Config.json, exiting." << std::endl;   
 			return false;
 		}
 		LogFile << "No parse exceptions detected." << std::endl;
@@ -341,29 +392,30 @@ bool LoadGUIConfig()
 		GUIConfig["Style"]["WindowTitleAlign"][0] = 0.0f;
 		GUIConfig["Style"]["WindowTitleAlign"][1] = 0.5f;
 
-		SetJsonFloat4(GUIConfig, "Colors", "Text", ImVec4(0.98f, 0.98f, 1.00f, 0.95f));
-		SetJsonFloat4(GUIConfig, "Colors", "TextDisabled", ImVec4(0.50f, 0.51f, 0.53f, 0.95f));
-		SetJsonFloat4(GUIConfig, "Colors", "WindowBackground", ImVec4(0.14f, 0.15f, 0.16f, 0.95f));
+		float DefaultGlobalOpacity = 1.0f;
+		SetJsonFloat4(GUIConfig, "Colors", "Text", ImVec4(0.98f, 0.98f, 1.00f, DefaultGlobalOpacity));
+		SetJsonFloat4(GUIConfig, "Colors", "TextDisabled", ImVec4(0.50f, 0.51f, 0.53f, DefaultGlobalOpacity));
+		SetJsonFloat4(GUIConfig, "Colors", "WindowBackground", ImVec4(0.14f, 0.15f, 0.16f, DefaultGlobalOpacity));
 		SetJsonFloat4(GUIConfig, "Colors", "ChildBackground", ImVec4(0.00f, 0.00f, 0.00f, 0.00f));
-		SetJsonFloat4(GUIConfig, "Colors", "PopupBackground", ImVec4(0.10f, 0.10f, 0.12f, 0.95f));
-		SetJsonFloat4(GUIConfig, "Colors", "Border", ImVec4(0.09f, 0.09f, 0.11f, 0.95f));
+		SetJsonFloat4(GUIConfig, "Colors", "PopupBackground", ImVec4(0.10f, 0.10f, 0.12f, DefaultGlobalOpacity));
+		SetJsonFloat4(GUIConfig, "Colors", "Border", ImVec4(0.09f, 0.09f, 0.11f, DefaultGlobalOpacity));
 		SetJsonFloat4(GUIConfig, "Colors", "BorderShadow", ImVec4(0.00f, 0.00f, 0.00f, 0.00f));
-		SetJsonFloat4(GUIConfig, "Colors", "FrameBackground", ImVec4(0.10f, 0.10f, 0.12f, 0.95f));
-		SetJsonFloat4(GUIConfig, "Colors", "FrameBackgroundHovered", ImVec4(0.20f, 0.55f, 0.83f, 0.95f));
-		SetJsonFloat4(GUIConfig, "Colors", "FrameBackgroundActive", ImVec4(0.20f, 0.55f, 0.83f, 0.95f));
+		SetJsonFloat4(GUIConfig, "Colors", "FrameBackground", ImVec4(0.10f, 0.10f, 0.12f, DefaultGlobalOpacity));
+		SetJsonFloat4(GUIConfig, "Colors", "FrameBackgroundHovered", ImVec4(0.20f, 0.55f, 0.83f, DefaultGlobalOpacity));
+		SetJsonFloat4(GUIConfig, "Colors", "FrameBackgroundActive", ImVec4(0.20f, 0.55f, 0.83f, DefaultGlobalOpacity));
 		SetJsonFloat4(GUIConfig, "Colors", "TitleBackground", ImVec4(0.04f, 0.04f, 0.04f, 1.00f));
-		SetJsonFloat4(GUIConfig, "Colors", "TitleBackgroundActive", ImVec4(0.10f, 0.40f, 0.75f, 0.95f));
+		SetJsonFloat4(GUIConfig, "Colors", "TitleBackgroundActive", ImVec4(0.10f, 0.40f, 0.75f, DefaultGlobalOpacity));
 		SetJsonFloat4(GUIConfig, "Colors", "TitleBackgroundCollapsed", ImVec4(0.00f, 0.00f, 0.00f, 0.51f));
 		SetJsonFloat4(GUIConfig, "Colors", "MenuBarBackground", ImVec4(0.14f, 0.14f, 0.14f, 1.00f));
 		SetJsonFloat4(GUIConfig, "Colors", "ScrollbarBackground", ImVec4(0.02f, 0.02f, 0.02f, 0.53f));
 		SetJsonFloat4(GUIConfig, "Colors", "ScrollbarGrab", ImVec4(0.31f, 0.31f, 0.31f, 1.00f));
 		SetJsonFloat4(GUIConfig, "Colors", "ScrollbarGrabHovered", ImVec4(0.41f, 0.41f, 0.41f, 1.00f));
 		SetJsonFloat4(GUIConfig, "Colors", "ScrollbarGrabActive", ImVec4(0.51f, 0.51f, 0.51f, 1.00f));
-		SetJsonFloat4(GUIConfig, "Colors", "CheckMark", ImVec4(0.10f, 0.40f, 0.75f, 0.95f));
-		SetJsonFloat4(GUIConfig, "Colors", "SliderGrab", ImVec4(0.20f, 0.55f, 0.83f, 0.95f));
-		SetJsonFloat4(GUIConfig, "Colors", "SliderGrabActive", ImVec4(0.20f, 0.55f, 0.83f, 0.95f));
-		SetJsonFloat4(GUIConfig, "Colors", "Button", ImVec4(0.10f, 0.40f, 0.75f, 0.95f));
-		SetJsonFloat4(GUIConfig, "Colors", "ButtonHovered", ImVec4(0.20f, 0.55f, 0.98f, 0.95f));
+		SetJsonFloat4(GUIConfig, "Colors", "CheckMark", ImVec4(0.10f, 0.40f, 0.75f, DefaultGlobalOpacity));
+		SetJsonFloat4(GUIConfig, "Colors", "SliderGrab", ImVec4(0.20f, 0.55f, 0.83f, DefaultGlobalOpacity));
+		SetJsonFloat4(GUIConfig, "Colors", "SliderGrabActive", ImVec4(0.20f, 0.55f, 0.83f, DefaultGlobalOpacity));
+		SetJsonFloat4(GUIConfig, "Colors", "Button", ImVec4(0.10f, 0.40f, 0.75f, DefaultGlobalOpacity));
+		SetJsonFloat4(GUIConfig, "Colors", "ButtonHovered", ImVec4(0.20f, 0.55f, 0.98f, DefaultGlobalOpacity));
 		SetJsonFloat4(GUIConfig, "Colors", "ButtonActive", ImVec4(0.06f, 0.53f, 0.98f, 1.00f));
 		SetJsonFloat4(GUIConfig, "Colors", "Header", ImVec4(0.26f, 0.59f, 0.98f, 0.31f));
 		SetJsonFloat4(GUIConfig, "Colors", "HeaderHovered", ImVec4(0.26f, 0.59f, 0.98f, 0.80f));
@@ -373,13 +425,13 @@ bool LoadGUIConfig()
 		SetJsonFloat4(GUIConfig, "Colors", "SeparatorActive", ImVec4(0.10f, 0.40f, 0.75f, 1.00f));
 		SetJsonFloat4(GUIConfig, "Colors", "ResizeGrip", ImVec4(0.26f, 0.59f, 0.98f, 0.25f));
 		SetJsonFloat4(GUIConfig, "Colors", "ResizeGripHovered", ImVec4(0.26f, 0.59f, 0.98f, 0.67f));
-		SetJsonFloat4(GUIConfig, "Colors", "ResizeGripActive", ImVec4(0.26f, 0.59f, 0.98f, 0.95f));
+		SetJsonFloat4(GUIConfig, "Colors", "ResizeGripActive", ImVec4(0.26f, 0.59f, 0.98f, DefaultGlobalOpacity));
 		SetJsonFloat4(GUIConfig, "Colors", "Tab", ImVec4(0.18f, 0.35f, 0.58f, 0.86f));
 		SetJsonFloat4(GUIConfig, "Colors", "TabHovered", ImVec4(0.26f, 0.59f, 0.98f, 0.80f));
 		SetJsonFloat4(GUIConfig, "Colors", "TabActive", ImVec4(0.20f, 0.41f, 0.68f, 1.00f));
 		SetJsonFloat4(GUIConfig, "Colors", "TabUnfocused", ImVec4(0.07f, 0.10f, 0.15f, 0.97f));
 		SetJsonFloat4(GUIConfig, "Colors", "TabUnfocusedActive", ImVec4(0.14f, 0.26f, 0.42f, 1.00f));
-		SetJsonFloat4(GUIConfig, "Colors", "PlotLines", ImVec4(0.55f, 0.83f, 1.00f, 0.95f));
+		SetJsonFloat4(GUIConfig, "Colors", "PlotLines", ImVec4(0.55f, 0.83f, 1.00f, DefaultGlobalOpacity));
 		SetJsonFloat4(GUIConfig, "Colors", "PlotLinesHovered", ImVec4(1.00f, 0.43f, 0.35f, 1.00f));
 		SetJsonFloat4(GUIConfig, "Colors", "PlotHistogram", ImVec4(0.90f, 0.70f, 0.00f, 1.00f));
 		SetJsonFloat4(GUIConfig, "Colors", "PlotHistogramHovered", ImVec4(1.00f, 0.60f, 0.00f, 1.00f));
@@ -483,6 +535,111 @@ bool LoadGUIConfig()
 	return true;
 }
 
+void SaveGUIConfig(std::string ThemeName, std::string Description, std::string Author, std::string Readme, std::string Filename)
+{
+	std::string ExePath = GetEXEPath(false);
+	CreateDirectoryIfNull(ExePath + "RFGR Script Loader/Settings/");
+	//std::cout << "Settings.txt not found. Creating from default values." << std::endl;
+	std::ofstream LogFile;
+	LogFile.open(ExePath + "RFGR Script Loader/Logs/Start errors.txt");
+	LogFile << "GUI Settings.json not found. Creating from default values." << std::endl;
+
+	GUIConfig["Theme Info"]["Theme name"] = ThemeName;
+	GUIConfig["Theme Info"]["Description"] = Description;
+	GUIConfig["Theme Info"]["Author"] = Author;
+	GUIConfig["Theme Info"]["Readme"] = Readme;
+
+	ImGuiStyle& Style = ImGui::GetStyle(); //Currently 25 items, some not provided to users since they aren't in the style editor.
+	GUIConfig["Style"]["Alpha"] = Style.Alpha;
+	GUIConfig["Style"]["AntiAliasedFill"] = Style.AntiAliasedFill;
+	GUIConfig["Style"]["ButtonTextAlign"][0] = Style.ButtonTextAlign.x;
+	GUIConfig["Style"]["ButtonTextAlign"][1] = Style.ButtonTextAlign.y;
+	GUIConfig["Style"]["ChildBorderSize"] = Style.ChildBorderSize; //Values > 1.0 can cause performance issues.
+	GUIConfig["Style"]["ChildRounding"] = Style.ChildRounding;
+	GUIConfig["Style"]["DisplaySafeAreaPadding"][0] = Style.DisplaySafeAreaPadding.x;
+	GUIConfig["Style"]["DisplaySafeAreaPadding"][1] = Style.DisplaySafeAreaPadding.y;
+	GUIConfig["Style"]["FrameBorderSize"] = Style.FrameBorderSize; //Values > 1.0 can cause performance issues.
+	GUIConfig["Style"]["FramePadding"][0] = Style.FramePadding.x;
+	GUIConfig["Style"]["FramePadding"][1] = Style.FramePadding.y;
+	GUIConfig["Style"]["FrameRounding"] = Style.FrameRounding;
+	GUIConfig["Style"]["GrabMinSize"] = Style.GrabMinSize;
+	GUIConfig["Style"]["GrabRounding"] = Style.GrabRounding;
+	GUIConfig["Style"]["IndentSpacing"] = Style.IndentSpacing;
+	GUIConfig["Style"]["ItemInnerSpacing"][0] = Style.ItemInnerSpacing.x;
+	GUIConfig["Style"]["ItemInnerSpacing"][1] = Style.ItemInnerSpacing.y;
+	GUIConfig["Style"]["ItemSpacing"][0] = Style.ItemSpacing.x;
+	GUIConfig["Style"]["ItemSpacing"][1] = Style.ItemSpacing.y;
+	GUIConfig["Style"]["PopupBorderSize"] = Style.PopupBorderSize; //Values > 1.0 can cause performance issues.
+	GUIConfig["Style"]["PopupRounding"] = Style.PopupRounding;
+	GUIConfig["Style"]["ScrollbarRounding"] = Style.ScrollbarRounding;
+	GUIConfig["Style"]["ScrollbarSize"] = Style.ScrollbarSize;
+	GUIConfig["Style"]["TabBorderSize"] = Style.TabBorderSize;
+	GUIConfig["Style"]["TabRounding"] = Style.TabRounding;
+	GUIConfig["Style"]["TouchExtraPadding"][0] = Style.TouchExtraPadding.x;
+	GUIConfig["Style"]["TouchExtraPadding"][1] = Style.TouchExtraPadding.y;
+	GUIConfig["Style"]["WindowBorderSize"] = Style.WindowBorderSize; //Values > 1.0 can cause performance issues.
+	GUIConfig["Style"]["WindowPadding"][0] = Style.WindowPadding.x;
+	GUIConfig["Style"]["WindowPadding"][1] = Style.WindowPadding.y;
+	GUIConfig["Style"]["WindowRounding"] = Style.WindowRounding;
+	GUIConfig["Style"]["WindowTitleAlign"][0] = Style.WindowTitleAlign.x;
+	GUIConfig["Style"]["WindowTitleAlign"][1] = Style.WindowTitleAlign.y;
+
+	ImVec4* Colors = ImGui::GetStyle().Colors; 
+	SetJsonFloat4(GUIConfig, "Colors", "Text", Colors[ImGuiCol_Text]);
+	SetJsonFloat4(GUIConfig, "Colors", "TextDisabled", Colors[ImGuiCol_TextDisabled]);
+	SetJsonFloat4(GUIConfig, "Colors", "WindowBackground", Colors[ImGuiCol_WindowBg]);
+	SetJsonFloat4(GUIConfig, "Colors", "ChildBackground", Colors[ImGuiCol_ChildBg]);
+	SetJsonFloat4(GUIConfig, "Colors", "PopupBackground", Colors[ImGuiCol_PopupBg]);
+	SetJsonFloat4(GUIConfig, "Colors", "Border", Colors[ImGuiCol_Border]);
+	SetJsonFloat4(GUIConfig, "Colors", "BorderShadow", Colors[ImGuiCol_BorderShadow]);
+	SetJsonFloat4(GUIConfig, "Colors", "FrameBackground", Colors[ImGuiCol_FrameBg]);
+	SetJsonFloat4(GUIConfig, "Colors", "FrameBackgroundHovered", Colors[ImGuiCol_FrameBgHovered]);
+	SetJsonFloat4(GUIConfig, "Colors", "FrameBackgroundActive", Colors[ImGuiCol_FrameBgActive]);
+	SetJsonFloat4(GUIConfig, "Colors", "TitleBackground", Colors[ImGuiCol_TitleBg]);
+	SetJsonFloat4(GUIConfig, "Colors", "TitleBackgroundActive", Colors[ImGuiCol_TitleBgActive ]);
+	SetJsonFloat4(GUIConfig, "Colors", "TitleBackgroundCollapsed", Colors[ImGuiCol_TitleBgCollapsed]);
+	SetJsonFloat4(GUIConfig, "Colors", "MenuBarBackground", Colors[ImGuiCol_MenuBarBg]);
+	SetJsonFloat4(GUIConfig, "Colors", "ScrollbarBackground", Colors[ImGuiCol_ScrollbarBg]);
+	SetJsonFloat4(GUIConfig, "Colors", "ScrollbarGrab", Colors[ImGuiCol_ScrollbarGrab]);
+	SetJsonFloat4(GUIConfig, "Colors", "ScrollbarGrabHovered", Colors[ImGuiCol_ScrollbarGrabHovered]);
+	SetJsonFloat4(GUIConfig, "Colors", "ScrollbarGrabActive", Colors[ImGuiCol_ScrollbarGrabActive]);
+	SetJsonFloat4(GUIConfig, "Colors", "CheckMark", Colors[ImGuiCol_CheckMark]);
+	SetJsonFloat4(GUIConfig, "Colors", "SliderGrab", Colors[ImGuiCol_SliderGrab]);
+	SetJsonFloat4(GUIConfig, "Colors", "SliderGrabActive", Colors[ImGuiCol_SliderGrabActive]);
+	SetJsonFloat4(GUIConfig, "Colors", "Button", Colors[ImGuiCol_Button]);
+	SetJsonFloat4(GUIConfig, "Colors", "ButtonHovered", Colors[ImGuiCol_ButtonHovered]);
+	SetJsonFloat4(GUIConfig, "Colors", "ButtonActive", Colors[ImGuiCol_ButtonActive]);
+	SetJsonFloat4(GUIConfig, "Colors", "Header", Colors[ImGuiCol_Header]);
+	SetJsonFloat4(GUIConfig, "Colors", "HeaderHovered", Colors[ImGuiCol_HeaderHovered]);
+	SetJsonFloat4(GUIConfig, "Colors", "HeaderActive", Colors[ImGuiCol_HeaderActive]);
+	SetJsonFloat4(GUIConfig, "Colors", "Separator", Colors[ImGuiCol_Separator]);
+	SetJsonFloat4(GUIConfig, "Colors", "SeparatorHovered", Colors[ImGuiCol_SeparatorHovered]);
+	SetJsonFloat4(GUIConfig, "Colors", "SeparatorActive", Colors[ImGuiCol_SeparatorActive]);
+	SetJsonFloat4(GUIConfig, "Colors", "ResizeGrip", Colors[ImGuiCol_ResizeGrip]);
+	SetJsonFloat4(GUIConfig, "Colors", "ResizeGripHovered", Colors[ImGuiCol_ResizeGripHovered]);
+	SetJsonFloat4(GUIConfig, "Colors", "ResizeGripActive", Colors[ImGuiCol_ResizeGripActive]);
+	SetJsonFloat4(GUIConfig, "Colors", "Tab", Colors[ImGuiCol_Tab]);
+	SetJsonFloat4(GUIConfig, "Colors", "TabHovered", Colors[ImGuiCol_TabHovered]);
+	SetJsonFloat4(GUIConfig, "Colors", "TabActive", Colors[ImGuiCol_TabActive]);
+	SetJsonFloat4(GUIConfig, "Colors", "TabUnfocused", Colors[ImGuiCol_TabUnfocused]);
+	SetJsonFloat4(GUIConfig, "Colors", "TabUnfocusedActive", Colors[ImGuiCol_TabUnfocusedActive]);
+	SetJsonFloat4(GUIConfig, "Colors", "PlotLines", Colors[ImGuiCol_PlotLines]);
+	SetJsonFloat4(GUIConfig, "Colors", "PlotLinesHovered", Colors[ImGuiCol_PlotLinesHovered]);
+	SetJsonFloat4(GUIConfig, "Colors", "PlotHistogram", Colors[ImGuiCol_PlotHistogram]);
+	SetJsonFloat4(GUIConfig, "Colors", "PlotHistogramHovered", Colors[ImGuiCol_PlotHistogramHovered]);
+	SetJsonFloat4(GUIConfig, "Colors", "TextSelectedBackground", Colors[ImGuiCol_TextSelectedBg]);
+	SetJsonFloat4(GUIConfig, "Colors", "DragDropTarget", Colors[ImGuiCol_DragDropTarget]);
+	SetJsonFloat4(GUIConfig, "Colors", "NavHighlight", Colors[ImGuiCol_NavHighlight]);
+	SetJsonFloat4(GUIConfig, "Colors", "NavWindowingHighlight", Colors[ImGuiCol_NavWindowingHighlight]);
+	SetJsonFloat4(GUIConfig, "Colors", "NavWindowingDimBackground", Colors[ImGuiCol_NavWindowingDimBg]);
+	SetJsonFloat4(GUIConfig, "Colors", "ModalWindowDimBackground", Colors[ImGuiCol_ModalWindowDimBg]);
+
+	std::ofstream ConfigOutput(ExePath + "RFGR Script Loader/Settings/" + ThemeName + ".json");
+	ConfigOutput << std::setw(4) << GUIConfig << std::endl;
+	ConfigOutput.close();
+	LogFile.close();
+}
+
 MainOverlay::MainOverlay()
 {
 
@@ -506,8 +663,40 @@ void MainOverlay::Initialize()
 	//MainOverlayWindowFlags |= ImGuiWindowFlags_NoBackground;
 	//MainOverlayWindowFlags |= ImGuiWindowFlags_NoBringToFrontOnFocus;
 
+	MainOverlayPopupFlags = 0;
+	//MainOverlayWindowFlags |= ImGuiWindowFlags_NoTitleBar;
+	//MainOverlayWindowFlags |= ImGuiWindowFlags_NoScrollbar;
+	//MainOverlayPopupFlags |= ImGuiWindowFlags_MenuBar;
+	//MainOverlayWindowFlags |= ImGuiWindowFlags_NoMove;
+	MainOverlayPopupFlags |= ImGuiWindowFlags_NoResize;
+	MainOverlayPopupFlags |= ImGuiWindowFlags_NoCollapse;
+	//MainOverlayWindowFlags |= ImGuiWindowFlags_NoNav;
+	//MainOverlayWindowFlags |= ImGuiWindowFlags_NoBackground;
+	//MainOverlayWindowFlags |= ImGuiWindowFlags_NoBringToFrontOnFocus;
+
+	MainOverlayModalFlags = 0;
+	//MainOverlayWindowFlags |= ImGuiWindowFlags_NoTitleBar;
+	//MainOverlayWindowFlags |= ImGuiWindowFlags_NoScrollbar;
+	//MainOverlayModalFlags |= ImGuiWindowFlags_MenuBar;
+	//MainOverlayWindowFlags |= ImGuiWindowFlags_NoMove;
+	MainOverlayModalFlags |= ImGuiWindowFlags_NoResize;
+	MainOverlayModalFlags |= ImGuiWindowFlags_NoCollapse;
+	//MainOverlayWindowFlags |= ImGuiWindowFlags_NoNav;
+	//MainOverlayWindowFlags |= ImGuiWindowFlags_NoBackground;
+	//MainOverlayWindowFlags |= ImGuiWindowFlags_NoBringToFrontOnFocus;
+
+	MainOverlayTeleportEditTextFlags = 0;
+	MainOverlayTeleportEditTextFlags |= ImGuiInputTextFlags_AllowTabInput;
+	MainOverlayTeleportEditTextFlags |= ImGuiInputTextFlags_CharsHexadecimal;
+
 	LoadGUIConfig();
 	LoadTeleportLocations();
+
+	NewTeleportName = "";
+	NewTeleportPosition.x = 0.0f;
+	NewTeleportPosition.y = 0.0f;
+	NewTeleportPosition.z = 0.0f;
+	NewTeleportDescription = "";
 }
 
 void MainOverlay::Draw(const char* title, bool* p_open)
@@ -620,30 +809,6 @@ void MainOverlay::Draw(const char* title, bool* p_open)
 	ImGui::Text("Globals:");
 	ImGui::Checkbox("Infinite jetpack", &InfiniteJetpack);
 	ImGui::Checkbox("Invulnerable", &Invulnerable);
-	if (ImGui::CollapsingHeader("Global explosion modifiers##GlobalExplosionModifiersMain"))
-	{
-		if (ImGui::Button("Reset to defaults##GlobalExplosionModifiersMain"))
-		{
-			GlobalExplosionStrengthMultiplier = 1.0f;
-			UseGlobalExplosionStrengthMultiplier = false;
-			UseExplosionRadiusLimits = true;
-			MinimumExplosionRadius = 0.0f;
-			MaximumExplosionRadius = 12.0f;
-		}
-		ImGui::PushItemWidth(232.0f);
-		ImGui::SliderFloat("Global explosion strength multiplier", &GlobalExplosionStrengthMultiplier, 0.01f, 10.0f);
-		ImGui::SameLine(); ImGui::Checkbox("Use", &UseGlobalExplosionStrengthMultiplier);
-		ImGui::Checkbox("Use explosion radius limits", &UseExplosionRadiusLimits);
-		TooltipOnPrevious("If you turn this off be very very careful with the explosion multipliers. Too high and it's very easy to freeze/crash the game. My game froze at 4x explosions with no radius limits.");
-		ImGui::InputFloat("Minimum explosion radius", &MinimumExplosionRadius, 0.1f, 1.0f, 3);
-		ImGui::InputFloat("Maximum explosion radius", &MaximumExplosionRadius, 0.1f, 1.0f, 3);
-	}
-	else
-	{
-		ImGui::SameLine(); ImGui::TextColored(ColorRed, " [Experimental]");
-	}
-
-	ImGui::Separator();
 
 	ImGui::InputFloat("Player move speed", &PlayerPtr->MoveSpeed, 1.0f, 5.0f, 3);
 	ImGui::InputFloat("Player max speed", &PlayerPtr->MaxSpeed, 1.0f, 5.0f, 3);
@@ -667,6 +832,30 @@ void MainOverlay::Draw(const char* title, bool* p_open)
 	//ImGui::Text("FPS: ");
 	//ImGui::Separator();
 	
+	if (ImGui::CollapsingHeader("Global explosion modifiers##GlobalExplosionModifiersMain"))
+	{
+		if (ImGui::Button("Reset to defaults##GlobalExplosionModifiersMain"))
+		{
+			GlobalExplosionStrengthMultiplier = 1.0f;
+			UseGlobalExplosionStrengthMultiplier = false;
+			UseExplosionRadiusLimits = true;
+			MinimumExplosionRadius = 0.0f;
+			MaximumExplosionRadius = 12.0f;
+		}
+		ImGui::PushItemWidth(232.0f);
+		ImGui::SliderFloat("Global explosion strength multiplier", &GlobalExplosionStrengthMultiplier, 0.01f, 10.0f);
+		ImGui::SameLine(); ImGui::Checkbox("Use", &UseGlobalExplosionStrengthMultiplier);
+		ImGui::Checkbox("Use explosion radius limits", &UseExplosionRadiusLimits);
+		TooltipOnPrevious("If you turn this off be very very careful with the explosion multipliers. Too high and it's very easy to freeze/crash the game. My game froze at 4x explosions with no radius limits.");
+		ImGui::InputFloat("Minimum explosion radius", &MinimumExplosionRadius, 0.1f, 1.0f, 3);
+		ImGui::InputFloat("Maximum explosion radius", &MaximumExplosionRadius, 0.1f, 1.0f, 3);
+	}
+	else
+	{
+		ImGui::SameLine(); ImGui::TextColored(ColorRed, " [Experimental]");
+	}
+	ImGui::Separator();
+
 	DrawTeleportGui(false, "Teleport", &TeleportWindowOpen, MainOverlayWindowFlags);
 	ImGui::Separator();
 	
@@ -696,15 +885,16 @@ void MainOverlay::DrawTeleportGui(bool UseSeparateWindow, const char* Title, boo
 		//ImGui::Checkbox("Use unsafe teleport", &UseUnsafeTeleport);
 		//ImGui::Checkbox("Allow safe teleport fail", &AllowSafeTeleportFail);
 		//ImGui::InputFloat("Safe teleport placement range: ", &SafeTeleportPlacementRange, 1.0, 5.0, 3);
-
+		static bool NameAlreadyUsedWarning = false;
 		ImGui::Text("Manual:");
+		//ImGui::Separator();
 		ImGui::Text("Current player position: ");
 		ImGui::SameLine();
 		std::string PlayerPositionString("(" + std::to_string(PlayerPtr->Position.x) + ", " + std::to_string(PlayerPtr->Position.y) + ", " + std::to_string(PlayerPtr->Position.z) + ")");
 		ImGui::TextColored(SecondaryTextColor, PlayerPositionString.c_str());
 
-		ImGui::PushItemWidth(232.0f);
 		ImGui::Text("New player position:"); ImGui::SameLine();
+		ImGui::PushItemWidth(232.0f);
 		ImGui::InputFloat3("##Player Position Target", PlayerPositionTargetArray, 3);
 		ImGui::SameLine();
 		if (ImGui::Button("Sync##PlayerPositionTarget"))
@@ -714,22 +904,66 @@ void MainOverlay::DrawTeleportGui(bool UseSeparateWindow, const char* Title, boo
 			PlayerPositionTargetArray[2] = PlayerPtr->Position.z;
 		}
 		ImGui::SameLine();
-		if (ImGui::Button("Set##PlayerPositionTarget"))
+		if (ImGui::Button("Teleport##PlayerPositionTarget"))
 		{
 			HumanTeleportUnsafe(PlayerPtr, vector(PlayerPositionTargetArray[0], PlayerPositionTargetArray[1], PlayerPositionTargetArray[2]), PlayerPtr->Orientation);
 		}
 		TooltipOnPrevious("This will teleport the player to the value's you've typed, even if they are out of bounds. When setting TP points for later, try to set the y value a bit higher. If the game doesn't load quick enough your player will fall through the map. Usually the game will pull them back up, but sometimes it fails.");
+		ImGui::SameLine();
+		if (ImGui::Button("Save as new##PlayerPositionTarget"))
+		{
+			ImGui::OpenPopup("Save teleport location##PlayerPositionTarget");
+			NewTeleportName = "";
+			NewTeleportPosition.x = PlayerPositionTargetArray[0];
+			NewTeleportPosition.y = PlayerPositionTargetArray[1];
+			NewTeleportPosition.z = PlayerPositionTargetArray[2];
+			NewTeleportDescription = "";
+		}
+		if (ImGui::BeginPopupModal("Save teleport location##PlayerPositionTarget", NULL, MainOverlayModalFlags))
+		{
+			ImGui::Text("Name:");
+			ImGui::InputText("##TeleportEditNamePlayerPositionTarget", &NewTeleportName);
+			if (NameAlreadyUsedWarning)
+			{
+				ImGui::SameLine();
+				ImGui::TextColored(ColorRed, "Name already used!");
+			}
+			ImGui::Text("Position:");
+			ImGui::PushItemWidth(232.0f);
+			ImGui::InputFloat3("##TeleportEditPositionPlayerPositionTarget", (float*)(&NewTeleportPosition), 2);
+			ImGui::Text("Tooltip description:");
+			ImGui::InputTextMultiline("##TeleportEditTooltip descriptionPlayerPositionTarget", &NewTeleportDescription, ImVec2(500.0f, 350.0f));// , MainOverlayTeleportEditTextFlags);// , ImGuiInputTextFlags_CharsHexadecimal);
+			if (ImGui::Button("Save##PlayerPositionTarget"))
+			{
+				if (SetTeleportLocation(NewTeleportName, NewTeleportPosition.x, NewTeleportPosition.y, NewTeleportPosition.z, NewTeleportDescription))
+				{
+					NameAlreadyUsedWarning = false;
+					SaveTeleportLocations();
+					ImGui::CloseCurrentPopup();
+				}
+				else
+				{
+					NameAlreadyUsedWarning = true;
+				}
+			}
+			ImGui::SameLine();
+			if (ImGui::Button("Cancel##PlayerPositionTarget"))
+			{
+				ImGui::CloseCurrentPopup();
+			}
+			ImGui::EndPopup();
+		}
 
-		ImGui::PushItemWidth(232.0f);
+		/*ImGui::PushItemWidth(232.0f);
 		ImGui::Text("Player velocity:"); ImGui::SameLine();
 		ImGui::InputFloat3("##Player velocity: ", (float*)&PlayerPtr->Velocity); ImGui::SameLine();
-		/*if (ImGui::Button("Sync##PlayerVelocityTarget"))
+		if (ImGui::Button("Sync##PlayerVelocityTarget"))
 		{
 			PlayerVelocityTargetArray[0] = PlayerPtr->Velocity.x;
 			PlayerVelocityTargetArray[1] = PlayerPtr->Velocity.y;
 			PlayerVelocityTargetArray[2] = PlayerPtr->Velocity.z;
 		}
-		ImGui::SameLine();*/
+		ImGui::SameLine();
 		if (ImGui::Button("Set##PlayerVelocityTarget"))
 		{
 			PlayerPtr->Velocity.x = PlayerVelocityTargetArray[0];
@@ -738,107 +972,70 @@ void MainOverlay::DrawTeleportGui(bool UseSeparateWindow, const char* Title, boo
 			NeedPlayerVelocitySet = true;
 		}
 		ImGui::SameLine(); ShowHelpMarker("This is always equal to the true player velocity. Haven't quite nailed down how objects are moved yet so there's only partial control for now. You can still set the velocity, but once you move out of that edit box it'll go back to the normal values.");
+		*/
 
-		ImGui::Text("Presets:");
-		if (ImGui::Button("Tutorial Area Hilltop"))
+		ImGui::Separator();
+		ImGui::Text("Saved locations:");
+		try
 		{
-			//HumanTeleportSafe(-2328.29f, 30.0f, -2317.9f);
-			HumanTeleportUnsafe(PlayerPtr, vector(-2328.29f, 30.0f, -2317.9f), PlayerPtr->Orientation);
+			for (auto i : TeleportLocations)
+			{
+				if (ImGui::Button(i["Name"].get<std::string>().c_str()))
+				{
+					HumanTeleportUnsafe(PlayerPtr, vector(i["Position"][0].get<float>(), i["Position"][1].get<float>(), i["Position"][2].get<float>()), PlayerPtr->Orientation);
+				}
+				TooltipOnPrevious(i["TooltipDescription"].get<std::string>().c_str());
+				ImGui::SameLine();
+				if (ImGui::Button(std::string("Edit##" + i["Name"].get<std::string>()).c_str()))
+				{
+					ImGui::OpenPopup(std::string("Teleport location edit##" + i["Name"].get<std::string>()).c_str());
+					TeleportEditPopupOpen = true;
+					NewTeleportName = i["Name"].get<std::string>();
+					NewTeleportPosition.x = i["Position"][0];
+					NewTeleportPosition.y = i["Position"][1];
+					NewTeleportPosition.z = i["Position"][2];
+					NewTeleportDescription = i["TooltipDescription"].get<std::string>();
+				}
+				if (ImGui::BeginPopupModal(std::string("Teleport location edit##" + i["Name"].get<std::string>()).c_str(), NULL, MainOverlayModalFlags))
+				{
+					ImGui::Text("Name:");
+					ImGui::InputText("##TeleportEditName", &NewTeleportName);
+					ImGui::Text("Position:");
+					ImGui::PushItemWidth(232.0f);
+					ImGui::InputFloat3("##TeleportEditPosition", (float*)(&NewTeleportPosition), 2);
+					ImGui::Text("Tooltip description:"); 
+					ImGui::InputTextMultiline("##TeleportEditTooltip description", &NewTeleportDescription, ImVec2(500.0f, 350.0f));// , MainOverlayTeleportEditTextFlags);// , ImGuiInputTextFlags_CharsHexadecimal);
+					if (ImGui::Button(std::string("Save##" + i["Name"].get<std::string>()).c_str()))
+					{
+						ChangeTeleportLocation(i["Name"], NewTeleportName, NewTeleportPosition.x, NewTeleportPosition.y, NewTeleportPosition.z, NewTeleportDescription);
+						SaveTeleportLocations();
+						ImGui::CloseCurrentPopup();
+					}
+					ImGui::SameLine();
+					if (ImGui::Button(std::string("Cancel##" + i["Name"].get<std::string>()).c_str()))
+					{
+						ImGui::CloseCurrentPopup();
+					}
+					ImGui::EndPopup();
+				}
+				/*if (ShowName)
+				{
+					std::cout << "Name after exiting modal: " << i["Name"] << std::endl;
+					i["Name"] = NewTeleportName;
+					ShowName = false;
+				}*/
+			}
 		}
-		TooltipOnPrevious("Tutorial area at the start of the game. Position: (-2328.29, 30.0, -2317.9)");
-		if (ImGui::Button("Parker - Safehouse"))
+		catch (std::exception& Exception)
 		{
-			//HumanTeleportSafe(-1877.77f, 27.0f, -1452.0f);
-			HumanTeleportUnsafe(PlayerPtr, vector(-1877.77f, 27.0f, -1452.0f), PlayerPtr->Orientation);
+			ConsoleLog("Exception while drawing teleport menu!", LOGFATALERROR, false, true, true);
+			ConsoleLog(Exception.what(), LOGFATALERROR, false, true, true);
+			Sleep(6000);
 		}
-		TooltipOnPrevious("Game starting safehouse. Near ore processing plant. Position: (-1877.77, 27.0, -1452.0)");
-		if (ImGui::Button("Dust - Northern Safehouse"))
+		catch (...)
 		{
-			//HumanTeleportSafe(-387.0f, 38.0f, -820.0f);
-			HumanTeleportUnsafe(PlayerPtr, vector(-387.0f, 38.0f, -820.0f), PlayerPtr->Orientation);
+			ConsoleLog("Unknown exception while drawing teleport menu!", LOGFATALERROR, false, true, true);
 		}
-		TooltipOnPrevious("Near tharsis wind farm and Dust town hall. Position: (-387.0, 38.0, -820.0)");
-		if (ImGui::Button("Dust - Southern Safehouse"))
-		{
-			//HumanTeleportSafe(-113.59f, 30.0f, -2449.58f);
-			HumanTeleportUnsafe(PlayerPtr, vector(-113.59f, 30.0f, -2449.58f), PlayerPtr->Orientation);
-		}
-		TooltipOnPrevious("Near chemical plant. Position: (-113.59, 30.0, -2449.58)");
-		if (ImGui::Button("Badlands - Safehouse / RFHQ"))
-		{
-			HumanTeleportUnsafe(PlayerPtr, vector(2411.90f, 58.0f, -239.77f), PlayerPtr->Orientation);
-		}
-		TooltipOnPrevious("Main safehouse in Badlands. Also the HQ of the Red Faction. Position: (2411.90, 58.0, -239.77)");
-		if (ImGui::Button("Badlands - Mohole"))
-		{
-			HumanTeleportUnsafe(PlayerPtr, vector(1420.27f, -28.0f, -734.28f), PlayerPtr->Orientation);
-		}
-		TooltipOnPrevious("Big 'ol hole in the ground used to pull heat from Mars' core for terraforming purposes. There's a smaller one in Dust. Position: (1420.27, -28.0, -734.28)");
-		if (ImGui::Button("Badlands - Harrington Memorial Bridge"))
-		{
-			HumanTeleportUnsafe(PlayerPtr, vector(948.14f, -5.0f, -417.68f), PlayerPtr->Orientation);
-		}
-		TooltipOnPrevious("The big one. Position: (948.14, -5.0, -417.68)");
-		if (ImGui::Button("Badlands - EDF Barracks"))
-		{
-			HumanTeleportUnsafe(PlayerPtr, vector(899.91f, 2.0f, -885.64f), PlayerPtr->Orientation);
-		}
-		TooltipOnPrevious("EDF Barracks sitting in a hilly area south of the EDF airbase in Badlands. Position: (899.91, 2.0, -885.64)");
-		if (ImGui::Button("Badlands - Marauder Safehouse"))
-		{
-			HumanTeleportUnsafe(PlayerPtr, vector(2458.47f, 58.0f, -1210.17f), PlayerPtr->Orientation);
-		}
-		TooltipOnPrevious("Safehouse in marauder territory. Unless you want hostile marauders, wait until you've completed certain missions to go here. Position: (2458.47, 58.0, -1210.17)");
-		if (ImGui::Button("Oasis - Safehouse"))
-		{
-			HumanTeleportUnsafe(PlayerPtr, vector(1434.29f, 18.0f, 691.65f), PlayerPtr->Orientation);
-		}
-		TooltipOnPrevious("Near EDF vehicle depot. Position: (1434.29, 18.0, 691.65)");
-		if (ImGui::Button("Free Fire Zone - Artillery Base"))
-		{
-			HumanTeleportUnsafe(PlayerPtr, vector(-1752.03f, 9.0f, -132.59f), PlayerPtr->Orientation);
-		}
-		TooltipOnPrevious("Base which runs and protects the EDF Artillery Gun. Deadly to be here until the FFZ has been liberated. Position: (-1752.03, 9.0, -132.59)");
-		if (ImGui::Button("Free Fire Zone - Artillery Gun"))
-		{
-			HumanTeleportUnsafe(PlayerPtr, vector(-1944.92f, 38.0f, -65.49f), PlayerPtr->Orientation);
-		}
-		TooltipOnPrevious("Bottom of the EDF Artillery Gun. Deadly to be here until the FFZ has been liberated. Position: (-1944.92, 38.0, -65.49)");
-		if (ImGui::Button("EOS - Western Safehouse"))
-		{
-			HumanTeleportUnsafe(PlayerPtr, vector(-1726.0f, 50.0f, 438.0f), PlayerPtr->Orientation);
-		}
-		TooltipOnPrevious("Near FFZ entrance/exit and Eos Memorial Bridge. Position: (-1726.0, 50.0, 438.0)");
-		if (ImGui::Button("EOS - Eastern Safehouse"))
-		{
-			HumanTeleportUnsafe(PlayerPtr, vector(-1390.95f, 30.0f, 561.08f), PlayerPtr->Orientation);
-		}
-		TooltipOnPrevious("Near construction site. Position: (-1390.95, 30.0, 561.08)");
-		if (ImGui::Button("EOS - Outside EDF Central Command"))
-		{
-			HumanTeleportUnsafe(PlayerPtr, vector(-1428.61f, 8.0f, 2013.5f), PlayerPtr->Orientation);
-		}
-		TooltipOnPrevious("Right outside the defense shield. Position: (-1428.61, 8.0, 2013.5)");
-		if (ImGui::Button("EOS - Inside EDF Central Command"))
-		{
-			HumanTeleportUnsafe(PlayerPtr, vector(-1458.75f, 8.0f, 2050.16f), PlayerPtr->Orientation);
-		}
-		TooltipOnPrevious("Right inside past the defense shield. Position: (-1458.75, 8.0, 2050.16)");
-		if (ImGui::Button("EOS - EDF Central Command Main Building"))
-		{
-			HumanTeleportUnsafe(PlayerPtr, vector(-1474.53f, 38.0f, 2397.49f), PlayerPtr->Orientation);
-		}
-		TooltipOnPrevious("The final building at the peak of the inner valley / cliffsides. Position: (-1474.53, 38.0, 2397.49)");
-		if (ImGui::Button("Mount Vogel - Base"))
-		{
-			HumanTeleportUnsafe(PlayerPtr, vector(-670.37f, 47.0f, 2423.75f), PlayerPtr->Orientation);
-		}
-		TooltipOnPrevious("Bottom of Mount Vogel and mass accelerator. Several old buildings. Position: (-670.37, 47.0, 2423.75)");
-		if (ImGui::Button("Mount Vogel - Peak"))
-		{
-			HumanTeleportUnsafe(PlayerPtr, vector(-285.77f, 183.0f, 2423.4f), PlayerPtr->Orientation);
-		}
-		TooltipOnPrevious("Peak of Mount Vogel with mass accelerator exit. Position: (-285.77, 183.0, 2423.4)");
 	}
 	TooltipOnPrevious("Manual and preset teleport controls for the player. Works in vehicles.");
 }
@@ -1081,7 +1278,7 @@ void MainOverlay::DrawPlayerVariablesGui(bool UseSeparateWindow, const char* Tit
 
 				ImGui::TreePop();
 			}
-			if (ImGui::CollapsingHeader("Human values"))
+			if (ImGui::TreeNode("Human values"))
 			{
 				//ImGui::Separator();
 				//ImGui::Text("Human values");
@@ -1318,21 +1515,23 @@ void MainOverlay::DrawPlayerVariablesGui(bool UseSeparateWindow, const char* Tit
 				ImGui::Text(": "); ImGui::SameLine(); //Timestamp
 				ImGui::TextColored(SecondaryTextColor, std::to_string(PlayerPtr->).c_str());
 				//Previous value is Timestamp TurretHoldAnimations. Still several dozen values left.*/
+				ImGui::TreePop();
 			}
-			if (ImGui::CollapsingHeader("Player values"))
+			if (ImGui::TreeNode("Player values"))
 			{
 				//ImGui::Separator();
 				//ImGui::Text("Player values");
+				ImGui::TreePop();
 			}
-
-
-
-
 		}
 		else
 		{
 			ImGui::Text("Player pointer is null. Cannot view");
 		}
+	}
+	else
+	{
+		ImGui::SameLine(); ImGui::TextColored(ColorRed, " [Experimental]");
 	}
 }
 

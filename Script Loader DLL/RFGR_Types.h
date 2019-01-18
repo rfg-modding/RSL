@@ -266,6 +266,7 @@ struct TimestampPercent : Timestamp //8
 struct vector
 {
 	vector() { }
+	vector(float InitialValue) : x(InitialValue), y(InitialValue), z(InitialValue) { }
 	vector(float x_, float y_, float z_) : x(x_), y(y_), z(z_) { }
 	float x;
 	float y;

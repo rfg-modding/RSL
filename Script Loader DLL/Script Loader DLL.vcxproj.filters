@@ -81,6 +81,9 @@
     <ClCompile Include="Includes.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="imgui_stdlib.cpp">
+      <Filter>D3D11 Hook + ImGui\Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CameraWrapper.h">
@@ -173,10 +176,8 @@
     <ClInclude Include="RFGR Structs\KeenNamespace.h">
       <Filter>RFGR Structs</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="rfg.h">
-      <Filter>Header Files</Filter>
-    </None>
+    <ClInclude Include="imgui_stdlib.h">
+      <Filter>D3D11 Hook + ImGui\Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
