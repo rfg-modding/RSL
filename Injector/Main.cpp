@@ -155,26 +155,45 @@ bool LoadDataFromConfig()
 	fs::remove(ExePath + "Logs/Injector Load Log.txt");
 	std::ofstream LogFile(ExePath + "Logs/Injector Load Log.txt");
 
-	if (fs::exists(ExePath + "Settings/InjectorSettings.txt"))
+	if (fs::exists(ExePath + "Settings/InjectorSettings.json"))
 	{
-		std::ifstream Config(ExePath + "Settings/InjectorSettings.txt");
-
 		try
 		{
-			LogFile << "Parsing InjectorSettings.txt" << std::endl;
+			std::ifstream Config(ExePath + "Settings/InjectorSettings.json");
+			LogFile << "Parsing InjectorSettings.json" << std::endl;
 			Config >> InjectorConfig;
 			Config.close();
 		}
 		catch (nlohmann::json::parse_error& Exception)
 		{
-			LogFile << "Exception while parsing InjectorSettings.txt!" << std::endl;
+			LogFile << "Exception while parsing InjectorSettings.json!" << std::endl;
 			LogFile << Exception.what() << std::endl;
-			std::string ExceptionMessage("Exception when parsing InjectorSettings.txt!\n");
+			std::string ExceptionMessage("Exception when parsing InjectorSettings.json!\n");
 			ExceptionMessage += "Message: ";
 			ExceptionMessage += Exception.what();
 
 			MessageBoxA(find_main_window(GetProcessID("rfg.exe")), ExceptionMessage.c_str(), "Json parsing exception", MB_OK);
-			LogFile << "Failed parse Settings.txt, exiting." << std::endl;
+			LogFile << "Failed to parse Settings.txt, exiting." << std::endl;
+			return false;
+		}
+		catch (std::exception& Exception)
+		{
+			LogFile << "General exception while parsing InjectorSettings.json!" << std::endl;
+			LogFile << Exception.what() << std::endl;
+			std::string ExceptionMessage("General exception while parsing InjectorSettings.json!\n");
+			ExceptionMessage += "Message: ";
+			ExceptionMessage += Exception.what();
+
+			MessageBoxA(find_main_window(GetProcessID("rfg.exe")), ExceptionMessage.c_str(), "Json parsing exception", MB_OK);
+			LogFile << "Failed to parse Settings.json, exiting." << std::endl;
+			return false;
+		}
+		catch (...)
+		{
+			LogFile << "Default exception when parsing InjectorSettings.json!" << std::endl;
+
+			MessageBoxA(find_main_window(GetProcessID("rfg.exe")), "Default exception while parsing InjectorSettings.json", "Json parsing exception", MB_OK);
+			LogFile << "Failed to parse InjectorSettings.json, exiting." << std::endl;
 			return false;
 		}
 		LogFile << "No parse exceptions detected." << std::endl;
@@ -182,13 +201,13 @@ bool LoadDataFromConfig()
 	else
 	{
 		//CreateDirectoryIfNull(ExePath + "/RFGR Camera Extender");
-		//std::cout << "InjectorSettings.txt not found. Creating from default values." << std::endl;
-		ConsoleLog("InjectorSettings.txt not found. Creating from default values.\n", LOGWARNING);
+		//std::cout << "InjectorSettings.json not found. Creating from default values." << std::endl;
+		ConsoleLog("InjectorSettings.json not found. Creating from default values.\n", LOGWARNING);
 
 		InjectorConfig["ForceInjectorConsoleToTop"] = false;
 		InjectorConfig["AutoStartRFG"] = true;
 
-		std::ofstream ConfigOutput(ExePath + "Settings/InjectorSettings.txt");
+		std::ofstream ConfigOutput(ExePath + "Settings/InjectorSettings.json");
 		ConfigOutput << std::setw(4) << InjectorConfig << std::endl;
 		ConfigOutput.close();
 	}

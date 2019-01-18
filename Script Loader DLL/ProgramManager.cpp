@@ -540,42 +540,79 @@ bool ProgramManager::LoadDataFromConfig()
 	fs::remove(ExePath + "RFGR Script Loader/Logs/Load Log.txt");
 	std::ofstream LogFile(ExePath + "RFGR Script Loader/Logs/Load Log.txt");
 
-	if (fs::exists(ExePath + "RFGR Script Loader/Settings/Settings.txt"))
+	if (fs::exists(ExePath + "RFGR Script Loader/Settings/Settings.json"))
 	{
-		//LogFile << "Settings.txt found. Loading into string buffer..." << std::endl;
-		std::ifstream Config(ExePath + "RFGR Script Loader/Settings/Settings.txt");
+		//LogFile << "Settings.json found. Loading into string buffer..." << std::endl;
+		
 		//LogFile << "Preparing to parse..." << std::endl;
 
 		try
 		{
-			LogFile << "Parsing settings.txt..." << std::endl;
+			LogFile << "Parsing settings.json..." << std::endl;
+			std::ifstream Config(ExePath + "RFGR Script Loader/Settings/Settings.json");
 			Config >> MainConfig;
 			Config.close();
 			//MainConfig.parse(Buffer);
-			//LogFile << "Done parsing settings.txt" << std::endl;
+			//LogFile << "Done parsing Settings.json" << std::endl;
 		}
 		catch (nlohmann::json::parse_error& Exception)
 		{
-			LogFile << "Exception when parsing settings.txt!" << std::endl;
+			LogFile << "Parse error while parsing Settings.json!" << std::endl;
 			LogFile << Exception.what() << std::endl;
-			std::string ExceptionMessage("Exception when parsing Settings.txt!\n");
+			std::string ExceptionMessage("Exception when parsing Settings.json!\n");
 			ExceptionMessage += "Message: ";
 			ExceptionMessage += Exception.what();
 
 			MessageBoxA(find_main_window(GetProcessID("rfg.exe")), ExceptionMessage.c_str(), "Json parsing exception", MB_OK);
-			LogFile << "Failed parse Settings.txt, exiting." << std::endl;
+			LogFile << "Failed to parse Settings.json, exiting." << std::endl;
 			return false;
 		}
+		catch (std::exception& Exception)
+		{
+			LogFile << "General exception when parsing Settings.json!" << std::endl;
+			LogFile << Exception.what() << std::endl;
+			std::string ExceptionMessage("General exception when parsing Settings.json!\n");
+			ExceptionMessage += "Message: ";
+			ExceptionMessage += Exception.what();
+
+			MessageBoxA(find_main_window(GetProcessID("rfg.exe")), ExceptionMessage.c_str(), "Json general exception", MB_OK);
+			LogFile << "Failed to parse Settings.json, exiting." << std::endl;
+			return false;
+		}
+		catch (...)
+		{
+			LogFile << "Default exception when parsing settings.json!" << std::endl;
+
+			MessageBoxA(find_main_window(GetProcessID("rfg.exe")), "Default exception while parsing Settings.json", "Json parsing exception", MB_OK);
+			LogFile << "Failed to parse Settings.json, exiting." << std::endl;
+			return false;
+		}
+		/*catch (nlohmann::json::basic_json::invalid_iterator& Exception)
+		{
+
+		}
+		catch (nlohmann::json::basic_json::type_error& Exception)
+		{
+
+		}
+		catch (nlohmann::json::basic_json::out_of_range& Exception)
+		{
+
+		}
+		catch (nlohmann::json::basic_json::other_error& Exception)
+		{
+
+		}*/
 		LogFile << "No parse exceptions detected." << std::endl;
 	}
 	else
 	{
 		CreateDirectoryIfNull(ExePath + "RFGR Script Loader/Settings/");
-		LogFile << "Settings.txt not found. Creating from default values." << std::endl;
+		LogFile << "Settings.json not found. Creating from default values." << std::endl;
 
 		MainConfig["Open debug console"] = false;
 
-		std::ofstream ConfigOutput(ExePath + "RFGR Script Loader/Settings/Settings.txt");
+		std::ofstream ConfigOutput(ExePath + "RFGR Script Loader/Settings/Settings.json");
 		ConfigOutput << std::setw(4) << MainConfig << std::endl;
 		ConfigOutput.close();
 	}

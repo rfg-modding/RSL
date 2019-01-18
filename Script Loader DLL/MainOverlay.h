@@ -3,6 +3,10 @@
 ///#include "Globals.h"
 ///#include "RFGR_Types_Player.h"
 #include "Functions.h"
+#include "imgui_stdlib.h"
+
+extern nlohmann::json GUIConfig;
+extern nlohmann::json TeleportLocations;
 
 class MainOverlay
 {
@@ -24,8 +28,8 @@ public:
 	void ShowAboutWindow(bool* p_open);
 	//void ShowStyleEditor(ImGuiStyle* ref);
 
-	bool ShowStyleSelector(const char* label);
-	void ShowFontSelector(const char* label);
+	//bool ShowStyleSelector(const char* label);
+	//void ShowFontSelector(const char* label);
 
 	//void ShowHelpMarker(const char* Description);
 
@@ -35,6 +39,9 @@ public:
 	vector HavokPlayerPosition;
 
 	ImGuiWindowFlags MainOverlayWindowFlags = 0;
+	ImGuiWindowFlags MainOverlayPopupFlags = 0;
+	ImGuiWindowFlags MainOverlayModalFlags = 0;
+	ImGuiInputTextFlags MainOverlayTeleportEditTextFlags = 0;
 
 	bool ShowAppConsole = false;
 	bool ShowAppMetrics = false;
@@ -63,6 +70,11 @@ public:
 	bool AllowSafeTeleportFail = false;
 
 	bool Invulnerable = false;
+
+	bool TeleportEditPopupOpen = false;
+	std::string NewTeleportName;
+	vector NewTeleportPosition;
+	std::string NewTeleportDescription;
 };
 
 struct ExampleAppLog

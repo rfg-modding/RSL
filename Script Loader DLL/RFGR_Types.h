@@ -44,6 +44,19 @@ enum vint_res_scale
 	NUM_VINT_RES_SCALE = 0x6,
 };
 
+/* 617 */
+enum HumanTeams
+{
+	HUMAN_TEAM_NONE = 0xFFFFFFFF,
+	HUMAN_TEAM_GUERILLA = 0x0,
+	HUMAN_TEAM_EDF = 0x1,
+	HUMAN_TEAM_CIVILIAN = 0x2,
+	HUMAN_TEAM_MP_NEUTRAL = 0x2,
+	HUMAN_TEAM_MARAUDER = 0x3,
+	HUMAN_TEAM_MP_SPECTATOR = 0x3,
+	NUM_HUMAN_TEAMS = 0x4,
+};
+
 enum xray_effect_types
 {
 	XET_VISION_BACKPACK = 0x0,
@@ -253,6 +266,7 @@ struct TimestampPercent : Timestamp //8
 struct vector
 {
 	vector() { }
+	vector(float InitialValue) : x(InitialValue), y(InitialValue), z(InitialValue) { }
 	vector(float x_, float y_, float z_) : x(x_), y(y_), z(z_) { }
 	float x;
 	float y;

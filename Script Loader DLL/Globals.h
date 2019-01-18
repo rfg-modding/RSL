@@ -84,6 +84,12 @@ static WORD ConsoleDefaultTextAttributes = 0 | FOREGROUND_RED | FOREGROUND_GREEN
 //void SetConsoleAttributes(WORD Attributes);
 //void ResetConsoleAttributes();
 
+#define ScriptLoaderVersion "0.1.0-Alpha"
+static const char* GetScriptLoaderVersion()
+{
+	return ScriptLoaderVersion;
+}
+
 static void ShowHelpMarker(const char* desc)
 {
 	ImGui::TextDisabled("(?)");

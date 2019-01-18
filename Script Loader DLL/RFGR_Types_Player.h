@@ -1,6 +1,33 @@
 #pragma once
 #include "RFGR_Types.h"
 
+/* 632 */
+enum prop_type
+{
+	PROP_TYPE_NONE = 0xFFFFFFFF,
+	PROP_TYPE_AMMO = 0x0,
+	PROP_TYPE_CLIP = 0x1,
+	PROP_TYPE_ACCESSORY1 = 0x2,
+	PROP_TYPE_SCOPE = 0x3,
+	PROP_TYPE_SILENCER = 0x4,
+	PROP_TYPE_CODE_DESIGNATED = 0x5,
+	PROP_TYPE_HEAD_PROP = 0x6,
+	PROP_TYPE_GRENADE_1 = 0x7,
+	PROP_TYPE_GRENADE_2 = 0x8,
+	PROP_TYPE_GRENADE_3 = 0x9,
+	PROP_TYPE_ACCESSORY_MISC = 0xA,
+	PROP_TYPE_SATCHEL_CHARGE = 0xB,
+	PROP_TYPE_EYE_WEAR = 0xC,
+	PROP_TYPE_TORSO = 0xD,
+	PROP_TYPE_EARRING1 = 0xE,
+	PROP_TYPE_EARRING2 = 0xF,
+	PROP_TYPE_WAIST = 0x10,
+	PROP_TYPE_JETPACK = 0x11,
+	PROP_TYPE_MP_FLAG = 0x12,
+	PROP_TYPE_BACK = 0x13,
+	NUM_PROP_TYPES = 0x14,
+};
+
 /* 712 */
 enum GameState
 {
@@ -122,19 +149,6 @@ enum VoiceLineHandle
 	INVALID_VOICE_LINE_HANDLE = 0xFFFFFFFF,
 	VOICE_LINE_HANDLE_IS_DLC = 0x8000,
 	VOICE_LINE_HANDLE_FORCE_TO_32_BIT = 0x7FFFFFFF,
-};
-
-/* 617 */
-enum HumanTeams
-{
-	HUMAN_TEAM_NONE = 0xFFFFFFFF,
-	HUMAN_TEAM_GUERILLA = 0x0,
-	HUMAN_TEAM_EDF = 0x1,
-	HUMAN_TEAM_CIVILIAN = 0x2,
-	HUMAN_TEAM_MP_NEUTRAL = 0x2,
-	HUMAN_TEAM_MARAUDER = 0x3,
-	HUMAN_TEAM_MP_SPECTATOR = 0x3,
-	NUM_HUMAN_TEAMS = 0x4,
 };
 
 /* 410 */
@@ -1923,6 +1937,167 @@ struct objectVtbl
 	void(__thiscall *pool_free)(object *this);
 }; */
 
+/* 5213 */
+struct human_info_inventory_info //12
+{
+	inv_item_info *i_info; //4
+	int count; //4
+	int slot; //4
+};
+
+struct base_array_human_info_inventory_info_Vtbl;
+
+/* 5211 */
+struct base_array_human_info_inventory_info //16
+{
+  base_array_human_info_inventory_info_Vtbl* vfptr; //4
+  human_info_inventory_info *elt; //4
+  int array_size; //4
+  int num; //4
+};
+
+/* 5212 */
+struct base_array_human_info_inventory_info_Vtbl //4
+{
+	void* (__thiscall* __vecDelDtor)(base_array_human_info_inventory_info* This, unsigned int); //4
+};
+
+/* 5214 */
+struct farray_human_info_inventory_info_15 : base_array_human_info_inventory_info //180 + 16 = 196 Bytes
+{
+  human_info_inventory_info data[15]; //180
+};
+
+/* 5193 */
+struct char_def_head
+{
+	char *name;
+	char *lod_name;
+	void* BaseHeadInfo;///item_info* base_head_info;
+	void* BaseHead;	///character* base_head;
+	void* LODMesh;///character_mesh* lod_mesh;
+	void* AnimRig;///anim_rig* rig;
+	unsigned int morph_mat_srid;
+	int head_morph;
+	int base_head_morph;
+	int num_skin_shader_params;
+	float skin_shader_params[3][5];
+};
+
+/* 5215 */
+struct human_prop_info
+{
+	void* ItemInfo;//item_info *item;
+	char *item_prop_tag;
+	char *character_prop_tag;
+	int character_prop_index;
+	float appearance_percent;
+	int num_sub_props;
+	human_prop_info* sub_props;
+};
+
+/* 5216 */
+struct human_prop_general_info
+{
+	char *prop_name;
+	float appearance_percent;
+	prop_type m_prop_type;
+	int num_props;
+	human_prop_info *props;
+};
+
+/* 5217 */
+struct human_info_flags //19
+{
+	__int8 female : 1;
+	__int8 coin : 1;
+	__int8 preload : 1;
+	__int8 officer : 1;
+	__int8 unarmed : 1;
+	__int8 vip : 1;
+	__int8 use_tech_level : 1;
+	__int8 sniper : 1;
+	__int8 elite_dodge : 1;
+	__int8 riot_shield : 1;
+	__int8 body_armor : 1;
+	__int8 nonflammable : 1;
+	__int8 no_attaching_projectiles : 1;
+	__int8 guerrilla_tech : 1;
+	__int8 guerrilla_rfc : 1;
+	__int8 old_coot : 1;
+	__int8 dan : 1;
+	__int8 jenkins : 1;
+	bool driverless_exit_only;
+};
+
+struct base_array_human_voice_persona_pointer_Vtbl;
+
+/* 5194 */
+struct base_array_human_voice_persona_pointer //16
+{
+	base_array_human_voice_persona_pointer_Vtbl *vfptr; //4
+	void** elt;///human_voice_persona** elt; //4
+	int array_size; //4
+	int num; //4
+};
+
+/* 5195 */
+struct base_array_human_voice_persona_pointer_Vtbl //4
+{
+	void *(__thiscall *__vecDelDtor)(base_array_human_voice_persona_pointer* This, unsigned int); //4
+};
+
+struct voice_persona_list //16
+{
+	base_array_human_voice_persona_pointer voice_list; //16
+};
+
+/* 5218 */
+const struct HumanInfo //397
+{
+  int max_hit_points; //4
+  int max_knockdown_hits; //4
+  float max_speed; //4
+  inv_item_info* default_equip_item; //4
+  inv_item_info* default_last_equip_item; //4
+  char* name;  //4
+  unsigned int name_crc; //4
+  char* model_name; //4
+  char* anim_set_name; //4
+  unsigned int anim_set_name_crc; //4
+  char* rig_name; //4
+  unsigned int srid; //4
+  int slot_id; //4
+  float default_height_scale; //4
+  float height_scale_variation; //4
+  HumanTeams default_team; //4, enum
+  __int16 hurt_threshold; //2
+  int home_district; //4
+  float aim_error_pct; //4
+  foot_ground_effects* foot_effects; //4
+  int num_heads; //4
+  char_def_head* heads[4]; //16, This is a array of pointers, each 4 bytes since the game is 32bit
+  voice_persona_list voice_personas; //16
+  farray_human_info_inventory_info_15 default_inventory; //196
+  int num_general_props; //4
+  human_prop_general_info* general_props; //4
+  int lower_spine_bone_index; //4
+  int upper_spine_bone_index; //4
+  int pelvis_bone_index; //4
+  int head_bone_index; //4
+  int neck_bone_index; //4
+  int eye_l_bone_index; //4
+  int eye_r_bone_index; //4
+  int calf_l_bone_index; //4
+  int calf_r_bone_index; //4
+  int camera_bone_index; //4
+  int drop_cash_min; //4
+  int drop_cash_max; //4
+  unsigned int light_effect_handle; //4
+  char* light_tag_names[2]; //8, array of pointers
+  human_info_flags flags; //19
+};
+
 /* 4848 */
 struct hkpBroadPhaseHandle
 {
@@ -2048,7 +2223,7 @@ struct Human : Object //3786 + 175 = 3961 Bytes
 	HumanFlags Flags; //512
 	HumanMPFlags MPFlags; //68
 	int LastTriggerDownFrame; //4
-	void* Info;///HumanInfo* Info;  //4 //Actual object size = 397 Bytes
+	HumanInfo* Info;  //4 //Actual object size = 397 Bytes
 	ObjectRenderDistance render_distance; //8
 	char XRayMaterial; //1
 	char XrayRenderAlpha; //1
@@ -2138,7 +2313,7 @@ struct Human : Object //3786 + 175 = 3961 Bytes
 	InventoryItem* LastEquippedWeapon; //4
 	InventoryItem* SecondLastEquippedWeapon; //4
 	InventoryItem* GrenadeWeapon; //4
-	void* AnimationPropInfo;// ItemInfo* AnimationPropInfo; ///4 *** Define later, has a lot of useful things such as mass, restitution, explosion_info, etc.
+	void* AnimationPropInfo;/// ItemInfo* AnimationPropInfo; ///4 *** Define later, has a lot of useful things such as mass, restitution, explosion_info, etc.
 	unsigned int OffhandProjectileHandle; //4
 	unsigned int ShieldHandle; //4
 	Timestamp ReloadTimer; //4
@@ -2291,7 +2466,7 @@ struct /*__declspec(align(8))*/ Player : Human //5415 + 3961 = 9376 Bytes
 	unsigned int current_mat_fx;  //4
 	PlayerScriptMode script_mode; //4
 	ScriptSpecificData script_data; //8
-	MultiObjectBackpack* Backpack; //4 //Todo: Eventually define this one, will be nice to control backpacks.
+	void* Backpack;//MultiObjectBackpack* Backpack; //4 //Todo: Eventually define this one, will be nice to control backpacks.
 	int mp_respawn_backpack_type; //4
 	GameCommand mp_current_command; //268
 	bool mp_remote_player_fired_this_frame; //1
