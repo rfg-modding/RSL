@@ -28,8 +28,8 @@ public:
 	void ShowAboutWindow(bool* p_open);
 	//void ShowStyleEditor(ImGuiStyle* ref);
 
-	bool ShowStyleSelector(const char* label);
-	void ShowFontSelector(const char* label);
+	//bool ShowStyleSelector(const char* label);
+	//void ShowFontSelector(const char* label);
 
 	//void ShowHelpMarker(const char* Description);
 

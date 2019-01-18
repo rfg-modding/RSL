@@ -3,6 +3,8 @@
 nlohmann::json GUIConfig;
 nlohmann::json TeleportLocations;
 
+void ShowStyleEditor(ImGuiStyle* ref);
+
 static void ShowExampleMenuFile()
 {
 	ImGui::MenuItem("(dummy menu)", NULL, false, false);
@@ -356,17 +358,17 @@ bool LoadGUIConfig()
 		GUIConfig["Theme Info"]["Theme name"] = std::string("Default Dark Theme");
 		GUIConfig["Theme Info"]["Description"] = std::string("The default dark theme for the script loader.");
 		GUIConfig["Theme Info"]["Author"] = std::string("moneyl");
-		GUIConfig["Theme Info"]["Readme"] = std::string("When making your own themes you can use this for extra information such as known bugs or optional settings.");
+		GUIConfig["Theme Info"]["Readme"] = std::string("When making your own themes you can use this for extra information such as known bugs or optional settings. Note: This section will be used once I add a custom theme loading GUI to the script loader. Not present for the initial themes release.");
 
 		GUIConfig["Style"]["Alpha"] = 0.95f;
 		GUIConfig["Style"]["AntiAliasedFill"] = true;
 		GUIConfig["Style"]["ButtonTextAlign"][0] = 0.5f;
 		GUIConfig["Style"]["ButtonTextAlign"][1] = 0.5f;
-		GUIConfig["Style"]["ChildBorderSize"] = 0.0f; //Values > 1.0 can cause performance issues.
+		GUIConfig["Style"]["ChildBorderSize"] = 1.0f; //Values > 1.0 can cause performance issues.
 		GUIConfig["Style"]["ChildRounding"] = 3.0f;
 		GUIConfig["Style"]["DisplaySafeAreaPadding"][0] = 3.0f;
 		GUIConfig["Style"]["DisplaySafeAreaPadding"][1] = 3.0f;
-		GUIConfig["Style"]["FrameBorderSize"] = 0.0f; //Values > 1.0 can cause performance issues.
+		GUIConfig["Style"]["FrameBorderSize"] = 1.0f; //Values > 1.0 can cause performance issues.
 		GUIConfig["Style"]["FramePadding"][0] = 4.0f;
 		GUIConfig["Style"]["FramePadding"][1] = 3.0f;
 		GUIConfig["Style"]["FrameRounding"] = 3.0f;
@@ -381,7 +383,7 @@ bool LoadGUIConfig()
 		GUIConfig["Style"]["PopupRounding"] = 3.0f;
 		GUIConfig["Style"]["ScrollbarRounding"] = 3.0f;
 		GUIConfig["Style"]["ScrollbarSize"] = 6.0f;
-		GUIConfig["Style"]["TabBorderSize"] = 10.0f;
+		GUIConfig["Style"]["TabBorderSize"] = 1.0f; //Values > 1.0 can cause performance issues.
 		GUIConfig["Style"]["TabRounding"] = 3.0f;
 		GUIConfig["Style"]["TouchExtraPadding"][0] = 0.0f;
 		GUIConfig["Style"]["TouchExtraPadding"][1] = 0.0f;
@@ -634,7 +636,7 @@ void SaveGUIConfig(std::string ThemeName, std::string Description, std::string A
 	SetJsonFloat4(GUIConfig, "Colors", "NavWindowingDimBackground", Colors[ImGuiCol_NavWindowingDimBg]);
 	SetJsonFloat4(GUIConfig, "Colors", "ModalWindowDimBackground", Colors[ImGuiCol_ModalWindowDimBg]);
 
-	std::ofstream ConfigOutput(ExePath + "RFGR Script Loader/Settings/" + ThemeName + ".json");
+	std::ofstream ConfigOutput(ExePath + "RFGR Script Loader/Settings/" + Filename + ".json");
 	ConfigOutput << std::setw(4) << GUIConfig << std::endl;
 	ConfigOutput.close();
 	LogFile.close();
@@ -741,7 +743,7 @@ void MainOverlay::Draw(const char* title, bool* p_open)
 	if (ShowAppSimpleOverlay)      ShowExampleAppSimpleOverlay(&ShowAppLongText);
 
 	if (ShowAppMetrics) { ImGui::ShowMetricsWindow(&ShowAppMetrics); }
-	if (ShowAppStyleEditor) { ImGui::Begin("Style Editor", &ShowAppStyleEditor); ImGui::ShowStyleEditor(); ImGui::End(); }
+	if (ShowAppStyleEditor) { ImGui::Begin("Theme editor", &ShowAppStyleEditor); ShowStyleEditor(&ImGui::GetStyle()); ImGui::End(); }
 	if (ShowAppAbout) { ShowAboutWindow(&ShowAppAbout); }
 
 	// Menu
@@ -1537,11 +1539,24 @@ void MainOverlay::DrawPlayerVariablesGui(bool UseSeparateWindow, const char* Tit
 
 void MainOverlay::ShowAboutWindow(bool* p_open)
 {
-	if (!ImGui::Begin("About Dear ImGui", p_open, ImGuiWindowFlags_AlwaysAutoResize))
+	if (!ImGui::Begin("About RFGR Script Loader", p_open, ImGuiWindowFlags_AlwaysAutoResize))
 	{
 		ImGui::End();
 		return;
 	}
+	ImGui::Text("RFGR Script Loader %s", GetScriptLoaderVersion());
+	ImGui::Separator();
+	ImGui::PushItemWidth(100.0f);
+	ImGui::TextWrapped("By moneyl. See it's public wiki repo here:");
+	ImGui::PushItemWidth(100.0f);
+	ImGui::TextWrapped("https://github.com/Moneyl/RFGR-Script-Loader-Wiki");
+	ImGui::PushItemWidth(100.0f);
+	ImGui::TextWrapped("If you have any bugs or questions either check the github issues section or contact me on the official RFG discord (https://discord.gg/RDsQKU8), @moneyl. I'd appreciate if you made a github issue and described the steps to reproduce any bug you find.");
+
+	ImGui::Separator();
+	ImGui::Text("About libraries used:");
+	ImGui::Separator();
+	ImGui::Separator();
 	ImGui::Text("Dear ImGui %s", ImGui::GetVersion());
 	ImGui::Separator();
 	ImGui::Text("By Omar Cornut and all dear imgui contributors.");
@@ -1652,7 +1667,7 @@ void MainOverlay::ShowAboutWindow(bool* p_open)
 	ImGui::End();
 }
 
-bool MainOverlay::ShowStyleSelector(const char* label)
+/*bool MainOverlay::ShowStyleSelector(const char* label)
 {
 	static int style_idx = -1;
 	if (ImGui::Combo(label, &style_idx, "Classic\0Dark\0Light\0"))
@@ -1685,7 +1700,7 @@ void MainOverlay::ShowFontSelector(const char* label)
 		"- The font atlas is built when calling io.Fonts->GetTexDataAsXXXX() or io.Fonts->Build().\n"
 		"- Read FAQ and documentation in misc/fonts/ for more details.\n"
 		"- If you need to add/remove fonts at runtime (e.g. for DPI change), do it before calling NewFrame().");
-}
+}*/
 
 void MainOverlay::ShowExampleAppMainMenuBar()
 {
@@ -1860,4 +1875,290 @@ void MainOverlay::ShowExampleAppSimpleOverlay(bool* p_open)
 		}
 	}
 	ImGui::End();
+}
+
+
+
+//-----------------------------------------------------------------------------
+// [SECTION] Style Editor / ShowStyleEditor()
+//-----------------------------------------------------------------------------
+
+// Demo helper function to select among default colors. See ShowStyleEditor() for more advanced options.
+// Here we use the simplified Combo() api that packs items into a single literal string. Useful for quick combo boxes where the choices are known locally.
+bool ShowStyleSelector(const char* label)
+{
+	static int style_idx = -1;
+	if (ImGui::Combo(label, &style_idx, "RFGR Dark\0Classic\0Dark\0Light\0"))
+	{
+		switch (style_idx)
+		{
+		case 0: LoadGUIConfig(); break;
+		case 1: ImGui::StyleColorsClassic(); break;
+		case 2: ImGui::StyleColorsDark(); break;
+		case 3: ImGui::StyleColorsLight(); break;
+		}
+		return true;
+	}
+	return false;
+}
+
+// Demo helper function to select among loaded fonts.
+// Here we use the regular BeginCombo()/EndCombo() api which is more the more flexible one.
+void ShowFontSelector(const char* label)
+{
+	ImGuiIO& io = ImGui::GetIO();
+	ImFont* font_current = ImGui::GetFont();
+	if (ImGui::BeginCombo(label, font_current->GetDebugName()))
+	{
+		for (int n = 0; n < io.Fonts->Fonts.Size; n++)
+			if (ImGui::Selectable(io.Fonts->Fonts[n]->GetDebugName(), io.Fonts->Fonts[n] == font_current))
+				io.FontDefault = io.Fonts->Fonts[n];
+		ImGui::EndCombo();
+	}
+	ImGui::SameLine();
+	ShowHelpMarker(
+		"- Load additional fonts with io.Fonts->AddFontFromFileTTF().\n"
+		"- The font atlas is built when calling io.Fonts->GetTexDataAsXXXX() or io.Fonts->Build().\n"
+		"- Read FAQ and documentation in misc/fonts/ for more details.\n"
+		"- If you need to add/remove fonts at runtime (e.g. for DPI change), do it before calling NewFrame().");
+}
+
+void ShowStyleEditor(ImGuiStyle* ref)
+{
+	// You can pass in a reference ImGuiStyle structure to compare to, revert to and save to (else it compares to an internally stored reference)
+	ImGuiStyle& style = ImGui::GetStyle();
+	static ImGuiStyle ref_saved_style;
+
+	// Default to using internal storage as reference
+	static bool init = true;
+	if (init && ref == NULL)
+		ref_saved_style = style;
+	init = false;
+	if (ref == NULL)
+		ref = &ref_saved_style;
+
+	ImGui::PushItemWidth(ImGui::GetWindowWidth() * 0.50f);
+
+	if (ImGui::ShowStyleSelector("Colors##Selector"))
+		ref_saved_style = style;
+	ImGui::ShowFontSelector("Fonts##Selector");
+
+	// Simplified Settings
+	if (ImGui::SliderFloat("FrameRounding", &style.FrameRounding, 0.0f, 12.0f, "%.0f"))
+		style.GrabRounding = style.FrameRounding; // Make GrabRounding always the same value as FrameRounding
+	{ bool window_border = (style.WindowBorderSize > 0.0f); if (ImGui::Checkbox("WindowBorder", &window_border)) style.WindowBorderSize = window_border ? 1.0f : 0.0f; }
+	ImGui::SameLine();
+	{ bool frame_border = (style.FrameBorderSize > 0.0f); if (ImGui::Checkbox("FrameBorder", &frame_border)) style.FrameBorderSize = frame_border ? 1.0f : 0.0f; }
+	ImGui::SameLine();
+	{ bool popup_border = (style.PopupBorderSize > 0.0f); if (ImGui::Checkbox("PopupBorder", &popup_border)) style.PopupBorderSize = popup_border ? 1.0f : 0.0f; }
+
+	// Save/Revert button
+	if (ImGui::Button("Save Ref"))
+		*ref = ref_saved_style = style;
+	ImGui::SameLine();
+	if (ImGui::Button("Revert Ref"))
+		style = *ref;
+	ImGui::SameLine();
+	ShowHelpMarker("Save/Revert in local non-persistent storage. Default Colors definition are not affected. Use \"Export Colors\" below to save them somewhere.");
+	ImGui::SameLine();
+	if (ImGui::Button("Save to script loader config"))
+	{
+		SaveGUIConfig("Default Dark Theme", "The default dark theme for the script loader.", "moneyl", "When making your own themes you can use this for extra information such as known bugs or optional settings. Note: This section will be used once I add a custom theme loading GUI to the script loader. Not present for the initial themes release.", "GUI Config");
+	}
+
+	ImGui::Separator();
+
+	if (ImGui::BeginTabBar("##tabs", ImGuiTabBarFlags_None))
+	{
+		if (ImGui::BeginTabItem("Sizes"))
+		{
+			ImGui::Text("Main");
+			ImGui::SliderFloat2("WindowPadding", (float*)&style.WindowPadding, 0.0f, 20.0f, "%.0f");
+			ImGui::SliderFloat("PopupRounding", &style.PopupRounding, 0.0f, 16.0f, "%.0f");
+			ImGui::SliderFloat2("FramePadding", (float*)&style.FramePadding, 0.0f, 20.0f, "%.0f");
+			ImGui::SliderFloat2("ItemSpacing", (float*)&style.ItemSpacing, 0.0f, 20.0f, "%.0f");
+			ImGui::SliderFloat2("ItemInnerSpacing", (float*)&style.ItemInnerSpacing, 0.0f, 20.0f, "%.0f");
+			ImGui::SliderFloat2("TouchExtraPadding", (float*)&style.TouchExtraPadding, 0.0f, 10.0f, "%.0f");
+			ImGui::SliderFloat("IndentSpacing", &style.IndentSpacing, 0.0f, 30.0f, "%.0f");
+			ImGui::SliderFloat("ScrollbarSize", &style.ScrollbarSize, 1.0f, 20.0f, "%.0f");
+			ImGui::SliderFloat("GrabMinSize", &style.GrabMinSize, 1.0f, 20.0f, "%.0f");
+			ImGui::Text("Borders");
+			ImGui::SliderFloat("WindowBorderSize", &style.WindowBorderSize, 0.0f, 1.0f, "%.0f");
+			ImGui::SliderFloat("ChildBorderSize", &style.ChildBorderSize, 0.0f, 1.0f, "%.0f");
+			ImGui::SliderFloat("PopupBorderSize", &style.PopupBorderSize, 0.0f, 1.0f, "%.0f");
+			ImGui::SliderFloat("FrameBorderSize", &style.FrameBorderSize, 0.0f, 1.0f, "%.0f");
+			ImGui::SliderFloat("TabBorderSize", &style.TabBorderSize, 0.0f, 1.0f, "%.0f");
+			ImGui::Text("Rounding");
+			ImGui::SliderFloat("WindowRounding", &style.WindowRounding, 0.0f, 14.0f, "%.0f");
+			ImGui::SliderFloat("ChildRounding", &style.ChildRounding, 0.0f, 16.0f, "%.0f");
+			ImGui::SliderFloat("FrameRounding", &style.FrameRounding, 0.0f, 12.0f, "%.0f");
+			ImGui::SliderFloat("ScrollbarRounding", &style.ScrollbarRounding, 0.0f, 12.0f, "%.0f");
+			ImGui::SliderFloat("GrabRounding", &style.GrabRounding, 0.0f, 12.0f, "%.0f");
+			ImGui::SliderFloat("TabRounding", &style.TabRounding, 0.0f, 12.0f, "%.0f");
+			ImGui::Text("Alignment");
+			ImGui::SliderFloat2("WindowTitleAlign", (float*)&style.WindowTitleAlign, 0.0f, 1.0f, "%.2f");
+			ImGui::SliderFloat2("ButtonTextAlign", (float*)&style.ButtonTextAlign, 0.0f, 1.0f, "%.2f"); ImGui::SameLine(); ShowHelpMarker("Alignment applies when a button is larger than its text content.");
+			ImGui::Text("Safe Area Padding"); ImGui::SameLine(); ShowHelpMarker("Adjust if you cannot see the edges of your screen (e.g. on a TV where scaling has not been configured).");
+			ImGui::SliderFloat2("DisplaySafeAreaPadding", (float*)&style.DisplaySafeAreaPadding, 0.0f, 30.0f, "%.0f");
+			ImGui::EndTabItem();
+		}
+
+		if (ImGui::BeginTabItem("Colors"))
+		{
+			static int output_dest = 0;
+			static bool output_only_modified = true;
+			if (ImGui::Button("Export Unsaved"))
+			{
+				if (output_dest == 0)
+					ImGui::LogToClipboard();
+				else
+					ImGui::LogToTTY();
+				ImGui::LogText("ImVec4* colors = ImGui::GetStyle().Colors;", "\r\n");
+				for (int i = 0; i < ImGuiCol_COUNT; i++)
+				{
+					const ImVec4& col = style.Colors[i];
+					const char* name = ImGui::GetStyleColorName(i);
+					if (!output_only_modified || memcmp(&col, &ref->Colors[i], sizeof(ImVec4)) != 0)
+						ImGui::LogText("colors[ImGuiCol_%s]%*s= ImVec4(%.2ff, %.2ff, %.2ff, %.2ff);", "\r\n", name, 23 - (int)strlen(name), "", col.x, col.y, col.z, col.w);
+				}
+				ImGui::LogFinish();
+			}
+			ImGui::SameLine(); ImGui::PushItemWidth(120); ImGui::Combo("##output_type", &output_dest, "To Clipboard\0To TTY\0"); ImGui::PopItemWidth();
+			ImGui::SameLine(); ImGui::Checkbox("Only Modified Colors", &output_only_modified);
+
+			static ImGuiTextFilter filter;
+			filter.Draw("Filter colors", ImGui::GetFontSize() * 16);
+
+			static ImGuiColorEditFlags alpha_flags = 0;
+			ImGui::RadioButton("Opaque", &alpha_flags, 0); ImGui::SameLine();
+			ImGui::RadioButton("Alpha", &alpha_flags, ImGuiColorEditFlags_AlphaPreview); ImGui::SameLine();
+			ImGui::RadioButton("Both", &alpha_flags, ImGuiColorEditFlags_AlphaPreviewHalf); ImGui::SameLine();
+			ShowHelpMarker("In the color list:\nLeft-click on colored square to open color picker,\nRight-click to open edit options menu.");
+
+			ImGui::BeginChild("##colors", ImVec2(0, 0), true, ImGuiWindowFlags_AlwaysVerticalScrollbar | ImGuiWindowFlags_AlwaysHorizontalScrollbar | ImGuiWindowFlags_NavFlattened);
+			ImGui::PushItemWidth(-160);
+			for (int i = 0; i < ImGuiCol_COUNT; i++)
+			{
+				const char* name = ImGui::GetStyleColorName(i);
+				if (!filter.PassFilter(name))
+					continue;
+				ImGui::PushID(i);
+				ImGui::ColorEdit4("##color", (float*)&style.Colors[i], ImGuiColorEditFlags_AlphaBar | alpha_flags);
+				if (memcmp(&style.Colors[i], &ref->Colors[i], sizeof(ImVec4)) != 0)
+				{
+					// Tips: in a real user application, you may want to merge and use an icon font into the main font, so instead of "Save"/"Revert" you'd use icons.
+					// Read the FAQ and misc/fonts/README.txt about using icon fonts. It's really easy and super convenient!
+					ImGui::SameLine(0.0f, style.ItemInnerSpacing.x); if (ImGui::Button("Save")) ref->Colors[i] = style.Colors[i];
+					ImGui::SameLine(0.0f, style.ItemInnerSpacing.x); if (ImGui::Button("Revert")) style.Colors[i] = ref->Colors[i];
+				}
+				ImGui::SameLine(0.0f, style.ItemInnerSpacing.x);
+				ImGui::TextUnformatted(name);
+				ImGui::PopID();
+			}
+			ImGui::PopItemWidth();
+			ImGui::EndChild();
+
+			ImGui::EndTabItem();
+		}
+
+		if (ImGui::BeginTabItem("Fonts"))
+		{
+			ImFontAtlas* atlas = ImGui::GetIO().Fonts;
+			ShowHelpMarker("Read FAQ and misc/fonts/README.txt for details on font loading.");
+			ImGui::PushItemWidth(120);
+			for (int i = 0; i < atlas->Fonts.Size; i++)
+			{
+				ImFont* font = atlas->Fonts[i];
+				ImGui::PushID(font);
+				bool font_details_opened = ImGui::TreeNode(font, "Font %d: \"%s\"\n%.2f px, %d glyphs, %d file(s)", i, font->ConfigData ? font->ConfigData[0].Name : "", font->FontSize, font->Glyphs.Size, font->ConfigDataCount);
+				ImGui::SameLine(); if (ImGui::SmallButton("Set as default")) ImGui::GetIO().FontDefault = font;
+				if (font_details_opened)
+				{
+					ImGui::PushFont(font);
+					ImGui::Text("The quick brown fox jumps over the lazy dog");
+					ImGui::PopFont();
+					ImGui::DragFloat("Font scale", &font->Scale, 0.005f, 0.3f, 2.0f, "%.1f");   // Scale only this font
+					ImGui::SameLine(); ShowHelpMarker("Note than the default embedded font is NOT meant to be scaled.\n\nFont are currently rendered into bitmaps at a given size at the time of building the atlas. You may oversample them to get some flexibility with scaling. You can also render at multiple sizes and select which one to use at runtime.\n\n(Glimmer of hope: the atlas system should hopefully be rewritten in the future to make scaling more natural and automatic.)");
+					ImGui::InputFloat("Font offset", &font->DisplayOffset.y, 1, 1, "%.0f");
+					ImGui::Text("Ascent: %f, Descent: %f, Height: %f", font->Ascent, font->Descent, font->Ascent - font->Descent);
+					ImGui::Text("Fallback character: '%c' (%d)", font->FallbackChar, font->FallbackChar);
+					ImGui::Text("Texture surface: %d pixels (approx) ~ %dx%d", font->MetricsTotalSurface, (int)sqrtf((float)font->MetricsTotalSurface), (int)sqrtf((float)font->MetricsTotalSurface));
+					for (int config_i = 0; config_i < font->ConfigDataCount; config_i++)
+						if (ImFontConfig* cfg = &font->ConfigData[config_i])
+							ImGui::BulletText("Input %d: \'%s\', Oversample: (%d,%d), PixelSnapH: %d", config_i, cfg->Name, cfg->OversampleH, cfg->OversampleV, cfg->PixelSnapH);
+					if (ImGui::TreeNode("Glyphs", "Glyphs (%d)", font->Glyphs.Size))
+					{
+						// Display all glyphs of the fonts in separate pages of 256 characters
+						for (int base = 0; base < 0x10000; base += 256)
+						{
+							int count = 0;
+							for (int n = 0; n < 256; n++)
+								count += font->FindGlyphNoFallback((ImWchar)(base + n)) ? 1 : 0;
+							if (count > 0 && ImGui::TreeNode((void*)(intptr_t)base, "U+%04X..U+%04X (%d %s)", base, base + 255, count, count > 1 ? "glyphs" : "glyph"))
+							{
+								float cell_size = font->FontSize * 1;
+								float cell_spacing = style.ItemSpacing.y;
+								ImVec2 base_pos = ImGui::GetCursorScreenPos();
+								ImDrawList* draw_list = ImGui::GetWindowDrawList();
+								for (int n = 0; n < 256; n++)
+								{
+									ImVec2 cell_p1(base_pos.x + (n % 16) * (cell_size + cell_spacing), base_pos.y + (n / 16) * (cell_size + cell_spacing));
+									ImVec2 cell_p2(cell_p1.x + cell_size, cell_p1.y + cell_size);
+									const ImFontGlyph* glyph = font->FindGlyphNoFallback((ImWchar)(base + n));
+									draw_list->AddRect(cell_p1, cell_p2, glyph ? IM_COL32(255, 255, 255, 100) : IM_COL32(255, 255, 255, 50));
+									if (glyph)
+										font->RenderChar(draw_list, cell_size, cell_p1, ImGui::GetColorU32(ImGuiCol_Text), (ImWchar)(base + n)); // We use ImFont::RenderChar as a shortcut because we don't have UTF-8 conversion functions available to generate a string.
+									if (glyph && ImGui::IsMouseHoveringRect(cell_p1, cell_p2))
+									{
+										ImGui::BeginTooltip();
+										ImGui::Text("Codepoint: U+%04X", base + n);
+										ImGui::Separator();
+										ImGui::Text("AdvanceX: %.1f", glyph->AdvanceX);
+										ImGui::Text("Pos: (%.2f,%.2f)->(%.2f,%.2f)", glyph->X0, glyph->Y0, glyph->X1, glyph->Y1);
+										ImGui::Text("UV: (%.3f,%.3f)->(%.3f,%.3f)", glyph->U0, glyph->V0, glyph->U1, glyph->V1);
+										ImGui::EndTooltip();
+									}
+								}
+								ImGui::Dummy(ImVec2((cell_size + cell_spacing) * 16, (cell_size + cell_spacing) * 16));
+								ImGui::TreePop();
+							}
+						}
+						ImGui::TreePop();
+					}
+					ImGui::TreePop();
+				}
+				ImGui::PopID();
+			}
+			if (ImGui::TreeNode("Atlas texture", "Atlas texture (%dx%d pixels)", atlas->TexWidth, atlas->TexHeight))
+			{
+				ImGui::Image(atlas->TexID, ImVec2((float)atlas->TexWidth, (float)atlas->TexHeight), ImVec2(0, 0), ImVec2(1, 1), ImColor(255, 255, 255, 255), ImColor(255, 255, 255, 128));
+				ImGui::TreePop();
+			}
+
+			static float window_scale = 1.0f;
+			if (ImGui::DragFloat("this window scale", &window_scale, 0.005f, 0.3f, 2.0f, "%.1f"))           // scale only this window
+				ImGui::SetWindowFontScale(window_scale);
+			ImGui::DragFloat("global scale", &ImGui::GetIO().FontGlobalScale, 0.005f, 0.3f, 2.0f, "%.1f");  // scale everything
+			ImGui::PopItemWidth();
+
+			ImGui::EndTabItem();
+		}
+
+		if (ImGui::BeginTabItem("Rendering"))
+		{
+			ImGui::Checkbox("Anti-aliased lines", &style.AntiAliasedLines); ImGui::SameLine(); ShowHelpMarker("When disabling anti-aliasing lines, you'll probably want to disable borders in your style as well.");
+			ImGui::Checkbox("Anti-aliased fill", &style.AntiAliasedFill);
+			ImGui::PushItemWidth(100);
+			ImGui::DragFloat("Curve Tessellation Tolerance", &style.CurveTessellationTol, 0.02f, 0.10f, FLT_MAX, "%.2f", 2.0f);
+			if (style.CurveTessellationTol < 0.10f) style.CurveTessellationTol = 0.10f;
+			ImGui::DragFloat("Global Alpha", &style.Alpha, 0.005f, 0.20f, 1.0f, "%.2f"); // Not exposing zero here so user doesn't "lose" the UI (zero alpha clips all widgets). But application code could have a toggle to switch between zero and non-zero.
+			ImGui::PopItemWidth();
+
+			ImGui::EndTabItem();
+		}
+
+		ImGui::EndTabBar();
+	}
+
+	ImGui::PopItemWidth();
 }

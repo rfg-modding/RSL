@@ -255,6 +255,7 @@
     <ClInclude Include="RFGR_Types_Player.h" />
     <ClInclude Include="ScriptManager.h" />
     <ClInclude Include="SnippetManager.h" />
+    <ClInclude Include="ThemeEditor.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

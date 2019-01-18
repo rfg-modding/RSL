@@ -128,40 +128,10 @@ LRESULT __stdcall WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		PostQuitMessage(0);
 		return 0;
 	}
-	//ConsoleLog("You better see this #3", LOGSUCCESS, false, true, true);
+
 	return CallWindowProc(OriginalWndProc, hwnd, msg, wParam, lParam);
 	//return DefWindowProc(hWnd, msg, wParam, lParam);
 }
-
-/*LRESULT __stdcall SafeWndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
-{
-	if (ImGui_ImplWin32_WndProcHandler(hWnd, msg, wParam, lParam))
-		return true;
-
-	switch (msg)
-	{
-	case WM_SIZE:
-		ConsoleLog("Window resized", LOGWARNING, false, true, true);
-
-		if (D3D11Device == nullptr && wParam != SIZE_MINIMIZED)//g_pd3dDevice != NULL && wParam != SIZE_MINIMIZED)
-		{
-			ConsoleLog("Window resize test 1 passed, setting UpdateD3D11Pointers to true", LOGWARNING, false, true, true);
-			UpdateD3D11Pointers = true;
-			//CleanupRenderTarget();
-			//g_pSwapChain->ResizeBuffers(0, (UINT)LOWORD(lParam), (UINT)HIWORD(lParam), DXGI_FORMAT_UNKNOWN, 0);
-			//CreateRenderTarget();
-		}
-		return 0;
-	case WM_SYSCOMMAND:
-		if ((wParam & 0xfff0) == SC_KEYMENU) // Disable ALT application menu
-			return 0;
-		break;
-	case WM_DESTROY:
-		PostQuitMessage(0);
-		return 0;
-	}
-	return DefWindowProc(hWnd, msg, wParam, lParam);
-}*/
 
 HRESULT D3D11_DEVICE_CONTEXT_FROM_SWAPCHAIN(IDXGISwapChain * pSwapChain, ID3D11Device ** ppDevice, ID3D11DeviceContext ** ppContext)
 {
@@ -229,112 +199,20 @@ HRESULT __stdcall D3D11PresentHook(IDXGISwapChain * pSwapChain, UINT SyncInterva
 		hwnd = find_main_window(GetProcessID("rfg.exe"));
 		ImGui_ImplWin32_Init(hwnd);
 
-		//ConsoleLog("Before getting font path.", LOGWARNING, false, true, true);
 		std::string DroidSansPath = std::string(GetEXEPath(false) + "RFGR Script Loader/Fonts/DroidSans.ttf");
-		//std::cout << "Font Path: " << DroidSansPath << std::endl;
 		if (fs::exists(DroidSansPath))
 		{
-			//ConsoleLog("DroidSans.ttf found. Using as overlay font.", LOGMESSAGE, false, true, true);
 			ImGui::GetIO().Fonts->AddFontFromFileTTF(DroidSansPath.c_str(), 17.0f);
-			//ImGui::GetIO().Fonts->GetTexDataAsRGBA32();
-			//ImGui::GetIO().Fonts->Build()
 		}
 		else
 		{
 			ConsoleLog("DroidSans.ttf not found. Using default font.", LOGERROR, false, true, true);
 		}
-		//ConsoleLog("Got past font setup without crashing.", LOGWARNING, false, true, true);
 
-		float UIOpacity = 0.95f;
-
-		Colors = ImGui::GetStyle().Colors;
-		Colors[ImGuiCol_Text] = ImVec4(0.98f, 0.98f, 1.00f, UIOpacity);
-		Colors[ImGuiCol_TextDisabled] = ImVec4(0.50f, 0.51f, 0.53f, UIOpacity);
-		Colors[ImGuiCol_WindowBg] = ImVec4(0.14f, 0.15f, 0.16f, UIOpacity);
-		Colors[ImGuiCol_PopupBg] = ImVec4(0.10f, 0.10f, 0.12f, UIOpacity);
-		Colors[ImGuiCol_Border] = ImVec4(0.09f, 0.09f, 0.11f, UIOpacity);
-		Colors[ImGuiCol_FrameBg] = ImVec4(0.10f, 0.10f, 0.12f, UIOpacity);
-		Colors[ImGuiCol_FrameBgHovered] = ImVec4(0.20f, 0.55f, 0.83f, UIOpacity);
-		Colors[ImGuiCol_FrameBgActive] = ImVec4(0.20f, 0.55f, 0.83f, UIOpacity);
-		Colors[ImGuiCol_TitleBgActive] = ImVec4(0.10f, 0.40f, 0.75f, UIOpacity);
-		Colors[ImGuiCol_CheckMark] = ImVec4(0.10f, 0.40f, 0.75f, UIOpacity);
-		Colors[ImGuiCol_SliderGrab] = ImVec4(0.20f, 0.55f, 0.83f, UIOpacity);
-		Colors[ImGuiCol_SliderGrabActive] = ImVec4(0.20f, 0.55f, 0.83f, UIOpacity);
-		Colors[ImGuiCol_Button] = ImVec4(0.10f, 0.40f, 0.75f, UIOpacity);
-		Colors[ImGuiCol_ButtonHovered] = ImVec4(0.20f, 0.55f, 0.98f, UIOpacity);
-		Colors[ImGuiCol_PlotLines] = ImVec4(0.55f, 0.83f, 1.00f, UIOpacity);
-
-		// Setup style
-		/*ImVec4* Colors = ImGui::GetStyle().Colors;
-		Colors[ImGuiCol_Text] = ImVec4(1.00f, 1.00f, 1.00f, 0.95f);
-		Colors[ImGuiCol_TextDisabled] = ImVec4(0.50f, 0.50f, 0.50f, 1.00f);
-		Colors[ImGuiCol_WindowBg] = ImVec4(0.13f, 0.12f, 0.12f, 1.00f);
-		Colors[ImGuiCol_ChildBg] = ImVec4(1.00f, 1.00f, 1.00f, 0.00f);
-		Colors[ImGuiCol_PopupBg] = ImVec4(0.05f, 0.05f, 0.05f, 0.94f);
-		Colors[ImGuiCol_Border] = ImVec4(0.53f, 0.53f, 0.53f, 0.46f);
-		Colors[ImGuiCol_BorderShadow] = ImVec4(0.00f, 0.00f, 0.00f, 0.00f);
-		Colors[ImGuiCol_FrameBg] = ImVec4(0.00f, 0.00f, 0.00f, 0.85f);
-		Colors[ImGuiCol_FrameBgHovered] = ImVec4(0.22f, 0.22f, 0.22f, 0.40f);
-		Colors[ImGuiCol_FrameBgActive] = ImVec4(0.16f, 0.16f, 0.16f, 0.53f);
-		Colors[ImGuiCol_TitleBg] = ImVec4(0.00f, 0.00f, 0.00f, 1.00f);
-		Colors[ImGuiCol_TitleBgActive] = ImVec4(0.00f, 0.00f, 0.00f, 1.00f);
-		Colors[ImGuiCol_TitleBgCollapsed] = ImVec4(0.00f, 0.00f, 0.00f, 0.51f);
-		Colors[ImGuiCol_MenuBarBg] = ImVec4(0.12f, 0.12f, 0.12f, 1.00f);
-		Colors[ImGuiCol_ScrollbarBg] = ImVec4(0.02f, 0.02f, 0.02f, 0.53f);
-		Colors[ImGuiCol_ScrollbarGrab] = ImVec4(0.31f, 0.31f, 0.31f, 1.00f);
-		Colors[ImGuiCol_ScrollbarGrabHovered] = ImVec4(0.41f, 0.41f, 0.41f, 1.00f);
-		Colors[ImGuiCol_ScrollbarGrabActive] = ImVec4(0.48f, 0.48f, 0.48f, 1.00f);
-		Colors[ImGuiCol_CheckMark] = ImVec4(0.79f, 0.79f, 0.79f, 1.00f);
-		Colors[ImGuiCol_SliderGrab] = ImVec4(0.48f, 0.47f, 0.47f, 0.91f);
-		Colors[ImGuiCol_SliderGrabActive] = ImVec4(0.56f, 0.55f, 0.55f, 0.62f);
-		Colors[ImGuiCol_Button] = ImVec4(0.50f, 0.50f, 0.50f, 0.63f);
-		Colors[ImGuiCol_ButtonHovered] = ImVec4(0.67f, 0.67f, 0.68f, 0.63f);
-		Colors[ImGuiCol_ButtonActive] = ImVec4(0.26f, 0.26f, 0.26f, 0.63f);
-		Colors[ImGuiCol_Header] = ImVec4(0.54f, 0.54f, 0.54f, 0.58f);
-		Colors[ImGuiCol_HeaderHovered] = ImVec4(0.64f, 0.65f, 0.65f, 0.80f);
-		Colors[ImGuiCol_HeaderActive] = ImVec4(0.25f, 0.25f, 0.25f, 0.80f);
-		Colors[ImGuiCol_Separator] = ImVec4(0.58f, 0.58f, 0.58f, 0.50f);
-		Colors[ImGuiCol_SeparatorHovered] = ImVec4(0.81f, 0.81f, 0.81f, 0.64f);
-		Colors[ImGuiCol_SeparatorActive] = ImVec4(0.81f, 0.81f, 0.81f, 0.64f);
-		Colors[ImGuiCol_ResizeGrip] = ImVec4(0.87f, 0.87f, 0.87f, 0.53f);
-		Colors[ImGuiCol_ResizeGripHovered] = ImVec4(0.87f, 0.87f, 0.87f, 0.74f);
-		Colors[ImGuiCol_ResizeGripActive] = ImVec4(0.87f, 0.87f, 0.87f, 0.74f);
-		Colors[ImGuiCol_Tab] = ImVec4(0.01f, 0.01f, 0.01f, 0.86f);
-		Colors[ImGuiCol_TabHovered] = ImVec4(0.29f, 0.29f, 0.29f, 1.00f);
-		Colors[ImGuiCol_TabActive] = ImVec4(0.31f, 0.31f, 0.31f, 1.00f);
-		Colors[ImGuiCol_TabUnfocused] = ImVec4(0.02f, 0.02f, 0.02f, 1.00f);
-		Colors[ImGuiCol_TabUnfocusedActive] = ImVec4(0.19f, 0.19f, 0.19f, 1.00f);
-		//Colors[ImGuiCol_DockingPreview] = ImVec4(0.38f, 0.48f, 0.60f, 1.00f);
-		//Colors[ImGuiCol_DockingEmptyBg] = ImVec4(0.20f, 0.20f, 0.20f, 1.00f);
-		Colors[ImGuiCol_PlotLines] = ImVec4(0.61f, 0.61f, 0.61f, 1.00f);
-		Colors[ImGuiCol_PlotLinesHovered] = ImVec4(0.68f, 0.68f, 0.68f, 1.00f);
-		Colors[ImGuiCol_PlotHistogram] = ImVec4(0.90f, 0.77f, 0.33f, 1.00f);
-		Colors[ImGuiCol_PlotHistogramHovered] = ImVec4(0.87f, 0.55f, 0.08f, 1.00f);
-		Colors[ImGuiCol_TextSelectedBg] = ImVec4(0.47f, 0.60f, 0.76f, 0.47f);
-		Colors[ImGuiCol_DragDropTarget] = ImVec4(0.58f, 0.58f, 0.58f, 0.90f);
-		Colors[ImGuiCol_NavHighlight] = ImVec4(0.60f, 0.60f, 0.60f, 1.00f);
-		Colors[ImGuiCol_NavWindowingHighlight] = ImVec4(1.00f, 1.00f, 1.00f, 0.70f);
-		Colors[ImGuiCol_NavWindowingDimBg] = ImVec4(0.80f, 0.80f, 0.80f, 0.20f);
-		Colors[ImGuiCol_ModalWindowDimBg] = ImVec4(0.80f, 0.80f, 0.80f, 0.35f);*/
-
-		ImGuiStyle& Style = ImGui::GetStyle();
-		Style.WindowBorderSize = 1;
-		Style.ChildBorderSize = 0;
-		Style.PopupBorderSize = 1;
-		Style.FrameBorderSize = 1;
-		Style.TabBorderSize = 0;
-
-		Style.WindowRounding = 3;
-		Style.ChildRounding = 3;
-		Style.FrameRounding = 3;
-		Style.ScrollbarRounding = 3;
-		Style.GrabRounding = 3;
-		Style.TabRounding = 3;
-
-		if (OverlayActive)
+		/*if (OverlayActive)
 		{
-			//OriginalWndProc = (WNDPROC)SetWindowLongPtr(hwnd, GWLP_WNDPROC, (__int3264)(LONG_PTR)WndProc);
-		}
+			OriginalWndProc = (WNDPROC)SetWindowLongPtr(hwnd, GWLP_WNDPROC, (__int3264)(LONG_PTR)WndProc);
+		}*/
 
 		Overlay.Initialize();
 		ImGuiInitialized = true;
@@ -378,44 +256,6 @@ HRESULT __stdcall D3D11PresentHook(IDXGISwapChain * pSwapChain, UINT SyncInterva
 		ConsoleLog("Finish reforming after resize.", LOGSUCCESS, false, true, true);
 		UpdateD3D11Pointers = false;
 	}
-	/*if (D3D11SwapchainPtr != pSwapChain)
-	{
-		ConsoleLog("D3D11SwapchainPtr address changed", LOGMESSAGE, false, true, true);
-		std::cout << "D3D11SwapchainPtr: " << std::hex << std::uppercase << D3D11SwapchainPtr << std::endl;
-		std::cout << "pSwapChain: " << std::hex << std::uppercase << pSwapChain << std::endl;
-	}
-
-	//ConsoleLog("Before updating D3D11 pointers", LOGERROR, false, true, true);
-	if (UpdateD3D11Pointers)
-	{
-		std::cout << "Present before D3D11Device: " << std::hex << std::uppercase << D3D11Device << std::endl;
-		std::cout << "Present before D3D11Context: " << std::hex << std::uppercase << D3D11Context << std::endl;
-
-		ImGui_ImplDX11_InvalidateDeviceObjects();
-
-		ConsoleLog("Updating D3D11 Pointers", LOGWARNING, false, true, true);
-		if (FAILED(D3D11_DEVICE_CONTEXT_FROM_SWAPCHAIN(pSwapChain, &D3D11Device, &D3D11Context)))
-		{
-			ConsoleLog("Couldn't get device and context from swapchain. In device pointer update branch.", LOGERROR, false, true, true);
-			return D3D11PresentObject(pSwapChain, SyncInterval, Flags);;
-		}
-
-		ID3D11Texture2D* BackBuffer;
-		pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&BackBuffer);
-		D3D11Device->CreateRenderTargetView(BackBuffer, NULL, &MainRenderTargetView);
-		BackBuffer->Release();
-
-		DXGI_SWAP_CHAIN_DESC SwapChainDescription;
-		pSwapChain->GetDesc(&SwapChainDescription);
-
-		std::cout << "Present after D3D11Device: " << std::hex << std::uppercase << D3D11Device << std::endl;
-		std::cout << "Present after D3D11Context: " << std::hex << std::uppercase << D3D11Context << std::endl;
-
-		ImGui_ImplDX11_CreateDeviceObjects();
-		//ImGui_ImplDX11_Init(D3D11Device, D3D11Context);
-		UpdateD3D11Pointers = false;
-		ConsoleLog("Done updating D3D11 pointers", LOGFATALERROR, false, true, true);
-	}*/
 	if (!ImGuiInitialized)
 	{
 		return D3D11PresentObject(pSwapChain, SyncInterval, Flags);
@@ -429,8 +269,8 @@ HRESULT __stdcall D3D11PresentHook(IDXGISwapChain * pSwapChain, UINT SyncInterva
 	ImGui_ImplWin32_NewFrame();
 	ImGui::NewFrame();
 
-	if (show_demo_window)
-		ImGui::ShowDemoWindow(&show_demo_window);
+	/*if (show_demo_window)
+		ImGui::ShowDemoWindow(&show_demo_window);*/
 
 	Overlay.Draw("Main Overlay", &ShowMainOverlay);
 

@@ -2313,7 +2313,7 @@ struct Human : Object //3786 + 175 = 3961 Bytes
 	InventoryItem* LastEquippedWeapon; //4
 	InventoryItem* SecondLastEquippedWeapon; //4
 	InventoryItem* GrenadeWeapon; //4
-	void* AnimationPropInfo;// ItemInfo* AnimationPropInfo; ///4 *** Define later, has a lot of useful things such as mass, restitution, explosion_info, etc.
+	void* AnimationPropInfo;/// ItemInfo* AnimationPropInfo; ///4 *** Define later, has a lot of useful things such as mass, restitution, explosion_info, etc.
 	unsigned int OffhandProjectileHandle; //4
 	unsigned int ShieldHandle; //4
 	Timestamp ReloadTimer; //4
