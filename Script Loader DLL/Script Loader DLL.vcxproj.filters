@@ -179,8 +179,5 @@
     <ClInclude Include="imgui_stdlib.h">
       <Filter>D3D11 Hook + ImGui\Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ThemeEditor.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
 </Project>

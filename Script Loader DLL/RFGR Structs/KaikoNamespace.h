@@ -1,4 +1,6 @@
 #pragma once
+#include "KeenNamespace.h"
+#include "Unit4Namespace.h"
 
 namespace kaiko
 {
@@ -97,5 +99,35 @@ namespace kaiko
 		GameSessionResponseId_SkipSignIn = 0x4002,
 		GameSessionResponseId_RepeatSignIn = 0x4003,
 		GameSessionResponseId_None = 0xFFFFFFFF,
+	};
+
+	enum kaiko::GameSessionInteractionParameterType
+	{
+		GameSessionInteractionParameterType_PlatformErrorCode = 0x0,
+		GameSessionInteractionParameterType_UserNameString = 0x1,
+	};
+
+	namespace GameSessionInteractionParameter
+	{
+		/* 3572 */
+		union GameSessionInteractionParameterValue
+		{
+			int sint32Value;
+			char stringValue[64];
+		};
+	}
+
+	/* 3573 */
+	struct GameSessionInteractionParameter
+	{
+		kaiko::GameSessionInteractionParameterType type;
+		kaiko::GameSessionInteractionParameter::GameSessionInteractionParameterValue value;
+	};
+
+	/* 3574 */
+	struct GameSessionInteractionParameterList
+	{
+		kaiko::GameSessionInteractionParameter parameters[4];
+		unsigned int parameterCount;
 	};
 }
