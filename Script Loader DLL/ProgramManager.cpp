@@ -46,14 +46,14 @@ void ProgramManager::Initialize()
 
 	if (!kiero::init(kiero::RenderType::D3D11) == kiero::Status::Success)
 	{
-		ConsoleLog(std::string("Kiero error: " + std::to_string(kiero::init(kiero::RenderType::D3D11))).c_str(), LOGFATALERROR, false, true, true);
-		ConsoleLog("Failed to initialize kiero for D3D11. RFGR Script loader deactivating.\n", LOGFATALERROR, false, true, true);
+		Logger::ConsoleLog(std::string("Kiero error: " + std::to_string(kiero::init(kiero::RenderType::D3D11))).c_str(), LOGFATALERROR, false, true, true);
+		Logger::ConsoleLog("Failed to initialize kiero for D3D11. RFGR Script loader deactivating.\n", LOGFATALERROR, false, true, true);
 		FreeLibraryAndExitThread(ScriptLoaderModule, 0);
 		return;
 	}
 	if (MH_Initialize() != MH_OK)
 	{
-		ConsoleLog("Failed to initialize MinHook. RFGR Script loader deactivating.", LOGFATALERROR, false, true, true);
+		Logger::ConsoleLog("Failed to initialize MinHook. RFGR Script loader deactivating.", LOGFATALERROR, false, true, true);
 		FreeLibraryAndExitThread(ScriptLoaderModule, 0);
 		return;
 	}
@@ -65,14 +65,14 @@ void ProgramManager::Initialize()
 	CreateGameHooks();
 	EnableGameHooks();
 #if !PublicMode
-	ConsoleLog("Finished hooking game functions.", LOGSUCCESS, false, true, true);
+	Logger::ConsoleLog("Finished hooking game functions.", LOGSUCCESS, false, true, true);
 #endif
 
 	//FindPattern((char*)"rfg.exe", (char*)"", (char*)"");
 	MouseGenericPollMouseVisible = FindPattern((char*)"rfg.exe", (char*)"\x84\xD2\x74\x08\x38\x00\x00\x00\x00\x00\x75\x02", (char*)"xxxxx?????xx");
 	CenterMouseCursorCall = FindPattern((char*)"rfg.exe", (char*)"\xE8\x00\x00\x00\x00\x89\x46\x4C\x89\x56\x50", (char*)"x????xxxxxx");
 
-	ConsoleLog("Now monitoring RFGR State", LOGMESSAGE, false, true, true);
+	Logger::ConsoleLog("Now monitoring RFGR State", LOGMESSAGE, false, true, true);
 	GameState RFGRState;
 	auto StartTime = std::chrono::steady_clock::now();
 	auto EndTime = std::chrono::steady_clock::now();
@@ -91,15 +91,15 @@ void ProgramManager::Initialize()
 		EndTime = std::chrono::steady_clock::now();
 	} 
 	while (RFGRState < 0 || RFGRState > 63); //Todo: Consider changing to hex values for consistency with enum definition. Alternatively change enum to decimal.
-	ConsoleLog(std::string("RFGR State > 0. Value: " + std::to_string(RFGRState)).c_str(), LOGSUCCESS, false, true, true);
+	Logger::ConsoleLog(std::string("RFGR State > 0. Value: " + std::to_string(RFGRState)).c_str(), LOGSUCCESS, false, true, true);
 
 	OriginalWndProc = (WNDPROC)SetWindowLongPtr(GameWindowHandle, GWLP_WNDPROC, (__int3264)(LONG_PTR)WndProc);
-	ConsoleLog("Custom WndProc set.", LOGMESSAGE, false, true, true);
+	Logger::ConsoleLog("Custom WndProc set.", LOGMESSAGE, false, true, true);
 	CreateD3D11Hooks();
 	EnableD3D11Hooks();
-	ConsoleLog("D3D11 hooks created and enabled.", LOGMESSAGE, false, true, true);
+	Logger::ConsoleLog("D3D11 hooks created and enabled.", LOGMESSAGE, false, true, true);
 #if !PublicMode
-	ConsoleLog("Finished hooking D3D11 functions.", LOGSUCCESS, false, true, true);
+	Logger::ConsoleLog("Finished hooking D3D11 functions.", LOGSUCCESS, false, true, true);
 #endif
 
 	Sleep(5000);
@@ -112,7 +112,7 @@ void ProgramManager::Initialize()
 		//std::cout << "ImGui TimeElapsed: " << TimeElapsed << std::endl;
 		if (TimeElapsed > 2000LL) 
 		{
-			ConsoleLog("Waiting for ImGui to be initialized.", LOGMESSAGE, false, true, true);
+			Logger::ConsoleLog("Waiting for ImGui to be initialized.", LOGMESSAGE, false, true, true);
 			//Sleep(2000);
 		}
 		EndTime = StartTime;
@@ -148,7 +148,7 @@ void ProgramManager::ProcessInput()
 	if (GetAsyncKeyState(VK_F1))
 	{
 		OverlayActive = !OverlayActive;
-		ConsoleLog(std::string("Overlay active value: " + std::to_string(OverlayActive)).c_str(), LOGMESSAGE, false, true, true);
+		Logger::ConsoleLog(std::string("Overlay active value: " + std::to_string(OverlayActive)).c_str(), LOGMESSAGE, false, true, true);
 		if (OverlayActive)
 		{
 			//OriginalWndProc = (WNDPROC)SetWindowLongPtr(GameWindowHandle, GWLP_WNDPROC, (__int3264)(LONG_PTR)WndProc);
@@ -167,7 +167,7 @@ void ProgramManager::ProcessInput()
 	if (GetAsyncKeyState(VK_F2))
 	{
 		FirstPersonModeActive = !FirstPersonModeActive;
-		ConsoleLog(std::string("FPS Mode active value: " + std::to_string(FirstPersonModeActive)).c_str(), LOGMESSAGE, false, true, true);
+		Logger::ConsoleLog(std::string("FPS Mode active value: " + std::to_string(FirstPersonModeActive)).c_str(), LOGMESSAGE, false, true, true);
 		Sleep(150);
 	}
 }
@@ -235,25 +235,25 @@ void ProgramManager::CreateGameHooks()
 {
 	if (MH_CreateHook((DWORD*)(ModuleBase + 0x6DECA0), PlayerConstructorHook, (LPVOID*)&PlayerConstructor) != MH_OK)
 	{
-		ConsoleLog("Failed to create PlayerConstructor() hook. RFGR Script loader deactivating.", LOGFATALERROR, false, true, true);
+		Logger::ConsoleLog("Failed to create PlayerConstructor() hook. RFGR Script loader deactivating.", LOGFATALERROR, false, true, true);
 		FreeLibraryAndExitThread(ScriptLoaderModule, 0);
 		return;
 	}
 	if (MH_CreateHook((DWORD*)(ModuleBase + 0x6D5A80), PlayerDoFrameHook, (LPVOID*)&PlayerDoFrame) != MH_OK)
 	{
-		ConsoleLog("Failed to create PlayerDoFrame() hook. RFGR Script loader deactivating.", LOGFATALERROR, false, true, true);
+		Logger::ConsoleLog("Failed to create PlayerDoFrame() hook. RFGR Script loader deactivating.", LOGFATALERROR, false, true, true);
 		FreeLibraryAndExitThread(ScriptLoaderModule, 0);
 		return;
 	}
 	if (MH_CreateHook((DWORD*)(ModuleBase + 0x68C310), ObjectUpdatePosAndOrientHook, (LPVOID*)&ObjectUpdatePosAndOrient) != MH_OK)
 	{
-		ConsoleLog("Failed to create ObjectUpdatePosAndOrient() hook. RFGR Script loader deactivating.", LOGFATALERROR, false, true, true);
+		Logger::ConsoleLog("Failed to create ObjectUpdatePosAndOrient() hook. RFGR Script loader deactivating.", LOGFATALERROR, false, true, true);
 		FreeLibraryAndExitThread(ScriptLoaderModule, 0);
 		return;
 	}
 	if (MH_CreateHook((DWORD*)(ModuleBase + 0x69AF70), HumanUpdatePosAndOrientHook, (LPVOID*)&HumanUpdatePosAndOrient) != MH_OK)
 	{
-		ConsoleLog("Failed to create HumanUpdatePosAndOrient() hook. RFGR Script loader deactivating.", LOGFATALERROR, false, true, true);
+		Logger::ConsoleLog("Failed to create HumanUpdatePosAndOrient() hook. RFGR Script loader deactivating.", LOGFATALERROR, false, true, true);
 		FreeLibraryAndExitThread(ScriptLoaderModule, 0);
 		return;
 	}
@@ -265,13 +265,13 @@ void ProgramManager::CreateGameHooks()
 	}*/
 	if (MH_CreateHook((DWORD*)(ModuleBase + 0x2EC720), ExplosionCreateHook, (LPVOID*)&ExplosionCreate) != MH_OK)
 	{
-		ConsoleLog("Failed to create ExplosionCreate() hook. RFGR Script loader deactivating.", LOGFATALERROR, false, true, true);
+		Logger::ConsoleLog("Failed to create ExplosionCreate() hook. RFGR Script loader deactivating.", LOGFATALERROR, false, true, true);
 		FreeLibraryAndExitThread(ScriptLoaderModule, 0);
 		return;
 	}
 	if (MH_CreateHook((DWORD*)(ModuleBase + 0x2D0290), CameraViewDataSetViewHook, (LPVOID*)&CameraViewDataSetView) != MH_OK)
 	{
-		ConsoleLog("Failed to create CameraViewDataSetView() hook. RFGR Script loader deactivating.", LOGFATALERROR, false, true, true);
+		Logger::ConsoleLog("Failed to create CameraViewDataSetView() hook. RFGR Script loader deactivating.", LOGFATALERROR, false, true, true);
 		FreeLibraryAndExitThread(ScriptLoaderModule, 0);
 		return;
 	}
@@ -279,31 +279,31 @@ void ProgramManager::CreateGameHooks()
 	/*Start of MP Detection Hooks*/
 	if (MH_CreateHook((DWORD*)(ModuleBase + 0x1D0DD0), IsValidGameLinkLobbyKaikoHook, (LPVOID*)&IsValidGameLinkLobbyKaiko) != MH_OK)
 	{
-		ConsoleLog("Failed to create nameless hook 1. RFGR Script loader deactivating.", LOGFATALERROR, false, true, true);
+		Logger::ConsoleLog("Failed to create nameless hook 1. RFGR Script loader deactivating.", LOGFATALERROR, false, true, true);
 		FreeLibraryAndExitThread(ScriptLoaderModule, 0);
 		return;
 	}
 	if (MH_CreateHook((DWORD*)(ModuleBase + 0x3CC750), GameMusicMultiplayerStartHook, (LPVOID*)&GameMusicMultiplayerStart) != MH_OK)
 	{
-		ConsoleLog("Failed to create nameless hook 2. RFGR Script loader deactivating.", LOGFATALERROR, false, true, true);
+		Logger::ConsoleLog("Failed to create nameless hook 2. RFGR Script loader deactivating.", LOGFATALERROR, false, true, true);
 		FreeLibraryAndExitThread(ScriptLoaderModule, 0);
 		return;
 	}
 	if (MH_CreateHook((DWORD*)(ModuleBase + 0x497740), InitMultiplayerDataItemRespawnHook, (LPVOID*)&InitMultiplayerDataItemRespawn) != MH_OK)
 	{
-		ConsoleLog("Failed to create nameless hook 3. RFGR Script loader deactivating.", LOGFATALERROR, false, true, true);
+		Logger::ConsoleLog("Failed to create nameless hook 3. RFGR Script loader deactivating.", LOGFATALERROR, false, true, true);
 		FreeLibraryAndExitThread(ScriptLoaderModule, 0);
 		return;
 	}
 	if (MH_CreateHook((DWORD*)(ModuleBase + 0x4F50B0), HudUiMultiplayerProcessHook, (LPVOID*)&HudUiMultiplayerProcess) != MH_OK)
 	{
-		ConsoleLog("Failed to create nameless hook 4. RFGR Script loader deactivating.", LOGFATALERROR, false, true, true);
+		Logger::ConsoleLog("Failed to create nameless hook 4. RFGR Script loader deactivating.", LOGFATALERROR, false, true, true);
 		FreeLibraryAndExitThread(ScriptLoaderModule, 0);
 		return;
 	}
 	if (MH_CreateHook((DWORD*)(ModuleBase + 0x516D80), HudUiMultiplayerEnterHook, (LPVOID*)&HudUiMultiplayerEnter) != MH_OK)
 	{
-		ConsoleLog("Failed to create nameless hook 5. RFGR Script loader deactivating.", LOGFATALERROR, false, true, true);
+		Logger::ConsoleLog("Failed to create nameless hook 5. RFGR Script loader deactivating.", LOGFATALERROR, false, true, true);
 		FreeLibraryAndExitThread(ScriptLoaderModule, 0);
 		return;
 	}
@@ -321,25 +321,25 @@ void ProgramManager::EnableGameHooks()
 {
 	if (MH_EnableHook((DWORD*)(ModuleBase + 0x6DECA0)) != MH_OK)
 	{
-		ConsoleLog("Failed to enable PlayerConstructor() hook. RFGR Script loader deactivating.", LOGFATALERROR, false, true, true);
+		Logger::ConsoleLog("Failed to enable PlayerConstructor() hook. RFGR Script loader deactivating.", LOGFATALERROR, false, true, true);
 		FreeLibraryAndExitThread(ScriptLoaderModule, 0);
 		return;
 	}
 	if (MH_EnableHook((DWORD*)(ModuleBase + 0x6D5A80)) != MH_OK)
 	{
-		ConsoleLog("Failed to enable PlayerDoFrame() hook. RFGR Script loader deactivating.", LOGFATALERROR, false, true, true);
+		Logger::ConsoleLog("Failed to enable PlayerDoFrame() hook. RFGR Script loader deactivating.", LOGFATALERROR, false, true, true);
 		FreeLibraryAndExitThread(ScriptLoaderModule, 0);
 		return;
 	}
 	if (MH_EnableHook((DWORD*)(ModuleBase + 0x68C310)) != MH_OK)
 	{
-		ConsoleLog("Failed to enable ObjectUpdatePosAndOrient() hook. RFGR Script loader deactivating.", LOGFATALERROR, false, true, true);
+		Logger::ConsoleLog("Failed to enable ObjectUpdatePosAndOrient() hook. RFGR Script loader deactivating.", LOGFATALERROR, false, true, true);
 		FreeLibraryAndExitThread(ScriptLoaderModule, 0);
 		return;
 	}
 	if (MH_EnableHook((DWORD*)(ModuleBase + 0x69AF70)) != MH_OK)
 	{
-		ConsoleLog("Failed to enable HumanUpdatePosAndOrient() hook. RFGR Script loader deactivating.", LOGFATALERROR, false, true, true);
+		Logger::ConsoleLog("Failed to enable HumanUpdatePosAndOrient() hook. RFGR Script loader deactivating.", LOGFATALERROR, false, true, true);
 		FreeLibraryAndExitThread(ScriptLoaderModule, 0);
 		return;
 	}
@@ -351,13 +351,13 @@ void ProgramManager::EnableGameHooks()
 	}*/
 	if (MH_EnableHook((DWORD*)(ModuleBase + 0x2EC720)) != MH_OK)
 	{
-		ConsoleLog("Failed to enable ExplosionCreate() hook. RFGR Script loader deactivating.", LOGFATALERROR, false, true, true);
+		Logger::ConsoleLog("Failed to enable ExplosionCreate() hook. RFGR Script loader deactivating.", LOGFATALERROR, false, true, true);
 		FreeLibraryAndExitThread(ScriptLoaderModule, 0);
 		return;
 	}
 	if (MH_EnableHook((DWORD*)(ModuleBase + 0x2D0290)) != MH_OK)
 	{
-		ConsoleLog("Failed to enable CameraViewDataSetView() hook. RFGR Script loader deactivating.", LOGFATALERROR, false, true, true);
+		Logger::ConsoleLog("Failed to enable CameraViewDataSetView() hook. RFGR Script loader deactivating.", LOGFATALERROR, false, true, true);
 		FreeLibraryAndExitThread(ScriptLoaderModule, 0);
 		return;
 	}
@@ -365,31 +365,31 @@ void ProgramManager::EnableGameHooks()
 	/*Start of MP Detection Hooks*/
 	if (MH_EnableHook((DWORD*)(ModuleBase + 0x1D0DD0)) != MH_OK)
 	{
-		ConsoleLog("Failed to enable nameless hook 1. RFGR Script loader deactivating.", LOGFATALERROR, false, true, true);
+		Logger::ConsoleLog("Failed to enable nameless hook 1. RFGR Script loader deactivating.", LOGFATALERROR, false, true, true);
 		FreeLibraryAndExitThread(ScriptLoaderModule, 0);
 		return;
 	}
 	if (MH_EnableHook((DWORD*)(ModuleBase + 0x3CC750)) != MH_OK)
 	{
-		ConsoleLog("Failed to enable nameless hook 2. RFGR Script loader deactivating.", LOGFATALERROR, false, true, true);
+		Logger::ConsoleLog("Failed to enable nameless hook 2. RFGR Script loader deactivating.", LOGFATALERROR, false, true, true);
 		FreeLibraryAndExitThread(ScriptLoaderModule, 0);
 		return;
 	}
 	if (MH_EnableHook((DWORD*)(ModuleBase + 0x497740)) != MH_OK)
 	{
-		ConsoleLog("Failed to enable nameless hook 3. RFGR Script loader deactivating.", LOGFATALERROR, false, true, true);
+		Logger::ConsoleLog("Failed to enable nameless hook 3. RFGR Script loader deactivating.", LOGFATALERROR, false, true, true);
 		FreeLibraryAndExitThread(ScriptLoaderModule, 0);
 		return;
 	}
 	if (MH_EnableHook((DWORD*)(ModuleBase + 0x4F50B0)) != MH_OK)
 	{
-		ConsoleLog("Failed to enable nameless hook 4. RFGR Script loader deactivating.", LOGFATALERROR, false, true, true);
+		Logger::ConsoleLog("Failed to enable nameless hook 4. RFGR Script loader deactivating.", LOGFATALERROR, false, true, true);
 		FreeLibraryAndExitThread(ScriptLoaderModule, 0);
 		return;
 	}
 	if (MH_EnableHook((DWORD*)(ModuleBase + 0x516D80)) != MH_OK)
 	{
-		ConsoleLog("Failed to enable nameless hook 5. RFGR Script loader deactivating.", LOGFATALERROR, false, true, true);
+		Logger::ConsoleLog("Failed to enable nameless hook 5. RFGR Script loader deactivating.", LOGFATALERROR, false, true, true);
 		FreeLibraryAndExitThread(ScriptLoaderModule, 0);
 		return;
 	}
@@ -407,19 +407,19 @@ void ProgramManager::DisableGameHooks()
 {
 	if (MH_DisableHook((DWORD*)(ModuleBase + 0x6DECA0)) != MH_OK)
 	{
-		ConsoleLog("Failed to disable PlayerConstructor() hook. RFGR might crash.", LOGFATALERROR, false, true, true);
+		Logger::ConsoleLog("Failed to disable PlayerConstructor() hook. RFGR might crash.", LOGFATALERROR, false, true, true);
 	}
 	if (MH_DisableHook((DWORD*)(ModuleBase + 0x6D5A80)) != MH_OK)
 	{
-		ConsoleLog("Failed to disable PlayerDoFrame() hook. RFGR might crash.", LOGFATALERROR, false, true, true);
+		Logger::ConsoleLog("Failed to disable PlayerDoFrame() hook. RFGR might crash.", LOGFATALERROR, false, true, true);
 	}
 	if (MH_DisableHook((DWORD*)(ModuleBase + 0x68C310)) != MH_OK)
 	{
-		ConsoleLog("Failed to disable ObjectUpdatePosAndOrient() hook. RFGR might crash.", LOGFATALERROR, false, true, true);
+		Logger::ConsoleLog("Failed to disable ObjectUpdatePosAndOrient() hook. RFGR might crash.", LOGFATALERROR, false, true, true);
 	}
 	if (MH_DisableHook((DWORD*)(ModuleBase + 0x69AF70)) != MH_OK)
 	{
-		ConsoleLog("Failed to disable HumanUpdatePosAndOrient() hook. RFGR might crash.", LOGFATALERROR, false, true, true);
+		Logger::ConsoleLog("Failed to disable HumanUpdatePosAndOrient() hook. RFGR might crash.", LOGFATALERROR, false, true, true);
 	}
 	/*if (MH_DisableHook((DWORD*)(ModuleBase + 0x4153D0)) != MH_OK)
 	{
@@ -427,41 +427,41 @@ void ProgramManager::DisableGameHooks()
 	}*/
 	if (MH_DisableHook((DWORD*)(ModuleBase + 0x2EC720)) != MH_OK)
 	{
-		ConsoleLog("Failed to disable ExplosionCreate() hook. RFGR might crash.", LOGFATALERROR, false, true, true);
+		Logger::ConsoleLog("Failed to disable ExplosionCreate() hook. RFGR might crash.", LOGFATALERROR, false, true, true);
 	}
 	if (MH_DisableHook((DWORD*)(ModuleBase + 0x2D0290)) != MH_OK)
 	{
-		ConsoleLog("Failed to disable CameraViewDataSetView() hook. RFGR might crash.", LOGFATALERROR, false, true, true);
+		Logger::ConsoleLog("Failed to disable CameraViewDataSetView() hook. RFGR might crash.", LOGFATALERROR, false, true, true);
 	}
 
 	/*Start of MP Detection Hooks*/
 	if (MH_DisableHook((DWORD*)(ModuleBase + 0x1D0DD0)) != MH_OK)
 	{
-		ConsoleLog("Failed to disable nameless hook 1. RFGR might crash.", LOGFATALERROR, false, true, true);
+		Logger::ConsoleLog("Failed to disable nameless hook 1. RFGR might crash.", LOGFATALERROR, false, true, true);
 		FreeLibraryAndExitThread(ScriptLoaderModule, 0);
 		return;
 	}
 	if (MH_DisableHook((DWORD*)(ModuleBase + 0x3CC750)) != MH_OK)
 	{
-		ConsoleLog("Failed to disable nameless hook 2. RFGR might crash.", LOGFATALERROR, false, true, true);
+		Logger::ConsoleLog("Failed to disable nameless hook 2. RFGR might crash.", LOGFATALERROR, false, true, true);
 		FreeLibraryAndExitThread(ScriptLoaderModule, 0);
 		return;
 	}
 	if (MH_DisableHook((DWORD*)(ModuleBase + 0x497740)) != MH_OK)
 	{
-		ConsoleLog("Failed to disable nameless hook 3. RFGR might crash.", LOGFATALERROR, false, true, true);
+		Logger::ConsoleLog("Failed to disable nameless hook 3. RFGR might crash.", LOGFATALERROR, false, true, true);
 		FreeLibraryAndExitThread(ScriptLoaderModule, 0);
 		return;
 	}
 	if (MH_DisableHook((DWORD*)(ModuleBase + 0x4F50B0)) != MH_OK)
 	{
-		ConsoleLog("Failed to disable nameless hook 4. RFGR might crash.", LOGFATALERROR, false, true, true);
+		Logger::ConsoleLog("Failed to disable nameless hook 4. RFGR might crash.", LOGFATALERROR, false, true, true);
 		FreeLibraryAndExitThread(ScriptLoaderModule, 0);
 		return;
 	}
 	if (MH_DisableHook((DWORD*)(ModuleBase + 0x516D80)) != MH_OK)
 	{
-		ConsoleLog("Failed to disable nameless hook 5. RFGR might crash.", LOGFATALERROR, false, true, true);
+		Logger::ConsoleLog("Failed to disable nameless hook 5. RFGR might crash.", LOGFATALERROR, false, true, true);
 		FreeLibraryAndExitThread(ScriptLoaderModule, 0);
 		return;
 	}
@@ -479,7 +479,7 @@ void ProgramManager::CreateD3D11Hooks()
 {
 	if (MH_CreateHook((LPVOID)kiero::getMethodsTable()[8], D3D11PresentHook, (LPVOID*)&D3D11PresentObject) != MH_OK)
 	{
-		ConsoleLog("Failed to create D3D11Present() hook. RFGR Script loader deactivating.", LOGFATALERROR, false, true, true);
+		Logger::ConsoleLog("Failed to create D3D11Present() hook. RFGR Script loader deactivating.", LOGFATALERROR, false, true, true);
 		DisableGameHooks();
 		FreeLibraryAndExitThread(ScriptLoaderModule, 0);
 		return;
@@ -490,7 +490,7 @@ void ProgramManager::EnableD3D11Hooks()
 {
 	if (MH_EnableHook((LPVOID)kiero::getMethodsTable()[8]) != MH_OK)
 	{
-		ConsoleLog("Failed to enable D3D11Present() hook. RFGR Script loader deactivating.", LOGFATALERROR, false, true, true);
+		Logger::ConsoleLog("Failed to enable D3D11Present() hook. RFGR Script loader deactivating.", LOGFATALERROR, false, true, true);
 		DisableGameHooks();
 		FreeLibraryAndExitThread(ScriptLoaderModule, 0);
 		return;
@@ -501,7 +501,7 @@ void ProgramManager::DisableD3D11Hooks()
 {
 	if (MH_DisableHook((LPVOID)kiero::getMethodsTable()[8]) != MH_OK)
 	{
-		ConsoleLog("Failed to disable D3D11Present() hook. RFGR might crash.", LOGFATALERROR, false, true, true);
+		Logger::ConsoleLog("Failed to disable D3D11Present() hook. RFGR might crash.", LOGFATALERROR, false, true, true);
 	}
 }
 

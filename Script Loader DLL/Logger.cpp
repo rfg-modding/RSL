@@ -1,98 +1,123 @@
 #include "Logger.h"
+#include "Globals.h"
+#include <map>
 
 // Instantiate static variables
-HANDLE ConsoleHandle;
-std::vector <std::string> Logger::LogData;
-std::string Logger::FileName;
-std::ofstream Logger::LogFile;
-int Logger::ErrorCount;
+std::map <std::string, LogFile> Logger::LogFileMap;
+std::vector <LogEntry> Logger::LogData;
+LogType Logger::ConsoleLogLevel = LOGMESSAGE;
+std::string Logger::DefaultLogPath;
 
-WORD ConsoleMessageLabelTextAttributes;
-WORD ConsoleMessageTextAttributes;
-WORD ConsoleWarningTextAttributes;
-WORD ConsoleErrorTextAttributes;
-WORD ConsoleFatalErrorTextAttributes;
-WORD ConsoleSuccessTextAttributes;
-WORD ConsoleDefaultTextAttributes;
-
-void Logger::Open(std::string FileName_)
+void Logger::Init(LogType _ConsoleLogLevel, std::string _DefaultLogPath)
 {
-#if EnableLogging
-	FileName = FileName_;
-	LogFile.open(FileName, std::ios::app | std::ofstream::out); //Second bitmask flag is needed or else the file is not created if it is missing.
+	ConsoleLogLevel = _ConsoleLogLevel;
+	DefaultLogPath = _DefaultLogPath;
+}
 
-	if (!LogFile)
+void Logger::OpenLogFile(std::string FileName, LogType LogLevel, std::ios_base::openmode Mode, std::string CustomFilePath)
+{
+	std::string Path;
+	if (CustomFilePath == "DEFAULT")
 	{
-		std::cerr << "Unable to open file: '" << FileName << "'." << std::endl; //Todo: Throw an error / exception here.
+		Path = DefaultLogPath;
 	}
-
-	LogFile << "******  START OF LOG  ******" << std::endl;
-	LogFile << "Start Time: " << GetTimeString(0) << "\n" << std::endl;
-#endif
-}
-
-void Logger::Log(std::string LogEntry)
-{
-#if EnableLogging
-	LogFile << "[" << GetTimeString(0) << "]: " << LogEntry << std::endl;
-	ErrorCount++;
-#endif
-}
-
-void Logger::Close()
-{
-#if EnableLogging
-	LogFile << "\n" << ErrorCount << " errors logged during this session." << std::endl;
-	LogFile << "End Time: " << GetTimeString(0) << std::endl;
-	LogFile << "******  END OF LOG  ******\n\n\n" << std::endl;
-
-	LogFile.close();//Todo: Check if log file still exists. If not, save the stored log data.
-					//Todo: Figure out if the vector is using too much RAM
-#endif
-}
-
-void Logger::SaveToFile()
-{
-#if EnableLogging
-	std::ofstream LogFile;
-	LogFile.open(FileName, std::ios::app);
-
-	if (!LogFile)
+	else
 	{
-		std::cerr << "Unable to open file: '" << FileName << "'." << std::endl; //Todo: Throw an error / exception here.
+		Path = CustomFilePath;
 	}
-
-	LogFile << "******  START OF LOG  ******\n" << std::endl;
-
-	for (int i = 0; i < LogData.size(); i++)
+	for (auto i = LogFileMap.begin(); i != LogFileMap.end(); i++)
 	{
-		LogFile << "[" << GetTimeString(0) << "]: " << LogData[i] << std::endl;
+		if (i->first == FileName)
+		{
+			Log(std::string(FileName + " already exists. New log file not created."), LOGERROR);
+			return;
+		}
 	}
-
-	LogFile << "******  END OF LOG  ******\n" << std::endl;
-
-	LogFile.close();
-#endif
+	std::cout << "Opening log file at: " << Path + FileName << std::endl;
+	//LogFileMap[FileName] = LogFile(Path, LogLevel, Mode);
+	LogFileMap.insert_or_assign(FileName, LogFile(Path + FileName, LogLevel, Mode));
+	LogFileMap[FileName].File.open(Path + FileName, Mode);
 }
 
-void Logger::SaveToFile(std::string FileName_)
+void Logger::CloseLogFile(std::string FileName)
 {
-#if EnableLogging
-	FileName = FileName_;
-#endif
+	LogFileMap[FileName].File.close();
+	LogFileMap.erase(FileName);
 }
 
-void Logger::SetConsoleAttributes(WORD Attributes)
+void Logger::CloseAllLogFiles()
 {
-	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), Attributes);
+	for (auto i = LogFileMap.begin(); i != LogFileMap.end(); i++)
+	{
+		i->second.File.close();
+	}
+	LogFileMap.erase(LogFileMap.begin(), LogFileMap.end());
 }
 
-void Logger::ResetConsoleAttributes()
+void Logger::Log(std::string Message, LogType LogLevel, bool LogTime)
 {
-	SetConsoleAttributes(ConsoleDefaultTextAttributes);
+	LogData.push_back(LogEntry(Message, LogLevel));
+	if (LogLevel >= ConsoleLogLevel)
+	{
+		ConsoleLog(Message.c_str(), LogLevel, LogTime, true, true);
+	}
+	for (auto i = LogFileMap.begin(); i != LogFileMap.end(); i++)
+	{
+		if (i->second.LogLevel >= LogLevel)
+		{
+			if (LogTime)
+			{
+				LogTimeMessageToFile(i->first);
+			}
+			LogTypeMessageToFile(i->first, LogLevel);
+			i->second.File << Message << std::endl;
+		}
+	}
 }
 
-void Logger::ConsoleLog(const char* Message, LogType Type, bool PrintTimeLabel = false, bool PrintTypeLabel = true, bool NewLine = false)
+void Logger::LogTypeMessageToFile(std::string FileName, LogType LogLevel)
+{
+	if (LogLevel == LogType::LOGMESSAGE)
+	{
+		LogFileMap[FileName].File << "[+] " << std::endl;
+	}
+	else if (LogLevel == LogType::LOGWARNING)
+	{
+		LogFileMap[FileName].File << "[Warning] " << std::endl;
+	}
+	else if (LogLevel == LogType::LOGERROR)
+	{
+		LogFileMap[FileName].File << "[Error] " << std::endl;
+	}
+	else if (LogLevel == LogType::LOGFATALERROR)
+	{
+		LogFileMap[FileName].File << "[Fatal Error] " << std::endl;
+	}
+	else if (LogLevel == LogType::LOGSUCCESS)
+	{
+		LogFileMap[FileName].File << "[Success] " << std::endl;
+	}
+}
+
+void Logger::LogTimeMessageToFile(std::string FileName)
+{
+	LogFileMap[FileName].File << "[" << GetTimeString(false) << "]" << std::endl;
+}
+
+void Logger::LogToFile(std::string FileName, std::string Message, LogType LogLevel, bool LogTime)
+{
+	if (LogFileMap[FileName].LogLevel >= LogLevel)
+	{
+		if (LogTime)
+		{
+			LogTimeMessageToFile(FileName);
+		}
+		LogTypeMessageToFile(FileName, LogLevel);
+		LogFileMap[FileName].File << Message << std::endl;
+	}
+}
+
+void Logger::ConsoleLog(const char* Message, LogType Type, bool PrintTimeLabel, bool PrintTypeLabel, bool NewLine)
 {
 	/*HANDLE ConsoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
 	PCONSOLE_SCREEN_BUFFER_INFO InitialConsoleScreenInfo = NULL;

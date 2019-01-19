@@ -124,7 +124,7 @@ void CameraWrapper::MoveFreeCamera(CameraDirection Direction)
 	}
 	else
 	{
-		ConsoleLog("Invalid camera direction passed to MoveFreeCamera()", LOGERROR, false, true);
+		Logger::ConsoleLog("Invalid camera direction passed to MoveFreeCamera()", LOGERROR, false, true);
 	}
 }
 
@@ -149,7 +149,7 @@ void CameraWrapper::RecalculateOrientationMatrix()
 
 void CameraWrapper::ActivateFreeCamera()
 {
-	ConsoleLog("Activating free camera\n", LOGMESSAGE);
+	Logger::ConsoleLog("Activating free camera\n", LOGMESSAGE);
 	FreeCameraActive = true;
 	DisableCameraCode(CameraYWriteAddress, CameraZWriteAddress);
 
@@ -167,7 +167,7 @@ void CameraWrapper::ActivateFreeCamera()
 
 void CameraWrapper::ActivateRotationControl()
 {
-	ConsoleLog("Activating rotation control\n", LOGMESSAGE);
+	Logger::ConsoleLog("Activating rotation control\n", LOGMESSAGE);
 	DisableCameraDirectionCode(CameraRealOrientWrite1, CameraRealOrientWrite2, CameraRealOrientWrite3, CameraRealOrientWrite4, CameraRealOrientWrite5);
 
 	//Roll = 0;
@@ -181,7 +181,7 @@ void CameraWrapper::ActivateRotationControl()
 
 void CameraWrapper::DeactivateFreeCamera()
 {
-	ConsoleLog("Deactivating free camera\n", LOGMESSAGE);
+	Logger::ConsoleLog("Deactivating free camera\n", LOGMESSAGE);
 	RestoreCameraCode();
 
 #if EnableSpectatorMode
@@ -196,7 +196,7 @@ void CameraWrapper::DeactivateFreeCamera()
 
 void CameraWrapper::DeactivateRotationControl()
 {
-	ConsoleLog("Deactivating rotation control\n", LOGMESSAGE);
+	Logger::ConsoleLog("Deactivating rotation control\n", LOGMESSAGE);
 	RestoreCameraDirectionCode();
 	RotationControlActive = false;
 	RollLocked = false;
@@ -571,7 +571,7 @@ void CameraWrapper::SetCameraSpeed(float Value, bool LogValue)
 	CameraSpeed = Value;
 	if (LogValue)
 	{
-		ConsoleLog(std::string("Camera Speed: " + std::to_string(CameraSpeed) + "\n").c_str(), LOGMESSAGE);
+		Logger::ConsoleLog(std::string("Camera Speed: " + std::to_string(CameraSpeed) + "\n").c_str(), LOGMESSAGE);
 	}
 }
 
@@ -580,7 +580,7 @@ void CameraWrapper::SetCameraRotationSpeed(float Value, bool LogValue)
 	CameraRotationSpeed = Value;
 	if (LogValue)
 	{
-		ConsoleLog(std::string("Rotation Speed: " + std::to_string(CameraRotationSpeed) + "\n").c_str(), LOGMESSAGE);
+		Logger::ConsoleLog(std::string("Rotation Speed: " + std::to_string(CameraRotationSpeed) + "\n").c_str(), LOGMESSAGE);
 	}
 }
 
@@ -698,7 +698,7 @@ void CameraWrapper::AdjustPitch(float Value)
 	if (!PitchLocked)
 	{
 		Pitch += Value;
-		ConsoleLog(std::string("Pitch: " + std::to_string(Pitch) + "\n").c_str(), LOGMESSAGE, false, true);
+		Logger::ConsoleLog(std::string("Pitch: " + std::to_string(Pitch) + "\n").c_str(), LOGMESSAGE, false, true);
 	}
 }
 
@@ -707,7 +707,7 @@ void CameraWrapper::AdjustYaw(float Value)
 	if (!YawLocked)
 	{
 		Yaw += Value;
-		ConsoleLog(std::string("Yaw: " + std::to_string(Yaw) + "\n").c_str(), LOGMESSAGE, false, true);
+		Logger::ConsoleLog(std::string("Yaw: " + std::to_string(Yaw) + "\n").c_str(), LOGMESSAGE, false, true);
 		//RecalculateOrientationMatrix();
 	}
 }
@@ -717,14 +717,14 @@ void CameraWrapper::AdjustRoll(float Value)
 	if (!RollLocked)
 	{
 		Roll += Value;
-		ConsoleLog(std::string("Roll: " + std::to_string(Roll) + "\n").c_str(), LOGMESSAGE, false, true);
+		Logger::ConsoleLog(std::string("Roll: " + std::to_string(Roll) + "\n").c_str(), LOGMESSAGE, false, true);
 		//RecalculateOrientationMatrix();
 	}
 }
 
 void CameraWrapper::AdjustCameraSpeed(float Value)
 {
-	ConsoleLog(std::string("Camera Speed: " + std::to_string(CameraSpeed) + "\n").c_str(), LOGMESSAGE);
+	Logger::ConsoleLog(std::string("Camera Speed: " + std::to_string(CameraSpeed) + "\n").c_str(), LOGMESSAGE);
 	CameraSpeed += Value;
 	if (CameraSpeed < 0.0f)
 	{
@@ -734,7 +734,7 @@ void CameraWrapper::AdjustCameraSpeed(float Value)
 
 void CameraWrapper::AdjustCameraRotationSpeed(float Value)
 {
-	ConsoleLog(std::string("Rotation Speed: " + std::to_string(CameraRotationSpeed) + "\n").c_str(), LOGMESSAGE);
+	Logger::ConsoleLog(std::string("Rotation Speed: " + std::to_string(CameraRotationSpeed) + "\n").c_str(), LOGMESSAGE);
 	CameraRotationSpeed += Value;
 }
 

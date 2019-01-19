@@ -1,6 +1,5 @@
 #include "Globals.h"
 
-
 bool OpenDebugConsole = false;
 nlohmann::json MainConfig;
 float DefaultFreeCameraSpeed = 0.3f;
@@ -35,6 +34,14 @@ bool InfiniteJetpack = false;
 
 sol::state Lua;
 
-extern HANDLE ConsoleHandle = { 0 };
-extern DWORD* InMultiplayer = nullptr;
-extern bool MultiplayerHookTriggered = false;
+HANDLE ConsoleHandle = { 0 };
+DWORD* InMultiplayer = nullptr;
+bool MultiplayerHookTriggered = false;
+
+const WORD ConsoleMessageLabelTextAttributes = 0 | FOREGROUND_BLUE | FOREGROUND_INTENSITY;
+const WORD ConsoleMessageTextAttributes = 0 | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE;
+const WORD ConsoleWarningTextAttributes = 0 | FOREGROUND_RED | FOREGROUND_GREEN;
+const WORD ConsoleErrorTextAttributes = 0 | FOREGROUND_RED | FOREGROUND_INTENSITY;
+const WORD ConsoleFatalErrorTextAttributes = 0 | FOREGROUND_RED | FOREGROUND_INTENSITY | BACKGROUND_BLUE;
+const WORD ConsoleSuccessTextAttributes = 0 | FOREGROUND_GREEN | FOREGROUND_INTENSITY;
+const WORD ConsoleDefaultTextAttributes = 0 | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE;

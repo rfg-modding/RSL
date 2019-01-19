@@ -13,13 +13,6 @@ public:
 	ProgramManager(HMODULE hModule);
 	~ProgramManager();
 
-	enum TestEnum
-	{
-		One,
-		Two,
-		Three
-	};
-
 	void Initialize();
 	void OpenConsole();
 	bool LoadDataFromConfig();

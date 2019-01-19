@@ -716,7 +716,7 @@ void MainOverlay::Draw(const char* title, bool* p_open)
 			PlayerVelocityTargetArray[2] = PlayerPtr->Velocity.z;
 
 			PlayerPtrTargetsInitialized = true;
-			ConsoleLog("PlayerPtrTargetsInitialized = true", LOGWARNING, false, true, true);
+			Logger::ConsoleLog("PlayerPtrTargetsInitialized = true", LOGWARNING, false, true, true);
 		}
 	}
 
@@ -1034,13 +1034,13 @@ void MainOverlay::DrawTeleportGui(bool UseSeparateWindow, const char* Title, boo
 		}
 		catch (std::exception& Exception)
 		{
-			ConsoleLog("Exception while drawing teleport menu!", LOGFATALERROR, false, true, true);
-			ConsoleLog(Exception.what(), LOGFATALERROR, false, true, true);
+			Logger::ConsoleLog("Exception while drawing teleport menu!", LOGFATALERROR, false, true, true);
+			Logger::ConsoleLog(Exception.what(), LOGFATALERROR, false, true, true);
 			Sleep(6000);
 		}
 		catch (...)
 		{
-			ConsoleLog("Unknown exception while drawing teleport menu!", LOGFATALERROR, false, true, true);
+			Logger::ConsoleLog("Unknown exception while drawing teleport menu!", LOGFATALERROR, false, true, true);
 		}
 	}
 	TooltipOnPrevious("Manual and preset teleport controls for the player. Works in vehicles.");

@@ -12,6 +12,11 @@
 
 DWORD WINAPI MainThread(HMODULE hModule)
 {
+	Logger::Init(LOGWARNING, GetEXEPath(false) + "RFGR Script Loader/Logs/");
+	Logger::OpenLogFile("General Log.txt", LOGMESSAGE, std::ios_base::trunc);
+	Logger::Log("You should only see this in General Log.txt", LOGMESSAGE, false);
+	Logger::Log("You should see this everywhere", LOGFATALERROR, false);
+
 	ProgramManager Program(hModule);
 	if (!Program.LoadDataFromConfig())
 	{
@@ -19,11 +24,11 @@ DWORD WINAPI MainThread(HMODULE hModule)
 		return 0;
 	}
 	Program.OpenConsole();
-	ConsoleLog("Script loader attached to console", LOGSUCCESS, false, true, true);
+	Logger::ConsoleLog("Script loader attached to console", LOGSUCCESS, false, true, true);
 	Program.SetMemoryLocations();
 	Program.Initialize();
 
-	ConsoleLog("RFGR script loader activated.\n", LOGSUCCESS, true, true);
+	Logger::ConsoleLog("RFGR script loader activated.\n", LOGSUCCESS, true, true);
 	GameState RFGRState;
 	while (!Program.ShouldClose()) //Todo: Change to respond to PostQuitMessage(0) in WndProc;
 	{
@@ -52,7 +57,7 @@ DWORD WINAPI MainThread(HMODULE hModule)
 		Program.ProcessInput();
 		Program.Update();
 	}
-	ConsoleLog("RFGR script loader deactivated.\n\n", LOGSUCCESS, true, true);
+	Logger::ConsoleLog("RFGR script loader deactivated.\n\n", LOGSUCCESS, true, true);
 
 	Program.CloseConsole();
 	Program.Exit();

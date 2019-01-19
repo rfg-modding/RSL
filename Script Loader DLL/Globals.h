@@ -63,22 +63,13 @@ extern HANDLE ConsoleHandle;
 extern DWORD* InMultiplayer;
 extern bool MultiplayerHookTriggered;
 
-enum LogType
-{
-	LOGMESSAGE,
-	LOGWARNING,
-	LOGERROR,
-	LOGFATALERROR,
-	LOGSUCCESS
-};
-
-static WORD ConsoleMessageLabelTextAttributes = 0 | FOREGROUND_BLUE | FOREGROUND_INTENSITY;
-static WORD ConsoleMessageTextAttributes = 0 | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE;
-static WORD ConsoleWarningTextAttributes = 0 | FOREGROUND_RED | FOREGROUND_GREEN;
-static WORD ConsoleErrorTextAttributes = 0 | FOREGROUND_RED | FOREGROUND_INTENSITY;
-static WORD ConsoleFatalErrorTextAttributes = 0 | FOREGROUND_RED | FOREGROUND_INTENSITY | BACKGROUND_BLUE;
-static WORD ConsoleSuccessTextAttributes = 0 | FOREGROUND_GREEN | FOREGROUND_INTENSITY;
-static WORD ConsoleDefaultTextAttributes = 0 | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE;
+extern const WORD ConsoleMessageLabelTextAttributes;
+extern const WORD ConsoleMessageTextAttributes;
+extern const WORD ConsoleWarningTextAttributes;
+extern const WORD ConsoleErrorTextAttributes;
+extern const WORD ConsoleFatalErrorTextAttributes;
+extern const WORD ConsoleSuccessTextAttributes;
+extern const WORD ConsoleDefaultTextAttributes;
 
 //void ConsoleLog(const char* Message, LogType Type, bool PrintTimeLabel = false, bool PrintTypeLabel = true);
 //void SetConsoleAttributes(WORD Attributes);
@@ -141,6 +132,16 @@ static float cosd(float AngleInDegrees)
 static float tand(float AngleInDegrees)
 {
 	return tan(FloatConvertDegreesToRadians(AngleInDegrees));
+}
+
+static void SetConsoleAttributes(WORD Attributes)
+{
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), Attributes);
+}
+
+static void ResetConsoleAttributes()
+{
+	SetConsoleAttributes(ConsoleDefaultTextAttributes);
 }
 
 static HWND FindTopWindow(DWORD pid)
@@ -215,242 +216,6 @@ static void EnforceFloatRange(float& Value, float& Minimum, float& Maximum)
 	{
 		Value = Maximum;
 	}
-}
-
-static std::string GetTimeString(bool MilitaryTime)
-{
-	std::time_t t = std::time(0);
-	std::tm now;
-	localtime_s(&now, &t);
-
-	std::string DateTime;
-	std::string Year = std::to_string(now.tm_year + 1900);
-	std::string Month = std::to_string(now.tm_mon + 1);
-	std::string Day = std::to_string(now.tm_mday);
-	std::string Hour;
-	std::string Minutes = std::to_string(now.tm_min);
-
-	if (Minutes.size() == 1) //Changes things like 1:6 to 1:06
-	{
-		Minutes.insert(0, 1, '0');
-	}
-
-	if (MilitaryTime)
-	{
-		Hour = std::to_string(now.tm_hour);
-	}
-	else
-	{
-		if (now.tm_hour > 11) //PM
-		{
-			Hour = std::to_string(now.tm_hour - 12);
-			DateTime += Hour + ":" + Minutes + " PM, ";
-		}
-		else //AM
-		{
-			if (now.tm_hour == 0)
-			{
-				Hour = "12";
-				DateTime += Hour + ":" + Minutes + " AM, ";
-			}
-			else
-			{
-				Hour = std::to_string(now.tm_hour);
-				DateTime += Hour + ":" + Minutes + " AM, ";
-			}
-		}
-	}
-
-	DateTime += Month + "/" + Day + "/" + Year;
-
-	//std::cout << DateTime << std::endl;
-
-	//std::cout << "Date & Time:" << now.tm_year + 1900 << "/" << now.tm_mon + 1 << "/" << now.tm_mday << " - " << now.tm_hour << ":" << now.tm_min << std::endl;
-
-	return DateTime;
-}
-
-static void SetConsoleAttributes(WORD Attributes)
-{
-	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), Attributes);
-}
-
-static void ResetConsoleAttributes()
-{
-	SetConsoleAttributes(ConsoleDefaultTextAttributes);
-}
-
-static void ConsoleLog(const char* Message, LogType Type, bool PrintTimeLabel = false, bool PrintTypeLabel = true, bool NewLine = false)
-{
-	/*HANDLE ConsoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
-	PCONSOLE_SCREEN_BUFFER_INFO InitialConsoleScreenInfo = NULL;
-	GetConsoleScreenBufferInfo(ConsoleHandle, InitialConsoleScreenInfo); //Returns bool if error checking is needed later.*/
-
-	if (Type == LOGMESSAGE)
-	{
-		if (PrintTypeLabel)
-		{
-			printf("[");
-			SetConsoleAttributes(ConsoleMessageLabelTextAttributes);
-			printf("+");
-			ResetConsoleAttributes();
-			if (PrintTimeLabel)
-			{
-				printf("]");
-			}
-			else
-			{
-				printf("] ");
-			}
-		}
-		if (PrintTimeLabel)
-		{
-			printf("[");
-			printf(GetTimeString(false).c_str());
-			printf("] ");
-		}
-#if ColorLogMessages
-		SetConsoleTextAttribute(ConsoleHandle, ConsoleMessageTextAttributes);
-#endif
-		printf(Message);
-		if (NewLine)
-		{
-			printf("\n");
-		}
-	}
-	else if (Type == LOGWARNING)
-	{
-		if (PrintTypeLabel)
-		{
-			printf("[");
-			SetConsoleAttributes(ConsoleWarningTextAttributes);
-			printf("Warning");
-			ResetConsoleAttributes();
-			if (PrintTimeLabel)
-			{
-				printf("]");
-			}
-			else
-			{
-				printf("] ");
-			}
-		}
-		if (PrintTimeLabel)
-		{
-			printf("[");
-			printf(GetTimeString(false).c_str());
-			printf("] ");
-		}
-#if ColorLogMessages
-		SetConsoleTextAttribute(ConsoleHandle, ConsoleWarningTextAttributes);
-#endif
-		printf(Message);
-		if (NewLine)
-		{
-			printf("\n");
-		}
-	}
-	else if (Type == LOGERROR)
-	{
-		if (PrintTypeLabel)
-		{
-			printf("[");
-			SetConsoleAttributes(ConsoleErrorTextAttributes);
-			printf("Error");
-			ResetConsoleAttributes();
-			if (PrintTimeLabel)
-			{
-				printf("]");
-			}
-			else
-			{
-				printf("] ");
-			}
-		}
-		if (PrintTimeLabel)
-		{
-			printf("[");
-			printf(GetTimeString(false).c_str());
-			printf("] ");
-		}
-#if ColorLogMessages
-		SetConsoleTextAttribute(ConsoleHandle, ConsoleErrorTextAttributes);
-#endif
-		printf(Message);
-		if (NewLine)
-		{
-			printf("\n");
-		}
-	}
-	else if (Type == LOGFATALERROR)
-	{
-		if (PrintTypeLabel)
-		{
-			printf("[");
-			SetConsoleAttributes(ConsoleFatalErrorTextAttributes);
-			printf("Fatal Error");
-			ResetConsoleAttributes();
-			if (PrintTimeLabel)
-			{
-				printf("]");
-			}
-			else
-			{
-				printf("] ");
-			}
-		}
-		if (PrintTimeLabel)
-		{
-			printf("[");
-			printf(GetTimeString(false).c_str());
-			printf("] ");
-		}
-#if ColorLogMessages
-		SetConsoleTextAttribute(ConsoleHandle, ConsoleFatalErrorTextAttributes);
-#endif
-		printf(Message);
-		if (NewLine)
-		{
-			printf("\n");
-		}
-	}
-	else if (Type == LOGSUCCESS)
-	{
-		if (PrintTypeLabel)
-		{
-			printf("[");
-			SetConsoleAttributes(ConsoleSuccessTextAttributes);
-			printf("Success");
-			ResetConsoleAttributes();
-			if (PrintTimeLabel)
-			{
-				printf("]");
-			}
-			else
-			{
-				printf("] ");
-			}
-		}
-		if (PrintTimeLabel)
-		{
-			printf("[");
-			printf(GetTimeString(false).c_str());
-			printf("] ");
-		}
-#if ColorLogMessages
-		SetConsoleTextAttribute(ConsoleHandle, ConsoleSuccessTextAttributes);
-#endif
-		printf(Message);
-		if (NewLine)
-		{
-			printf("\n");
-		}
-	}
-	else
-	{
-		//Invalid log type
-	}
-	SetConsoleTextAttribute(ConsoleHandle, ConsoleDefaultTextAttributes);// InitialConsoleScreenInfo->wAttributes);
 }
 
 static void ChangeMemoryFloat(DWORD BaseAddress, float Value, DWORD Offset1, DWORD Offset2, bool PrintMessage)
@@ -603,7 +368,8 @@ static DWORD FindPattern(char *module, char *pattern, char *mask)
 			return base + i;
 		}
 	}
-	ConsoleLog("FindPattern() returning NULL", LOGERROR, false, true);
+	std::cout << "Error! FindPattern() returning NULL" << std::endl;
+	//ConsoleLog("FindPattern() returning NULL", LOGERROR, false, true);
 	return NULL;
 }
 
