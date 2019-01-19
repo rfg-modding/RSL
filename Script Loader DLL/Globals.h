@@ -2,7 +2,7 @@
 #define PublicMode true
 #define ColorLogMessages false
 #define EnableSpectatorMode false 
-#include "Includes.hpp"
+#include "Includes.h"
 
 /*RFGR Script Loader DLL*/
 

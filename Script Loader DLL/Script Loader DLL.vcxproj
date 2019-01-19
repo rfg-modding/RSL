@@ -171,6 +171,7 @@
     <ClCompile Include="include\ImGui\imgui_draw.cpp" />
     <ClCompile Include="include\ImGui\imgui_widgets.cpp" />
     <ClCompile Include="include\kiero\kiero.cpp" />
+    <ClCompile Include="Logger.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MainOverlay.cpp" />
     <ClCompile Include="Includes.cpp">
@@ -206,8 +207,9 @@
     <ClInclude Include="include\ImGui\imstb_truetype.h" />
     <ClInclude Include="include\kiero\kiero.h" />
     <ClInclude Include="include\MinHook\MinHook.h" />
+    <ClInclude Include="Logger.h" />
     <ClInclude Include="MainOverlay.h" />
-    <ClInclude Include="Includes.hpp" />
+    <ClInclude Include="Includes.h" />
     <ClInclude Include="ProgramManager.h" />
     <ClInclude Include="RFGR Structs\BasicTypes.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>

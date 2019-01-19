@@ -1,5 +1,6 @@
 #pragma once
-#include "Globals.h"
+//#include "Globals.h"
+#include "Logger.h"
 
 class CodeSnippet
 {

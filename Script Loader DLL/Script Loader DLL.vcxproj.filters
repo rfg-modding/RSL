@@ -84,6 +84,9 @@
     <ClCompile Include="imgui_stdlib.cpp">
       <Filter>D3D11 Hook + ImGui\Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Logger.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CameraWrapper.h">
@@ -92,25 +95,10 @@
     <ClInclude Include="Functions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Globals.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Hooks.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="RFGR_Types.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SnippetManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ProgramManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="FunctionManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ScriptManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\kiero\kiero.h">
@@ -149,12 +137,6 @@
     <ClInclude Include="MainOverlay.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="RFGR_Types_Player.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Includes.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="RFGR Structs\rfg.h">
       <Filter>RFGR Structs</Filter>
     </ClInclude>
@@ -190,6 +172,30 @@
     </ClInclude>
     <ClInclude Include="RFGR Structs\KeenSoundSystem.hpp">
       <Filter>RFGR Structs</Filter>
+    </ClInclude>
+    <ClInclude Include="ProgramManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RFGR_Types.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RFGR_Types_Player.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ScriptManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SnippetManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Includes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Logger.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Globals.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
