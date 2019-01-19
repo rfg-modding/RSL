@@ -810,8 +810,12 @@ void MainOverlay::Draw(const char* title, bool* p_open)
 
 	ImGui::Text("Globals:");
 	ImGui::Checkbox("Infinite jetpack", &InfiniteJetpack);
+	//ImGui::Checkbox("Invulnerability", (bool*)(PlayerPtr->Flags.invulnerable));
 	ImGui::Checkbox("Invulnerable", &Invulnerable);
-
+	if (!Invulnerable)
+	{
+		PlayerPtr->Flags.invulnerable = false;
+	}
 	ImGui::InputFloat("Player move speed", &PlayerPtr->MoveSpeed, 1.0f, 5.0f, 3);
 	ImGui::InputFloat("Player max speed", &PlayerPtr->MaxSpeed, 1.0f, 5.0f, 3);
 	//ImGui::InputFloat("Player cash", &PlayerPtr->Cash, 10.0f, 50.0f, 3);
