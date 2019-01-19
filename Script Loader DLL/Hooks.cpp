@@ -340,9 +340,13 @@ void __fastcall PlayerDoFrameHook(Player* PlayerPtr)
 	}
 	if (Overlay.Invulnerable)
 	{
-		PlayerPtr->MaxHitPoints = 2147483647;
-		PlayerPtr->HitPoints = 2147483647.0f;
-		PlayerPtr->InitialMaxHitPoints = 2147483647;
+		PlayerPtr->Flags.invulnerable = true;
+		//PlayerPtr->Flags.super_jump = true;
+		//PlayerPtr->Flags.use_bigsteps = true;
+		//PlayerPtr->PFlags.UnlimitedAmmo = true;
+		//PlayerPtr->MaxHitPoints = 2147483647;
+		//PlayerPtr->HitPoints = 2147483647.0f;
+		//PlayerPtr->InitialMaxHitPoints = 2147483647;
 	}
 
 	return PlayerDoFrame(&NewPlayerObject);
