@@ -3,6 +3,29 @@
 
 namespace keen
 {
+	/* 528 */
+	enum SteamError
+	{
+		SteamError_Ok = 0x0,
+		SteamError_FailedInitialization = 0x1,
+		SteamError_NotSubscribedToApp = 0x2,
+	};
+
+	/* 530 */
+	enum ApplicationProcessState
+	{
+		ApplicationProcessState_Foreground = 0x0,
+		ApplicationProcessState_ForegroundWithSystemMessageOpen = 0x1,
+		ApplicationProcessState_Background = 0x2,
+	};
+
+	/* 535 */
+	enum FatalErrorTypeId
+	{
+		FatalErrorTypeId_ContentError = 0x0,
+		FatalErrorTypeId_Count = 0x1,
+	};
+
 	/* 4595 */
 	struct __declspec(align(4)) GameFrameworkSystem : GameFrameworkSystemNative
 	{

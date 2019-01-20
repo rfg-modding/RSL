@@ -6,6 +6,10 @@
 #include "KeenGameFrameworkSystem.hpp"
 #include "KeenGraphicsSystem.hpp"
 #include "KeenMemorySystem.hpp"
+#include "KeenTaskSystem.h"
+#include "KeenFileSystem.h"
+#include "KeenTlsfAllocator.h"
+#include "KeenRenderEffectSystem.h"
 #include <Windows.h>
 
 namespace keen
@@ -392,6 +396,16 @@ namespace keen
 		unsigned int id;
 	};
 	
+	/* 2415 */
+	struct BasePoolAllocator
+	{
+		keen::MemoryBlock m_memoryBlock;
+		unsigned int m_capacity;
+		unsigned int m_size;
+		unsigned int m_elementSize;
+		unsigned int m_firstFreeIndex;
+	};
+
 	namespace SaveDataHandler
 	{
 		/* 3069 */
