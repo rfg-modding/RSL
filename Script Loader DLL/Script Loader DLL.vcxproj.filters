@@ -140,9 +140,6 @@
     <ClInclude Include="MainOverlay.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="RFGR Structs\rfg.h">
-      <Filter>RFGR Structs</Filter>
-    </ClInclude>
     <ClInclude Include="RFGR Structs\Unit4Namespace.h">
       <Filter>RFGR Structs</Filter>
     </ClInclude>
@@ -203,5 +200,25 @@
     <ClInclude Include="HookManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="RFGR Structs\KeenTaskSystem.h">
+      <Filter>RFGR Structs</Filter>
+    </ClInclude>
+    <ClInclude Include="RFGR Structs\KeenTlsfAllocator.h">
+      <Filter>RFGR Structs</Filter>
+    </ClInclude>
+    <ClInclude Include="RFGR Structs\KeenFileSystem.h">
+      <Filter>RFGR Structs</Filter>
+    </ClInclude>
+    <ClInclude Include="RFGR Structs\KeenRenderEffectSystem.h">
+      <Filter>RFGR Structs</Filter>
+    </ClInclude>
+    <ClInclude Include="RFGR Structs\KeenNamespace2.h">
+      <Filter>RFGR Structs</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="RFGR Structs\rfg.h">
+      <Filter>Header Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

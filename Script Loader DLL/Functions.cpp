@@ -76,3 +76,9 @@ F_HudUiMultiplayerEnter HudUiMultiplayerEnter;
 
 F_KeenGraphicsResizeRenderSwapchain KeenGraphicsResizeRenderSwapchain;
 F_GameseqGetState GameseqGetState;
+
+F_ObjectEnableOutline ObjectEnableOutline;
+F_ObjectDisableOutline ObjectDisableOutline;
+F_HumanEnableOutline HumanEnableOutline;
+F_HumanDisableOutline HumanDisableOutline;
+F_TargetOutlineAddObject TargetOutlineAddObject;

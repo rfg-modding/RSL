@@ -276,10 +276,25 @@ extern F_KeenGraphicsResizeRenderSwapchain KeenGraphicsResizeRenderSwapchain;
 typedef GameState(__cdecl* F_GameseqGetState)(void);
 extern F_GameseqGetState GameseqGetState;
 
+//.text:01270C50 rfg.exe:$310C50 #310050 <object::enable_object_outline>
+typedef void(__thiscall *F_ObjectEnableOutline)(Object* This, int Layer);
+extern F_ObjectEnableOutline ObjectEnableOutline;
 
+//.text:01270C60 rfg.exe:$310C60 #310060 <object::disable_object_outline>
+typedef void(__thiscall* F_ObjectDisableOutline)(Object* This);
+extern F_ObjectDisableOutline ObjectDisableOutline;
 
+//.text:0158EE80 rfg.exe:$62EE80 #62E280 <human::enable_object_outline>
+typedef void(__thiscall* F_HumanEnableOutline)(Human* This, int Layer);
+extern F_HumanEnableOutline HumanEnableOutline;
 
+//.text:0158EF00 rfg.exe:$62EF00 #62E300 <human::disable_object_outline>
+typedef void(__thiscall* F_HumanDisableOutline)(Human* This);
+extern F_HumanDisableOutline HumanDisableOutline;
 
+//.text:01695390 rfg.exe:$735390 #734790 <target_outline_add_object>
+typedef void(__cdecl* F_TargetOutlineAddObject)(unsigned int Handle);
+extern F_TargetOutlineAddObject TargetOutlineAddObject;
 
 
 //.text:00679AC0 rfg.exe:$2C9AC0 #2C8EC0 <camera_start_first_person>

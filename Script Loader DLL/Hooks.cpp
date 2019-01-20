@@ -67,7 +67,7 @@ LRESULT __stdcall WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	switch (msg)
 	{
 	case WM_SIZE:
-		Logger::ConsoleLog("WM_SIZE Recieved in custom WndProc. Invalidating ImGui DX11 device object. Releasing MainRenderTargetView.", LOGWARNING, false, true, true);
+		Logger::Log("WM_SIZE Recieved in custom WndProc. Invalidating ImGui DX11 device object. Releasing MainRenderTargetView.", LOGWARNING);
 		ImGui_ImplDX11_InvalidateDeviceObjects();
 		UpdateD3D11Pointers = true;
 		D3D11Context->OMSetRenderTargets(0, 0, 0);
@@ -139,7 +139,7 @@ HRESULT D3D11_DEVICE_CONTEXT_FROM_SWAPCHAIN(IDXGISwapChain * pSwapChain, ID3D11D
 
 	if(Result != S_OK)
 	{
-		Logger::ConsoleLog(std::string("ID3D11SwapChain::GetDevice() failed, return value: " + std::to_string(Result)).c_str(), LOGFATALERROR, false, true, true);
+		Logger::Log(std::string("ID3D11SwapChain::GetDevice() failed, return value: " + std::to_string(Result)), LOGFATALERROR);
 		return E_FAIL;
 	}
 	(*ppDevice)->GetImmediateContext(ppContext);
@@ -159,7 +159,7 @@ HRESULT __stdcall D3D11PresentHook(IDXGISwapChain * pSwapChain, UINT SyncInterva
 		Result = D3D11_DEVICE_CONTEXT_FROM_SWAPCHAIN(pSwapChain, &D3D11Device, &D3D11Context);
 		if (Result != S_OK)
 		{
-			Logger::ConsoleLog(std::string("D3D11DeviceContextFromSwapchain() failed, return value: " + std::to_string(Result)).c_str(), LOGFATALERROR, false, true, true);
+			Logger::Log(std::string("D3D11DeviceContextFromSwapchain() failed, return value: " + std::to_string(Result)), LOGFATALERROR);
 			return E_FAIL;
 		}
 		D3D11SwapchainPtr = pSwapChain;
@@ -168,14 +168,14 @@ HRESULT __stdcall D3D11PresentHook(IDXGISwapChain * pSwapChain, UINT SyncInterva
 		Result = pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&BackBuffer);
 		if (Result != S_OK)
 		{
-			Logger::ConsoleLog(std::string("GetBuffer() failed, return value: " + std::to_string(Result)).c_str(), LOGFATALERROR, false, true, true);
+			Logger::Log(std::string("GetBuffer() failed, return value: " + std::to_string(Result)).c_str(), LOGFATALERROR);
 			return E_FAIL;
 		}
 
 		Result = D3D11Device->CreateRenderTargetView(BackBuffer, NULL, &MainRenderTargetView);
 		if (Result != S_OK)
 		{
-			Logger::ConsoleLog(std::string("CreateRenderTargetView() failed, return value: " + std::to_string(Result)).c_str(), LOGFATALERROR, false, true, true);
+			Logger::Log(std::string("CreateRenderTargetView() failed, return value: " + std::to_string(Result)), LOGFATALERROR);
 			return E_FAIL;
 		}
 
@@ -187,7 +187,7 @@ HRESULT __stdcall D3D11PresentHook(IDXGISwapChain * pSwapChain, UINT SyncInterva
 		Logger::ConsoleLog(std::string("Initial flags: " + std::to_string(SwapChainDescription.Flags)).c_str(), LOGWARNING, false, true, true);
 		Logger::ConsoleLog(std::string("Initial format: " + std::to_string(SwapChainDescription.BufferDesc.Format)).c_str(), LOGWARNING, false, true, true);*/
 		
-		Logger::ConsoleLog("Initializing ImGui.\n", LOGMESSAGE, false, true);
+		Logger::Log("Initializing ImGui.", LOGMESSAGE);
 
 		IMGUI_CHECKVERSION();
 		ImGui::CreateContext();
@@ -206,7 +206,7 @@ HRESULT __stdcall D3D11PresentHook(IDXGISwapChain * pSwapChain, UINT SyncInterva
 		}
 		else
 		{
-			Logger::ConsoleLog("DroidSans.ttf not found. Using default font.", LOGERROR, false, true, true);
+			Logger::Log("DroidSans.ttf not found. Using default font.", LOGERROR);
 		}
 
 		/*if (OverlayActive)
@@ -217,19 +217,19 @@ HRESULT __stdcall D3D11PresentHook(IDXGISwapChain * pSwapChain, UINT SyncInterva
 		Overlay.Initialize();
 		ImGuiInitialized = true;
 		UpdateD3D11Pointers = false;
-		Logger::ConsoleLog("ImGui Initialized.", LOGSUCCESS, false, true, true);
+		Logger::Log("ImGui Initialized.", LOGSUCCESS);
 	});
 
 	if (UpdateD3D11Pointers)
 	{
-		Logger::ConsoleLog("UpdateD3D11Pointers = true. Reforming MainRenderTargetView and ImGui DX11 Devices.", LOGWARNING, false, true, true);
+		Logger::Log("UpdateD3D11Pointers = true. Reforming MainRenderTargetView and ImGui DX11 Devices.", LOGWARNING);
 
 		HRESULT Result;
 
 		Result = D3D11_DEVICE_CONTEXT_FROM_SWAPCHAIN(pSwapChain, &D3D11Device, &D3D11Context);
 		if (Result != S_OK)
 		{
-			Logger::ConsoleLog(std::string("D3D11DeviceContextFromSwapchain() failed, return value: " + std::to_string(Result)).c_str(), LOGFATALERROR, false, true, true);
+			Logger::Log(std::string("D3D11DeviceContextFromSwapchain() failed, return value: " + std::to_string(Result)), LOGFATALERROR);
 			return E_FAIL;
 		}
 		D3D11SwapchainPtr = pSwapChain;
@@ -238,14 +238,14 @@ HRESULT __stdcall D3D11PresentHook(IDXGISwapChain * pSwapChain, UINT SyncInterva
 		Result = pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&BackBuffer);
 		if (Result != S_OK)
 		{
-			Logger::ConsoleLog(std::string("GetBuffer() failed, return value: " + std::to_string(Result)).c_str(), LOGFATALERROR, false, true, true);
+			Logger::Log(std::string("GetBuffer() failed, return value: " + std::to_string(Result)), LOGFATALERROR);
 			return E_FAIL;
 		}
 
 		Result = D3D11Device->CreateRenderTargetView(BackBuffer, NULL, &MainRenderTargetView);
 		if (Result != S_OK)
 		{
-			Logger::ConsoleLog(std::string("CreateRenderTargetView() failed, return value: " + std::to_string(Result)).c_str(), LOGFATALERROR, false, true, true);
+			Logger::Log(std::string("CreateRenderTargetView() failed, return value: " + std::to_string(Result)), LOGFATALERROR);
 			return E_FAIL;
 		}
 
@@ -253,7 +253,7 @@ HRESULT __stdcall D3D11PresentHook(IDXGISwapChain * pSwapChain, UINT SyncInterva
 
 		//ImGui_ImplDX11_Init(D3D11Device, D3D11Context);
 		ImGui_ImplDX11_CreateDeviceObjects();
-		Logger::ConsoleLog("Finish reforming after resize.", LOGSUCCESS, false, true, true);
+		Logger::Log("Finish reforming after resize.", LOGSUCCESS);
 		UpdateD3D11Pointers = false;
 	}
 	if (!ImGuiInitialized)
@@ -283,7 +283,7 @@ HRESULT __stdcall D3D11PresentHook(IDXGISwapChain * pSwapChain, UINT SyncInterva
 
 bool __cdecl KeenGraphicsResizeRenderSwapchainHook(void* KeenSwapchain, unsigned int NewWidth, unsigned int NewHeight)
 {
-	Logger::ConsoleLog("In KeenGraphicsResizeSwapchainHook()", LOGFATALERROR, false, true, true);
+	Logger::Log("In KeenGraphicsResizeSwapchainHook()", LOGFATALERROR);
 	std::cout << "NewWidth: " << NewWidth << ", NewHeight: " << NewHeight << std::endl;
 	UpdateD3D11Pointers = true;
 
@@ -370,10 +370,10 @@ void __cdecl ExplosionCreateHook(explosion_info * ExplosionInfo, void * Source, 
 	if (UseGlobalExplosionStrengthMultiplier)
 	{
 		std::cout << "Address of ExplosionInfo: " << ExplosionInfo << ", Hex: " << std::hex << std::uppercase << ExplosionInfo << std::endl;
-		Logger::ConsoleLog(std::string("ExplosionInfo->m_name: " + std::string(NewExplosionInfo.m_name)).c_str(), LOGMESSAGE, false, true, true);
-		Logger::ConsoleLog(std::string("ExplosionInfo->m_unique_id: " + std::to_string(NewExplosionInfo.m_unique_id)).c_str(), LOGMESSAGE, false, true, true);
-		Logger::ConsoleLog(std::string("Before, Explosion radius: " + std::to_string(NewExplosionInfo.m_radius)).c_str(), LOGMESSAGE, false, true, true);
-		Logger::ConsoleLog(std::string("Increasing explosion values by a factor of " + std::to_string(GlobalExplosionStrengthMultiplier)).c_str(), LOGMESSAGE, false, true, true);
+		Logger::Log(std::string("ExplosionInfo->m_name: " + std::string(NewExplosionInfo.m_name)), LOGMESSAGE);
+		Logger::Log(std::string("ExplosionInfo->m_unique_id: " + std::to_string(NewExplosionInfo.m_unique_id)), LOGMESSAGE);
+		Logger::Log(std::string("Before, Explosion radius: " + std::to_string(NewExplosionInfo.m_radius)), LOGMESSAGE);
+		Logger::Log(std::string("Increasing explosion values by a factor of " + std::to_string(GlobalExplosionStrengthMultiplier)), LOGMESSAGE);
 
 		NewExplosionInfo.m_radius *= GlobalExplosionStrengthMultiplier;
 		NewExplosionInfo.m_impulse_magnitude *= GlobalExplosionStrengthMultiplier;
@@ -381,7 +381,8 @@ void __cdecl ExplosionCreateHook(explosion_info * ExplosionInfo, void * Source, 
 		NewExplosionInfo.m_secondary_radius *= GlobalExplosionStrengthMultiplier;
 		NewExplosionInfo.m_structural_damage = (int)(GlobalExplosionStrengthMultiplier * (float)(NewExplosionInfo.m_structural_damage)); //Did this instead of *= to avoid a compiler error. Probably unecessary.
 
-		Logger::ConsoleLog(std::string("After, Explosion radius: " + std::to_string(NewExplosionInfo.m_radius) + "\n").c_str(), LOGMESSAGE, false, true, true);
+		Logger::Log(std::string("After, Explosion radius: " + std::to_string(NewExplosionInfo.m_radius)), LOGMESSAGE);
+		std::cout << std::endl;
 
 		*ExplosionInfo = NewExplosionInfo;
 	}
@@ -458,7 +459,7 @@ void __fastcall HumanUpdatePosAndOrientHook(Human* HumanPtr, void* edx, vector* 
 			{
 				//std::cout << "Player HumanPtr found!" << std::endl;
 				//std::cout << "Proof, HumanPtr->Position.y: " << HumanPtr->Position.y << std::endl;
-				Logger::ConsoleLog("Manually setting Player.Object.Position in HumanUpdatePosAndOrient() hook.\n", LOGWARNING, false, true);
+				Logger::Log("Manually setting Player.Object.Position in HumanUpdatePosAndOrient() hook.\n", LOGWARNING);
 				NewObjectPosition = *UpdatedPosition;
 
 				NewObjectPosition.x = Overlay.PlayerPositionTargetArray[0];

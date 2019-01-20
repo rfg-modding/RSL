@@ -55,4 +55,11 @@ void FunctionManager::Initialize()
 	
 	//typedef GameState(__cdecl* F_GameseqGetState)(void);
 	GameseqGetState = (F_GameseqGetState)(ModuleBase + 0x3BFCF0); //.text:0122FCF0 rfg.exe:$3BFCF0 #3BF0F0 <gameseq_get_state>
+
+	ObjectEnableOutline = (F_ObjectEnableOutline)(ModuleBase + 0x310C50); //.text:01270C50 rfg.exe:$310C50 #310050 <object::enable_object_outline>
+	ObjectDisableOutline = (F_ObjectDisableOutline)(ModuleBase + 0x310C60); //.text:01270C60 rfg.exe:$310C60 #310060 <object::disable_object_outline>
+	HumanEnableOutline = (F_HumanEnableOutline)(ModuleBase + 0x62EE80); //.text:0158EE80 rfg.exe:$62EE80 #62E280 <human::enable_object_outline>
+	HumanDisableOutline = (F_HumanDisableOutline)(ModuleBase + 0x62EF00); //.text:0158EF00 rfg.exe:$62EF00 #62E300 <human::disable_object_outline>
+
+	TargetOutlineAddObject = (F_TargetOutlineAddObject)(ModuleBase + 0x735390);	//.text:01695390 rfg.exe:$735390 #734790 <target_outline_add_object>
 }

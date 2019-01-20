@@ -716,7 +716,7 @@ void MainOverlay::Draw(const char* title, bool* p_open)
 			PlayerVelocityTargetArray[2] = PlayerPtr->Velocity.z;
 
 			PlayerPtrTargetsInitialized = true;
-			Logger::ConsoleLog("PlayerPtrTargetsInitialized = true", LOGWARNING, false, true, true);
+			Logger::Log("PlayerPtrTargetsInitialized = true", LOGWARNING);
 		}
 	}
 
@@ -766,7 +766,7 @@ void MainOverlay::Draw(const char* title, bool* p_open)
 		if (ImGui::BeginMenu("Help"))
 		{
 			ImGui::MenuItem("Metrics", NULL, &ShowAppMetrics);
-			ImGui::MenuItem("Style Editor", NULL, &ShowAppStyleEditor);
+			ImGui::MenuItem("Theme Editor", NULL, &ShowAppStyleEditor);
 			ImGui::MenuItem("About", NULL, &ShowAppAbout);
 			ImGui::EndMenu();
 		}
@@ -806,6 +806,31 @@ void MainOverlay::Draw(const char* title, bool* p_open)
 	ImGui::Separator();
 
 	ImGui::Text("Scripts:");
+	ImGui::Separator();
+
+	ImGui::Text("Experimental Features:");
+	ImGui::InputFloat("Default height scale", &PlayerPtr->Info->default_height_scale, 0.1f, 0.5f, 3);
+	ImGui::InputFloat("Height scale variation", &PlayerPtr->Info->height_scale_variation, 0.1f, 0.5f, 3);
+
+	static int PlayerOutlineLayer = 0;
+	ImGui::InputInt("Player Outline Layer", &PlayerOutlineLayer);
+	ImGui::SameLine();
+	if (ImGui::Button("Enable##PlayerOutline"))
+	{
+		HumanEnableOutline(PlayerPtr, PlayerOutlineLayer);
+	}
+	ImGui::SameLine();
+	if (ImGui::Button("Disable##PlayerOutline"))
+	{
+		HumanDisableOutline(PlayerPtr);
+	}
+
+	if (ImGui::Button("Add player object to target outline"))
+	{
+		TargetOutlineAddObject(PlayerPtr->Handle);
+	}
+
+	ImGui::Separator();
 	ImGui::Separator();
 
 	ImGui::Text("Globals:");
@@ -1034,13 +1059,13 @@ void MainOverlay::DrawTeleportGui(bool UseSeparateWindow, const char* Title, boo
 		}
 		catch (std::exception& Exception)
 		{
-			Logger::ConsoleLog("Exception while drawing teleport menu!", LOGFATALERROR, false, true, true);
-			Logger::ConsoleLog(Exception.what(), LOGFATALERROR, false, true, true);
+			Logger::Log("Exception while drawing teleport menu!", LOGFATALERROR);
+			Logger::Log(Exception.what(), LOGFATALERROR);
 			Sleep(6000);
 		}
 		catch (...)
 		{
-			Logger::ConsoleLog("Unknown exception while drawing teleport menu!", LOGFATALERROR, false, true, true);
+			Logger::Log("Unknown exception while drawing teleport menu!", LOGFATALERROR);
 		}
 	}
 	TooltipOnPrevious("Manual and preset teleport controls for the player. Works in vehicles.");
@@ -1965,7 +1990,7 @@ void ShowStyleEditor(ImGuiStyle* ref)
 	ImGui::SameLine();
 	ShowHelpMarker("Save/Revert in local non-persistent storage. Default Colors definition are not affected. Use \"Export Colors\" below to save them somewhere.");
 	ImGui::SameLine();
-	if (ImGui::Button("Save to script loader config"))
+	if (ImGui::Button("Save to file"))
 	{
 		SaveGUIConfig("Default Dark Theme", "The default dark theme for the script loader.", "moneyl", "When making your own themes you can use this for extra information such as known bugs or optional settings. Note: This section will be used once I add a custom theme loading GUI to the script loader. Not present for the initial themes release.", "GUI Config");
 	}
