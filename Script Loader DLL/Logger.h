@@ -48,7 +48,7 @@ public:
 	static void LogTypeMessageToFile(std::string FileName, LogType LogLevel);
 	static void LogTimeMessageToFile(std::string FileName);
 	static void LogToFile(std::string FileName, std::string Message, LogType LogLevel, bool LogTime = false);
-	static void ConsoleLog(const char* Message, LogType Type, bool PrintTimeLabel = false, bool PrintTypeLabel = true, bool NewLine = false);
+	
 	static std::string GetTimeString(bool MilitaryTime);
 
 	static std::map <std::string, LogFile> LogFileMap;
@@ -59,4 +59,5 @@ public:
 
 private:
 	Logger() { }
+	static void ConsoleLog(const char* Message, LogType Type, bool PrintTimeLabel = false, bool PrintTypeLabel = true, bool NewLine = false);
 };
