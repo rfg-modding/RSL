@@ -57,13 +57,13 @@ void Logger::CloseAllLogFiles()
 void Logger::Log(std::string Message, LogType LogLevel, bool LogTime)
 {
 	LogData.push_back(LogEntry(Message, LogLevel));
-	if (LogLevel <= ConsoleLogLevel)
+	if (LogLevel >= ConsoleLogLevel)
 	{
 		ConsoleLog(Message.c_str(), LogLevel, LogTime, true, true);
 	}
 	for (auto i = LogFileMap.begin(); i != LogFileMap.end(); i++)
 	{
-		if (LogLevel <= i->second.LogLevel)
+		if (LogLevel >= i->second.LogLevel)
 		{
 			if (LogTime)
 			{
@@ -106,7 +106,7 @@ void Logger::LogTimeMessageToFile(std::string FileName)
 
 void Logger::LogToFile(std::string FileName, std::string Message, LogType LogLevel, bool LogTime)
 {
-	if (LogLevel <= LogFileMap[FileName].LogLevel)
+	if (LogLevel >= LogFileMap[FileName].LogLevel)
 	{
 		if (LogTime)
 		{
