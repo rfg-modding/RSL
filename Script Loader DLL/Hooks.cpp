@@ -367,12 +367,17 @@ void __cdecl ExplosionCreateHook(explosion_info * ExplosionInfo, void * Source, 
 		MinimumExplosionRadius = 0.000000f;
 	}
 
+	std::cout << "Address of ExplosionInfo: " << ExplosionInfo << ", Hex: " << std::hex << std::uppercase << ExplosionInfo << std::endl;
+	Logger::Log(std::string("ExplosionInfo->m_name: " + std::string(NewExplosionInfo.m_name)), LOGMESSAGE);
+	Logger::Log(std::string("ExplosionInfo->m_unique_id: " + std::to_string(NewExplosionInfo.m_unique_id)), LOGMESSAGE);
+	Logger::Log(std::string("Before, Explosion radius: " + std::to_string(NewExplosionInfo.m_radius)), LOGMESSAGE);
+
 	if (UseGlobalExplosionStrengthMultiplier)
 	{
-		std::cout << "Address of ExplosionInfo: " << ExplosionInfo << ", Hex: " << std::hex << std::uppercase << ExplosionInfo << std::endl;
+		/*std::cout << "Address of ExplosionInfo: " << ExplosionInfo << ", Hex: " << std::hex << std::uppercase << ExplosionInfo << std::endl;
 		Logger::Log(std::string("ExplosionInfo->m_name: " + std::string(NewExplosionInfo.m_name)), LOGMESSAGE);
 		Logger::Log(std::string("ExplosionInfo->m_unique_id: " + std::to_string(NewExplosionInfo.m_unique_id)), LOGMESSAGE);
-		Logger::Log(std::string("Before, Explosion radius: " + std::to_string(NewExplosionInfo.m_radius)), LOGMESSAGE);
+		Logger::Log(std::string("Before, Explosion radius: " + std::to_string(NewExplosionInfo.m_radius)), LOGMESSAGE);*/
 		Logger::Log(std::string("Increasing explosion values by a factor of " + std::to_string(GlobalExplosionStrengthMultiplier)), LOGMESSAGE);
 
 		NewExplosionInfo.m_radius *= GlobalExplosionStrengthMultiplier;
@@ -386,6 +391,7 @@ void __cdecl ExplosionCreateHook(explosion_info * ExplosionInfo, void * Source, 
 
 		*ExplosionInfo = NewExplosionInfo;
 	}
+	std::cout << std::endl;
 
 	if (UseExplosionRadiusLimits)
 	{

@@ -14,7 +14,7 @@ DWORD WINAPI MainThread(HMODULE hModule)
 {
 	Logger::Init(LOGSUCCESS, GetEXEPath(false) + "RFGR Script Loader/Logs/");
 	Logger::OpenLogFile("Load Log.txt", LOGSUCCESS, std::ios_base::trunc);
-	Logger::OpenLogFile("General Log.txt", LOGMESSAGE, std::ios_base::trunc);
+	//Logger::OpenLogFile("General Log.txt", LOGMESSAGE, std::ios_base::trunc);
 	//Logger::Log("You should only see this in General Log.txt", LOGMESSAGE, false);
 	//Logger::Log("You should see this everywhere", LOGFATALERROR, false);
 
@@ -37,7 +37,9 @@ DWORD WINAPI MainThread(HMODULE hModule)
 	Logger::Log("RFGR script loader successfully activated.", LOGSUCCESS, true);
 	Logger::CloseLogFile("Load Log.txt");
 	Logger::OpenLogFile("General Log.txt", LOGSUCCESS, std::ios_base::trunc);
+	Logger::Log("Start of General Log.txt", LOGSUCCESS, true);
 	Logger::OpenLogFile("Error Log.txt", LOGERROR, std::ios_base::trunc);
+	Logger::Log("Start of Error Log.txt", LOGERROR, true);
 
 	GameState RFGRState;
 	while (!Program.ShouldClose()) //Todo: Change to respond to PostQuitMessage(0) in WndProc;
@@ -67,11 +69,11 @@ DWORD WINAPI MainThread(HMODULE hModule)
 		Program.ProcessInput();
 		Program.Update();
 	}
-	Logger::Log("RFGR script loader deactivated", LOGSUCCESS, true);
-	Logger::CloseAllLogFiles();
-
 	Program.CloseConsole();
 	Program.Exit();
+
+	Logger::Log("RFGR script loader deactivated", LOGSUCCESS, true);
+	Logger::CloseAllLogFiles();
 
 	FreeLibraryAndExitThread(hModule, 0);
 	return 0;

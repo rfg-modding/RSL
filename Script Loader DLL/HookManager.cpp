@@ -53,7 +53,7 @@ bool HookManager::DisableHook(std::string HookName)
 		Logger::Log(std::string("A hook with the name \"" + HookName + "\" does not exist. Failed to disable."), LOGERROR);
 		return false;
 	}
-	if (MH_EnableHook(HookMap[HookName].Target) != MH_OK)
+	if (MH_DisableHook(HookMap[HookName].Target) != MH_OK)
 	{
 		Logger::Log(std::string("Failed to disable " + HookName + " hook. RFGR Script Loader deactivating."), LOGFATALERROR);
 		return false;

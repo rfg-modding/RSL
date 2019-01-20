@@ -137,6 +137,11 @@ void ProgramManager::ProcessInput()
 		Scripts.RunTestScript2();
 		Sleep(100);
 	}
+	if (GetAsyncKeyState(VK_NUMPAD3))
+	{
+		
+		Sleep(100);
+	}
 	if (GetAsyncKeyState(VK_F1))
 	{
 		OverlayActive = !OverlayActive;
@@ -283,13 +288,70 @@ bool ProgramManager::LoadDataFromConfig() ///UPDATE THIS TO USE LOGGER!!
 	{
 		try
 		{
-			Logger::Log("Parsing \"Settings.json\"", LOGMESSAGE);
+			Logger::Log("Parsing Settings.json", LOGMESSAGE);
 			//LogFile << "Parsing settings.json..." << std::endl;
 			std::ifstream Config(ExePath + "RFGR Script Loader/Settings/Settings.json");
 			Config >> MainConfig;
 			Config.close();
 		}
+		catch (nlohmann::json::parse_error& Exception)
+		{
+			Logger::Log("Parse error while parsing Settings.json!", LOGFATALERROR);
+			Logger::Log(std::string(Exception.what()), LOGFATALERROR);
+			//LogFile << "Parse error while parsing Settings.json!" << std::endl;
+			//LogFile << Exception.what() << std::endl;
+			std::string ExceptionMessage("Parse error while parsing Settings.json!\n");
+			ExceptionMessage += "Message: ";
+			ExceptionMessage += Exception.what();
+
+			MessageBoxA(find_main_window(GetProcessID("rfg.exe")), ExceptionMessage.c_str(), "Json parsing exception", MB_OK);
+			Logger::Log("Failed to parse Settings.json, exiting.", LOGFATALERROR);
+			//LogFile << "Failed to parse Settings.json, exiting." << std::endl;
+			return false;
+		}
 		catch (std::exception& Exception)
+		{
+			Logger::Log("General exception while parsing Settings.json!", LOGFATALERROR);
+			Logger::Log(std::string(Exception.what()), LOGFATALERROR);
+			//LogFile << "General exception when parsing Settings.json!" << std::endl;
+			//LogFile << Exception.what() << std::endl;
+			std::string ExceptionMessage("General exception while parsing Settings.json!\n");
+			ExceptionMessage += "Message: ";
+			ExceptionMessage += Exception.what();
+
+			MessageBoxA(find_main_window(GetProcessID("rfg.exe")), ExceptionMessage.c_str(), "Json general exception", MB_OK);
+			Logger::Log("Failed to parse Settings.json, exiting.", LOGFATALERROR);
+			//LogFile << "Failed to parse Settings.json, exiting." << std::endl;
+			return false;
+		}
+		catch (...)
+		{
+			Logger::Log("Default exception while parsing Settings.json!", LOGFATALERROR);
+			//LogFile << "Default exception when parsing settings.json!" << std::endl;
+
+			MessageBoxA(find_main_window(GetProcessID("rfg.exe")), "Default exception while parsing Settings.json", "Json parsing exception", MB_OK);
+			Logger::Log("Failed to parse Settings.json, exiting.", LOGFATALERROR);
+			//LogFile << "Failed to parse Settings.json, exiting." << std::endl;
+			return false;
+		}
+		/*catch (nlohmann::json::basic_json::invalid_iterator& Exception)
+		{
+
+		}
+		catch (nlohmann::json::basic_json::type_error& Exception)
+		{
+
+		}
+		catch (nlohmann::json::basic_json::out_of_range& Exception)
+		{
+
+		}
+		catch (nlohmann::json::basic_json::other_error& Exception)
+		{
+
+		}*/
+
+		/*catch (std::exception& Exception)
 		{
 			Logger::Log("Exception when parsing \"Settings.json\"!", LOGERROR);
 			Logger::Log(Exception.what(), LOGMESSAGE);
@@ -309,7 +371,7 @@ bool ProgramManager::LoadDataFromConfig() ///UPDATE THIS TO USE LOGGER!!
 			Logger::Log("Unknown exception when parsing \"Settings.json\"!", LOGERROR);
 			//LogFile << "Unknown exception when parsing Settings.json!" << std::endl;
 			return false;
-		}
+		}*/
 		Logger::Log("No parse exceptions detected.", LOGSUCCESS);
 		//LogFile << "No parse exceptions detected." << std::endl;
 	}
