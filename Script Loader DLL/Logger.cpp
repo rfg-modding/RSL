@@ -79,29 +79,29 @@ void Logger::LogTypeMessageToFile(std::string FileName, LogType LogLevel)
 {
 	if (LogLevel == LogType::LOGMESSAGE)
 	{
-		LogFileMap[FileName].File << "[+] " << std::endl;
+		LogFileMap[FileName].File << "[+] ";
 	}
 	else if (LogLevel == LogType::LOGWARNING)
 	{
-		LogFileMap[FileName].File << "[Warning] " << std::endl;
+		LogFileMap[FileName].File << "[Warning] ";
 	}
 	else if (LogLevel == LogType::LOGERROR)
 	{
-		LogFileMap[FileName].File << "[Error] " << std::endl;
+		LogFileMap[FileName].File << "[Error] ";
 	}
 	else if (LogLevel == LogType::LOGFATALERROR)
 	{
-		LogFileMap[FileName].File << "[Fatal Error] " << std::endl;
+		LogFileMap[FileName].File << "[Fatal Error] ";
 	}
 	else if (LogLevel == LogType::LOGSUCCESS)
 	{
-		LogFileMap[FileName].File << "[Success] " << std::endl;
+		LogFileMap[FileName].File << "[Success] ";
 	}
 }
 
 void Logger::LogTimeMessageToFile(std::string FileName)
 {
-	LogFileMap[FileName].File << "[" << GetTimeString(false) << "]" << std::endl;
+	LogFileMap[FileName].File << "[" << GetTimeString(false) << "]";
 }
 
 void Logger::LogToFile(std::string FileName, std::string Message, LogType LogLevel, bool LogTime)
