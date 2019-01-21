@@ -1315,3 +1315,30 @@ struct rl_hdr_state
 	float m_bloom_slope_B;
 	vector m_sun_shafts_position;
 };
+
+/* 6026 */
+struct base_array_int
+{
+	base_array_int_Vtbl *vfptr;
+	int *elt;
+	int array_size;
+	int num;
+};
+
+/* 6027 */
+struct base_array_int_Vtbl
+{
+	void *(__thiscall *__vecDelDtor)(base_array_int *This, unsigned int);
+};
+
+/* 6028 */
+struct farray_int_4 : base_array_int
+{
+	int data[4];
+};
+
+/* 9049 */
+struct farray_int_16 : base_array_int
+{
+	int data[16];
+};
