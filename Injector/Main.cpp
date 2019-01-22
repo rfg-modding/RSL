@@ -18,7 +18,7 @@ int main()
 	if (!LoadDataFromConfig())
 	{
 		Logger::Log("Failed to load settings. \"Check Injector Log.txt\". Closing in 3 seconds.", LOGMESSAGE, true);
-		Sleep(317500);
+		Sleep(3175);
 		return -1;
 	}
 
