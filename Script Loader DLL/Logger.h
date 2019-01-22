@@ -75,7 +75,7 @@ auto JsonExceptionHandler(Callable&& Function, std::string FileName, std::string
 		Logger::Log("Parse exception caught while " + ActionConjugated + " \"" + FileName + "\"!", LOGFATALERROR);
 		Logger::Log(std::string(Exception.what()), LOGFATALERROR);
 
-		std::string ExceptionMessage("Parse exception caught while " + ActionConjugated + " \"" + FileName + "\"! See logs.");
+		std::string ExceptionMessage("Parse exception caught while " + ActionConjugated + " \"" + FileName + "\"! See logs. ");
 		ExceptionMessage += "Message: ";
 		ExceptionMessage += Exception.what();
 
@@ -88,7 +88,7 @@ auto JsonExceptionHandler(Callable&& Function, std::string FileName, std::string
 		Logger::Log("Invalid iterator exception caught while " + ActionConjugated + " \"" + FileName + "\"!", LOGFATALERROR);
 		Logger::Log(std::string(Exception.what()), LOGFATALERROR);
 
-		std::string ExceptionMessage("Invalid iterator exception caught while " + ActionConjugated + " \"" + FileName + "\"! See logs.");
+		std::string ExceptionMessage("Invalid iterator exception caught while " + ActionConjugated + " \"" + FileName + "\"! See logs. ");
 		ExceptionMessage += "Message: ";
 		ExceptionMessage += Exception.what();
 
@@ -101,7 +101,7 @@ auto JsonExceptionHandler(Callable&& Function, std::string FileName, std::string
 		Logger::Log("Type error exception caught while " + ActionConjugated + " \"" + FileName + "\"!", LOGFATALERROR);
 		Logger::Log(std::string(Exception.what()), LOGFATALERROR);
 
-		std::string ExceptionMessage("Type error exception caught while " + ActionConjugated + " \"" + FileName + "\"! See logs.");
+		std::string ExceptionMessage("Type error exception caught while " + ActionConjugated + " \"" + FileName + "\"! See logs. ");
 		ExceptionMessage += "Message: ";
 		ExceptionMessage += Exception.what();
 
@@ -114,7 +114,7 @@ auto JsonExceptionHandler(Callable&& Function, std::string FileName, std::string
 		Logger::Log("Out of range exception caught while " + ActionConjugated + " \"" + FileName + "\"!", LOGFATALERROR);
 		Logger::Log(std::string(Exception.what()), LOGFATALERROR);
 
-		std::string ExceptionMessage("Parse exception caught while " + ActionConjugated + " \"" + FileName + "\"! See logs.");
+		std::string ExceptionMessage("Parse exception caught while " + ActionConjugated + " \"" + FileName + "\"! See logs. ");
 		ExceptionMessage += "Message: ";
 		ExceptionMessage += Exception.what();
 
@@ -127,7 +127,7 @@ auto JsonExceptionHandler(Callable&& Function, std::string FileName, std::string
 		Logger::Log("Other error exception caught while " + ActionConjugated + " \"" + FileName + "\"!", LOGFATALERROR);
 		Logger::Log(std::string(Exception.what()), LOGFATALERROR);
 
-		std::string ExceptionMessage("Other error exception caught while " + ActionConjugated + " \"" + FileName + "\"! See logs.");
+		std::string ExceptionMessage("Other error exception caught while " + ActionConjugated + " \"" + FileName + "\"! See logs. ");
 		ExceptionMessage += "Message: ";
 		ExceptionMessage += Exception.what();
 
@@ -140,7 +140,7 @@ auto JsonExceptionHandler(Callable&& Function, std::string FileName, std::string
 		Logger::Log("General exception caught while " + ActionConjugated + " \"" + FileName + "\"!", LOGFATALERROR);
 		Logger::Log(std::string(Exception.what()), LOGFATALERROR);
 
-		std::string ExceptionMessage("General exception caught while " + ActionConjugated + " \"" + FileName + "\"! See logs.");
+		std::string ExceptionMessage("General exception caught while " + ActionConjugated + " \"" + FileName + "\"! See logs. ");
 		ExceptionMessage += "Message: ";
 		ExceptionMessage += Exception.what();
 
@@ -152,7 +152,7 @@ auto JsonExceptionHandler(Callable&& Function, std::string FileName, std::string
 	{
 		Logger::Log("Default exception caught while " + ActionConjugated + " \"" + FileName + "\"!", LOGFATALERROR);
 
-		std::string ExceptionMessage("Default exception caught while " + ActionConjugated + " \"" + FileName + "\"! See logs.");
+		std::string ExceptionMessage("Default exception caught while " + ActionConjugated + " \"" + FileName + "\"! See logs. ");
 		MessageBoxA(find_main_window(GetProcessID("rfg.exe")), ExceptionMessage.c_str(), "Json default exception caught", MB_OK);
 		Logger::Log("Failed to " + Action + " \"" + FileName + "\", exiting.", LOGFATALERROR);
 		return false;
