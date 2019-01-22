@@ -44,7 +44,7 @@ public:
 	static void CloseLogFile(std::string FileName);
 	static void CloseAllLogFiles();
 	
-	static void Log(std::string Message, LogType LogLevel, bool LogTime = false);
+	static void Log(std::string Message, LogType LogLevel, bool LogTime = false, bool NewLine = true);
 	static void LogTypeMessageToFile(std::string FileName, LogType LogLevel);
 	static void LogTimeMessageToFile(std::string FileName);
 	static void LogToFile(std::string FileName, std::string Message, LogType LogLevel, bool LogTime = false);

@@ -54,12 +54,19 @@ void Logger::CloseAllLogFiles()
 	LogFileMap.erase(LogFileMap.begin(), LogFileMap.end());
 }
 
-void Logger::Log(std::string Message, LogType LogLevel, bool LogTime)
+void Logger::Log(std::string Message, LogType LogLevel, bool LogTime, bool NewLine)
 {
 	LogData.push_back(LogEntry(Message, LogLevel));
 	if (LogLevel >= ConsoleLogLevel)
 	{
-		ConsoleLog(Message.c_str(), LogLevel, LogTime, true, true);
+		if (NewLine)
+		{
+			ConsoleLog(Message.c_str(), LogLevel, LogTime, true, true);
+		}
+		else
+		{
+			ConsoleLog(Message.c_str(), LogLevel, LogTime, true, false);
+		}
 	}
 	for (auto i = LogFileMap.begin(); i != LogFileMap.end(); i++)
 	{
@@ -70,7 +77,11 @@ void Logger::Log(std::string Message, LogType LogLevel, bool LogTime)
 				LogTimeMessageToFile(i->first);
 			}
 			LogTypeMessageToFile(i->first, LogLevel);
-			i->second.File << Message << std::endl;
+			i->second.File << Message;
+			if (NewLine)
+			{
+				i->second.File << std::endl;
+			}
 		}
 	}
 }

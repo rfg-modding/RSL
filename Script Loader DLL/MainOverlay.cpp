@@ -437,14 +437,14 @@ bool LoadGUIConfig()
 		Style.PopupBorderSize = GUIConfig["Style"]["PopupBorderSize"].get<float>();
 		Style.PopupRounding = GUIConfig["Style"]["PopupRounding"].get<float>();
 		Style.ScrollbarRounding = GUIConfig["Style"]["ScrollbarRounding"].get<float>();
-		Style.ScrollbarSize = GUIConfig["Style"]["ScrollbarSize"].get<float>(); 16.0f;
-		Style.TabBorderSize = GUIConfig["Style"]["TabBorderSize"].get<float>(); 0.0f;
-		Style.TabRounding = GUIConfig["Style"]["TabRounding"].get<float>(); 3.0f;
+		Style.ScrollbarSize = GUIConfig["Style"]["ScrollbarSize"].get<float>();
+		Style.TabBorderSize = GUIConfig["Style"]["TabBorderSize"].get<float>();
+		Style.TabRounding = GUIConfig["Style"]["TabRounding"].get<float>();
 		Style.TouchExtraPadding = JsonGetFloat2(GUIConfig, "Style", "TouchExtraPadding");
-		Style.WindowBorderSize = GUIConfig["Style"]["WindowBorderSize"].get<float>(); 1.0f;
+		Style.WindowBorderSize = GUIConfig["Style"]["WindowBorderSize"].get<float>();
 		//Style.WindowMinSize = 1.0f;
 		Style.WindowPadding = JsonGetFloat2(GUIConfig, "Style", "WindowPadding");
-		Style.WindowRounding = GUIConfig["Style"]["WindowRounding"].get<float>(); 3.0f;
+		Style.WindowRounding = GUIConfig["Style"]["WindowRounding"].get<float>();
 		Style.WindowTitleAlign = JsonGetFloat2(GUIConfig, "Style", "WindowTitleAlign");
 
 		ImVec4* Colors = ImGui::GetStyle().Colors; //48 items
