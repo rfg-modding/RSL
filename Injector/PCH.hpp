@@ -14,6 +14,7 @@
 #include <ctype.h>
 #include <tlhelp32.h>
 #include <math.h>
+#include <map>
 
 #include <Shlwapi.h>
 #pragma comment(lib, "Shlwapi.lib")
