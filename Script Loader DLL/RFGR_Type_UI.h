@@ -146,6 +146,7 @@ struct __declspec(align(4)) hint_info
 	bool is_visible;
 };
 
+struct base_array_hint_info_Vtbl;
 /* 9303 */
 struct base_array_hint_info
 {
@@ -178,6 +179,22 @@ enum menu_item_type
 	MI_LAST = 0x4,
 };
 
+/* 9302 */
+struct document_info
+{
+	int needs_cleanup;
+	int doc_handle;
+	int data_handle_tween_on_select;
+	int data_handle_title;
+	int data_handle_populate_group;
+	int data_handle_hint_group;
+	char event_surtag[8];
+	farray_int_4 data_handle_hints;
+	farray_int_16 data_handle_populate_items;
+};
+
+struct ui_menuVtbl;
+struct ui_menu_item_base;
 /* 9298 */
 struct ui_menu
 {
@@ -207,6 +224,7 @@ struct ui_menuVtbl
 	void *(__thiscall *__vecDelDtor)(ui_menu *This, unsigned int);
 };
 
+struct ui_menu_item_baseVtbl;
 /* 9300 */
 struct ui_menu_item_base
 {
@@ -228,20 +246,7 @@ struct ui_menu_item_baseVtbl
 	void(__thiscall *get_text_value)(ui_menu_item_base *This, char *, int);
 };
 
-/* 9302 */
-struct document_info
-{
-	int needs_cleanup;
-	int doc_handle;
-	int data_handle_tween_on_select;
-	int data_handle_title;
-	int data_handle_populate_group;
-	int data_handle_hint_group;
-	char event_surtag[8];
-	farray_int_4 data_handle_hints;
-	farray_int_16 data_handle_populate_items;
-};
-
+struct base_array_ui_menu_pointer_Vtbl;
 /* 9325 */
 struct base_array_ui_menu_pointer
 {

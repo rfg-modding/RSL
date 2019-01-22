@@ -200,24 +200,27 @@
     <ClInclude Include="HookManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="RFGR Structs\KeenNamespace2.h">
-      <Filter>RFGR Structs</Filter>
+    <ClInclude Include="RFGR_Type_UI.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <None Include="RFGR Structs\rfg.h">
+      <Filter>RFGR Structs</Filter>
+    </None>
+    <None Include="RFGR Structs\KeenNamespace2.h">
+      <Filter>Header Files</Filter>
+    </None>
     <None Include="RFGR Structs\KeenFileSystem.h">
-      <Filter>Header Files</Filter>
-    </None>
-    <None Include="RFGR Structs\KeenRenderEffectSystem.h">
-      <Filter>Header Files</Filter>
-    </None>
-    <None Include="RFGR Structs\KeenTaskSystem.h">
-      <Filter>Header Files</Filter>
+      <Filter>RFGR Structs</Filter>
     </None>
     <None Include="RFGR Structs\KeenTlsfAllocator.h">
-      <Filter>Header Files</Filter>
+      <Filter>RFGR Structs</Filter>
     </None>
-    <None Include="RFGR Structs\rfg.h">
+    <None Include="RFGR Structs\KeenRenderEffectSystem.h">
+      <Filter>RFGR Structs</Filter>
+    </None>
+    <None Include="RFGR Structs\KeenTaskSystem.h">
       <Filter>RFGR Structs</Filter>
     </None>
   </ItemGroup>

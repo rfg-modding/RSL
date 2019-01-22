@@ -14,24 +14,22 @@ DWORD WINAPI MainThread(HMODULE hModule)
 {
 	Logger::Init(LOGSUCCESS, GetEXEPath(false) + "RFGR Script Loader/Logs/");
 	Logger::OpenLogFile("Load Log.txt", LOGSUCCESS, std::ios_base::trunc);
-	//Logger::OpenLogFile("General Log.txt", LOGMESSAGE, std::ios_base::trunc);
-	//Logger::Log("You should only see this in General Log.txt", LOGMESSAGE, false);
-	//Logger::Log("You should see this everywhere", LOGFATALERROR, false);
+	Logger::Log("RFGR Script Loader started. Activating.", LOGMESSAGE, true);
 
-	Logger::Log("Before ProgramManager::ProgramManager()", LOGMESSAGE);
+	//Logger::Log("Before ProgramManager::ProgramManager()", LOGMESSAGE);
 	ProgramManager Program(hModule);
-	Logger::Log("Before Program.LoadDataFromConfig()", LOGMESSAGE);
+	//Logger::Log("Before Program.LoadDataFromConfig()", LOGMESSAGE);
 	if (!Program.LoadDataFromConfig())
 	{
 		FreeLibraryAndExitThread(hModule, 0);
 		return 0;
 	}
-	Logger::Log("Before Program.OpenConsole()", LOGMESSAGE);
+	//Logger::Log("Before Program.OpenConsole()", LOGMESSAGE);
 	Program.OpenConsole();
-	Logger::Log("RFGR Script Loader attached to external console", LOGSUCCESS, true);
-	Logger::Log("Before Program.SetMemoryLocations()", LOGMESSAGE);
+	//Logger::Log("RFGR Script Loader attached to external console", LOGSUCCESS, true);
+	//Logger::Log("Before Program.SetMemoryLocations()", LOGMESSAGE);
 	Program.SetMemoryLocations();
-	Logger::Log("Before Program.Initialize()", LOGMESSAGE);
+	//Logger::Log("Before Program.Initialize()", LOGMESSAGE);
 	Program.Initialize();
 
 	Logger::Log("RFGR script loader successfully activated.", LOGSUCCESS, true);

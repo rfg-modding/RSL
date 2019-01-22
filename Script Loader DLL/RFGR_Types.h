@@ -1316,6 +1316,7 @@ struct rl_hdr_state
 	vector m_sun_shafts_position;
 };
 
+struct base_array_int_Vtbl;
 /* 6026 */
 struct base_array_int
 {

@@ -335,6 +335,7 @@
     </ClInclude>
     <ClInclude Include="RFGR_Types.h" />
     <ClInclude Include="RFGR_Types_Player.h" />
+    <ClInclude Include="RFGR_Type_UI.h" />
     <ClInclude Include="ScriptManager.h" />
     <ClInclude Include="SnippetManager.h" />
   </ItemGroup>

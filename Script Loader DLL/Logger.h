@@ -61,3 +61,100 @@ private:
 	Logger() { }
 	static void ConsoleLog(const char* Message, LogType Type, bool PrintTimeLabel = false, bool PrintTypeLabel = true, bool NewLine = false);
 };
+
+/*This code is a modified version of this SO answer: https://codereview.stackexchange.com/a/71330 ... Very useful.*/
+template<typename Callable>
+auto JsonExceptionHandler(Callable&& Function, std::string FileName, std::string Action, std::string ActionConjugated) -> decltype(Function())
+{
+	try
+	{
+		return Function();
+	}
+	catch (nlohmann::json::parse_error& Exception)
+	{
+		Logger::Log("Parse exception caught while " + ActionConjugated + " \"" + FileName + "\"!", LOGFATALERROR);
+		Logger::Log(std::string(Exception.what()), LOGFATALERROR);
+
+		std::string ExceptionMessage("Parse exception caught while " + ActionConjugated + " \"" + FileName + "\"! See logs.");
+		ExceptionMessage += "Message: ";
+		ExceptionMessage += Exception.what();
+
+		MessageBoxA(find_main_window(GetProcessID("rfg.exe")), ExceptionMessage.c_str(), "Json parse exception caught", MB_OK);
+		Logger::Log("Failed to " + Action + " \"" + FileName + "\", exiting.", LOGFATALERROR);
+		return false;
+	}
+	catch (nlohmann::json::basic_json::invalid_iterator& Exception)
+	{
+		Logger::Log("Invalid iterator exception caught while " + ActionConjugated + " \"" + FileName + "\"!", LOGFATALERROR);
+		Logger::Log(std::string(Exception.what()), LOGFATALERROR);
+
+		std::string ExceptionMessage("Invalid iterator exception caught while " + ActionConjugated + " \"" + FileName + "\"! See logs.");
+		ExceptionMessage += "Message: ";
+		ExceptionMessage += Exception.what();
+
+		MessageBoxA(find_main_window(GetProcessID("rfg.exe")), ExceptionMessage.c_str(), "Json invalid iterator exception caught", MB_OK);
+		Logger::Log("Failed to " + Action + " \"" + FileName + "\", exiting.", LOGFATALERROR);
+		return false;
+	}
+	catch (nlohmann::json::basic_json::type_error& Exception)
+	{
+		Logger::Log("Type error exception caught while " + ActionConjugated + " \"" + FileName + "\"!", LOGFATALERROR);
+		Logger::Log(std::string(Exception.what()), LOGFATALERROR);
+
+		std::string ExceptionMessage("Type error exception caught while " + ActionConjugated + " \"" + FileName + "\"! See logs.");
+		ExceptionMessage += "Message: ";
+		ExceptionMessage += Exception.what();
+
+		MessageBoxA(find_main_window(GetProcessID("rfg.exe")), ExceptionMessage.c_str(), "Json type error exception caught", MB_OK);
+		Logger::Log("Failed to " + Action + " \"" + FileName + "\", exiting.", LOGFATALERROR);
+		return false;
+	}
+	catch (nlohmann::json::basic_json::out_of_range& Exception)
+	{
+		Logger::Log("Out of range exception caught while " + ActionConjugated + " \"" + FileName + "\"!", LOGFATALERROR);
+		Logger::Log(std::string(Exception.what()), LOGFATALERROR);
+
+		std::string ExceptionMessage("Parse exception caught while " + ActionConjugated + " \"" + FileName + "\"! See logs.");
+		ExceptionMessage += "Message: ";
+		ExceptionMessage += Exception.what();
+
+		MessageBoxA(find_main_window(GetProcessID("rfg.exe")), ExceptionMessage.c_str(), "Json out of range exception caught", MB_OK);
+		Logger::Log("Failed to " + Action + " \"" + FileName + "\", exiting.", LOGFATALERROR);
+		return false;
+	}
+	catch (nlohmann::json::basic_json::other_error& Exception)
+	{
+		Logger::Log("Other error exception caught while " + ActionConjugated + " \"" + FileName + "\"!", LOGFATALERROR);
+		Logger::Log(std::string(Exception.what()), LOGFATALERROR);
+
+		std::string ExceptionMessage("Other error exception caught while " + ActionConjugated + " \"" + FileName + "\"! See logs.");
+		ExceptionMessage += "Message: ";
+		ExceptionMessage += Exception.what();
+
+		MessageBoxA(find_main_window(GetProcessID("rfg.exe")), ExceptionMessage.c_str(), "Json other error exception caught", MB_OK);
+		Logger::Log("Failed to " + Action + " \"" + FileName + "\", exiting.", LOGFATALERROR);
+		return false;
+	}
+	catch (std::exception& Exception)
+	{
+		Logger::Log("General exception caught while " + ActionConjugated + " \"" + FileName + "\"!", LOGFATALERROR);
+		Logger::Log(std::string(Exception.what()), LOGFATALERROR);
+
+		std::string ExceptionMessage("General exception caught while " + ActionConjugated + " \"" + FileName + "\"! See logs.");
+		ExceptionMessage += "Message: ";
+		ExceptionMessage += Exception.what();
+
+		MessageBoxA(find_main_window(GetProcessID("rfg.exe")), ExceptionMessage.c_str(), "Json general exception caught", MB_OK);
+		Logger::Log("Failed to " + Action + " \"" + FileName + "\", exiting.", LOGFATALERROR);
+		return false;
+	}
+	catch (...)
+	{
+		Logger::Log("Default exception caught while " + ActionConjugated + " \"" + FileName + "\"!", LOGFATALERROR);
+
+		std::string ExceptionMessage("Default exception caught while " + ActionConjugated + " \"" + FileName + "\"! See logs.");
+		MessageBoxA(find_main_window(GetProcessID("rfg.exe")), ExceptionMessage.c_str(), "Json default exception caught", MB_OK);
+		Logger::Log("Failed to " + Action + " \"" + FileName + "\", exiting.", LOGFATALERROR);
+		return false;
+	}
+}

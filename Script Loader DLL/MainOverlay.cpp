@@ -200,446 +200,424 @@ bool ChangeTeleportLocation(std::string CurrentName, std::string NewName, float 
 bool LoadTeleportLocations()
 {
 	std::string ExePath = GetEXEPath(false);
-	std::ofstream LogFile(ExePath + "RFGR Script Loader/Logs/Load Log.txt");
-
+	Logger::Log("Started loading \"Teleport Locations.json\".", LOGSUCCESS);
+	
 	if (fs::exists(ExePath + "RFGR Script Loader/Settings/Teleport Locations.json"))
 	{
-		try
+		if (!JsonExceptionHandler([&]
 		{
+			Logger::Log("Parsing \"Teleport Locations.json\"...", LOGMESSAGE);
 			std::ifstream Config(ExePath + "RFGR Script Loader/Settings/Teleport Locations.json");
-			LogFile << "Parsing \"Teleport Locations.json\"..." << std::endl;
 			Config >> TeleportLocations;
 			Config.close();
-		}
-		catch (nlohmann::json::parse_error& Exception)
+			return true;
+		}, "Teleport Locations.json", "parse", "parsing"))
 		{
-			LogFile << "Parse error while parsing \"Teleport Locations.json\"!" << std::endl;
-			LogFile << Exception.what() << std::endl;
-			std::string ExceptionMessage("Parse error while parsing \"Teleport Locations.json\"\n");
-			ExceptionMessage += "Message: ";
-			ExceptionMessage += Exception.what();
-
-			MessageBoxA(find_main_window(GetProcessID("rfg.exe")), ExceptionMessage.c_str(), "Json parsing exception", MB_OK);
-			LogFile << "Failed to parse \"Teleport Locations.json\", exiting." << std::endl;
 			return false;
 		}
-		catch (std::exception& Exception)
-		{
-			LogFile << "General exception when parsing \"Teleport Locations.json\"!" << std::endl;
-			LogFile << Exception.what() << std::endl;
-			std::string ExceptionMessage("General exception when parsing \"Teleport Locations.json\"\n");
-			ExceptionMessage += "Message: ";
-			ExceptionMessage += Exception.what();
-
-			MessageBoxA(find_main_window(GetProcessID("rfg.exe")), ExceptionMessage.c_str(), "Json parsing exception", MB_OK);
-			LogFile << "Failed to parse \"Teleport Locations.json\", exiting." << std::endl;
-			return false;
-		}
-		catch (...)
-		{
-			LogFile << "Default exception when parsing \"Teleport Locations.json\"!" << std::endl;
-
-			MessageBoxA(find_main_window(GetProcessID("rfg.exe")), "Default exception while parsing \"Teleport Locations.json\"", "Json parsing exception", MB_OK);
-			LogFile << "Failed to parse \"Teleport Locations.json\", exiting." << std::endl;
-			return false;
-		}
-		LogFile << "No parse exceptions detected." << std::endl;
+		Logger::Log("No parse exceptions detected.", LOGSUCCESS);
 	}
 	else
 	{
-		CreateDirectoryIfNull(ExePath + "RFGR Script Loader/Settings/");
-		//std::cout << "Settings.txt not found. Creating from default values." << std::endl;
-		std::ofstream LogFile;
-		LogFile.open(ExePath + "RFGR Script Loader/Logs/Start errors.txt");
-		LogFile << "\"Teleport Locations.json\" not found. Creating from default values." << std::endl;
+		if (!JsonExceptionHandler([&]
+		{
+			Logger::Log("\"Teleport Locations.json\" not found. Creating from default values.", LOGWARNING);
+			CreateDirectoryIfNull(ExePath + "RFGR Script Loader/Settings/");
 
-		SetTeleportLocation("Tutorial Area Hilltop", -2328.29f, 30.0f, -2317.9f, "Tutorial area at the start of the game. Position: (-2328.29, 30.0, -2317.9)");
-		SetTeleportLocation("Parker - Safehouse", -1877.77f, 27.0f, -1452.0f, "Game starting safehouse. Near ore processing plant. Position: (-1877.77, 27.0, -1452.0)");
-		SetTeleportLocation("Dust - Northern Safehouse", -387.0f, 38.0f, -820.0f, "Near tharsis point wind farm and Dust town hall. Position: (-387.0, 38.0, -820.0)");
-		SetTeleportLocation("Dust - Southern Safehouse", -113.59f, 30.0f, -2449.58f, "Near chemical plant. Position: (-113.59, 30.0, -2449.58)");
-		SetTeleportLocation("Badlands - Safehouse / RFHQ", 2411.90f, 58.0f, -239.77f, "Main safehouse in Badlands. Also the HQ of the Red Faction. Position: (2411.90, 58.0, -239.77)");
-		SetTeleportLocation("Badlands - Mohole", 1420.27f, -28.0f, -734.28f, "Big 'ol hole in the ground used to pull heat from Mars' core for terraforming purposes. There's a smaller one in Dust. Position: (1420.27, -28.0, -734.28)");
-		SetTeleportLocation("Badlands - Harrington Memorial Bridge", 948.14f, -5.0f, -417.68f, "The big one. Position: (948.14, -5.0, -417.68)");
-		SetTeleportLocation("Badlands - EDF Barracks", 899.91f, 2.0f, -885.64f, "EDF Barracks sitting in a hilly area south of the EDF airbase in Badlands. Position: (899.91, 2.0, -885.64)");
-		SetTeleportLocation("Badlands - Marauder Safehouse", 2458.47f, 58.0f, -1210.17f, "Safehouse in marauder territory. Unless you want hostile marauders, wait until you've completed certain missions to go here. Position: (2458.47, 58.0, -1210.17)");
-		SetTeleportLocation("Oasis - Safehouse", 1434.29f, 18.0f, 691.65f, "Near EDF vehicle depot. Position: (1434.29, 18.0, 691.65)");
-		SetTeleportLocation("Free Fire Zone - Artillery Base", -1752.03f, 9.0f, -132.59f, "Base which runs and protects the EDF Artillery Gun. Deadly to be here until the FFZ has been liberated. Position: (-1752.03, 9.0, -132.59)");
-		SetTeleportLocation("Free Fire Zone - Artillery Gun", -1944.92f, 38.0f, -65.49f, "Bottom of the EDF Artillery Gun. Deadly to be here until the FFZ has been liberated. Position: (-1944.92, 38.0, -65.49)");
-		SetTeleportLocation("EOS - Western Safehouse", -1726.0f, 50.0f, 438.0f, "Near FFZ entrance/exit and Eos Memorial Bridge. Position: (-1726.0, 50.0, 438.0)");
-		SetTeleportLocation("EOS - Eastern Safehouse", -1390.95f, 30.0f, 561.08f, "Near construction site. Position: (-1390.95, 30.0, 561.08)");
-		SetTeleportLocation("EOS - Outside EDF Central Command", -1428.61f, 8.0f, 2013.5f, "Right outside the defense shield. Position: (-1428.61, 8.0, 2013.5)");
-		SetTeleportLocation("EOS - Inside EDF Central Command", -1458.75f, 8.0f, 2050.16f, "Right inside past the defense shield. Position: (-1458.75, 8.0, 2050.16)");
-		SetTeleportLocation("EOS - EDF Central Command Main Building", -1474.53f, 38.0f, 2397.49f, "The final building at the peak of the inner valley / cliffsides. Position: (-1474.53, 38.0, 2397.49)");
-		SetTeleportLocation("Mount Vogel - Base", -670.37f, 47.0f, 2423.75f, "Bottom of Mount Vogel and mass accelerator. Several old buildings. Position: (-670.37, 47.0, 2423.75)");
-		SetTeleportLocation("Mount Vogel - Peak", -285.77f, 183.0f, 2423.4f, "Peak of Mount Vogel with mass accelerator exit. Position: (-285.77, 183.0, 2423.4)");
+			SetTeleportLocation("Tutorial Area Hilltop", -2328.29f, 30.0f, -2317.9f, "Tutorial area at the start of the game. Position: (-2328.29, 30.0, -2317.9)");
+			SetTeleportLocation("Parker - Safehouse", -1877.77f, 27.0f, -1452.0f, "Game starting safehouse. Near ore processing plant. Position: (-1877.77, 27.0, -1452.0)");
+			SetTeleportLocation("Dust - Northern Safehouse", -387.0f, 38.0f, -820.0f, "Near tharsis point wind farm and Dust town hall. Position: (-387.0, 38.0, -820.0)");
+			SetTeleportLocation("Dust - Southern Safehouse", -113.59f, 30.0f, -2449.58f, "Near chemical plant. Position: (-113.59, 30.0, -2449.58)");
+			SetTeleportLocation("Badlands - Safehouse / RFHQ", 2411.90f, 58.0f, -239.77f, "Main safehouse in Badlands. Also the HQ of the Red Faction. Position: (2411.90, 58.0, -239.77)");
+			SetTeleportLocation("Badlands - Mohole", 1420.27f, -28.0f, -734.28f, "Big 'ol hole in the ground used to pull heat from Mars' core for terraforming purposes. There's a smaller one in Dust. Position: (1420.27, -28.0, -734.28)");
+			SetTeleportLocation("Badlands - Harrington Memorial Bridge", 948.14f, -5.0f, -417.68f, "The big one. Position: (948.14, -5.0, -417.68)");
+			SetTeleportLocation("Badlands - EDF Barracks", 899.91f, 2.0f, -885.64f, "EDF Barracks sitting in a hilly area south of the EDF airbase in Badlands. Position: (899.91, 2.0, -885.64)");
+			SetTeleportLocation("Badlands - Marauder Safehouse", 2458.47f, 58.0f, -1210.17f, "Safehouse in marauder territory. Unless you want hostile marauders, wait until you've completed certain missions to go here. Position: (2458.47, 58.0, -1210.17)");
+			SetTeleportLocation("Oasis - Safehouse", 1434.29f, 18.0f, 691.65f, "Near EDF vehicle depot. Position: (1434.29, 18.0, 691.65)");
+			SetTeleportLocation("Free Fire Zone - Artillery Base", -1752.03f, 9.0f, -132.59f, "Base which runs and protects the EDF Artillery Gun. Deadly to be here until the FFZ has been liberated. Position: (-1752.03, 9.0, -132.59)");
+			SetTeleportLocation("Free Fire Zone - Artillery Gun", -1944.92f, 38.0f, -65.49f, "Bottom of the EDF Artillery Gun. Deadly to be here until the FFZ has been liberated. Position: (-1944.92, 38.0, -65.49)");
+			SetTeleportLocation("EOS - Western Safehouse", -1726.0f, 50.0f, 438.0f, "Near FFZ entrance/exit and Eos Memorial Bridge. Position: (-1726.0, 50.0, 438.0)");
+			SetTeleportLocation("EOS - Eastern Safehouse", -1390.95f, 30.0f, 561.08f, "Near construction site. Position: (-1390.95, 30.0, 561.08)");
+			SetTeleportLocation("EOS - Outside EDF Central Command", -1428.61f, 8.0f, 2013.5f, "Right outside the defense shield. Position: (-1428.61, 8.0, 2013.5)");
+			SetTeleportLocation("EOS - Inside EDF Central Command", -1458.75f, 8.0f, 2050.16f, "Right inside past the defense shield. Position: (-1458.75, 8.0, 2050.16)");
+			SetTeleportLocation("EOS - EDF Central Command Main Building", -1474.53f, 38.0f, 2397.49f, "The final building at the peak of the inner valley / cliffsides. Position: (-1474.53, 38.0, 2397.49)");
+			SetTeleportLocation("Mount Vogel - Base", -670.37f, 47.0f, 2423.75f, "Bottom of Mount Vogel and mass accelerator. Several old buildings. Position: (-670.37, 47.0, 2423.75)");
+			SetTeleportLocation("Mount Vogel - Peak", -285.77f, 183.0f, 2423.4f, "Peak of Mount Vogel with mass accelerator exit. Position: (-285.77, 183.0, 2423.4)");
 
-		std::ofstream ConfigOutput(ExePath + "RFGR Script Loader/Settings/Teleport Locations.json");
-		ConfigOutput << std::setw(4) << TeleportLocations << std::endl;
-		ConfigOutput.close();
-		LogFile.close();
+			std::ofstream ConfigOutput(ExePath + "RFGR Script Loader/Settings/Teleport Locations.json");
+			ConfigOutput << std::setw(4) << TeleportLocations << std::endl;
+			ConfigOutput.close();
+			return true;
+		}, "Teleport Locations.json", "write", "writing"))
+		{
+			return false;
+		}
+		Logger::Log("No write exceptions detected.", LOGSUCCESS);
 	}
 
+	Logger::Log("Done loading \"Teleport Locations.json\".", LOGSUCCESS);
 	return true;
 }
 
 bool SaveTeleportLocations()
 {
-	std::string ExePath = GetEXEPath(false);
+	Logger::Log("Started writing \"Teleport Locations.json\"", LOGMESSAGE);
+	if (!JsonExceptionHandler([&]
+	{
+		Logger::Log("\"Teleport Locations.json\" not found. Creating from default values.", LOGWARNING);
+		std::string ExePath = GetEXEPath(false);
+		CreateDirectoryIfNull(ExePath + "RFGR Script Loader/Settings/");
 
-	//CreateDirectoryIfNull(ExePath + "RFGR Script Loader/Settings/");
-	//std::cout << "Settings.txt not found. Creating from default values." << std::endl;
-	//std::ofstream LogFile(ExePath + "RFGR Script Loader/Logs/Start errors.txt");;
-	//LogFile << "\"Teleport Locations.json\" not found. Creating from default values." << std::endl;
+		std::ofstream ConfigOutput(ExePath + "RFGR Script Loader/Settings/Teleport Locations.json");
+		ConfigOutput << std::setw(4) << TeleportLocations << std::endl; 
+		ConfigOutput.close();
 
-	std::ofstream ConfigOutput(ExePath + "RFGR Script Loader/Settings/Teleport Locations.json");
-	ConfigOutput << std::setw(4) << TeleportLocations << std::endl;
-	ConfigOutput.close();
-	//LogFile.close();
-
+		return true;
+	}, "Teleport Locations.json", "write", "writing"))
+	{
+		return false;
+	}
+	Logger::Log("No write exceptions detected.", LOGSUCCESS);
+	
+	Logger::Log("Done writing \"Teleport Locations.json\"", LOGSUCCESS);
 	return true;
 }
 
 bool LoadGUIConfig()
 {
 	std::string ExePath = GetEXEPath(false);
-	std::ofstream LogFile(ExePath + "RFGR Script Loader/Logs/Load Log.txt");
+	Logger::Log("Started loading \"GUI Config.json\".", LOGSUCCESS);
 
 	if (fs::exists(ExePath + "RFGR Script Loader/Settings/GUI Config.json"))
 	{
-		try
+		if (!JsonExceptionHandler([&]
 		{
+			Logger::Log("Parsing \"GUI Config.json\"", LOGMESSAGE);
 			std::ifstream Config(ExePath + "RFGR Script Loader/Settings/GUI Config.json");
-			LogFile << "Parsing GUI Config.json..." << std::endl;
-			Config >> GUIConfig;
+			Config >> MainConfig;
 			Config.close();
-		}
-		catch (nlohmann::json::parse_error& Exception)
+			return true;
+		}, "GUI Config.json", "parse", "parsing"))
 		{
-			LogFile << "Parse error while parsing GUI Config.json!" << std::endl;
-			LogFile << Exception.what() << std::endl;
-			std::string ExceptionMessage("Parse error while parsing GUI Config.json!\n");
-			ExceptionMessage += "Message: ";
-			ExceptionMessage += Exception.what();
-
-			MessageBoxA(find_main_window(GetProcessID("rfg.exe")), ExceptionMessage.c_str(), "Json parsing exception", MB_OK);
-			LogFile << "Failed to parse GUI Config.json, exiting." << std::endl;
 			return false;
 		}
-		catch (std::exception& Exception)
-		{
-			LogFile << "General exception when parsing GUI Config.json!" << std::endl;
-			LogFile << Exception.what() << std::endl;
-			std::string ExceptionMessage("General exception when parsing GUI Config.json!\n");
-			ExceptionMessage += "Message: ";
-			ExceptionMessage += Exception.what();
-
-			MessageBoxA(find_main_window(GetProcessID("rfg.exe")), ExceptionMessage.c_str(), "Json parsing exception", MB_OK);
-			LogFile << "Failed to parse GUI Config.json, exiting." << std::endl;         
-			return false;
-		}
-		catch (...)
-		{
-			LogFile << "Default exception when parsing GUI Config.json!" << std::endl;
-
-			MessageBoxA(find_main_window(GetProcessID("rfg.exe")), "Default exception while parsing GUI Config.json", "Json parsing exception", MB_OK);
-			LogFile << "Failed to parse GUI Config.json, exiting." << std::endl;   
-			return false;
-		}
-		LogFile << "No parse exceptions detected." << std::endl;
+		Logger::Log("No parse exceptions detected.", LOGSUCCESS);
 	}
 	else
 	{
+		Logger::Log("\"GUI Settings.json\" not found. Creating from default values.", LOGWARNING);
 		CreateDirectoryIfNull(ExePath + "RFGR Script Loader/Settings/");
-		//std::cout << "Settings.txt not found. Creating from default values." << std::endl;
-		std::ofstream LogFile;
-		LogFile.open(ExePath + "RFGR Script Loader/Logs/Start errors.txt");
-		LogFile << "GUI Settings.json not found. Creating from default values." << std::endl;
-		
-		GUIConfig["Theme Info"]["Theme name"] = std::string("Default Dark Theme");
-		GUIConfig["Theme Info"]["Description"] = std::string("The default dark theme for the script loader.");
-		GUIConfig["Theme Info"]["Author"] = std::string("moneyl");
-		GUIConfig["Theme Info"]["Readme"] = std::string("When making your own themes you can use this for extra information such as known bugs or optional settings. Note: This section will be used once I add a custom theme loading GUI to the script loader. Not present for the initial themes release.");
 
-		GUIConfig["Style"]["Alpha"] = 0.95f;
-		GUIConfig["Style"]["AntiAliasedFill"] = true;
-		GUIConfig["Style"]["ButtonTextAlign"][0] = 0.5f;
-		GUIConfig["Style"]["ButtonTextAlign"][1] = 0.5f;
-		GUIConfig["Style"]["ChildBorderSize"] = 1.0f; //Values > 1.0 can cause performance issues.
-		GUIConfig["Style"]["ChildRounding"] = 3.0f;
-		GUIConfig["Style"]["DisplaySafeAreaPadding"][0] = 3.0f;
-		GUIConfig["Style"]["DisplaySafeAreaPadding"][1] = 3.0f;
-		GUIConfig["Style"]["FrameBorderSize"] = 1.0f; //Values > 1.0 can cause performance issues.
-		GUIConfig["Style"]["FramePadding"][0] = 4.0f;
-		GUIConfig["Style"]["FramePadding"][1] = 3.0f;
-		GUIConfig["Style"]["FrameRounding"] = 3.0f;
-		GUIConfig["Style"]["GrabMinSize"] = 10.0f;
-		GUIConfig["Style"]["GrabRounding"] = 3.0f;
-		GUIConfig["Style"]["IndentSpacing"] = 21.0f;
-		GUIConfig["Style"]["ItemInnerSpacing"][0] = 4.0f;
-		GUIConfig["Style"]["ItemInnerSpacing"][1] = 4.0f;
-		GUIConfig["Style"]["ItemSpacing"][0] = 8.0f;
-		GUIConfig["Style"]["ItemSpacing"][1] = 4.0f;
-		GUIConfig["Style"]["PopupBorderSize"] = 1.0f; //Values > 1.0 can cause performance issues.
-		GUIConfig["Style"]["PopupRounding"] = 3.0f;
-		GUIConfig["Style"]["ScrollbarRounding"] = 3.0f;
-		GUIConfig["Style"]["ScrollbarSize"] = 6.0f;
-		GUIConfig["Style"]["TabBorderSize"] = 1.0f; //Values > 1.0 can cause performance issues.
-		GUIConfig["Style"]["TabRounding"] = 3.0f;
-		GUIConfig["Style"]["TouchExtraPadding"][0] = 0.0f;
-		GUIConfig["Style"]["TouchExtraPadding"][1] = 0.0f;
-		GUIConfig["Style"]["WindowBorderSize"] = 1.0f; //Values > 1.0 can cause performance issues.
-		GUIConfig["Style"]["WindowPadding"][0] = 8.0f;
-		GUIConfig["Style"]["WindowPadding"][1] = 8.0f;
-		GUIConfig["Style"]["WindowRounding"] = 3.0f;
-		GUIConfig["Style"]["WindowTitleAlign"][0] = 0.0f;
-		GUIConfig["Style"]["WindowTitleAlign"][1] = 0.5f;
+		if (!JsonExceptionHandler([&]
+		{
+			CreateDirectoryIfNull(ExePath + "RFGR Script Loader/Settings/");
+			Logger::Log("\"GUI Config.json\" not found. Creating from default values.", LOGWARNING);
 
-		float DefaultGlobalOpacity = 1.0f;
-		SetJsonFloat4(GUIConfig, "Colors", "Text", ImVec4(0.98f, 0.98f, 1.00f, DefaultGlobalOpacity));
-		SetJsonFloat4(GUIConfig, "Colors", "TextDisabled", ImVec4(0.50f, 0.51f, 0.53f, DefaultGlobalOpacity));
-		SetJsonFloat4(GUIConfig, "Colors", "WindowBackground", ImVec4(0.14f, 0.15f, 0.16f, DefaultGlobalOpacity));
-		SetJsonFloat4(GUIConfig, "Colors", "ChildBackground", ImVec4(0.00f, 0.00f, 0.00f, 0.00f));
-		SetJsonFloat4(GUIConfig, "Colors", "PopupBackground", ImVec4(0.10f, 0.10f, 0.12f, DefaultGlobalOpacity));
-		SetJsonFloat4(GUIConfig, "Colors", "Border", ImVec4(0.09f, 0.09f, 0.11f, DefaultGlobalOpacity));
-		SetJsonFloat4(GUIConfig, "Colors", "BorderShadow", ImVec4(0.00f, 0.00f, 0.00f, 0.00f));
-		SetJsonFloat4(GUIConfig, "Colors", "FrameBackground", ImVec4(0.10f, 0.10f, 0.12f, DefaultGlobalOpacity));
-		SetJsonFloat4(GUIConfig, "Colors", "FrameBackgroundHovered", ImVec4(0.20f, 0.55f, 0.83f, DefaultGlobalOpacity));
-		SetJsonFloat4(GUIConfig, "Colors", "FrameBackgroundActive", ImVec4(0.20f, 0.55f, 0.83f, DefaultGlobalOpacity));
-		SetJsonFloat4(GUIConfig, "Colors", "TitleBackground", ImVec4(0.04f, 0.04f, 0.04f, 1.00f));
-		SetJsonFloat4(GUIConfig, "Colors", "TitleBackgroundActive", ImVec4(0.10f, 0.40f, 0.75f, DefaultGlobalOpacity));
-		SetJsonFloat4(GUIConfig, "Colors", "TitleBackgroundCollapsed", ImVec4(0.00f, 0.00f, 0.00f, 0.51f));
-		SetJsonFloat4(GUIConfig, "Colors", "MenuBarBackground", ImVec4(0.14f, 0.14f, 0.14f, 1.00f));
-		SetJsonFloat4(GUIConfig, "Colors", "ScrollbarBackground", ImVec4(0.02f, 0.02f, 0.02f, 0.53f));
-		SetJsonFloat4(GUIConfig, "Colors", "ScrollbarGrab", ImVec4(0.31f, 0.31f, 0.31f, 1.00f));
-		SetJsonFloat4(GUIConfig, "Colors", "ScrollbarGrabHovered", ImVec4(0.41f, 0.41f, 0.41f, 1.00f));
-		SetJsonFloat4(GUIConfig, "Colors", "ScrollbarGrabActive", ImVec4(0.51f, 0.51f, 0.51f, 1.00f));
-		SetJsonFloat4(GUIConfig, "Colors", "CheckMark", ImVec4(0.10f, 0.40f, 0.75f, DefaultGlobalOpacity));
-		SetJsonFloat4(GUIConfig, "Colors", "SliderGrab", ImVec4(0.20f, 0.55f, 0.83f, DefaultGlobalOpacity));
-		SetJsonFloat4(GUIConfig, "Colors", "SliderGrabActive", ImVec4(0.20f, 0.55f, 0.83f, DefaultGlobalOpacity));
-		SetJsonFloat4(GUIConfig, "Colors", "Button", ImVec4(0.10f, 0.40f, 0.75f, DefaultGlobalOpacity));
-		SetJsonFloat4(GUIConfig, "Colors", "ButtonHovered", ImVec4(0.20f, 0.55f, 0.98f, DefaultGlobalOpacity));
-		SetJsonFloat4(GUIConfig, "Colors", "ButtonActive", ImVec4(0.06f, 0.53f, 0.98f, 1.00f));
-		SetJsonFloat4(GUIConfig, "Colors", "Header", ImVec4(0.26f, 0.59f, 0.98f, 0.31f));
-		SetJsonFloat4(GUIConfig, "Colors", "HeaderHovered", ImVec4(0.26f, 0.59f, 0.98f, 0.80f));
-		SetJsonFloat4(GUIConfig, "Colors", "HeaderActive", ImVec4(0.26f, 0.59f, 0.98f, 1.00f));
-		SetJsonFloat4(GUIConfig, "Colors", "Separator", ImVec4(0.43f, 0.43f, 0.50f, 0.50f));
-		SetJsonFloat4(GUIConfig, "Colors", "SeparatorHovered", ImVec4(0.10f, 0.40f, 0.75f, 0.78f));
-		SetJsonFloat4(GUIConfig, "Colors", "SeparatorActive", ImVec4(0.10f, 0.40f, 0.75f, 1.00f));
-		SetJsonFloat4(GUIConfig, "Colors", "ResizeGrip", ImVec4(0.26f, 0.59f, 0.98f, 0.25f));
-		SetJsonFloat4(GUIConfig, "Colors", "ResizeGripHovered", ImVec4(0.26f, 0.59f, 0.98f, 0.67f));
-		SetJsonFloat4(GUIConfig, "Colors", "ResizeGripActive", ImVec4(0.26f, 0.59f, 0.98f, DefaultGlobalOpacity));
-		SetJsonFloat4(GUIConfig, "Colors", "Tab", ImVec4(0.18f, 0.35f, 0.58f, 0.86f));
-		SetJsonFloat4(GUIConfig, "Colors", "TabHovered", ImVec4(0.26f, 0.59f, 0.98f, 0.80f));
-		SetJsonFloat4(GUIConfig, "Colors", "TabActive", ImVec4(0.20f, 0.41f, 0.68f, 1.00f));
-		SetJsonFloat4(GUIConfig, "Colors", "TabUnfocused", ImVec4(0.07f, 0.10f, 0.15f, 0.97f));
-		SetJsonFloat4(GUIConfig, "Colors", "TabUnfocusedActive", ImVec4(0.14f, 0.26f, 0.42f, 1.00f));
-		SetJsonFloat4(GUIConfig, "Colors", "PlotLines", ImVec4(0.55f, 0.83f, 1.00f, DefaultGlobalOpacity));
-		SetJsonFloat4(GUIConfig, "Colors", "PlotLinesHovered", ImVec4(1.00f, 0.43f, 0.35f, 1.00f));
-		SetJsonFloat4(GUIConfig, "Colors", "PlotHistogram", ImVec4(0.90f, 0.70f, 0.00f, 1.00f));
-		SetJsonFloat4(GUIConfig, "Colors", "PlotHistogramHovered", ImVec4(1.00f, 0.60f, 0.00f, 1.00f));
-		SetJsonFloat4(GUIConfig, "Colors", "TextSelectedBackground", ImVec4(0.26f, 0.59f, 0.98f, 0.35f));
-		SetJsonFloat4(GUIConfig, "Colors", "DragDropTarget", ImVec4(1.00f, 1.00f, 0.00f, 0.90f));
-		SetJsonFloat4(GUIConfig, "Colors", "NavHighlight", ImVec4(0.26f, 0.59f, 0.98f, 1.00f));
-		SetJsonFloat4(GUIConfig, "Colors", "NavWindowingHighlight", ImVec4(1.00f, 1.00f, 1.00f, 0.70f));
-		SetJsonFloat4(GUIConfig, "Colors", "NavWindowingDimBackground", ImVec4(0.80f, 0.80f, 0.80f, 0.20f));
-		SetJsonFloat4(GUIConfig, "Colors", "ModalWindowDimBackground", ImVec4(0.80f, 0.80f, 0.80f, 0.35f));
+			GUIConfig["Theme Info"]["Theme name"] = std::string("Default Dark Theme");
+			GUIConfig["Theme Info"]["Description"] = std::string("The default dark theme for the script loader.");
+			GUIConfig["Theme Info"]["Author"] = std::string("moneyl");
+			GUIConfig["Theme Info"]["Readme"] = std::string("When making your own themes you can use this for extra information such as known bugs or optional settings. Note: This section will be used once I add a custom theme loading GUI to the script loader. Not present for the initial themes release.");
 
-		std::ofstream ConfigOutput(ExePath + "RFGR Script Loader/Settings/GUI Config.json");
-		ConfigOutput << std::setw(4) << GUIConfig << std::endl;
-		ConfigOutput.close();
-		LogFile.close();
+			GUIConfig["Style"]["Alpha"] = 0.95f;
+			GUIConfig["Style"]["AntiAliasedFill"] = true;
+			GUIConfig["Style"]["ButtonTextAlign"][0] = 0.5f;
+			GUIConfig["Style"]["ButtonTextAlign"][1] = 0.5f;
+			GUIConfig["Style"]["ChildBorderSize"] = 1.0f; //Values > 1.0 can cause performance issues.
+			GUIConfig["Style"]["ChildRounding"] = 3.0f;
+			GUIConfig["Style"]["DisplaySafeAreaPadding"][0] = 3.0f;
+			GUIConfig["Style"]["DisplaySafeAreaPadding"][1] = 3.0f;
+			GUIConfig["Style"]["FrameBorderSize"] = 1.0f; //Values > 1.0 can cause performance issues.
+			GUIConfig["Style"]["FramePadding"][0] = 4.0f;
+			GUIConfig["Style"]["FramePadding"][1] = 3.0f;
+			GUIConfig["Style"]["FrameRounding"] = 3.0f;
+			GUIConfig["Style"]["GrabMinSize"] = 10.0f;
+			GUIConfig["Style"]["GrabRounding"] = 3.0f;
+			GUIConfig["Style"]["IndentSpacing"] = 21.0f;
+			GUIConfig["Style"]["ItemInnerSpacing"][0] = 4.0f;
+			GUIConfig["Style"]["ItemInnerSpacing"][1] = 4.0f;
+			GUIConfig["Style"]["ItemSpacing"][0] = 8.0f;
+			GUIConfig["Style"]["ItemSpacing"][1] = 4.0f;
+			GUIConfig["Style"]["PopupBorderSize"] = 1.0f; //Values > 1.0 can cause performance issues.
+			GUIConfig["Style"]["PopupRounding"] = 3.0f;
+			GUIConfig["Style"]["ScrollbarRounding"] = 3.0f;
+			GUIConfig["Style"]["ScrollbarSize"] = 6.0f;
+			GUIConfig["Style"]["TabBorderSize"] = 1.0f; //Values > 1.0 can cause performance issues.
+			GUIConfig["Style"]["TabRounding"] = 3.0f;
+			GUIConfig["Style"]["TouchExtraPadding"][0] = 0.0f;
+			GUIConfig["Style"]["TouchExtraPadding"][1] = 0.0f;
+			GUIConfig["Style"]["WindowBorderSize"] = 1.0f; //Values > 1.0 can cause performance issues.
+			GUIConfig["Style"]["WindowPadding"][0] = 8.0f;
+			GUIConfig["Style"]["WindowPadding"][1] = 8.0f;
+			GUIConfig["Style"]["WindowRounding"] = 3.0f;
+			GUIConfig["Style"]["WindowTitleAlign"][0] = 0.0f;
+			GUIConfig["Style"]["WindowTitleAlign"][1] = 0.5f;
+
+			float DefaultGlobalOpacity = 1.0f;
+			SetJsonFloat4(GUIConfig, "Colors", "Text", ImVec4(0.98f, 0.98f, 1.00f, DefaultGlobalOpacity));
+			SetJsonFloat4(GUIConfig, "Colors", "TextDisabled", ImVec4(0.50f, 0.51f, 0.53f, DefaultGlobalOpacity));
+			SetJsonFloat4(GUIConfig, "Colors", "WindowBackground", ImVec4(0.14f, 0.15f, 0.16f, DefaultGlobalOpacity));
+			SetJsonFloat4(GUIConfig, "Colors", "ChildBackground", ImVec4(0.00f, 0.00f, 0.00f, 0.00f));
+			SetJsonFloat4(GUIConfig, "Colors", "PopupBackground", ImVec4(0.10f, 0.10f, 0.12f, DefaultGlobalOpacity));
+			SetJsonFloat4(GUIConfig, "Colors", "Border", ImVec4(0.09f, 0.09f, 0.11f, DefaultGlobalOpacity));
+			SetJsonFloat4(GUIConfig, "Colors", "BorderShadow", ImVec4(0.00f, 0.00f, 0.00f, 0.00f));
+			SetJsonFloat4(GUIConfig, "Colors", "FrameBackground", ImVec4(0.10f, 0.10f, 0.12f, DefaultGlobalOpacity));
+			SetJsonFloat4(GUIConfig, "Colors", "FrameBackgroundHovered", ImVec4(0.20f, 0.55f, 0.83f, DefaultGlobalOpacity));
+			SetJsonFloat4(GUIConfig, "Colors", "FrameBackgroundActive", ImVec4(0.20f, 0.55f, 0.83f, DefaultGlobalOpacity));
+			SetJsonFloat4(GUIConfig, "Colors", "TitleBackground", ImVec4(0.04f, 0.04f, 0.04f, 1.00f));
+			SetJsonFloat4(GUIConfig, "Colors", "TitleBackgroundActive", ImVec4(0.10f, 0.40f, 0.75f, DefaultGlobalOpacity));
+			SetJsonFloat4(GUIConfig, "Colors", "TitleBackgroundCollapsed", ImVec4(0.00f, 0.00f, 0.00f, 0.51f));
+			SetJsonFloat4(GUIConfig, "Colors", "MenuBarBackground", ImVec4(0.14f, 0.14f, 0.14f, 1.00f));
+			SetJsonFloat4(GUIConfig, "Colors", "ScrollbarBackground", ImVec4(0.02f, 0.02f, 0.02f, 0.53f));
+			SetJsonFloat4(GUIConfig, "Colors", "ScrollbarGrab", ImVec4(0.31f, 0.31f, 0.31f, 1.00f));
+			SetJsonFloat4(GUIConfig, "Colors", "ScrollbarGrabHovered", ImVec4(0.41f, 0.41f, 0.41f, 1.00f));
+			SetJsonFloat4(GUIConfig, "Colors", "ScrollbarGrabActive", ImVec4(0.51f, 0.51f, 0.51f, 1.00f));
+			SetJsonFloat4(GUIConfig, "Colors", "CheckMark", ImVec4(0.10f, 0.40f, 0.75f, DefaultGlobalOpacity));
+			SetJsonFloat4(GUIConfig, "Colors", "SliderGrab", ImVec4(0.20f, 0.55f, 0.83f, DefaultGlobalOpacity));
+			SetJsonFloat4(GUIConfig, "Colors", "SliderGrabActive", ImVec4(0.20f, 0.55f, 0.83f, DefaultGlobalOpacity));
+			SetJsonFloat4(GUIConfig, "Colors", "Button", ImVec4(0.10f, 0.40f, 0.75f, DefaultGlobalOpacity));
+			SetJsonFloat4(GUIConfig, "Colors", "ButtonHovered", ImVec4(0.20f, 0.55f, 0.98f, DefaultGlobalOpacity));
+			SetJsonFloat4(GUIConfig, "Colors", "ButtonActive", ImVec4(0.06f, 0.53f, 0.98f, 1.00f));
+			SetJsonFloat4(GUIConfig, "Colors", "Header", ImVec4(0.26f, 0.59f, 0.98f, 0.31f));
+			SetJsonFloat4(GUIConfig, "Colors", "HeaderHovered", ImVec4(0.26f, 0.59f, 0.98f, 0.80f));
+			SetJsonFloat4(GUIConfig, "Colors", "HeaderActive", ImVec4(0.26f, 0.59f, 0.98f, 1.00f));
+			SetJsonFloat4(GUIConfig, "Colors", "Separator", ImVec4(0.43f, 0.43f, 0.50f, 0.50f));
+			SetJsonFloat4(GUIConfig, "Colors", "SeparatorHovered", ImVec4(0.10f, 0.40f, 0.75f, 0.78f));
+			SetJsonFloat4(GUIConfig, "Colors", "SeparatorActive", ImVec4(0.10f, 0.40f, 0.75f, 1.00f));
+			SetJsonFloat4(GUIConfig, "Colors", "ResizeGrip", ImVec4(0.26f, 0.59f, 0.98f, 0.25f));
+			SetJsonFloat4(GUIConfig, "Colors", "ResizeGripHovered", ImVec4(0.26f, 0.59f, 0.98f, 0.67f));
+			SetJsonFloat4(GUIConfig, "Colors", "ResizeGripActive", ImVec4(0.26f, 0.59f, 0.98f, DefaultGlobalOpacity));
+			SetJsonFloat4(GUIConfig, "Colors", "Tab", ImVec4(0.18f, 0.35f, 0.58f, 0.86f));
+			SetJsonFloat4(GUIConfig, "Colors", "TabHovered", ImVec4(0.26f, 0.59f, 0.98f, 0.80f));
+			SetJsonFloat4(GUIConfig, "Colors", "TabActive", ImVec4(0.20f, 0.41f, 0.68f, 1.00f));
+			SetJsonFloat4(GUIConfig, "Colors", "TabUnfocused", ImVec4(0.07f, 0.10f, 0.15f, 0.97f));
+			SetJsonFloat4(GUIConfig, "Colors", "TabUnfocusedActive", ImVec4(0.14f, 0.26f, 0.42f, 1.00f));
+			SetJsonFloat4(GUIConfig, "Colors", "PlotLines", ImVec4(0.55f, 0.83f, 1.00f, DefaultGlobalOpacity));
+			SetJsonFloat4(GUIConfig, "Colors", "PlotLinesHovered", ImVec4(1.00f, 0.43f, 0.35f, 1.00f));
+			SetJsonFloat4(GUIConfig, "Colors", "PlotHistogram", ImVec4(0.90f, 0.70f, 0.00f, 1.00f));
+			SetJsonFloat4(GUIConfig, "Colors", "PlotHistogramHovered", ImVec4(1.00f, 0.60f, 0.00f, 1.00f));
+			SetJsonFloat4(GUIConfig, "Colors", "TextSelectedBackground", ImVec4(0.26f, 0.59f, 0.98f, 0.35f));
+			SetJsonFloat4(GUIConfig, "Colors", "DragDropTarget", ImVec4(1.00f, 1.00f, 0.00f, 0.90f));
+			SetJsonFloat4(GUIConfig, "Colors", "NavHighlight", ImVec4(0.26f, 0.59f, 0.98f, 1.00f));
+			SetJsonFloat4(GUIConfig, "Colors", "NavWindowingHighlight", ImVec4(1.00f, 1.00f, 1.00f, 0.70f));
+			SetJsonFloat4(GUIConfig, "Colors", "NavWindowingDimBackground", ImVec4(0.80f, 0.80f, 0.80f, 0.20f));
+			SetJsonFloat4(GUIConfig, "Colors", "ModalWindowDimBackground", ImVec4(0.80f, 0.80f, 0.80f, 0.35f));
+
+			std::ofstream ConfigOutput(ExePath + "RFGR Script Loader/Settings/GUI Config.json");
+			ConfigOutput << std::setw(4) << MainConfig << std::endl;
+			ConfigOutput.close();
+			return true;
+		}, "GUI Config.json", "write", "writing"))
+		{
+			return false;
+		}
+		Logger::Log("No write exceptions detected.", LOGSUCCESS);
 	}
 
-	//OpenDebugConsole = MainConfig["Open debug console"].get<bool>();
+	if (!JsonExceptionHandler([&]
+	{
+		ImGuiStyle& Style = ImGui::GetStyle(); //Currently 25 items
+		Style.Alpha = GUIConfig["Style"]["Alpha"].get<float>();
+		Style.AntiAliasedFill = GUIConfig["Style"]["AntiAliasedFill"].get<bool>();
+		Style.ButtonTextAlign = JsonGetFloat2(GUIConfig, "Style", "ButtonTextAlign");
+		Style.ChildBorderSize = GUIConfig["Style"]["ChildBorderSize"].get<float>();
+		Style.ChildRounding = GUIConfig["Style"]["ChildRounding"].get<float>();
+		//Style.ColumnsMinSpacing = 1.0f;
+		//Style.CurveTessellationTol = 1.25f;
+		Style.DisplaySafeAreaPadding = JsonGetFloat2(GUIConfig, "Style", "DisplaySafeAreaPadding");
+		//Style.DisplayWindowPadding = ImVec2(1.0, 1.0f);
+		Style.FrameBorderSize = GUIConfig["Style"]["FrameBorderSize"].get<float>();
+		Style.FramePadding = JsonGetFloat2(GUIConfig, "Style", "FramePadding");
+		Style.FrameRounding = GUIConfig["Style"]["FrameRounding"].get<float>();
+		Style.GrabMinSize = GUIConfig["Style"]["GrabMinSize"].get<float>();
+		Style.GrabRounding = GUIConfig["Style"]["GrabRounding"].get<float>();
+		Style.IndentSpacing = GUIConfig["Style"]["IndentSpacing"].get<float>();
+		Style.ItemInnerSpacing = JsonGetFloat2(GUIConfig, "Style", "ItemInnerSpacing");
+		Style.ItemSpacing = JsonGetFloat2(GUIConfig, "Style", "ItemSpacing");
+		//Style.MouseCursorScale = 1.0f;
+		Style.PopupBorderSize = GUIConfig["Style"]["PopupBorderSize"].get<float>();
+		Style.PopupRounding = GUIConfig["Style"]["PopupRounding"].get<float>();
+		Style.ScrollbarRounding = GUIConfig["Style"]["ScrollbarRounding"].get<float>();
+		Style.ScrollbarSize = GUIConfig["Style"]["ScrollbarSize"].get<float>(); 16.0f;
+		Style.TabBorderSize = GUIConfig["Style"]["TabBorderSize"].get<float>(); 0.0f;
+		Style.TabRounding = GUIConfig["Style"]["TabRounding"].get<float>(); 3.0f;
+		Style.TouchExtraPadding = JsonGetFloat2(GUIConfig, "Style", "TouchExtraPadding");
+		Style.WindowBorderSize = GUIConfig["Style"]["WindowBorderSize"].get<float>(); 1.0f;
+		//Style.WindowMinSize = 1.0f;
+		Style.WindowPadding = JsonGetFloat2(GUIConfig, "Style", "WindowPadding");
+		Style.WindowRounding = GUIConfig["Style"]["WindowRounding"].get<float>(); 3.0f;
+		Style.WindowTitleAlign = JsonGetFloat2(GUIConfig, "Style", "WindowTitleAlign");
 
-	ImGuiStyle& Style = ImGui::GetStyle(); //Currently 25 items
-	Style.Alpha = GUIConfig["Style"]["Alpha"].get<float>();
-	Style.AntiAliasedFill = GUIConfig["Style"]["AntiAliasedFill"].get<bool>();
-	Style.ButtonTextAlign = JsonGetFloat2(GUIConfig, "Style", "ButtonTextAlign");
-	Style.ChildBorderSize = GUIConfig["Style"]["ChildBorderSize"].get<float>();
-	Style.ChildRounding = GUIConfig["Style"]["ChildRounding"].get<float>();
-	//Style.ColumnsMinSpacing = 1.0f;
-	//Style.CurveTessellationTol = 1.25f;
-	Style.DisplaySafeAreaPadding = JsonGetFloat2(GUIConfig, "Style", "DisplaySafeAreaPadding");
-	//Style.DisplayWindowPadding = ImVec2(1.0, 1.0f);
-	Style.FrameBorderSize = GUIConfig["Style"]["FrameBorderSize"].get<float>();
-	Style.FramePadding = JsonGetFloat2(GUIConfig, "Style", "FramePadding");
-	Style.FrameRounding = GUIConfig["Style"]["FrameRounding"].get<float>();
-	Style.GrabMinSize = GUIConfig["Style"]["GrabMinSize"].get<float>();
-	Style.GrabRounding = GUIConfig["Style"]["GrabRounding"].get<float>(); 
-	Style.IndentSpacing = GUIConfig["Style"]["IndentSpacing"].get<float>(); 
-	Style.ItemInnerSpacing = JsonGetFloat2(GUIConfig, "Style", "ItemInnerSpacing");
-	Style.ItemSpacing = JsonGetFloat2(GUIConfig, "Style", "ItemSpacing");
-	//Style.MouseCursorScale = 1.0f;
-	Style.PopupBorderSize = GUIConfig["Style"]["PopupBorderSize"].get<float>(); 
-	Style.PopupRounding = GUIConfig["Style"]["PopupRounding"].get<float>(); 
-	Style.ScrollbarRounding = GUIConfig["Style"]["ScrollbarRounding"].get<float>(); 
-	Style.ScrollbarSize = GUIConfig["Style"]["ScrollbarSize"].get<float>(); 16.0f;
-	Style.TabBorderSize = GUIConfig["Style"]["TabBorderSize"].get<float>(); 0.0f;
-	Style.TabRounding = GUIConfig["Style"]["TabRounding"].get<float>(); 3.0f;
-	Style.TouchExtraPadding = JsonGetFloat2(GUIConfig, "Style", "TouchExtraPadding");
-	Style.WindowBorderSize = GUIConfig["Style"]["WindowBorderSize"].get<float>(); 1.0f;
-	//Style.WindowMinSize = 1.0f;
-	Style.WindowPadding = JsonGetFloat2(GUIConfig, "Style", "WindowPadding");
-	Style.WindowRounding = GUIConfig["Style"]["WindowRounding"].get<float>(); 3.0f;
-	Style.WindowTitleAlign = JsonGetFloat2(GUIConfig, "Style", "WindowTitleAlign");
+		ImVec4* Colors = ImGui::GetStyle().Colors; //48 items
+		Colors[ImGuiCol_Text] = JsonGetFloat4(GUIConfig, "Colors", "Text");
+		Colors[ImGuiCol_TextDisabled] = JsonGetFloat4(GUIConfig, "Colors", "TextDisabled");
+		Colors[ImGuiCol_WindowBg] = JsonGetFloat4(GUIConfig, "Colors", "WindowBackground");
+		Colors[ImGuiCol_ChildBg] = JsonGetFloat4(GUIConfig, "Colors", "ChildBackground");
+		Colors[ImGuiCol_PopupBg] = JsonGetFloat4(GUIConfig, "Colors", "PopupBackground");
+		Colors[ImGuiCol_Border] = JsonGetFloat4(GUIConfig, "Colors", "Border");
+		Colors[ImGuiCol_BorderShadow] = JsonGetFloat4(GUIConfig, "Colors", "BorderShadow");
+		Colors[ImGuiCol_FrameBg] = JsonGetFloat4(GUIConfig, "Colors", "FrameBackground");
+		Colors[ImGuiCol_FrameBgHovered] = JsonGetFloat4(GUIConfig, "Colors", "FrameBackgroundHovered");
+		Colors[ImGuiCol_FrameBgActive] = JsonGetFloat4(GUIConfig, "Colors", "FrameBackgroundActive");
+		Colors[ImGuiCol_TitleBg] = JsonGetFloat4(GUIConfig, "Colors", "TitleBackground");
+		Colors[ImGuiCol_TitleBgActive] = JsonGetFloat4(GUIConfig, "Colors", "TitleBackgroundActive");
+		Colors[ImGuiCol_TitleBgCollapsed] = JsonGetFloat4(GUIConfig, "Colors", "TitleBackgroundCollapsed");
+		Colors[ImGuiCol_MenuBarBg] = JsonGetFloat4(GUIConfig, "Colors", "MenuBarBackground");
+		Colors[ImGuiCol_ScrollbarBg] = JsonGetFloat4(GUIConfig, "Colors", "ScrollbarBackground");
+		Colors[ImGuiCol_ScrollbarGrab] = JsonGetFloat4(GUIConfig, "Colors", "ScrollbarGrab");
+		Colors[ImGuiCol_ScrollbarGrabHovered] = JsonGetFloat4(GUIConfig, "Colors", "ScrollbarGrabHovered");
+		Colors[ImGuiCol_ScrollbarGrabActive] = JsonGetFloat4(GUIConfig, "Colors", "ScrollbarGrabActive");
+		Colors[ImGuiCol_CheckMark] = JsonGetFloat4(GUIConfig, "Colors", "CheckMark");
+		Colors[ImGuiCol_SliderGrab] = JsonGetFloat4(GUIConfig, "Colors", "SliderGrab");
+		Colors[ImGuiCol_SliderGrabActive] = JsonGetFloat4(GUIConfig, "Colors", "SliderGrabActive");
+		Colors[ImGuiCol_Button] = JsonGetFloat4(GUIConfig, "Colors", "Button");
+		Colors[ImGuiCol_ButtonHovered] = JsonGetFloat4(GUIConfig, "Colors", "ButtonHovered");
+		Colors[ImGuiCol_ButtonActive] = JsonGetFloat4(GUIConfig, "Colors", "ButtonActive");
+		Colors[ImGuiCol_Header] = JsonGetFloat4(GUIConfig, "Colors", "Header");
+		Colors[ImGuiCol_HeaderHovered] = JsonGetFloat4(GUIConfig, "Colors", "HeaderHovered");
+		Colors[ImGuiCol_HeaderActive] = JsonGetFloat4(GUIConfig, "Colors", "HeaderActive");
+		Colors[ImGuiCol_Separator] = JsonGetFloat4(GUIConfig, "Colors", "Separator");
+		Colors[ImGuiCol_SeparatorHovered] = JsonGetFloat4(GUIConfig, "Colors", "SeparatorHovered");
+		Colors[ImGuiCol_SeparatorActive] = JsonGetFloat4(GUIConfig, "Colors", "SeparatorActive");
+		Colors[ImGuiCol_ResizeGrip] = JsonGetFloat4(GUIConfig, "Colors", "ResizeGrip");
+		Colors[ImGuiCol_ResizeGripHovered] = JsonGetFloat4(GUIConfig, "Colors", "ResizeGripHovered");
+		Colors[ImGuiCol_ResizeGripActive] = JsonGetFloat4(GUIConfig, "Colors", "ResizeGripActive");
+		Colors[ImGuiCol_Tab] = JsonGetFloat4(GUIConfig, "Colors", "Tab");
+		Colors[ImGuiCol_TabHovered] = JsonGetFloat4(GUIConfig, "Colors", "TabHovered");
+		Colors[ImGuiCol_TabActive] = JsonGetFloat4(GUIConfig, "Colors", "TabActive");
+		Colors[ImGuiCol_TabUnfocused] = JsonGetFloat4(GUIConfig, "Colors", "TabUnfocused");
+		Colors[ImGuiCol_TabUnfocusedActive] = JsonGetFloat4(GUIConfig, "Colors", "TabUnfocusedActive");
+		Colors[ImGuiCol_PlotLines] = JsonGetFloat4(GUIConfig, "Colors", "PlotLines");
+		Colors[ImGuiCol_PlotLinesHovered] = JsonGetFloat4(GUIConfig, "Colors", "PlotLinesHovered");
+		Colors[ImGuiCol_PlotHistogram] = JsonGetFloat4(GUIConfig, "Colors", "PlotHistogram");
+		Colors[ImGuiCol_PlotHistogramHovered] = JsonGetFloat4(GUIConfig, "Colors", "PlotHistogramHovered");
+		Colors[ImGuiCol_TextSelectedBg] = JsonGetFloat4(GUIConfig, "Colors", "TextSelectedBackground");
+		Colors[ImGuiCol_DragDropTarget] = JsonGetFloat4(GUIConfig, "Colors", "DragDropTarget");
+		Colors[ImGuiCol_NavHighlight] = JsonGetFloat4(GUIConfig, "Colors", "NavHighlight");
+		Colors[ImGuiCol_NavWindowingHighlight] = JsonGetFloat4(GUIConfig, "Colors", "NavWindowingHighlight");
+		Colors[ImGuiCol_NavWindowingDimBg] = JsonGetFloat4(GUIConfig, "Colors", "NavWindowingDimBackground");
+		Colors[ImGuiCol_ModalWindowDimBg] = JsonGetFloat4(GUIConfig, "Colors", "ModalWindowDimBackground");
 
-	ImVec4* Colors = ImGui::GetStyle().Colors; //48 items
-	Colors[ImGuiCol_Text] = JsonGetFloat4(GUIConfig, "Colors", "Text");
-	Colors[ImGuiCol_TextDisabled] = JsonGetFloat4(GUIConfig, "Colors", "TextDisabled");
-	Colors[ImGuiCol_WindowBg] = JsonGetFloat4(GUIConfig, "Colors", "WindowBackground");
-	Colors[ImGuiCol_ChildBg] = JsonGetFloat4(GUIConfig, "Colors", "ChildBackground");
-	Colors[ImGuiCol_PopupBg] = JsonGetFloat4(GUIConfig, "Colors", "PopupBackground");
-	Colors[ImGuiCol_Border] = JsonGetFloat4(GUIConfig, "Colors", "Border");
-	Colors[ImGuiCol_BorderShadow] = JsonGetFloat4(GUIConfig, "Colors", "BorderShadow");
-	Colors[ImGuiCol_FrameBg] = JsonGetFloat4(GUIConfig, "Colors", "FrameBackground");
-	Colors[ImGuiCol_FrameBgHovered] = JsonGetFloat4(GUIConfig, "Colors", "FrameBackgroundHovered");
-	Colors[ImGuiCol_FrameBgActive] = JsonGetFloat4(GUIConfig, "Colors", "FrameBackgroundActive");
-	Colors[ImGuiCol_TitleBg] = JsonGetFloat4(GUIConfig, "Colors", "TitleBackground");
-	Colors[ImGuiCol_TitleBgActive] = JsonGetFloat4(GUIConfig, "Colors", "TitleBackgroundActive");
-	Colors[ImGuiCol_TitleBgCollapsed] = JsonGetFloat4(GUIConfig, "Colors", "TitleBackgroundCollapsed");
-	Colors[ImGuiCol_MenuBarBg] = JsonGetFloat4(GUIConfig, "Colors", "MenuBarBackground");
-	Colors[ImGuiCol_ScrollbarBg] = JsonGetFloat4(GUIConfig, "Colors", "ScrollbarBackground");
-	Colors[ImGuiCol_ScrollbarGrab] = JsonGetFloat4(GUIConfig, "Colors", "ScrollbarGrab");
-	Colors[ImGuiCol_ScrollbarGrabHovered] = JsonGetFloat4(GUIConfig, "Colors", "ScrollbarGrabHovered");
-	Colors[ImGuiCol_ScrollbarGrabActive] = JsonGetFloat4(GUIConfig, "Colors", "ScrollbarGrabActive");
-	Colors[ImGuiCol_CheckMark] = JsonGetFloat4(GUIConfig, "Colors", "CheckMark");
-	Colors[ImGuiCol_SliderGrab] = JsonGetFloat4(GUIConfig, "Colors", "SliderGrab");
-	Colors[ImGuiCol_SliderGrabActive] = JsonGetFloat4(GUIConfig, "Colors", "SliderGrabActive");
-	Colors[ImGuiCol_Button] = JsonGetFloat4(GUIConfig, "Colors", "Button");
-	Colors[ImGuiCol_ButtonHovered] = JsonGetFloat4(GUIConfig, "Colors", "ButtonHovered");
-	Colors[ImGuiCol_ButtonActive] = JsonGetFloat4(GUIConfig, "Colors", "ButtonActive");
-	Colors[ImGuiCol_Header] = JsonGetFloat4(GUIConfig, "Colors", "Header");
-	Colors[ImGuiCol_HeaderHovered] = JsonGetFloat4(GUIConfig, "Colors", "HeaderHovered");
-	Colors[ImGuiCol_HeaderActive] = JsonGetFloat4(GUIConfig, "Colors", "HeaderActive");
-	Colors[ImGuiCol_Separator] = JsonGetFloat4(GUIConfig, "Colors", "Separator");
-	Colors[ImGuiCol_SeparatorHovered] = JsonGetFloat4(GUIConfig, "Colors", "SeparatorHovered");
-	Colors[ImGuiCol_SeparatorActive] = JsonGetFloat4(GUIConfig, "Colors", "SeparatorActive");
-	Colors[ImGuiCol_ResizeGrip] = JsonGetFloat4(GUIConfig, "Colors", "ResizeGrip");
-	Colors[ImGuiCol_ResizeGripHovered] = JsonGetFloat4(GUIConfig, "Colors", "ResizeGripHovered");
-	Colors[ImGuiCol_ResizeGripActive] = JsonGetFloat4(GUIConfig, "Colors", "ResizeGripActive");
-	Colors[ImGuiCol_Tab] = JsonGetFloat4(GUIConfig, "Colors", "Tab");
-	Colors[ImGuiCol_TabHovered] = JsonGetFloat4(GUIConfig, "Colors", "TabHovered");
-	Colors[ImGuiCol_TabActive] = JsonGetFloat4(GUIConfig, "Colors", "TabActive");
-	Colors[ImGuiCol_TabUnfocused] = JsonGetFloat4(GUIConfig, "Colors", "TabUnfocused");
-	Colors[ImGuiCol_TabUnfocusedActive] = JsonGetFloat4(GUIConfig, "Colors", "TabUnfocusedActive");
-	Colors[ImGuiCol_PlotLines] = JsonGetFloat4(GUIConfig, "Colors", "PlotLines");
-	Colors[ImGuiCol_PlotLinesHovered] = JsonGetFloat4(GUIConfig, "Colors", "PlotLinesHovered");
-	Colors[ImGuiCol_PlotHistogram] = JsonGetFloat4(GUIConfig, "Colors", "PlotHistogram");
-	Colors[ImGuiCol_PlotHistogramHovered] = JsonGetFloat4(GUIConfig, "Colors", "PlotHistogramHovered");
-	Colors[ImGuiCol_TextSelectedBg] = JsonGetFloat4(GUIConfig, "Colors", "TextSelectedBackground");
-	Colors[ImGuiCol_DragDropTarget] = JsonGetFloat4(GUIConfig, "Colors", "DragDropTarget");
-	Colors[ImGuiCol_NavHighlight] = JsonGetFloat4(GUIConfig, "Colors", "NavHighlight");
-	Colors[ImGuiCol_NavWindowingHighlight] = JsonGetFloat4(GUIConfig, "Colors", "NavWindowingHighlight");
-	Colors[ImGuiCol_NavWindowingDimBg] = JsonGetFloat4(GUIConfig, "Colors", "NavWindowingDimBackground");
-	Colors[ImGuiCol_ModalWindowDimBg] = JsonGetFloat4(GUIConfig, "Colors", "ModalWindowDimBackground");
+		return true;
+	}, "GUI Config.json", "read", "reading"))
+	{
+		return false;
+	}
+	Logger::Log("No read exceptions detected.", LOGSUCCESS);
 
+	Logger::Log("Done loading \"Settings.json\".", LOGSUCCESS);
 	return true;
 }
 
-void SaveGUIConfig(std::string ThemeName, std::string Description, std::string Author, std::string Readme, std::string Filename)
+bool SaveGUIConfig(std::string ThemeName, std::string Description, std::string Author, std::string Readme, std::string Filename)
 {
-	std::string ExePath = GetEXEPath(false);
-	CreateDirectoryIfNull(ExePath + "RFGR Script Loader/Settings/");
-	//std::cout << "Settings.txt not found. Creating from default values." << std::endl;
-	std::ofstream LogFile;
-	LogFile.open(ExePath + "RFGR Script Loader/Logs/Start errors.txt");
-	LogFile << "GUI Settings.json not found. Creating from default values." << std::endl;
+	if (!JsonExceptionHandler([&]
+	{
+		Logger::Log("Started saving \"GUI Config.json\".", LOGMESSAGE);
+		std::string ExePath = GetEXEPath(false);
+		CreateDirectoryIfNull(ExePath + "RFGR Script Loader/Settings/");
 
-	GUIConfig["Theme Info"]["Theme name"] = ThemeName;
-	GUIConfig["Theme Info"]["Description"] = Description;
-	GUIConfig["Theme Info"]["Author"] = Author;
-	GUIConfig["Theme Info"]["Readme"] = Readme;
+		GUIConfig["Theme Info"]["Theme name"] = ThemeName;
+		GUIConfig["Theme Info"]["Description"] = Description;
+		GUIConfig["Theme Info"]["Author"] = Author;
+		GUIConfig["Theme Info"]["Readme"] = Readme;
 
-	ImGuiStyle& Style = ImGui::GetStyle(); //Currently 25 items, some not provided to users since they aren't in the style editor.
-	GUIConfig["Style"]["Alpha"] = Style.Alpha;
-	GUIConfig["Style"]["AntiAliasedFill"] = Style.AntiAliasedFill;
-	GUIConfig["Style"]["ButtonTextAlign"][0] = Style.ButtonTextAlign.x;
-	GUIConfig["Style"]["ButtonTextAlign"][1] = Style.ButtonTextAlign.y;
-	GUIConfig["Style"]["ChildBorderSize"] = Style.ChildBorderSize; //Values > 1.0 can cause performance issues.
-	GUIConfig["Style"]["ChildRounding"] = Style.ChildRounding;
-	GUIConfig["Style"]["DisplaySafeAreaPadding"][0] = Style.DisplaySafeAreaPadding.x;
-	GUIConfig["Style"]["DisplaySafeAreaPadding"][1] = Style.DisplaySafeAreaPadding.y;
-	GUIConfig["Style"]["FrameBorderSize"] = Style.FrameBorderSize; //Values > 1.0 can cause performance issues.
-	GUIConfig["Style"]["FramePadding"][0] = Style.FramePadding.x;
-	GUIConfig["Style"]["FramePadding"][1] = Style.FramePadding.y;
-	GUIConfig["Style"]["FrameRounding"] = Style.FrameRounding;
-	GUIConfig["Style"]["GrabMinSize"] = Style.GrabMinSize;
-	GUIConfig["Style"]["GrabRounding"] = Style.GrabRounding;
-	GUIConfig["Style"]["IndentSpacing"] = Style.IndentSpacing;
-	GUIConfig["Style"]["ItemInnerSpacing"][0] = Style.ItemInnerSpacing.x;
-	GUIConfig["Style"]["ItemInnerSpacing"][1] = Style.ItemInnerSpacing.y;
-	GUIConfig["Style"]["ItemSpacing"][0] = Style.ItemSpacing.x;
-	GUIConfig["Style"]["ItemSpacing"][1] = Style.ItemSpacing.y;
-	GUIConfig["Style"]["PopupBorderSize"] = Style.PopupBorderSize; //Values > 1.0 can cause performance issues.
-	GUIConfig["Style"]["PopupRounding"] = Style.PopupRounding;
-	GUIConfig["Style"]["ScrollbarRounding"] = Style.ScrollbarRounding;
-	GUIConfig["Style"]["ScrollbarSize"] = Style.ScrollbarSize;
-	GUIConfig["Style"]["TabBorderSize"] = Style.TabBorderSize;
-	GUIConfig["Style"]["TabRounding"] = Style.TabRounding;
-	GUIConfig["Style"]["TouchExtraPadding"][0] = Style.TouchExtraPadding.x;
-	GUIConfig["Style"]["TouchExtraPadding"][1] = Style.TouchExtraPadding.y;
-	GUIConfig["Style"]["WindowBorderSize"] = Style.WindowBorderSize; //Values > 1.0 can cause performance issues.
-	GUIConfig["Style"]["WindowPadding"][0] = Style.WindowPadding.x;
-	GUIConfig["Style"]["WindowPadding"][1] = Style.WindowPadding.y;
-	GUIConfig["Style"]["WindowRounding"] = Style.WindowRounding;
-	GUIConfig["Style"]["WindowTitleAlign"][0] = Style.WindowTitleAlign.x;
-	GUIConfig["Style"]["WindowTitleAlign"][1] = Style.WindowTitleAlign.y;
+		ImGuiStyle& Style = ImGui::GetStyle(); //Currently 25 items, some not provided to users since they aren't in the style editor.
+		GUIConfig["Style"]["Alpha"] = Style.Alpha;
+		GUIConfig["Style"]["AntiAliasedFill"] = Style.AntiAliasedFill;
+		GUIConfig["Style"]["ButtonTextAlign"][0] = Style.ButtonTextAlign.x;
+		GUIConfig["Style"]["ButtonTextAlign"][1] = Style.ButtonTextAlign.y;
+		GUIConfig["Style"]["ChildBorderSize"] = Style.ChildBorderSize; //Values > 1.0 can cause performance issues.
+		GUIConfig["Style"]["ChildRounding"] = Style.ChildRounding;
+		GUIConfig["Style"]["DisplaySafeAreaPadding"][0] = Style.DisplaySafeAreaPadding.x;
+		GUIConfig["Style"]["DisplaySafeAreaPadding"][1] = Style.DisplaySafeAreaPadding.y;
+		GUIConfig["Style"]["FrameBorderSize"] = Style.FrameBorderSize; //Values > 1.0 can cause performance issues.
+		GUIConfig["Style"]["FramePadding"][0] = Style.FramePadding.x;
+		GUIConfig["Style"]["FramePadding"][1] = Style.FramePadding.y;
+		GUIConfig["Style"]["FrameRounding"] = Style.FrameRounding;
+		GUIConfig["Style"]["GrabMinSize"] = Style.GrabMinSize;
+		GUIConfig["Style"]["GrabRounding"] = Style.GrabRounding;
+		GUIConfig["Style"]["IndentSpacing"] = Style.IndentSpacing;
+		GUIConfig["Style"]["ItemInnerSpacing"][0] = Style.ItemInnerSpacing.x;
+		GUIConfig["Style"]["ItemInnerSpacing"][1] = Style.ItemInnerSpacing.y;
+		GUIConfig["Style"]["ItemSpacing"][0] = Style.ItemSpacing.x;
+		GUIConfig["Style"]["ItemSpacing"][1] = Style.ItemSpacing.y;
+		GUIConfig["Style"]["PopupBorderSize"] = Style.PopupBorderSize; //Values > 1.0 can cause performance issues.
+		GUIConfig["Style"]["PopupRounding"] = Style.PopupRounding;
+		GUIConfig["Style"]["ScrollbarRounding"] = Style.ScrollbarRounding;
+		GUIConfig["Style"]["ScrollbarSize"] = Style.ScrollbarSize;
+		GUIConfig["Style"]["TabBorderSize"] = Style.TabBorderSize;
+		GUIConfig["Style"]["TabRounding"] = Style.TabRounding;
+		GUIConfig["Style"]["TouchExtraPadding"][0] = Style.TouchExtraPadding.x;
+		GUIConfig["Style"]["TouchExtraPadding"][1] = Style.TouchExtraPadding.y;
+		GUIConfig["Style"]["WindowBorderSize"] = Style.WindowBorderSize; //Values > 1.0 can cause performance issues.
+		GUIConfig["Style"]["WindowPadding"][0] = Style.WindowPadding.x;
+		GUIConfig["Style"]["WindowPadding"][1] = Style.WindowPadding.y;
+		GUIConfig["Style"]["WindowRounding"] = Style.WindowRounding;
+		GUIConfig["Style"]["WindowTitleAlign"][0] = Style.WindowTitleAlign.x;
+		GUIConfig["Style"]["WindowTitleAlign"][1] = Style.WindowTitleAlign.y;
 
-	ImVec4* Colors = ImGui::GetStyle().Colors; 
-	SetJsonFloat4(GUIConfig, "Colors", "Text", Colors[ImGuiCol_Text]);
-	SetJsonFloat4(GUIConfig, "Colors", "TextDisabled", Colors[ImGuiCol_TextDisabled]);
-	SetJsonFloat4(GUIConfig, "Colors", "WindowBackground", Colors[ImGuiCol_WindowBg]);
-	SetJsonFloat4(GUIConfig, "Colors", "ChildBackground", Colors[ImGuiCol_ChildBg]);
-	SetJsonFloat4(GUIConfig, "Colors", "PopupBackground", Colors[ImGuiCol_PopupBg]);
-	SetJsonFloat4(GUIConfig, "Colors", "Border", Colors[ImGuiCol_Border]);
-	SetJsonFloat4(GUIConfig, "Colors", "BorderShadow", Colors[ImGuiCol_BorderShadow]);
-	SetJsonFloat4(GUIConfig, "Colors", "FrameBackground", Colors[ImGuiCol_FrameBg]);
-	SetJsonFloat4(GUIConfig, "Colors", "FrameBackgroundHovered", Colors[ImGuiCol_FrameBgHovered]);
-	SetJsonFloat4(GUIConfig, "Colors", "FrameBackgroundActive", Colors[ImGuiCol_FrameBgActive]);
-	SetJsonFloat4(GUIConfig, "Colors", "TitleBackground", Colors[ImGuiCol_TitleBg]);
-	SetJsonFloat4(GUIConfig, "Colors", "TitleBackgroundActive", Colors[ImGuiCol_TitleBgActive ]);
-	SetJsonFloat4(GUIConfig, "Colors", "TitleBackgroundCollapsed", Colors[ImGuiCol_TitleBgCollapsed]);
-	SetJsonFloat4(GUIConfig, "Colors", "MenuBarBackground", Colors[ImGuiCol_MenuBarBg]);
-	SetJsonFloat4(GUIConfig, "Colors", "ScrollbarBackground", Colors[ImGuiCol_ScrollbarBg]);
-	SetJsonFloat4(GUIConfig, "Colors", "ScrollbarGrab", Colors[ImGuiCol_ScrollbarGrab]);
-	SetJsonFloat4(GUIConfig, "Colors", "ScrollbarGrabHovered", Colors[ImGuiCol_ScrollbarGrabHovered]);
-	SetJsonFloat4(GUIConfig, "Colors", "ScrollbarGrabActive", Colors[ImGuiCol_ScrollbarGrabActive]);
-	SetJsonFloat4(GUIConfig, "Colors", "CheckMark", Colors[ImGuiCol_CheckMark]);
-	SetJsonFloat4(GUIConfig, "Colors", "SliderGrab", Colors[ImGuiCol_SliderGrab]);
-	SetJsonFloat4(GUIConfig, "Colors", "SliderGrabActive", Colors[ImGuiCol_SliderGrabActive]);
-	SetJsonFloat4(GUIConfig, "Colors", "Button", Colors[ImGuiCol_Button]);
-	SetJsonFloat4(GUIConfig, "Colors", "ButtonHovered", Colors[ImGuiCol_ButtonHovered]);
-	SetJsonFloat4(GUIConfig, "Colors", "ButtonActive", Colors[ImGuiCol_ButtonActive]);
-	SetJsonFloat4(GUIConfig, "Colors", "Header", Colors[ImGuiCol_Header]);
-	SetJsonFloat4(GUIConfig, "Colors", "HeaderHovered", Colors[ImGuiCol_HeaderHovered]);
-	SetJsonFloat4(GUIConfig, "Colors", "HeaderActive", Colors[ImGuiCol_HeaderActive]);
-	SetJsonFloat4(GUIConfig, "Colors", "Separator", Colors[ImGuiCol_Separator]);
-	SetJsonFloat4(GUIConfig, "Colors", "SeparatorHovered", Colors[ImGuiCol_SeparatorHovered]);
-	SetJsonFloat4(GUIConfig, "Colors", "SeparatorActive", Colors[ImGuiCol_SeparatorActive]);
-	SetJsonFloat4(GUIConfig, "Colors", "ResizeGrip", Colors[ImGuiCol_ResizeGrip]);
-	SetJsonFloat4(GUIConfig, "Colors", "ResizeGripHovered", Colors[ImGuiCol_ResizeGripHovered]);
-	SetJsonFloat4(GUIConfig, "Colors", "ResizeGripActive", Colors[ImGuiCol_ResizeGripActive]);
-	SetJsonFloat4(GUIConfig, "Colors", "Tab", Colors[ImGuiCol_Tab]);
-	SetJsonFloat4(GUIConfig, "Colors", "TabHovered", Colors[ImGuiCol_TabHovered]);
-	SetJsonFloat4(GUIConfig, "Colors", "TabActive", Colors[ImGuiCol_TabActive]);
-	SetJsonFloat4(GUIConfig, "Colors", "TabUnfocused", Colors[ImGuiCol_TabUnfocused]);
-	SetJsonFloat4(GUIConfig, "Colors", "TabUnfocusedActive", Colors[ImGuiCol_TabUnfocusedActive]);
-	SetJsonFloat4(GUIConfig, "Colors", "PlotLines", Colors[ImGuiCol_PlotLines]);
-	SetJsonFloat4(GUIConfig, "Colors", "PlotLinesHovered", Colors[ImGuiCol_PlotLinesHovered]);
-	SetJsonFloat4(GUIConfig, "Colors", "PlotHistogram", Colors[ImGuiCol_PlotHistogram]);
-	SetJsonFloat4(GUIConfig, "Colors", "PlotHistogramHovered", Colors[ImGuiCol_PlotHistogramHovered]);
-	SetJsonFloat4(GUIConfig, "Colors", "TextSelectedBackground", Colors[ImGuiCol_TextSelectedBg]);
-	SetJsonFloat4(GUIConfig, "Colors", "DragDropTarget", Colors[ImGuiCol_DragDropTarget]);
-	SetJsonFloat4(GUIConfig, "Colors", "NavHighlight", Colors[ImGuiCol_NavHighlight]);
-	SetJsonFloat4(GUIConfig, "Colors", "NavWindowingHighlight", Colors[ImGuiCol_NavWindowingHighlight]);
-	SetJsonFloat4(GUIConfig, "Colors", "NavWindowingDimBackground", Colors[ImGuiCol_NavWindowingDimBg]);
-	SetJsonFloat4(GUIConfig, "Colors", "ModalWindowDimBackground", Colors[ImGuiCol_ModalWindowDimBg]);
+		ImVec4* Colors = ImGui::GetStyle().Colors;
+		SetJsonFloat4(GUIConfig, "Colors", "Text", Colors[ImGuiCol_Text]);
+		SetJsonFloat4(GUIConfig, "Colors", "TextDisabled", Colors[ImGuiCol_TextDisabled]);
+		SetJsonFloat4(GUIConfig, "Colors", "WindowBackground", Colors[ImGuiCol_WindowBg]);
+		SetJsonFloat4(GUIConfig, "Colors", "ChildBackground", Colors[ImGuiCol_ChildBg]);
+		SetJsonFloat4(GUIConfig, "Colors", "PopupBackground", Colors[ImGuiCol_PopupBg]);
+		SetJsonFloat4(GUIConfig, "Colors", "Border", Colors[ImGuiCol_Border]);
+		SetJsonFloat4(GUIConfig, "Colors", "BorderShadow", Colors[ImGuiCol_BorderShadow]);
+		SetJsonFloat4(GUIConfig, "Colors", "FrameBackground", Colors[ImGuiCol_FrameBg]);
+		SetJsonFloat4(GUIConfig, "Colors", "FrameBackgroundHovered", Colors[ImGuiCol_FrameBgHovered]);
+		SetJsonFloat4(GUIConfig, "Colors", "FrameBackgroundActive", Colors[ImGuiCol_FrameBgActive]);
+		SetJsonFloat4(GUIConfig, "Colors", "TitleBackground", Colors[ImGuiCol_TitleBg]);
+		SetJsonFloat4(GUIConfig, "Colors", "TitleBackgroundActive", Colors[ImGuiCol_TitleBgActive]);
+		SetJsonFloat4(GUIConfig, "Colors", "TitleBackgroundCollapsed", Colors[ImGuiCol_TitleBgCollapsed]);
+		SetJsonFloat4(GUIConfig, "Colors", "MenuBarBackground", Colors[ImGuiCol_MenuBarBg]);
+		SetJsonFloat4(GUIConfig, "Colors", "ScrollbarBackground", Colors[ImGuiCol_ScrollbarBg]);
+		SetJsonFloat4(GUIConfig, "Colors", "ScrollbarGrab", Colors[ImGuiCol_ScrollbarGrab]);
+		SetJsonFloat4(GUIConfig, "Colors", "ScrollbarGrabHovered", Colors[ImGuiCol_ScrollbarGrabHovered]);
+		SetJsonFloat4(GUIConfig, "Colors", "ScrollbarGrabActive", Colors[ImGuiCol_ScrollbarGrabActive]);
+		SetJsonFloat4(GUIConfig, "Colors", "CheckMark", Colors[ImGuiCol_CheckMark]);
+		SetJsonFloat4(GUIConfig, "Colors", "SliderGrab", Colors[ImGuiCol_SliderGrab]);
+		SetJsonFloat4(GUIConfig, "Colors", "SliderGrabActive", Colors[ImGuiCol_SliderGrabActive]);
+		SetJsonFloat4(GUIConfig, "Colors", "Button", Colors[ImGuiCol_Button]);
+		SetJsonFloat4(GUIConfig, "Colors", "ButtonHovered", Colors[ImGuiCol_ButtonHovered]);
+		SetJsonFloat4(GUIConfig, "Colors", "ButtonActive", Colors[ImGuiCol_ButtonActive]);
+		SetJsonFloat4(GUIConfig, "Colors", "Header", Colors[ImGuiCol_Header]);
+		SetJsonFloat4(GUIConfig, "Colors", "HeaderHovered", Colors[ImGuiCol_HeaderHovered]);
+		SetJsonFloat4(GUIConfig, "Colors", "HeaderActive", Colors[ImGuiCol_HeaderActive]);
+		SetJsonFloat4(GUIConfig, "Colors", "Separator", Colors[ImGuiCol_Separator]);
+		SetJsonFloat4(GUIConfig, "Colors", "SeparatorHovered", Colors[ImGuiCol_SeparatorHovered]);
+		SetJsonFloat4(GUIConfig, "Colors", "SeparatorActive", Colors[ImGuiCol_SeparatorActive]);
+		SetJsonFloat4(GUIConfig, "Colors", "ResizeGrip", Colors[ImGuiCol_ResizeGrip]);
+		SetJsonFloat4(GUIConfig, "Colors", "ResizeGripHovered", Colors[ImGuiCol_ResizeGripHovered]);
+		SetJsonFloat4(GUIConfig, "Colors", "ResizeGripActive", Colors[ImGuiCol_ResizeGripActive]);
+		SetJsonFloat4(GUIConfig, "Colors", "Tab", Colors[ImGuiCol_Tab]);
+		SetJsonFloat4(GUIConfig, "Colors", "TabHovered", Colors[ImGuiCol_TabHovered]);
+		SetJsonFloat4(GUIConfig, "Colors", "TabActive", Colors[ImGuiCol_TabActive]);
+		SetJsonFloat4(GUIConfig, "Colors", "TabUnfocused", Colors[ImGuiCol_TabUnfocused]);
+		SetJsonFloat4(GUIConfig, "Colors", "TabUnfocusedActive", Colors[ImGuiCol_TabUnfocusedActive]);
+		SetJsonFloat4(GUIConfig, "Colors", "PlotLines", Colors[ImGuiCol_PlotLines]);
+		SetJsonFloat4(GUIConfig, "Colors", "PlotLinesHovered", Colors[ImGuiCol_PlotLinesHovered]);
+		SetJsonFloat4(GUIConfig, "Colors", "PlotHistogram", Colors[ImGuiCol_PlotHistogram]);
+		SetJsonFloat4(GUIConfig, "Colors", "PlotHistogramHovered", Colors[ImGuiCol_PlotHistogramHovered]);
+		SetJsonFloat4(GUIConfig, "Colors", "TextSelectedBackground", Colors[ImGuiCol_TextSelectedBg]);
+		SetJsonFloat4(GUIConfig, "Colors", "DragDropTarget", Colors[ImGuiCol_DragDropTarget]);
+		SetJsonFloat4(GUIConfig, "Colors", "NavHighlight", Colors[ImGuiCol_NavHighlight]);
+		SetJsonFloat4(GUIConfig, "Colors", "NavWindowingHighlight", Colors[ImGuiCol_NavWindowingHighlight]);
+		SetJsonFloat4(GUIConfig, "Colors", "NavWindowingDimBackground", Colors[ImGuiCol_NavWindowingDimBg]);
+		SetJsonFloat4(GUIConfig, "Colors", "ModalWindowDimBackground", Colors[ImGuiCol_ModalWindowDimBg]);
 
-	std::ofstream ConfigOutput(ExePath + "RFGR Script Loader/Settings/" + Filename + ".json");
-	ConfigOutput << std::setw(4) << GUIConfig << std::endl;
-	ConfigOutput.close();
-	LogFile.close();
+		std::ofstream ConfigOutput(ExePath + "RFGR Script Loader/Settings/" + Filename + ".json");
+		ConfigOutput << std::setw(4) << GUIConfig << std::endl;
+		ConfigOutput.close();
+		return true;
+	}, "GUI Settings.json", "write", "writing"))
+	{
+		return false;
+	}
+	Logger::Log("No write exceptions detected.", LOGSUCCESS);
+
+	Logger::Log("Done saving \"GUI Config.json\".", LOGSUCCESS);
+	return true;
 }
 
 MainOverlay::MainOverlay()
