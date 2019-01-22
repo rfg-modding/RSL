@@ -305,13 +305,10 @@ bool LoadGUIConfig()
 	}
 	else
 	{
-		Logger::Log("\"GUI Settings.json\" not found. Creating from default values.", LOGWARNING);
-		CreateDirectoryIfNull(ExePath + "RFGR Script Loader/Settings/");
-
 		if (!JsonExceptionHandler([&]
 		{
+			Logger::Log("\"GUI Settings.json\" not found. Creating from default values.", LOGWARNING);
 			CreateDirectoryIfNull(ExePath + "RFGR Script Loader/Settings/");
-			Logger::Log("\"GUI Config.json\" not found. Creating from default values.", LOGWARNING);
 
 			GUIConfig["Theme Info"]["Theme name"] = std::string("Default Dark Theme");
 			GUIConfig["Theme Info"]["Description"] = std::string("The default dark theme for the script loader.");
@@ -403,7 +400,7 @@ bool LoadGUIConfig()
 			SetJsonFloat4(GUIConfig, "Colors", "ModalWindowDimBackground", ImVec4(0.80f, 0.80f, 0.80f, 0.35f));
 
 			std::ofstream ConfigOutput(ExePath + "RFGR Script Loader/Settings/GUI Config.json");
-			ConfigOutput << std::setw(4) << MainConfig << std::endl;
+			ConfigOutput << std::setw(4) << GUIConfig << std::endl;
 			ConfigOutput.close();
 			return true;
 		}, "GUI Config.json", "write", "writing"))
@@ -709,7 +706,7 @@ void MainOverlay::Draw(const char* title, bool* p_open)
 	if (!PlayerPtr) //Same thing as if(PlayerPtr == nullptr)
 	{
 		ImGui::PushItemWidth(300.0f);
-		ImGui::TextWrapped("Please load a save and unpause the game, and reopen this gui to allow for game data retrieval. Then this gui should be useable.");
+		ImGui::TextWrapped("You must load a save first before this gui is useable.");
 		ImGui::End();
 		return;
 	}
@@ -786,7 +783,7 @@ void MainOverlay::Draw(const char* title, bool* p_open)
 	ImGui::Text("Scripts:");
 	ImGui::Separator();
 
-	ImGui::Text("Experimental Features:");
+	/*ImGui::Text("Experimental Features:");
 	ImGui::InputFloat("Default height scale", &PlayerPtr->Info->default_height_scale, 0.1f, 0.5f, 3);
 	ImGui::InputFloat("Height scale variation", &PlayerPtr->Info->height_scale_variation, 0.1f, 0.5f, 3);
 
@@ -809,12 +806,12 @@ void MainOverlay::Draw(const char* title, bool* p_open)
 	}
 
 	ImGui::Separator();
-	ImGui::Separator();
+	ImGui::Separator();*/
 
 	ImGui::Text("Globals:");
 	ImGui::Checkbox("Infinite jetpack", &InfiniteJetpack);
 	//ImGui::Checkbox("Invulnerability", (bool*)(PlayerPtr->Flags.invulnerable));
-	ImGui::Checkbox("Invulnerable", &Invulnerable);
+	ImGui::Checkbox("Invulnerability", &Invulnerable);
 	if (!Invulnerable)
 	{
 		PlayerPtr->Flags.invulnerable = false;
@@ -832,10 +829,10 @@ void MainOverlay::Draw(const char* title, bool* p_open)
 	ImGui::InputScalar("Player aim target duration", ImGuiDataType_U32, &PlayerPtr->aim_target_duration);
 	ImGui::InputFloat3("Player penetrating aim pos", (float*)&PlayerPtr->penetrating_aim_pos, 3);
 	ImGui::InputScalar("Player penetrating aim target", ImGuiDataType_U32, &PlayerPtr->penetrating_aim_target);
-	ImGui::Text("Player frametime multiplier: ");
-	ImGui::SameLine();
-	ImGui::TextColored(SecondaryTextColor, std::to_string(PlayerPtr->FrametimeMultiplier).c_str());
-	ImGui::InputFloat("Target player frametime multiplier", &PlayerPtr->FrametimeMultiplier);
+	//ImGui::Text("Player frametime multiplier: ");
+	//ImGui::SameLine();
+	//ImGui::TextColored(SecondaryTextColor, std::to_string(PlayerPtr->FrametimeMultiplier).c_str());
+	//ImGui::InputFloat("Target player frametime multiplier", &PlayerPtr->FrametimeMultiplier);
 	ImGui::Separator();
 
 	//ImGui::Text("FPS: ");
