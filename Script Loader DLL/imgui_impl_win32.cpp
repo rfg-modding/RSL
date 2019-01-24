@@ -189,7 +189,7 @@ void    ImGui_ImplWin32_NewFrame()
 // PS: We treat DBLCLK messages as regular mouse down messages, so this code will work on windows classes that have the CS_DBLCLKS flag set. Our own example app code doesn't set this flag.
 IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-	//ConsoleLog("You better see this #2", LOGSUCCESS, false, true, true);
+	//ConsoleLog("You better see this #2", LogInfo, false, true, true);
 	//std::cout << "ImGui: You better see this #2" << std::endl;
 
     if (ImGui::GetCurrentContext() == NULL)

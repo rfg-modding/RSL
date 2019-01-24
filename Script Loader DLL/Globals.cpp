@@ -304,7 +304,7 @@ DWORD FindPattern(char *module, char *pattern, char *mask)
 		}
 	}
 	std::cout << "Error! FindPattern() returning NULL" << std::endl;
-	//ConsoleLog("FindPattern() returning NULL", LOGERROR, false, true);
+	//ConsoleLog("FindPattern() returning NULL", LogError, false, true);
 	return NULL;
 }
 

@@ -48,7 +48,7 @@ void ScriptManager::RunTestScript()
 		std::ofstream LogFile(ExePath + "RFGR Script Loader/Logs/Script Log.txt");
 		LogFile << "Exception caught when running Test.lua: " << Exception.what() << std::endl;
 		//std::cout << "Exception caught when running Test.lua: " << Exception.what() << std::endl;
-		Logger::Log(std::string("Exception caught when running Test.lua: " +  std::string(Exception.what())), LOGERROR);
+		Logger::Log(std::string("Exception caught when running Test.lua: " +  std::string(Exception.what())), LogError);
 		LogFile.close();
 	}
 	catch (...)
@@ -100,8 +100,8 @@ void ScriptManager::RunTestScript2()
 	}
 	catch (std::exception& Exception)
 	{
-		std::ofstream LogFile(ExePath + "RFGR Script Loader/Logs/Script Log.txt");
-		LogFile << "Exception caught when running Test2.lua: " << Exception.what() << std::endl;
-		Logger::Log(std::string("Exception caught when running Test2.lua: ", Exception.what()), LOGERROR);
+		//std::ofstream LogFile(ExePath + "RFGR Script Loader/Logs/Script Log.txt");
+		//LogFile << "Exception caught when running Test2.lua: " << Exception.what() << std::endl;
+		Logger::Log(std::string("Exception caught when running Test2.lua: " + std::string(Exception.what())), LogLua | LogError);
 	}
 }

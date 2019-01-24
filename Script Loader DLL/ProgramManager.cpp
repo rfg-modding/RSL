@@ -47,14 +47,14 @@ void ProgramManager::Initialize()
 
 	if (!kiero::init(kiero::RenderType::D3D11) == kiero::Status::Success)
 	{
-		Logger::Log(std::string("Kiero error: " + std::to_string(kiero::init(kiero::RenderType::D3D11))), LOGFATALERROR, true);
-		Logger::Log("Failed to initialize kiero for D3D11. RFGR Script loader deactivating.", LOGFATALERROR, true);
+		Logger::Log(std::string("Kiero error: " + std::to_string(kiero::init(kiero::RenderType::D3D11))), LogFatalError, true);
+		Logger::Log("Failed to initialize kiero for D3D11. RFGR Script loader deactivating.", LogFatalError, true);
 		FreeLibraryAndExitThread(ScriptLoaderModule, 0);
 		return;
 	}
 	if (MH_Initialize() != MH_OK)
 	{
-		Logger::Log("Failed to initialize MinHook. RFGR Script loader deactivating.", LOGFATALERROR, true);
+		Logger::Log("Failed to initialize MinHook. RFGR Script loader deactivating.", LogFatalError, true);
 		FreeLibraryAndExitThread(ScriptLoaderModule, 0);
 		return;
 	}
@@ -63,13 +63,13 @@ void ProgramManager::Initialize()
 
 	CreateGameHooks(true);
 #if !PublicMode
-	Logger::ConsoleLog("Finished hooking game functions.", LOGSUCCESS, false, true, true);
+	Logger::ConsoleLog("Finished hooking game functions.", LogInfo, false, true, true);
 #endif
 
 	MouseGenericPollMouseVisible = FindPattern((char*)"rfg.exe", (char*)"\x84\xD2\x74\x08\x38\x00\x00\x00\x00\x00\x75\x02", (char*)"xxxxx?????xx");
 	CenterMouseCursorCall = FindPattern((char*)"rfg.exe", (char*)"\xE8\x00\x00\x00\x00\x89\x46\x4C\x89\x56\x50", (char*)"x????xxxxxx");
 
-	Logger::Log("Now monitoring RFGR State", LOGMESSAGE);
+	Logger::Log("Now monitoring RFGR State", LogInfo);
 	GameState RFGRState;
 	auto StartTime = std::chrono::steady_clock::now();
 	auto EndTime = std::chrono::steady_clock::now();
@@ -87,14 +87,14 @@ void ProgramManager::Initialize()
 		EndTime = std::chrono::steady_clock::now();
 	} 
 	while (RFGRState < 0 || RFGRState > 63); //Todo: Consider changing to hex values for consistency with enum definition. Alternatively change enum to decimal.
-	Logger::Log(std::string("RFGR State > 0. Value: " + std::to_string(RFGRState)), LOGSUCCESS);
+	Logger::Log(std::string("RFGR State > 0. Value: " + std::to_string(RFGRState)), LogInfo);
 
 	OriginalWndProc = (WNDPROC)SetWindowLongPtr(GameWindowHandle, GWLP_WNDPROC, (__int3264)(LONG_PTR)WndProc);
-	Logger::Log("Custom WndProc set.", LOGMESSAGE);
+	Logger::Log("Custom WndProc set.", LogInfo);
 	CreateD3D11Hooks(true);
-	Logger::Log("D3D11 hooks created and enabled.", LOGMESSAGE);
+	Logger::Log("D3D11 hooks created and enabled.", LogInfo);
 #if !PublicMode
-	Logger::Log("Finished hooking D3D11 functions.", LOGSUCCESS);
+	Logger::Log("Finished hooking D3D11 functions.", LogInfoS);
 #endif
 
 	Sleep(5000);
@@ -106,7 +106,7 @@ void ProgramManager::Initialize()
 		long long TimeElapsed = std::chrono::duration_cast<std::chrono::milliseconds>(EndTime - StartTime).count();
 		if (TimeElapsed > 2000LL) 
 		{
-			Logger::Log("Waiting for ImGui to be initialized.", LOGMESSAGE);
+			Logger::Log("Waiting for ImGui to be initialized.", LogInfo);
 		}
 		EndTime = StartTime;
 		StartTime = std::chrono::steady_clock::now();
@@ -145,7 +145,7 @@ void ProgramManager::ProcessInput()
 	if (GetAsyncKeyState(VK_F1))
 	{
 		OverlayActive = !OverlayActive;
-		Logger::Log(std::string("Overlay active value: " + std::to_string(OverlayActive)), LOGMESSAGE);
+		Logger::Log(std::string("Overlay active value: " + std::to_string(OverlayActive)), LogInfo);
 		if (OverlayActive)
 		{
 			SnippetManager::BackupSnippet("MouseGenericPollMouseVisible", MouseGenericPollMouseVisible, 12, true);
@@ -161,7 +161,7 @@ void ProgramManager::ProcessInput()
 	if (GetAsyncKeyState(VK_F2))
 	{
 		FirstPersonModeActive = !FirstPersonModeActive;
-		Logger::Log(std::string("FPS Mode active value: " + std::to_string(FirstPersonModeActive)), LOGMESSAGE);
+		Logger::Log(std::string("FPS Mode active value: " + std::to_string(FirstPersonModeActive)), LogInfo);
 		Sleep(150);
 	}
 }
@@ -281,13 +281,13 @@ void ProgramManager::CloseConsole()
 bool ProgramManager::LoadDataFromConfig()
 {
 	std::string ExePath = GetEXEPath(false);
-	Logger::Log("Started loading \"Settings.json\".", LOGSUCCESS);
+	Logger::Log("Started loading \"Settings.json\".", LogInfo);
 	
 	if (fs::exists(ExePath + "RFGR Script Loader/Settings/Settings.json"))
 	{
 		if (!JsonExceptionHandler([&]
 		{
-			Logger::Log("Parsing \"Settings.json\"", LOGMESSAGE);
+			Logger::Log("Parsing \"Settings.json\"", LogInfo);
 			std::ifstream Config(ExePath + "RFGR Script Loader/Settings/Settings.json");
 			Config >> MainConfig;
 			Config.close();
@@ -296,14 +296,14 @@ bool ProgramManager::LoadDataFromConfig()
 		{
 			return false;
 		}
-		Logger::Log("No parse exceptions detected.", LOGSUCCESS);
+		Logger::Log("No parse exceptions detected.", LogInfo);
 	}
 	else
 	{
 		if (!JsonExceptionHandler([&]
 		{
 			CreateDirectoryIfNull(ExePath + "RFGR Script Loader/Settings/");
-			Logger::Log("\"Settings.json\" not found. Creating from default values.", LOGWARNING);
+			Logger::Log("\"Settings.json\" not found. Creating from default values.", LogWarning);
 
 			MainConfig["Open debug console"] = false;
 
@@ -315,7 +315,7 @@ bool ProgramManager::LoadDataFromConfig()
 		{
 			return false;
 		}
-		Logger::Log("No write exceptions detected.", LOGSUCCESS);
+		Logger::Log("No write exceptions detected.", LogInfo);
 	}
 
 	if (!JsonExceptionHandler([&]
@@ -326,9 +326,9 @@ bool ProgramManager::LoadDataFromConfig()
 	{
 		return false;
 	}
-	Logger::Log("No read exceptions detected.", LOGSUCCESS);
+	Logger::Log("No read exceptions detected.", LogInfo);
 	
-	Logger::Log("Done loading \"Settings.json\".", LOGSUCCESS);
+	Logger::Log("Done loading \"Settings.json\".", LogInfo);
 	return true;
 }
 

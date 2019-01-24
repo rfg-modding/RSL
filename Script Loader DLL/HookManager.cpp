@@ -14,12 +14,12 @@ bool HookManager::CreateHook(std::string HookName, HookType Type, LPVOID Target,
 {
 	if (HookExists(HookName))
 	{
-		Logger::Log(std::string("A hook with the name \"" + HookName + "\" already exists. Failed to create."), LOGERROR);
+		Logger::Log(std::string("A hook with the name \"" + HookName + "\" already exists. Failed to create."), LogError);
 		return false;
 	}
 	if (MH_CreateHook(Target, Detour, Original) != MH_OK)
 	{
-		Logger::Log(std::string("Failed to create " + HookName + " hook. RFGR Script Loader deactivating."), LOGFATALERROR);
+		Logger::Log(std::string("Failed to create " + HookName + " hook. RFGR Script Loader deactivating."), LogFatalError);
 		return false;
 	}
 
@@ -35,12 +35,12 @@ bool HookManager::EnableHook(std::string HookName)
 {
 	if (!HookExists(HookName))
 	{
-		Logger::Log(std::string("A hook with the name \"" + HookName + "\" does not exist. Failed to enable."), LOGERROR);
+		Logger::Log(std::string("A hook with the name \"" + HookName + "\" does not exist. Failed to enable."), LogError);
 		return false;
 	}
 	if (MH_EnableHook(HookMap[HookName].Target) != MH_OK)
 	{
-		Logger::Log(std::string("Failed to enable " + HookName + " hook. RFGR Script Loader deactivating."), LOGFATALERROR);
+		Logger::Log(std::string("Failed to enable " + HookName + " hook. RFGR Script Loader deactivating."), LogFatalError);
 		return false;
 	}
 	return true;
@@ -50,12 +50,12 @@ bool HookManager::DisableHook(std::string HookName)
 {
 	if (!HookExists(HookName))
 	{
-		Logger::Log(std::string("A hook with the name \"" + HookName + "\" does not exist. Failed to disable."), LOGERROR);
+		Logger::Log(std::string("A hook with the name \"" + HookName + "\" does not exist. Failed to disable."), LogError);
 		return false;
 	}
 	if (MH_DisableHook(HookMap[HookName].Target) != MH_OK)
 	{
-		Logger::Log(std::string("Failed to disable " + HookName + " hook. RFGR Script Loader deactivating."), LOGFATALERROR);
+		Logger::Log(std::string("Failed to disable " + HookName + " hook. RFGR Script Loader deactivating."), LogFatalError);
 		return false;
 	}
 	return false;

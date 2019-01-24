@@ -5,7 +5,7 @@
 {
 	std::call_once(HookD3D11CreateQueryInitialMessage, [&]()
 	{
-		ConsoleLog("First time in D3D11CreateQuery() hook.\n", LOGSUCCESS, false, true);
+		ConsoleLog("First time in D3D11CreateQuery() hook.\n", LogInfo, false, true);
 		g_pd3dDevice = pDevice;
 		D3D11DeviceFound = true;
 	});
@@ -17,7 +17,7 @@ void __stdcall D3D11DrawIndexedHook(ID3D11DeviceContext* pContext, UINT IndexCou
 {
 	std::call_once(HookD3D11DrawIndexedInitialMessage, [&]()
 	{
-		ConsoleLog("First time in D3D11DrawIndexed() hook.\n", LOGSUCCESS, false, true);
+		ConsoleLog("First time in D3D11DrawIndexed() hook.\n", LogInfo, false, true);
 		g_pd3dDeviceContext = pContext;
 		D3D11DeviceContextFound = true;
 	});
@@ -29,7 +29,7 @@ HRESULT __stdcall D3D11CheckFeatureSupportHook(ID3D11Device* pDevice, D3D11_FEAT
 {
 	std::call_once(HookD3D11CheckFeatureSupportInitialMessage, [&]()
 	{
-		ConsoleLog("First time in D3D11CheckFeatureSupport() hook.\n", LOGSUCCESS, false, true);
+		ConsoleLog("First time in D3D11CheckFeatureSupport() hook.\n", LogInfo, false, true);
 		g_pd3dDevice = pDevice;
 		D3D11DeviceFound = true;
 	});
@@ -41,7 +41,7 @@ void __stdcall D3D11GetDeviceHook(ID3D11DeviceChild* Child, ID3D11Device** Devic
 {
 	std::call_once(HookD3D11GetDeviceInitialMessage, [&]()
 	{
-		ConsoleLog("First time in D3D11CheckFeatureSupport() hook.\n", LOGSUCCESS, false, true);
+		ConsoleLog("First time in D3D11CheckFeatureSupport() hook.\n", LogInfo, false, true);
 		g_pd3dDevice = *Device;
 		D3D11DeviceFound = true;
 	});
@@ -53,7 +53,7 @@ void __stdcall D3D11BeginHook(ID3D11DeviceContext* Context, ID3D11Asynchronous* 
 {
 	std::call_once(HookD3D11BeginInitialMessage, [&]()
 	{
-		ConsoleLog("First time in D3D11Begin() hook.\n", LOGSUCCESS, false, true);
+		ConsoleLog("First time in D3D11Begin() hook.\n", LogInfo, false, true);
 		g_pd3dDeviceContext = Context;
 		D3D11DeviceContextFound = true;
 	});
@@ -62,22 +62,22 @@ void __stdcall D3D11BeginHook(ID3D11DeviceContext* Context, ID3D11Asynchronous* 
 }*/
 
 /*	
-ConsoleLog("Hooking GraphicsBeginFrame().\n", LOGMESSAGE, false, true);
+ConsoleLog("Hooking GraphicsBeginFrame().\n", LogInfo, false, true);
 if (MH_CreateHook((DWORD*)(ModuleBase + 0x86DD00), GraphicsBeginFrameHook, (LPVOID*)&GraphicsBeginFrame) != MH_OK)
 {
-	ConsoleLog("Failed to create GraphicsBeginFrame() hook. RFGR Script loader deactivating.", LOGERROR, false, true, true);
+	ConsoleLog("Failed to create GraphicsBeginFrame() hook. RFGR Script loader deactivating.", LogError, false, true, true);
 	FreeLibraryAndExitThread(hModule, 0);
 	return 0;
 }
-ConsoleLog("Successfully created GraphicsBeginFrame() hook.", LOGSUCCESS, false, true, true);
+ConsoleLog("Successfully created GraphicsBeginFrame() hook.", LogInfo, false, true, true);
 if (MH_EnableHook((DWORD*)(ModuleBase + 0x86DD00)) != MH_OK)
 {
-	ConsoleLog("Failed to enable GraphicsBeginFrame() hook. RFGR Script loader deactivating.", LOGERROR, false, true, true);
+	ConsoleLog("Failed to enable GraphicsBeginFrame() hook. RFGR Script loader deactivating.", LogError, false, true, true);
 	FreeLibraryAndExitThread(hModule, 0);
 	return 0;
 }
-ConsoleLog("Sucessfully enabled GraphicsBeginFrame() hook.", LOGSUCCESS, false, true, true);
-ConsoleLog("Sucessfully hooked GraphicsBeginFrame().\n", LOGSUCCESS, false, true);*/
+ConsoleLog("Sucessfully enabled GraphicsBeginFrame() hook.", LogInfo, false, true, true);
+ConsoleLog("Sucessfully hooked GraphicsBeginFrame().\n", LogInfo, false, true);*/
 
 
 
@@ -149,16 +149,16 @@ void ProgramManager::LoadDataFromConfig()
 	HKL KeyboardLayout = GetKeyboardLayout(0);
 	//VkKeyScanEx(YOUR_CHAR, currentKBL);
 
-	//ConsoleLog("Keyboard layout created", LOGWARNING, false, true, true);
+	//ConsoleLog("Keyboard layout created", LogWarning, false, true, true);
 
 	DefaultFreeCameraSpeed = MainConfig["Default free camera speed"].get<float>();
 	//DefaultRotationSpeed = MainConfig["Default rotation speed"].get<float>();
 	//UseConsole = MainConfig["Create output console"].get<bool>();
 
-	ConsoleLog("Loading keybinds", LOGWARNING, false, true, true);
+	ConsoleLog("Loading keybinds", LogWarning, false, true, true);
 
 	KeyDecreaseCameraSpeed = VkKeyScanEx(MainConfig["Keybinds"]["Decrease camera speed"].get<int>(), KeyboardLayout);
-	ConsoleLog("KeyDecreaseCameraSpeed Set", LOGERROR, false, true, true);
+	ConsoleLog("KeyDecreaseCameraSpeed Set", LogError, false, true, true);
 	KeyIncreaseCameraSpeed = VkKeyScanEx(MainConfig["Keybinds"]["Increase camera speed"].get<char>(), KeyboardLayout);
 	KeyToggleFreecamera = VkKeyScanEx(MainConfig["Keybinds"]["Toggle free camera"].get<char>(), KeyboardLayout);
 	KeyToggleHud = VkKeyScanEx(MainConfig["Keybinds"]["Toggle hud"].get<char>(), KeyboardLayout);
@@ -170,7 +170,7 @@ void ProgramManager::LoadDataFromConfig()
 	KeyCameraUp = VkKeyScanEx(MainConfig["Keybinds"]["Camera up"].get<char>(), KeyboardLayout);
 	KeyCameraDown = VkKeyScanEx(MainConfig["Keybinds"]["Camera down"].get<char>(), KeyboardLayout);
 
-	ConsoleLog("Loading rotation control keybinds", LOGWARNING, false, true, true);
+	ConsoleLog("Loading rotation control keybinds", LogWarning, false, true, true);
 
 	KeyDecreaseRotationSpeed = VkKeyScanEx(MainConfig["Keybinds"]["Decrease rotation speed"].get<char>(), KeyboardLayout);
 	KeyIncreaseRotationSpeed = VkKeyScanEx(MainConfig["Keybinds"]["Inrease rotation speed"].get<char>(), KeyboardLayout);
@@ -322,89 +322,89 @@ __declspec(naked) void GetPlayerYaxis()
 /*#define JsonCatchAll(FileName) \
 catch (nlohmann::json::parse_error& Exception) \
 { \
-	Logger::Log(std::string("Parse exception caught while parsing " + "\"" + FileName + "\""), LOGFATALERROR); \
-	Logger::Log(std::string(Exception.what()), LOGFATALERROR); \
+	Logger::Log(std::string("Parse exception caught while parsing " + "\"" + FileName + "\""), LogFatalError); \
+	Logger::Log(std::string(Exception.what()), LogFatalError); \
  \
 	std::string ExceptionMessage(std::string("Parse exception caught while parsing " + "\"" + FileName + "\"")); \
 	ExceptionMessage += "Message: "; \
 	ExceptionMessage += Exception.what(); \
  \
 	MessageBoxA(find_main_window(GetProcessID("rfg.exe")), ExceptionMessage.c_str(), "Json parse exception caught", MB_OK); \
-	Logger::Log("Failed to parse " + "\"" + FileName + "\", exiting.", LOGFATALERROR); \
+	Logger::Log("Failed to parse " + "\"" + FileName + "\", exiting.", LogFatalError); \
 	return false; \
 } \
 catch (nlohmann::json::basic_json::invalid_iterator& Exception) \
 { \
-	Logger::Log("Invalid iterator exception caught while parsing" + "\"" + FileName + "\"", LOGFATALERROR); \
-	Logger::Log(std::string(Exception.what()), LOGFATALERROR); \
+	Logger::Log("Invalid iterator exception caught while parsing" + "\"" + FileName + "\"", LogFatalError); \
+	Logger::Log(std::string(Exception.what()), LogFatalError); \
  \
 	std::string ExceptionMessage("Invalid iterator exception caught while parsing " + "\"" + FileName + "\""); \
 	ExceptionMessage += "Message: "; \
 	ExceptionMessage += Exception.what(); \
  \
 	MessageBoxA(find_main_window(GetProcessID("rfg.exe")), ExceptionMessage.c_str(), "Json invalid iterator exception caught", MB_OK); \
-	Logger::Log("Failed to parse " + "\"" + FileName + "\", exiting.", LOGFATALERROR); \
+	Logger::Log("Failed to parse " + "\"" + FileName + "\", exiting.", LogFatalError); \
 	return false; \
 } \
 catch (nlohmann::json::basic_json::type_error& Exception) \
 { \
-	Logger::Log("Type error exception caught while parsing " + "\"" + FileName + "\"", LOGFATALERROR); \
-	Logger::Log(std::string(Exception.what()), LOGFATALERROR); \
+	Logger::Log("Type error exception caught while parsing " + "\"" + FileName + "\"", LogFatalError); \
+	Logger::Log(std::string(Exception.what()), LogFatalError); \
  \
 	std::string ExceptionMessage("Type error exception caught while parsing " + "\"" + FileName + "\""); \
 	ExceptionMessage += "Message: "; \
 	ExceptionMessage += Exception.what(); \
  \
 	MessageBoxA(find_main_window(GetProcessID("rfg.exe")), ExceptionMessage.c_str(), "Json type error exception caught", MB_OK); \
-	Logger::Log("Failed to parse " + "\"" + FileName + "\", exiting.", LOGFATALERROR); \
+	Logger::Log("Failed to parse " + "\"" + FileName + "\", exiting.", LogFatalError); \
 	return false; \
 } \
 catch (nlohmann::json::basic_json::out_of_range& Exception) \
 { \
-	Logger::Log("Out of range exception caught while parsing " + "\"" + FileName + "\"", LOGFATALERROR); \
-	Logger::Log(std::string(Exception.what()), LOGFATALERROR); \
+	Logger::Log("Out of range exception caught while parsing " + "\"" + FileName + "\"", LogFatalError); \
+	Logger::Log(std::string(Exception.what()), LogFatalError); \
  \
 	std::string ExceptionMessage("Out of range exception caught while parsing " + "\"" + FileName + "\""); \
 	ExceptionMessage += "Message: "; \
 	ExceptionMessage += Exception.what(); \
  \
 	MessageBoxA(find_main_window(GetProcessID("rfg.exe")), ExceptionMessage.c_str(), "Json out of range exception caught", MB_OK); \
-	Logger::Log("Failed to parse " + "\"" + FileName + "\", exiting.", LOGFATALERROR); \
+	Logger::Log("Failed to parse " + "\"" + FileName + "\", exiting.", LogFatalError); \
 	return false; \
 } \
 catch (nlohmann::json::basic_json::other_error& Exception) \
 { \
-	Logger::Log("Other error exception caught while parsing " + "\"" + FileName + "\"", LOGFATALERROR); \
-	Logger::Log(std::string(Exception.what()), LOGFATALERROR); \
+	Logger::Log("Other error exception caught while parsing " + "\"" + FileName + "\"", LogFatalError); \
+	Logger::Log(std::string(Exception.what()), LogFatalError); \
  \
 	std::string ExceptionMessage("Other error exception caught while parsing " + "\"" + FileName + "\""); \
 	ExceptionMessage += "Message: "; \
 	ExceptionMessage += Exception.what(); \
  \
 	MessageBoxA(find_main_window(GetProcessID("rfg.exe")), ExceptionMessage.c_str(), "Other error parse exception caught", MB_OK); \
-	Logger::Log("Failed to parse " + "\"" + FileName + "\", exiting.", LOGFATALERROR); \
+	Logger::Log("Failed to parse " + "\"" + FileName + "\", exiting.", LogFatalError); \
 	return false; \
 } \
 catch (std::exception& Exception) \
 { \
-	Logger::Log("General exception caught while parsing " + "\"" + FileName + "\"", LOGFATALERROR); \
-	Logger::Log(std::string(Exception.what()), LOGFATALERROR); \
+	Logger::Log("General exception caught while parsing " + "\"" + FileName + "\"", LogFatalError); \
+	Logger::Log(std::string(Exception.what()), LogFatalError); \
  \
 	std::string ExceptionMessage("General exception caught while parsing " + "\"" + FileName + "\""); \
 	ExceptionMessage += "Message: "; \
 	ExceptionMessage += Exception.what(); \
  \
 	MessageBoxA(find_main_window(GetProcessID("rfg.exe")), ExceptionMessage.c_str(), "Json general exception caught", MB_OK); \
-	Logger::Log("Failed to parse " + "\"" + FileName + "\", exiting.", LOGFATALERROR); \
+	Logger::Log("Failed to parse " + "\"" + FileName + "\", exiting.", LogFatalError); \
  \
 	return false; \
 } \
 catch (...) \
 { \
-	Logger::Log("Default exception caught while parsing " + "\"" + FileName + "\"", LOGFATALERROR); \
+	Logger::Log("Default exception caught while parsing " + "\"" + FileName + "\"", LogFatalError); \
  \
 	MessageBoxA(find_main_window(GetProcessID("rfg.exe")), "Default exception caught while parsing " + "\"" + FileName + "\"", "Json default exception caught", MB_OK); \
-	Logger::Log("Failed to parse " + "\"" + FileName + "\", exiting.", LOGFATALERROR); \
+	Logger::Log("Failed to parse " + "\"" + FileName + "\", exiting.", LogFatalError); \
  \
 	return false; \
 } */
@@ -419,89 +419,89 @@ auto JsonExceptionHandler(Callable&& Function, std::string FileName, std::string
 	}
 	catch (nlohmann::json::parse_error& Exception)
 	{
-		Logger::Log("Parse exception caught while " + ActionConjugated + " \"" + FileName + "\"!", LOGFATALERROR);
-		Logger::Log(std::string(Exception.what()), LOGFATALERROR);
+		Logger::Log("Parse exception caught while " + ActionConjugated + " \"" + FileName + "\"!", LogFatalError);
+		Logger::Log(std::string(Exception.what()), LogFatalError);
 
 		std::string ExceptionMessage("Parse exception caught while " + ActionConjugated + " \"" + FileName + "\"! See logs.");
 		ExceptionMessage += "Message: ";
 		ExceptionMessage += Exception.what();
 
 		MessageBoxA(find_main_window(GetProcessID("rfg.exe")), ExceptionMessage.c_str(), "Json parse exception caught", MB_OK);
-		Logger::Log("Failed to " + Action + " \"" + FileName + "\", exiting.", LOGFATALERROR);
+		Logger::Log("Failed to " + Action + " \"" + FileName + "\", exiting.", LogFatalError);
 		return false;
 	}
 	catch (nlohmann::json::basic_json::invalid_iterator& Exception)
 	{
-		Logger::Log("Invalid iterator exception caught while " + ActionConjugated + " \"" + FileName + "\"!", LOGFATALERROR);
-		Logger::Log(std::string(Exception.what()), LOGFATALERROR);
+		Logger::Log("Invalid iterator exception caught while " + ActionConjugated + " \"" + FileName + "\"!", LogFatalError);
+		Logger::Log(std::string(Exception.what()), LogFatalError);
 
 		std::string ExceptionMessage("Invalid iterator exception caught while " + ActionConjugated + " \"" + FileName + "\"! See logs.");
 		ExceptionMessage += "Message: ";
 		ExceptionMessage += Exception.what();
 
 		MessageBoxA(find_main_window(GetProcessID("rfg.exe")), ExceptionMessage.c_str(), "Json invalid iterator exception caught", MB_OK);
-		Logger::Log("Failed to " + Action + " \"" + FileName + "\", exiting.", LOGFATALERROR);
+		Logger::Log("Failed to " + Action + " \"" + FileName + "\", exiting.", LogFatalError);
 		return false;
 	}
 	catch (nlohmann::json::basic_json::type_error& Exception)
 	{
-		Logger::Log("Type error exception caught while " + ActionConjugated + " \"" + FileName + "\"!", LOGFATALERROR);
-		Logger::Log(std::string(Exception.what()), LOGFATALERROR);
+		Logger::Log("Type error exception caught while " + ActionConjugated + " \"" + FileName + "\"!", LogFatalError);
+		Logger::Log(std::string(Exception.what()), LogFatalError);
 
 		std::string ExceptionMessage("Type error exception caught while " + ActionConjugated + " \"" + FileName + "\"! See logs.");
 		ExceptionMessage += "Message: ";
 		ExceptionMessage += Exception.what();
 
 		MessageBoxA(find_main_window(GetProcessID("rfg.exe")), ExceptionMessage.c_str(), "Json type error exception caught", MB_OK);
-		Logger::Log("Failed to " + Action + " \"" + FileName + "\", exiting.", LOGFATALERROR);
+		Logger::Log("Failed to " + Action + " \"" + FileName + "\", exiting.", LogFatalError);
 		return false;
 	}
 	catch (nlohmann::json::basic_json::out_of_range& Exception)
 	{
-		Logger::Log("Out of range exception caught while " + ActionConjugated + " \"" + FileName + "\"!", LOGFATALERROR);
-		Logger::Log(std::string(Exception.what()), LOGFATALERROR);
+		Logger::Log("Out of range exception caught while " + ActionConjugated + " \"" + FileName + "\"!", LogFatalError);
+		Logger::Log(std::string(Exception.what()), LogFatalError);
 
 		std::string ExceptionMessage("Parse exception caught while " + ActionConjugated + " \"" + FileName + "\"! See logs.");
 		ExceptionMessage += "Message: ";
 		ExceptionMessage += Exception.what();
 
 		MessageBoxA(find_main_window(GetProcessID("rfg.exe")), ExceptionMessage.c_str(), "Json out of range exception caught", MB_OK);
-		Logger::Log("Failed to " + Action + " \"" + FileName + "\", exiting.", LOGFATALERROR);
+		Logger::Log("Failed to " + Action + " \"" + FileName + "\", exiting.", LogFatalError);
 		return false;
 	}
 	catch (nlohmann::json::basic_json::other_error& Exception)
 	{
-		Logger::Log("Other error exception caught while " + ActionConjugated + " \"" + FileName + "\"!", LOGFATALERROR);
-		Logger::Log(std::string(Exception.what()), LOGFATALERROR);
+		Logger::Log("Other error exception caught while " + ActionConjugated + " \"" + FileName + "\"!", LogFatalError);
+		Logger::Log(std::string(Exception.what()), LogFatalError);
 
 		std::string ExceptionMessage("Other error exception caught while " + ActionConjugated + " \"" + FileName + "\"! See logs.");
 		ExceptionMessage += "Message: ";
 		ExceptionMessage += Exception.what();
 
 		MessageBoxA(find_main_window(GetProcessID("rfg.exe")), ExceptionMessage.c_str(), "Json other error exception caught", MB_OK);
-		Logger::Log("Failed to " + Action + " \"" + FileName + "\", exiting.", LOGFATALERROR);
+		Logger::Log("Failed to " + Action + " \"" + FileName + "\", exiting.", LogFatalError);
 		return false;
 	}
 	catch (std::exception& Exception)
 	{
-		Logger::Log("General exception caught while " + ActionConjugated + " \"" + FileName + "\"!", LOGFATALERROR);
-		Logger::Log(std::string(Exception.what()), LOGFATALERROR);
+		Logger::Log("General exception caught while " + ActionConjugated + " \"" + FileName + "\"!", LogFatalError);
+		Logger::Log(std::string(Exception.what()), LogFatalError);
 
 		std::string ExceptionMessage("General exception caught while " + ActionConjugated + " \"" + FileName + "\"! See logs.");
 		ExceptionMessage += "Message: ";
 		ExceptionMessage += Exception.what();
 
 		MessageBoxA(find_main_window(GetProcessID("rfg.exe")), ExceptionMessage.c_str(), "Json general exception caught", MB_OK);
-		Logger::Log("Failed to " + Action + " \"" + FileName + "\", exiting.", LOGFATALERROR);
+		Logger::Log("Failed to " + Action + " \"" + FileName + "\", exiting.", LogFatalError);
 		return false;
 	}
 	catch (...)
 	{
-		Logger::Log("Default exception caught while " + ActionConjugated + " \"" + FileName + "\"!", LOGFATALERROR);
+		Logger::Log("Default exception caught while " + ActionConjugated + " \"" + FileName + "\"!", LogFatalError);
 
 		std::string ExceptionMessage("Default exception caught while " + ActionConjugated + " \"" + FileName + "\"! See logs.");
 		MessageBoxA(find_main_window(GetProcessID("rfg.exe")), ExceptionMessage.c_str(), "Json default exception caught", MB_OK);
-		Logger::Log("Failed to " + Action + " \"" + FileName + "\", exiting.", LOGFATALERROR);
+		Logger::Log("Failed to " + Action + " \"" + FileName + "\", exiting.", LogFatalError);
 		return false;
 	}
 }

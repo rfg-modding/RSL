@@ -200,13 +200,13 @@ bool ChangeTeleportLocation(std::string CurrentName, std::string NewName, float 
 bool LoadTeleportLocations()
 {
 	std::string ExePath = GetEXEPath(false);
-	Logger::Log("Started loading \"Teleport Locations.json\".", LOGSUCCESS);
+	Logger::Log("Started loading \"Teleport Locations.json\".", LogInfo);
 	
 	if (fs::exists(ExePath + "RFGR Script Loader/Settings/Teleport Locations.json"))
 	{
 		if (!JsonExceptionHandler([&]
 		{
-			Logger::Log("Parsing \"Teleport Locations.json\"...", LOGMESSAGE);
+			Logger::Log("Parsing \"Teleport Locations.json\"...", LogInfo);
 			std::ifstream Config(ExePath + "RFGR Script Loader/Settings/Teleport Locations.json");
 			Config >> TeleportLocations;
 			Config.close();
@@ -215,13 +215,13 @@ bool LoadTeleportLocations()
 		{
 			return false;
 		}
-		Logger::Log("No parse exceptions detected.", LOGSUCCESS);
+		Logger::Log("No parse exceptions detected.", LogInfo);
 	}
 	else
 	{
 		if (!JsonExceptionHandler([&]
 		{
-			Logger::Log("\"Teleport Locations.json\" not found. Creating from default values.", LOGWARNING);
+			Logger::Log("\"Teleport Locations.json\" not found. Creating from default values.", LogWarning);
 			CreateDirectoryIfNull(ExePath + "RFGR Script Loader/Settings/");
 
 			SetTeleportLocation("Tutorial Area Hilltop", -2328.29f, 30.0f, -2317.9f, "Tutorial area at the start of the game. Position: (-2328.29, 30.0, -2317.9)");
@@ -252,19 +252,19 @@ bool LoadTeleportLocations()
 		{
 			return false;
 		}
-		Logger::Log("No write exceptions detected.", LOGSUCCESS);
+		Logger::Log("No write exceptions detected.", LogInfo);
 	}
 
-	Logger::Log("Done loading \"Teleport Locations.json\".", LOGSUCCESS);
+	Logger::Log("Done loading \"Teleport Locations.json\".", LogInfo);
 	return true;
 }
 
 bool SaveTeleportLocations()
 {
-	Logger::Log("Started writing \"Teleport Locations.json\"", LOGMESSAGE);
+	Logger::Log("Started writing \"Teleport Locations.json\"", LogInfo);
 	if (!JsonExceptionHandler([&]
 	{
-		Logger::Log("\"Teleport Locations.json\" not found. Creating from default values.", LOGWARNING);
+		Logger::Log("\"Teleport Locations.json\" not found. Creating from default values.", LogWarning);
 		std::string ExePath = GetEXEPath(false);
 		CreateDirectoryIfNull(ExePath + "RFGR Script Loader/Settings/");
 
@@ -277,37 +277,37 @@ bool SaveTeleportLocations()
 	{
 		return false;
 	}
-	Logger::Log("No write exceptions detected.", LOGSUCCESS);
+	Logger::Log("No write exceptions detected.", LogInfo);
 	
-	Logger::Log("Done writing \"Teleport Locations.json\"", LOGSUCCESS);
+	Logger::Log("Done writing \"Teleport Locations.json\"", LogInfo);
 	return true;
 }
 
 bool LoadGUIConfig()
 {
 	std::string ExePath = GetEXEPath(false);
-	Logger::Log("Started loading \"GUI Config.json\".", LOGSUCCESS);
+	Logger::Log("Started loading \"GUI Config.json\".", LogInfo);
 
 	if (fs::exists(ExePath + "RFGR Script Loader/Settings/GUI Config.json"))
 	{
 		if (!JsonExceptionHandler([&]
 		{
-			Logger::Log("Parsing \"GUI Config.json\"", LOGMESSAGE);
+			Logger::Log("Parsing \"GUI Config.json\"", LogInfo);
 			std::ifstream Config(ExePath + "RFGR Script Loader/Settings/GUI Config.json");
-			Config >> MainConfig;
+			Config >> GUIConfig;
 			Config.close();
 			return true;
 		}, "GUI Config.json", "parse", "parsing"))
 		{
 			return false;
 		}
-		Logger::Log("No parse exceptions detected.", LOGSUCCESS);
+		Logger::Log("No parse exceptions detected.", LogInfo);
 	}
 	else
 	{
 		if (!JsonExceptionHandler([&]
 		{
-			Logger::Log("\"GUI Settings.json\" not found. Creating from default values.", LOGWARNING);
+			Logger::Log("\"GUI Settings.json\" not found. Creating from default values.", LogWarning);
 			CreateDirectoryIfNull(ExePath + "RFGR Script Loader/Settings/");
 
 			GUIConfig["Theme Info"]["Theme name"] = std::string("Default Dark Theme");
@@ -407,11 +407,12 @@ bool LoadGUIConfig()
 		{
 			return false;
 		}
-		Logger::Log("No write exceptions detected.", LOGSUCCESS);
+		Logger::Log("No write exceptions detected.", LogInfo);
 	}
 
 	if (!JsonExceptionHandler([&]
 	{
+		Logger::Log("Start of gui style reading.", LogInfo);
 		ImGuiStyle& Style = ImGui::GetStyle(); //Currently 25 items
 		Style.Alpha = GUIConfig["Style"]["Alpha"].get<float>();
 		Style.AntiAliasedFill = GUIConfig["Style"]["AntiAliasedFill"].get<bool>();
@@ -443,7 +444,9 @@ bool LoadGUIConfig()
 		Style.WindowPadding = JsonGetFloat2(GUIConfig, "Style", "WindowPadding");
 		Style.WindowRounding = GUIConfig["Style"]["WindowRounding"].get<float>();
 		Style.WindowTitleAlign = JsonGetFloat2(GUIConfig, "Style", "WindowTitleAlign");
+		Logger::Log("Done reading gui style.", LogInfo);
 
+		Logger::Log("Start of gui color reading.", LogInfo);
 		ImVec4* Colors = ImGui::GetStyle().Colors; //48 items
 		Colors[ImGuiCol_Text] = JsonGetFloat4(GUIConfig, "Colors", "Text");
 		Colors[ImGuiCol_TextDisabled] = JsonGetFloat4(GUIConfig, "Colors", "TextDisabled");
@@ -493,15 +496,17 @@ bool LoadGUIConfig()
 		Colors[ImGuiCol_NavWindowingHighlight] = JsonGetFloat4(GUIConfig, "Colors", "NavWindowingHighlight");
 		Colors[ImGuiCol_NavWindowingDimBg] = JsonGetFloat4(GUIConfig, "Colors", "NavWindowingDimBackground");
 		Colors[ImGuiCol_ModalWindowDimBg] = JsonGetFloat4(GUIConfig, "Colors", "ModalWindowDimBackground");
+		Logger::Log("Done reading gui color.", LogInfo);
+		Logger::Log("End of gui theme reading.", LogInfo);
 
 		return true;
 	}, "GUI Config.json", "read", "reading"))
 	{
 		return false;
 	}
-	Logger::Log("No read exceptions detected.", LOGSUCCESS);
+	Logger::Log("No read exceptions detected.", LogInfo);
 
-	Logger::Log("Done loading \"Settings.json\".", LOGSUCCESS);
+	Logger::Log("Done loading \"Settings.json\".", LogInfo);
 	return true;
 }
 
@@ -509,7 +514,7 @@ bool SaveGUIConfig(std::string ThemeName, std::string Description, std::string A
 {
 	if (!JsonExceptionHandler([&]
 	{
-		Logger::Log("Started saving \"GUI Config.json\".", LOGMESSAGE);
+		Logger::Log("Started saving \"GUI Config.json\".", LogInfo);
 		std::string ExePath = GetEXEPath(false);
 		CreateDirectoryIfNull(ExePath + "RFGR Script Loader/Settings/");
 
@@ -611,9 +616,9 @@ bool SaveGUIConfig(std::string ThemeName, std::string Description, std::string A
 	{
 		return false;
 	}
-	Logger::Log("No write exceptions detected.", LOGSUCCESS);
+	Logger::Log("No write exceptions detected.", LogInfo);
 
-	Logger::Log("Done saving \"GUI Config.json\".", LOGSUCCESS);
+	Logger::Log("Done saving \"GUI Config.json\".", LogInfo);
 	return true;
 }
 
@@ -691,7 +696,7 @@ void MainOverlay::Draw(const char* title, bool* p_open)
 			PlayerVelocityTargetArray[2] = PlayerPtr->Velocity.z;
 
 			PlayerPtrTargetsInitialized = true;
-			Logger::Log("PlayerPtrTargetsInitialized = true", LOGWARNING);
+			Logger::Log("PlayerPtrTargetsInitialized = true", LogWarning);
 		}
 	}
 
@@ -1034,13 +1039,13 @@ void MainOverlay::DrawTeleportGui(bool UseSeparateWindow, const char* Title, boo
 		}
 		catch (std::exception& Exception)
 		{
-			Logger::Log("Exception while drawing teleport menu!", LOGFATALERROR);
-			Logger::Log(Exception.what(), LOGFATALERROR);
+			Logger::Log("Exception while drawing teleport menu!", LogFatalError);
+			Logger::Log(Exception.what(), LogFatalError);
 			Sleep(6000);
 		}
 		catch (...)
 		{
-			Logger::Log("Unknown exception while drawing teleport menu!", LOGFATALERROR);
+			Logger::Log("Unknown exception while drawing teleport menu!", LogFatalError);
 		}
 	}
 	TooltipOnPrevious("Manual and preset teleport controls for the player. Works in vehicles.");
