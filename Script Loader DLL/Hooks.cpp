@@ -178,7 +178,6 @@ HRESULT __stdcall D3D11PresentHook(IDXGISwapChain * pSwapChain, UINT SyncInterva
 			Logger::Log(std::string("CreateRenderTargetView() failed, return value: " + std::to_string(Result)), LogFatalError);
 			return E_FAIL;
 		}
-
 		BackBuffer->Release();
 
 		/*DXGI_SWAP_CHAIN_DESC SwapChainDescription;
@@ -356,6 +355,12 @@ void __fastcall PlayerDoFrameHook(Player* PlayerPtr)
 		//PlayerPtr->MaxHitPoints = 2147483647;
 		//PlayerPtr->HitPoints = 2147483647.0f;
 		//PlayerPtr->InitialMaxHitPoints = 2147483647;
+	}
+	if (Overlay.NeedCustomJumpHeightSet)
+	{
+		PlayerPtr->CodeDrivenJumpHeight = Overlay.CustomJumpHeight;
+		PlayerPtr->MoveSpeed = Overlay.CustomPlayerMoveSpeed;
+		PlayerPtr->MaxSpeed = Overlay.CustomPlayerMaxSpeed;
 	}
 
 	return PlayerDoFrame(&NewPlayerObject);

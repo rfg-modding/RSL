@@ -814,6 +814,45 @@ void MainOverlay::Draw(const char* title, bool* p_open)
 	ImGui::Separator();*/
 
 	ImGui::Text("Globals:");
+	ImGui::Text("Xray Effect Mode: ");
+	ImGui::SameLine(); ImGui::RadioButton("Backpack", &XrayEffectMode, 0);
+	ImGui::SameLine(); ImGui::RadioButton("Rail Driver", &XrayEffectMode, 1);
+	ImGui::Text("Selected mode value: "); ImGui::SameLine();
+	ImGui::TextColored(SecondaryTextColor, std::to_string(XrayEffectMode).c_str());
+	if (ImGui::Button("Toggle Selected Xray Mode"))
+	{
+		if (XrayEffectMode == 0)
+		{
+			if (XrayModeOn)
+			{
+				xray_effect_stop(XET_VISION_BACKPACK);
+				XrayModeOn = false;
+			}
+			else
+			{
+				xray_effect_start(XET_VISION_BACKPACK);
+				XrayModeOn = true;
+			}
+		}
+		else if (XrayEffectMode == 1)
+		{
+			if (XrayModeOn)
+			{
+				xray_effect_stop(XET_RAIL_DRIVER);
+				XrayModeOn = false;
+			}
+			else
+			{
+				xray_effect_start(XET_RAIL_DRIVER);
+				XrayModeOn = true;
+			}
+		}
+	}
+
+	ImGui::Text("Code driven jump height:"); ImGui::SameLine();
+	ImGui::TextColored(SecondaryTextColor, std::to_string(PlayerPtr->CodeDrivenJumpHeight).c_str());
+	ImGui::InputFloat("Custom code driven jump height", &CustomJumpHeight, 0.5, 2.0, 3); ImGui::SameLine();
+	ImGui::Checkbox("Active", &NeedCustomJumpHeightSet);
 	ImGui::Checkbox("Infinite jetpack", &InfiniteJetpack);
 	//ImGui::Checkbox("Invulnerability", (bool*)(PlayerPtr->Flags.invulnerable));
 	ImGui::Checkbox("Invulnerability", &Invulnerable);
@@ -821,8 +860,12 @@ void MainOverlay::Draw(const char* title, bool* p_open)
 	{
 		PlayerPtr->Flags.invulnerable = false;
 	}
-	ImGui::InputFloat("Player move speed", &PlayerPtr->MoveSpeed, 1.0f, 5.0f, 3);
-	ImGui::InputFloat("Player max speed", &PlayerPtr->MaxSpeed, 1.0f, 5.0f, 3);
+	ImGui::Text("Player move speed:"); ImGui::SameLine();
+	ImGui::TextColored(SecondaryTextColor, std::to_string(PlayerPtr->MoveSpeed).c_str());
+	ImGui::InputFloat("Player move speed", &CustomPlayerMoveSpeed, 1.0f, 5.0f, 3);
+	ImGui::Text("Player max speed:"); ImGui::SameLine();
+	ImGui::TextColored(SecondaryTextColor, std::to_string(PlayerPtr->MaxSpeed).c_str());
+	ImGui::InputFloat("Player max speed", &CustomPlayerMaxSpeed, 1.0f, 5.0f, 3);
 	//ImGui::InputFloat("Player cash", &PlayerPtr->Cash, 10.0f, 50.0f, 3);
 	//ImGui::InputFloat("Player hit points", &PlayerPtr->HitPoints, 10.0f, 100.0f, 3);
 	//ImGui::InputInt("Player max hit points", &PlayerPtr->MaxHitPoints);

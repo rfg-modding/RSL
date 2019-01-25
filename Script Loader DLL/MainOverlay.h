@@ -72,6 +72,15 @@ public:
 	bool Invulnerable = false;
 
 	bool TeleportEditPopupOpen = false;
+
+	float CustomPlayerMoveSpeed = 5.0f;
+	float CustomPlayerMaxSpeed = 50.0f;
+	float CustomJumpHeight = 1.2f;
+	bool NeedCustomJumpHeightSet = false;
+
+	int XrayEffectMode = 0;
+	bool XrayModeOn = false;
+
 	std::string NewTeleportName;
 	vector NewTeleportPosition;
 	std::string NewTeleportDescription;

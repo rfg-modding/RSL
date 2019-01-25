@@ -62,4 +62,9 @@ void FunctionManager::Initialize()
 	HumanDisableOutline = (F_HumanDisableOutline)(ModuleBase + 0x62EF00); //.text:0158EF00 rfg.exe:$62EF00 #62E300 <human::disable_object_outline>
 
 	TargetOutlineAddObject = (F_TargetOutlineAddObject)(ModuleBase + 0x735390);	//.text:01695390 rfg.exe:$735390 #734790 <target_outline_add_object>
+
+
+
+	xray_effect_start = (F_xray_effect_start)(ModuleBase + 0x2E4E30); //.text:00694E30 rfg.exe:$2E4E30 #2E4230 <xray_effect_start>
+	xray_effect_stop = (F_xray_effect_stop)(ModuleBase + 0x2E4E50); //.text:00694E50 rfg.exe:$2E4E50 #2E4250 <xray_effect_stop>
 }
