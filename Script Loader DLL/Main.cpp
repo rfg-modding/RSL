@@ -40,6 +40,8 @@ DWORD WINAPI MainThread(HMODULE hModule)
 	Logger::OpenLogFile("Json Log.txt", LogJson, std::ios_base::trunc);
 	Logger::OpenLogFile("Lua Log.txt", LogLua, std::ios_base::trunc);
 
+	Program.Scripts.ScanScriptsFolder();
+
 	GameState RFGRState;
 	while (!Program.ShouldClose()) //Todo: Change to respond to PostQuitMessage(0) in WndProc;
 	{

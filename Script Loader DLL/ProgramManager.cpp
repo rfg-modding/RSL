@@ -38,6 +38,7 @@ void ProgramManager::Initialize()
 	Camera.Initialize(DefaultFreeCameraSpeed, 5.0);
 	Functions.Initialize();
 	Scripts.Initialize();
+	Overlay.Scripts = &Scripts;
 
 	NewObjectPosition.x = 0.0f;
 	NewObjectPosition.y = 0.0f;

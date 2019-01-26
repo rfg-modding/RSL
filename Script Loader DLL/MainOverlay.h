@@ -4,9 +4,12 @@
 ///#include "RFGR_Types_Player.h"
 #include "Functions.h"
 #include "imgui_stdlib.h"
+//#include "ScriptManager.h"
 
 extern nlohmann::json GUIConfig;
 extern nlohmann::json TeleportLocations;
+
+class ScriptManager;
 
 class MainOverlay
 {
@@ -80,6 +83,8 @@ public:
 
 	int XrayEffectMode = 0;
 	bool XrayModeOn = false;
+
+	ScriptManager* Scripts;
 
 	std::string NewTeleportName;
 	vector NewTeleportPosition;

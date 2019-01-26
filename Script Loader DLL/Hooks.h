@@ -3,6 +3,8 @@
 ///#include "Globals.h"
 #include "MainOverlay.h"
 
+//class MainOverlay;
+
 extern MainOverlay Overlay;
 
 extern std::once_flag HookD3D11PresentInitialCall;

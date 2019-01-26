@@ -105,3 +105,152 @@ void ScriptManager::RunTestScript2()
 		Logger::Log(std::string("Exception caught when running Test2.lua: " + std::string(Exception.what())), LogLua | LogError);
 	}
 }
+
+void ScriptManager::ScanScriptsFolder()
+{
+	Scripts.clear();
+	std::string ScriptFolderPath(GetEXEPath(false) + "RFGR Script Loader/Scripts/");
+
+	std::string ThisScriptPath;
+	std::string ThisScriptFolderPath;
+	std::string ThisScriptName;
+
+	for (auto& i : fs::directory_iterator(ScriptFolderPath))
+	{
+		if (IsValidScriptExtensionFromPath(i.path().string()))
+		{
+			ThisScriptPath = i.path().string();
+			ThisScriptFolderPath = GetScriptFolderFromPath(i.path().string());
+			ThisScriptName = GetScriptNameFromPath(i.path().string());
+			Scripts.push_back(Script(ThisScriptPath, ThisScriptFolderPath, ThisScriptName));
+
+			Logger::Log(i.path().string(), LogInfo);
+			Logger::Log("Script Name: " + ThisScriptName, LogInfo);
+			Logger::Log("Script Folder: " + ThisScriptFolderPath, LogInfo);
+		}
+	}
+}
+
+void ScriptManager::ScanScriptsSubFolders()
+{
+
+}
+
+bool ScriptManager::RunScript(std::string FullPath)
+{
+	if (IsValidScriptExtensionFromPath(FullPath))
+	{
+		try
+		{
+			auto CodeResult = Lua.script_file(FullPath, [](lua_State*, sol::protected_function_result pfr)
+			{
+				return pfr;
+			}, sol::load_mode::text);
+
+			if (!CodeResult.valid())
+			{
+				sol::error ScriptError = CodeResult;
+				std::exception ScriptException(ScriptError.what());
+				throw(ScriptException);
+			}
+			return true;
+		}
+		catch (std::exception& Exception)
+		{
+			Logger::Log(std::string("Exception caught when running" + GetScriptNameFromPath(FullPath) + std::string(Exception.what())), LogLua | LogError);
+			return false;
+		}
+	}
+	else
+	{
+		return false;
+	}
+}
+
+bool ScriptManager::RunScript(size_t Index)
+{
+	std::string FullPath = Scripts[Index].FullPath;
+	try
+	{
+		auto CodeResult = Lua.script_file(FullPath, [](lua_State*, sol::protected_function_result pfr)
+		{
+			return pfr;
+		}, sol::load_mode::text);
+
+		if (!CodeResult.valid())
+		{
+			sol::error ScriptError = CodeResult;
+			std::exception ScriptException(ScriptError.what());
+			throw(ScriptException);
+		}
+		return true;
+	}
+	catch (std::exception& Exception)
+	{
+		Logger::Log(std::string("Exception caught when running" + Scripts[Index].Name + std::string(Exception.what())), LogLua | LogError);
+		return false;
+	}
+}
+
+std::string ScriptManager::GetScriptNameFromPath(std::string FullPath)
+{
+	for (int i = FullPath.length() - 1; i > 0; i--)
+	{
+		if (i != FullPath.length())
+		{
+			if (FullPath.compare(i, 1, "\\") == 0 || FullPath.compare(i, 1, "/") == 0)
+			{
+				return FullPath.substr(i + 1, FullPath.length() - i);
+			}
+		}
+	}
+	return std::string();
+}
+
+std::string ScriptManager::GetScriptFolderFromPath(std::string FullPath)
+{
+	for (int i = FullPath.length() - 1; i > 0; i--)
+	{
+		if (i != FullPath.length())
+		{
+			if (FullPath.compare(i, 1, "\\") == 0 || FullPath.compare(i, 1, "/") == 0)
+			{
+				return FullPath.substr(0, i + 1);
+			}
+		}
+	}
+	return std::string();
+}
+
+std::string ScriptManager::GetScriptExtensionFromPath(std::string FullPath)
+{
+	for (int i = FullPath.length() - 1; i > 0; i--)
+	{
+		if (FullPath.compare(i, 1, ".") == 0)
+		{
+			//Logger::Log("Script extension: " + FullPath.substr(i + 1, FullPath.length() - i), LogInfo);
+			return FullPath.substr(i + 1, FullPath.length() - i);
+		}
+	}
+	return std::string();
+}
+
+bool ScriptManager::IsValidScriptExtensionFromPath(std::string FullPath)
+{
+	if (IsValidScriptExtension(GetScriptExtensionFromPath(FullPath)))
+	{
+		return true;
+	}
+	return false;
+}
+
+bool ScriptManager::IsValidScriptExtension(std::string Extension)
+{
+	std::transform(Extension.begin(), Extension.end(), Extension.begin(), ::tolower);
+	if (Extension == "lua")
+	{
+		return true;
+	}
+	return false;
+}
+
