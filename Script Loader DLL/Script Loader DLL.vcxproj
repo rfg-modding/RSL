@@ -78,7 +78,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>.\include\LuaJIT-2.0.5;.\include\sol3;.\include\ImGui;.\include\nlohmann;.\include\glm;.\chaiscript;.\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.\include\IconFontCppHeaders;.\include\LuaJIT-2.0.5;.\include\sol3;.\include\ImGui;.\include\nlohmann;.\include\glm;.\chaiscript;.\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>PCH.hpp</PrecompiledHeaderFile>
@@ -97,7 +97,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>.\include\LuaJIT-2.0.5;.\include\sol3;.\include\ImGui;.\include\nlohmann;.\include\glm;.\chaiscript;.\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.\include\IconFontCppHeaders;.\include\LuaJIT-2.0.5;.\include\sol3;.\include\ImGui;.\include\nlohmann;.\include\glm;.\chaiscript;.\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>PCH.hpp</PrecompiledHeaderFile>
@@ -118,7 +118,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>.\include\LuaJIT-2.0.5;.\include\sol3;.\include\ImGui;.\include\nlohmann;.\include\glm;.\chaiscript;.\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.\include\IconFontCppHeaders;.\include\LuaJIT-2.0.5;.\include\sol3;.\include\ImGui;.\include\nlohmann;.\include\glm;.\chaiscript;.\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>PCH.hpp</PrecompiledHeaderFile>
@@ -142,7 +142,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>.\include\LuaJIT-2.0.5;.\include\sol3;.\include\ImGui;.\include\nlohmann;.\include\glm;.\chaiscript;.\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.\include\IconFontCppHeaders;.\include\LuaJIT-2.0.5;.\include\sol3;.\include\ImGui;.\include\nlohmann;.\include\glm;.\chaiscript;.\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>PCH.hpp</PrecompiledHeaderFile>

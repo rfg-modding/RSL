@@ -198,32 +198,34 @@ HRESULT __stdcall D3D11PresentHook(IDXGISwapChain * pSwapChain, UINT SyncInterva
 		hwnd = find_main_window(GetProcessID("rfg.exe"));
 		ImGui_ImplWin32_Init(hwnd);
 
+		ImGuiIO& io = ImGui::GetIO();
+		float GlobalFontSize = 17.0f;
 		std::string DroidSansPath = std::string(GetEXEPath(false) + "RFGR Script Loader/Fonts/DroidSans.ttf");
 		if (fs::exists(DroidSansPath))
 		{
-			ImGui::GetIO().Fonts->AddFontFromFileTTF(DroidSansPath.c_str(), 17.0f);
+			io.Fonts->AddFontFromFileTTF(DroidSansPath.c_str(), GlobalFontSize);
 		}
 		else
 		{
 			Logger::Log("DroidSans.ttf not found. Using default font.", LogInfo);
+			io.Fonts->AddFontDefault();
 		}
 
-		/*if (OverlayActive)
-		{
-			OriginalWndProc = (WNDPROC)SetWindowLongPtr(hwnd, GWLP_WNDPROC, (__int3264)(LONG_PTR)WndProc);
-		}*/
+		Logger::Log("Merging FontAwesome...", LogWarning);
+		//Logger::Log("Merging FontAwesome...", LogWarning);
+		static const ImWchar IconsRanges[] = { ICON_MIN_FA, ICON_MAX_FA, 0 };
+		ImFontConfig IconsConfig; ///fa-solid-900
+		IconsConfig.MergeMode = true;
+		IconsConfig.PixelSnapH = true;//C:\Program Files\SteamLibrary\steamapps\common\Red Faction Guerrilla Re-MARS-tered\RFGR Script Loader\Fonts
+		//Logger::Log("Merging FontAwesome...", LogWarning);
+		std::string FontAwesomeSolidPath(GetEXEPath(false) + "RFGR Script Loader/Fonts/fa-solid-900.ttf");
+		Logger::Log(FontAwesomeSolidPath, LogWarning);
+		io.Fonts->AddFontFromFileTTF(FontAwesomeSolidPath.c_str(), GlobalFontSize, &IconsConfig, IconsRanges);
+		Logger::Log("Done merging FontAwesome...", LogWarning);
 
 		Overlay.Initialize();
 		ImGuiInitialized = true;
 		UpdateD3D11Pointers = false;
-
-		//Cheap attempt to turn on wireframe mode.
-		/*ID3D11RasterizerState* RastState;
-		D3D11Context->RSGetState(&RastState);
-		D3D11_RASTERIZER_DESC RastDesc;
-		RastState->GetDesc(&RastDesc);
-		D3D11Device->CreateRasterizerState(&RastDesc, &RastState);
-		D3D11Context->RSSetState(RastState);*/
 
 		Logger::Log("ImGui Initialized.", LogInfo);
 	});

@@ -5,6 +5,7 @@
 #include "Functions.h"
 #include "imgui_stdlib.h"
 //#include "ScriptManager.h"
+#include "IconsFontAwesome5.h"
 
 extern nlohmann::json GUIConfig;
 extern nlohmann::json TeleportLocations;
