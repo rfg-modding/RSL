@@ -172,7 +172,11 @@ HRESULT __stdcall D3D11PresentHook(IDXGISwapChain * pSwapChain, UINT SyncInterva
 			return E_FAIL;
 		}
 
-		Result = D3D11Device->CreateRenderTargetView(BackBuffer, NULL, &MainRenderTargetView);
+		D3D11_RENDER_TARGET_VIEW_DESC desc = {};
+		memset(&desc, 0, sizeof(desc));
+		desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM; // most important change!
+		desc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
+		Result = D3D11Device->CreateRenderTargetView(BackBuffer, &desc, &MainRenderTargetView);
 		if (Result != S_OK)
 		{
 			Logger::Log(std::string("CreateRenderTargetView() failed, return value: " + std::to_string(Result)), LogFatalError);
