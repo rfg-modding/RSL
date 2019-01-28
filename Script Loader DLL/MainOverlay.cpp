@@ -351,54 +351,54 @@ bool LoadGUIConfig()
 			GUIConfig["Style"]["WindowTitleAlign"][1] = 0.5f;
 
 			float DefaultGlobalOpacity = 1.0f;
-			SetJsonFloat4(GUIConfig, "Colors", "Text", ImVec4(0.98f, 0.98f, 1.00f, DefaultGlobalOpacity));
-			SetJsonFloat4(GUIConfig, "Colors", "TextDisabled", ImVec4(0.50f, 0.51f, 0.53f, DefaultGlobalOpacity));
-			SetJsonFloat4(GUIConfig, "Colors", "WindowBackground", ImVec4(0.14f, 0.15f, 0.16f, DefaultGlobalOpacity));
-			SetJsonFloat4(GUIConfig, "Colors", "ChildBackground", ImVec4(0.00f, 0.00f, 0.00f, 0.00f));
-			SetJsonFloat4(GUIConfig, "Colors", "PopupBackground", ImVec4(0.10f, 0.10f, 0.12f, DefaultGlobalOpacity));
-			SetJsonFloat4(GUIConfig, "Colors", "Border", ImVec4(0.09f, 0.09f, 0.11f, DefaultGlobalOpacity));
-			SetJsonFloat4(GUIConfig, "Colors", "BorderShadow", ImVec4(0.00f, 0.00f, 0.00f, 0.00f));
-			SetJsonFloat4(GUIConfig, "Colors", "FrameBackground", ImVec4(0.10f, 0.10f, 0.12f, DefaultGlobalOpacity));
-			SetJsonFloat4(GUIConfig, "Colors", "FrameBackgroundHovered", ImVec4(0.20f, 0.55f, 0.83f, DefaultGlobalOpacity));
-			SetJsonFloat4(GUIConfig, "Colors", "FrameBackgroundActive", ImVec4(0.20f, 0.55f, 0.83f, DefaultGlobalOpacity));
-			SetJsonFloat4(GUIConfig, "Colors", "TitleBackground", ImVec4(0.04f, 0.04f, 0.04f, 1.00f));
-			SetJsonFloat4(GUIConfig, "Colors", "TitleBackgroundActive", ImVec4(0.10f, 0.40f, 0.75f, DefaultGlobalOpacity));
-			SetJsonFloat4(GUIConfig, "Colors", "TitleBackgroundCollapsed", ImVec4(0.00f, 0.00f, 0.00f, 0.51f));
-			SetJsonFloat4(GUIConfig, "Colors", "MenuBarBackground", ImVec4(0.14f, 0.14f, 0.14f, 1.00f));
-			SetJsonFloat4(GUIConfig, "Colors", "ScrollbarBackground", ImVec4(0.02f, 0.02f, 0.02f, 0.53f));
-			SetJsonFloat4(GUIConfig, "Colors", "ScrollbarGrab", ImVec4(0.31f, 0.31f, 0.31f, 1.00f));
-			SetJsonFloat4(GUIConfig, "Colors", "ScrollbarGrabHovered", ImVec4(0.41f, 0.41f, 0.41f, 1.00f));
-			SetJsonFloat4(GUIConfig, "Colors", "ScrollbarGrabActive", ImVec4(0.51f, 0.51f, 0.51f, 1.00f));
-			SetJsonFloat4(GUIConfig, "Colors", "CheckMark", ImVec4(0.10f, 0.40f, 0.75f, DefaultGlobalOpacity));
-			SetJsonFloat4(GUIConfig, "Colors", "SliderGrab", ImVec4(0.20f, 0.55f, 0.83f, DefaultGlobalOpacity));
-			SetJsonFloat4(GUIConfig, "Colors", "SliderGrabActive", ImVec4(0.20f, 0.55f, 0.83f, DefaultGlobalOpacity));
-			SetJsonFloat4(GUIConfig, "Colors", "Button", ImVec4(0.10f, 0.40f, 0.75f, DefaultGlobalOpacity));
-			SetJsonFloat4(GUIConfig, "Colors", "ButtonHovered", ImVec4(0.20f, 0.55f, 0.98f, DefaultGlobalOpacity));
-			SetJsonFloat4(GUIConfig, "Colors", "ButtonActive", ImVec4(0.06f, 0.53f, 0.98f, 1.00f));
-			SetJsonFloat4(GUIConfig, "Colors", "Header", ImVec4(0.26f, 0.59f, 0.98f, 0.31f));
-			SetJsonFloat4(GUIConfig, "Colors", "HeaderHovered", ImVec4(0.26f, 0.59f, 0.98f, 0.80f));
-			SetJsonFloat4(GUIConfig, "Colors", "HeaderActive", ImVec4(0.26f, 0.59f, 0.98f, 1.00f));
-			SetJsonFloat4(GUIConfig, "Colors", "Separator", ImVec4(0.43f, 0.43f, 0.50f, 0.50f));
-			SetJsonFloat4(GUIConfig, "Colors", "SeparatorHovered", ImVec4(0.10f, 0.40f, 0.75f, 0.78f));
-			SetJsonFloat4(GUIConfig, "Colors", "SeparatorActive", ImVec4(0.10f, 0.40f, 0.75f, 1.00f));
-			SetJsonFloat4(GUIConfig, "Colors", "ResizeGrip", ImVec4(0.26f, 0.59f, 0.98f, 0.25f));
-			SetJsonFloat4(GUIConfig, "Colors", "ResizeGripHovered", ImVec4(0.26f, 0.59f, 0.98f, 0.67f));
-			SetJsonFloat4(GUIConfig, "Colors", "ResizeGripActive", ImVec4(0.26f, 0.59f, 0.98f, DefaultGlobalOpacity));
-			SetJsonFloat4(GUIConfig, "Colors", "Tab", ImVec4(0.18f, 0.35f, 0.58f, 0.86f));
-			SetJsonFloat4(GUIConfig, "Colors", "TabHovered", ImVec4(0.26f, 0.59f, 0.98f, 0.80f));
-			SetJsonFloat4(GUIConfig, "Colors", "TabActive", ImVec4(0.20f, 0.41f, 0.68f, 1.00f));
-			SetJsonFloat4(GUIConfig, "Colors", "TabUnfocused", ImVec4(0.07f, 0.10f, 0.15f, 0.97f));
-			SetJsonFloat4(GUIConfig, "Colors", "TabUnfocusedActive", ImVec4(0.14f, 0.26f, 0.42f, 1.00f));
-			SetJsonFloat4(GUIConfig, "Colors", "PlotLines", ImVec4(0.55f, 0.83f, 1.00f, DefaultGlobalOpacity));
-			SetJsonFloat4(GUIConfig, "Colors", "PlotLinesHovered", ImVec4(1.00f, 0.43f, 0.35f, 1.00f));
-			SetJsonFloat4(GUIConfig, "Colors", "PlotHistogram", ImVec4(0.90f, 0.70f, 0.00f, 1.00f));
-			SetJsonFloat4(GUIConfig, "Colors", "PlotHistogramHovered", ImVec4(1.00f, 0.60f, 0.00f, 1.00f));
-			SetJsonFloat4(GUIConfig, "Colors", "TextSelectedBackground", ImVec4(0.26f, 0.59f, 0.98f, 0.35f));
-			SetJsonFloat4(GUIConfig, "Colors", "DragDropTarget", ImVec4(1.00f, 1.00f, 0.00f, 0.90f));
-			SetJsonFloat4(GUIConfig, "Colors", "NavHighlight", ImVec4(0.26f, 0.59f, 0.98f, 1.00f));
-			SetJsonFloat4(GUIConfig, "Colors", "NavWindowingHighlight", ImVec4(1.00f, 1.00f, 1.00f, 0.70f));
-			SetJsonFloat4(GUIConfig, "Colors", "NavWindowingDimBackground", ImVec4(0.80f, 0.80f, 0.80f, 0.20f));
-			SetJsonFloat4(GUIConfig, "Colors", "ModalWindowDimBackground", ImVec4(0.80f, 0.80f, 0.80f, 0.35f));
+			SetJsonFloat4(GUIConfig, "Colors", "Text", ImVec4(0.945f, 0.945f, 0.945f, DefaultGlobalOpacity));
+			SetJsonFloat4(GUIConfig, "Colors", "TextDisabled", ImVec4(0.610f, 0.610f, 0.610f, DefaultGlobalOpacity));
+			SetJsonFloat4(GUIConfig, "Colors", "WindowBackground", ImVec4(0.349f, 0.349f, 0.349f, DefaultGlobalOpacity));
+			SetJsonFloat4(GUIConfig, "Colors", "ChildBackground", ImVec4(0.357f, 0.357f, 0.357f, DefaultGlobalOpacity));
+			SetJsonFloat4(GUIConfig, "Colors", "PopupBackground", ImVec4(0.357f, 0.357f, 0.357f, DefaultGlobalOpacity));
+			SetJsonFloat4(GUIConfig, "Colors", "Border", ImVec4(0.430f, 0.430f, 0.430f, DefaultGlobalOpacity));
+			SetJsonFloat4(GUIConfig, "Colors", "BorderShadow", ImVec4(0.498f, 0.498f, 0.498f, 0.000f));
+			SetJsonFloat4(GUIConfig, "Colors", "FrameBackground", ImVec4(0.394f, 0.394f, 0.394f, DefaultGlobalOpacity));
+			SetJsonFloat4(GUIConfig, "Colors", "FrameBackgroundHovered", ImVec4(0.333f, 0.333f, 0.333f, DefaultGlobalOpacity));
+			SetJsonFloat4(GUIConfig, "Colors", "FrameBackgroundActive", ImVec4(0.358f, 0.660f, 0.871f, DefaultGlobalOpacity));
+			SetJsonFloat4(GUIConfig, "Colors", "TitleBackground", ImVec4(0.522f, 0.522f, 0.522f, DefaultGlobalOpacity));
+			SetJsonFloat4(GUIConfig, "Colors", "TitleBackgroundActive", ImVec4(0.358f, 0.660f, 0.871f, DefaultGlobalOpacity));
+			SetJsonFloat4(GUIConfig, "Colors", "TitleBackgroundCollapsed", ImVec4(0.422f, 0.422f, 0.422f, DefaultGlobalOpacity));
+			SetJsonFloat4(GUIConfig, "Colors", "MenuBarBackground", ImVec4(0.422f, 0.422f, 0.422f, DefaultGlobalOpacity));
+			SetJsonFloat4(GUIConfig, "Colors", "ScrollbarBackground", ImVec4(0.322f, 0.322f, 0.322f, DefaultGlobalOpacity));
+			SetJsonFloat4(GUIConfig, "Colors", "ScrollbarGrab", ImVec4(0.510f, 0.510f, 0.510f, DefaultGlobalOpacity));
+			SetJsonFloat4(GUIConfig, "Colors", "ScrollbarGrabHovered", ImVec4(0.610f, 0.610f, 0.610f, DefaultGlobalOpacity));
+			SetJsonFloat4(GUIConfig, "Colors", "ScrollbarGrabActive", ImVec4(0.710f, 0.710f, 0.710f, DefaultGlobalOpacity));
+			SetJsonFloat4(GUIConfig, "Colors", "CheckMark", ImVec4(0.310f, 0.571f, 0.753f, DefaultGlobalOpacity));
+			SetJsonFloat4(GUIConfig, "Colors", "SliderGrab", ImVec4(0.310f, 0.571f, 0.753f, DefaultGlobalOpacity));
+			SetJsonFloat4(GUIConfig, "Colors", "SliderGrabActive", ImVec4(0.358f, 0.660f, 0.871f, DefaultGlobalOpacity));
+			SetJsonFloat4(GUIConfig, "Colors", "Button", ImVec4(0.310f, 0.571f, 0.753f, DefaultGlobalOpacity));
+			SetJsonFloat4(GUIConfig, "Colors", "ButtonHovered", ImVec4(0.334, 0.615, 0.812, DefaultGlobalOpacity));
+			SetJsonFloat4(GUIConfig, "Colors", "ButtonActive", ImVec4(0.358f, 0.660f, 0.871f, DefaultGlobalOpacity));
+			SetJsonFloat4(GUIConfig, "Colors", "Header", ImVec4(0.310f, 0.571f, 0.753f, DefaultGlobalOpacity));
+			SetJsonFloat4(GUIConfig, "Colors", "HeaderHovered", ImVec4(0.334, 0.615, 0.812, DefaultGlobalOpacity));
+			SetJsonFloat4(GUIConfig, "Colors", "HeaderActive", ImVec4(0.358f, 0.660f, 0.871f, DefaultGlobalOpacity));
+			SetJsonFloat4(GUIConfig, "Colors", "Separator", ImVec4(0.510f, 0.510f, 0.510f, DefaultGlobalOpacity));
+			SetJsonFloat4(GUIConfig, "Colors", "SeparatorHovered", ImVec4(0.610f, 0.610f, 0.610f, DefaultGlobalOpacity));
+			SetJsonFloat4(GUIConfig, "Colors", "SeparatorActive", ImVec4(0.710f, 0.710f, 0.710f, DefaultGlobalOpacity));
+			SetJsonFloat4(GUIConfig, "Colors", "ResizeGrip", ImVec4(0.310f, 0.571f, 0.753f, DefaultGlobalOpacity));
+			SetJsonFloat4(GUIConfig, "Colors", "ResizeGripHovered", ImVec4(0.334, 0.615, 0.812, DefaultGlobalOpacity));
+			SetJsonFloat4(GUIConfig, "Colors", "ResizeGripActive", ImVec4(0.358f, 0.660f, 0.871f, DefaultGlobalOpacity));
+			SetJsonFloat4(GUIConfig, "Colors", "Tab", ImVec4(0.310f, 0.571f, 0.753f, DefaultGlobalOpacity));
+			SetJsonFloat4(GUIConfig, "Colors", "TabHovered", ImVec4(0.334, 0.615, 0.812, DefaultGlobalOpacity));
+			SetJsonFloat4(GUIConfig, "Colors", "TabActive", ImVec4(0.358f, 0.660f, 0.871f, DefaultGlobalOpacity));
+			SetJsonFloat4(GUIConfig, "Colors", "TabUnfocused", ImVec4(0.07f, 0.10f, 0.15f, DefaultGlobalOpacity));
+			SetJsonFloat4(GUIConfig, "Colors", "TabUnfocusedActive", ImVec4(0.14f, 0.26f, 0.42f, DefaultGlobalOpacity));
+			SetJsonFloat4(GUIConfig, "Colors", "PlotLines", ImVec4(0.310f, 0.571f, 0.753f, DefaultGlobalOpacity));
+			SetJsonFloat4(GUIConfig, "Colors", "PlotLinesHovered", ImVec4(0.000f, 0.578f, 0.900f, DefaultGlobalOpacity));
+			SetJsonFloat4(GUIConfig, "Colors", "PlotHistogram", ImVec4(0.310f, 0.571f, 0.753f, DefaultGlobalOpacity));
+			SetJsonFloat4(GUIConfig, "Colors", "PlotHistogramHovered", ImVec4(0.334, 0.615, 0.812, DefaultGlobalOpacity));
+			SetJsonFloat4(GUIConfig, "Colors", "TextSelectedBackground", ImVec4(0.310f, 0.571f, 0.753f, DefaultGlobalOpacity));
+			SetJsonFloat4(GUIConfig, "Colors", "DragDropTarget", ImVec4(1.00f, 1.00f, 0.00f, DefaultGlobalOpacity));
+			SetJsonFloat4(GUIConfig, "Colors", "NavHighlight", ImVec4(0.26f, 0.59f, 0.98f, DefaultGlobalOpacity));
+			SetJsonFloat4(GUIConfig, "Colors", "NavWindowingHighlight", ImVec4(1.00f, 1.00f, 1.00f, DefaultGlobalOpacity));
+			SetJsonFloat4(GUIConfig, "Colors", "NavWindowingDimBackground", ImVec4(0.80f, 0.80f, 0.80f, DefaultGlobalOpacity));
+			SetJsonFloat4(GUIConfig, "Colors", "ModalWindowDimBackground", ImVec4(0.80f, 0.80f, 0.80f, DefaultGlobalOpacity));
 
 			std::ofstream ConfigOutput(ExePath + "RFGR Script Loader/Settings/GUI Config.json");
 			ConfigOutput << std::setw(4) << GUIConfig << std::endl;
@@ -807,6 +807,11 @@ void MainOverlay::Draw(const char* title, bool* p_open)
 	{
 
 	}
+	ImGui::SameLine();
+	if (ImGui::Button(std::string(std::string(ICON_FA_TERMINAL) + u8"##TerminalIcon").c_str()))
+	{
+
+	}
 	ImGui::PopStyleColor(3);
 
 	if (ImGui::CollapsingHeader("Notes:"))
@@ -887,6 +892,11 @@ void MainOverlay::Draw(const char* title, bool* p_open)
 
 	if (ImGui::CollapsingHeader("Globals"))
 	{
+		if (ImGui::Button("Test Tooltips 1"))
+		{
+			UiToolTipsAddTip("Salvage", 200, 0);
+		}
+
 		ImGui::Text("Xray Effect Mode: ");
 		ImGui::SameLine(); ImGui::RadioButton("Backpack", &XrayEffectMode, 0);
 		ImGui::SameLine(); ImGui::RadioButton("Rail Driver", &XrayEffectMode, 1);
@@ -924,6 +934,7 @@ void MainOverlay::Draw(const char* title, bool* p_open)
 
 		ImGui::Text("Code driven jump height:"); ImGui::SameLine();
 		ImGui::TextColored(SecondaryTextColor, std::to_string(PlayerPtr->CodeDrivenJumpHeight).c_str());
+		ImGui::PushItemWidth(232.0f);
 		ImGui::InputFloat("Custom code driven jump height", &CustomJumpHeight, 0.5, 2.0, 3); ImGui::SameLine();
 		ImGui::Checkbox("Active", &NeedCustomJumpHeightSet);
 		ImGui::Checkbox("Infinite jetpack", &InfiniteJetpack);
@@ -935,10 +946,15 @@ void MainOverlay::Draw(const char* title, bool* p_open)
 		}
 		ImGui::Text("Player move speed:"); ImGui::SameLine();
 		ImGui::TextColored(SecondaryTextColor, std::to_string(PlayerPtr->MoveSpeed).c_str());
+		ImGui::PushItemWidth(232.0f);
 		ImGui::InputFloat("Player move speed", &CustomPlayerMoveSpeed, 1.0f, 5.0f, 3);
 		ImGui::Text("Player max speed:"); ImGui::SameLine();
 		ImGui::TextColored(SecondaryTextColor, std::to_string(PlayerPtr->MaxSpeed).c_str());
+		ImGui::PushItemWidth(232.0f);
 		ImGui::InputFloat("Player max speed", &CustomPlayerMaxSpeed, 1.0f, 5.0f, 3);
+		ImGui::PushItemWidth(232.0f);
+		ImGui::Text("Player velocity:"); ImGui::SameLine();
+		ImGui::InputFloat3("##Player velocity: ", (float*)&PlayerPtr->Velocity); ImGui::SameLine();
 		//ImGui::InputFloat("Player cash", &PlayerPtr->Cash, 10.0f, 50.0f, 3);
 		//ImGui::InputFloat("Player hit points", &PlayerPtr->HitPoints, 10.0f, 100.0f, 3);
 		//ImGui::InputInt("Player max hit points", &PlayerPtr->MaxHitPoints);
@@ -1082,10 +1098,7 @@ void MainOverlay::DrawTeleportGui(bool UseSeparateWindow, const char* Title, boo
 			ImGui::EndPopup();
 		}
 
-		/*ImGui::PushItemWidth(232.0f);
-		ImGui::Text("Player velocity:"); ImGui::SameLine();
-		ImGui::InputFloat3("##Player velocity: ", (float*)&PlayerPtr->Velocity); ImGui::SameLine();
-		if (ImGui::Button("Sync##PlayerVelocityTarget"))
+		/*if (ImGui::Button("Sync##PlayerVelocityTarget"))
 		{
 			PlayerVelocityTargetArray[0] = PlayerPtr->Velocity.x;
 			PlayerVelocityTargetArray[1] = PlayerPtr->Velocity.y;

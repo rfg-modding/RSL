@@ -82,3 +82,5 @@ F_ObjectDisableOutline ObjectDisableOutline;
 F_HumanEnableOutline HumanEnableOutline;
 F_HumanDisableOutline HumanDisableOutline;
 F_TargetOutlineAddObject TargetOutlineAddObject;
+
+F_ui_tool_tips_add_tip UiToolTipsAddTip;

@@ -16,20 +16,14 @@ DWORD WINAPI MainThread(HMODULE hModule)
 	Logger::OpenLogFile("Load Log.txt", LogAll, std::ios_base::trunc);
 	Logger::Log("RFGR Script Loader started. Activating.", LogInfo, true);
 
-	//Logger::Log("Before ProgramManager::ProgramManager()", LogInfo);
 	ProgramManager Program(hModule);
-	//Logger::Log("Before Program.LoadDataFromConfig()", LogInfo);
 	if (!Program.LoadDataFromConfig())
 	{
 		FreeLibraryAndExitThread(hModule, 0);
 		return 0;
 	}
-	//Logger::Log("Before Program.OpenConsole()", LogInfo);
 	Program.OpenConsole();
-	//Logger::Log("RFGR Script Loader attached to external console", LogInfo, true);
-	//Logger::Log("Before Program.SetMemoryLocations()", LogInfo);
 	Program.SetMemoryLocations();
-	//Logger::Log("Before Program.Initialize()", LogInfo);
 	Program.Initialize();
 
 	Logger::Log("RFGR script loader successfully activated.", LogInfo, true);

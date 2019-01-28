@@ -297,6 +297,10 @@ extern F_HumanDisableOutline HumanDisableOutline;
 typedef void(__cdecl* F_TargetOutlineAddObject)(unsigned int Handle);
 extern F_TargetOutlineAddObject TargetOutlineAddObject;
 
+//.text:00D0A4F0 rfg.exe:$4DA4F0 #4D98F0 <ui_tool_tips_add_tip> //void __cdecl ui_tool_tips_add_tip(const char *name, const int delay_ms, const char *icon_image)
+typedef void(__cdecl* F_ui_tool_tips_add_tip)(const char* Name, const int DelayMs, const char* IconImage);
+extern F_ui_tool_tips_add_tip UiToolTipsAddTip;
+
 
 //.text:00679AC0 rfg.exe:$2C9AC0 #2C8EC0 <camera_start_first_person>
 //.text:00679B60 rfg.exe:$2C9B60 #2C8F60 <camera_stop_first_person>

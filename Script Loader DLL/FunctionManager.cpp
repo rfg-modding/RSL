@@ -65,4 +65,6 @@ void FunctionManager::Initialize()
 
 	xray_effect_start = (F_xray_effect_start)(ModuleBase + 0x2E4E30); //.text:00694E30 rfg.exe:$2E4E30 #2E4230 <xray_effect_start>
 	xray_effect_stop = (F_xray_effect_stop)(ModuleBase + 0x2E4E50); //.text:00694E50 rfg.exe:$2E4E50 #2E4250 <xray_effect_stop>
+
+	UiToolTipsAddTip = (F_ui_tool_tips_add_tip)(ModuleBase + 0x4DA4F0);	//.text:00D0A4F0 rfg.exe:$4DA4F0 #4D98F0 <ui_tool_tips_add_tip>
 }
