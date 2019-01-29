@@ -2,7 +2,8 @@
 
 D3D11Present D3D11PresentObject;
 
-MainOverlay Overlay;
+//MainOverlay Overlay;
+GuiSystem Gui;
 
 std::once_flag HookD3D11PresentInitialCall;
 std::once_flag HookExplosionCreateInitialCall;
@@ -22,6 +23,8 @@ std::once_flag HookHumanUpdatePosAndOrientInitialCall;
 vector NewObjectPosition;
 
 bool UpdateD3D11Pointers = true;
+
+std::once_flag HookRlDrawTristip2dInitialCall;
 
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 LRESULT __stdcall WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
@@ -227,7 +230,8 @@ HRESULT __stdcall D3D11PresentHook(IDXGISwapChain * pSwapChain, UINT SyncInterva
 		io.Fonts->AddFontFromFileTTF(FontAwesomeSolidPath.c_str(), GlobalFontSize, &IconsConfig, IconsRanges);
 		Logger::Log("Done merging FontAwesome...", LogWarning);
 
-		Overlay.Initialize();
+		//Overlay.Initialize();
+		Gui.Initialize();
 		ImGuiInitialized = true;
 		UpdateD3D11Pointers = false;
 
@@ -286,7 +290,8 @@ HRESULT __stdcall D3D11PresentHook(IDXGISwapChain * pSwapChain, UINT SyncInterva
 	/*if (show_demo_window)
 		ImGui::ShowDemoWindow(&show_demo_window);*/
 
-	Overlay.Draw("Main Overlay", &ShowMainOverlay);
+	Gui.Draw();
+	//Overlay.Draw("Main Overlay", &ShowMainOverlay);
 
 	D3D11Context->OMSetRenderTargets(1, &MainRenderTargetView, NULL);
 	ImGui::Render();
@@ -307,7 +312,8 @@ bool __cdecl KeenGraphicsResizeRenderSwapchainHook(void* KeenSwapchain, unsigned
 void __fastcall PlayerConstructorHook(Player* PlayerPtr)
 {
 	GlobalPlayerPtr = (DWORD*)PlayerPtr;
-	Overlay.PlayerPtr = PlayerPtr;
+	//Overlay.PlayerPtr = PlayerPtr;
+	Gui.SetPlayerPtr(PlayerPtr);
 	if (!GlobalPlayerPtrInitialized)
 	{
 		GlobalPlayerPtrInitialized = true;
@@ -325,7 +331,8 @@ void __fastcall PlayerDoFrameHook(Player* PlayerPtr)
 			GlobalPlayerPtr = (DWORD*)PlayerPtr;
 			GlobalPlayerPtrInitialized = true;
 
-			Overlay.PlayerPtr = PlayerPtr;
+			//Overlay.PlayerPtr = PlayerPtr;
+			Gui.SetPlayerPtr(PlayerPtr);
 
 #if !PublicMode
 			std::cout << "PlayerPtr: " << std::hex << std::uppercase << PlayerPtr << std::endl;
@@ -337,7 +344,8 @@ void __fastcall PlayerDoFrameHook(Player* PlayerPtr)
 	if (GlobalPlayerPtr != (DWORD*)PlayerPtr)
 	{
 		GlobalPlayerPtr = (DWORD*)PlayerPtr;
-		Overlay.PlayerPtr = PlayerPtr;
+		//Overlay.PlayerPtr = PlayerPtr;
+		Gui.SetPlayerPtr(PlayerPtr);
 
 #if !PublicMode
 		std::cout << "PlayerPtr: " << std::hex << std::uppercase << PlayerPtr << std::endl;
@@ -352,7 +360,7 @@ void __fastcall PlayerDoFrameHook(Player* PlayerPtr)
 	{
 		PlayerPtr->JetpackFuelPercent = 1.0f;
 	}
-	if (Overlay.Invulnerable)
+	if (Gui.MainWindow.Invulnerable)
 	{
 		PlayerPtr->Flags.invulnerable = true;
 		//PlayerPtr->Flags.super_jump = true;
@@ -362,11 +370,11 @@ void __fastcall PlayerDoFrameHook(Player* PlayerPtr)
 		//PlayerPtr->HitPoints = 2147483647.0f;
 		//PlayerPtr->InitialMaxHitPoints = 2147483647;
 	}
-	if (Overlay.NeedCustomJumpHeightSet)
+	if (Gui.MainWindow.NeedCustomJumpHeightSet)
 	{
-		PlayerPtr->CodeDrivenJumpHeight = Overlay.CustomJumpHeight;
-		PlayerPtr->MoveSpeed = Overlay.CustomPlayerMoveSpeed;
-		PlayerPtr->MaxSpeed = Overlay.CustomPlayerMaxSpeed;
+		PlayerPtr->CodeDrivenJumpHeight = Gui.MainWindow.CustomJumpHeight;
+		PlayerPtr->MoveSpeed = Gui.MainWindow.CustomPlayerMoveSpeed;
+		PlayerPtr->MaxSpeed = Gui.MainWindow.CustomPlayerMaxSpeed;
 	}
 
 	return PlayerDoFrame(&NewPlayerObject);
@@ -477,7 +485,7 @@ void __fastcall HumanUpdatePosAndOrientHook(Human* HumanPtr, void* edx, vector* 
 		Logger::ConsoleLog("First time in HumanUpdatePosAndOrient() hook.\n", LogInfo, false, true);
 #endif
 	});
-	if (Overlay.NeedPlayerPosSet)
+	if (Gui.MainWindow.NeedPlayerPosSet)
 	{
 		if (GlobalPlayerPtrInitialized)
 		{
@@ -488,25 +496,25 @@ void __fastcall HumanUpdatePosAndOrientHook(Human* HumanPtr, void* edx, vector* 
 				Logger::Log("Manually setting Player.Object.Position in HumanUpdatePosAndOrient() hook.\n", LogWarning);
 				NewObjectPosition = *UpdatedPosition;
 
-				NewObjectPosition.x = Overlay.PlayerPositionTargetArray[0];
-				NewObjectPosition.y = Overlay.PlayerPositionTargetArray[1];
-				NewObjectPosition.z = Overlay.PlayerPositionTargetArray[2];
+				NewObjectPosition.x = Gui.MainWindow.PlayerPositionTargetArray[0];
+				NewObjectPosition.y = Gui.MainWindow.PlayerPositionTargetArray[1];
+				NewObjectPosition.z = Gui.MainWindow.PlayerPositionTargetArray[2];
 
-				Overlay.NeedPlayerPosSet = false;
+				Gui.MainWindow.NeedPlayerPosSet = false;
 
 				return HumanUpdatePosAndOrient(HumanPtr, edx, &NewObjectPosition, UpdatedOrientation, SetHavokData);
 			}
 		}
 	}
-	if (Overlay.NeedPlayerVelocitySet)
+	if (Gui.MainWindow.NeedPlayerVelocitySet)
 	{
 		if (GlobalPlayerPtrInitialized)
 		{
 			if (GlobalPlayerPtr == (DWORD*)HumanPtr)
 			{
-					HumanPtr->Velocity.x = Overlay.PlayerVelocityTargetArray[0];
-					HumanPtr->Velocity.y = Overlay.PlayerVelocityTargetArray[1];
-					HumanPtr->Velocity.z = Overlay.PlayerVelocityTargetArray[2];
+					HumanPtr->Velocity.x = Gui.MainWindow.PlayerVelocityTargetArray[0];
+					HumanPtr->Velocity.y = Gui.MainWindow.PlayerVelocityTargetArray[1];
+					HumanPtr->Velocity.z = Gui.MainWindow.PlayerVelocityTargetArray[2];
 			}
 		}
 	}
@@ -595,3 +603,25 @@ void __cdecl HudUiMultiplayerEnterHook()
 	return HudUiMultiplayerEnter();
 }
 /*End of MP Detection Hooks*/
+
+void __fastcall rl_draw_tristrip_2d_begin_hook(void* This, void* edx, rl_primitive_state* PrimitiveState)
+{
+	std::call_once(HookRlDrawTristip2dInitialCall, [&]()
+	{
+		GlobalRlDrawPtr = This;
+		std::cout << "First time in rl_draw::tristrip_2d_begin() hook..." << std::endl;
+		std::cout << "Alpha mode: " << PrimitiveState->d.v.m_alpha_mode << std::endl;
+		std::cout << "Clamp mode: " << PrimitiveState->d.v.m_clamp_mode << std::endl;
+		std::cout << "Color write mode: " << PrimitiveState->d.v.m_color_write_mode << std::endl;
+		std::cout << "Const alpha: " << PrimitiveState->d.v.m_const_alpha << std::endl;
+		std::cout << "Cull mode: " << PrimitiveState->d.v.m_cull_mode << std::endl;
+		std::cout << "MSAA: " << PrimitiveState->d.v.m_msaa << std::endl;
+		std::cout << "Scissor: " << PrimitiveState->d.v.m_scissor << std::endl;
+		std::cout << "Stencil mode: " << PrimitiveState->d.v.m_stencil_mode << std::endl;
+		std::cout << "Valid: " << PrimitiveState->d.v.m_valid << std::endl;
+		std::cout << "Z-Bias mode: " << PrimitiveState->d.v.m_zbias_mode << std::endl;
+		std::cout << "Z-Buffer mode: " << PrimitiveState->d.v.m_zbuf_mode << std::endl;
+	});
+
+	return rl_draw_tristrip_2d_begin(This, edx, PrimitiveState);
+}

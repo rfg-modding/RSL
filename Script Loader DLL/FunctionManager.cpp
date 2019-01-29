@@ -67,4 +67,13 @@ void FunctionManager::Initialize()
 	xray_effect_stop = (F_xray_effect_stop)(ModuleBase + 0x2E4E50); //.text:00694E50 rfg.exe:$2E4E50 #2E4250 <xray_effect_stop>
 
 	UiToolTipsAddTip = (F_ui_tool_tips_add_tip)(ModuleBase + 0x4DA4F0);	//.text:00D0A4F0 rfg.exe:$4DA4F0 #4D98F0 <ui_tool_tips_add_tip>
+
+	console_set_console_mode = (F_console_set_console_mode)(ModuleBase + 0x18CD30); //.text:009BCD30 rfg.exe:$18CD30 #18C130 <console_set_console_mode>
+	console_get_console_mode = (F_console_get_console_mode)(ModuleBase + 0x18CD50); //.text:009BCD50 rfg.exe:$18CD50 #18C150 <console_get_console_mode>
+	Console_Init = (F_Console_Init)(ModuleBase + 0x1CD150); //.text:003CD150 rfg.exe:$1CD150 #1CC550 <console_init>
+	Console_Activate = (F_Console_Activate)(ModuleBase + 0x18CAC0); //.text:0038CAC0 rfg.exe:$18CAC0 #18BEC0 <console_activate>
+	Console_Deactivate = (F_Console_Deactivate)(ModuleBase + 0x1AF950); //.text:003AF950 rfg.exe:$1AF950 #1AED50 <console_deactivate>
+
+	rl_draw_tristrip_2d_begin = (F_rl_draw_tristrip_2d_begin)(ModuleBase + 0x10DDA0);
+	rl_draw_string = (F_rl_draw_string)(ModuleBase + 0x155BC0); //.text:00985BC0 rfg.exe:$155BC0 #154FC0 <rl_draw::string>
 }

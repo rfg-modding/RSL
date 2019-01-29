@@ -43,7 +43,7 @@ typedef void(__cdecl* F_Camera_Stop_Slew_Mode)(void);
 extern F_Camera_Stop_Slew_Mode Camera_Stop_Slew_Mode;
 
 typedef void(__cdecl* F_Interface_Debug_Mode_Activate)(void);
-extern F_Interface_Debug_Mode_Activate Interface_Debug_Mode_Activate;
+extern F_Interface_Debug_Mode_Activate Interface_Debug_Mode_Activate; 
 
 typedef void(__cdecl* F_Keen_Debug_WriteToLogFile)(char* String);
 extern F_Keen_Debug_WriteToLogFile Keen_Debug_WriteToLogFile;
@@ -51,7 +51,15 @@ extern F_Keen_Debug_WriteToLogFile Keen_Debug_WriteToLogFile;
 typedef void(__cdecl* F_Hud_Display_Distance)(bool Value);
 extern F_Hud_Display_Distance Hud_Display_Distance;
 
-typedef void(__cdecl* F_Console_Init)(void);
+//.text:009BCD30 rfg.exe:$18CD30 #18C130 <console_set_console_mode>
+typedef void(__cdecl* F_console_set_console_mode)(vconsole_mode);
+extern F_console_set_console_mode console_set_console_mode;
+
+//.text:009BCD50 rfg.exe:$18CD50 #18C150 <console_get_console_mode>
+typedef vconsole_mode(__cdecl* F_console_get_console_mode)(void);
+extern F_console_get_console_mode console_get_console_mode;
+
+typedef void(__cdecl* F_Console_Init)(vconsole_config* ConsoleInit);
 extern F_Console_Init Console_Init;
 
 typedef void(__cdecl* F_Console_Activate)(void);
@@ -301,6 +309,14 @@ extern F_TargetOutlineAddObject TargetOutlineAddObject;
 typedef void(__cdecl* F_ui_tool_tips_add_tip)(const char* Name, const int DelayMs, const char* IconImage);
 extern F_ui_tool_tips_add_tip UiToolTipsAddTip;
 
+//.text:0093DDA0 rfg.exe:$10DDA0 #10D1A0 <rl_draw::tristrip_2d_begin>
+typedef void(__fastcall* F_rl_draw_tristrip_2d_begin)(void*, void*, rl_primitive_state*); //2nd arg is edx, needed for __thiscall functions.
+extern F_rl_draw_tristrip_2d_begin rl_draw_tristrip_2d_begin;
+
+//.text:00985BC0 rfg.exe:$155BC0 #154FC0 <rl_draw::string>
+//void __thiscall rl_draw::string(rl_draw *this, float sx, float sy, const char *s, bool centered, int fontnum, rl_primitive_state *state)
+typedef void(__fastcall* F_rl_draw_string)(void* This, void* edx, float sx, float sy, const char* s, bool centered, int fontnum, rl_primitive_state* state); //2nd arg is edx, needed for __thiscall functions.
+extern F_rl_draw_string rl_draw_string;
 
 //.text:00679AC0 rfg.exe:$2C9AC0 #2C8EC0 <camera_start_first_person>
 //.text:00679B60 rfg.exe:$2C9B60 #2C8F60 <camera_stop_first_person>
@@ -340,10 +356,12 @@ extern F_ui_tool_tips_add_tip UiToolTipsAddTip;
 //.text:00641A90 rfg.exe:$441A90 #440E90 <hud_hide>
 //.text:00641AC0 rfg.exe:$441AC0 #440EC0 <hud_is_hidden>
 //.text:00642D80 rfg.exe:$442D80 #442180 <hud_display_distance>
-//.text:003CD150 rfg.exe:$1CD150 #1CC550 <console_init>
 //.text:0038CDB0 rfg.exe:$18CDB0 #18C1B0 <console_enable_chat_window>
+
+//.text:003CD150 rfg.exe:$1CD150 #1CC550 <console_init>
 //.text:0038CAC0 rfg.exe:$18CAC0 #18BEC0 <console_activate>
 //.text:003AF950 rfg.exe:$1AF950 #1AED50 <console_deactivate>
+
 //.text:003AF470 rfg.exe:$1AF470 #1AE870 <console_printf>
 //.text:003C4B50 rfg.exe:$1C4B50 #1C3F50 <console_display_help>
 //.text:003C54B0 rfg.exe:$1C54B0 #1C48B0 <console_command_enable>

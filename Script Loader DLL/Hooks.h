@@ -1,11 +1,13 @@
 #pragma once
 ///#include "Functions.h"
 ///#include "Globals.h"
-#include "MainOverlay.h"
+//#include "MainOverlay.h"
+#include "GuiSystem.h"
 
 //class MainOverlay;
 
-extern MainOverlay Overlay;
+extern GuiSystem Gui;
+//extern MainOverlay Overlay;
 
 extern std::once_flag HookD3D11PresentInitialCall;
 extern std::once_flag HookExplosionCreateInitialCall;
@@ -52,3 +54,6 @@ void __cdecl HudUiMultiplayerEnterHook();
 extern bool UpdateD3D11Pointers;
 
 bool __cdecl KeenGraphicsResizeRenderSwapchainHook(void* KeenSwapchain, unsigned int NewWidth, unsigned int NewHeight);
+
+void __fastcall rl_draw_tristrip_2d_begin_hook(void* This, void* edx, rl_primitive_state* PrimitiveState);
+extern std::once_flag HookRlDrawTristip2dInitialCall;

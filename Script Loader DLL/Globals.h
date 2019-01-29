@@ -71,6 +71,8 @@ extern const WORD ConsoleFatalErrorTextAttributes;
 extern const WORD ConsoleSuccessTextAttributes;
 extern const WORD ConsoleDefaultTextAttributes;
 
+extern void* GlobalRlDrawPtr;
+
 #define ScriptLoaderVersion "0.1.0-Alpha"
 const char* GetScriptLoaderVersion();
 void ShowHelpMarker(const char* desc);

@@ -6,9 +6,13 @@ F_Camera_Stop_Slew_Mode Camera_Stop_Slew_Mode;
 F_Interface_Debug_Mode_Activate Interface_Debug_Mode_Activate;
 F_Keen_Debug_WriteToLogFile Keen_Debug_WriteToLogFile;
 F_Hud_Display_Distance Hud_Display_Distance;
+
+F_console_set_console_mode console_set_console_mode;
+F_console_get_console_mode console_get_console_mode;
 F_Console_Init Console_Init;
 F_Console_Activate Console_Activate;
 F_Console_Deactivate Console_Deactivate;
+
 F_Console_Printf Console_Printf;
 F_Console_Display_Help Console_Display_Help;
 F_Console_Command_Enable Console_Command_Enable;
@@ -84,3 +88,6 @@ F_HumanDisableOutline HumanDisableOutline;
 F_TargetOutlineAddObject TargetOutlineAddObject;
 
 F_ui_tool_tips_add_tip UiToolTipsAddTip;
+
+F_rl_draw_tristrip_2d_begin rl_draw_tristrip_2d_begin;
+F_rl_draw_string rl_draw_string;
