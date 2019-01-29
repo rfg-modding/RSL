@@ -1,5 +1,6 @@
 #pragma once
-#include "Globals.h"
+//#include "Globals.h"
+#include "Utilities.h"
 #define EnableLogging true
 
 /*Uses bitflags to allow for multiple log types. For example,
