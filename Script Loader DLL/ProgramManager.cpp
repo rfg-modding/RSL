@@ -38,7 +38,7 @@ void ProgramManager::Initialize()
 	Camera.Initialize(DefaultFreeCameraSpeed, 5.0);
 	Functions.Initialize();
 	Scripts.Initialize();
-	Overlay.Scripts = &Scripts;
+	Gui.SetScriptManager(&Scripts);
 
 	NewObjectPosition.x = 0.0f;
 	NewObjectPosition.y = 0.0f;
@@ -243,6 +243,8 @@ void ProgramManager::CreateGameHooks(bool EnableNow)
 	Hooks.CreateHook("CameraViewDataQuaternionTranslate", GAMEHOOK, (DWORD*)(ModuleBase + 0x4F50B0), HudUiMultiplayerProcessHook, (LPVOID*)&HudUiMultiplayerProcess, EnableNow);
 	Hooks.CreateHook("CameraViewDataQuaternionRotate", GAMEHOOK, (DWORD*)(ModuleBase + 0x516D80), HudUiMultiplayerEnterHook, (LPVOID*)&HudUiMultiplayerEnter, EnableNow);
 	/*End of MP Detection Hooks*/
+
+	Hooks.CreateHook("rl_draw::tristrip_2d_begin", GAMEHOOK, (DWORD*)(ModuleBase + 0x10DDA0), rl_draw_tristrip_2d_begin_hook, (LPVOID*)&rl_draw_tristrip_2d_begin, EnableNow);
 }
 
 void ProgramManager::CreateD3D11Hooks(bool EnableNow)

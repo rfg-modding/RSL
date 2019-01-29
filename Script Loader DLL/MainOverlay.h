@@ -1,14 +1,7 @@
 #pragma once
-//#include "imgui.h"
 ///#include "Globals.h"
 ///#include "RFGR_Types_Player.h"
-#include "Functions.h"
-#include "imgui_stdlib.h"
-//#include "ScriptManager.h"
-#include "IconsFontAwesome5.h"
-
-extern nlohmann::json GUIConfig;
-extern nlohmann::json TeleportLocations;
+#include "TeleportGui.h"
 
 class ScriptManager;
 
@@ -18,9 +11,8 @@ public:
 	MainOverlay();
 	~MainOverlay();
 
-	void Initialize();
-	void Draw(const char* title, bool* p_open);
-	void DrawTeleportGui(bool UseSeparateWindow, const char* Title, bool* Open, ImGuiWindowFlags Flags);
+	void Initialize(bool* _OpenState);
+	void Draw(const char* Title);
 	void DrawPlayerVariablesGui(bool UseSeparateWindow, const char* Title, bool* Open, ImGuiWindowFlags Flags);
 
 	void ShowExampleAppMainMenuBar();
@@ -44,20 +36,18 @@ public:
 
 	ImGuiWindowFlags MainOverlayWindowFlags = 0;
 	ImGuiWindowFlags MainOverlayPopupFlags = 0;
-	ImGuiWindowFlags MainOverlayModalFlags = 0;
 	ImGuiInputTextFlags MainOverlayTeleportEditTextFlags = 0;
 
-	bool ShowAppConsole = false;
-	bool ShowAppMetrics = false;
-	bool ShowAppStyleEditor = false;
-	bool ShowAppAbout = false;
-	bool ShowAppGameInfoOverlay = false;
+	bool* ShowAppConsole = false;
+	bool* ShowAppMetrics = false;
+	bool* ShowAppStyleEditor = false;
+	bool* ShowAppAbout = false;
+	bool* ShowAppGameInfoOverlay = false;
 
-	bool ShowAppMainMenuBar = false;
-	//bool ShowAppConsole = false;
-	bool ShowAppLog = false;
-	bool ShowAppLongText = false;
-	bool ShowAppSimpleOverlay = false;
+	bool* ShowAppMainMenuBar = false;
+	bool* ShowAppLog = false;
+	bool* ShowAppLongText = false;
+	bool* ShowAppSimpleOverlay = false;
 
 	bool PlayerPtrTargetsInitialized = false;
 	bool NeedPlayerPosSet = false;
@@ -75,8 +65,6 @@ public:
 
 	bool Invulnerable = false;
 
-	bool TeleportEditPopupOpen = false;
-
 	float CustomPlayerMoveSpeed = 5.0f;
 	float CustomPlayerMaxSpeed = 50.0f;
 	float CustomJumpHeight = 1.2f;
@@ -87,9 +75,8 @@ public:
 
 	ScriptManager* Scripts;
 
-	std::string NewTeleportName;
-	vector NewTeleportPosition;
-	std::string NewTeleportDescription;
+private:
+	bool* OpenState;
 };
 
 struct ExampleAppLog

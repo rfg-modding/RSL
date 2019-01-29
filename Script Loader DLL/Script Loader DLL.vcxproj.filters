@@ -25,6 +25,15 @@
     <Filter Include="RFGR Structs">
       <UniqueIdentifier>{ac7bae05-808c-43c4-8c08-ddc078f44eb2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Overlay Gui">
+      <UniqueIdentifier>{a6d8a793-b545-460c-a878-f5b9f6e89230}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Overlay Gui\Header Files">
+      <UniqueIdentifier>{4213c34b-ed34-4d0e-997b-e49465ec1935}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Overlay Gui\Source Files">
+      <UniqueIdentifier>{8cf5668e-7dab-4a97-b150-32b57f0c4179}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CameraWrapper.cpp">
@@ -75,9 +84,6 @@
     <ClCompile Include="Globals.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MainOverlay.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Includes.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -89,6 +95,24 @@
     </ClCompile>
     <ClCompile Include="HookManager.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Utilities.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GuiSystem.cpp">
+      <Filter>Overlay Gui\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MainOverlay.cpp">
+      <Filter>Overlay Gui\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OverlayConsole.cpp">
+      <Filter>Overlay Gui\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TeleportGui.cpp">
+      <Filter>Overlay Gui\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ThemeEditorGui.cpp">
+      <Filter>Overlay Gui\Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -135,9 +159,6 @@
       <Filter>D3D11 Hook + ImGui\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="DeepCodeStorage.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MainOverlay.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="RFGR Structs\Unit4Namespace.h">
@@ -202,6 +223,24 @@
     </ClInclude>
     <ClInclude Include="RFGR_Type_UI.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GuiSystem.h">
+      <Filter>Overlay Gui\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MainOverlay.h">
+      <Filter>Overlay Gui\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OverlayConsole.h">
+      <Filter>Overlay Gui\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TeleportGui.h">
+      <Filter>Overlay Gui\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ThemeEditorGui.h">
+      <Filter>Overlay Gui\Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

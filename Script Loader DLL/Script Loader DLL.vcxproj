@@ -162,6 +162,7 @@
     <ClCompile Include="FunctionManager.cpp" />
     <ClCompile Include="Functions.cpp" />
     <ClCompile Include="Globals.cpp" />
+    <ClCompile Include="GuiSystem.cpp" />
     <ClCompile Include="HookManager.cpp" />
     <ClCompile Include="Hooks.cpp" />
     <ClCompile Include="imgui_impl_dx11.cpp" />
@@ -181,9 +182,13 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="OverlayConsole.cpp" />
     <ClCompile Include="ProgramManager.cpp" />
     <ClCompile Include="ScriptManager.cpp" />
     <ClCompile Include="SnippetManager.cpp" />
+    <ClCompile Include="TeleportGui.cpp" />
+    <ClCompile Include="ThemeEditorGui.cpp" />
+    <ClCompile Include="Utilities.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CameraWrapper.h" />
@@ -196,6 +201,7 @@
     <ClInclude Include="FunctionManager.h" />
     <ClInclude Include="Functions.h" />
     <ClInclude Include="Globals.h" />
+    <ClInclude Include="GuiSystem.h" />
     <ClInclude Include="HookManager.h" />
     <ClInclude Include="Hooks.h" />
     <ClInclude Include="imgui_impl_dx11.h" />
@@ -212,6 +218,7 @@
     <ClInclude Include="Logger.h" />
     <ClInclude Include="MainOverlay.h" />
     <ClInclude Include="Includes.h" />
+    <ClInclude Include="OverlayConsole.h" />
     <ClInclude Include="ProgramManager.h" />
     <ClInclude Include="RFGR Structs\BasicTypes.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
@@ -225,6 +232,9 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClInclude>
+    <ClInclude Include="TeleportGui.h" />
+    <ClInclude Include="ThemeEditorGui.h" />
+    <ClInclude Include="Utilities.h" />
     <None Include="RFGR Structs\KeenFileSystem.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</DeploymentContent>

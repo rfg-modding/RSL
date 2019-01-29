@@ -57,6 +57,8 @@
 #include <imgui.h>
 #include "imgui_impl_win32.h"
 #include "imgui_impl_dx11.h"
+#include "IconsFontAwesome5.h"
+#include "imgui_stdlib.h"
 
 #include <DXGI.h>
 #include <d3d11.h>

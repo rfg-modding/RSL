@@ -1,9 +1,6 @@
 #include "MainOverlay.h"
 #include "ScriptManager.h"
 
-nlohmann::json GUIConfig;
-nlohmann::json TeleportLocations;
-
 void ShowStyleEditor(ImGuiStyle* ref);
 
 static void ShowExampleMenuFile()
@@ -95,18 +92,6 @@ static void ShowExampleAppLog(bool* p_open)
 	log.Draw("Example: Log", p_open);
 }
 
-static void TooltipOnPrevious(const char* Description)
-{
-	if (ImGui::IsItemHovered())
-	{
-		ImGui::BeginTooltip();
-		ImGui::PushTextWrapPos(ImGui::GetFontSize() * 35.0f);
-		ImGui::TextUnformatted(Description);
-		ImGui::PopTextWrapPos();
-		ImGui::EndTooltip();
-	}
-}
-
 bool HumanTeleportSafe(float x, float y, float z, int TimeToHover = 5000)
 {
 	if (GlobalPlayerPtr)
@@ -130,499 +115,6 @@ void HumanTeleportSafe(vector NewPosition, int TimeToHover = 5000)
 
 }
 
-void SetJsonFloat4(nlohmann::json& Json, const char* FirstKey, const char* SecondKey, float r, float g, float b, float a)
-{
-	Json[FirstKey][SecondKey][0] = r;
-	Json[FirstKey][SecondKey][1] = g;
-	Json[FirstKey][SecondKey][2] = b;
-	Json[FirstKey][SecondKey][3] = a;
-}
-
-void SetJsonFloat4(nlohmann::json& Json, const char* FirstKey, const char* SecondKey, ImVec4 Color)
-{
-	Json[FirstKey][SecondKey][0] = Color.x;
-	Json[FirstKey][SecondKey][1] = Color.y;
-	Json[FirstKey][SecondKey][2] = Color.z;
-	Json[FirstKey][SecondKey][3] = Color.w;
-}
-
-ImVec2 JsonGetFloat2(nlohmann::json& Json, const char* FirstKey, const char* SecondKey)
-{
-	return ImVec2(Json[FirstKey][SecondKey][0], Json[FirstKey][SecondKey][1]);
-}
-
-ImVec4 JsonGetFloat4(nlohmann::json& Json, const char* FirstKey, const char* SecondKey)
-{
-	return ImVec4(Json[FirstKey][SecondKey][0], Json[FirstKey][SecondKey][1], Json[FirstKey][SecondKey][2], Json[FirstKey][SecondKey][3]);
-}
-
-bool SetTeleportLocation(std::string Name, float x, float y, float z, std::string Description)
-{
-	for (size_t i = 0; i < TeleportLocations.size(); i++)
-	{
-		if (TeleportLocations[i]["Name"] == Name)
-		{
-			return false;
-			break;
-		}
-	}
-	size_t Index = TeleportLocations.size();
-	TeleportLocations[Index]["Name"] = Name;
-	TeleportLocations[Index]["Position"][0] = x;
-	TeleportLocations[Index]["Position"][1] = y;
-	TeleportLocations[Index]["Position"][2] = z;
-	TeleportLocations[Index]["TooltipDescription"] = Description;
-	return true;
-}
-
-bool ChangeTeleportLocation(std::string CurrentName, std::string NewName, float NewX, float NewY, float NewZ, std::string NewDescription)
-{
-	int Index = -1;
-	for (size_t i = 0; i < TeleportLocations.size(); i++)
-	{
-		if (TeleportLocations[i]["Name"] == CurrentName)
-		{
-			Index = i;
-			break;
-		}
-	}
-	if (Index < 0)
-	{
-		return false;
-	}
-	TeleportLocations[Index]["Name"] = NewName;
-	TeleportLocations[Index]["Position"][0] = NewX;
-	TeleportLocations[Index]["Position"][1] = NewY;
-	TeleportLocations[Index]["Position"][2] = NewZ;
-	TeleportLocations[Index]["TooltipDescription"] = NewDescription;
-	return true;
-}
-
-bool LoadTeleportLocations()
-{
-	std::string ExePath = GetEXEPath(false);
-	Logger::Log("Started loading \"Teleport Locations.json\".", LogInfo);
-	
-	if (fs::exists(ExePath + "RFGR Script Loader/Settings/Teleport Locations.json"))
-	{
-		if (!JsonExceptionHandler([&]
-		{
-			Logger::Log("Parsing \"Teleport Locations.json\"...", LogInfo);
-			std::ifstream Config(ExePath + "RFGR Script Loader/Settings/Teleport Locations.json");
-			Config >> TeleportLocations;
-			Config.close();
-			return true;
-		}, "Teleport Locations.json", "parse", "parsing"))
-		{
-			return false;
-		}
-		Logger::Log("No parse exceptions detected.", LogInfo);
-	}
-	else
-	{
-		if (!JsonExceptionHandler([&]
-		{
-			Logger::Log("\"Teleport Locations.json\" not found. Creating from default values.", LogWarning);
-			CreateDirectoryIfNull(ExePath + "RFGR Script Loader/Settings/");
-
-			SetTeleportLocation("Tutorial Area Hilltop", -2328.29f, 30.0f, -2317.9f, "Tutorial area at the start of the game. Position: (-2328.29, 30.0, -2317.9)");
-			SetTeleportLocation("Parker - Safehouse", -1877.77f, 27.0f, -1452.0f, "Game starting safehouse. Near ore processing plant. Position: (-1877.77, 27.0, -1452.0)");
-			SetTeleportLocation("Dust - Northern Safehouse", -387.0f, 38.0f, -820.0f, "Near tharsis point wind farm and Dust town hall. Position: (-387.0, 38.0, -820.0)");
-			SetTeleportLocation("Dust - Southern Safehouse", -113.59f, 30.0f, -2449.58f, "Near chemical plant. Position: (-113.59, 30.0, -2449.58)");
-			SetTeleportLocation("Badlands - Safehouse / RFHQ", 2411.90f, 58.0f, -239.77f, "Main safehouse in Badlands. Also the HQ of the Red Faction. Position: (2411.90, 58.0, -239.77)");
-			SetTeleportLocation("Badlands - Mohole", 1420.27f, -28.0f, -734.28f, "Big 'ol hole in the ground used to pull heat from Mars' core for terraforming purposes. There's a smaller one in Dust. Position: (1420.27, -28.0, -734.28)");
-			SetTeleportLocation("Badlands - Harrington Memorial Bridge", 948.14f, -5.0f, -417.68f, "The big one. Position: (948.14, -5.0, -417.68)");
-			SetTeleportLocation("Badlands - EDF Barracks", 899.91f, 2.0f, -885.64f, "EDF Barracks sitting in a hilly area south of the EDF airbase in Badlands. Position: (899.91, 2.0, -885.64)");
-			SetTeleportLocation("Badlands - Marauder Safehouse", 2458.47f, 58.0f, -1210.17f, "Safehouse in marauder territory. Unless you want hostile marauders, wait until you've completed certain missions to go here. Position: (2458.47, 58.0, -1210.17)");
-			SetTeleportLocation("Oasis - Safehouse", 1434.29f, 18.0f, 691.65f, "Near EDF vehicle depot. Position: (1434.29, 18.0, 691.65)");
-			SetTeleportLocation("Free Fire Zone - Artillery Base", -1752.03f, 9.0f, -132.59f, "Base which runs and protects the EDF Artillery Gun. Deadly to be here until the FFZ has been liberated. Position: (-1752.03, 9.0, -132.59)");
-			SetTeleportLocation("Free Fire Zone - Artillery Gun", -1944.92f, 38.0f, -65.49f, "Bottom of the EDF Artillery Gun. Deadly to be here until the FFZ has been liberated. Position: (-1944.92, 38.0, -65.49)");
-			SetTeleportLocation("EOS - Western Safehouse", -1726.0f, 50.0f, 438.0f, "Near FFZ entrance/exit and Eos Memorial Bridge. Position: (-1726.0, 50.0, 438.0)");
-			SetTeleportLocation("EOS - Eastern Safehouse", -1390.95f, 30.0f, 561.08f, "Near construction site. Position: (-1390.95, 30.0, 561.08)");
-			SetTeleportLocation("EOS - Outside EDF Central Command", -1428.61f, 8.0f, 2013.5f, "Right outside the defense shield. Position: (-1428.61, 8.0, 2013.5)");
-			SetTeleportLocation("EOS - Inside EDF Central Command", -1458.75f, 8.0f, 2050.16f, "Right inside past the defense shield. Position: (-1458.75, 8.0, 2050.16)");
-			SetTeleportLocation("EOS - EDF Central Command Main Building", -1474.53f, 38.0f, 2397.49f, "The final building at the peak of the inner valley / cliffsides. Position: (-1474.53, 38.0, 2397.49)");
-			SetTeleportLocation("Mount Vogel - Base", -670.37f, 47.0f, 2423.75f, "Bottom of Mount Vogel and mass accelerator. Several old buildings. Position: (-670.37, 47.0, 2423.75)");
-			SetTeleportLocation("Mount Vogel - Peak", -285.77f, 183.0f, 2423.4f, "Peak of Mount Vogel with mass accelerator exit. Position: (-285.77, 183.0, 2423.4)");
-
-			std::ofstream ConfigOutput(ExePath + "RFGR Script Loader/Settings/Teleport Locations.json");
-			ConfigOutput << std::setw(4) << TeleportLocations << std::endl;
-			ConfigOutput.close();
-			return true;
-		}, "Teleport Locations.json", "write", "writing"))
-		{
-			return false;
-		}
-		Logger::Log("No write exceptions detected.", LogInfo);
-	}
-
-	Logger::Log("Done loading \"Teleport Locations.json\".", LogInfo);
-	return true;
-}
-
-bool SaveTeleportLocations()
-{
-	Logger::Log("Started writing \"Teleport Locations.json\"", LogInfo);
-	if (!JsonExceptionHandler([&]
-	{
-		Logger::Log("\"Teleport Locations.json\" not found. Creating from default values.", LogWarning);
-		std::string ExePath = GetEXEPath(false);
-		CreateDirectoryIfNull(ExePath + "RFGR Script Loader/Settings/");
-
-		std::ofstream ConfigOutput(ExePath + "RFGR Script Loader/Settings/Teleport Locations.json");
-		ConfigOutput << std::setw(4) << TeleportLocations << std::endl; 
-		ConfigOutput.close();
-
-		return true;
-	}, "Teleport Locations.json", "write", "writing"))
-	{
-		return false;
-	}
-	Logger::Log("No write exceptions detected.", LogInfo);
-	
-	Logger::Log("Done writing \"Teleport Locations.json\"", LogInfo);
-	return true;
-}
-
-bool LoadGUIConfig()
-{
-	std::string ExePath = GetEXEPath(false);
-	Logger::Log("Started loading \"GUI Config.json\".", LogInfo);
-
-	if (fs::exists(ExePath + "RFGR Script Loader/Settings/GUI Config.json"))
-	{
-		if (!JsonExceptionHandler([&]
-		{
-			Logger::Log("Parsing \"GUI Config.json\"", LogInfo);
-			std::ifstream Config(ExePath + "RFGR Script Loader/Settings/GUI Config.json");
-			Config >> GUIConfig;
-			Config.close();
-			return true;
-		}, "GUI Config.json", "parse", "parsing"))
-		{
-			return false;
-		}
-		Logger::Log("No parse exceptions detected.", LogInfo);
-	}
-	else
-	{
-		if (!JsonExceptionHandler([&]
-		{
-			Logger::Log("\"GUI Settings.json\" not found. Creating from default values.", LogWarning);
-			CreateDirectoryIfNull(ExePath + "RFGR Script Loader/Settings/");
-
-			GUIConfig["Theme Info"]["Theme name"] = std::string("Default Dark Theme");
-			GUIConfig["Theme Info"]["Description"] = std::string("The default dark theme for the script loader.");
-			GUIConfig["Theme Info"]["Author"] = std::string("moneyl");
-			GUIConfig["Theme Info"]["Readme"] = std::string("When making your own themes you can use this for extra information such as known bugs or optional settings. Note: This section will be used once I add a custom theme loading GUI to the script loader. Not present for the initial themes release.");
-
-			GUIConfig["Style"]["Alpha"] = 0.95f;
-			GUIConfig["Style"]["AntiAliasedFill"] = true;
-			GUIConfig["Style"]["ButtonTextAlign"][0] = 0.5f;
-			GUIConfig["Style"]["ButtonTextAlign"][1] = 0.5f;
-			GUIConfig["Style"]["ChildBorderSize"] = 1.0f; //Values > 1.0 can cause performance issues.
-			GUIConfig["Style"]["ChildRounding"] = 3.0f;
-			GUIConfig["Style"]["DisplaySafeAreaPadding"][0] = 3.0f;
-			GUIConfig["Style"]["DisplaySafeAreaPadding"][1] = 3.0f;
-			GUIConfig["Style"]["FrameBorderSize"] = 1.0f; //Values > 1.0 can cause performance issues.
-			GUIConfig["Style"]["FramePadding"][0] = 4.0f;
-			GUIConfig["Style"]["FramePadding"][1] = 3.0f;
-			GUIConfig["Style"]["FrameRounding"] = 3.0f;
-			GUIConfig["Style"]["GrabMinSize"] = 10.0f;
-			GUIConfig["Style"]["GrabRounding"] = 3.0f;
-			GUIConfig["Style"]["IndentSpacing"] = 21.0f;
-			GUIConfig["Style"]["ItemInnerSpacing"][0] = 4.0f;
-			GUIConfig["Style"]["ItemInnerSpacing"][1] = 4.0f;
-			GUIConfig["Style"]["ItemSpacing"][0] = 8.0f;
-			GUIConfig["Style"]["ItemSpacing"][1] = 4.0f;
-			GUIConfig["Style"]["PopupBorderSize"] = 1.0f; //Values > 1.0 can cause performance issues.
-			GUIConfig["Style"]["PopupRounding"] = 3.0f;
-			GUIConfig["Style"]["ScrollbarRounding"] = 3.0f;
-			GUIConfig["Style"]["ScrollbarSize"] = 6.0f;
-			GUIConfig["Style"]["TabBorderSize"] = 1.0f; //Values > 1.0 can cause performance issues.
-			GUIConfig["Style"]["TabRounding"] = 3.0f;
-			GUIConfig["Style"]["TouchExtraPadding"][0] = 0.0f;
-			GUIConfig["Style"]["TouchExtraPadding"][1] = 0.0f;
-			GUIConfig["Style"]["WindowBorderSize"] = 1.0f; //Values > 1.0 can cause performance issues.
-			GUIConfig["Style"]["WindowPadding"][0] = 8.0f;
-			GUIConfig["Style"]["WindowPadding"][1] = 8.0f;
-			GUIConfig["Style"]["WindowRounding"] = 3.0f;
-			GUIConfig["Style"]["WindowTitleAlign"][0] = 0.0f;
-			GUIConfig["Style"]["WindowTitleAlign"][1] = 0.5f;
-
-			float DefaultGlobalOpacity = 1.0f;
-			SetJsonFloat4(GUIConfig, "Colors", "Text", ImVec4(0.945f, 0.945f, 0.945f, DefaultGlobalOpacity));
-			SetJsonFloat4(GUIConfig, "Colors", "TextDisabled", ImVec4(0.610f, 0.610f, 0.610f, DefaultGlobalOpacity));
-			SetJsonFloat4(GUIConfig, "Colors", "WindowBackground", ImVec4(0.349f, 0.349f, 0.349f, DefaultGlobalOpacity));
-			SetJsonFloat4(GUIConfig, "Colors", "ChildBackground", ImVec4(0.357f, 0.357f, 0.357f, DefaultGlobalOpacity));
-			SetJsonFloat4(GUIConfig, "Colors", "PopupBackground", ImVec4(0.357f, 0.357f, 0.357f, DefaultGlobalOpacity));
-			SetJsonFloat4(GUIConfig, "Colors", "Border", ImVec4(0.430f, 0.430f, 0.430f, DefaultGlobalOpacity));
-			SetJsonFloat4(GUIConfig, "Colors", "BorderShadow", ImVec4(0.498f, 0.498f, 0.498f, 0.000f));
-			SetJsonFloat4(GUIConfig, "Colors", "FrameBackground", ImVec4(0.394f, 0.394f, 0.394f, DefaultGlobalOpacity));
-			SetJsonFloat4(GUIConfig, "Colors", "FrameBackgroundHovered", ImVec4(0.333f, 0.333f, 0.333f, DefaultGlobalOpacity));
-			SetJsonFloat4(GUIConfig, "Colors", "FrameBackgroundActive", ImVec4(0.358f, 0.660f, 0.871f, DefaultGlobalOpacity));
-			SetJsonFloat4(GUIConfig, "Colors", "TitleBackground", ImVec4(0.522f, 0.522f, 0.522f, DefaultGlobalOpacity));
-			SetJsonFloat4(GUIConfig, "Colors", "TitleBackgroundActive", ImVec4(0.358f, 0.660f, 0.871f, DefaultGlobalOpacity));
-			SetJsonFloat4(GUIConfig, "Colors", "TitleBackgroundCollapsed", ImVec4(0.422f, 0.422f, 0.422f, DefaultGlobalOpacity));
-			SetJsonFloat4(GUIConfig, "Colors", "MenuBarBackground", ImVec4(0.422f, 0.422f, 0.422f, DefaultGlobalOpacity));
-			SetJsonFloat4(GUIConfig, "Colors", "ScrollbarBackground", ImVec4(0.322f, 0.322f, 0.322f, DefaultGlobalOpacity));
-			SetJsonFloat4(GUIConfig, "Colors", "ScrollbarGrab", ImVec4(0.510f, 0.510f, 0.510f, DefaultGlobalOpacity));
-			SetJsonFloat4(GUIConfig, "Colors", "ScrollbarGrabHovered", ImVec4(0.610f, 0.610f, 0.610f, DefaultGlobalOpacity));
-			SetJsonFloat4(GUIConfig, "Colors", "ScrollbarGrabActive", ImVec4(0.710f, 0.710f, 0.710f, DefaultGlobalOpacity));
-			SetJsonFloat4(GUIConfig, "Colors", "CheckMark", ImVec4(0.310f, 0.571f, 0.753f, DefaultGlobalOpacity));
-			SetJsonFloat4(GUIConfig, "Colors", "SliderGrab", ImVec4(0.310f, 0.571f, 0.753f, DefaultGlobalOpacity));
-			SetJsonFloat4(GUIConfig, "Colors", "SliderGrabActive", ImVec4(0.358f, 0.660f, 0.871f, DefaultGlobalOpacity));
-			SetJsonFloat4(GUIConfig, "Colors", "Button", ImVec4(0.310f, 0.571f, 0.753f, DefaultGlobalOpacity));
-			SetJsonFloat4(GUIConfig, "Colors", "ButtonHovered", ImVec4(0.334, 0.615, 0.812, DefaultGlobalOpacity));
-			SetJsonFloat4(GUIConfig, "Colors", "ButtonActive", ImVec4(0.358f, 0.660f, 0.871f, DefaultGlobalOpacity));
-			SetJsonFloat4(GUIConfig, "Colors", "Header", ImVec4(0.310f, 0.571f, 0.753f, DefaultGlobalOpacity));
-			SetJsonFloat4(GUIConfig, "Colors", "HeaderHovered", ImVec4(0.334, 0.615, 0.812, DefaultGlobalOpacity));
-			SetJsonFloat4(GUIConfig, "Colors", "HeaderActive", ImVec4(0.358f, 0.660f, 0.871f, DefaultGlobalOpacity));
-			SetJsonFloat4(GUIConfig, "Colors", "Separator", ImVec4(0.510f, 0.510f, 0.510f, DefaultGlobalOpacity));
-			SetJsonFloat4(GUIConfig, "Colors", "SeparatorHovered", ImVec4(0.610f, 0.610f, 0.610f, DefaultGlobalOpacity));
-			SetJsonFloat4(GUIConfig, "Colors", "SeparatorActive", ImVec4(0.710f, 0.710f, 0.710f, DefaultGlobalOpacity));
-			SetJsonFloat4(GUIConfig, "Colors", "ResizeGrip", ImVec4(0.310f, 0.571f, 0.753f, DefaultGlobalOpacity));
-			SetJsonFloat4(GUIConfig, "Colors", "ResizeGripHovered", ImVec4(0.334, 0.615, 0.812, DefaultGlobalOpacity));
-			SetJsonFloat4(GUIConfig, "Colors", "ResizeGripActive", ImVec4(0.358f, 0.660f, 0.871f, DefaultGlobalOpacity));
-			SetJsonFloat4(GUIConfig, "Colors", "Tab", ImVec4(0.310f, 0.571f, 0.753f, DefaultGlobalOpacity));
-			SetJsonFloat4(GUIConfig, "Colors", "TabHovered", ImVec4(0.334, 0.615, 0.812, DefaultGlobalOpacity));
-			SetJsonFloat4(GUIConfig, "Colors", "TabActive", ImVec4(0.358f, 0.660f, 0.871f, DefaultGlobalOpacity));
-			SetJsonFloat4(GUIConfig, "Colors", "TabUnfocused", ImVec4(0.07f, 0.10f, 0.15f, DefaultGlobalOpacity));
-			SetJsonFloat4(GUIConfig, "Colors", "TabUnfocusedActive", ImVec4(0.14f, 0.26f, 0.42f, DefaultGlobalOpacity));
-			SetJsonFloat4(GUIConfig, "Colors", "PlotLines", ImVec4(0.310f, 0.571f, 0.753f, DefaultGlobalOpacity));
-			SetJsonFloat4(GUIConfig, "Colors", "PlotLinesHovered", ImVec4(0.000f, 0.578f, 0.900f, DefaultGlobalOpacity));
-			SetJsonFloat4(GUIConfig, "Colors", "PlotHistogram", ImVec4(0.310f, 0.571f, 0.753f, DefaultGlobalOpacity));
-			SetJsonFloat4(GUIConfig, "Colors", "PlotHistogramHovered", ImVec4(0.334, 0.615, 0.812, DefaultGlobalOpacity));
-			SetJsonFloat4(GUIConfig, "Colors", "TextSelectedBackground", ImVec4(0.310f, 0.571f, 0.753f, DefaultGlobalOpacity));
-			SetJsonFloat4(GUIConfig, "Colors", "DragDropTarget", ImVec4(1.00f, 1.00f, 0.00f, DefaultGlobalOpacity));
-			SetJsonFloat4(GUIConfig, "Colors", "NavHighlight", ImVec4(0.26f, 0.59f, 0.98f, DefaultGlobalOpacity));
-			SetJsonFloat4(GUIConfig, "Colors", "NavWindowingHighlight", ImVec4(1.00f, 1.00f, 1.00f, DefaultGlobalOpacity));
-			SetJsonFloat4(GUIConfig, "Colors", "NavWindowingDimBackground", ImVec4(0.80f, 0.80f, 0.80f, DefaultGlobalOpacity));
-			SetJsonFloat4(GUIConfig, "Colors", "ModalWindowDimBackground", ImVec4(0.80f, 0.80f, 0.80f, DefaultGlobalOpacity));
-
-			std::ofstream ConfigOutput(ExePath + "RFGR Script Loader/Settings/GUI Config.json");
-			ConfigOutput << std::setw(4) << GUIConfig << std::endl;
-			ConfigOutput.close();
-			return true;
-		}, "GUI Config.json", "write", "writing"))
-		{
-			return false;
-		}
-		Logger::Log("No write exceptions detected.", LogInfo);
-	}
-
-	if (!JsonExceptionHandler([&]
-	{
-		Logger::Log("Start of gui style reading.", LogInfo);
-		ImGuiStyle& Style = ImGui::GetStyle(); //Currently 25 items
-		Style.Alpha = GUIConfig["Style"]["Alpha"].get<float>();
-		Style.AntiAliasedFill = GUIConfig["Style"]["AntiAliasedFill"].get<bool>();
-		Style.ButtonTextAlign = JsonGetFloat2(GUIConfig, "Style", "ButtonTextAlign");
-		Style.ChildBorderSize = GUIConfig["Style"]["ChildBorderSize"].get<float>();
-		Style.ChildRounding = GUIConfig["Style"]["ChildRounding"].get<float>();
-		//Style.ColumnsMinSpacing = 1.0f;
-		//Style.CurveTessellationTol = 1.25f;
-		Style.DisplaySafeAreaPadding = JsonGetFloat2(GUIConfig, "Style", "DisplaySafeAreaPadding");
-		//Style.DisplayWindowPadding = ImVec2(1.0, 1.0f);
-		Style.FrameBorderSize = GUIConfig["Style"]["FrameBorderSize"].get<float>();
-		Style.FramePadding = JsonGetFloat2(GUIConfig, "Style", "FramePadding");
-		Style.FrameRounding = GUIConfig["Style"]["FrameRounding"].get<float>();
-		Style.GrabMinSize = GUIConfig["Style"]["GrabMinSize"].get<float>();
-		Style.GrabRounding = GUIConfig["Style"]["GrabRounding"].get<float>();
-		Style.IndentSpacing = GUIConfig["Style"]["IndentSpacing"].get<float>();
-		Style.ItemInnerSpacing = JsonGetFloat2(GUIConfig, "Style", "ItemInnerSpacing");
-		Style.ItemSpacing = JsonGetFloat2(GUIConfig, "Style", "ItemSpacing");
-		//Style.MouseCursorScale = 1.0f;
-		Style.PopupBorderSize = GUIConfig["Style"]["PopupBorderSize"].get<float>();
-		Style.PopupRounding = GUIConfig["Style"]["PopupRounding"].get<float>();
-		Style.ScrollbarRounding = GUIConfig["Style"]["ScrollbarRounding"].get<float>();
-		Style.ScrollbarSize = GUIConfig["Style"]["ScrollbarSize"].get<float>();
-		Style.TabBorderSize = GUIConfig["Style"]["TabBorderSize"].get<float>();
-		Style.TabRounding = GUIConfig["Style"]["TabRounding"].get<float>();
-		Style.TouchExtraPadding = JsonGetFloat2(GUIConfig, "Style", "TouchExtraPadding");
-		Style.WindowBorderSize = GUIConfig["Style"]["WindowBorderSize"].get<float>();
-		//Style.WindowMinSize = 1.0f;
-		Style.WindowPadding = JsonGetFloat2(GUIConfig, "Style", "WindowPadding");
-		Style.WindowRounding = GUIConfig["Style"]["WindowRounding"].get<float>();
-		Style.WindowTitleAlign = JsonGetFloat2(GUIConfig, "Style", "WindowTitleAlign");
-		Logger::Log("Done reading gui style.", LogInfo);
-
-		Logger::Log("Start of gui color reading.", LogInfo);
-		ImVec4* Colors = ImGui::GetStyle().Colors; //48 items
-		Colors[ImGuiCol_Text] = JsonGetFloat4(GUIConfig, "Colors", "Text");
-		Colors[ImGuiCol_TextDisabled] = JsonGetFloat4(GUIConfig, "Colors", "TextDisabled");
-		Colors[ImGuiCol_WindowBg] = JsonGetFloat4(GUIConfig, "Colors", "WindowBackground");
-		Colors[ImGuiCol_ChildBg] = JsonGetFloat4(GUIConfig, "Colors", "ChildBackground");
-		Colors[ImGuiCol_PopupBg] = JsonGetFloat4(GUIConfig, "Colors", "PopupBackground");
-		Colors[ImGuiCol_Border] = JsonGetFloat4(GUIConfig, "Colors", "Border");
-		Colors[ImGuiCol_BorderShadow] = JsonGetFloat4(GUIConfig, "Colors", "BorderShadow");
-		Colors[ImGuiCol_FrameBg] = JsonGetFloat4(GUIConfig, "Colors", "FrameBackground");
-		Colors[ImGuiCol_FrameBgHovered] = JsonGetFloat4(GUIConfig, "Colors", "FrameBackgroundHovered");
-		Colors[ImGuiCol_FrameBgActive] = JsonGetFloat4(GUIConfig, "Colors", "FrameBackgroundActive");
-		Colors[ImGuiCol_TitleBg] = JsonGetFloat4(GUIConfig, "Colors", "TitleBackground");
-		Colors[ImGuiCol_TitleBgActive] = JsonGetFloat4(GUIConfig, "Colors", "TitleBackgroundActive");
-		Colors[ImGuiCol_TitleBgCollapsed] = JsonGetFloat4(GUIConfig, "Colors", "TitleBackgroundCollapsed");
-		Colors[ImGuiCol_MenuBarBg] = JsonGetFloat4(GUIConfig, "Colors", "MenuBarBackground");
-		Colors[ImGuiCol_ScrollbarBg] = JsonGetFloat4(GUIConfig, "Colors", "ScrollbarBackground");
-		Colors[ImGuiCol_ScrollbarGrab] = JsonGetFloat4(GUIConfig, "Colors", "ScrollbarGrab");
-		Colors[ImGuiCol_ScrollbarGrabHovered] = JsonGetFloat4(GUIConfig, "Colors", "ScrollbarGrabHovered");
-		Colors[ImGuiCol_ScrollbarGrabActive] = JsonGetFloat4(GUIConfig, "Colors", "ScrollbarGrabActive");
-		Colors[ImGuiCol_CheckMark] = JsonGetFloat4(GUIConfig, "Colors", "CheckMark");
-		Colors[ImGuiCol_SliderGrab] = JsonGetFloat4(GUIConfig, "Colors", "SliderGrab");
-		Colors[ImGuiCol_SliderGrabActive] = JsonGetFloat4(GUIConfig, "Colors", "SliderGrabActive");
-		Colors[ImGuiCol_Button] = JsonGetFloat4(GUIConfig, "Colors", "Button");
-		Colors[ImGuiCol_ButtonHovered] = JsonGetFloat4(GUIConfig, "Colors", "ButtonHovered");
-		Colors[ImGuiCol_ButtonActive] = JsonGetFloat4(GUIConfig, "Colors", "ButtonActive");
-		Colors[ImGuiCol_Header] = JsonGetFloat4(GUIConfig, "Colors", "Header");
-		Colors[ImGuiCol_HeaderHovered] = JsonGetFloat4(GUIConfig, "Colors", "HeaderHovered");
-		Colors[ImGuiCol_HeaderActive] = JsonGetFloat4(GUIConfig, "Colors", "HeaderActive");
-		Colors[ImGuiCol_Separator] = JsonGetFloat4(GUIConfig, "Colors", "Separator");
-		Colors[ImGuiCol_SeparatorHovered] = JsonGetFloat4(GUIConfig, "Colors", "SeparatorHovered");
-		Colors[ImGuiCol_SeparatorActive] = JsonGetFloat4(GUIConfig, "Colors", "SeparatorActive");
-		Colors[ImGuiCol_ResizeGrip] = JsonGetFloat4(GUIConfig, "Colors", "ResizeGrip");
-		Colors[ImGuiCol_ResizeGripHovered] = JsonGetFloat4(GUIConfig, "Colors", "ResizeGripHovered");
-		Colors[ImGuiCol_ResizeGripActive] = JsonGetFloat4(GUIConfig, "Colors", "ResizeGripActive");
-		Colors[ImGuiCol_Tab] = JsonGetFloat4(GUIConfig, "Colors", "Tab");
-		Colors[ImGuiCol_TabHovered] = JsonGetFloat4(GUIConfig, "Colors", "TabHovered");
-		Colors[ImGuiCol_TabActive] = JsonGetFloat4(GUIConfig, "Colors", "TabActive");
-		Colors[ImGuiCol_TabUnfocused] = JsonGetFloat4(GUIConfig, "Colors", "TabUnfocused");
-		Colors[ImGuiCol_TabUnfocusedActive] = JsonGetFloat4(GUIConfig, "Colors", "TabUnfocusedActive");
-		Colors[ImGuiCol_PlotLines] = JsonGetFloat4(GUIConfig, "Colors", "PlotLines");
-		Colors[ImGuiCol_PlotLinesHovered] = JsonGetFloat4(GUIConfig, "Colors", "PlotLinesHovered");
-		Colors[ImGuiCol_PlotHistogram] = JsonGetFloat4(GUIConfig, "Colors", "PlotHistogram");
-		Colors[ImGuiCol_PlotHistogramHovered] = JsonGetFloat4(GUIConfig, "Colors", "PlotHistogramHovered");
-		Colors[ImGuiCol_TextSelectedBg] = JsonGetFloat4(GUIConfig, "Colors", "TextSelectedBackground");
-		Colors[ImGuiCol_DragDropTarget] = JsonGetFloat4(GUIConfig, "Colors", "DragDropTarget");
-		Colors[ImGuiCol_NavHighlight] = JsonGetFloat4(GUIConfig, "Colors", "NavHighlight");
-		Colors[ImGuiCol_NavWindowingHighlight] = JsonGetFloat4(GUIConfig, "Colors", "NavWindowingHighlight");
-		Colors[ImGuiCol_NavWindowingDimBg] = JsonGetFloat4(GUIConfig, "Colors", "NavWindowingDimBackground");
-		Colors[ImGuiCol_ModalWindowDimBg] = JsonGetFloat4(GUIConfig, "Colors", "ModalWindowDimBackground");
-		Logger::Log("Done reading gui color.", LogInfo);
-		Logger::Log("End of gui theme reading.", LogInfo);
-
-		return true;
-	}, "GUI Config.json", "read", "reading"))
-	{
-		return false;
-	}
-	Logger::Log("No read exceptions detected.", LogInfo);
-
-	Logger::Log("Done loading \"Settings.json\".", LogInfo);
-	return true;
-}
-
-bool SaveGUIConfig(std::string ThemeName, std::string Description, std::string Author, std::string Readme, std::string Filename)
-{
-	if (!JsonExceptionHandler([&]
-	{
-		Logger::Log("Started saving \"GUI Config.json\".", LogInfo);
-		std::string ExePath = GetEXEPath(false);
-		CreateDirectoryIfNull(ExePath + "RFGR Script Loader/Settings/");
-
-		GUIConfig["Theme Info"]["Theme name"] = ThemeName;
-		GUIConfig["Theme Info"]["Description"] = Description;
-		GUIConfig["Theme Info"]["Author"] = Author;
-		GUIConfig["Theme Info"]["Readme"] = Readme;
-
-		ImGuiStyle& Style = ImGui::GetStyle(); //Currently 25 items, some not provided to users since they aren't in the style editor.
-		GUIConfig["Style"]["Alpha"] = Style.Alpha;
-		GUIConfig["Style"]["AntiAliasedFill"] = Style.AntiAliasedFill;
-		GUIConfig["Style"]["ButtonTextAlign"][0] = Style.ButtonTextAlign.x;
-		GUIConfig["Style"]["ButtonTextAlign"][1] = Style.ButtonTextAlign.y;
-		GUIConfig["Style"]["ChildBorderSize"] = Style.ChildBorderSize; //Values > 1.0 can cause performance issues.
-		GUIConfig["Style"]["ChildRounding"] = Style.ChildRounding;
-		GUIConfig["Style"]["DisplaySafeAreaPadding"][0] = Style.DisplaySafeAreaPadding.x;
-		GUIConfig["Style"]["DisplaySafeAreaPadding"][1] = Style.DisplaySafeAreaPadding.y;
-		GUIConfig["Style"]["FrameBorderSize"] = Style.FrameBorderSize; //Values > 1.0 can cause performance issues.
-		GUIConfig["Style"]["FramePadding"][0] = Style.FramePadding.x;
-		GUIConfig["Style"]["FramePadding"][1] = Style.FramePadding.y;
-		GUIConfig["Style"]["FrameRounding"] = Style.FrameRounding;
-		GUIConfig["Style"]["GrabMinSize"] = Style.GrabMinSize;
-		GUIConfig["Style"]["GrabRounding"] = Style.GrabRounding;
-		GUIConfig["Style"]["IndentSpacing"] = Style.IndentSpacing;
-		GUIConfig["Style"]["ItemInnerSpacing"][0] = Style.ItemInnerSpacing.x;
-		GUIConfig["Style"]["ItemInnerSpacing"][1] = Style.ItemInnerSpacing.y;
-		GUIConfig["Style"]["ItemSpacing"][0] = Style.ItemSpacing.x;
-		GUIConfig["Style"]["ItemSpacing"][1] = Style.ItemSpacing.y;
-		GUIConfig["Style"]["PopupBorderSize"] = Style.PopupBorderSize; //Values > 1.0 can cause performance issues.
-		GUIConfig["Style"]["PopupRounding"] = Style.PopupRounding;
-		GUIConfig["Style"]["ScrollbarRounding"] = Style.ScrollbarRounding;
-		GUIConfig["Style"]["ScrollbarSize"] = Style.ScrollbarSize;
-		GUIConfig["Style"]["TabBorderSize"] = Style.TabBorderSize;
-		GUIConfig["Style"]["TabRounding"] = Style.TabRounding;
-		GUIConfig["Style"]["TouchExtraPadding"][0] = Style.TouchExtraPadding.x;
-		GUIConfig["Style"]["TouchExtraPadding"][1] = Style.TouchExtraPadding.y;
-		GUIConfig["Style"]["WindowBorderSize"] = Style.WindowBorderSize; //Values > 1.0 can cause performance issues.
-		GUIConfig["Style"]["WindowPadding"][0] = Style.WindowPadding.x;
-		GUIConfig["Style"]["WindowPadding"][1] = Style.WindowPadding.y;
-		GUIConfig["Style"]["WindowRounding"] = Style.WindowRounding;
-		GUIConfig["Style"]["WindowTitleAlign"][0] = Style.WindowTitleAlign.x;
-		GUIConfig["Style"]["WindowTitleAlign"][1] = Style.WindowTitleAlign.y;
-
-		ImVec4* Colors = ImGui::GetStyle().Colors;
-		SetJsonFloat4(GUIConfig, "Colors", "Text", Colors[ImGuiCol_Text]);
-		SetJsonFloat4(GUIConfig, "Colors", "TextDisabled", Colors[ImGuiCol_TextDisabled]);
-		SetJsonFloat4(GUIConfig, "Colors", "WindowBackground", Colors[ImGuiCol_WindowBg]);
-		SetJsonFloat4(GUIConfig, "Colors", "ChildBackground", Colors[ImGuiCol_ChildBg]);
-		SetJsonFloat4(GUIConfig, "Colors", "PopupBackground", Colors[ImGuiCol_PopupBg]);
-		SetJsonFloat4(GUIConfig, "Colors", "Border", Colors[ImGuiCol_Border]);
-		SetJsonFloat4(GUIConfig, "Colors", "BorderShadow", Colors[ImGuiCol_BorderShadow]);
-		SetJsonFloat4(GUIConfig, "Colors", "FrameBackground", Colors[ImGuiCol_FrameBg]);
-		SetJsonFloat4(GUIConfig, "Colors", "FrameBackgroundHovered", Colors[ImGuiCol_FrameBgHovered]);
-		SetJsonFloat4(GUIConfig, "Colors", "FrameBackgroundActive", Colors[ImGuiCol_FrameBgActive]);
-		SetJsonFloat4(GUIConfig, "Colors", "TitleBackground", Colors[ImGuiCol_TitleBg]);
-		SetJsonFloat4(GUIConfig, "Colors", "TitleBackgroundActive", Colors[ImGuiCol_TitleBgActive]);
-		SetJsonFloat4(GUIConfig, "Colors", "TitleBackgroundCollapsed", Colors[ImGuiCol_TitleBgCollapsed]);
-		SetJsonFloat4(GUIConfig, "Colors", "MenuBarBackground", Colors[ImGuiCol_MenuBarBg]);
-		SetJsonFloat4(GUIConfig, "Colors", "ScrollbarBackground", Colors[ImGuiCol_ScrollbarBg]);
-		SetJsonFloat4(GUIConfig, "Colors", "ScrollbarGrab", Colors[ImGuiCol_ScrollbarGrab]);
-		SetJsonFloat4(GUIConfig, "Colors", "ScrollbarGrabHovered", Colors[ImGuiCol_ScrollbarGrabHovered]);
-		SetJsonFloat4(GUIConfig, "Colors", "ScrollbarGrabActive", Colors[ImGuiCol_ScrollbarGrabActive]);
-		SetJsonFloat4(GUIConfig, "Colors", "CheckMark", Colors[ImGuiCol_CheckMark]);
-		SetJsonFloat4(GUIConfig, "Colors", "SliderGrab", Colors[ImGuiCol_SliderGrab]);
-		SetJsonFloat4(GUIConfig, "Colors", "SliderGrabActive", Colors[ImGuiCol_SliderGrabActive]);
-		SetJsonFloat4(GUIConfig, "Colors", "Button", Colors[ImGuiCol_Button]);
-		SetJsonFloat4(GUIConfig, "Colors", "ButtonHovered", Colors[ImGuiCol_ButtonHovered]);
-		SetJsonFloat4(GUIConfig, "Colors", "ButtonActive", Colors[ImGuiCol_ButtonActive]);
-		SetJsonFloat4(GUIConfig, "Colors", "Header", Colors[ImGuiCol_Header]);
-		SetJsonFloat4(GUIConfig, "Colors", "HeaderHovered", Colors[ImGuiCol_HeaderHovered]);
-		SetJsonFloat4(GUIConfig, "Colors", "HeaderActive", Colors[ImGuiCol_HeaderActive]);
-		SetJsonFloat4(GUIConfig, "Colors", "Separator", Colors[ImGuiCol_Separator]);
-		SetJsonFloat4(GUIConfig, "Colors", "SeparatorHovered", Colors[ImGuiCol_SeparatorHovered]);
-		SetJsonFloat4(GUIConfig, "Colors", "SeparatorActive", Colors[ImGuiCol_SeparatorActive]);
-		SetJsonFloat4(GUIConfig, "Colors", "ResizeGrip", Colors[ImGuiCol_ResizeGrip]);
-		SetJsonFloat4(GUIConfig, "Colors", "ResizeGripHovered", Colors[ImGuiCol_ResizeGripHovered]);
-		SetJsonFloat4(GUIConfig, "Colors", "ResizeGripActive", Colors[ImGuiCol_ResizeGripActive]);
-		SetJsonFloat4(GUIConfig, "Colors", "Tab", Colors[ImGuiCol_Tab]);
-		SetJsonFloat4(GUIConfig, "Colors", "TabHovered", Colors[ImGuiCol_TabHovered]);
-		SetJsonFloat4(GUIConfig, "Colors", "TabActive", Colors[ImGuiCol_TabActive]);
-		SetJsonFloat4(GUIConfig, "Colors", "TabUnfocused", Colors[ImGuiCol_TabUnfocused]);
-		SetJsonFloat4(GUIConfig, "Colors", "TabUnfocusedActive", Colors[ImGuiCol_TabUnfocusedActive]);
-		SetJsonFloat4(GUIConfig, "Colors", "PlotLines", Colors[ImGuiCol_PlotLines]);
-		SetJsonFloat4(GUIConfig, "Colors", "PlotLinesHovered", Colors[ImGuiCol_PlotLinesHovered]);
-		SetJsonFloat4(GUIConfig, "Colors", "PlotHistogram", Colors[ImGuiCol_PlotHistogram]);
-		SetJsonFloat4(GUIConfig, "Colors", "PlotHistogramHovered", Colors[ImGuiCol_PlotHistogramHovered]);
-		SetJsonFloat4(GUIConfig, "Colors", "TextSelectedBackground", Colors[ImGuiCol_TextSelectedBg]);
-		SetJsonFloat4(GUIConfig, "Colors", "DragDropTarget", Colors[ImGuiCol_DragDropTarget]);
-		SetJsonFloat4(GUIConfig, "Colors", "NavHighlight", Colors[ImGuiCol_NavHighlight]);
-		SetJsonFloat4(GUIConfig, "Colors", "NavWindowingHighlight", Colors[ImGuiCol_NavWindowingHighlight]);
-		SetJsonFloat4(GUIConfig, "Colors", "NavWindowingDimBackground", Colors[ImGuiCol_NavWindowingDimBg]);
-		SetJsonFloat4(GUIConfig, "Colors", "ModalWindowDimBackground", Colors[ImGuiCol_ModalWindowDimBg]);
-
-		std::ofstream ConfigOutput(ExePath + "RFGR Script Loader/Settings/" + Filename + ".json");
-		ConfigOutput << std::setw(4) << GUIConfig << std::endl;
-		ConfigOutput.close();
-		return true;
-	}, "GUI Settings.json", "write", "writing"))
-	{
-		return false;
-	}
-	Logger::Log("No write exceptions detected.", LogInfo);
-
-	Logger::Log("Done saving \"GUI Config.json\".", LogInfo);
-	return true;
-}
-
 MainOverlay::MainOverlay()
 {
 
@@ -633,8 +125,10 @@ MainOverlay::~MainOverlay()
 
 }
 
-void MainOverlay::Initialize()
+void MainOverlay::Initialize(bool* _OpenState)
 {
+	OpenState = _OpenState;
+
 	MainOverlayWindowFlags = 0;
 	//MainOverlayWindowFlags |= ImGuiWindowFlags_NoTitleBar;
 	//MainOverlayWindowFlags |= ImGuiWindowFlags_NoScrollbar;
@@ -657,32 +151,15 @@ void MainOverlay::Initialize()
 	//MainOverlayWindowFlags |= ImGuiWindowFlags_NoBackground;
 	//MainOverlayWindowFlags |= ImGuiWindowFlags_NoBringToFrontOnFocus;
 
-	MainOverlayModalFlags = 0;
-	//MainOverlayWindowFlags |= ImGuiWindowFlags_NoTitleBar;
-	//MainOverlayWindowFlags |= ImGuiWindowFlags_NoScrollbar;
-	//MainOverlayModalFlags |= ImGuiWindowFlags_MenuBar;
-	//MainOverlayWindowFlags |= ImGuiWindowFlags_NoMove;
-	MainOverlayModalFlags |= ImGuiWindowFlags_NoResize;
-	MainOverlayModalFlags |= ImGuiWindowFlags_NoCollapse;
-	//MainOverlayWindowFlags |= ImGuiWindowFlags_NoNav;
-	//MainOverlayWindowFlags |= ImGuiWindowFlags_NoBackground;
-	//MainOverlayWindowFlags |= ImGuiWindowFlags_NoBringToFrontOnFocus;
-
 	MainOverlayTeleportEditTextFlags = 0;
 	MainOverlayTeleportEditTextFlags |= ImGuiInputTextFlags_AllowTabInput;
 	MainOverlayTeleportEditTextFlags |= ImGuiInputTextFlags_CharsHexadecimal;
 
-	LoadGUIConfig();
-	LoadTeleportLocations();
-
-	NewTeleportName = "";
-	NewTeleportPosition.x = 0.0f;
-	NewTeleportPosition.y = 0.0f;
-	NewTeleportPosition.z = 0.0f;
-	NewTeleportDescription = "";
+	//LoadGUIConfig();
+	//LoadTeleportLocations();
 }
 
-void MainOverlay::Draw(const char* title, bool* p_open)
+void MainOverlay::Draw(const char* Title)
 {
 	if (!PlayerPtrTargetsInitialized)
 	{
@@ -703,7 +180,7 @@ void MainOverlay::Draw(const char* title, bool* p_open)
 
 	ImGui::SetNextWindowSize(ImVec2(600.0f, 700.0f), ImGuiCond_FirstUseEver);
 
-	if (!ImGui::Begin(title, p_open, MainOverlayWindowFlags))
+	if (!ImGui::Begin(Title, OpenState, MainOverlayWindowFlags))
 	{
 		ImGui::End();
 		return;
@@ -717,15 +194,15 @@ void MainOverlay::Draw(const char* title, bool* p_open)
 		return;
 	}
 
-	if (ShowAppMainMenuBar)       ShowExampleAppMainMenuBar();
-	if (ShowAppConsole)             ShowExampleAppConsole(&ShowAppConsole);
-	if (ShowAppLog)                 ShowExampleAppLog(&ShowAppLog);
-	if (ShowAppLongText)           ShowExampleAppLongText(&ShowAppLongText);
-	if (ShowAppSimpleOverlay)      ShowExampleAppSimpleOverlay(&ShowAppLongText);
+	if (*ShowAppMainMenuBar)       ShowExampleAppMainMenuBar();
+	//if (*ShowAppConsole)             ShowExampleAppConsole(ShowAppConsole);
+	if (*ShowAppLog)                 ShowExampleAppLog(ShowAppLog);
+	if (*ShowAppLongText)           ShowExampleAppLongText(ShowAppLongText);
+	if (*ShowAppSimpleOverlay)      ShowExampleAppSimpleOverlay(ShowAppLongText);
 
-	if (ShowAppMetrics) { ImGui::ShowMetricsWindow(&ShowAppMetrics); }
-	if (ShowAppStyleEditor) { ImGui::Begin("Theme editor", &ShowAppStyleEditor); ShowStyleEditor(&ImGui::GetStyle()); ImGui::End(); }
-	if (ShowAppAbout) { ShowAboutWindow(&ShowAppAbout); }
+	if (*ShowAppMetrics) { ImGui::ShowMetricsWindow(ShowAppMetrics); }
+	//if (*ShowAppStyleEditor) { ImGui::Begin("Theme editor", ShowAppStyleEditor); ShowStyleEditor(&ImGui::GetStyle()); ImGui::End(); }
+	if (*ShowAppAbout) { ShowAboutWindow(ShowAppAbout); }
 
 	// Menu
 	if (ImGui::BeginMenuBar())
@@ -737,18 +214,19 @@ void MainOverlay::Draw(const char* title, bool* p_open)
 		}
 		if (ImGui::BeginMenu("Examples"))
 		{
-			ImGui::MenuItem("Main menu bar", NULL, &ShowAppMainMenuBar);
-			ImGui::MenuItem("Console", NULL, &ShowAppConsole);
-			ImGui::MenuItem("Log", NULL, &ShowAppLog);
-			ImGui::MenuItem("Long text display", NULL, &ShowAppLongText);
-			ImGui::MenuItem("Simple overlay", NULL, &ShowAppSimpleOverlay);
+			//ImGui::Text(std::to_string(*ShowAppMainMenuBar).c_str());
+			ImGui::MenuItem("Main menu bar", NULL, ShowAppMainMenuBar);
+			ImGui::MenuItem("Console", NULL, ShowAppConsole);
+			ImGui::MenuItem("Log", NULL, ShowAppLog);
+			ImGui::MenuItem("Long text display", NULL, ShowAppLongText);
+			ImGui::MenuItem("Simple overlay", NULL, ShowAppSimpleOverlay);
 			ImGui::EndMenu();
 		}
 		if (ImGui::BeginMenu("Help"))
 		{
-			ImGui::MenuItem("Metrics", NULL, &ShowAppMetrics);
-			ImGui::MenuItem("Theme Editor", NULL, &ShowAppStyleEditor);
-			ImGui::MenuItem("About", NULL, &ShowAppAbout);
+			ImGui::MenuItem("Metrics", NULL, ShowAppMetrics);
+			ImGui::MenuItem("Theme Editor", NULL, ShowAppStyleEditor);
+			ImGui::MenuItem("About", NULL, ShowAppAbout);
 			ImGui::EndMenu();
 		}
 		ImGui::EndMenuBar();
@@ -813,6 +291,65 @@ void MainOverlay::Draw(const char* title, bool* p_open)
 
 	}
 	ImGui::PopStyleColor(3);
+
+	/*Test of rl_draw::string(). Currently this just freezes the game. Will
+	probably end up just using an external lib to render text for now.*/
+	/*if (ImGui::Button("Test draw string"))
+	{
+		rl_primitive_state* PrimitiveState;
+		PrimitiveState = new rl_primitive_state;
+		PrimitiveState->d.v.m_alpha_mode = 5;
+		PrimitiveState->d.v.m_clamp_mode = 0;
+		PrimitiveState->d.v.m_color_write_mode = 0;
+		PrimitiveState->d.v.m_const_alpha = 0xFF;
+		PrimitiveState->d.v.m_cull_mode = 0;
+		PrimitiveState->d.v.m_msaa = 0;
+		PrimitiveState->d.v.m_scissor = 0;
+		PrimitiveState->d.v.m_stencil_mode = 0;
+		PrimitiveState->d.v.m_valid = 1;
+		PrimitiveState->d.v.m_zbias_mode = 0;
+		PrimitiveState->d.v.m_zbuf_mode = 0;
+
+		rl_draw_string(GlobalRlDrawPtr, nullptr, 100.0f, 100.0f, "Test string draw!!!", true, 0, PrimitiveState);
+	}*/
+
+	/*This is experimental code meant to manipulate the remnants of the games
+	debug console. Currently just tries to activate it. Later on I'll try to
+	manually add commands to it and run them. If that works, then I'll add them
+	to the lua system and port them through the overlay lua console.*/
+	/*ImGui::Text("Console Mode: "); ImGui::SameLine();
+	ImGui::TextColored(SecondaryTextColor, std::to_string((int)console_get_console_mode).c_str());
+	if (ImGui::Button("VCM_NORMAL (0)"))
+	{
+		console_set_console_mode(VCM_NORMAL);
+	}
+	if (ImGui::Button("VCM_CHAT (1)"))
+	{
+		console_set_console_mode(VCM_CHAT);
+	}
+	if (ImGui::Button("VCM_TEAMCHAT (2)"))
+	{
+		console_set_console_mode(VCM_TEAMCHAT);
+	}
+
+	if (ImGui::Button("Console init"))
+	{
+		vconsole_config* ConsoleConfig;
+		ConsoleConfig = new vconsole_config; //Todo: Fix this if actually using. This is for testing purposes only and will cause a memory leak.
+		ConsoleConfig->screen_width = 1680;
+		ConsoleConfig->screen_height = 1050;
+		ConsoleConfig->save_history = true;
+		ConsoleConfig->safe_area_left = 0;
+		Console_Init(ConsoleConfig);
+	}
+	if (ImGui::Button("Console activate"))
+	{
+		Console_Activate();
+	}
+	if (ImGui::Button("Console deactivate"))
+	{
+		Console_Deactivate();
+	}*/
 
 	if (ImGui::CollapsingHeader("Notes:"))
 	{
@@ -990,7 +527,7 @@ void MainOverlay::Draw(const char* title, bool* p_open)
 		ImGui::SliderFloat("Global explosion strength multiplier", &GlobalExplosionStrengthMultiplier, 0.01f, 10.0f);
 		ImGui::SameLine(); ImGui::Checkbox("Use", &UseGlobalExplosionStrengthMultiplier);
 		ImGui::Checkbox("Use explosion radius limits", &UseExplosionRadiusLimits);
-		TooltipOnPrevious("If you turn this off be very very careful with the explosion multipliers. Too high and it's very easy to freeze/crash the game. My game froze at 4x explosions with no radius limits.");
+		Utilities::GUI::TooltipOnPrevious("If you turn this off be very very careful with the explosion multipliers. Too high and it's very easy to freeze/crash the game. My game froze at 4x explosions with no radius limits.");
 		ImGui::InputFloat("Minimum explosion radius", &MinimumExplosionRadius, 0.1f, 1.0f, 3);
 		ImGui::InputFloat("Maximum explosion radius", &MaximumExplosionRadius, 0.1f, 1.0f, 3);
 	}
@@ -1000,7 +537,7 @@ void MainOverlay::Draw(const char* title, bool* p_open)
 	}
 	ImGui::Separator();
 
-	DrawTeleportGui(false, "Teleport", &TeleportWindowOpen, MainOverlayWindowFlags);
+	//DrawTeleportGui(false, "Teleport", &TeleportWindowOpen, MainOverlayWindowFlags);
 	ImGui::Separator();
 	
 	DrawPlayerVariablesGui(false, "Player variables", &PlayerVariablesGuiOpen, MainOverlayWindowFlags);
@@ -1009,176 +546,6 @@ void MainOverlay::Draw(const char* title, bool* p_open)
 	ImGui::Text("Misc Program Values:");
 
 	ImGui::End();
-}
-
-void MainOverlay::DrawTeleportGui(bool UseSeparateWindow, const char* Title, bool* Open, ImGuiWindowFlags Flags)
-{
-	if (UseSeparateWindow)
-	{
-		if (!ImGui::Begin(Title, Open, Flags))
-		{
-			ImGui::End();
-			return;
-		}
-	}
-
-	if (ImGui::CollapsingHeader("Teleport"))
-	{
-		//ImGui::Text("Teleport:"); 
-		//ImGui::SameLine(); ShowHelpMarker("Works in vehicles and out.");
-		//ImGui::Checkbox("Use unsafe teleport", &UseUnsafeTeleport);
-		//ImGui::Checkbox("Allow safe teleport fail", &AllowSafeTeleportFail);
-		//ImGui::InputFloat("Safe teleport placement range: ", &SafeTeleportPlacementRange, 1.0, 5.0, 3);
-		static bool NameAlreadyUsedWarning = false;
-		ImGui::Text("Manual:");
-		//ImGui::Separator();
-		ImGui::Text("Current player position: ");
-		ImGui::SameLine();
-		std::string PlayerPositionString("(" + std::to_string(PlayerPtr->Position.x) + ", " + std::to_string(PlayerPtr->Position.y) + ", " + std::to_string(PlayerPtr->Position.z) + ")");
-		ImGui::TextColored(SecondaryTextColor, PlayerPositionString.c_str());
-
-		ImGui::Text("New player position:"); ImGui::SameLine();
-		ImGui::PushItemWidth(232.0f);
-		ImGui::InputFloat3("##Player Position Target", PlayerPositionTargetArray, 3);
-		ImGui::SameLine();
-		if (ImGui::Button("Sync##PlayerPositionTarget"))
-		{
-			PlayerPositionTargetArray[0] = PlayerPtr->Position.x;
-			PlayerPositionTargetArray[1] = PlayerPtr->Position.y;
-			PlayerPositionTargetArray[2] = PlayerPtr->Position.z;
-		}
-		ImGui::SameLine();
-		if (ImGui::Button("Teleport##PlayerPositionTarget"))
-		{
-			HumanTeleportUnsafe(PlayerPtr, vector(PlayerPositionTargetArray[0], PlayerPositionTargetArray[1], PlayerPositionTargetArray[2]), PlayerPtr->Orientation);
-		}
-		TooltipOnPrevious("This will teleport the player to the value's you've typed, even if they are out of bounds. When setting TP points for later, try to set the y value a bit higher. If the game doesn't load quick enough your player will fall through the map. Usually the game will pull them back up, but sometimes it fails.");
-		ImGui::SameLine();
-		if (ImGui::Button("Save as new##PlayerPositionTarget"))
-		{
-			ImGui::OpenPopup("Save teleport location##PlayerPositionTarget");
-			NewTeleportName = "";
-			NewTeleportPosition.x = PlayerPositionTargetArray[0];
-			NewTeleportPosition.y = PlayerPositionTargetArray[1];
-			NewTeleportPosition.z = PlayerPositionTargetArray[2];
-			NewTeleportDescription = "";
-		}
-		if (ImGui::BeginPopupModal("Save teleport location##PlayerPositionTarget", NULL, MainOverlayModalFlags))
-		{
-			ImGui::Text("Name:");
-			ImGui::InputText("##TeleportEditNamePlayerPositionTarget", &NewTeleportName);
-			if (NameAlreadyUsedWarning)
-			{
-				ImGui::SameLine();
-				ImGui::TextColored(ColorRed, "Name already used!");
-			}
-			ImGui::Text("Position:");
-			ImGui::PushItemWidth(232.0f);
-			ImGui::InputFloat3("##TeleportEditPositionPlayerPositionTarget", (float*)(&NewTeleportPosition), 2);
-			ImGui::Text("Tooltip description:");
-			ImGui::InputTextMultiline("##TeleportEditTooltip descriptionPlayerPositionTarget", &NewTeleportDescription, ImVec2(500.0f, 350.0f));// , MainOverlayTeleportEditTextFlags);// , ImGuiInputTextFlags_CharsHexadecimal);
-			if (ImGui::Button("Save##PlayerPositionTarget"))
-			{
-				if (SetTeleportLocation(NewTeleportName, NewTeleportPosition.x, NewTeleportPosition.y, NewTeleportPosition.z, NewTeleportDescription))
-				{
-					NameAlreadyUsedWarning = false;
-					SaveTeleportLocations();
-					ImGui::CloseCurrentPopup();
-				}
-				else
-				{
-					NameAlreadyUsedWarning = true;
-				}
-			}
-			ImGui::SameLine();
-			if (ImGui::Button("Cancel##PlayerPositionTarget"))
-			{
-				ImGui::CloseCurrentPopup();
-			}
-			ImGui::EndPopup();
-		}
-
-		/*if (ImGui::Button("Sync##PlayerVelocityTarget"))
-		{
-			PlayerVelocityTargetArray[0] = PlayerPtr->Velocity.x;
-			PlayerVelocityTargetArray[1] = PlayerPtr->Velocity.y;
-			PlayerVelocityTargetArray[2] = PlayerPtr->Velocity.z;
-		}
-		ImGui::SameLine();
-		if (ImGui::Button("Set##PlayerVelocityTarget"))
-		{
-			PlayerPtr->Velocity.x = PlayerVelocityTargetArray[0];
-			PlayerPtr->Velocity.y = PlayerVelocityTargetArray[1];
-			PlayerPtr->Velocity.z = PlayerVelocityTargetArray[2];
-			NeedPlayerVelocitySet = true;
-		}
-		ImGui::SameLine(); ShowHelpMarker("This is always equal to the true player velocity. Haven't quite nailed down how objects are moved yet so there's only partial control for now. You can still set the velocity, but once you move out of that edit box it'll go back to the normal values.");
-		*/
-
-		ImGui::Separator();
-		ImGui::Text("Saved locations:");
-		try
-		{
-			for (auto i : TeleportLocations)
-			{
-				if (ImGui::Button(i["Name"].get<std::string>().c_str()))
-				{
-					HumanTeleportUnsafe(PlayerPtr, vector(i["Position"][0].get<float>(), i["Position"][1].get<float>(), i["Position"][2].get<float>()), PlayerPtr->Orientation);
-				}
-				TooltipOnPrevious(i["TooltipDescription"].get<std::string>().c_str());
-				ImGui::SameLine();
-				if (ImGui::Button(std::string("Edit##" + i["Name"].get<std::string>()).c_str()))
-				{
-					ImGui::OpenPopup(std::string("Teleport location edit##" + i["Name"].get<std::string>()).c_str());
-					TeleportEditPopupOpen = true;
-					NewTeleportName = i["Name"].get<std::string>();
-					NewTeleportPosition.x = i["Position"][0];
-					NewTeleportPosition.y = i["Position"][1];
-					NewTeleportPosition.z = i["Position"][2];
-					NewTeleportDescription = i["TooltipDescription"].get<std::string>();
-				}
-				if (ImGui::BeginPopupModal(std::string("Teleport location edit##" + i["Name"].get<std::string>()).c_str(), NULL, MainOverlayModalFlags))
-				{
-					ImGui::Text("Name:");
-					ImGui::InputText("##TeleportEditName", &NewTeleportName);
-					ImGui::Text("Position:");
-					ImGui::PushItemWidth(232.0f);
-					ImGui::InputFloat3("##TeleportEditPosition", (float*)(&NewTeleportPosition), 2);
-					ImGui::Text("Tooltip description:"); 
-					ImGui::InputTextMultiline("##TeleportEditTooltip description", &NewTeleportDescription, ImVec2(500.0f, 350.0f));// , MainOverlayTeleportEditTextFlags);// , ImGuiInputTextFlags_CharsHexadecimal);
-					if (ImGui::Button(std::string("Save##" + i["Name"].get<std::string>()).c_str()))
-					{
-						ChangeTeleportLocation(i["Name"], NewTeleportName, NewTeleportPosition.x, NewTeleportPosition.y, NewTeleportPosition.z, NewTeleportDescription);
-						SaveTeleportLocations();
-						ImGui::CloseCurrentPopup();
-					}
-					ImGui::SameLine();
-					if (ImGui::Button(std::string("Cancel##" + i["Name"].get<std::string>()).c_str()))
-					{
-						ImGui::CloseCurrentPopup();
-					}
-					ImGui::EndPopup();
-				}
-				/*if (ShowName)
-				{
-					std::cout << "Name after exiting modal: " << i["Name"] << std::endl;
-					i["Name"] = NewTeleportName;
-					ShowName = false;
-				}*/
-			}
-		}
-		catch (std::exception& Exception)
-		{
-			Logger::Log("Exception while drawing teleport menu!", LogFatalError);
-			Logger::Log(Exception.what(), LogFatalError);
-			Sleep(6000);
-		}
-		catch (...)
-		{
-			Logger::Log("Unknown exception while drawing teleport menu!", LogFatalError);
-		}
-	}
-	TooltipOnPrevious("Manual and preset teleport controls for the player. Works in vehicles.");
 }
 
 void MainOverlay::DrawPlayerVariablesGui(bool UseSeparateWindow, const char* Title, bool* Open, ImGuiWindowFlags Flags)
@@ -2014,290 +1381,4 @@ void MainOverlay::ShowExampleAppSimpleOverlay(bool* p_open)
 		}
 	}
 	ImGui::End();
-}
-
-
-
-//-----------------------------------------------------------------------------
-// [SECTION] Style Editor / ShowStyleEditor()
-//-----------------------------------------------------------------------------
-
-// Demo helper function to select among default colors. See ShowStyleEditor() for more advanced options.
-// Here we use the simplified Combo() api that packs items into a single literal string. Useful for quick combo boxes where the choices are known locally.
-bool ShowStyleSelector(const char* label)
-{
-	static int style_idx = -1;
-	if (ImGui::Combo(label, &style_idx, "RFGR Dark\0Classic\0Dark\0Light\0"))
-	{
-		switch (style_idx)
-		{
-		case 0: LoadGUIConfig(); break;
-		case 1: ImGui::StyleColorsClassic(); break;
-		case 2: ImGui::StyleColorsDark(); break;
-		case 3: ImGui::StyleColorsLight(); break;
-		}
-		return true;
-	}
-	return false;
-}
-
-// Demo helper function to select among loaded fonts.
-// Here we use the regular BeginCombo()/EndCombo() api which is more the more flexible one.
-void ShowFontSelector(const char* label)
-{
-	ImGuiIO& io = ImGui::GetIO();
-	ImFont* font_current = ImGui::GetFont();
-	if (ImGui::BeginCombo(label, font_current->GetDebugName()))
-	{
-		for (int n = 0; n < io.Fonts->Fonts.Size; n++)
-			if (ImGui::Selectable(io.Fonts->Fonts[n]->GetDebugName(), io.Fonts->Fonts[n] == font_current))
-				io.FontDefault = io.Fonts->Fonts[n];
-		ImGui::EndCombo();
-	}
-	ImGui::SameLine();
-	ShowHelpMarker(
-		"- Load additional fonts with io.Fonts->AddFontFromFileTTF().\n"
-		"- The font atlas is built when calling io.Fonts->GetTexDataAsXXXX() or io.Fonts->Build().\n"
-		"- Read FAQ and documentation in misc/fonts/ for more details.\n"
-		"- If you need to add/remove fonts at runtime (e.g. for DPI change), do it before calling NewFrame().");
-}
-
-void ShowStyleEditor(ImGuiStyle* ref)
-{
-	// You can pass in a reference ImGuiStyle structure to compare to, revert to and save to (else it compares to an internally stored reference)
-	ImGuiStyle& style = ImGui::GetStyle();
-	static ImGuiStyle ref_saved_style;
-
-	// Default to using internal storage as reference
-	static bool init = true;
-	if (init && ref == NULL)
-		ref_saved_style = style;
-	init = false;
-	if (ref == NULL)
-		ref = &ref_saved_style;
-
-	ImGui::PushItemWidth(ImGui::GetWindowWidth() * 0.50f);
-
-	if (ImGui::ShowStyleSelector("Colors##Selector"))
-		ref_saved_style = style;
-	ImGui::ShowFontSelector("Fonts##Selector");
-
-	// Simplified Settings
-	if (ImGui::SliderFloat("FrameRounding", &style.FrameRounding, 0.0f, 12.0f, "%.0f"))
-		style.GrabRounding = style.FrameRounding; // Make GrabRounding always the same value as FrameRounding
-	{ bool window_border = (style.WindowBorderSize > 0.0f); if (ImGui::Checkbox("WindowBorder", &window_border)) style.WindowBorderSize = window_border ? 1.0f : 0.0f; }
-	ImGui::SameLine();
-	{ bool frame_border = (style.FrameBorderSize > 0.0f); if (ImGui::Checkbox("FrameBorder", &frame_border)) style.FrameBorderSize = frame_border ? 1.0f : 0.0f; }
-	ImGui::SameLine();
-	{ bool popup_border = (style.PopupBorderSize > 0.0f); if (ImGui::Checkbox("PopupBorder", &popup_border)) style.PopupBorderSize = popup_border ? 1.0f : 0.0f; }
-
-	// Save/Revert button
-	if (ImGui::Button("Save Ref"))
-		*ref = ref_saved_style = style;
-	ImGui::SameLine();
-	if (ImGui::Button("Revert Ref"))
-		style = *ref;
-	ImGui::SameLine();
-	ShowHelpMarker("Save/Revert in local non-persistent storage. Default Colors definition are not affected. Use \"Export Colors\" below to save them somewhere.");
-	ImGui::SameLine();
-	if (ImGui::Button("Save to file"))
-	{
-		SaveGUIConfig("Default Dark Theme", "The default dark theme for the script loader.", "moneyl", "When making your own themes you can use this for extra information such as known bugs or optional settings. Note: This section will be used once I add a custom theme loading GUI to the script loader. Not present for the initial themes release.", "GUI Config");
-	}
-
-	ImGui::Separator();
-
-	if (ImGui::BeginTabBar("##tabs", ImGuiTabBarFlags_None))
-	{
-		if (ImGui::BeginTabItem("Sizes"))
-		{
-			ImGui::Text("Main");
-			ImGui::SliderFloat2("WindowPadding", (float*)&style.WindowPadding, 0.0f, 20.0f, "%.0f");
-			ImGui::SliderFloat("PopupRounding", &style.PopupRounding, 0.0f, 16.0f, "%.0f");
-			ImGui::SliderFloat2("FramePadding", (float*)&style.FramePadding, 0.0f, 20.0f, "%.0f");
-			ImGui::SliderFloat2("ItemSpacing", (float*)&style.ItemSpacing, 0.0f, 20.0f, "%.0f");
-			ImGui::SliderFloat2("ItemInnerSpacing", (float*)&style.ItemInnerSpacing, 0.0f, 20.0f, "%.0f");
-			ImGui::SliderFloat2("TouchExtraPadding", (float*)&style.TouchExtraPadding, 0.0f, 10.0f, "%.0f");
-			ImGui::SliderFloat("IndentSpacing", &style.IndentSpacing, 0.0f, 30.0f, "%.0f");
-			ImGui::SliderFloat("ScrollbarSize", &style.ScrollbarSize, 1.0f, 20.0f, "%.0f");
-			ImGui::SliderFloat("GrabMinSize", &style.GrabMinSize, 1.0f, 20.0f, "%.0f");
-			ImGui::Text("Borders");
-			ImGui::SliderFloat("WindowBorderSize", &style.WindowBorderSize, 0.0f, 1.0f, "%.0f");
-			ImGui::SliderFloat("ChildBorderSize", &style.ChildBorderSize, 0.0f, 1.0f, "%.0f");
-			ImGui::SliderFloat("PopupBorderSize", &style.PopupBorderSize, 0.0f, 1.0f, "%.0f");
-			ImGui::SliderFloat("FrameBorderSize", &style.FrameBorderSize, 0.0f, 1.0f, "%.0f");
-			ImGui::SliderFloat("TabBorderSize", &style.TabBorderSize, 0.0f, 1.0f, "%.0f");
-			ImGui::Text("Rounding");
-			ImGui::SliderFloat("WindowRounding", &style.WindowRounding, 0.0f, 14.0f, "%.0f");
-			ImGui::SliderFloat("ChildRounding", &style.ChildRounding, 0.0f, 16.0f, "%.0f");
-			ImGui::SliderFloat("FrameRounding", &style.FrameRounding, 0.0f, 12.0f, "%.0f");
-			ImGui::SliderFloat("ScrollbarRounding", &style.ScrollbarRounding, 0.0f, 12.0f, "%.0f");
-			ImGui::SliderFloat("GrabRounding", &style.GrabRounding, 0.0f, 12.0f, "%.0f");
-			ImGui::SliderFloat("TabRounding", &style.TabRounding, 0.0f, 12.0f, "%.0f");
-			ImGui::Text("Alignment");
-			ImGui::SliderFloat2("WindowTitleAlign", (float*)&style.WindowTitleAlign, 0.0f, 1.0f, "%.2f");
-			ImGui::SliderFloat2("ButtonTextAlign", (float*)&style.ButtonTextAlign, 0.0f, 1.0f, "%.2f"); ImGui::SameLine(); ShowHelpMarker("Alignment applies when a button is larger than its text content.");
-			ImGui::Text("Safe Area Padding"); ImGui::SameLine(); ShowHelpMarker("Adjust if you cannot see the edges of your screen (e.g. on a TV where scaling has not been configured).");
-			ImGui::SliderFloat2("DisplaySafeAreaPadding", (float*)&style.DisplaySafeAreaPadding, 0.0f, 30.0f, "%.0f");
-			ImGui::EndTabItem();
-		}
-
-		if (ImGui::BeginTabItem("Colors"))
-		{
-			static int output_dest = 0;
-			static bool output_only_modified = true;
-			if (ImGui::Button("Export Unsaved"))
-			{
-				if (output_dest == 0)
-					ImGui::LogToClipboard();
-				else
-					ImGui::LogToTTY();
-				ImGui::LogText("ImVec4* colors = ImGui::GetStyle().Colors;", "\r\n");
-				for (int i = 0; i < ImGuiCol_COUNT; i++)
-				{
-					const ImVec4& col = style.Colors[i];
-					const char* name = ImGui::GetStyleColorName(i);
-					if (!output_only_modified || memcmp(&col, &ref->Colors[i], sizeof(ImVec4)) != 0)
-						ImGui::LogText("colors[ImGuiCol_%s]%*s= ImVec4(%.2ff, %.2ff, %.2ff, %.2ff);", "\r\n", name, 23 - (int)strlen(name), "", col.x, col.y, col.z, col.w);
-				}
-				ImGui::LogFinish();
-			}
-			ImGui::SameLine(); ImGui::PushItemWidth(120); ImGui::Combo("##output_type", &output_dest, "To Clipboard\0To TTY\0"); ImGui::PopItemWidth();
-			ImGui::SameLine(); ImGui::Checkbox("Only Modified Colors", &output_only_modified);
-
-			static ImGuiTextFilter filter;
-			filter.Draw("Filter colors", ImGui::GetFontSize() * 16);
-
-			static ImGuiColorEditFlags alpha_flags = 0;
-			ImGui::RadioButton("Opaque", &alpha_flags, 0); ImGui::SameLine();
-			ImGui::RadioButton("Alpha", &alpha_flags, ImGuiColorEditFlags_AlphaPreview); ImGui::SameLine();
-			ImGui::RadioButton("Both", &alpha_flags, ImGuiColorEditFlags_AlphaPreviewHalf); ImGui::SameLine();
-			ShowHelpMarker("In the color list:\nLeft-click on colored square to open color picker,\nRight-click to open edit options menu.");
-
-			ImGui::BeginChild("##colors", ImVec2(0, 0), true, ImGuiWindowFlags_AlwaysVerticalScrollbar | ImGuiWindowFlags_AlwaysHorizontalScrollbar | ImGuiWindowFlags_NavFlattened);
-			ImGui::PushItemWidth(-160);
-			for (int i = 0; i < ImGuiCol_COUNT; i++)
-			{
-				const char* name = ImGui::GetStyleColorName(i);
-				if (!filter.PassFilter(name))
-					continue;
-				ImGui::PushID(i);
-				ImGui::ColorEdit4("##color", (float*)&style.Colors[i], ImGuiColorEditFlags_AlphaBar | alpha_flags);
-				if (memcmp(&style.Colors[i], &ref->Colors[i], sizeof(ImVec4)) != 0)
-				{
-					// Tips: in a real user application, you may want to merge and use an icon font into the main font, so instead of "Save"/"Revert" you'd use icons.
-					// Read the FAQ and misc/fonts/README.txt about using icon fonts. It's really easy and super convenient!
-					ImGui::SameLine(0.0f, style.ItemInnerSpacing.x); if (ImGui::Button("Save")) ref->Colors[i] = style.Colors[i];
-					ImGui::SameLine(0.0f, style.ItemInnerSpacing.x); if (ImGui::Button("Revert")) style.Colors[i] = ref->Colors[i];
-				}
-				ImGui::SameLine(0.0f, style.ItemInnerSpacing.x);
-				ImGui::TextUnformatted(name);
-				ImGui::PopID();
-			}
-			ImGui::PopItemWidth();
-			ImGui::EndChild();
-
-			ImGui::EndTabItem();
-		}
-
-		if (ImGui::BeginTabItem("Fonts"))
-		{
-			ImFontAtlas* atlas = ImGui::GetIO().Fonts;
-			ShowHelpMarker("Read FAQ and misc/fonts/README.txt for details on font loading.");
-			ImGui::PushItemWidth(120);
-			for (int i = 0; i < atlas->Fonts.Size; i++)
-			{
-				ImFont* font = atlas->Fonts[i];
-				ImGui::PushID(font);
-				bool font_details_opened = ImGui::TreeNode(font, "Font %d: \"%s\"\n%.2f px, %d glyphs, %d file(s)", i, font->ConfigData ? font->ConfigData[0].Name : "", font->FontSize, font->Glyphs.Size, font->ConfigDataCount);
-				ImGui::SameLine(); if (ImGui::SmallButton("Set as default")) ImGui::GetIO().FontDefault = font;
-				if (font_details_opened)
-				{
-					ImGui::PushFont(font);
-					ImGui::Text("The quick brown fox jumps over the lazy dog");
-					ImGui::PopFont();
-					ImGui::DragFloat("Font scale", &font->Scale, 0.005f, 0.3f, 2.0f, "%.1f");   // Scale only this font
-					ImGui::SameLine(); ShowHelpMarker("Note than the default embedded font is NOT meant to be scaled.\n\nFont are currently rendered into bitmaps at a given size at the time of building the atlas. You may oversample them to get some flexibility with scaling. You can also render at multiple sizes and select which one to use at runtime.\n\n(Glimmer of hope: the atlas system should hopefully be rewritten in the future to make scaling more natural and automatic.)");
-					ImGui::InputFloat("Font offset", &font->DisplayOffset.y, 1, 1, "%.0f");
-					ImGui::Text("Ascent: %f, Descent: %f, Height: %f", font->Ascent, font->Descent, font->Ascent - font->Descent);
-					ImGui::Text("Fallback character: '%c' (%d)", font->FallbackChar, font->FallbackChar);
-					ImGui::Text("Texture surface: %d pixels (approx) ~ %dx%d", font->MetricsTotalSurface, (int)sqrtf((float)font->MetricsTotalSurface), (int)sqrtf((float)font->MetricsTotalSurface));
-					for (int config_i = 0; config_i < font->ConfigDataCount; config_i++)
-						if (ImFontConfig* cfg = &font->ConfigData[config_i])
-							ImGui::BulletText("Input %d: \'%s\', Oversample: (%d,%d), PixelSnapH: %d", config_i, cfg->Name, cfg->OversampleH, cfg->OversampleV, cfg->PixelSnapH);
-					if (ImGui::TreeNode("Glyphs", "Glyphs (%d)", font->Glyphs.Size))
-					{
-						// Display all glyphs of the fonts in separate pages of 256 characters
-						for (int base = 0; base < 0x10000; base += 256)
-						{
-							int count = 0;
-							for (int n = 0; n < 256; n++)
-								count += font->FindGlyphNoFallback((ImWchar)(base + n)) ? 1 : 0;
-							if (count > 0 && ImGui::TreeNode((void*)(intptr_t)base, "U+%04X..U+%04X (%d %s)", base, base + 255, count, count > 1 ? "glyphs" : "glyph"))
-							{
-								float cell_size = font->FontSize * 1;
-								float cell_spacing = style.ItemSpacing.y;
-								ImVec2 base_pos = ImGui::GetCursorScreenPos();
-								ImDrawList* draw_list = ImGui::GetWindowDrawList();
-								for (int n = 0; n < 256; n++)
-								{
-									ImVec2 cell_p1(base_pos.x + (n % 16) * (cell_size + cell_spacing), base_pos.y + (n / 16) * (cell_size + cell_spacing));
-									ImVec2 cell_p2(cell_p1.x + cell_size, cell_p1.y + cell_size);
-									const ImFontGlyph* glyph = font->FindGlyphNoFallback((ImWchar)(base + n));
-									draw_list->AddRect(cell_p1, cell_p2, glyph ? IM_COL32(255, 255, 255, 100) : IM_COL32(255, 255, 255, 50));
-									if (glyph)
-										font->RenderChar(draw_list, cell_size, cell_p1, ImGui::GetColorU32(ImGuiCol_Text), (ImWchar)(base + n)); // We use ImFont::RenderChar as a shortcut because we don't have UTF-8 conversion functions available to generate a string.
-									if (glyph && ImGui::IsMouseHoveringRect(cell_p1, cell_p2))
-									{
-										ImGui::BeginTooltip();
-										ImGui::Text("Codepoint: U+%04X", base + n);
-										ImGui::Separator();
-										ImGui::Text("AdvanceX: %.1f", glyph->AdvanceX);
-										ImGui::Text("Pos: (%.2f,%.2f)->(%.2f,%.2f)", glyph->X0, glyph->Y0, glyph->X1, glyph->Y1);
-										ImGui::Text("UV: (%.3f,%.3f)->(%.3f,%.3f)", glyph->U0, glyph->V0, glyph->U1, glyph->V1);
-										ImGui::EndTooltip();
-									}
-								}
-								ImGui::Dummy(ImVec2((cell_size + cell_spacing) * 16, (cell_size + cell_spacing) * 16));
-								ImGui::TreePop();
-							}
-						}
-						ImGui::TreePop();
-					}
-					ImGui::TreePop();
-				}
-				ImGui::PopID();
-			}
-			if (ImGui::TreeNode("Atlas texture", "Atlas texture (%dx%d pixels)", atlas->TexWidth, atlas->TexHeight))
-			{
-				ImGui::Image(atlas->TexID, ImVec2((float)atlas->TexWidth, (float)atlas->TexHeight), ImVec2(0, 0), ImVec2(1, 1), ImColor(255, 255, 255, 255), ImColor(255, 255, 255, 128));
-				ImGui::TreePop();
-			}
-
-			static float window_scale = 1.0f;
-			if (ImGui::DragFloat("this window scale", &window_scale, 0.005f, 0.3f, 2.0f, "%.1f"))           // scale only this window
-				ImGui::SetWindowFontScale(window_scale);
-			ImGui::DragFloat("global scale", &ImGui::GetIO().FontGlobalScale, 0.005f, 0.3f, 2.0f, "%.1f");  // scale everything
-			ImGui::PopItemWidth();
-
-			ImGui::EndTabItem();
-		}
-
-		if (ImGui::BeginTabItem("Rendering"))
-		{
-			ImGui::Checkbox("Anti-aliased lines", &style.AntiAliasedLines); ImGui::SameLine(); ShowHelpMarker("When disabling anti-aliasing lines, you'll probably want to disable borders in your style as well.");
-			ImGui::Checkbox("Anti-aliased fill", &style.AntiAliasedFill);
-			ImGui::PushItemWidth(100);
-			ImGui::DragFloat("Curve Tessellation Tolerance", &style.CurveTessellationTol, 0.02f, 0.10f, FLT_MAX, "%.2f", 2.0f);
-			if (style.CurveTessellationTol < 0.10f) style.CurveTessellationTol = 0.10f;
-			ImGui::DragFloat("Global Alpha", &style.Alpha, 0.005f, 0.20f, 1.0f, "%.2f"); // Not exposing zero here so user doesn't "lose" the UI (zero alpha clips all widgets). But application code could have a toggle to switch between zero and non-zero.
-			ImGui::PopItemWidth();
-
-			ImGui::EndTabItem();
-		}
-
-		ImGui::EndTabBar();
-	}
-
-	ImGui::PopItemWidth();
 }
