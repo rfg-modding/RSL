@@ -506,3 +506,114 @@ auto JsonExceptionHandler(Callable&& Function, std::string FileName, std::string
 	}
 }
 */
+
+
+
+/*Test of rl_draw::string(). Currently this just freezes the game. Will
+probably end up just using an external lib to render text for now.*/
+/*if (ImGui::Button("Test draw string"))
+{
+	rl_primitive_state* PrimitiveState;
+	PrimitiveState = new rl_primitive_state;
+	PrimitiveState->d.v.m_alpha_mode = 5;
+	PrimitiveState->d.v.m_clamp_mode = 0;
+	PrimitiveState->d.v.m_color_write_mode = 0;
+	PrimitiveState->d.v.m_const_alpha = 0xFF;
+	PrimitiveState->d.v.m_cull_mode = 0;
+	PrimitiveState->d.v.m_msaa = 0;
+	PrimitiveState->d.v.m_scissor = 0;
+	PrimitiveState->d.v.m_stencil_mode = 0;
+	PrimitiveState->d.v.m_valid = 1;
+	PrimitiveState->d.v.m_zbias_mode = 0;
+	PrimitiveState->d.v.m_zbuf_mode = 0;
+
+	rl_draw_string(GlobalRlDrawPtr, nullptr, 100.0f, 100.0f, "Test string draw!!!", true, 0, PrimitiveState);
+}*/
+
+/*This is experimental code meant to manipulate the remnants of the games
+debug console. Currently just tries to activate it. Later on I'll try to
+manually add commands to it and run them. If that works, then I'll add them
+to the lua system and port them through the overlay lua console.*/
+/*ImGui::Text("Console Mode: "); ImGui::SameLine();
+ImGui::TextColored(SecondaryTextColor, std::to_string((int)console_get_console_mode).c_str());
+if (ImGui::Button("VCM_NORMAL (0)"))
+{
+	console_set_console_mode(VCM_NORMAL);
+}
+if (ImGui::Button("VCM_CHAT (1)"))
+{
+	console_set_console_mode(VCM_CHAT);
+}
+if (ImGui::Button("VCM_TEAMCHAT (2)"))
+{
+	console_set_console_mode(VCM_TEAMCHAT);
+}
+
+if (ImGui::Button("Console init"))
+{
+	vconsole_config* ConsoleConfig;
+	ConsoleConfig = new vconsole_config; //Todo: Fix this if actually using. This is for testing purposes only and will cause a memory leak.
+	ConsoleConfig->screen_width = 1680;
+	ConsoleConfig->screen_height = 1050;
+	ConsoleConfig->save_history = true;
+	ConsoleConfig->safe_area_left = 0;
+	Console_Init(ConsoleConfig);
+}
+if (ImGui::Button("Console activate"))
+{
+	Console_Activate();
+}
+if (ImGui::Button("Console deactivate"))
+{
+	Console_Deactivate();
+}*/
+
+
+
+
+
+
+
+/*ImGui::Separator();
+
+if (ImGui::CollapsingHeader("Globals"))
+{
+
+}
+ImGui::Separator();*/
+
+//ImGui::Text("FPS: ");
+//ImGui::Separator();
+
+/*if (ImGui::CollapsingHeader("Global explosion modifiers##GlobalExplosionModifiersMain"))
+{
+	if (ImGui::Button("Reset to defaults##GlobalExplosionModifiersMain"))
+	{
+		GlobalExplosionStrengthMultiplier = 1.0f;
+		UseGlobalExplosionStrengthMultiplier = false;
+		UseExplosionRadiusLimits = true;
+		MinimumExplosionRadius = 0.0f;
+		MaximumExplosionRadius = 12.0f;
+	}
+	ImGui::PushItemWidth(232.0f);
+	ImGui::SliderFloat("Global explosion strength multiplier", &GlobalExplosionStrengthMultiplier, 0.01f, 10.0f);
+	ImGui::SameLine(); ImGui::Checkbox("Use", &UseGlobalExplosionStrengthMultiplier);
+	ImGui::Checkbox("Use explosion radius limits", &UseExplosionRadiusLimits);
+	Utilities::GUI::TooltipOnPrevious("If you turn this off be very very careful with the explosion multipliers. Too high and it's very easy to freeze/crash the game. My game froze at 4x explosions with no radius limits.");
+	ImGui::InputFloat("Minimum explosion radius", &MinimumExplosionRadius, 0.1f, 1.0f, 3);
+	ImGui::InputFloat("Maximum explosion radius", &MaximumExplosionRadius, 0.1f, 1.0f, 3);
+}
+else
+{
+	ImGui::SameLine(); ImGui::TextColored(ColorRed, " [Experimental]");
+}*/
+
+//ImGui::Separator();
+
+//DrawTeleportGui(false, "Teleport", &TeleportWindowOpen, MainOverlayWindowFlags);
+//ImGui::Separator();
+
+//DrawPlayerVariablesGui(false, "Player variables", &PlayerVariablesGuiOpen, MainOverlayWindowFlags);
+//ImGui::Separator();
+
+//ImGui::Text("Misc Program Values:");

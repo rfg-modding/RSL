@@ -19,6 +19,7 @@ void ThemeEditorGui::Initialize(bool* _OpenState)
 
 void ThemeEditorGui::Draw(const char* Title)
 {
+	ImGui::SetNextWindowSize(ImVec2(600.0f, 700.0f), ImGuiCond_FirstUseEver);
 	if (!ImGui::Begin(Title, OpenState))
 	{
 		ImGui::End();
@@ -390,26 +391,26 @@ bool ThemeEditorGui::LoadGUIConfig()
 			Utilities::Json::SetFloat4(GUIConfig, "Colors", "SliderGrab", ImVec4(0.310f, 0.571f, 0.753f, DefaultGlobalOpacity));
 			Utilities::Json::SetFloat4(GUIConfig, "Colors", "SliderGrabActive", ImVec4(0.358f, 0.660f, 0.871f, DefaultGlobalOpacity));
 			Utilities::Json::SetFloat4(GUIConfig, "Colors", "Button", ImVec4(0.310f, 0.571f, 0.753f, DefaultGlobalOpacity));
-			Utilities::Json::SetFloat4(GUIConfig, "Colors", "ButtonHovered", ImVec4(0.334, 0.615, 0.812, DefaultGlobalOpacity));
+			Utilities::Json::SetFloat4(GUIConfig, "Colors", "ButtonHovered", ImVec4(0.334f, 0.615f, 0.812f, DefaultGlobalOpacity));
 			Utilities::Json::SetFloat4(GUIConfig, "Colors", "ButtonActive", ImVec4(0.358f, 0.660f, 0.871f, DefaultGlobalOpacity));
 			Utilities::Json::SetFloat4(GUIConfig, "Colors", "Header", ImVec4(0.310f, 0.571f, 0.753f, DefaultGlobalOpacity));
-			Utilities::Json::SetFloat4(GUIConfig, "Colors", "HeaderHovered", ImVec4(0.334, 0.615, 0.812, DefaultGlobalOpacity));
+			Utilities::Json::SetFloat4(GUIConfig, "Colors", "HeaderHovered", ImVec4(0.334f, 0.615f, 0.812f, DefaultGlobalOpacity));
 			Utilities::Json::SetFloat4(GUIConfig, "Colors", "HeaderActive", ImVec4(0.358f, 0.660f, 0.871f, DefaultGlobalOpacity));
 			Utilities::Json::SetFloat4(GUIConfig, "Colors", "Separator", ImVec4(0.510f, 0.510f, 0.510f, DefaultGlobalOpacity));
 			Utilities::Json::SetFloat4(GUIConfig, "Colors", "SeparatorHovered", ImVec4(0.610f, 0.610f, 0.610f, DefaultGlobalOpacity));
 			Utilities::Json::SetFloat4(GUIConfig, "Colors", "SeparatorActive", ImVec4(0.710f, 0.710f, 0.710f, DefaultGlobalOpacity));
 			Utilities::Json::SetFloat4(GUIConfig, "Colors", "ResizeGrip", ImVec4(0.310f, 0.571f, 0.753f, DefaultGlobalOpacity));
-			Utilities::Json::SetFloat4(GUIConfig, "Colors", "ResizeGripHovered", ImVec4(0.334, 0.615, 0.812, DefaultGlobalOpacity));
+			Utilities::Json::SetFloat4(GUIConfig, "Colors", "ResizeGripHovered", ImVec4(0.334f, 0.615f, 0.812f, DefaultGlobalOpacity));
 			Utilities::Json::SetFloat4(GUIConfig, "Colors", "ResizeGripActive", ImVec4(0.358f, 0.660f, 0.871f, DefaultGlobalOpacity));
 			Utilities::Json::SetFloat4(GUIConfig, "Colors", "Tab", ImVec4(0.310f, 0.571f, 0.753f, DefaultGlobalOpacity));
-			Utilities::Json::SetFloat4(GUIConfig, "Colors", "TabHovered", ImVec4(0.334, 0.615, 0.812, DefaultGlobalOpacity));
+			Utilities::Json::SetFloat4(GUIConfig, "Colors", "TabHovered", ImVec4(0.334f, 0.615f, 0.812f, DefaultGlobalOpacity));
 			Utilities::Json::SetFloat4(GUIConfig, "Colors", "TabActive", ImVec4(0.358f, 0.660f, 0.871f, DefaultGlobalOpacity));
 			Utilities::Json::SetFloat4(GUIConfig, "Colors", "TabUnfocused", ImVec4(0.07f, 0.10f, 0.15f, DefaultGlobalOpacity));
 			Utilities::Json::SetFloat4(GUIConfig, "Colors", "TabUnfocusedActive", ImVec4(0.14f, 0.26f, 0.42f, DefaultGlobalOpacity));
 			Utilities::Json::SetFloat4(GUIConfig, "Colors", "PlotLines", ImVec4(0.310f, 0.571f, 0.753f, DefaultGlobalOpacity));
 			Utilities::Json::SetFloat4(GUIConfig, "Colors", "PlotLinesHovered", ImVec4(0.000f, 0.578f, 0.900f, DefaultGlobalOpacity));
 			Utilities::Json::SetFloat4(GUIConfig, "Colors", "PlotHistogram", ImVec4(0.310f, 0.571f, 0.753f, DefaultGlobalOpacity));
-			Utilities::Json::SetFloat4(GUIConfig, "Colors", "PlotHistogramHovered", ImVec4(0.334, 0.615, 0.812, DefaultGlobalOpacity));
+			Utilities::Json::SetFloat4(GUIConfig, "Colors", "PlotHistogramHovered", ImVec4(0.334f, 0.615f, 0.812f, DefaultGlobalOpacity));
 			Utilities::Json::SetFloat4(GUIConfig, "Colors", "TextSelectedBackground", ImVec4(0.310f, 0.571f, 0.753f, DefaultGlobalOpacity));
 			Utilities::Json::SetFloat4(GUIConfig, "Colors", "DragDropTarget", ImVec4(1.00f, 1.00f, 0.00f, DefaultGlobalOpacity));
 			Utilities::Json::SetFloat4(GUIConfig, "Colors", "NavHighlight", ImVec4(0.26f, 0.59f, 0.98f, DefaultGlobalOpacity));

@@ -1,5 +1,5 @@
 #pragma once
-#include "OverlayConsole.h"
+#include "IntrospectionGui.h"
 
 class ThemeEditorGui
 {

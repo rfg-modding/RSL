@@ -27,13 +27,14 @@ void GuiSystem::Initialize()
 	Console.Initialize(&ShowAppConsole);
 	ThemeEditor.Initialize(&ShowAppThemeEditor);
 	TeleportMenu.Initialize(&ShowAppTeleportMenu);
+	IntrospectionMenu.Initialize(&ShowAppIntrospectionMenu);
+	TweaksMenu.Initialize(&ShowAppTweaksMenu);
 }
 
 /*Should only be doing this once.*/
 void GuiSystem::SetScriptManager(ScriptManager* _Scripts)
 {
 	Scripts = _Scripts;
-
 	MainWindow.Scripts = _Scripts;
 }
 
@@ -43,6 +44,8 @@ void GuiSystem::Draw()
 	Console.Draw("Lua Console");
 	ThemeEditor.Draw("Theme Editor");
 	TeleportMenu.Draw("Teleport Menu");
+	IntrospectionMenu.Draw("Introspection Menu");
+	TweaksMenu.Draw("General Tweaks Menu");
 }
 
 void GuiSystem::SetPlayerPtr(Player* NewPlayerPtr)
@@ -52,6 +55,8 @@ void GuiSystem::SetPlayerPtr(Player* NewPlayerPtr)
 	Console.PlayerPtr = NewPlayerPtr;
 	//ThemeEditor.PlayerPtr = NewPlayerPtr;
 	TeleportMenu.PlayerPtr = NewPlayerPtr;
+	IntrospectionMenu.PlayerPtr = NewPlayerPtr;
+	TweaksMenu.PlayerPtr = NewPlayerPtr;
 }
 
 /*Sets PlayerPtr for all GUI classes which use it.*/
@@ -62,4 +67,6 @@ void GuiSystem::SetPlayerPtr(void* NewPlayerPtr)
 	Console.PlayerPtr = (Player*)(NewPlayerPtr);
 	//ThemeEditor.PlayerPtr = (Player*)(NewPlayerPtr);
 	TeleportMenu.PlayerPtr = (Player*)(NewPlayerPtr);
+	IntrospectionMenu.PlayerPtr = (Player*)(NewPlayerPtr);
+	TweaksMenu.PlayerPtr = (Player*)(NewPlayerPtr);
 }

@@ -1,5 +1,9 @@
 #include "Globals.h"
 
+ImFont* FontNormal;
+ImFont* FontLarge;
+ImFont* FontHuge;
+
 bool OpenDebugConsole = false;
 nlohmann::json MainConfig;
 float DefaultFreeCameraSpeed = 0.3f;

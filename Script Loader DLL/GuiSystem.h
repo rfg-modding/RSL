@@ -22,6 +22,8 @@ public:
 	OverlayConsole Console;
 	ThemeEditorGui ThemeEditor;
 	TeleportGui TeleportMenu;
+	IntrospectionGui IntrospectionMenu;
+	GeneralTweaksGui TweaksMenu;
 
 	bool ShowAppMainWindow = true;
 
@@ -38,6 +40,8 @@ public:
 
 	bool ShowAppTeleportMenu = true;
 	bool ShowAppHelpWindow = false;
+	bool ShowAppIntrospectionMenu = true;
+	bool ShowAppTweaksMenu = true;
 
 private:
 	/*This is private to prevent accidental changes.*/

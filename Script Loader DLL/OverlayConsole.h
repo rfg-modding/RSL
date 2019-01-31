@@ -15,8 +15,11 @@ public:
 	void Draw(const char* Title);
 
 	Player* PlayerPtr = nullptr;
-	ImGuiWindowFlags MainOverlayWindowFlags = 0;
+	ImGuiWindowFlags WindowFlags = 0;
 	ScriptManager* Scripts;
+
+	int ConsoleLogType = LogLua | LogError;
+	int BufferLength = 100;
 
 private:
 	bool* OpenState;

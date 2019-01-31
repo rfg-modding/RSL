@@ -122,7 +122,7 @@ std::string Logger::GetFlagString(int LogFlags)
 
 void Logger::LogTimeMessageToFile(std::string FileName)
 {
-	LogFileMap[FileName].File << "[" << GetTimeString(false) << "]";
+	LogFileMap[FileName].File << GetTimeString(false);
 }
 
 void Logger::LogToFile(std::string FileName, std::string Message, int LogFlags, bool LogTime, bool BypassFlagCheck)

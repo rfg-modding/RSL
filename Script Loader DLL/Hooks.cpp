@@ -197,7 +197,7 @@ HRESULT __stdcall D3D11PresentHook(IDXGISwapChain * pSwapChain, UINT SyncInterva
 
 		IMGUI_CHECKVERSION();
 		ImGui::CreateContext();
-		io = ImGui::GetIO(); (void)io;
+		io = ImGui::GetIO();
 		io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
 		ImGui::StyleColorsDark();
 
@@ -208,9 +208,11 @@ HRESULT __stdcall D3D11PresentHook(IDXGISwapChain * pSwapChain, UINT SyncInterva
 		ImGuiIO& io = ImGui::GetIO();
 		float GlobalFontSize = 17.0f;
 		std::string DroidSansPath = std::string(GetEXEPath(false) + "RFGR Script Loader/Fonts/DroidSans.ttf");
+		bool DroidSansLoaded = false;
 		if (fs::exists(DroidSansPath))
-		{
+		{	
 			io.Fonts->AddFontFromFileTTF(DroidSansPath.c_str(), GlobalFontSize);
+			DroidSansLoaded = true;
 		}
 		else
 		{
@@ -219,16 +221,34 @@ HRESULT __stdcall D3D11PresentHook(IDXGISwapChain * pSwapChain, UINT SyncInterva
 		}
 
 		Logger::Log("Merging FontAwesome...", LogWarning);
-		//Logger::Log("Merging FontAwesome...", LogWarning);
 		static const ImWchar IconsRanges[] = { ICON_MIN_FA, ICON_MAX_FA, 0 };
-		ImFontConfig IconsConfig; ///fa-solid-900
+		ImFontConfig IconsConfig;
 		IconsConfig.MergeMode = true;
-		IconsConfig.PixelSnapH = true;//C:\Program Files\SteamLibrary\steamapps\common\Red Faction Guerrilla Re-MARS-tered\RFGR Script Loader\Fonts
-		//Logger::Log("Merging FontAwesome...", LogWarning);
+		IconsConfig.PixelSnapH = true;
 		std::string FontAwesomeSolidPath(GetEXEPath(false) + "RFGR Script Loader/Fonts/fa-solid-900.ttf");
 		Logger::Log(FontAwesomeSolidPath, LogWarning);
-		io.Fonts->AddFontFromFileTTF(FontAwesomeSolidPath.c_str(), GlobalFontSize, &IconsConfig, IconsRanges);
+		FontNormal = io.Fonts->AddFontFromFileTTF(FontAwesomeSolidPath.c_str(), GlobalFontSize, &IconsConfig, IconsRanges);
 		Logger::Log("Done merging FontAwesome...", LogWarning);
+		
+
+		/*Start of FontLarge loading*/
+		float GlobalLargeFontSize = 35.0f;
+		if (DroidSansLoaded)
+		{
+			io.Fonts->AddFontFromFileTTF(DroidSansPath.c_str(), GlobalLargeFontSize);
+		}
+		FontLarge = io.Fonts->AddFontFromFileTTF(FontAwesomeSolidPath.c_str(), GlobalLargeFontSize, &IconsConfig, IconsRanges);
+		/*End of FontLarge loading*/
+
+		/*Start of FontHuge loading*/
+		float GlobalHugeFontSize = 70.0f;
+		if (DroidSansLoaded)
+		{
+			io.Fonts->AddFontFromFileTTF(DroidSansPath.c_str(), GlobalHugeFontSize);
+		}
+		FontHuge = io.Fonts->AddFontFromFileTTF(FontAwesomeSolidPath.c_str(), GlobalHugeFontSize, &IconsConfig, IconsRanges);
+		/*End of FontHuge loading*/
+
 
 		//Overlay.Initialize();
 		Gui.Initialize();
@@ -236,6 +256,7 @@ HRESULT __stdcall D3D11PresentHook(IDXGISwapChain * pSwapChain, UINT SyncInterva
 		UpdateD3D11Pointers = false;
 
 		Logger::Log("ImGui Initialized.", LogInfo);
+		return S_OK;
 	});
 
 	if (UpdateD3D11Pointers)
@@ -360,7 +381,7 @@ void __fastcall PlayerDoFrameHook(Player* PlayerPtr)
 	{
 		PlayerPtr->JetpackFuelPercent = 1.0f;
 	}
-	if (Gui.MainWindow.Invulnerable)
+	if (Gui.TweaksMenu.Invulnerable)
 	{
 		PlayerPtr->Flags.invulnerable = true;
 		//PlayerPtr->Flags.super_jump = true;
@@ -370,11 +391,11 @@ void __fastcall PlayerDoFrameHook(Player* PlayerPtr)
 		//PlayerPtr->HitPoints = 2147483647.0f;
 		//PlayerPtr->InitialMaxHitPoints = 2147483647;
 	}
-	if (Gui.MainWindow.NeedCustomJumpHeightSet)
+	if (Gui.TweaksMenu.NeedCustomJumpHeightSet)
 	{
-		PlayerPtr->CodeDrivenJumpHeight = Gui.MainWindow.CustomJumpHeight;
-		PlayerPtr->MoveSpeed = Gui.MainWindow.CustomPlayerMoveSpeed;
-		PlayerPtr->MaxSpeed = Gui.MainWindow.CustomPlayerMaxSpeed;
+		PlayerPtr->CodeDrivenJumpHeight = Gui.TweaksMenu.CustomJumpHeight;
+		PlayerPtr->MoveSpeed = Gui.TweaksMenu.CustomPlayerMoveSpeed;
+		PlayerPtr->MaxSpeed = Gui.TweaksMenu.CustomPlayerMaxSpeed;
 	}
 
 	return PlayerDoFrame(&NewPlayerObject);

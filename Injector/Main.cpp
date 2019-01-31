@@ -2,7 +2,7 @@
 #include "Logger.hpp"
 //#include "Globals.hpp"
 
-float ProgramVersion = 0.20;
+float ProgramVersion = 0.20f;
 
 bool InjectDLL(int PID, std::string DLLPath, double Dummy1, double Dummy2, bool Dummy3); 
 bool LoadDataFromConfig();
