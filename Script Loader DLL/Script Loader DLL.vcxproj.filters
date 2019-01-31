@@ -114,6 +114,12 @@
     <ClCompile Include="ThemeEditorGui.cpp">
       <Filter>Overlay Gui\Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="IntrospectionGui.cpp">
+      <Filter>Overlay Gui\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneralTweaksGui.cpp">
+      <Filter>Overlay Gui\Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CameraWrapper.h">
@@ -240,6 +246,12 @@
       <Filter>Overlay Gui\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ThemeEditorGui.h">
+      <Filter>Overlay Gui\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="IntrospectionGui.h">
+      <Filter>Overlay Gui\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GeneralTweaksGui.h">
       <Filter>Overlay Gui\Header Files</Filter>
     </ClInclude>
   </ItemGroup>

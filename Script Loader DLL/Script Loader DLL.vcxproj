@@ -136,7 +136,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>EnableAllWarnings</WarningLevel>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -161,6 +161,7 @@
     <ClCompile Include="CameraWrapper.cpp" />
     <ClCompile Include="FunctionManager.cpp" />
     <ClCompile Include="Functions.cpp" />
+    <ClCompile Include="GeneralTweaksGui.cpp" />
     <ClCompile Include="Globals.cpp" />
     <ClCompile Include="GuiSystem.cpp" />
     <ClCompile Include="HookManager.cpp" />
@@ -173,6 +174,7 @@
     <ClCompile Include="include\ImGui\imgui_draw.cpp" />
     <ClCompile Include="include\ImGui\imgui_widgets.cpp" />
     <ClCompile Include="include\kiero\kiero.cpp" />
+    <ClCompile Include="IntrospectionGui.cpp" />
     <ClCompile Include="Logger.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MainOverlay.cpp" />
@@ -200,6 +202,7 @@
     </ClInclude>
     <ClInclude Include="FunctionManager.h" />
     <ClInclude Include="Functions.h" />
+    <ClInclude Include="GeneralTweaksGui.h" />
     <ClInclude Include="Globals.h" />
     <ClInclude Include="GuiSystem.h" />
     <ClInclude Include="HookManager.h" />
@@ -215,6 +218,7 @@
     <ClInclude Include="include\ImGui\imstb_truetype.h" />
     <ClInclude Include="include\kiero\kiero.h" />
     <ClInclude Include="include\MinHook\MinHook.h" />
+    <ClInclude Include="IntrospectionGui.h" />
     <ClInclude Include="Logger.h" />
     <ClInclude Include="MainOverlay.h" />
     <ClInclude Include="Includes.h" />
