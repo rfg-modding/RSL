@@ -356,7 +356,7 @@ bool ThemeEditorGui::LoadGUIConfig()
 			GUIConfig["Style"]["PopupBorderSize"] = 1.0f; //Values > 1.0 can cause performance issues.
 			GUIConfig["Style"]["PopupRounding"] = 3.0f;
 			GUIConfig["Style"]["ScrollbarRounding"] = 3.0f;
-			GUIConfig["Style"]["ScrollbarSize"] = 6.0f;
+			GUIConfig["Style"]["ScrollbarSize"] = 16.0f;
 			GUIConfig["Style"]["TabBorderSize"] = 1.0f; //Values > 1.0 can cause performance issues.
 			GUIConfig["Style"]["TabRounding"] = 3.0f;
 			GUIConfig["Style"]["TouchExtraPadding"][0] = 0.0f;

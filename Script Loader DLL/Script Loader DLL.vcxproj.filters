@@ -120,6 +120,9 @@
     <ClCompile Include="GeneralTweaksGui.cpp">
       <Filter>Overlay Gui\Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="TextEditor.cpp">
+      <Filter>Overlay Gui\Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CameraWrapper.h">
@@ -252,6 +255,9 @@
       <Filter>Overlay Gui\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GeneralTweaksGui.h">
+      <Filter>Overlay Gui\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TextEditor.h">
       <Filter>Overlay Gui\Header Files</Filter>
     </ClInclude>
   </ItemGroup>

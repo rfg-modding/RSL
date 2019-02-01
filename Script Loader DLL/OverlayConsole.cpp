@@ -20,7 +20,7 @@ void OverlayConsole::Initialize(bool* _OpenState)
 	//WindowFlags |= ImGuiWindowFlags_NoScrollbar;
 	///WindowFlags |= ImGuiWindowFlags_MenuBar;
 	WindowFlags |= ImGuiWindowFlags_NoMove;
-	WindowFlags |= ImGuiWindowFlags_NoResize;
+	//WindowFlags |= ImGuiWindowFlags_NoResize;
 	WindowFlags |= ImGuiWindowFlags_NoCollapse;
 	//WindowFlags |= ImGuiWindowFlags_NoNav;
 	//WindowFlags |= ImGuiWindowFlags_NoBackground;
@@ -29,8 +29,13 @@ void OverlayConsole::Initialize(bool* _OpenState)
 
 void OverlayConsole::Draw(const char* Title)
 {
-	ImGui::SetNextWindowSize(ImVec2(ImGui::GetContentRegionAvailWidth(), 400.0f), ImGuiCond_Always);
+	ImGui::SetNextWindowSizeConstraints(ImVec2(-1, 0), ImVec2(-1, FLT_MAX));
+	ImGui::SetNextWindowSize(ImVec2((float)(WindowRect.right - WindowRect.left) - 10.0f, 400.0f), ImGuiCond_Once);
 	ImGui::SetNextWindowPos(ImVec2(0.0f, 0.0f));
+	ImVec4* Colors = ImGui::GetStyle().Colors; //48 items
+	ImGui::PushStyleColor(ImGuiCol_ResizeGrip, Colors[ImGuiCol_WindowBg]);
+	ImGui::PushStyleColor(ImGuiCol_ResizeGripHovered, Colors[ImGuiCol_WindowBg]);
+	ImGui::PushStyleColor(ImGuiCol_ResizeGripActive, Colors[ImGuiCol_WindowBg]);
 	if (!ImGui::Begin(Title, OpenState, WindowFlags))
 	{
 		ImGui::End();
@@ -38,18 +43,23 @@ void OverlayConsole::Draw(const char* Title)
 	}
 
 	//ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0, 0));
+	ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(4.0f, 2.0f));
 	const float footer_height_to_reserve = ImGui::GetStyle().ItemSpacing.y + ImGui::GetFrameHeightWithSpacing(); // 1 separator, 1 input text
 	ImGui::BeginChild("ScrollingRegion", ImVec2(0, -footer_height_to_reserve), false, ImGuiWindowFlags_HorizontalScrollbar); // Leave room for 1 separator + 1 InputText
-	//ImGui::BeginChild("ScrollingRegion");
 
 	std::string Buffer;
 	ImVec4 Color;
 	//Logger::Log(std::string("LogData size: " + std::to_string(Logger::LogData.size())), LogAll);
-	for (auto i = Logger::LogData.begin(); i != Logger::LogData.end(); i++)
+	int BufferStart = Logger::LogData.size() - 1 - BufferDisplayLength;
+	if (BufferStart < 0)
 	{
-		if (i->Flags & ConsoleLogType)
+		BufferStart = 0;
+	}
+	for (int i = BufferStart; i < Logger::LogData.size() - 1; i++)
+	{
+		if (Logger::LogData[i].Flags & ConsoleLogType)
 		{
-			Buffer = Logger::GetFlagString(i->Flags);
+			Buffer = Logger::GetFlagString(Logger::LogData[i].Flags);
 			if (Buffer == "[Info] ")
 			{
 				Color = ImVec4(0.945f, 0.945f, 0.945f, 1.0f); //White/Grey
@@ -83,20 +93,29 @@ void OverlayConsole::Draw(const char* Title)
 			{
 
 			}
-			/*This code below is a crime againt humanity. Looks bad*/
-			//Todo: Fix this mess below.
-			ImGui::Text(Buffer.substr(0, 1).c_str());
+
+			//Todo: Make function for this or make it look better. 
+			ImGui::TextUnformatted(Buffer.substr(0, 1).c_str());
 			ImGui::SameLine();
-			ImGui::TextColored(Color, Buffer.substr(1, Buffer.size() - 3).c_str());
+			ImGui::PushStyleColor(ImGuiCol_Text, Color);
+			ImGui::TextUnformatted(Buffer.substr(1, Buffer.size() - 3).c_str());
+			ImGui::PopStyleColor();
 			ImGui::SameLine();
-			ImGui::Text(Buffer.substr(Buffer.size() - 2, 1).c_str());
+			ImGui::TextUnformatted(Buffer.substr(Buffer.size() - 2, 1).c_str());
 			ImGui::SameLine();
-			ImGui::Text(i->Message.c_str());
+			ImGui::TextUnformatted(Logger::LogData[i].Message.c_str());
 		}	
 	}
 	ImGui::EndChild();
+	ImGui::PopStyleVar();
+
+	///ImGui::Separator();
+	ImGui::InputText("##LuaConsoleInput", &InputBuffer);
+
 	ImGui::End();
-	Logger::Log("Console called End. Done drawing!", LogAll);
+	ImGui::PopStyleColor(3);
+	///Logger::Log("Console called End. Done drawing!", LogAll);
+
 	/*Example code start*/
 
 

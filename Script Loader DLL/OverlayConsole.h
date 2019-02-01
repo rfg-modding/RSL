@@ -1,5 +1,6 @@
 #pragma once
-#include "Functions.h"
+#include "TextEditor.h"
+//#include "Functions.h"
 //#include "imgui_stdlib.h"
 //#include "IconsFontAwesome5.h"
 
@@ -19,7 +20,8 @@ public:
 	ScriptManager* Scripts;
 
 	int ConsoleLogType = LogLua | LogError;
-	int BufferLength = 100;
+	int BufferDisplayLength = 100;
+	std::string InputBuffer;
 
 private:
 	bool* OpenState;

@@ -29,6 +29,7 @@ void GuiSystem::Initialize()
 	TeleportMenu.Initialize(&ShowAppTeleportMenu);
 	IntrospectionMenu.Initialize(&ShowAppIntrospectionMenu);
 	TweaksMenu.Initialize(&ShowAppTweaksMenu);
+	ScriptEditor.Initialize(&ShowAppScriptEditor);
 }
 
 /*Should only be doing this once.*/
@@ -46,6 +47,7 @@ void GuiSystem::Draw()
 	TeleportMenu.Draw("Teleport Menu");
 	IntrospectionMenu.Draw("Introspection Menu");
 	TweaksMenu.Draw("General Tweaks Menu");
+	ScriptEditor.Render("Script Editor");// , ImVec2(400.0f, 400.0f));
 }
 
 void GuiSystem::SetPlayerPtr(Player* NewPlayerPtr)
@@ -60,13 +62,7 @@ void GuiSystem::SetPlayerPtr(Player* NewPlayerPtr)
 }
 
 /*Sets PlayerPtr for all GUI classes which use it.*/
-void GuiSystem::SetPlayerPtr(void* NewPlayerPtr) 
+void GuiSystem::SetPlayerPtr(void* NewPlayerPtr)
 {
-	PlayerPtr = (Player*)(NewPlayerPtr);
-	MainWindow.PlayerPtr = (Player*)(NewPlayerPtr);
-	Console.PlayerPtr = (Player*)(NewPlayerPtr);
-	//ThemeEditor.PlayerPtr = (Player*)(NewPlayerPtr);
-	TeleportMenu.PlayerPtr = (Player*)(NewPlayerPtr);
-	IntrospectionMenu.PlayerPtr = (Player*)(NewPlayerPtr);
-	TweaksMenu.PlayerPtr = (Player*)(NewPlayerPtr);
+	SetPlayerPtr((Player*)NewPlayerPtr);
 }

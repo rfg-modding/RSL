@@ -164,9 +164,9 @@ void Logger::ConsoleLog(const char* Message, int LogFlags, bool PrintTimeLabel, 
 		}
 		if (PrintTimeLabel)
 		{
-			printf("[");
+			//printf("[");
 			printf(GetTimeString(false).c_str());
-			printf("] ");
+			//printf("] ");
 		}
 #if ColorLogMessages
 		SetConsoleTextAttribute(ConsoleHandle, ConsoleMessageTextAttributes);
@@ -196,9 +196,9 @@ void Logger::ConsoleLog(const char* Message, int LogFlags, bool PrintTimeLabel, 
 		}
 		if (PrintTimeLabel)
 		{
-			printf("[");
+			//printf("[");
 			printf(GetTimeString(false).c_str());
-			printf("] ");
+			//printf("] ");
 		}
 #if ColorLogMessages
 		SetConsoleTextAttribute(ConsoleHandle, ConsoleWarningTextAttributes);
@@ -228,9 +228,9 @@ void Logger::ConsoleLog(const char* Message, int LogFlags, bool PrintTimeLabel, 
 		}
 		if (PrintTimeLabel)
 		{
-			printf("[");
+			//printf("[");
 			printf(GetTimeString(false).c_str());
-			printf("] ");
+			//printf("] ");
 		}
 #if ColorLogMessages
 		SetConsoleTextAttribute(ConsoleHandle, ConsoleErrorTextAttributes);
@@ -260,9 +260,9 @@ void Logger::ConsoleLog(const char* Message, int LogFlags, bool PrintTimeLabel, 
 		}
 		if (PrintTimeLabel)
 		{
-			printf("[");
+			//printf("[");
 			printf(GetTimeString(false).c_str());
-			printf("] ");
+			//printf("] ");
 		}
 #if ColorLogMessages
 		SetConsoleTextAttribute(ConsoleHandle, ConsoleFatalErrorTextAttributes);
@@ -293,9 +293,9 @@ void Logger::ConsoleLog(const char* Message, int LogFlags, bool PrintTimeLabel, 
 		}
 		if (PrintTimeLabel)
 		{
-			printf("[");
+			//printf("[");
 			printf(GetTimeString(false).c_str());
-			printf("] ");
+			//printf("] ");
 		}
 #if ColorLogMessages
 		SetConsoleTextAttribute(ConsoleHandle, ConsoleMessageTextAttributes);
@@ -360,6 +360,6 @@ std::string Logger::GetTimeString(bool MilitaryTime)
 
 	//std::cout << "Date & Time:" << now.tm_year + 1900 << "/" << now.tm_mon + 1 << "/" << now.tm_mday << " - " << now.tm_hour << ":" << now.tm_min << std::endl;
 
-	return "[" + DateTime + "]";
+	return "[" + DateTime + "] ";
 #endif
 }

@@ -39,7 +39,8 @@ extern ID3D11Device* D3D11Device;
 extern ID3D11DeviceContext* D3D11Context;
 extern ID3D11RenderTargetView* MainRenderTargetView;
 extern HWND hwnd;
-extern ImVec4* Colors;
+extern RECT WindowRect;
+//extern ImVec4* Colors;
 
 //extern MainOverlay Overlay;
 extern bool ShowMainOverlay;

@@ -189,6 +189,7 @@
     <ClCompile Include="ScriptManager.cpp" />
     <ClCompile Include="SnippetManager.cpp" />
     <ClCompile Include="TeleportGui.cpp" />
+    <ClCompile Include="TextEditor.cpp" />
     <ClCompile Include="ThemeEditorGui.cpp" />
     <ClCompile Include="Utilities.cpp" />
   </ItemGroup>
@@ -237,6 +238,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="TeleportGui.h" />
+    <ClInclude Include="TextEditor.h" />
     <ClInclude Include="ThemeEditorGui.h" />
     <ClInclude Include="Utilities.h" />
     <None Include="RFGR Structs\KeenFileSystem.h">

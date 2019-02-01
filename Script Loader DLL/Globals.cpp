@@ -14,7 +14,8 @@ ID3D11Device* D3D11Device = nullptr;
 ID3D11DeviceContext* D3D11Context = nullptr;
 ID3D11RenderTargetView* MainRenderTargetView = nullptr;
 HWND hwnd = NULL;
-ImVec4* Colors = nullptr;
+RECT WindowRect = { 0 };
+//ImVec4* Colors = nullptr;
 
 //MainOverlay Overlay;
 bool ShowMainOverlay = true;

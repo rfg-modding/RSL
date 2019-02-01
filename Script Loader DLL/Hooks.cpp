@@ -192,7 +192,7 @@ HRESULT __stdcall D3D11PresentHook(IDXGISwapChain * pSwapChain, UINT SyncInterva
 		Logger::ConsoleLog(std::string("Initial buffer count: " + std::to_string(SwapChainDescription.BufferCount)).c_str(), LogWarning, false, true, true);
 		Logger::ConsoleLog(std::string("Initial flags: " + std::to_string(SwapChainDescription.Flags)).c_str(), LogWarning, false, true, true);
 		Logger::ConsoleLog(std::string("Initial format: " + std::to_string(SwapChainDescription.BufferDesc.Format)).c_str(), LogWarning, false, true, true);*/
-		
+
 		Logger::Log("Initializing ImGui.", LogInfo);
 
 		IMGUI_CHECKVERSION();
@@ -203,6 +203,16 @@ HRESULT __stdcall D3D11PresentHook(IDXGISwapChain * pSwapChain, UINT SyncInterva
 
 		ImGui_ImplDX11_Init(D3D11Device, D3D11Context);
 		hwnd = find_main_window(GetProcessID("rfg.exe"));
+		HRESULT RectResult = GetWindowRect(hwnd, &WindowRect);
+		if (RectResult == 0L)
+		{
+			std::cout << "GetWindowRect Failed! Result: " << GetLastError() << std::endl;
+			//Sleep(10000);
+		}
+		else
+		{
+			Logger::Log("GetWindowRect() Succeeded", LogWarning);
+		}
 		ImGui_ImplWin32_Init(hwnd);
 
 		ImGuiIO& io = ImGui::GetIO();
@@ -308,8 +318,8 @@ HRESULT __stdcall D3D11PresentHook(IDXGISwapChain * pSwapChain, UINT SyncInterva
 	ImGui_ImplWin32_NewFrame();
 	ImGui::NewFrame();
 
-	/*if (show_demo_window)
-		ImGui::ShowDemoWindow(&show_demo_window);*/
+	if (show_demo_window)
+		ImGui::ShowDemoWindow(&show_demo_window);
 
 	Gui.Draw();
 	//Overlay.Draw("Main Overlay", &ShowMainOverlay);

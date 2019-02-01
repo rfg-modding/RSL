@@ -24,6 +24,7 @@ public:
 	TeleportGui TeleportMenu;
 	IntrospectionGui IntrospectionMenu;
 	GeneralTweaksGui TweaksMenu;
+	TextEditor ScriptEditor;
 
 	bool ShowAppMainWindow = true;
 
@@ -42,6 +43,7 @@ public:
 	bool ShowAppHelpWindow = false;
 	bool ShowAppIntrospectionMenu = true;
 	bool ShowAppTweaksMenu = true;
+	bool ShowAppScriptEditor = true;
 
 private:
 	/*This is private to prevent accidental changes.*/
