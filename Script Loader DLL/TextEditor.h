@@ -11,6 +11,8 @@
 #include <regex>
 //#include "imgui.h"
 
+class ScriptManager;
+
 class TextEditor
 {
 public:
@@ -242,6 +244,7 @@ public:
 	static const Palette& GetLightPalette();
 	static const Palette& GetRetroBluePalette();
 
+	ScriptManager* Scripts;
 private:
 	bool* OpenState;
 

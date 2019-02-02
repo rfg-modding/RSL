@@ -346,7 +346,7 @@ bool ThemeEditorGui::LoadGUIConfig()
 			GUIConfig["Style"]["FramePadding"][0] = 4.0f;
 			GUIConfig["Style"]["FramePadding"][1] = 3.0f;
 			GUIConfig["Style"]["FrameRounding"] = 3.0f;
-			GUIConfig["Style"]["GrabMinSize"] = 10.0f;
+			GUIConfig["Style"]["GrabMinSize"] = 12.0f;
 			GUIConfig["Style"]["GrabRounding"] = 3.0f;
 			GUIConfig["Style"]["IndentSpacing"] = 21.0f;
 			GUIConfig["Style"]["ItemInnerSpacing"][0] = 4.0f;
@@ -356,7 +356,7 @@ bool ThemeEditorGui::LoadGUIConfig()
 			GUIConfig["Style"]["PopupBorderSize"] = 1.0f; //Values > 1.0 can cause performance issues.
 			GUIConfig["Style"]["PopupRounding"] = 3.0f;
 			GUIConfig["Style"]["ScrollbarRounding"] = 3.0f;
-			GUIConfig["Style"]["ScrollbarSize"] = 16.0f;
+			GUIConfig["Style"]["ScrollbarSize"] = 18.0f;
 			GUIConfig["Style"]["TabBorderSize"] = 1.0f; //Values > 1.0 can cause performance issues.
 			GUIConfig["Style"]["TabRounding"] = 3.0f;
 			GUIConfig["Style"]["TouchExtraPadding"][0] = 0.0f;
@@ -368,7 +368,7 @@ bool ThemeEditorGui::LoadGUIConfig()
 			GUIConfig["Style"]["WindowTitleAlign"][0] = 0.0f;
 			GUIConfig["Style"]["WindowTitleAlign"][1] = 0.5f;
 
-			float DefaultGlobalOpacity = 1.0f;
+			/*float DefaultGlobalOpacity = 1.0f;
 			Utilities::Json::SetFloat4(GUIConfig, "Colors", "Text", ImVec4(0.945f, 0.945f, 0.945f, DefaultGlobalOpacity));
 			Utilities::Json::SetFloat4(GUIConfig, "Colors", "TextDisabled", ImVec4(0.610f, 0.610f, 0.610f, DefaultGlobalOpacity));
 			Utilities::Json::SetFloat4(GUIConfig, "Colors", "WindowBackground", ImVec4(0.349f, 0.349f, 0.349f, DefaultGlobalOpacity));
@@ -416,7 +416,58 @@ bool ThemeEditorGui::LoadGUIConfig()
 			Utilities::Json::SetFloat4(GUIConfig, "Colors", "NavHighlight", ImVec4(0.26f, 0.59f, 0.98f, DefaultGlobalOpacity));
 			Utilities::Json::SetFloat4(GUIConfig, "Colors", "NavWindowingHighlight", ImVec4(1.00f, 1.00f, 1.00f, DefaultGlobalOpacity));
 			Utilities::Json::SetFloat4(GUIConfig, "Colors", "NavWindowingDimBackground", ImVec4(0.80f, 0.80f, 0.80f, DefaultGlobalOpacity));
-			Utilities::Json::SetFloat4(GUIConfig, "Colors", "ModalWindowDimBackground", ImVec4(0.80f, 0.80f, 0.80f, DefaultGlobalOpacity));
+			Utilities::Json::SetFloat4(GUIConfig, "Colors", "ModalWindowDimBackground", ImVec4(0.80f, 0.80f, 0.80f, DefaultGlobalOpacity));*/
+
+			ImVec4* Colors = ImGui::GetStyle().Colors;
+			Utilities::Json::SetFloat4(GUIConfig, "Colors", "Text", Colors[ImGuiCol_Text]);
+			Utilities::Json::SetFloat4(GUIConfig, "Colors", "TextDisabled", Colors[ImGuiCol_TextDisabled]);
+			Colors[ImGuiCol_WindowBg].w = 0.8627f;
+			Utilities::Json::SetFloat4(GUIConfig, "Colors", "WindowBackground", Colors[ImGuiCol_WindowBg]);
+			Utilities::Json::SetFloat4(GUIConfig, "Colors", "ChildBackground", Colors[ImGuiCol_ChildBg]);
+			Utilities::Json::SetFloat4(GUIConfig, "Colors", "PopupBackground", Colors[ImGuiCol_PopupBg]);
+			Utilities::Json::SetFloat4(GUIConfig, "Colors", "Border", Colors[ImGuiCol_Border]);
+			Utilities::Json::SetFloat4(GUIConfig, "Colors", "BorderShadow", Colors[ImGuiCol_BorderShadow]);
+			Utilities::Json::SetFloat4(GUIConfig, "Colors", "FrameBackground", Colors[ImGuiCol_FrameBg]);
+			Utilities::Json::SetFloat4(GUIConfig, "Colors", "FrameBackgroundHovered", Colors[ImGuiCol_FrameBgHovered]);
+			Utilities::Json::SetFloat4(GUIConfig, "Colors", "FrameBackgroundActive", Colors[ImGuiCol_FrameBgActive]);
+			Utilities::Json::SetFloat4(GUIConfig, "Colors", "TitleBackground", Colors[ImGuiCol_TitleBg]);
+			Utilities::Json::SetFloat4(GUIConfig, "Colors", "TitleBackgroundActive", Colors[ImGuiCol_TitleBgActive]);
+			Utilities::Json::SetFloat4(GUIConfig, "Colors", "TitleBackgroundCollapsed", Colors[ImGuiCol_TitleBgCollapsed]);
+			Utilities::Json::SetFloat4(GUIConfig, "Colors", "MenuBarBackground", Colors[ImGuiCol_MenuBarBg]);
+			Utilities::Json::SetFloat4(GUIConfig, "Colors", "ScrollbarBackground", Colors[ImGuiCol_ScrollbarBg]);
+			Utilities::Json::SetFloat4(GUIConfig, "Colors", "ScrollbarGrab", Colors[ImGuiCol_ScrollbarGrab]);
+			Utilities::Json::SetFloat4(GUIConfig, "Colors", "ScrollbarGrabHovered", Colors[ImGuiCol_ScrollbarGrabHovered]);
+			Utilities::Json::SetFloat4(GUIConfig, "Colors", "ScrollbarGrabActive", Colors[ImGuiCol_ScrollbarGrabActive]);
+			Utilities::Json::SetFloat4(GUIConfig, "Colors", "CheckMark", Colors[ImGuiCol_CheckMark]);
+			Utilities::Json::SetFloat4(GUIConfig, "Colors", "SliderGrab", Colors[ImGuiCol_SliderGrab]);
+			Utilities::Json::SetFloat4(GUIConfig, "Colors", "SliderGrabActive", Colors[ImGuiCol_SliderGrabActive]);
+			Utilities::Json::SetFloat4(GUIConfig, "Colors", "Button", Colors[ImGuiCol_Button]);
+			Utilities::Json::SetFloat4(GUIConfig, "Colors", "ButtonHovered", Colors[ImGuiCol_ButtonHovered]);
+			Utilities::Json::SetFloat4(GUIConfig, "Colors", "ButtonActive", Colors[ImGuiCol_ButtonActive]);
+			Utilities::Json::SetFloat4(GUIConfig, "Colors", "Header", Colors[ImGuiCol_Header]);
+			Utilities::Json::SetFloat4(GUIConfig, "Colors", "HeaderHovered", Colors[ImGuiCol_HeaderHovered]);
+			Utilities::Json::SetFloat4(GUIConfig, "Colors", "HeaderActive", Colors[ImGuiCol_HeaderActive]);
+			Utilities::Json::SetFloat4(GUIConfig, "Colors", "Separator", Colors[ImGuiCol_Separator]);
+			Utilities::Json::SetFloat4(GUIConfig, "Colors", "SeparatorHovered", Colors[ImGuiCol_SeparatorHovered]);
+			Utilities::Json::SetFloat4(GUIConfig, "Colors", "SeparatorActive", Colors[ImGuiCol_SeparatorActive]);
+			Utilities::Json::SetFloat4(GUIConfig, "Colors", "ResizeGrip", Colors[ImGuiCol_ResizeGrip]);
+			Utilities::Json::SetFloat4(GUIConfig, "Colors", "ResizeGripHovered", Colors[ImGuiCol_ResizeGripHovered]);
+			Utilities::Json::SetFloat4(GUIConfig, "Colors", "ResizeGripActive", Colors[ImGuiCol_ResizeGripActive]);
+			Utilities::Json::SetFloat4(GUIConfig, "Colors", "Tab", Colors[ImGuiCol_Tab]);
+			Utilities::Json::SetFloat4(GUIConfig, "Colors", "TabHovered", Colors[ImGuiCol_TabHovered]);
+			Utilities::Json::SetFloat4(GUIConfig, "Colors", "TabActive", Colors[ImGuiCol_TabActive]);
+			Utilities::Json::SetFloat4(GUIConfig, "Colors", "TabUnfocused", Colors[ImGuiCol_TabUnfocused]);
+			Utilities::Json::SetFloat4(GUIConfig, "Colors", "TabUnfocusedActive", Colors[ImGuiCol_TabUnfocusedActive]);
+			Utilities::Json::SetFloat4(GUIConfig, "Colors", "PlotLines", Colors[ImGuiCol_PlotLines]);
+			Utilities::Json::SetFloat4(GUIConfig, "Colors", "PlotLinesHovered", Colors[ImGuiCol_PlotLinesHovered]);
+			Utilities::Json::SetFloat4(GUIConfig, "Colors", "PlotHistogram", Colors[ImGuiCol_PlotHistogram]);
+			Utilities::Json::SetFloat4(GUIConfig, "Colors", "PlotHistogramHovered", Colors[ImGuiCol_PlotHistogramHovered]);
+			Utilities::Json::SetFloat4(GUIConfig, "Colors", "TextSelectedBackground", Colors[ImGuiCol_TextSelectedBg]);
+			Utilities::Json::SetFloat4(GUIConfig, "Colors", "DragDropTarget", Colors[ImGuiCol_DragDropTarget]);
+			Utilities::Json::SetFloat4(GUIConfig, "Colors", "NavHighlight", Colors[ImGuiCol_NavHighlight]);
+			Utilities::Json::SetFloat4(GUIConfig, "Colors", "NavWindowingHighlight", Colors[ImGuiCol_NavWindowingHighlight]);
+			Utilities::Json::SetFloat4(GUIConfig, "Colors", "NavWindowingDimBackground", Colors[ImGuiCol_NavWindowingDimBg]);
+			Utilities::Json::SetFloat4(GUIConfig, "Colors", "ModalWindowDimBackground", Colors[ImGuiCol_ModalWindowDimBg]);
 
 			std::ofstream ConfigOutput(ExePath + "RFGR Script Loader/Settings/GUI Config.json");
 			ConfigOutput << std::setw(4) << GUIConfig << std::endl;

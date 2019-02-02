@@ -9,6 +9,8 @@
 #define IMGUI_DEFINE_MATH_OPERATORS
 #include "imgui.h" // for imGui::GetCurrentWindow()
 
+#include "ScriptManager.h"
+
 // TODO
 // - multiline comments vs single-line: latter is blocking start of a ML
 // - handle unicode/utf
@@ -847,16 +849,99 @@ void TextEditor::Render()
 
 void TextEditor::Render(const char* aTitle, const ImVec2& aSize, bool aBorder)
 {
+	ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(4.0f, 4.0f));
 	ImGui::SetNextWindowSize(ImVec2(400.0f, 500.0f), ImGuiCond_FirstUseEver);
 	ImVec4* Colors = ImGui::GetStyle().Colors; //48 items
 	ImGui::PushStyleColor(ImGuiCol_ResizeGrip, Colors[ImGuiCol_WindowBg]);
 	ImGui::PushStyleColor(ImGuiCol_ResizeGripHovered, Colors[ImGuiCol_WindowBg]);
 	ImGui::PushStyleColor(ImGuiCol_ResizeGripActive, Colors[ImGuiCol_WindowBg]);
-	if (!ImGui::Begin(aTitle, OpenState))
+	if (!ImGui::Begin(aTitle, OpenState, ImGuiWindowFlags_MenuBar))
 	{
 		ImGui::End();
 		return;
 	}
+
+	
+	if (ImGui::BeginMenuBar())
+	{
+		if (ImGui::BeginMenu("Menu"))
+		{
+			//ShowExampleMenuFile();
+			ImGui::Text("New");
+			ImGui::Text("Open");
+			ImGui::Text("Save");
+			ImGui::Text("Save As");
+			ImGui::EndMenu();
+		}
+		if (ImGui::BeginMenu("Edit"))
+		{
+			ImGui::Text("Load");
+			//ImGui::Text(std::to_string(*ShowAppMainMenuBar).c_str());
+			//ImGui::MenuItem("Main menu bar", NULL, ShowAppMainMenuBar);
+			//ImGui::MenuItem("Console", NULL, ShowAppConsole);
+			//ImGui::MenuItem("Log", NULL, ShowAppLog);
+			//ImGui::MenuItem("Long text display", NULL, ShowAppLongText);
+			//ImGui::MenuItem("Simple overlay", NULL, ShowAppSimpleOverlay);
+			ImGui::EndMenu();
+		}
+		if (ImGui::BeginMenu("Examples")) //Todo: Maybe just make this a submenu of Help
+		{
+			ImGui::Text("Load");
+			//ImGui::Text(std::to_string(*ShowAppMainMenuBar).c_str());
+			//ImGui::MenuItem("Main menu bar", NULL, ShowAppMainMenuBar);
+			//ImGui::MenuItem("Console", NULL, ShowAppConsole);
+			//ImGui::MenuItem("Log", NULL, ShowAppLog);
+			//ImGui::MenuItem("Long text display", NULL, ShowAppLongText);
+			//ImGui::MenuItem("Simple overlay", NULL, ShowAppSimpleOverlay);
+			ImGui::EndMenu();
+		}
+		if (ImGui::BeginMenu("Help"))
+		{
+			ImGui::Text("Load");
+			//ImGui::MenuItem("Metrics", NULL, ShowAppMetrics);
+			//ImGui::MenuItem("Theme Editor", NULL, ShowAppStyleEditor);
+			//ImGui::MenuItem("About", NULL, ShowAppAbout);
+			ImGui::EndMenu();
+		}
+		//ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 0.0f);
+		
+		ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.556f, 0.823f, 0.541f, 1.0f));
+		if (ImGui::BeginMenu(std::string(std::string(ICON_FA_PLAY) + u8"##ScriptEditor").c_str()))
+		{
+			Logger::Log("Clicked Script Editor run button", LogInfo);
+			ImGui::EndMenu();
+		}
+		ImGui::PopStyleColor(1);
+		ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.952f, 0.545f, 0.462f, 1.0f));
+		if (ImGui::BeginMenu(std::string(std::string(ICON_FA_BAN) + u8"##ScriptEditor").c_str()))
+		{
+			Logger::Log("Clicked Script Editor stop button", LogInfo);
+			ImGui::EndMenu();
+		}
+		ImGui::PopStyleColor(1);
+
+		/*ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 0.0f);
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4());
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4());
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4());
+		ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.556f, 0.823f, 0.541f, 1.0f));
+		if (ImGui::Button(std::string(std::string(ICON_FA_PLAY) + u8"##ScriptEditor").c_str()))
+		{
+			//size_t ScriptIndex = std::distance(Scripts->Scripts.begin(), i);
+			//bool Result = Scripts->RunScript(ScriptIndex);
+			Logger::Log("Clicked Script Editor run button", LogInfo);
+		}
+		ImGui::PopStyleColor(1);
+		ImGui::SameLine();
+		if (ImGui::Button(std::string(std::string(ICON_FA_BAN) + u8"##ScriptEditor").c_str()))
+		{
+			Logger::Log("Clicked Script Editor stop button", LogInfo);
+		}
+		ImGui::PopStyleColor(4);
+		ImGui::PopStyleVar();*/
+		ImGui::EndMenuBar();
+	}
+	ImGui::PopStyleVar();
 
 	mWithinRender = true;
 	mTextChanged = false;

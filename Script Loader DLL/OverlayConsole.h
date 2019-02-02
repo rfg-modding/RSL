@@ -15,6 +15,8 @@ public:
 	void Initialize(bool* _OpenState);
 	void Draw(const char* Title);
 
+	template <typename T> bool InputTextLambdaWrapper(const char* Label, std::string* Buffer, ImGuiInputTextFlags Flags = 0, T Callback = nullptr, void* UserData = nullptr);
+
 	Player* PlayerPtr = nullptr;
 	ImGuiWindowFlags WindowFlags = 0;
 	ScriptManager* Scripts;
@@ -23,7 +25,11 @@ public:
 	int BufferDisplayLength = 100;
 	std::string InputBuffer;
 
+	std::vector <std::string> CommandHistory;
+	unsigned int HistoryPosition = 0;
+
 private:
 	bool* OpenState;
 };
+
 

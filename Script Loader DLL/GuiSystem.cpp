@@ -29,7 +29,9 @@ void GuiSystem::Initialize()
 	TeleportMenu.Initialize(&ShowAppTeleportMenu);
 	IntrospectionMenu.Initialize(&ShowAppIntrospectionMenu);
 	TweaksMenu.Initialize(&ShowAppTweaksMenu);
+
 	ScriptEditor.Initialize(&ShowAppScriptEditor);
+	ScriptEditor.SetLanguageDefinition(TextEditor::LanguageDefinition::Lua());
 }
 
 /*Should only be doing this once.*/
@@ -37,10 +39,21 @@ void GuiSystem::SetScriptManager(ScriptManager* _Scripts)
 {
 	Scripts = _Scripts;
 	MainWindow.Scripts = _Scripts;
+	Console.Scripts = _Scripts;
+	ScriptEditor.Scripts = _Scripts;
 }
 
 void GuiSystem::Draw()
 {
+	if (!PlayerPtr)
+	{
+		return;
+	}
+	if (!Scripts)
+	{
+		return;
+	}
+
 	MainWindow.Draw("Main overlay");
 	Console.Draw("Lua Console");
 	ThemeEditor.Draw("Theme Editor");

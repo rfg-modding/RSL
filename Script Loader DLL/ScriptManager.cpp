@@ -192,6 +192,30 @@ bool ScriptManager::RunScript(size_t Index)
 	}
 }
 
+bool ScriptManager::RunStringAsScript(std::string Buffer, std::string Name)
+{
+	try
+	{
+		auto CodeResult = Lua.script(Buffer, [](lua_State*, sol::protected_function_result pfr)
+		{
+			return pfr;
+		});
+
+		if (!CodeResult.valid())
+		{
+			sol::error ScriptError = CodeResult;
+			std::exception ScriptException(ScriptError.what());
+			throw(ScriptException);
+		}
+		return true;
+	}
+	catch (std::exception& Exception)
+	{
+		Logger::Log(std::string("Exception caught when running " + Name + std::string(Exception.what())), LogLua | LogError);
+		return false;
+	}
+}
+
 std::string ScriptManager::GetScriptNameFromPath(std::string FullPath)
 {
 	for (int i = FullPath.length() - 1; i > 0; i--)

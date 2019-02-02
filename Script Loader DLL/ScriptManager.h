@@ -35,6 +35,8 @@ public:
 	bool RunScript(std::string FullPath);
 	bool RunScript(size_t Index);
 
+	bool RunStringAsScript(std::string Buffer, std::string Name);
+
 	std::vector <Script> Scripts;
 
 private:
