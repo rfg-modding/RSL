@@ -41,8 +41,8 @@ public:
 	}*/
 
 	std::ofstream File;
-	int LogFlags;
-	std::ios_base::openmode OpenMode;
+	int LogFlags = LogAll;
+	std::ios_base::openmode OpenMode = std::ios_base::out;
 	std::string FilePath;
 };
 

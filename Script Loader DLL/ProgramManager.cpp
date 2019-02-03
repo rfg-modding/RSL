@@ -71,7 +71,7 @@ void ProgramManager::Initialize()
 	CenterMouseCursorCall = FindPattern((char*)"rfg.exe", (char*)"\xE8\x00\x00\x00\x00\x89\x46\x4C\x89\x56\x50", (char*)"x????xxxxxx");
 
 	Logger::Log("Now monitoring RFGR State", LogInfo);
-	GameState RFGRState;
+	GameState RFGRState = GameseqGetState();;
 	auto StartTime = std::chrono::steady_clock::now();
 	auto EndTime = std::chrono::steady_clock::now();
 	long long TimeElapsed = 0LL;
@@ -117,7 +117,7 @@ void ProgramManager::Initialize()
 	Beep(700, 100);
 	Beep(900, 200);
 
-	ZeroMemory(&msg, sizeof(msg));
+	///ZeroMemory(&msg, sizeof(msg));
 }
 
 void ProgramManager::ProcessInput()
@@ -266,11 +266,11 @@ bool ProgramManager::ShouldClose()
 
 void ProgramManager::Update()
 {
-	if (PeekMessage(&msg, NULL, 0U, 0U, PM_REMOVE)) //Todo: Figure out if I really need this for the overlay to work.
+	/*if (PeekMessage(&msg, NULL, 0U, 0U, PM_REMOVE)) //Todo: Figure out if I really need this for the overlay to work.
 	{
 		TranslateMessage(&msg);
 		DispatchMessage(&msg);
-	}
+	}*/
 }
 
 void ProgramManager::CloseConsole()

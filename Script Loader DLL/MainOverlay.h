@@ -51,9 +51,9 @@ public:
 
 	bool PlayerPtrTargetsInitialized = false;
 	bool NeedPlayerPosSet = false;
-	float PlayerPositionTargetArray[3];
+	float PlayerPositionTargetArray[3] = { 0 };
 
-	float PlayerVelocityTargetArray[3];
+	float PlayerVelocityTargetArray[3] = { 0 };
 	bool NeedPlayerVelocitySet = false;
 
 	ScriptManager* Scripts;
@@ -67,7 +67,7 @@ struct ExampleAppLog
 	ImGuiTextBuffer     Buf;
 	ImGuiTextFilter     Filter;
 	ImVector<int>       LineOffsets;        // Index to lines offset
-	bool                ScrollToBottom;
+	bool                ScrollToBottom = false;
 
 	void    Clear() { Buf.clear(); LineOffsets.clear(); }
 

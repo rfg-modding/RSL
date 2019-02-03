@@ -10,7 +10,7 @@ public:
 	void Initialize(bool* _OpenState);
 	void Draw(const char* Title);
 
-	Player* PlayerPtr;
+	Player* PlayerPtr = nullptr;
 
 	bool TeleportWindowOpen = false;
 	bool PlayerVariablesGuiOpen = false;
@@ -30,6 +30,6 @@ public:
 	bool XrayModeOn = false;
 
 private:
-	bool* OpenState;
+	bool* OpenState = nullptr;
 };
 

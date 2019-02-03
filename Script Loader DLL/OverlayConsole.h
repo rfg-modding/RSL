@@ -19,7 +19,7 @@ public:
 
 	Player* PlayerPtr = nullptr;
 	ImGuiWindowFlags WindowFlags = 0;
-	ScriptManager* Scripts;
+	ScriptManager* Scripts = nullptr;
 
 	int ConsoleLogType = LogLua | LogError;
 	int BufferDisplayLength = 100;
@@ -29,7 +29,7 @@ public:
 	unsigned int HistoryPosition = 0;
 
 private:
-	bool* OpenState;
+	bool* OpenState = nullptr;
 };
 
 

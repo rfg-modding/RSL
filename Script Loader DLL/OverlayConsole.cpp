@@ -55,7 +55,7 @@ void OverlayConsole::Draw(const char* Title)
 	{
 		BufferStart = 0;
 	}
-	for (int i = BufferStart; i < Logger::LogData.size() - 1; i++)
+	for (size_t i = BufferStart; i < Logger::LogData.size() - 1; i++)
 	{
 		if (Logger::LogData[i].Flags & ConsoleLogType)
 		{
@@ -86,7 +86,7 @@ void OverlayConsole::Draw(const char* Title)
 			}
 			else if (Buffer == "[+] ")
 			{
-				Buffer == "[Undefined Log Type] ";
+				Buffer = "[Undefined Log Type] ";
 				Color = ImVec4(1.000f, 0.000f, 0.000f, 1.0f); //Pure Red (255,0,0)
 			}
 			else

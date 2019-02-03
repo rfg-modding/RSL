@@ -47,9 +47,9 @@ public:
 
 private:
 	/*This is private to prevent accidental changes.*/
-	ScriptManager* Scripts;
+	ScriptManager* Scripts = nullptr;
 	/*Private to insure that every instance of PlayerPtr is properly set,
 	instead of mistakenly just setting this one.*/
-	Player* PlayerPtr;
+	Player* PlayerPtr = nullptr;
 };
 

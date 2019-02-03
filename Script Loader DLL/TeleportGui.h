@@ -18,19 +18,19 @@ public:
 	bool ChangeTeleportLocation(std::string CurrentName, std::string NewName, float NewX, float NewY, float NewZ, std::string NewDescription);
 
 	nlohmann::json TeleportLocations;
-	Player* PlayerPtr;
+	Player* PlayerPtr = nullptr;
 
 	bool TeleportEditPopupOpen = false;
 	std::string NewTeleportName;
 	vector NewTeleportPosition;
 	std::string NewTeleportDescription;
 
-	float PlayerPositionTargetArray[3];
+	float PlayerPositionTargetArray[3] = { 0 };
 
 	ImGuiWindowFlags WindowFlags = 0;
 	ImGuiWindowFlags ModalFlags = 0;
 
 private:
-	bool* OpenState;
+	bool* OpenState = nullptr;
 };
 

@@ -19,6 +19,6 @@ public:
 	nlohmann::json GUIConfig;
 
 private:
-	bool* OpenState;
+	bool* OpenState = nullptr;
 };
 

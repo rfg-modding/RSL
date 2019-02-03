@@ -244,9 +244,9 @@ public:
 	static const Palette& GetLightPalette();
 	static const Palette& GetRetroBluePalette();
 
-	ScriptManager* Scripts;
+	ScriptManager* Scripts = nullptr;
 private:
-	bool* OpenState;
+	bool* OpenState = nullptr;
 
 	typedef std::vector<std::pair<std::regex, PaletteIndex>> RegexList;
 

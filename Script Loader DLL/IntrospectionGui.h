@@ -11,9 +11,9 @@ public:
 	void Draw(const char* Title);
 	void DrawPlayerIntrospectionGui(const char* Title);
 
-	Player* PlayerPtr;
+	Player* PlayerPtr = nullptr;
 
 private:
-	bool* OpenState;
+	bool* OpenState = nullptr;
 };
 

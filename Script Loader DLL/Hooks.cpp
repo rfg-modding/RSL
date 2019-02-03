@@ -203,8 +203,8 @@ HRESULT __stdcall D3D11PresentHook(IDXGISwapChain * pSwapChain, UINT SyncInterva
 
 		ImGui_ImplDX11_Init(D3D11Device, D3D11Context);
 		hwnd = find_main_window(GetProcessID("rfg.exe"));
-		HRESULT RectResult = GetWindowRect(hwnd, &WindowRect);
-		if (RectResult == 0L)
+		bool RectResult = GetWindowRect(hwnd, &WindowRect);
+		if (!RectResult)
 		{
 			std::cout << "GetWindowRect Failed! Result: " << GetLastError() << std::endl;
 			//Sleep(10000);
