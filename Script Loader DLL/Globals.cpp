@@ -52,10 +52,11 @@ const WORD ConsoleSuccessTextAttributes = 0 | FOREGROUND_GREEN | FOREGROUND_INTE
 const WORD ConsoleDefaultTextAttributes = 0 | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE;
 
 void* GlobalRlDrawPtr = nullptr;
+extern const std::string ScriptLoaderVersion("0.1.0-Alpha");
 
 const char* GetScriptLoaderVersion()
 {
-	return ScriptLoaderVersion;
+	return ScriptLoaderVersion.c_str();
 }
 
 void ShowHelpMarker(const char* desc)

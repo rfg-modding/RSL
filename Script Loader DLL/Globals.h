@@ -78,7 +78,8 @@ extern const WORD ConsoleDefaultTextAttributes;
 
 extern void* GlobalRlDrawPtr;
 
-#define ScriptLoaderVersion "0.1.0-Alpha"
+extern const std::string ScriptLoaderVersion;
+
 const char* GetScriptLoaderVersion();
 void ShowHelpMarker(const char* desc);
 bool DirectoryExists(std::string Directory);
