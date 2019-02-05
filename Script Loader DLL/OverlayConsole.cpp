@@ -62,41 +62,6 @@ void OverlayConsole::Draw(const char* Title)
 	{
 		if (Logger::LogData[i].Flags & ConsoleLogType)
 		{
-			/*Buffer = Logger::GetFlagString(Logger::LogData[i].Flags);
-			if (Buffer == "[Info] ")
-			{
-				Color = ImVec4(0.945f, 0.945f, 0.945f, 1.0f); //White/Grey
-			}
-			else if (Buffer == "[Warning] ")
-			{
-				Color = ImVec4(0.756f, 0.611f, 0.000f, 1.0f); //Gold/Yellow
-			}
-			else if (Buffer == "[Lua] ")
-			{
-				Color = ImVec4(0.231f, 0.470f, 1.000f, 1.0f); //Light Blue (Info color in external console)
-			}
-			else if (Buffer == "[Json] ") 
-			{
-				Color = ImVec4(1.000f, 0.415f, 0.000f, 1.0f); //Light Orange
-			}
-			else if (Buffer == "[Error] ")
-			{
-				Color = ImVec4(0.772f, 0.058f, 0.121f, 1.0f); //Bright Red
-			}
-			else if (Buffer == "[Fatal Error] ")
-			{
-				Color = ImVec4(0.772f, 0.058f, 0.121f, 1.0f); //Bright Red
-			}
-			else if (Buffer == "[+] ")
-			{
-				Buffer = "[Undefined Log Type] ";
-				Color = ImVec4(1.000f, 0.000f, 0.000f, 1.0f); //Pure Red (255,0,0)
-			}
-			else
-			{
-
-			}*/
-
 			if (Logger::LogData[i].Flags & LogInfo)
 			{
 				Buffer = "[Info] ";
