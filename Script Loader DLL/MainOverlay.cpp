@@ -126,7 +126,7 @@ void MainOverlay::Initialize(bool* _OpenState)
 	MainOverlayWindowFlags |= ImGuiWindowFlags_MenuBar;
 	//MainOverlayWindowFlags |= ImGuiWindowFlags_NoMove;
 	//MainOverlayWindowFlags |= ImGuiWindowFlags_NoResize;
-	MainOverlayWindowFlags |= ImGuiWindowFlags_NoCollapse;
+	//MainOverlayWindowFlags |= ImGuiWindowFlags_NoCollapse;
 	//MainOverlayWindowFlags |= ImGuiWindowFlags_NoNav;
 	//MainOverlayWindowFlags |= ImGuiWindowFlags_NoBackground;
 	//MainOverlayWindowFlags |= ImGuiWindowFlags_NoBringToFrontOnFocus;
@@ -223,10 +223,10 @@ void MainOverlay::Draw(const char* Title)
 		ImGui::EndMenuBar();
 	}
 	ImGui::Separator();
-	
+	ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 0.0f);
 	ImGui::PushStyleColor(ImGuiCol_Button, ImVec4());
-	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4());
-	ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4());
+	//ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4());
+	//ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4());
 	if(ImGui::Button(std::string(std::string(ICON_FA_CODE) + u8"##CodeIcon").c_str()))
 	{
 
@@ -291,7 +291,14 @@ void MainOverlay::Draw(const char* Title)
 	{
 
 	}
-	ImGui::PopStyleColor(3);
+	ImGui::SameLine();
+	if (ImGui::Button(std::string(std::string(ICON_FA_VIAL) + u8"##ExclamationTriangleIcon").c_str()))
+	{
+
+	}
+	ImGui::PopStyleColor();
+	//ImGui::PopStyleColor(3);
+	ImGui::PopStyleVar();
 
 	if (ImGui::CollapsingHeader("Notes:"))
 	{
