@@ -907,7 +907,7 @@ void TextEditor::Render(const char* aTitle, const ImVec2& aSize, bool aBorder)
 		//ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 0.0f);
 		
 		ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.556f, 0.823f, 0.541f, 1.0f));
-		if (ImGui::BeginMenu(std::string(std::string(ICON_FA_PLAY) + u8"##ScriptEditor").c_str()))
+		if (ImGui::BeginMenu(std::string(std::string(ICON_FA_VIAL) + u8" Test & Run##ScriptEditor").c_str()))
 		{
 			Logger::Log("Clicked Script Editor run button", LogInfo);
 			ImGui::EndMenu();
