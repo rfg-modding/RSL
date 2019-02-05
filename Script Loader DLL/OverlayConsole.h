@@ -21,7 +21,7 @@ public:
 	ImGuiWindowFlags WindowFlags = 0;
 	ScriptManager* Scripts = nullptr;
 
-	int ConsoleLogType = LogLua | LogError;
+	int ConsoleLogType = LogAll;// LogLua | LogError;
 	int BufferDisplayLength = 100;
 	std::string InputBuffer;
 
@@ -30,6 +30,10 @@ public:
 
 private:
 	bool* OpenState = nullptr;
+
+	std::string Buffer;
+	ImVec4 Color;
+	int BufferStart = 0;
 };
 
 

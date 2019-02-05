@@ -29,6 +29,8 @@ void OverlayConsole::Initialize(bool* _OpenState)
 
 void OverlayConsole::Draw(const char* Title)
 {
+	auto StartTime = std::chrono::steady_clock::now();
+
 	ImGui::SetNextWindowSizeConstraints(ImVec2(-1, 0), ImVec2(-1, FLT_MAX));
 	ImGui::SetNextWindowSize(ImVec2((float)(WindowRect.right - WindowRect.left) - 10.0f, 400.0f), ImGuiCond_Once);
 	ImGui::SetNextWindowPos(ImVec2(0.0f, 0.0f));
@@ -47,10 +49,11 @@ void OverlayConsole::Draw(const char* Title)
 	const float footer_height_to_reserve = ImGui::GetStyle().ItemSpacing.y + ImGui::GetFrameHeightWithSpacing(); // 1 separator, 1 input text
 	ImGui::BeginChild("ScrollingRegion", ImVec2(0, -footer_height_to_reserve), false, ImGuiWindowFlags_HorizontalScrollbar); // Leave room for 1 separator + 1 InputText
 
-	std::string Buffer;
-	ImVec4 Color;
+	Buffer = "";
+	Color = { 0.0f, 0.0f, 0.0f, 0.0f };
+
 	//Logger::Log(std::string("LogData size: " + std::to_string(Logger::LogData.size())), LogAll);
-	int BufferStart = Logger::LogData.size() - 1 - BufferDisplayLength;
+	BufferStart = Logger::LogData.size() - 1 - BufferDisplayLength;
 	if (BufferStart < 0)
 	{
 		BufferStart = 0;
@@ -162,6 +165,10 @@ void OverlayConsole::Draw(const char* Title)
 
 	ImGui::End();
 	ImGui::PopStyleColor(3);
+
+	auto EndTime = std::chrono::steady_clock::now();
+	auto TimeElapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(EndTime - StartTime).count();
+	std::cout << "OverlayConsole::Draw() TimeElapsed = " << TimeElapsed << " ns\n";
 }
 
 template<typename T>
