@@ -86,6 +86,23 @@ void Logger::Log(std::string Message, int LogFlags, bool LogTime, bool NewLine)
 			}
 		}
 	}
+	/*if (LogData.size() >= 500)
+	{
+		std::cout << "LogData.size(): " << LogData.size() << "\n";
+		int TotalMessageSize = 0;
+		for (auto i = LogData.begin(); i != LogData.end(); i++)
+		{
+			TotalMessageSize += i->Message.length();
+			TotalMessageSize += i->FlagString.length();
+			TotalMessageSize += sizeof(i->Flags);
+		}
+		int VectorSize = sizeof(std::vector<std::string>);
+		std::cout << "Size of vector: " << VectorSize << " Bytes\n";
+		std::cout << "Size of all strings" << TotalMessageSize << " Bytes\n";
+		TotalMessageSize += VectorSize;
+		std::cout << "Total size of both: " << TotalMessageSize << " Bytes | " << TotalMessageSize / 1000 << " KiloBytes\n";
+	}*/
+	//std::cout << "sizeof std::string vector with 10000 values: " << (sizeof(std::vector<std::string>) + (sizeof(std::string) * 10000)) / 1000 << "kB\n";
 }
 
 std::string Logger::GetFlagString(int LogFlags)
