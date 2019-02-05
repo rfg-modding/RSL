@@ -82,8 +82,8 @@ void ProgramManager::Initialize()
 		{
 			RFGRState = GameseqGetState();
 			StartTime = EndTime;
-			std::cout << "TimeElapsed: " << TimeElapsed << std::endl;
-			std::cout << "Current RFGR State: " << (UINT32)RFGRState << std::endl;
+			std::cout << "TimeElapsed: " << TimeElapsed << "\n";
+			std::cout << "Current RFGR State: " << (UINT32)RFGRState << "\n";
 		}
 		EndTime = std::chrono::steady_clock::now();
 	} 
@@ -140,8 +140,36 @@ void ProgramManager::ProcessInput()
 	}
 	if (GetAsyncKeyState(VK_NUMPAD3))
 	{
-		
-		Sleep(100);
+		std::random_device RandomDevice; // obtain a random number from hardware
+		std::mt19937 Generator(RandomDevice()); // seed the generator
+		std::uniform_int_distribution<> Distribution(0, 5); // define the range
+		int RandError = Distribution(Generator);
+
+		switch (RandError)
+		{
+		case 0:
+			Logger::Log("Random Log Test", LogInfo);
+			break;
+		case 1:
+			Logger::Log("Random Log Test", LogWarning);
+			break;
+		case 2:
+			Logger::Log("Random Log Test", LogError);
+			break;
+		case 3:
+			Logger::Log("Random Log Test", LogFatalError);
+			break;
+		case 4:
+			Logger::Log("Random Log Test", LogLua);
+			break;
+		case 5:
+			Logger::Log("Random Log Test", LogJson);
+			break;
+		default:
+			Logger::Log("Random Log Test", LogNone);
+			break;
+		}
+		Sleep(5);
 	}
 	if (GetAsyncKeyState(VK_F1))
 	{

@@ -18,6 +18,7 @@
 
 #include <ctype.h>
 #include <math.h>
+#include <random>
 
 #include <chrono>
 #include <iostream>
