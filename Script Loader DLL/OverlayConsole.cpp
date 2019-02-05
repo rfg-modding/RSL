@@ -62,7 +62,7 @@ void OverlayConsole::Draw(const char* Title)
 	{
 		if (Logger::LogData[i].Flags & ConsoleLogType)
 		{
-			Buffer = Logger::GetFlagString(Logger::LogData[i].Flags);
+			/*Buffer = Logger::GetFlagString(Logger::LogData[i].Flags);
 			if (Buffer == "[Info] ")
 			{
 				Color = ImVec4(0.945f, 0.945f, 0.945f, 1.0f); //White/Grey
@@ -95,6 +95,42 @@ void OverlayConsole::Draw(const char* Title)
 			else
 			{
 
+			}*/
+
+			if (Logger::LogData[i].Flags & LogInfo)
+			{
+				Buffer = "[Info] ";
+				Color = ImVec4(0.945f, 0.945f, 0.945f, 1.0f); //White/Grey
+			}
+			else if (Logger::LogData[i].Flags & LogWarning)
+			{
+				Buffer = "[Warning] ";
+				Color = ImVec4(0.756f, 0.611f, 0.000f, 1.0f); //Gold/Yellow
+			}
+			else if (Logger::LogData[i].Flags & LogLua)
+			{
+				Buffer = "[Lua] ";
+				Color = ImVec4(0.231f, 0.470f, 1.000f, 1.0f); //Light Blue (Info color in external console)
+			}
+			else if (Logger::LogData[i].Flags & LogJson)
+			{
+				Buffer = "[Json] ";
+				Color = ImVec4(1.000f, 0.415f, 0.000f, 1.0f); //Light Orange
+			}
+			else if (Logger::LogData[i].Flags & LogError)
+			{
+				Buffer = "[Error] ";
+				Color = ImVec4(0.772f, 0.058f, 0.121f, 1.0f); //Bright Red
+			}
+			else if (Logger::LogData[i].Flags & LogFatalError)
+			{
+				Buffer = "[Fatal Error] ";
+				Color = ImVec4(0.772f, 0.058f, 0.121f, 1.0f); //Bright Red
+			}
+			else
+			{
+				Buffer = "[Undefined Message Type] ";
+				Color = ImVec4(1.000f, 0.000f, 0.000f, 1.0f); //Pure Red (255,0,0)
 			}
 
 			ImGui::TextUnformatted(Buffer.substr(0, 1).c_str());
@@ -119,7 +155,7 @@ void OverlayConsole::Draw(const char* Title)
 	///ImGui::Separator();
 	/*moneyl: Full credit goes to Elias Daler for the use of a stateless lambda and wrapper to pass a callback lambda to the InputText widget. I was having trouble implementing this, and his
 	article here gave a solution: https://eliasdaler.github.io/using-imgui-with-sfml-pt2/ This method is preferred to having a separate callback function since it keeps the code in one place,
-	and cleaner. He also described a general method of doing this for any widget which may be useful later on. Keep this in mind.*/
+	and cleaner. He also described a general method of doing this for any widget which may be useful later on. Keep this in mind for future gui additions which might use it.*/
 	bool ReclaimFocus = false;
 	if (InputTextLambdaWrapper("##LuaConsoleInput", &InputBuffer, ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_CallbackHistory, [&](ImGuiInputTextCallbackData* CallbackData)
 	{
