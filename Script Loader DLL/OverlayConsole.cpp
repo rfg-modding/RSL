@@ -29,7 +29,7 @@ void OverlayConsole::Initialize(bool* _OpenState)
 
 void OverlayConsole::Draw(const char* Title)
 {
-	auto StartTime = std::chrono::steady_clock::now();
+	//auto StartTime = std::chrono::steady_clock::now();
 
 	ImGui::SetNextWindowSizeConstraints(ImVec2(-1, 0), ImVec2(-1, FLT_MAX));
 	ImGui::SetNextWindowSize(ImVec2((float)(WindowRect.right - WindowRect.left) - 10.0f, 400.0f), ImGuiCond_Once);
@@ -167,9 +167,9 @@ void OverlayConsole::Draw(const char* Title)
 	ImGui::End();
 	ImGui::PopStyleColor(3);
 
-	auto EndTime = std::chrono::steady_clock::now();
+	/*auto EndTime = std::chrono::steady_clock::now();
 	auto TimeElapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(EndTime - StartTime).count();
-	std::cout << "OverlayConsole::Draw() TimeElapsed = " << TimeElapsed << " ns\n";
+	std::cout << "OverlayConsole::Draw() TimeElapsed = " << TimeElapsed << " ns\n";*/
 }
 
 template<typename T>

@@ -29,6 +29,7 @@ void GuiSystem::Initialize()
 	TeleportMenu.Initialize(&ShowAppTeleportMenu);
 	IntrospectionMenu.Initialize(&ShowAppIntrospectionMenu);
 	TweaksMenu.Initialize(&ShowAppTweaksMenu);
+	ScriptsMenu.Initialize(&ShowAppScriptsMenu);
 
 	ScriptEditor.Initialize(&ShowAppScriptEditor);
 	ScriptEditor.SetLanguageDefinition(TextEditor::LanguageDefinition::Lua());
@@ -40,6 +41,7 @@ void GuiSystem::SetScriptManager(ScriptManager* _Scripts)
 	Scripts = _Scripts;
 	MainWindow.Scripts = _Scripts;
 	Console.Scripts = _Scripts;
+	ScriptsMenu.Scripts = _Scripts;
 	ScriptEditor.Scripts = _Scripts;
 }
 
@@ -60,6 +62,7 @@ void GuiSystem::Draw()
 	TeleportMenu.Draw("Teleport Menu");
 	IntrospectionMenu.Draw("Introspection Menu");
 	TweaksMenu.Draw("General Tweaks Menu");
+	ScriptsMenu.Draw("Script Select Menu");
 	ScriptEditor.Render("Script Editor");// , ImVec2(400.0f, 400.0f));
 }
 

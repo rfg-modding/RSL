@@ -123,6 +123,9 @@
     <ClCompile Include="TextEditor.cpp">
       <Filter>Overlay Gui\Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ScriptSelectGui.cpp">
+      <Filter>Overlay Gui\Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CameraWrapper.h">
@@ -258,6 +261,9 @@
       <Filter>Overlay Gui\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="TextEditor.h">
+      <Filter>Overlay Gui\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ScriptSelectGui.h">
       <Filter>Overlay Gui\Header Files</Filter>
     </ClInclude>
   </ItemGroup>

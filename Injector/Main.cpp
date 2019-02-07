@@ -39,6 +39,8 @@ int main()
 			While the injector is completely safe, some dummy variables were added to help trick virus scanners. Some of
 			them think this program is a common virus since we must use the same common DLL injection code. I've also read
 			that the use of system() as seen below can cause them to flag programs, so that should be replaced at some point too.
+			The injector will likely be fazed out for normal use in favor of a proxy dll. It will likely not be picked up by antivirus
+			software and should be less finicky for users and automatically load when the game runs.
 			*/
 			float Dummy1 = ProgramVersion + 77.912f + (rand() % (int)(ProgramVersion + 641.9f));
 			double Dummy2 = (3730.0 / ((double)ProgramVersion)) + 2.93 * ProgramVersion + (rand() % (int)(2 + pow(2, ProgramVersion)));

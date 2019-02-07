@@ -331,49 +331,6 @@ void MainOverlay::Draw(const char* Title)
 		ImGui::PushItemWidth(300.0f);
 		ImGui::TextWrapped("- The \"Global explosion modifiers\" section is completely broken and will make explosions stupidly overpowered rapidly. Use at your own risk. You must restart the game to revert it's effects.");
 	}
-	ImGui::Separator();
-
-	if (ImGui::CollapsingHeader("Scripts##ScriptsCollapsingHeaderMain"))
-	{
-		if (ImGui::Button("Rescan"))
-		{
-			Scripts->ScanScriptsFolder();
-		}
-		for (auto i = Scripts->Scripts.begin(); i != Scripts->Scripts.end(); ++i)
-		{
-			ImGui::Text(i->Name.c_str()); ImGui::SameLine();
-			
-			
-			//ImGui::PushID(0);
-			ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 0.0f);
-			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4());
-			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4());
-			ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4());
-			ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.556f, 0.823f, 0.541f, 1.0f));
-			if (ImGui::Button(std::string(std::string(ICON_FA_PLAY) + u8"##" + i->FullPath).c_str()))
-			{
-				size_t ScriptIndex = std::distance(Scripts->Scripts.begin(), i);
-				bool Result = Scripts->RunScript(ScriptIndex);
-				Logger::Log("Result from running " + Scripts->Scripts[ScriptIndex].Name + ": " + std::to_string(Result), LogInfo);
-			}
-			ImGui::PopStyleColor(1);
-			ImGui::SameLine();
-			if (ImGui::Button(std::string(std::string(ICON_FA_EDIT) + u8"##" + i->FullPath).c_str()))
-			{
-
-			}
-			ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.952f, 0.545f, 0.462f, 1.0f));
-			ImGui::SameLine();
-			if (ImGui::Button(std::string(std::string(ICON_FA_BAN) + u8"##" + i->FullPath).c_str()))
-			{
-
-			}
-			ImGui::PopStyleColor(4);
-			ImGui::PopStyleVar();
-			//ImGui::PopID();
-			
-		}
-	}
 
 	ImGui::End();
 }
