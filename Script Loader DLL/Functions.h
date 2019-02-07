@@ -3,6 +3,7 @@
 #include "SnippetManager.h"
 //#include "RFGR_Types_Player.h"
 #include "RFGR_Type_UI.h"
+//#include "RFGR Structs/KeenNamespace.h"
 
 static void DisableCameraCode(DWORD AddressY, DWORD AddressZ) //Takes addresses for instructions affecting y and z. Alternatively x and z may work, since one piece seems to be shared between two coords.
 {
