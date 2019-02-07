@@ -342,3 +342,26 @@ bool TeleportGui::ChangeTeleportLocation(std::string CurrentName, std::string Ne
 	TeleportLocations[Index]["TooltipDescription"] = NewDescription;
 	return true;
 }
+
+bool TeleportGui::HumanTeleportSafe(float x, float y, float z, int TimeToHover)
+{
+	if (GlobalPlayerPtr)
+	{
+		Sleep(1000);
+		int TimeHovered = 0;
+		Player* TempPlayerPtr = (Player*)GlobalPlayerPtr;
+		while (TimeHovered < TimeToHover)
+		{
+			HumanTeleportUnsafe(TempPlayerPtr, vector(x, y, z), TempPlayerPtr->Orientation);
+			Sleep(200);
+			TimeHovered += 200;
+		}
+		return true;
+	}
+	return false;
+}
+
+void TeleportGui::HumanTeleportSafe(vector NewPosition, int TimeToHover)
+{
+
+}

@@ -127,7 +127,7 @@
       <Filter>Overlay Gui\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="MenuBarGui.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Overlay Gui\Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -270,7 +270,7 @@
       <Filter>Overlay Gui\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="MenuBarGui.h">
-      <Filter>Header Files</Filter>
+      <Filter>Overlay Gui\Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
