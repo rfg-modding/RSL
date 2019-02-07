@@ -1,8 +1,6 @@
 #pragma once
 /*RFGR Script Loader DLL*/
 
-#define _CRT_SECURE_NO_WARNINGS true
-
 #include <sstream>
 #include <windows.h>
 #include <stdio.h>
