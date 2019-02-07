@@ -658,6 +658,7 @@ uint32_t* kiero::getMethodsTable()
 }
 #endif
 
+#pragma warning (push, 0)
 void kiero::bind(uint16_t _index, void* _original, void* _function)
 {
 	// TODO: This function must be as detour for methods from g_methodsTable
@@ -665,3 +666,4 @@ void kiero::bind(uint16_t _index, void* _original, void* _function)
 #else
 #endif
 }
+#pragma warning (pop)
