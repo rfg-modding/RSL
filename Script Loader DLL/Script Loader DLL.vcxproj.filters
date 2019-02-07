@@ -126,6 +126,9 @@
     <ClCompile Include="ScriptSelectGui.cpp">
       <Filter>Overlay Gui\Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="MenuBarGui.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CameraWrapper.h">
@@ -265,6 +268,9 @@
     </ClInclude>
     <ClInclude Include="ScriptSelectGui.h">
       <Filter>Overlay Gui\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MenuBarGui.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -205,6 +205,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="MenuBarGui.cpp" />
     <ClCompile Include="OverlayConsole.cpp" />
     <ClCompile Include="ProgramManager.cpp" />
     <ClCompile Include="ScriptManager.cpp" />
@@ -245,6 +246,7 @@
     <ClInclude Include="Logger.h" />
     <ClInclude Include="MainOverlay.h" />
     <ClInclude Include="Includes.h" />
+    <ClInclude Include="MenuBarGui.h" />
     <ClInclude Include="OverlayConsole.h" />
     <ClInclude Include="ProgramManager.h" />
     <ClInclude Include="RFGR Structs\BasicTypes.h">

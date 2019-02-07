@@ -33,7 +33,7 @@ void OverlayConsole::Draw(const char* Title)
 
 	ImGui::SetNextWindowSizeConstraints(ImVec2(-1, 0), ImVec2(-1, FLT_MAX));
 	ImGui::SetNextWindowSize(ImVec2((float)(WindowRect.right - WindowRect.left) - 10.0f, 400.0f), ImGuiCond_Once);
-	ImGui::SetNextWindowPos(ImVec2(0.0f, 0.0f));
+	ImGui::SetNextWindowPos(ImVec2(0.0f, 20.0f)); //y = TextSize + FramePadding.y + BorderSize * 2?
 	ImVec4* Colors = ImGui::GetStyle().Colors; //48 items
 	ImGui::PushStyleColor(ImGuiCol_ResizeGrip, Colors[ImGuiCol_WindowBg]);
 	ImGui::PushStyleColor(ImGuiCol_ResizeGripHovered, Colors[ImGuiCol_WindowBg]);
