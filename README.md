@@ -1,15 +1,27 @@
-# RFGR-Script-Loader
-[![CodeFactor](https://www.codefactor.io/repository/github/moneyl/rfgr-script-loader/badge)](https://www.codefactor.io/repository/github/moneyl/rfgr-script-loader)
+# RFGR Script Loader Wiki
+  RFGR Script Loader is a scripting interface for Red Faction Guerrilla Re-mars-tered edition. Using LuaJIT 2.0.5 as the scripting language. This repo is used to provide public information about the project while keeping the source private. 
 
-RFGR Script Loader is a scripting interface for Red Faction Guerrilla Re-mars-tered edition. Using LuaJIT 2.0.5 as the scripting language. 
+### Project goals
+  Normally, modding RFGR involves editing xml files included in the game which define things such as AI behavior, the properties of vehicles, weapons, and more. This allows modders to change the game in many ways. Even so, there are many hardcoded values and behaviors that cannot be changed, ultimately limited what modders can do. This tool aims to bypass some of these limitations by allowing modders to change many hardcoded values and giving them access to the power and flexibility which a scripting languages allow for.
 
-Normally, modding RFGR involves editing xtbl files which are just xml's with a different extension. The problem with this method is that
-there are many hardcoded values in the xtbl files meaning modders are limited on what they can change. Also the fact that these files do 
-not allow anything dynamic behavior or logic lessens what they can do. This tool aims to bypass those limitations by allowing modders to 
-run lua scripts in the game which will be able to access many of the games structures and functions which previously were inaccesible. With this, hardcoded values may be changed, and the flexibility and power of scripting may be used for modding.
+  Before this is possible an interface between the game's structures and the scripts must be created. As of now the project is still very early on and few things are accesible by the scripts. The scripting interface will need to be expanded, and ways to easily control the scripts must be added. Another goal would be to provide debugging tools and GUIs in game, allowing modders to view the state of the game world as it changes and to understand the effects that their scripts are having on that world.
 
-Of course, first an interface between the games structures and the scripts must be created. As of now (January 10th, 2019) the project is 
-still very early on and very few things are accesible to them. The interface will need to be expanded, and ways to easily control the 
-scripts must be added.
+See the [wiki](https://github.com/Moneyl/RFGR-Script-Loader-Wiki/wiki) for info on how to install and use the script loader.
 
-Another roadblock facing modders of RFGR is the fact that many of the games file formats do not have tools that allow for modders to change and replace them. It is not an immediate goal of this project to provide ways of modifying these other file formats, however, it is feasible that through hooking of the functions which handle these assets, and memory edits that live replacement and change of them might be possible. While it's not a primary goal, this may still be explored at some point.
+### Bugs, features, questions, etc
+See the [issues](https://github.com/Moneyl/RFGR-Script-Loader-Wiki/issues) section and search for an issue which already describes your bug/feature/question. If you can't find it, create a new one.
+
+### Future updates
+See the [roadmap](https://github.com/Moneyl/RFGR-Script-Loader-Wiki/wiki/Roadmap) on the wiki for a rough plan of future updates, and the [milestones](https://github.com/Moneyl/RFGR-Script-Loader-Wiki/milestones) page for progress on upcoming updates. The milestones are a decent indicator of how close the next update is to release, but keep in mind that some features coming to an update might not have an accompanying issue, or new bugs might be encountered. 
+
+### Gallery
+![alt text](https://github.com/Moneyl/RFGR-Script-Loader-Wiki/blob/master/Images/0.02%20Main%20Overlay.jpg?raw=true "Main overlay example from 0.02")
+Main overlay from version 0.02. Visible here are the infinite jetpack and invulnerability options. The global explosion strength options, the teleport menu, and finally the prototype player values section.
+
+### Why is this closed source?
+  One of my primary concerns with this project being open source is that people will use it to cheat in the MP mode of the game. While the MP mode isn't as active as it used to be, I'd still hate for it to be ruined for everyone. There are many checks which will crash the game if the player enters MP mode while the script loader is active. If the source was public then it would be trivial to remove those checks from the code and use it as a cheating tool.
+  
+### Libraries used
+[Dear ImGui](https://github.com/ocornut/imgui) - Used for the in game overlay GUIs.
+
+[Sol 3](https://github.com/ThePhD/sol2/tree/sol3) - Used for quick and easy lua binding. Currently a branch of Sol2.
