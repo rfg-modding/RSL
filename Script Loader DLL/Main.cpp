@@ -45,7 +45,13 @@ DWORD WINAPI MainThread(HMODULE hModule)
 		patches. It likely won't slow down people who know what they are doing, 
 		but I figure it's worth a go.*/
 		RFGRState = GameseqGetState();
-		if (RFGRState == 0x13 || RFGRState == 0x14 || RFGRState == 0x15 || RFGRState == 0x16 || RFGRState == 0x3B || RFGRState == 0x3C || RFGRState == 0x3F) //See GameState enum is RFGR_Types_Player.h for values.
+		if (RFGRState == GS_WRECKING_CREW_MAIN_MENU || 
+			RFGRState == GS_WRECKING_CREW_CHARACTER_SELECT || 
+			RFGRState == GS_WRECKING_CREW_SCOREBOARD || 
+			RFGRState == GS_MULTIPLAYER_LIVE || 
+			RFGRState == GS_WC_INIT || 
+			RFGRState == GS_WC_SHUTDOWN || 
+			RFGRState == GS_MULTIPLAYER_LIVE_FIND_SERVERS)
 		{
 			//MessageBoxA(FindTopWindow(GetProcessID("rfg.exe")), "MP usage detected, shutting down!", "Multiplayer mode detected", MB_OK);
 			Logger::Log("Error in UI hook, script loader crashing!", LogFatalError, true);
