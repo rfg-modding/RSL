@@ -1,111 +1,6 @@
 #include "MainOverlay.h"
 #include "ScriptManager.h"
 
-static void ShowExampleMenuFile()
-{
-	ImGui::MenuItem("(dummy menu)", NULL, false, false);
-	if (ImGui::MenuItem("New")) {}
-	if (ImGui::MenuItem("Open", "Ctrl+O")) {}
-	if (ImGui::BeginMenu("Open Recent"))
-	{
-		ImGui::MenuItem("fish_hat.c");
-		ImGui::MenuItem("fish_hat.inl");
-		ImGui::MenuItem("fish_hat.h");
-		if (ImGui::BeginMenu("More.."))
-		{
-			ImGui::MenuItem("Hello");
-			ImGui::MenuItem("Sailor");
-			if (ImGui::BeginMenu("Recurse.."))
-			{
-				ShowExampleMenuFile();
-				ImGui::EndMenu();
-			}
-			ImGui::EndMenu();
-		}
-		ImGui::EndMenu();
-	}
-	if (ImGui::MenuItem("Save", "Ctrl+S")) {}
-	if (ImGui::MenuItem("Save As..")) {}
-	ImGui::Separator();
-	if (ImGui::BeginMenu("Options"))
-	{
-		static bool enabled = true;
-		ImGui::MenuItem("Enabled", "", &enabled);
-		ImGui::BeginChild("child", ImVec2(0, 60), true);
-		for (int i = 0; i < 10; i++)
-			ImGui::Text("Scrolling Text %d", i);
-		ImGui::EndChild();
-		static float f = 0.5f;
-		static int n = 0;
-		static bool b = true;
-		ImGui::SliderFloat("Value", &f, 0.0f, 1.0f);
-		ImGui::InputFloat("Input", &f, 0.1f);
-		ImGui::Combo("Combo", &n, "Yes\0No\0Maybe\0\0");
-		ImGui::Checkbox("Check", &b);
-		ImGui::EndMenu();
-	}
-	if (ImGui::BeginMenu("Colors"))
-	{
-		float sz = ImGui::GetTextLineHeight();
-		for (int i = 0; i < ImGuiCol_COUNT; i++)
-		{
-			const char* name = ImGui::GetStyleColorName((ImGuiCol)i);
-			ImVec2 p = ImGui::GetCursorScreenPos();
-			ImGui::GetWindowDrawList()->AddRectFilled(p, ImVec2(p.x + sz, p.y + sz), ImGui::GetColorU32((ImGuiCol)i));
-			ImGui::Dummy(ImVec2(sz, sz));
-			ImGui::SameLine();
-			ImGui::MenuItem(name);
-		}
-		ImGui::EndMenu();
-	}
-	if (ImGui::BeginMenu("Disabled", false)) // Disabled
-	{
-		IM_ASSERT(0);
-	}
-	if (ImGui::MenuItem("Checked", NULL, true)) {}
-	if (ImGui::MenuItem("Quit", "Alt+F4")) {}
-}
-
-static void ShowExampleAppLog(bool* p_open)
-{
-	static ExampleAppLog log;
-
-	// Demo: add random items (unless Ctrl is held)
-	static double last_time = -1.0;
-	double time = ImGui::GetTime();
-	if (time - last_time >= 0.20f && !ImGui::GetIO().KeyCtrl)
-	{
-		const char* random_words[] = { "system", "info", "warning", "error", "fatal", "notice", "log" };
-		log.AddLog("[%s] Hello, time is %.1f, frame count is %d\n", random_words[rand() % IM_ARRAYSIZE(random_words)], time, ImGui::GetFrameCount());
-		last_time = time;
-	}
-
-	log.Draw("Example: Log", p_open);
-}
-
-bool HumanTeleportSafe(float x, float y, float z, int TimeToHover = 5000)
-{
-	if (GlobalPlayerPtr)
-	{
-		Sleep(1000);
-		int TimeHovered = 0;
-		Player* TempPlayerPtr = (Player*)GlobalPlayerPtr;
-		while (TimeHovered < TimeToHover)
-		{
-			HumanTeleportUnsafe(TempPlayerPtr, vector(x, y, z), TempPlayerPtr->Orientation);
-			Sleep(200);
-			TimeHovered += 200;
-		}
-		return true;
-	}
-	return false;
-}
-
-void HumanTeleportSafe(vector NewPosition, int TimeToHover = 5000)
-{
-
-}
-
 MainOverlay::MainOverlay()
 {
 
@@ -185,24 +80,12 @@ void MainOverlay::Draw(const char* Title)
 		return;
 	}
 
-	if (*ShowAppMainMenuBar)       ShowExampleAppMainMenuBar();
-	//if (*ShowAppConsole)             ShowExampleAppConsole(ShowAppConsole);
-	if (*ShowAppLog)                 ShowExampleAppLog(ShowAppLog);
-	if (*ShowAppLongText)           ShowExampleAppLongText(ShowAppLongText);
-	if (*ShowAppSimpleOverlay)      ShowExampleAppSimpleOverlay(ShowAppLongText);
-
 	if (*ShowAppMetrics) { ImGui::ShowMetricsWindow(ShowAppMetrics); }
-	//if (*ShowAppStyleEditor) { ImGui::Begin("Theme editor", ShowAppStyleEditor); ShowStyleEditor(&ImGui::GetStyle()); ImGui::End(); }
 	if (*ShowAppAbout) { ShowAboutWindow(ShowAppAbout); }
 
 	// Menu
 	if (ImGui::BeginMenuBar())
 	{
-		if (ImGui::BeginMenu("Menu"))
-		{
-			ShowExampleMenuFile();
-			ImGui::EndMenu();
-		}
 		if (ImGui::BeginMenu("Examples"))
 		{
 			//ImGui::Text(std::to_string(*ShowAppMainMenuBar).c_str());
@@ -227,6 +110,7 @@ void MainOverlay::Draw(const char* Title)
 	ImGui::PushStyleColor(ImGuiCol_Button, ImVec4());
 	//ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4());
 	//ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4());
+	ImGui::PushFont(FontLarge);
 	if(ImGui::Button(std::string(std::string(ICON_FA_CODE) + u8"##CodeIcon").c_str()))
 	{
 
@@ -296,6 +180,7 @@ void MainOverlay::Draw(const char* Title)
 	{
 
 	}
+	ImGui::PopFont();
 	ImGui::PopStyleColor();
 	//ImGui::PopStyleColor(3);
 	ImGui::PopStyleVar();
@@ -461,181 +346,6 @@ void MainOverlay::ShowAboutWindow(bool* p_open)
 		if (copy_to_clipboard)
 			ImGui::LogFinish();
 		ImGui::EndChildFrame();
-	}
-	ImGui::End();
-}
-
-void MainOverlay::ShowExampleAppMainMenuBar()
-{
-	if (ImGui::BeginMainMenuBar())
-	{
-		if (ImGui::BeginMenu("File"))
-		{
-			ShowExampleMenuFile();
-			ImGui::EndMenu();
-		}
-		if (ImGui::BeginMenu("Edit"))
-		{
-			if (ImGui::MenuItem("Undo", "CTRL+Z")) {}
-			if (ImGui::MenuItem("Redo", "CTRL+Y", false, false)) {}  // Disabled item
-			ImGui::Separator();
-			if (ImGui::MenuItem("Cut", "CTRL+X")) {}
-			if (ImGui::MenuItem("Copy", "CTRL+C")) {}
-			if (ImGui::MenuItem("Paste", "CTRL+V")) {}
-			ImGui::EndMenu();
-		}
-		ImGui::EndMainMenuBar();
-	}
-}
-
-void MainOverlay::ShowExampleAppPropertyEditor(bool* p_open)
-{
-	ImGui::SetNextWindowSize(ImVec2(430, 450), ImGuiCond_FirstUseEver);
-	if (!ImGui::Begin("Example: Property editor", p_open))
-	{
-		ImGui::End();
-		return;
-	}
-
-	ShowHelpMarker("This example shows how you may implement a property editor using two columns.\nAll objects/fields data are dummies here.\nRemember that in many simple cases, you can use ImGui::SameLine(xxx) to position\nyour cursor horizontally instead of using the Columns() API.");
-
-	ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(2, 2));
-	ImGui::Columns(2);
-	ImGui::Separator();
-
-	struct funcs
-	{
-		static void ShowDummyObject(const char* prefix, int uid)
-		{
-			ImGui::PushID(uid);                      // Use object uid as identifier. Most commonly you could also use the object pointer as a base ID.
-			ImGui::AlignTextToFramePadding();  // Text and Tree nodes are less high than regular widgets, here we add vertical spacing to make the tree lines equal high.
-			bool node_open = ImGui::TreeNode("Object", "%s_%u", prefix, uid);
-			ImGui::NextColumn();
-			ImGui::AlignTextToFramePadding();
-			ImGui::Text("my sailor is rich");
-			ImGui::NextColumn();
-			if (node_open)
-			{
-				static float dummy_members[8] = { 0.0f,0.0f,1.0f,3.1416f,100.0f,999.0f };
-				for (int i = 0; i < 8; i++)
-				{
-					ImGui::PushID(i); // Use field index as identifier.
-					if (i < 2)
-					{
-						ShowDummyObject("Child", 424242);
-					}
-					else
-					{
-						// Here we use a TreeNode to highlight on hover (we could use e.g. Selectable as well)
-						ImGui::AlignTextToFramePadding();
-						ImGui::TreeNodeEx("Field", ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen | ImGuiTreeNodeFlags_Bullet, "Field_%d", i);
-						ImGui::NextColumn();
-						ImGui::PushItemWidth(-1);
-						if (i >= 5)
-							ImGui::InputFloat("##value", &dummy_members[i], 1.0f);
-						else
-							ImGui::DragFloat("##value", &dummy_members[i], 0.01f);
-						ImGui::PopItemWidth();
-						ImGui::NextColumn();
-					}
-					ImGui::PopID();
-				}
-				ImGui::TreePop();
-			}
-			ImGui::PopID();
-		}
-	};
-
-	// Iterate dummy objects with dummy members (all the same data)
-	for (int obj_i = 0; obj_i < 3; obj_i++)
-		funcs::ShowDummyObject("Object", obj_i);
-
-	ImGui::Columns(1);
-	ImGui::Separator();
-	ImGui::PopStyleVar();
-	ImGui::End();
-}
-
-void MainOverlay::ShowExampleAppLongText(bool* p_open)
-{
-	ImGui::SetNextWindowSize(ImVec2(520, 600), ImGuiCond_FirstUseEver);
-	if (!ImGui::Begin("Example: Long text display", p_open))
-	{
-		ImGui::End();
-		return;
-	}
-
-	static int test_type = 0;
-	static ImGuiTextBuffer log;
-	static int lines = 0;
-	ImGui::Text("Printing unusually long amount of text.");
-	ImGui::Combo("Test type", &test_type, "Single call to TextUnformatted()\0Multiple calls to Text(), clipped manually\0Multiple calls to Text(), not clipped (slow)\0");
-	ImGui::Text("Buffer contents: %d lines, %d bytes", lines, log.size());
-	if (ImGui::Button("Clear")) { log.clear(); lines = 0; }
-	ImGui::SameLine();
-	if (ImGui::Button("Add 1000 lines"))
-	{
-		for (int i = 0; i < 1000; i++)
-			log.appendf("%i The quick brown fox jumps over the lazy dog\n", lines + i);
-		lines += 1000;
-	}
-	ImGui::BeginChild("Log");
-	switch (test_type)
-	{
-	case 0:
-		// Single call to TextUnformatted() with a big buffer
-		ImGui::TextUnformatted(log.begin(), log.end());
-		break;
-	case 1:
-	{
-		// Multiple calls to Text(), manually coarsely clipped - demonstrate how to use the ImGuiListClipper helper.
-		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 0));
-		ImGuiListClipper clipper(lines);
-		while (clipper.Step())
-			for (int i = clipper.DisplayStart; i < clipper.DisplayEnd; i++)
-				ImGui::Text("%i The quick brown fox jumps over the lazy dog", i);
-		ImGui::PopStyleVar();
-		break;
-	}
-	case 2:
-		// Multiple calls to Text(), not clipped (slow)
-		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 0));
-		for (int i = 0; i < lines; i++)
-			ImGui::Text("%i The quick brown fox jumps over the lazy dog", i);
-		ImGui::PopStyleVar();
-		break;
-	}
-	ImGui::EndChild();
-	ImGui::End();
-}
-
-void MainOverlay::ShowExampleAppSimpleOverlay(bool* p_open)
-{
-	const float DISTANCE = 10.0f;
-	static int corner = 0;
-	ImVec2 window_pos = ImVec2((corner & 1) ? ImGui::GetIO().DisplaySize.x - DISTANCE : DISTANCE, (corner & 2) ? ImGui::GetIO().DisplaySize.y - DISTANCE : DISTANCE);
-	ImVec2 window_pos_pivot = ImVec2((corner & 1) ? 1.0f : 0.0f, (corner & 2) ? 1.0f : 0.0f);
-	if (corner != -1)
-		ImGui::SetNextWindowPos(window_pos, ImGuiCond_Always, window_pos_pivot);
-	ImGui::SetNextWindowBgAlpha(0.3f); // Transparent background
-	if (ImGui::Begin("Example: Simple overlay", p_open, (corner != -1 ? ImGuiWindowFlags_NoMove : 0) | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav))
-	{
-		ImGui::Text("Simple overlay\n" "in the corner of the screen.\n" "(right-click to change position)");
-		ImGui::Separator();
-		if (ImGui::IsMousePosValid())
-			ImGui::Text("Mouse Position: (%.1f,%.1f)", ImGui::GetIO().MousePos.x, ImGui::GetIO().MousePos.y);
-		else
-			ImGui::Text("Mouse Position: <invalid>");
-		if (ImGui::BeginPopupContextWindow())
-		{
-			if (ImGui::MenuItem("Custom", NULL, corner == -1)) corner = -1;
-			if (ImGui::MenuItem("Top-left", NULL, corner == 0)) corner = 0;
-			if (ImGui::MenuItem("Top-right", NULL, corner == 1)) corner = 1;
-			if (ImGui::MenuItem("Bottom-left", NULL, corner == 2)) corner = 2;
-			if (ImGui::MenuItem("Bottom-right", NULL, corner == 3)) corner = 3;
-			if (p_open && ImGui::MenuItem("Close")) *p_open = false;
-			ImGui::EndPopup();
-		}
 	}
 	ImGui::End();
 }
