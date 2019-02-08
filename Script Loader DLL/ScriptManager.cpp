@@ -25,7 +25,7 @@ void ScriptManager::RunTestScript()
 	std::string Script;
 	std::string ExePath = GetEXEPath(false);
 
-	std::cout << "Trying Test.lua" << std::endl;
+	std::cout << "Trying Test.lua\n";
 	try 
 	{
 		auto CodeResult = Lua.script_file(ExePath + "RFGR Script Loader/Scripts/Test.lua", [](lua_State*, sol::protected_function_result pfr) {
@@ -37,7 +37,7 @@ void ScriptManager::RunTestScript()
 
 		if (!CodeResult.valid())
 		{
-			std::cout << "Test.lua not valid. Throwing exception." << std::endl;
+			std::cout << "Test.lua not valid. Throwing exception.\n";
 			sol::error ScriptError = CodeResult;
 			std::exception ScriptException(ScriptError.what());
 			throw(ScriptException);
@@ -46,28 +46,28 @@ void ScriptManager::RunTestScript()
 	catch (std::exception& Exception)
 	{
 		std::ofstream LogFile(ExePath + "RFGR Script Loader/Logs/Script Log.txt");
-		LogFile << "Exception caught when running Test.lua: " << Exception.what() << std::endl;
-		//std::cout << "Exception caught when running Test.lua: " << Exception.what() << std::endl;
+		LogFile << "Exception caught when running Test.lua: " << Exception.what() << "\n";
+		//std::cout << "Exception caught when running Test.lua: " << Exception.what() << "\n";
 		Logger::Log(std::string("Exception caught when running Test.lua: " +  std::string(Exception.what())), LogError);
 		LogFile.close();
 	}
 	catch (...)
 	{
-		std::cout << "General exception..." << std::endl;
+		std::cout << "General exception...\n";
 	}
 	/*catch (sol::protected_function_result& pfrExcept)
 	{
-		std::cout << "pfr exception: " << pfrExcept.what() << std::endl;
+		std::cout << "pfr exception: " << pfrExcept.what() << "\n";
 	}*/
 
 
-	//std::cout << "Script Path: " << ExePath + "RFGR Script Loader/Scripts/Test.script" << std::endl;
+	//std::cout << "Script Path: " << ExePath + "RFGR Script Loader/Scripts/Test.script\n";
 
 	//std::ifstream ScriptFile(ExePath + "RFGR Script Loader/Scripts/Test.script");
 	//Script.assign((std::istreambuf_iterator<char>(ScriptFile)), (std::istreambuf_iterator<char>()));
 	//ScriptFile.close();
 	
-	//std::cout << "Test.script: " << Script << std::endl << std::endl;
+	//std::cout << "Test.script: " << Script << "\n\n";
 	
 	///ChaiScriptVM.eval(Script);
 	
@@ -101,7 +101,7 @@ void ScriptManager::RunTestScript2()
 	catch (std::exception& Exception)
 	{
 		//std::ofstream LogFile(ExePath + "RFGR Script Loader/Logs/Script Log.txt");
-		//LogFile << "Exception caught when running Test2.lua: " << Exception.what() << std::endl;
+		//LogFile << "Exception caught when running Test2.lua: " << Exception.what() << "\n";
 		Logger::Log(std::string("Exception caught when running Test2.lua: " + std::string(Exception.what())), LogLua | LogError);
 	}
 }

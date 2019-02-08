@@ -61,30 +61,30 @@ void CameraWrapper::Initialize(float InitialCameraSpeed, float InitialCameraRota
 void CameraWrapper::PrintCameraInfo()
 {
 #if !PublicMode
-	std::cout << "~~~ Camera data dump ~~~" << std::endl;
-	std::cout << "CameraX = " << *(float*)RealX << std::endl;
-	std::cout << "CameraY = " << *(float*)RealY << std::endl;
-	std::cout << "CameraZ = " << *(float*)RealZ << std::endl;
+	std::cout << "~~~ Camera data dump ~~~" << "\n";
+	std::cout << "CameraX = " << *(float*)RealX << "\n";
+	std::cout << "CameraY = " << *(float*)RealY << "\n";
+	std::cout << "CameraZ = " << *(float*)RealZ << "\n";
 
-	std::cout << "CameraRightX = " << *(float*)RealRightX << std::endl;
-	std::cout << "CameraRightY = " << *(float*)RealRightY << std::endl;
-	std::cout << "CameraRightZ = " << *(float*)RealRightZ << std::endl;
+	std::cout << "CameraRightX = " << *(float*)RealRightX << "\n";
+	std::cout << "CameraRightY = " << *(float*)RealRightY << "\n";
+	std::cout << "CameraRightZ = " << *(float*)RealRightZ << "\n";
 
-	std::cout << "CameraUpX = " << *(float*)RealUpX << std::endl;
-	std::cout << "CameraUpY = " << *(float*)RealUpY << std::endl;
-	std::cout << "CameraUpZ = " << *(float*)RealUpZ << std::endl;
+	std::cout << "CameraUpX = " << *(float*)RealUpX << "\n";
+	std::cout << "CameraUpY = " << *(float*)RealUpY << "\n";
+	std::cout << "CameraUpZ = " << *(float*)RealUpZ << "\n";
 
-	std::cout << "CameraDirectionX = " << *(float*)RealDirectionX << std::endl;
-	std::cout << "CameraDirectionY = " << *(float*)RealDirectionY << std::endl;
-	std::cout << "CameraDirectionZ = " << *(float*)RealDirectionZ << std::endl;
+	std::cout << "CameraDirectionX = " << *(float*)RealDirectionX << "\n";
+	std::cout << "CameraDirectionY = " << *(float*)RealDirectionY << "\n";
+	std::cout << "CameraDirectionZ = " << *(float*)RealDirectionZ << "\n";
 
-	std::cout << "CameraVelocity = " << CameraSpeed << std::endl;
+	std::cout << "CameraVelocity = " << CameraSpeed << "\n";
 
-	std::cout << "Pitch = " << Pitch << std::endl;
-	std::cout << "Yaw = " << Yaw << std::endl;
-	std::cout << "Roll = " << Roll << std::endl;
+	std::cout << "Pitch = " << Pitch << "\n";
+	std::cout << "Yaw = " << Yaw << "\n";
+	std::cout << "Roll = " << Roll << "\n";
 
-	std::cout << std::endl;
+	std::cout << "\n";
 #endif
 }
 

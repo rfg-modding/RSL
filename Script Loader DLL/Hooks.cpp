@@ -38,11 +38,11 @@ LRESULT __stdcall WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 
 	//LRESULT ImGuiWndProcResult = ImGui_ImplWin32_WndProcHandler(hWnd, msg, wParam, lParam);
-	//std::cout << "ImGuiWndProcResult: " << ImGuiWndProcResult << std::endl << std::endl;
+	//std::cout << "ImGuiWndProcResult: " << ImGuiWndProcResult << "\n\n";
 
 	/*Logger::ConsoleLog("WndProc: Window resized", LogWarning, false, true, true);
-	std::cout << "WndProc D3D11Device: " << std::hex << std::uppercase << D3D11Device << std::endl;
-	std::cout << "WndProc D3D11Context: " << std::hex << std::uppercase << D3D11Context << std::endl;
+	std::cout << "WndProc D3D11Device: " << std::hex << std::uppercase << D3D11Device << "\n";
+	std::cout << "WndProc D3D11Context: " << std::hex << std::uppercase << D3D11Context << "\n";
 	UpdateD3D11Pointers = true;
 	if (D3D11SwapchainPtr != nullptr)
 	{
@@ -206,7 +206,7 @@ HRESULT __stdcall D3D11PresentHook(IDXGISwapChain * pSwapChain, UINT SyncInterva
 		bool RectResult = GetWindowRect(hwnd, &WindowRect);
 		if (!RectResult)
 		{
-			std::cout << "GetWindowRect Failed! Result: " << GetLastError() << std::endl;
+			std::cout << "GetWindowRect Failed! Result: " << GetLastError() << "\n";
 			//Sleep(10000);
 		}
 		else
@@ -334,7 +334,7 @@ HRESULT __stdcall D3D11PresentHook(IDXGISwapChain * pSwapChain, UINT SyncInterva
 bool __cdecl KeenGraphicsResizeRenderSwapchainHook(void* KeenSwapchain, unsigned int NewWidth, unsigned int NewHeight)
 {
 	Logger::Log("In KeenGraphicsResizeSwapchainHook()", LogFatalError);
-	std::cout << "NewWidth: " << NewWidth << ", NewHeight: " << NewHeight << std::endl;
+	std::cout << "NewWidth: " << NewWidth << ", NewHeight: " << NewHeight << "\n";
 	UpdateD3D11Pointers = true;
 
 	return KeenGraphicsResizeRenderSwapchain(KeenSwapchain, NewWidth, NewHeight);
@@ -366,9 +366,9 @@ void __fastcall PlayerDoFrameHook(Player* PlayerPtr)
 			Gui.SetPlayerPtr(PlayerPtr);
 
 #if !PublicMode
-			std::cout << "PlayerPtr: " << std::hex << std::uppercase << PlayerPtr << std::endl;
-			std::cout << "PlayerPtr->Position.x: " << std::hex << std::uppercase << &PlayerPtr->Position.x << std::endl;
-			std::cout << "PlayerPtr->FrametimeMultiplier: " << std::hex << std::uppercase << &PlayerPtr->FrametimeMultiplier << std::endl;
+			std::cout << "PlayerPtr: " << std::hex << std::uppercase << PlayerPtr << "\n";
+			std::cout << "PlayerPtr->Position.x: " << std::hex << std::uppercase << &PlayerPtr->Position.x << "\n";
+			std::cout << "PlayerPtr->FrametimeMultiplier: " << std::hex << std::uppercase << &PlayerPtr->FrametimeMultiplier << "\n";
 #endif
 		}
 	});
@@ -379,9 +379,9 @@ void __fastcall PlayerDoFrameHook(Player* PlayerPtr)
 		Gui.SetPlayerPtr(PlayerPtr);
 
 #if !PublicMode
-		std::cout << "PlayerPtr: " << std::hex << std::uppercase << PlayerPtr << std::endl;
-		std::cout << "PlayerPtr->Position.x: " << std::hex << std::uppercase << &PlayerPtr->Position.x << std::endl;
-		std::cout << "PlayerPtr->FrametimeMultiplier: " << std::hex << std::uppercase << &PlayerPtr->FrametimeMultiplier << std::endl;
+		std::cout << "PlayerPtr: " << std::hex << std::uppercase << PlayerPtr << "\n";
+		std::cout << "PlayerPtr->Position.x: " << std::hex << std::uppercase << &PlayerPtr->Position.x << "\n";
+		std::cout << "PlayerPtr->FrametimeMultiplier: " << std::hex << std::uppercase << &PlayerPtr->FrametimeMultiplier << "\n";
 #endif
 	}
 
@@ -428,7 +428,7 @@ void __cdecl ExplosionCreateHook(explosion_info * ExplosionInfo, void * Source, 
 
 	if (UseGlobalExplosionStrengthMultiplier)
 	{
-		std::cout << "Address of ExplosionInfo: " << ExplosionInfo << ", Hex: " << std::hex << std::uppercase << ExplosionInfo << std::endl;
+		std::cout << "Address of ExplosionInfo: " << ExplosionInfo << ", Hex: " << std::hex << std::uppercase << ExplosionInfo << "\n";
 		Logger::Log(std::string("ExplosionInfo->m_name: " + std::string(NewExplosionInfo.m_name)), LogInfo);
 		Logger::Log(std::string("ExplosionInfo->m_unique_id: " + std::to_string(NewExplosionInfo.m_unique_id)), LogInfo);
 		Logger::Log(std::string("Before, Explosion radius: " + std::to_string(NewExplosionInfo.m_radius)), LogInfo);
@@ -441,11 +441,11 @@ void __cdecl ExplosionCreateHook(explosion_info * ExplosionInfo, void * Source, 
 		NewExplosionInfo.m_structural_damage = (int)(GlobalExplosionStrengthMultiplier * (float)(NewExplosionInfo.m_structural_damage)); //Did this instead of *= to avoid a compiler error. Probably unecessary.
 
 		Logger::Log(std::string("After, Explosion radius: " + std::to_string(NewExplosionInfo.m_radius)), LogInfo);
-		std::cout << std::endl;
+		std::cout << "\n";
 
 		*ExplosionInfo = NewExplosionInfo;
 	}
-	std::cout << std::endl;
+	std::cout << "\n";
 
 	if (UseExplosionRadiusLimits)
 	{
@@ -495,7 +495,7 @@ void __fastcall ObjectUpdatePosAndOrientHook(Object* ObjectPtr, void* edx, vecto
 	{
 		if (GlobalPlayerPtr == (DWORD*)ObjectPtr)
 		{
-			///std::cout << "PlayerSetHavokData: " << SetHavokData << std::endl;
+			///std::cout << "PlayerSetHavokData: " << SetHavokData << "\n";
 		}
 	}
 	///SetHavokData = true;
@@ -517,8 +517,8 @@ void __fastcall HumanUpdatePosAndOrientHook(Human* HumanPtr, void* edx, vector* 
 		{
 			if (GlobalPlayerPtr == (DWORD*)HumanPtr)
 			{
-				//std::cout << "Player HumanPtr found!" << std::endl;
-				//std::cout << "Proof, HumanPtr->Position.y: " << HumanPtr->Position.y << std::endl;
+				//std::cout << "Player HumanPtr found!" << "\n";
+				//std::cout << "Proof, HumanPtr->Position.y: " << HumanPtr->Position.y << "\n";
 				Logger::Log("Manually setting Player.Object.Position in HumanUpdatePosAndOrient() hook.\n", LogWarning);
 				NewObjectPosition = *UpdatedPosition;
 
@@ -548,8 +548,8 @@ void __fastcall HumanUpdatePosAndOrientHook(Human* HumanPtr, void* edx, vector* 
 	//HumanPtr->Flags.start_jump = 2147483647;
 	//HumanPtr->Flags.super_jump = 2147483647;
 
-	//std::cout << "HumanPtr->Flags.start_jump: " << HumanPtr->Flags.start_jump << std::endl;
-	//std::cout << "HumanPtr->Flags.super_jump: " << HumanPtr->Flags.super_jump << std::endl;
+	//std::cout << "HumanPtr->Flags.start_jump: " << HumanPtr->Flags.start_jump << "\n";
+	//std::cout << "HumanPtr->Flags.super_jump: " << HumanPtr->Flags.super_jump << "\n";
 
 	return HumanUpdatePosAndOrient(HumanPtr, edx, UpdatedPosition, UpdatedOrientation, SetHavokData);
 }
@@ -593,7 +593,7 @@ void __fastcall CharacterControllerSetPosHook(CharacterController* CharControlle
 		}
 	}*/
 
-	std::cout << "CharacterController Address: " << std::hex << std::uppercase << CharController << std::endl;
+	std::cout << "CharacterController Address: " << std::hex << std::uppercase << CharController << "\n";
 
 	return CharacterControllerSetPos(CharController, Position);
 }
@@ -635,18 +635,18 @@ void __fastcall rl_draw_tristrip_2d_begin_hook(void* This, void* edx, rl_primiti
 	std::call_once(HookRlDrawTristip2dInitialCall, [&]()
 	{
 		GlobalRlDrawPtr = This;
-		std::cout << "First time in rl_draw::tristrip_2d_begin() hook..." << std::endl;
-		std::cout << "Alpha mode: " << PrimitiveState->d.v.m_alpha_mode << std::endl;
-		std::cout << "Clamp mode: " << PrimitiveState->d.v.m_clamp_mode << std::endl;
-		std::cout << "Color write mode: " << PrimitiveState->d.v.m_color_write_mode << std::endl;
-		std::cout << "Const alpha: " << PrimitiveState->d.v.m_const_alpha << std::endl;
-		std::cout << "Cull mode: " << PrimitiveState->d.v.m_cull_mode << std::endl;
-		std::cout << "MSAA: " << PrimitiveState->d.v.m_msaa << std::endl;
-		std::cout << "Scissor: " << PrimitiveState->d.v.m_scissor << std::endl;
-		std::cout << "Stencil mode: " << PrimitiveState->d.v.m_stencil_mode << std::endl;
-		std::cout << "Valid: " << PrimitiveState->d.v.m_valid << std::endl;
-		std::cout << "Z-Bias mode: " << PrimitiveState->d.v.m_zbias_mode << std::endl;
-		std::cout << "Z-Buffer mode: " << PrimitiveState->d.v.m_zbuf_mode << std::endl;
+		std::cout << "First time in rl_draw::tristrip_2d_begin() hook..." << "\n";
+		std::cout << "Alpha mode: " << PrimitiveState->d.v.m_alpha_mode << "\n";
+		std::cout << "Clamp mode: " << PrimitiveState->d.v.m_clamp_mode << "\n";
+		std::cout << "Color write mode: " << PrimitiveState->d.v.m_color_write_mode << "\n";
+		std::cout << "Const alpha: " << PrimitiveState->d.v.m_const_alpha << "\n";
+		std::cout << "Cull mode: " << PrimitiveState->d.v.m_cull_mode << "\n";
+		std::cout << "MSAA: " << PrimitiveState->d.v.m_msaa << "\n";
+		std::cout << "Scissor: " << PrimitiveState->d.v.m_scissor << "\n";
+		std::cout << "Stencil mode: " << PrimitiveState->d.v.m_stencil_mode << "\n";
+		std::cout << "Valid: " << PrimitiveState->d.v.m_valid << "\n";
+		std::cout << "Z-Bias mode: " << PrimitiveState->d.v.m_zbias_mode << "\n";
+		std::cout << "Z-Buffer mode: " << PrimitiveState->d.v.m_zbuf_mode << "\n";
 	});
 
 	return rl_draw_tristrip_2d_begin(This, edx, PrimitiveState);

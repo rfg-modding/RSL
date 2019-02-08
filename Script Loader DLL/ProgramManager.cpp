@@ -248,7 +248,7 @@ void ProgramManager::SetMemoryLocations()
 	if (*(bool*)InMultiplayer)
 	{
 		MessageBoxA(FindTopWindow(GetProcessID("rfg.exe")), "MP usage detected, shutting down!", "Multiplayer mode detected", MB_OK);
-		std::cout << "MP detected. Shutting down!" << std::endl;
+		std::cout << "MP detected. Shutting down!\n";
 	}
 }
 
@@ -339,7 +339,7 @@ bool ProgramManager::LoadDataFromConfig()
 			MainConfig["Open debug console"] = false;
 
 			std::ofstream ConfigOutput(ExePath + "RFGR Script Loader/Settings/Settings.json");
-			ConfigOutput << std::setw(4) << MainConfig << std::endl;
+			ConfigOutput << std::setw(4) << MainConfig << "\n";
 			ConfigOutput.close();
 			return true;
 		}, "Settings.json", "write", "writing"))

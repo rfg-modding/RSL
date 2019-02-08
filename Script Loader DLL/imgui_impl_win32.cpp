@@ -190,7 +190,7 @@ void    ImGui_ImplWin32_NewFrame()
 IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	//ConsoleLog("You better see this #2", LogInfo, false, true, true);
-	//std::cout << "ImGui: You better see this #2" << std::endl;
+	//std::cout << "ImGui: You better see this #2" << "\n";
 
     if (ImGui::GetCurrentContext() == NULL)
         return 0;

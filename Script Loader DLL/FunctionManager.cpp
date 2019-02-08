@@ -13,7 +13,7 @@ FunctionManager::~FunctionManager()
 void FunctionManager::Initialize()
 {
 	ModuleBase = (uintptr_t)GetModuleHandle(NULL);
-	//std::cout << "ModuleBase, hex: " << std::hex << std::uppercase << ModuleBase << std::dec << ", decimal: " << ModuleBase << std::endl;
+	//std::cout << "ModuleBase, hex: " << std::hex << std::uppercase << ModuleBase << std::dec << ", decimal: " << ModuleBase << "\n";
 	Camera_Start_Slew_Mode = (F_Camera_Start_Slew_Mode)(ModuleBase + 0x2D09B0); //483B60
 	Camera_Stop_Slew_Mode = (F_Camera_Stop_Slew_Mode)(ModuleBase + 0x2D09C0);
 

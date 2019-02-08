@@ -194,7 +194,7 @@ void TeleportGui::Draw(const char* Title, bool UseSeparateWindow)
 			}
 			/*if (ShowName)
 			{
-				std::cout << "Name after exiting modal: " << i["Name"] << std::endl;
+				std::cout << "Name after exiting modal: " << i["Name"] << "\n";
 				i["Name"] = NewTeleportName;
 				ShowName = false;
 			}*/
@@ -263,7 +263,7 @@ bool TeleportGui::LoadTeleportLocations()
 			SetTeleportLocation("Mount Vogel - Peak", -285.77f, 183.0f, 2423.4f, "Peak of Mount Vogel with mass accelerator exit. Position: (-285.77, 183.0, 2423.4)");
 
 			std::ofstream ConfigOutput(ExePath + "RFGR Script Loader/Settings/Teleport Locations.json");
-			ConfigOutput << std::setw(4) << TeleportLocations << std::endl;
+			ConfigOutput << std::setw(4) << TeleportLocations << "\n";
 			ConfigOutput.close();
 			return true;
 		}, "Teleport Locations.json", "write", "writing"))
@@ -287,7 +287,7 @@ bool TeleportGui::SaveTeleportLocations()
 		CreateDirectoryIfNull(ExePath + "RFGR Script Loader/Settings/");
 
 		std::ofstream ConfigOutput(ExePath + "RFGR Script Loader/Settings/Teleport Locations.json");
-		ConfigOutput << std::setw(4) << TeleportLocations << std::endl;
+		ConfigOutput << std::setw(4) << TeleportLocations << "\n";
 		ConfigOutput.close();
 
 		return true;

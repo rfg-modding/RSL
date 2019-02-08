@@ -470,7 +470,7 @@ bool ThemeEditorGui::LoadGUIConfig()
 			Utilities::Json::SetFloat4(GUIConfig, "Colors", "ModalWindowDimBackground", Colors[ImGuiCol_ModalWindowDimBg]);
 
 			std::ofstream ConfigOutput(ExePath + "RFGR Script Loader/Settings/GUI Config.json");
-			ConfigOutput << std::setw(4) << GUIConfig << std::endl;
+			ConfigOutput << std::setw(4) << GUIConfig << "\n";
 			ConfigOutput.close();
 			return true;
 		}, "GUI Config.json", "write", "writing"))
@@ -679,7 +679,7 @@ bool ThemeEditorGui::SaveGUIConfig(std::string ThemeName, std::string Descriptio
 		Utilities::Json::SetFloat4(GUIConfig, "Colors", "ModalWindowDimBackground", Colors[ImGuiCol_ModalWindowDimBg]);
 
 		std::ofstream ConfigOutput(ExePath + "RFGR Script Loader/Settings/" + Filename + ".json");
-		ConfigOutput << std::setw(4) << GUIConfig << std::endl;
+		ConfigOutput << std::setw(4) << GUIConfig << "\n";
 		ConfigOutput.close();
 		return true;
 	}, "GUI Settings.json", "write", "writing"))

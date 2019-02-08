@@ -1,5 +1,6 @@
 #pragma once
-
+/*Random snippets of code which may be useful in the future go here. Mostly
+experimental stuff that was removed for better code clarity.*/
 
 /*void __stdcall D3D11CreateQueryHook(ID3D11Device* pDevice, const D3D11_QUERY_DESC* pQueryDesc, ID3D11Query** ppQuery)
 {
@@ -9,7 +10,7 @@
 		g_pd3dDevice = pDevice;
 		D3D11DeviceFound = true;
 	});
-	//std::cout << "10 CREATEQUERYHOOK" << std::endl;
+	//std::cout << "10 CREATEQUERYHOOK" << "\n";
 	return D3D11CreateQueryObject(pDevice, pQueryDesc, ppQuery);
 }
 
@@ -21,7 +22,7 @@ void __stdcall D3D11DrawIndexedHook(ID3D11DeviceContext* pContext, UINT IndexCou
 		g_pd3dDeviceContext = pContext;
 		D3D11DeviceContextFound = true;
 	});
-	std::cout << "11 DRAWINDEXEDHOOK" << std::endl;
+	std::cout << "11 DRAWINDEXEDHOOK" << "\n";
 	return D3D11DrawIndexedObject(pContext, IndexCount, StartIndexLocation, BaseVertexLocation);
 }
 
@@ -33,7 +34,7 @@ HRESULT __stdcall D3D11CheckFeatureSupportHook(ID3D11Device* pDevice, D3D11_FEAT
 		g_pd3dDevice = pDevice;
 		D3D11DeviceFound = true;
 	});
-	std::cout << "12 CHECKFEATURESUPPORTHOOK" << std::endl;
+	std::cout << "12 CHECKFEATURESUPPORTHOOK" << "\n";
 	return D3D11CheckFeatureSupportObject(pDevice, Feature, FeatureSupportData, FeatureSupportDataSize);
 }
 
@@ -45,7 +46,7 @@ void __stdcall D3D11GetDeviceHook(ID3D11DeviceChild* Child, ID3D11Device** Devic
 		g_pd3dDevice = *Device;
 		D3D11DeviceFound = true;
 	});
-	std::cout << "13 GETDEVICEHOOK" << std::endl;
+	std::cout << "13 GETDEVICEHOOK" << "\n";
 	return D3D11GetDeviceObject(Child, Device);
 }
 
@@ -57,7 +58,7 @@ void __stdcall D3D11BeginHook(ID3D11DeviceContext* Context, ID3D11Asynchronous* 
 		g_pd3dDeviceContext = Context;
 		D3D11DeviceContextFound = true;
 	});
-	//std::cout << "14 BEGINHOOK" << std::endl;
+	//std::cout << "14 BEGINHOOK" << "\n";
 	return D3D11BeginObject(Context, Async);
 }*/
 
@@ -88,7 +89,7 @@ B* BTestPointer = &BTest;
 unsigned char* bytePtr = reinterpret_cast<unsigned char*>(BTestPointer);
 bytePtr += 4;
 
-std::cout << "*(int*)(BTestPointer + 0x4): " << *(int*)(bytePtr) << std::endl;// *(int*)(BTestPointer + 0x4) << std::endl;
+std::cout << "*(int*)(BTestPointer + 0x4): " << *(int*)(bytePtr) << "\n";// *(int*)(BTestPointer + 0x4) << "\n";
 */
 
 
@@ -106,7 +107,7 @@ void ProgramManager::LoadDataFromConfig()
 	else
 	{
 	CreateDirectoryIfNull(ExePath + "RFGR Script Loader/");
-	std::cout << "Settings.txt not found. Creating from default values." << std::endl;
+	std::cout << "Settings.txt not found. Creating from default values.\n";
 
 	MainConfig["Default free camera speed"] = 0.3;
 	//MainConfig["Default rotation speed"] = 0.7;
@@ -142,7 +143,7 @@ void ProgramManager::LoadDataFromConfig()
 
 	// write prettified JSON to another file
 	std::ofstream ConfigOutput(ExePath + "RFGR Script Loader/Settings.txt");
-	ConfigOutput << std::setw(4) << MainConfig << std::endl;
+	ConfigOutput << std::setw(4) << MainConfig << "\n";
 	ConfigOutput.close();
 	}
 
@@ -293,7 +294,7 @@ __declspec(naked) void GetPlayerYaxis()
 		PlayerPtr->Position.z = PlayerPositionTargetArray[2];
 		//NeedPlayerPosSet = true;
 
-		std::cout << "Unsafely teleporting player to (" << PlayerPositionTargetArray[0] << ", " << PlayerPositionTargetArray[1] << ", " << PlayerPositionTargetArray[2] << ")!" << std::endl;
+		std::cout << "Unsafely teleporting player to (" << PlayerPositionTargetArray[0] << ", " << PlayerPositionTargetArray[1] << ", " << PlayerPositionTargetArray[2] << ")!" << "\n";
 		HumanTeleportUnsafe(PlayerPtr, vector(PlayerPositionTargetArray[0], PlayerPositionTargetArray[1], PlayerPositionTargetArray[2]), PlayerPtr->Orientation);
 	}
 
