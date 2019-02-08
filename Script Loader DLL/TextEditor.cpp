@@ -850,7 +850,7 @@ void TextEditor::Render()
 
 void TextEditor::Render(const char* aTitle, const ImVec2& aSize, bool aBorder)
 {
-	ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(4.0f, 4.0f));
+	ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(4.0f, 5.0f));
 	ImGui::SetNextWindowSize(ImVec2(400.0f, 500.0f), ImGuiCond_FirstUseEver);
 	ImVec4* Colors = ImGui::GetStyle().Colors; //48 items
 	ImGui::PushStyleColor(ImGuiCol_ResizeGrip, Colors[ImGuiCol_WindowBg]);
@@ -862,10 +862,9 @@ void TextEditor::Render(const char* aTitle, const ImVec2& aSize, bool aBorder)
 		return;
 	}
 
-	
 	if (ImGui::BeginMenuBar())
 	{
-		if (ImGui::BeginMenu("Menu"))
+		if (ImGui::BeginMenu(std::string(std::string(ICON_FA_FILE) + u8" File##ScriptEditor").c_str()))
 		{
 			//ShowExampleMenuFile();
 			ImGui::Text("New");
@@ -874,7 +873,7 @@ void TextEditor::Render(const char* aTitle, const ImVec2& aSize, bool aBorder)
 			ImGui::Text("Save As");
 			ImGui::EndMenu();
 		}
-		if (ImGui::BeginMenu("Edit"))
+		if (ImGui::BeginMenu(std::string(std::string(ICON_FA_EDIT) + u8" Edit##ScriptEditor").c_str()))
 		{
 			ImGui::Text("Load");
 			//ImGui::Text(std::to_string(*ShowAppMainMenuBar).c_str());
@@ -896,7 +895,21 @@ void TextEditor::Render(const char* aTitle, const ImVec2& aSize, bool aBorder)
 			//ImGui::MenuItem("Simple overlay", NULL, ShowAppSimpleOverlay);
 			ImGui::EndMenu();
 		}
-		if (ImGui::BeginMenu("Help"))
+		///ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.556f, 0.823f, 0.541f, 1.0f));
+		if (ImGui::BeginMenu(std::string(std::string(ICON_FA_TOOLS) + u8" Tools##ScriptEditor").c_str())) //ICON_FA_VIAL
+		{
+			Logger::Log("Clicked Script Editor run button", LogInfo);
+			ImGui::EndMenu();
+		}
+		///ImGui::PopStyleColor(1);
+		///ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.952f, 0.545f, 0.462f, 1.0f));
+		if (ImGui::BeginMenu(std::string(std::string(ICON_FA_BUG) + u8" Debug##ScriptEditor").c_str())) //ICON_FA_BUG
+		{
+			Logger::Log("Clicked Script Editor stop button", LogInfo);
+			ImGui::EndMenu();
+		}
+		///ImGui::PopStyleColor(1);
+		if (ImGui::BeginMenu(std::string(std::string(ICON_FA_QUESTION) + u8" Help##ScriptEditor").c_str()))
 		{
 			ImGui::Text("Load");
 			//ImGui::MenuItem("Metrics", NULL, ShowAppMetrics);
@@ -906,20 +919,13 @@ void TextEditor::Render(const char* aTitle, const ImVec2& aSize, bool aBorder)
 		}
 		//ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 0.0f);
 		
-		ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.556f, 0.823f, 0.541f, 1.0f));
-		if (ImGui::BeginMenu(std::string(std::string(ICON_FA_VIAL) + u8" Test & Run##ScriptEditor").c_str()))
-		{
-			Logger::Log("Clicked Script Editor run button", LogInfo);
-			ImGui::EndMenu();
-		}
-		ImGui::PopStyleColor(1);
-		ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.952f, 0.545f, 0.462f, 1.0f));
+		/*ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.952f, 0.545f, 0.462f, 1.0f));
 		if (ImGui::BeginMenu(std::string(std::string(ICON_FA_BAN) + u8"##ScriptEditor").c_str()))
 		{
 			Logger::Log("Clicked Script Editor stop button", LogInfo);
 			ImGui::EndMenu();
 		}
-		ImGui::PopStyleColor(1);
+		ImGui::PopStyleColor(1);*/
 
 		/*ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 0.0f);
 		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4());
