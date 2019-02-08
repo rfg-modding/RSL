@@ -48,17 +48,75 @@ void OverlayConsole::Draw(const char* Title)
 	ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(4.0f, 2.0f));
 	const float footer_height_to_reserve = ImGui::GetStyle().ItemSpacing.y + ImGui::GetFrameHeightWithSpacing(); // 1 separator, 1 input text
 	ImGui::BeginChild("ScrollingRegion", ImVec2(0, -footer_height_to_reserve), false, ImGuiWindowFlags_HorizontalScrollbar); // Leave room for 1 separator + 1 InputText
-
+	
 	Buffer = "";
 	Color = { 0.0f, 0.0f, 0.0f, 0.0f };
 
-	//Logger::Log(std::string("LogData size: " + std::to_string(Logger::LogData.size())), LogAll);
-	/*BufferStart = Logger::LogData.size() - 1 - BufferDisplayLength;
-	if (BufferStart < 0)
+	BufferCount = 0;
+	int i = BufferDisplayLength - 1;
+	if (i >= Logger::LogData.size())
 	{
-		BufferStart = 0;
-	}*/
-	BufferEnd = BufferDisplayLength;
+		i = Logger::LogData.size() - 1;
+	}
+	while (i >= 0 && BufferCount < BufferDisplayLength)
+	{
+		if (Logger::LogData[i].Flags & ConsoleLogType)
+		{
+			ImGui::TextUnformatted("[");
+			ImGui::SameLine();
+			if (Logger::LogData[i].Flags & LogInfo)
+			{
+				ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.945f, 0.945f, 0.945f, 1.0f));
+				ImGui::TextUnformatted("Info");
+				ImGui::PopStyleColor();
+			}
+			else if (Logger::LogData[i].Flags & LogWarning)
+			{
+				ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.756f, 0.611f, 0.000f, 1.0f));
+				ImGui::TextUnformatted("Warning");
+				ImGui::PopStyleColor();
+			}
+			else if (Logger::LogData[i].Flags & LogLua)
+			{
+				ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.231f, 0.470f, 1.000f, 1.0f));
+				ImGui::TextUnformatted("Lua");
+				ImGui::PopStyleColor();
+			}
+			else if (Logger::LogData[i].Flags & LogJson)
+			{
+				ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.000f, 0.415f, 0.000f, 1.0f));
+				ImGui::TextUnformatted("Json");
+				ImGui::PopStyleColor();
+			}
+			else if (Logger::LogData[i].Flags & LogError)
+			{
+				ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.772f, 0.058f, 0.121f, 1.0f));
+				ImGui::TextUnformatted("Error");
+				ImGui::PopStyleColor();
+			}
+			else if (Logger::LogData[i].Flags & LogFatalError)
+			{
+				ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.772f, 0.058f, 0.121f, 1.0f));
+				ImGui::TextUnformatted("Fatal Error");
+				ImGui::PopStyleColor();
+			}
+			else
+			{
+				ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.000f, 0.000f, 0.000f, 1.0f));
+				ImGui::TextUnformatted("Undefined Message Type");
+				ImGui::PopStyleColor();
+			}
+			ImGui::SameLine();
+			ImGui::TextUnformatted("] ");
+			ImGui::SameLine();
+			ImGui::TextUnformatted(Logger::LogData[i].Message.c_str());
+			BufferCount++;
+		}
+		i--;
+	}
+	BufferCount = 0;
+
+	/*BufferEnd = BufferDisplayLength;
 	if (BufferEnd > Logger::LogData.size())
 	{
 		BufferEnd = Logger::LogData.size() - 1;
@@ -113,7 +171,7 @@ void OverlayConsole::Draw(const char* Title)
 			ImGui::SameLine();
 			ImGui::TextUnformatted(Logger::LogData[i].Message.c_str());
 		}
-	}
+	}*/
 	//Auto-scrolls console output to bottom unless the user scrolls up.
 	if (ImGui::GetScrollY() >= abs(ImGui::GetContentRegionAvail().y) - 25.0f)
 	{
@@ -157,7 +215,7 @@ void OverlayConsole::Draw(const char* Title)
 		//This executes when the if statement returns true -> if the enter key is pressed.
 		Scripts->RunStringAsScript(InputBuffer, "lua console command");
 		CommandHistory.push_back(InputBuffer);
-		HistoryPosition = CommandHistory.size() - 1;
+		HistoryPosition = CommandHistory.size(); //Since pressing the up arrow key will subtract by one, the subtraction by one is not done here to insure the latest history entry isn't skipped.
 		InputBuffer.clear();
 		ReclaimFocus = true;
 	}

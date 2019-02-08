@@ -92,7 +92,6 @@ void Logger::Log(std::string Message, int LogFlags, bool LogTime, bool NewLine)
 	{
 		LogData.pop_back();
 	}
-	std::cout << "LogData.size(): " << LogData.size() << "\n";
 	/*if (LogData.size() >= 500)
 	{
 		std::cout << "LogData.size(): " << LogData.size() << "\n";
