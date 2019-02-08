@@ -33,6 +33,8 @@ void GuiSystem::Initialize()
 
 	ScriptEditor.Initialize(&ShowAppScriptEditor);
 	ScriptEditor.SetLanguageDefinition(TextEditor::LanguageDefinition::Lua());
+
+	TopMenuBar.Initialize(&ShowAppTopMenuBar);
 }
 
 /*Should only be doing this once.*/
@@ -43,6 +45,7 @@ void GuiSystem::SetScriptManager(ScriptManager* _Scripts)
 	Console.Scripts = _Scripts;
 	ScriptsMenu.Scripts = _Scripts;
 	ScriptEditor.Scripts = _Scripts;
+	TopMenuBar.Scripts = _Scripts;
 }
 
 void GuiSystem::Draw()
@@ -64,6 +67,7 @@ void GuiSystem::Draw()
 	TweaksMenu.Draw("General Tweaks Menu");
 	ScriptsMenu.Draw("Script Select Menu");
 	ScriptEditor.Render("Script Editor");// , ImVec2(400.0f, 400.0f));
+	TopMenuBar.Draw("Top Menu Bar");
 }
 
 void GuiSystem::SetPlayerPtr(Player* NewPlayerPtr)

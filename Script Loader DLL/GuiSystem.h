@@ -26,6 +26,7 @@ public:
 	GeneralTweaksGui TweaksMenu;
 	ScriptSelectGui ScriptsMenu;
 	TextEditor ScriptEditor;
+	MenuBarGui TopMenuBar;
 
 	bool ShowAppMainWindow = true;
 
@@ -46,6 +47,8 @@ public:
 	bool ShowAppTweaksMenu = true;
 	bool ShowAppScriptsMenu = true;
 	bool ShowAppScriptEditor = true;
+
+	bool ShowAppTopMenuBar = true;
 
 private:
 	/*This is private to prevent accidental changes.*/

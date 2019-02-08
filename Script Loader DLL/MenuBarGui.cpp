@@ -94,14 +94,10 @@ void MenuBarGui::Initialize(bool * _OpenState)
 
 void MenuBarGui::Draw(const char* Title)
 {
-	//ImGui::SetNextWindowSizeConstraints(ImVec2(-1, 0), ImVec2(-1, FLT_MAX));
-	ImGui::SetNextWindowSize(ImVec2((float)(WindowRect.right - WindowRect.left) - 10.0f, 400.0f), ImGuiCond_Once);
-	ImGui::SetNextWindowPos(ImVec2(0.0f, 0.0f));
-	if (!ImGui::Begin(Title, OpenState, WindowFlags))
+	if (!OpenState)
 	{
-		ImGui::End();
+		return;
 	}
-
 	if (ImGui::BeginMainMenuBar())
 	{
 		if (ImGui::BeginMenu("File"))
@@ -121,5 +117,4 @@ void MenuBarGui::Draw(const char* Title)
 		}
 		ImGui::EndMainMenuBar();
 	}
-	ImGui::End();
 }
