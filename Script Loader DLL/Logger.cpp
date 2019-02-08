@@ -7,11 +7,13 @@ std::map <std::string, LogFile> Logger::LogFileMap;
 std::vector <LogEntry> Logger::LogData;
 int Logger::ConsoleLogFlags = LogAll;
 std::string Logger::DefaultLogPath;
+unsigned int Logger::MaximumLogCount;
 
-void Logger::Init(int _ConsoleLogFlags, std::string _DefaultLogPath)
+void Logger::Init(int _ConsoleLogFlags, std::string _DefaultLogPath, unsigned int _MaximumLogCount)
 {
 	ConsoleLogFlags = _ConsoleLogFlags;
 	DefaultLogPath = _DefaultLogPath;
+	MaximumLogCount = _MaximumLogCount;
 
 	CreateDirectoryIfNull(DefaultLogPath);
 }
@@ -37,7 +39,7 @@ void Logger::OpenLogFile(std::string FileName, int LogFlags, std::ios_base::open
 	}
 	LogFileMap.insert_or_assign(FileName, LogFile(Path + FileName, LogFlags, Mode));
 	LogFileMap[FileName].File.open(Path + FileName, Mode);
-	LogFileMap[FileName].File << GetTimeString(false) << "[Info] " << "Start of " << FileName << std::endl;
+	LogFileMap[FileName].File << GetTimeString(false) << "[Info] " << "Start of " << FileName << "\n";
 }
 
 void Logger::CloseLogFile(std::string FileName)
@@ -58,7 +60,7 @@ void Logger::CloseAllLogFiles()
 void Logger::Log(std::string Message, int LogFlags, bool LogTime, bool NewLine)
 {
 	std::string FlagString = GetFlagString(LogFlags);
-	LogData.push_back(LogEntry(FlagString, Message, LogFlags));
+	LogData.insert(LogData.begin(), LogEntry(FlagString, Message, LogFlags));
 	if (ConsoleLogFlags & LogFlags)
 	{
 		if (NewLine)
@@ -82,10 +84,15 @@ void Logger::Log(std::string Message, int LogFlags, bool LogTime, bool NewLine)
 			i->second.File << Message;
 			if (NewLine)
 			{
-				i->second.File << std::endl;
+				i->second.File << "\n";
 			}
 		}
 	}
+	if (LogData.size() > MaximumLogCount && MaximumLogCount > 0)
+	{
+		LogData.pop_back();
+	}
+	std::cout << "LogData.size(): " << LogData.size() << "\n";
 	/*if (LogData.size() >= 500)
 	{
 		std::cout << "LogData.size(): " << LogData.size() << "\n";
@@ -156,7 +163,7 @@ void Logger::LogToFile(std::string FileName, std::string Message, int LogFlags, 
 		LogTimeMessageToFile(FileName);
 	}
 	LogFileMap[FileName].File << GetFlagString(LogFlags);
-	LogFileMap[FileName].File << Message << std::endl;
+	LogFileMap[FileName].File << Message << "\n";
 }
 
 /*Only used for debug purposed. Plan to deprecate this and use the overlay console instead.*/
@@ -373,9 +380,9 @@ std::string Logger::GetTimeString(bool MilitaryTime)
 
 	DateTime += Month + "/" + Day + "/" + Year;
 
-	//std::cout << DateTime << std::endl;
+	//std::cout << DateTime << "\n";
 
-	//std::cout << "Date & Time:" << now.tm_year + 1900 << "/" << now.tm_mon + 1 << "/" << now.tm_mday << " - " << now.tm_hour << ":" << now.tm_min << std::endl;
+	//std::cout << "Date & Time:" << now.tm_year + 1900 << "/" << now.tm_mon + 1 << "/" << now.tm_mday << " - " << now.tm_hour << ":" << now.tm_min << "\n";
 
 	return "[" + DateTime + "] ";
 #endif

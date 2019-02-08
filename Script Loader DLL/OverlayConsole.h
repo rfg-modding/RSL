@@ -33,7 +33,8 @@ private:
 
 	std::string Buffer;
 	ImVec4 Color;
-	int BufferStart = 0;
+	//int BufferStart = 0;
+	int BufferEnd = 0;
 };
 
 

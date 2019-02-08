@@ -60,7 +60,7 @@ the right log files and the console depending on their log type.*/
 class Logger
 {
 public:
-	static void Init(int _ConsoleLogLevel, std::string _DefaultLogPath);
+	static void Init(int _ConsoleLogLevel, std::string _DefaultLogPath, unsigned int _MaximumLogCount);
 
 	static void OpenLogFile(std::string FileName, int LogFlags, std::ios_base::openmode Mode = std::ios_base::out, std::string CustomFilePath = "DEFAULT");
 	static void CloseLogFile(std::string FileName);
@@ -78,6 +78,7 @@ public:
 
 	static int ConsoleLogFlags;
 	static std::string DefaultLogPath;
+	static unsigned int MaximumLogCount;
 
 private:
 	Logger() { }

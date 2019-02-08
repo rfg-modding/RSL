@@ -53,12 +53,17 @@ void OverlayConsole::Draw(const char* Title)
 	Color = { 0.0f, 0.0f, 0.0f, 0.0f };
 
 	//Logger::Log(std::string("LogData size: " + std::to_string(Logger::LogData.size())), LogAll);
-	BufferStart = Logger::LogData.size() - 1 - BufferDisplayLength;
+	/*BufferStart = Logger::LogData.size() - 1 - BufferDisplayLength;
 	if (BufferStart < 0)
 	{
 		BufferStart = 0;
+	}*/
+	BufferEnd = BufferDisplayLength;
+	if (BufferEnd > Logger::LogData.size())
+	{
+		BufferEnd = Logger::LogData.size() - 1;
 	}
-	for (size_t i = BufferStart; i < Logger::LogData.size() - 1; i++)
+	for (int i = BufferEnd; i >= 0; i--)
 	{
 		if (Logger::LogData[i].Flags & ConsoleLogType)
 		{
@@ -107,7 +112,7 @@ void OverlayConsole::Draw(const char* Title)
 			ImGui::TextUnformatted(Buffer.substr(Buffer.size() - 2, 1).c_str());
 			ImGui::SameLine();
 			ImGui::TextUnformatted(Logger::LogData[i].Message.c_str());
-		}	
+		}
 	}
 	//Auto-scrolls console output to bottom unless the user scrolls up.
 	if (ImGui::GetScrollY() >= abs(ImGui::GetContentRegionAvail().y) - 25.0f)

@@ -12,7 +12,7 @@
 
 DWORD WINAPI MainThread(HMODULE hModule)
 {
-	Logger::Init(LogAll, GetEXEPath(false) + "RFGR Script Loader/Logs/");
+	Logger::Init(LogAll, GetEXEPath(false) + "RFGR Script Loader/Logs/", 10000);
 	Logger::OpenLogFile("Load Log.txt", LogAll, std::ios_base::trunc);
 	Logger::Log("RFGR Script Loader started. Activating.", LogInfo, true);
 
