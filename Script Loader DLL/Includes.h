@@ -79,6 +79,7 @@
 //#include <lua.h>
 //#include <lualib.h>
 //#include <lauxlib.h>
+#define SOL_CHECK_ARGUMENTS 1
 #include <sol.hpp>
 
 #include <windef.h>
