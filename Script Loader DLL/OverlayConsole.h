@@ -21,7 +21,7 @@ public:
 	ImGuiWindowFlags WindowFlags = 0;
 	ScriptManager* Scripts = nullptr;
 
-	int ConsoleLogType = LogAll;// LogLua | LogError;
+	int ConsoleLogType =  LogLua | LogError;
 	int BufferDisplayLength = 100;
 	std::string InputBuffer;
 

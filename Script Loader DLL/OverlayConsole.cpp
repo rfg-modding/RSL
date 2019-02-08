@@ -33,7 +33,7 @@ void OverlayConsole::Draw(const char* Title)
 
 	ImGui::SetNextWindowSizeConstraints(ImVec2(-1, 0), ImVec2(-1, FLT_MAX));
 	ImGui::SetNextWindowSize(ImVec2((float)(WindowRect.right - WindowRect.left) - 10.0f, 400.0f), ImGuiCond_Once);
-	ImGui::SetNextWindowPos(ImVec2(0.0f, 20.0f)); //y = TextSize + FramePadding.y + BorderSize * 2?
+	ImGui::SetNextWindowPos(ImVec2(0.0f, 25.0f)); //y = TextSize + FramePadding.y + BorderSize * 2?
 	ImVec4* Colors = ImGui::GetStyle().Colors; //48 items
 	ImGui::PushStyleColor(ImGuiCol_ResizeGrip, Colors[ImGuiCol_WindowBg]);
 	ImGui::PushStyleColor(ImGuiCol_ResizeGripHovered, Colors[ImGuiCol_WindowBg]);
@@ -116,64 +116,8 @@ void OverlayConsole::Draw(const char* Title)
 	}
 	BufferCount = 0;
 
-	/*BufferEnd = BufferDisplayLength;
-	if (BufferEnd > Logger::LogData.size())
-	{
-		BufferEnd = Logger::LogData.size() - 1;
-	}
-	for (int i = BufferEnd; i >= 0; i--)
-	{
-		if (Logger::LogData[i].Flags & ConsoleLogType)
-		{
-			if (Logger::LogData[i].Flags & LogInfo)
-			{
-				Buffer = "[Info] ";
-				Color = ImVec4(0.945f, 0.945f, 0.945f, 1.0f); //White/Grey
-			}
-			else if (Logger::LogData[i].Flags & LogWarning)
-			{
-				Buffer = "[Warning] ";
-				Color = ImVec4(0.756f, 0.611f, 0.000f, 1.0f); //Gold/Yellow
-			}
-			else if (Logger::LogData[i].Flags & LogLua)
-			{
-				Buffer = "[Lua] ";
-				Color = ImVec4(0.231f, 0.470f, 1.000f, 1.0f); //Light Blue (Info color in external console)
-			}
-			else if (Logger::LogData[i].Flags & LogJson)
-			{
-				Buffer = "[Json] ";
-				Color = ImVec4(1.000f, 0.415f, 0.000f, 1.0f); //Light Orange
-			}
-			else if (Logger::LogData[i].Flags & LogError)
-			{
-				Buffer = "[Error] ";
-				Color = ImVec4(0.772f, 0.058f, 0.121f, 1.0f); //Bright Red
-			}
-			else if (Logger::LogData[i].Flags & LogFatalError)
-			{
-				Buffer = "[Fatal Error] ";
-				Color = ImVec4(0.772f, 0.058f, 0.121f, 1.0f); //Bright Red
-			}
-			else
-			{
-				Buffer = "[Undefined Message Type] ";
-				Color = ImVec4(1.000f, 0.000f, 0.000f, 1.0f); //Pure Red (255,0,0)
-			}
-
-			ImGui::TextUnformatted(Buffer.substr(0, 1).c_str());
-			ImGui::SameLine();
-			ImGui::PushStyleColor(ImGuiCol_Text, Color);
-			ImGui::TextUnformatted(Buffer.substr(1, Buffer.size() - 3).c_str());
-			ImGui::PopStyleColor();
-			ImGui::SameLine();
-			ImGui::TextUnformatted(Buffer.substr(Buffer.size() - 2, 1).c_str());
-			ImGui::SameLine();
-			ImGui::TextUnformatted(Logger::LogData[i].Message.c_str());
-		}
-	}*/
 	//Auto-scrolls console output to bottom unless the user scrolls up.
-	if (ImGui::GetScrollY() >= abs(ImGui::GetContentRegionAvail().y) - 25.0f)
+	if (ImGui::GetScrollY() >= abs(ImGui::GetContentRegionAvail().y) - 75.0f)
 	{
 		ImGui::SetScrollHereY();
 	}
