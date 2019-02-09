@@ -49,6 +49,7 @@ public:
 	bool ShowAppScriptEditor = true;
 
 	bool ShowAppTopMenuBar = true;
+	bool ShowAppLogWindow = true;
 
 private:
 	/*This is private to prevent accidental changes.*/

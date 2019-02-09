@@ -48,9 +48,6 @@ void OverlayConsole::Draw(const char* Title)
 	ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(4.0f, 2.0f));
 	const float footer_height_to_reserve = ImGui::GetStyle().ItemSpacing.y + ImGui::GetFrameHeightWithSpacing(); // 1 separator, 1 input text
 	ImGui::BeginChild("ScrollingRegion", ImVec2(0, -footer_height_to_reserve), false, ImGuiWindowFlags_HorizontalScrollbar); // Leave room for 1 separator + 1 InputText
-	
-	Buffer = "";
-	Color = { 0.0f, 0.0f, 0.0f, 0.0f };
 
 	BufferCount = 0;
 	int i = BufferDisplayLength - 1;

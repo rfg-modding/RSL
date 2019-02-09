@@ -30,10 +30,6 @@ public:
 
 private:
 	bool* OpenState = nullptr;
-
-	std::string Buffer;
-	ImVec4 Color;
-	//int BufferStart = 0;
 	int BufferEnd = 0;
 	int BufferCount = 0;
 };

@@ -1,21 +1,24 @@
 #pragma once
-#include "LogWindow.h"
+#include "Functions.h"
 
 class ScriptManager;
 
-class MenuBarGui
+class LogWindow
 {
 public:
-	MenuBarGui();
-	~MenuBarGui();
+	LogWindow();
+	~LogWindow();
 
 	void Initialize(bool* _OpenState);
 	void Draw(const char* Title);
 
-	ScriptManager* Scripts = nullptr;
 	ImGuiWindowFlags WindowFlags = 0;
+	int ConsoleLogType = LogAll;
+	int BufferDisplayLength = 1000;
 
 private:
 	bool* OpenState = nullptr;
+	int BufferEnd = 0;
+	int BufferCount = 0;
 };
 
