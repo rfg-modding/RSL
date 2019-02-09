@@ -19,8 +19,7 @@ void GuiSystem::Initialize()
 	MainWindow.ShowAppAbout = &ShowAppAbout;
 	MainWindow.ShowAppGameInfoOverlay = &ShowAppGameInfoOverlay;
 	MainWindow.ShowAppMainMenuBar = &ShowAppMainMenuBar;
-	MainWindow.ShowAppLog = &ShowAppLog;
-	MainWindow.ShowAppLongText = &ShowAppLongText;
+	MainWindow.ShowAppLog = &ShowAppLogWindow;
 	MainWindow.ShowAppSimpleOverlay = &ShowAppSimpleOverlay;
 
 	MainWindow.Initialize(&ShowAppMainWindow);
@@ -34,7 +33,8 @@ void GuiSystem::Initialize()
 	ScriptEditor.Initialize(&ShowAppScriptEditor);
 	ScriptEditor.SetLanguageDefinition(TextEditor::LanguageDefinition::Lua());
 
-	TopMenuBar.Initialize(&ShowAppTopMenuBar);
+	TopMenuBar.Initialize(&ShowAppMainMenuBar);
+	LogGui.Initialize(&ShowAppLogWindow);
 }
 
 /*Should only be doing this once.*/
@@ -68,6 +68,7 @@ void GuiSystem::Draw()
 	ScriptsMenu.Draw("Script Select Menu");
 	ScriptEditor.Render("Script Editor");// , ImVec2(400.0f, 400.0f));
 	TopMenuBar.Draw("Top Menu Bar");
+	LogGui.Draw("Logger");
 }
 
 void GuiSystem::SetPlayerPtr(Player* NewPlayerPtr)

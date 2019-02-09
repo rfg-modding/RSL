@@ -12,7 +12,18 @@ IntrospectionGui::~IntrospectionGui()
 
 void IntrospectionGui::Initialize(bool* _OpenState)
 {
-	OpenState = OpenState;
+	OpenState = _OpenState;
+
+	WindowFlags = 0;
+	//WindowFlags |= ImGuiWindowFlags_NoTitleBar;
+	//WindowFlags |= ImGuiWindowFlags_NoScrollbar;
+	//WindowFlags |= ImGuiWindowFlags_MenuBar;
+	//WindowFlags |= ImGuiWindowFlags_NoMove;
+	//WindowFlags |= ImGuiWindowFlags_NoResize;
+	//WindowFlags |= ImGuiWindowFlags_NoCollapse;
+	//WindowFlags |= ImGuiWindowFlags_NoNav;
+	//WindowFlags |= ImGuiWindowFlags_NoBackground;
+	//WindowFlags |= ImGuiWindowFlags_NoBringToFrontOnFocus;
 }
 
 void IntrospectionGui::Draw(const char* Title)
@@ -22,8 +33,12 @@ void IntrospectionGui::Draw(const char* Title)
 
 void IntrospectionGui::DrawPlayerIntrospectionGui(const char * Title)
 {
+	if (!*OpenState)
+	{
+		return;
+	}
 	ImGui::SetNextWindowSize(ImVec2(600.0f, 700.0f), ImGuiCond_FirstUseEver);
-	if (!ImGui::Begin(Title, OpenState))
+	if (!ImGui::Begin(Title, OpenState, WindowFlags))
 	{
 		ImGui::End();
 		return;

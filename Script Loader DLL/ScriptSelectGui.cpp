@@ -29,6 +29,10 @@ void ScriptSelectGui::Initialize(bool* _OpenState)
 
 void ScriptSelectGui::Draw(const char* Title)
 {
+	if (!*OpenState)
+	{
+		return;
+	}
 	if (!ImGui::Begin(Title, OpenState, WindowFlags))
 	{
 		ImGui::End();

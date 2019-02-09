@@ -157,7 +157,7 @@ bool ScriptManager::RunScript(std::string FullPath)
 		}
 		catch (std::exception& Exception)
 		{
-			Logger::Log(std::string("Exception caught when running" + GetScriptNameFromPath(FullPath) + std::string(Exception.what())), LogLua | LogError);
+			Logger::Log(std::string("Exception caught when running " + GetScriptNameFromPath(FullPath) + std::string(Exception.what())), LogLua | LogError);
 			return false;
 		}
 	}
@@ -187,7 +187,7 @@ bool ScriptManager::RunScript(size_t Index)
 	}
 	catch (std::exception& Exception)
 	{
-		Logger::Log(std::string("Exception caught when running" + Scripts[Index].Name + std::string(Exception.what())), LogLua | LogError);
+		Logger::Log(std::string("Exception caught when running " + Scripts[Index].Name + std::string(Exception.what())), LogLua | LogError);
 		return false;
 	}
 }

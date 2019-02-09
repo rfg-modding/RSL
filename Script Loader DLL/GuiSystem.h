@@ -27,18 +27,17 @@ public:
 	ScriptSelectGui ScriptsMenu;
 	TextEditor ScriptEditor;
 	MenuBarGui TopMenuBar;
+	LogWindow LogGui;
 
 	bool ShowAppMainWindow = true;
 
-	bool ShowAppConsole = false;
+	bool ShowAppConsole = true;
 	bool ShowAppMetrics = false;
 	bool ShowAppThemeEditor = true;
 	bool ShowAppAbout = false;
 	bool ShowAppGameInfoOverlay = false;
 
 	bool ShowAppMainMenuBar = false;
-	bool ShowAppLog = false;
-	bool ShowAppLongText = false;
 	bool ShowAppSimpleOverlay = false;
 
 	bool ShowAppTeleportMenu = true;
@@ -48,7 +47,6 @@ public:
 	bool ShowAppScriptsMenu = true;
 	bool ShowAppScriptEditor = true;
 
-	bool ShowAppTopMenuBar = true;
 	bool ShowAppLogWindow = true;
 
 private:

@@ -47,6 +47,11 @@ void MainOverlay::Initialize(bool* _OpenState)
 
 void MainOverlay::Draw(const char* Title)
 {
+	if (!*OpenState)
+	{
+		return;
+	}
+
 	if (!PlayerPtrTargetsInitialized)
 	{
 		if (PlayerPtr)
@@ -216,6 +221,10 @@ void MainOverlay::Draw(const char* Title)
 		ImGui::PushItemWidth(300.0f);
 		ImGui::TextWrapped("- The \"Global explosion modifiers\" section is completely broken and will make explosions stupidly overpowered rapidly. Use at your own risk. You must restart the game to revert it's effects.");
 	}
+
+	ImGui::Text("ShowAppLog: ");
+	ImGui::SameLine();
+	ImGui::TextColored(SecondaryTextColor, std::to_string(*ShowAppLog).c_str());
 
 	ImGui::End();
 }

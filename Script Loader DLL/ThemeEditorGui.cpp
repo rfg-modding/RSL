@@ -19,6 +19,10 @@ void ThemeEditorGui::Initialize(bool* _OpenState)
 
 void ThemeEditorGui::Draw(const char* Title)
 {
+	if (!*OpenState)
+	{
+		return;
+	}
 	ImGui::SetNextWindowSize(ImVec2(600.0f, 700.0f), ImGuiCond_FirstUseEver);
 	if (!ImGui::Begin(Title, OpenState))
 	{
