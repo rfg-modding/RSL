@@ -18,7 +18,7 @@ void OverlayConsole::Initialize(bool* _OpenState)
 	WindowFlags = 0;
 	WindowFlags |= ImGuiWindowFlags_NoTitleBar;
 	//WindowFlags |= ImGuiWindowFlags_NoScrollbar;
-	///WindowFlags |= ImGuiWindowFlags_MenuBar;
+	//WindowFlags |= ImGuiWindowFlags_MenuBar;
 	WindowFlags |= ImGuiWindowFlags_NoMove;
 	//WindowFlags |= ImGuiWindowFlags_NoResize;
 	WindowFlags |= ImGuiWindowFlags_NoCollapse;
