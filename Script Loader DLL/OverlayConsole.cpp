@@ -29,7 +29,7 @@ void OverlayConsole::Initialize(bool* _OpenState)
 
 void OverlayConsole::Draw(const char* Title)
 {
-	auto StartTime = std::chrono::steady_clock::now();
+	//auto StartTime = std::chrono::steady_clock::now();
 	if (!*OpenState)
 	{
 		return;
@@ -37,7 +37,15 @@ void OverlayConsole::Draw(const char* Title)
 
 	ImGui::SetNextWindowSizeConstraints(ImVec2(-1, 0), ImVec2(-1, FLT_MAX));
 	ImGui::SetNextWindowSize(ImVec2((float)(WindowRect.right - WindowRect.left) - 10.0f, 400.0f), ImGuiCond_Once);
-	ImGui::SetNextWindowPos(ImVec2(0.0f, 25.0f)); //y = TextSize + FramePadding.y + BorderSize * 2?
+	if (OverlayActive)
+	{
+		ImGui::SetNextWindowPos(ImVec2(0.0f, 25.0f));
+	}
+	else
+	{
+		ImGui::SetNextWindowPos(ImVec2(0.0f, 0.0f)); //If the main overlay 
+		//isn't visible then place the console at the very top of the screen.
+	}
 	ImVec4* Colors = ImGui::GetStyle().Colors; //48 items
 	ImGui::PushStyleColor(ImGuiCol_ResizeGrip, Colors[ImGuiCol_WindowBg]);
 	ImGui::PushStyleColor(ImGuiCol_ResizeGripHovered, Colors[ImGuiCol_WindowBg]);
@@ -129,7 +137,7 @@ void OverlayConsole::Draw(const char* Title)
 	/*moneyl: Full credit goes to Elias Daler for the use of a stateless lambda and wrapper to pass a callback lambda to the InputText widget. I was having trouble implementing this, and his
 	article here gave a solution: https://eliasdaler.github.io/using-imgui-with-sfml-pt2/ This method is preferred to having a separate callback function since it keeps the code in one place,
 	and cleaner. He also described a general method of doing this for any widget which may be useful later on. Keep this in mind for future gui additions which might use it.*/
-	bool ReclaimFocus = false;
+	//ReclaimFocus = false;
 	if (InputTextLambdaWrapper("##LuaConsoleInput", &InputBuffer, ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_CallbackHistory, [&](ImGuiInputTextCallbackData* CallbackData)
 	{
 		//Callback lambda which handles up/down keypresses
@@ -170,15 +178,16 @@ void OverlayConsole::Draw(const char* Title)
 	ImGui::SetItemDefaultFocus();
 	if (ReclaimFocus)
 	{
-		ImGui::SetKeyboardFocusHere(-1); // Auto focus previous widget
+		//ImGui::SetKeyboardFocusHere(-1); // Auto focus previous widget
 	}
+	ImGui::SetKeyboardFocusHere(-1);
 
 	ImGui::End();
 	ImGui::PopStyleColor(3);
 
-	auto EndTime = std::chrono::steady_clock::now();
-	auto TimeElapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(EndTime - StartTime).count();
-	std::cout << "OverlayConsole::Draw() TimeElapsed = " << TimeElapsed << " ns\n";
+	//auto EndTime = std::chrono::steady_clock::now();
+	//auto TimeElapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(EndTime - StartTime).count();
+	//std::cout << "OverlayConsole::Draw() TimeElapsed = " << TimeElapsed << " ns\n";
 }
 
 template<typename T>

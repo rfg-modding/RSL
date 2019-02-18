@@ -18,6 +18,11 @@ public:
 	void SetPlayerPtr(Player* NewPlayerPtr);
 	void SetPlayerPtr(void* NewPlayerPtr);
 
+	void ToggleLuaConsole();
+	bool IsLuaConsoleActive();
+	void DeactivateLuaConsole();
+	void ActivateLuaConsole();
+
 	MainOverlay MainWindow;
 	OverlayConsole Console;
 	ThemeEditorGui ThemeEditor;
@@ -50,6 +55,7 @@ public:
 	bool ShowAppLogWindow = true;
 
 private:
+	bool LuaConsoleActive = false;
 	/*This is private to prevent accidental changes.*/
 	ScriptManager* Scripts = nullptr;
 	/*Private to insure that every instance of PlayerPtr is properly set,

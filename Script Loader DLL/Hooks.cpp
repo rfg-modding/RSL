@@ -29,8 +29,19 @@ std::once_flag HookRlDrawTristip2dInitialCall;
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 LRESULT __stdcall WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-	if (OverlayActive)
+	if (OverlayActive || Gui.IsLuaConsoleActive())
 	{
+		if (BlockNextTildeInput)
+		{
+			if(msg == WM_KEYDOWN)//if (msg == WM_CHAR)
+			{
+				if (wParam == VK_OEM_3)
+				{
+					return true; //Block tilde input if console is being opened or closed.
+								 //This way, input is conserved and
+				}
+			}
+		}
 		if (ImGui_ImplWin32_WndProcHandler(hWnd, msg, wParam, lParam))
 			return true;
 		return true;
@@ -309,20 +320,23 @@ HRESULT __stdcall D3D11PresentHook(IDXGISwapChain * pSwapChain, UINT SyncInterva
 	{
 		return D3D11PresentObject(pSwapChain, SyncInterval, Flags);
 	}
-	if (!OverlayActive)
+	/*if (!OverlayActive)
 	{
 		return D3D11PresentObject(pSwapChain, SyncInterval, Flags);
-	}
+	}*/
 
 	ImGui_ImplDX11_NewFrame();
 	ImGui_ImplWin32_NewFrame();
 	ImGui::NewFrame();
 
-	if (show_demo_window)
-		ImGui::ShowDemoWindow(&show_demo_window);
-
+	if (OverlayActive)
+	{
+		if (show_demo_window)
+		{
+			ImGui::ShowDemoWindow(&show_demo_window);
+		}
+	}
 	Gui.Draw();
-	//Overlay.Draw("Main Overlay", &ShowMainOverlay);
 
 	D3D11Context->OMSetRenderTargets(1, &MainRenderTargetView, NULL);
 	ImGui::Render();

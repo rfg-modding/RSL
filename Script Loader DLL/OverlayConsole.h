@@ -28,6 +28,8 @@ public:
 	std::vector <std::string> CommandHistory;
 	unsigned int HistoryPosition = 0;
 
+	bool ReclaimFocus = true;
+
 private:
 	bool* OpenState = nullptr;
 	int BufferEnd = 0;

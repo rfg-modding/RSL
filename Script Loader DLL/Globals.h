@@ -77,6 +77,7 @@ extern const WORD ConsoleSuccessTextAttributes;
 extern const WORD ConsoleDefaultTextAttributes;
 
 extern void* GlobalRlDrawPtr;
+extern bool BlockNextTildeInput;
 
 extern const std::string ScriptLoaderVersion;
 

@@ -59,16 +59,26 @@ void GuiSystem::Draw()
 		return;
 	}
 
-	MainWindow.Draw("Main overlay");
-	Console.Draw("Lua Console");
-	ThemeEditor.Draw("Theme Editor");
-	TeleportMenu.Draw("Teleport Menu");
-	IntrospectionMenu.Draw("Introspection Menu");
-	TweaksMenu.Draw("General Tweaks Menu");
-	ScriptsMenu.Draw("Script Select Menu");
-	ScriptEditor.Render("Script Editor");// , ImVec2(400.0f, 400.0f));
-	TopMenuBar.Draw("Top Menu Bar");
-	LogGui.Draw("Logger");
+	if (OverlayActive)
+	{
+		MainWindow.Draw("Main overlay");
+		Console.Draw("Lua Console");
+		ThemeEditor.Draw("Theme Editor");
+		TeleportMenu.Draw("Teleport Menu");
+		IntrospectionMenu.Draw("Introspection Menu");
+		TweaksMenu.Draw("General Tweaks Menu");
+		ScriptsMenu.Draw("Script Select Menu");
+		ScriptEditor.Render("Script Editor");// , ImVec2(400.0f, 400.0f));
+		TopMenuBar.Draw("Top Menu Bar");
+		LogGui.Draw("Logger");
+	}
+	else
+	{
+		if (LuaConsoleActive)
+		{
+			Console.Draw("Lua Console");
+		}
+	}
 }
 
 void GuiSystem::SetPlayerPtr(Player* NewPlayerPtr)
@@ -86,4 +96,24 @@ void GuiSystem::SetPlayerPtr(Player* NewPlayerPtr)
 void GuiSystem::SetPlayerPtr(void* NewPlayerPtr)
 {
 	SetPlayerPtr((Player*)NewPlayerPtr);
+}
+
+void GuiSystem::ToggleLuaConsole()
+{
+	LuaConsoleActive = !LuaConsoleActive;
+}
+
+bool GuiSystem::IsLuaConsoleActive()
+{
+	return LuaConsoleActive;
+}
+
+void GuiSystem::DeactivateLuaConsole()
+{
+	LuaConsoleActive = false;
+}
+
+void GuiSystem::ActivateLuaConsole()
+{
+	LuaConsoleActive = true;
 }

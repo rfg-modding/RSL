@@ -122,6 +122,38 @@ void ProgramManager::Initialize()
 
 void ProgramManager::ProcessInput()
 {
+	if ((GetAsyncKeyState(VK_OEM_3))) //126 = virtual keycode for tilde
+	{
+		Logger::Log("Tilde pressed", LogInfo);
+		Gui.ToggleLuaConsole();
+		if (Gui.IsLuaConsoleActive())
+		{
+			Gui.Console.InputBuffer.clear();
+			/*if (Gui.Console.InputBuffer[Gui.Console.InputBuffer.length() - 1] == '`')
+			{
+				Gui.Console.InputBuffer[Gui.Console.InputBuffer.length() - 1] = '\0';
+			}*/
+			Gui.Console.ReclaimFocus = true; //Tell console to set focus to it's text input.
+			if (!OverlayActive)
+			{
+				SnippetManager::BackupSnippet("MouseGenericPollMouseVisible", MouseGenericPollMouseVisible, 12, true);
+				SnippetManager::BackupSnippet("CenterMouseCursorCall", CenterMouseCursorCall, 5, true);
+			}
+		}
+		else
+		{
+			/*if (Gui.Console.InputBuffer[Gui.Console.InputBuffer.length() - 1] == '`')
+			{
+				Gui.Console.InputBuffer[Gui.Console.InputBuffer.length() - 1] = '\0';
+			}*/
+			if (!OverlayActive)
+			{
+				SnippetManager::RestoreSnippet("MouseGenericPollMouseVisible", true);
+				SnippetManager::RestoreSnippet("CenterMouseCursorCall", true);
+			}
+		}
+		Sleep(200);
+	}
 	if ((GetAsyncKeyState(VK_LCONTROL) & 0x8000) && (GetAsyncKeyState(VK_MENU) & 0x8000))
 	{
 		ExitKeysPressCount++;
@@ -177,11 +209,15 @@ void ProgramManager::ProcessInput()
 		Logger::Log(std::string("Overlay active value: " + std::to_string(OverlayActive)), LogInfo);
 		if (OverlayActive)
 		{
-			SnippetManager::BackupSnippet("MouseGenericPollMouseVisible", MouseGenericPollMouseVisible, 12, true);
-			SnippetManager::BackupSnippet("CenterMouseCursorCall", CenterMouseCursorCall, 5, true);
+			if (!Gui.IsLuaConsoleActive())
+			{
+				SnippetManager::BackupSnippet("MouseGenericPollMouseVisible", MouseGenericPollMouseVisible, 12, true);
+				SnippetManager::BackupSnippet("CenterMouseCursorCall", CenterMouseCursorCall, 5, true);
+			}
 		}
 		else
 		{
+			Gui.DeactivateLuaConsole();
 			SnippetManager::RestoreSnippet("MouseGenericPollMouseVisible", true);
 			SnippetManager::RestoreSnippet("CenterMouseCursorCall", true);
 		}
@@ -197,7 +233,7 @@ void ProgramManager::ProcessInput()
 
 void ProgramManager::Exit()
 {
-	if (OverlayActive)
+	if (OverlayActive || Gui.IsLuaConsoleActive())
 	{
 		SnippetManager::RestoreSnippet("MouseGenericPollMouseVisible", true); //Todo: Stop removing from cache and add check to see if exists to BackupSnippet().
 		SnippetManager::RestoreSnippet("CenterMouseCursorCall", true);
