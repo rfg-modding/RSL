@@ -35,12 +35,20 @@ void LogWindow::Draw(const char * Title)
 		return;
 	}
 
-	ImGui::SetNextWindowSize(ImVec2(600.0f, 500.0f), ImGuiCond_Once);
+	ImGui::SetNextWindowSize(ImVec2(800.0f, 700.0f), ImGuiCond_Once);
 	if (!ImGui::Begin(Title, OpenState, WindowFlags))
 	{
 		ImGui::End();
 		return;
 	}
+
+	if (ImGui::Button("Filtering options"))
+	{
+		ImGui::OpenPopup("Log window filtering options");
+	}
+	ImGui::SameLine();
+	ImGui::Checkbox("Auto scroll", &AutoScroll);
+	DrawFilterSettingsPopup();
 
 	//ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0, 0));
 	ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(4.0f, 2.0f));
@@ -113,9 +121,9 @@ void LogWindow::Draw(const char * Title)
 	BufferCount = 0;
 
 	//Auto-scrolls console output to bottom unless the user scrolls up.
-	if (ImGui::GetScrollY() >= abs(ImGui::GetContentRegionAvail().y) - 75.0f)
+	if (AutoScroll)
 	{
-		ImGui::SetScrollHereY();
+		ImGui::SetScrollHereY(1.0f);
 	}
 	ImGui::EndChild();
 	ImGui::PopStyleVar();
@@ -124,4 +132,67 @@ void LogWindow::Draw(const char * Title)
 	/*auto EndTime = std::chrono::steady_clock::now();
 	auto TimeElapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(EndTime - StartTime).count();
 	std::cout << "OverlayConsole::Draw() TimeElapsed = " << TimeElapsed << " ns\n";*/
+}
+
+void LogWindow::DrawFilterSettingsPopup()
+{
+	ImGui::SetNextWindowSize(ImVec2(300.0f, 400.0f), ImGuiCond_Always);
+	if (ImGui::BeginPopup("Log window filtering options", 0))
+	{
+		static bool ShowAll = ConsoleLogType & LogAll ? true : false;
+		static bool ShowInfo = ConsoleLogType & LogInfo ? true : false;
+		static bool ShowWarning = ConsoleLogType & LogWarning ? true : false;
+		static bool ShowError = ConsoleLogType & LogError ? true : false;
+		static bool ShowFatalError = ConsoleLogType & LogFatalError ? true : false;
+		static bool ShowLua = ConsoleLogType & LogLua ? true : false;
+		static bool ShowJson = ConsoleLogType & LogJson ? true : false;
+
+		ImGui::PushItemWidth(225.0f);
+		ImGui::TextWrapped("Select which message types you wish to see in the logger below.");
+
+		ImGui::Checkbox("All", &ShowAll);
+		if (!ShowAll)
+		{
+			ImGui::Checkbox("Info", &ShowInfo);
+			ImGui::Checkbox("Warning", &ShowWarning);
+			ImGui::Checkbox("Error", &ShowError);
+			ImGui::Checkbox("Fatal Error", &ShowFatalError);
+			ImGui::Checkbox("Lua", &ShowLua);
+			ImGui::Checkbox("Json", &ShowJson);
+		}
+
+		if (ShowAll)
+		{
+			ConsoleLogType = ConsoleLogType | LogAll;
+		}
+		else
+		{
+			ConsoleLogType = 0;
+			if (ShowInfo)
+			{
+				ConsoleLogType = ConsoleLogType | LogInfo;
+			}
+			if (ShowWarning)
+			{
+				ConsoleLogType = ConsoleLogType | LogWarning;
+			}
+			if (ShowError)
+			{
+				ConsoleLogType = ConsoleLogType | LogError;
+			}
+			if (ShowFatalError)
+			{
+				ConsoleLogType = ConsoleLogType | LogFatalError;
+			}
+			if (ShowLua)
+			{
+				ConsoleLogType = ConsoleLogType | LogLua;
+			}
+			if (ShowJson)
+			{
+				ConsoleLogType = ConsoleLogType | LogJson;
+			}
+		}
+		ImGui::EndPopup();
+	}
 }
