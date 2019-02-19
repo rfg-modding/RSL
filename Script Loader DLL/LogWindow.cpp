@@ -35,7 +35,7 @@ void LogWindow::Draw(const char * Title)
 		return;
 	}
 
-	ImGui::SetNextWindowSize(ImVec2(400.0f, 500.0f), ImGuiCond_Once);
+	ImGui::SetNextWindowSize(ImVec2(600.0f, 500.0f), ImGuiCond_Once);
 	if (!ImGui::Begin(Title, OpenState, WindowFlags))
 	{
 		ImGui::End();

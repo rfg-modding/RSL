@@ -11,6 +11,6 @@ namespace Utilities::Json
 
 namespace Utilities::GUI
 {
-	void TooltipOnPrevious(std::string& Description);
-	void TooltipOnPrevious(const char* Description);
+	void TooltipOnPrevious(std::string& Description, ImFont* Font = nullptr);
+	void TooltipOnPrevious(const char* Description, ImFont* Font = nullptr);
 }

@@ -129,10 +129,10 @@ void ProgramManager::ProcessInput()
 		if (Gui.IsLuaConsoleActive())
 		{
 			Gui.Console.InputBuffer.clear();
-			/*if (Gui.Console.InputBuffer[Gui.Console.InputBuffer.length() - 1] == '`')
+			if (Gui.Console.InputBuffer[Gui.Console.InputBuffer.length() - 1] == '`')
 			{
 				Gui.Console.InputBuffer[Gui.Console.InputBuffer.length() - 1] = '\0';
-			}*/
+			}
 			Gui.Console.ReclaimFocus = true; //Tell console to set focus to it's text input.
 			if (!OverlayActive)
 			{
@@ -142,10 +142,10 @@ void ProgramManager::ProcessInput()
 		}
 		else
 		{
-			/*if (Gui.Console.InputBuffer[Gui.Console.InputBuffer.length() - 1] == '`')
+			if (Gui.Console.InputBuffer[Gui.Console.InputBuffer.length() - 1] == '`')
 			{
 				Gui.Console.InputBuffer[Gui.Console.InputBuffer.length() - 1] = '\0';
-			}*/
+			}
 			if (!OverlayActive)
 			{
 				SnippetManager::RestoreSnippet("MouseGenericPollMouseVisible", true);
@@ -330,6 +330,10 @@ bool ProgramManager::ShouldClose()
 
 void ProgramManager::Update()
 {
+	if (ScriptLoaderCloseRequested)
+	{
+		ExitKeysPressCount = 10;
+	}
 	/*if (PeekMessage(&msg, NULL, 0U, 0U, PM_REMOVE)) //Todo: Figure out if I really need this for the overlay to work.
 	{
 		TranslateMessage(&msg);

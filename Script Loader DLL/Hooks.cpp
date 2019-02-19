@@ -31,7 +31,10 @@ LRESULT __stdcall WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	if (OverlayActive || Gui.IsLuaConsoleActive())
 	{
-		if (BlockNextTildeInput)
+		//This check doesn't work currently :/
+		//Am just deleting the whole Console InputBuffer each time the console
+		//is toggled for now.
+		/*if (BlockNextTildeInput)
 		{
 			if(msg == WM_KEYDOWN)//if (msg == WM_CHAR)
 			{
@@ -41,7 +44,7 @@ LRESULT __stdcall WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 								 //This way, input is conserved and
 				}
 			}
-		}
+		}*/
 		if (ImGui_ImplWin32_WndProcHandler(hWnd, msg, wParam, lParam))
 			return true;
 		return true;
@@ -329,6 +332,7 @@ HRESULT __stdcall D3D11PresentHook(IDXGISwapChain * pSwapChain, UINT SyncInterva
 	ImGui_ImplWin32_NewFrame();
 	ImGui::NewFrame();
 
+#if !PublicMode
 	if (OverlayActive)
 	{
 		if (show_demo_window)
@@ -336,6 +340,7 @@ HRESULT __stdcall D3D11PresentHook(IDXGISwapChain * pSwapChain, UINT SyncInterva
 			ImGui::ShowDemoWindow(&show_demo_window);
 		}
 	}
+#endif
 	Gui.Draw();
 
 	D3D11Context->OMSetRenderTargets(1, &MainRenderTargetView, NULL);
@@ -517,6 +522,9 @@ void __fastcall ObjectUpdatePosAndOrientHook(Object* ObjectPtr, void* edx, vecto
 	return ObjectUpdatePosAndOrient(ObjectPtr, edx, UpdatedPosition, UpdatedOrientation, SetHavokData);
 }
 
+/*Note: Attempts to manually set the player pos here failed. Required it to be 
+repeatedly set else you'd return to where the game last had you. 
+Might've been fighting with havok.*/
 void __fastcall HumanUpdatePosAndOrientHook(Human* HumanPtr, void* edx, vector* UpdatedPosition, matrix* UpdatedOrientation, bool SetHavokData)
 {
 	std::call_once(HookHumanUpdatePosAndOrientInitialCall, [&]()
@@ -525,7 +533,7 @@ void __fastcall HumanUpdatePosAndOrientHook(Human* HumanPtr, void* edx, vector* 
 		Logger::ConsoleLog("First time in HumanUpdatePosAndOrient() hook.\n", LogInfo, false, true);
 #endif
 	});
-	if (Gui.MainWindow.NeedPlayerPosSet)
+	/*if (Gui.MainWindow.NeedPlayerPosSet)
 	{
 		if (GlobalPlayerPtrInitialized)
 		{
@@ -557,7 +565,7 @@ void __fastcall HumanUpdatePosAndOrientHook(Human* HumanPtr, void* edx, vector* 
 					HumanPtr->Velocity.z = Gui.MainWindow.PlayerVelocityTargetArray[2];
 			}
 		}
-	}
+	}*/
 
 	//HumanPtr->Flags.start_jump = 2147483647;
 	//HumanPtr->Flags.super_jump = 2147483647;

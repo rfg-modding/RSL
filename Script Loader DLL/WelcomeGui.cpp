@@ -1,196 +1,122 @@
-#include "MainOverlay.h"
+#include "WelcomeGui.h"
 #include "ScriptManager.h"
 
-MainOverlay::MainOverlay()
+WelcomeGui::WelcomeGui()
 {
 
 }
 
-MainOverlay::~MainOverlay()
+WelcomeGui::~WelcomeGui()
 {
 
 }
 
-void MainOverlay::Initialize(bool* _OpenState)
+void WelcomeGui::Initialize(bool* _OpenState)
 {
 	OpenState = _OpenState;
 
 	MainOverlayWindowFlags = 0;
 	//MainOverlayWindowFlags |= ImGuiWindowFlags_NoTitleBar;
 	//MainOverlayWindowFlags |= ImGuiWindowFlags_NoScrollbar;
-	MainOverlayWindowFlags |= ImGuiWindowFlags_MenuBar;
+	//MainOverlayWindowFlags |= ImGuiWindowFlags_MenuBar;
 	//MainOverlayWindowFlags |= ImGuiWindowFlags_NoMove;
-	//MainOverlayWindowFlags |= ImGuiWindowFlags_NoResize;
-	//MainOverlayWindowFlags |= ImGuiWindowFlags_NoCollapse;
+	MainOverlayWindowFlags |= ImGuiWindowFlags_NoResize;
+	MainOverlayWindowFlags |= ImGuiWindowFlags_NoCollapse;
+	MainOverlayWindowFlags |= ImGuiWindowFlags_AlwaysAutoResize;
 	//MainOverlayWindowFlags |= ImGuiWindowFlags_NoNav;
 	//MainOverlayWindowFlags |= ImGuiWindowFlags_NoBackground;
 	//MainOverlayWindowFlags |= ImGuiWindowFlags_NoBringToFrontOnFocus;
-
-	MainOverlayPopupFlags = 0;
-	//MainOverlayWindowFlags |= ImGuiWindowFlags_NoTitleBar;
-	//MainOverlayWindowFlags |= ImGuiWindowFlags_NoScrollbar;
-	//MainOverlayPopupFlags |= ImGuiWindowFlags_MenuBar;
-	//MainOverlayWindowFlags |= ImGuiWindowFlags_NoMove;
-	MainOverlayPopupFlags |= ImGuiWindowFlags_NoResize;
-	MainOverlayPopupFlags |= ImGuiWindowFlags_NoCollapse;
-	//MainOverlayWindowFlags |= ImGuiWindowFlags_NoNav;
-	//MainOverlayWindowFlags |= ImGuiWindowFlags_NoBackground;
-	//MainOverlayWindowFlags |= ImGuiWindowFlags_NoBringToFrontOnFocus;
-
-	MainOverlayTeleportEditTextFlags = 0;
-	MainOverlayTeleportEditTextFlags |= ImGuiInputTextFlags_AllowTabInput;
-	MainOverlayTeleportEditTextFlags |= ImGuiInputTextFlags_CharsHexadecimal;
-
-	//LoadGUIConfig();
-	//LoadTeleportLocations();
 }
 
-void MainOverlay::Draw(const char* Title)
+void WelcomeGui::Draw(const char* Title)
 {
 	if (!*OpenState)
 	{
 		return;
 	}
-
-	if (!PlayerPtrTargetsInitialized)
-	{
-		if (PlayerPtr)
-		{
-			PlayerPositionTargetArray[0] = PlayerPtr->Position.x;
-			PlayerPositionTargetArray[1] = PlayerPtr->Position.y;
-			PlayerPositionTargetArray[2] = PlayerPtr->Position.z;
-
-			PlayerVelocityTargetArray[0] = PlayerPtr->Velocity.x;
-			PlayerVelocityTargetArray[1] = PlayerPtr->Velocity.y;
-			PlayerVelocityTargetArray[2] = PlayerPtr->Velocity.z;
-
-			PlayerPtrTargetsInitialized = true;
-			Logger::Log("PlayerPtrTargetsInitialized = true", LogWarning);
-		}
-	}
-
-	ImGui::SetNextWindowSize(ImVec2(600.0f, 700.0f), ImGuiCond_FirstUseEver);
-
 	if (!ImGui::Begin(Title, OpenState, MainOverlayWindowFlags))
 	{
 		ImGui::End();
 		return;
 	}
 
-	if (!PlayerPtr) //Same thing as if(PlayerPtr == nullptr)
-	{
-		ImGui::PushItemWidth(300.0f);
-		ImGui::TextWrapped("You must load a save first before this gui is useable.");
-		ImGui::End();
-		return;
-	}
+	if (Gui.ShowAppMetrics) { ImGui::ShowMetricsWindow(&Gui.ShowAppMetrics); }
+	if (Gui.ShowAppAbout) { ShowAboutWindow(&Gui.ShowAppAbout); }
 
-	if (*ShowAppMetrics) { ImGui::ShowMetricsWindow(ShowAppMetrics); }
-	if (*ShowAppAbout) { ShowAboutWindow(ShowAppAbout); }
-
-	// Menu
-	if (ImGui::BeginMenuBar())
-	{
-		if (ImGui::BeginMenu("Examples"))
-		{
-			//ImGui::Text(std::to_string(*ShowAppMainMenuBar).c_str());
-			ImGui::MenuItem("Main menu bar", NULL, ShowAppMainMenuBar);
-			ImGui::MenuItem("Console", NULL, ShowAppConsole);
-			ImGui::MenuItem("Log", NULL, ShowAppLog);
-			ImGui::MenuItem("Long text display", NULL, ShowAppLongText);
-			ImGui::MenuItem("Simple overlay", NULL, ShowAppSimpleOverlay);
-			ImGui::EndMenu();
-		}
-		if (ImGui::BeginMenu("Help"))
-		{
-			ImGui::MenuItem("Metrics", NULL, ShowAppMetrics);
-			ImGui::MenuItem("Theme Editor", NULL, ShowAppStyleEditor);
-			ImGui::MenuItem("About", NULL, ShowAppAbout);
-			ImGui::EndMenu();
-		}
-		ImGui::EndMenuBar();
-	}
-	ImGui::Separator();
-	ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 0.0f);
+	//ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 0.0f);
 	ImGui::PushStyleColor(ImGuiCol_Button, ImVec4());
 	//ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4());
 	//ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4());
-	ImGui::PushFont(FontLarge);
-	if(ImGui::Button(std::string(std::string(ICON_FA_CODE) + u8"##CodeIcon").c_str()))
+	ImGui::PushFont(FontHuge);
+	ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.556f, 0.823f, 0.541f, 1.0f));
+	if (ImGui::Button(std::string(std::string(ICON_FA_CODE) + u8"##CodeIcon").c_str()))
 	{
-
+		Gui.ShowAppScriptsMenu = !Gui.ShowAppScriptsMenu;
 	}
+	ImGui::PopStyleColor();
+	Utilities::GUI::TooltipOnPrevious("This menu displays all the scripts detected in the scripts folder and lets you run, edit, and stop them on command. If the script isn't using event hooks then stopping it does nothing, since it stops after running once.", FontNormal);
 	ImGui::SameLine();
-	if(ImGui::Button(std::string(std::string(ICON_FA_FILE_CODE) + u8"##CodeFileIcon").c_str()))
-	{
-
-	}
-	ImGui::SameLine();
-	if(ImGui::Button(std::string(std::string(ICON_FA_MOUNTAIN) + u8"##AudioFileIcon").c_str()))
-	{
-
-	}
-	ImGui::SameLine();
-	if (ImGui::Button(std::string(std::string(ICON_FA_COG) + u8"##CogIcon").c_str()))
-	{
-
-	}
-	ImGui::SameLine();
-	if (ImGui::Button(std::string(std::string(ICON_FA_COGS) + u8"##CogsIcon").c_str()))
-	{
-
-	}
-	ImGui::SameLine();
-	if (ImGui::Button(std::string(std::string(ICON_FA_SLIDERS_H) + u8"##SlidersIcon").c_str()))
-	{
-
-	}
-	ImGui::SameLine();
-	if (ImGui::Button(std::string(std::string(ICON_FA_TASKS) + u8"##TasksIcon").c_str()))
-	{
-
-	}
-	ImGui::SameLine();
-	if (ImGui::Button(std::string(std::string(ICON_FA_TOOLS) + u8"##ToolsIcon").c_str()))
-	{
-
-	}
-	ImGui::SameLine();
-	if (ImGui::Button(std::string(std::string(ICON_FA_TOOLBOX) + u8"##ToolboxIcon").c_str()))
-	{
-
-	}
-	ImGui::SameLine();
-	if (ImGui::Button(std::string(std::string(ICON_FA_SPIDER) + u8"##SpiderIcon").c_str()))
-	{
-
-	}
-	ImGui::SameLine();
+	ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.357f, 0.659f, 0.863f, 1.0f));
 	if (ImGui::Button(std::string(std::string(ICON_FA_TERMINAL) + u8"##TerminalIcon").c_str()))
 	{
-
+		Gui.ToggleLuaConsole();
 	}
+	ImGui::PopStyleColor();
+	Utilities::GUI::TooltipOnPrevious("The console is useful for quickly setting values or calling functions without writing a script. Anything that scripts have access to, the console does too. The console is just running your input into it as a script.", FontNormal);
 	ImGui::SameLine();
-	if (ImGui::Button(std::string(std::string(ICON_FA_EXCLAMATION_CIRCLE) + u8"##ExclamationCircleIcon").c_str()))
+	ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 0.808f, 0.267f, 1.0f));
+	if (ImGui::Button(std::string(std::string(ICON_FA_EDIT) + u8"##EditIcon").c_str()))
 	{
-
+		Gui.ShowAppScriptEditor = !Gui.ShowAppScriptEditor;
 	}
+	ImGui::PopStyleColor();
+	Utilities::GUI::TooltipOnPrevious("The script editor allows you to save, load, edit, and run lua scripts in game, and provides basic lua syntax highlighting.", FontNormal);
 	ImGui::SameLine();
-	if (ImGui::Button(std::string(std::string(ICON_FA_EXCLAMATION_TRIANGLE) + u8"##ExclamationTriangleIcon").c_str()))
+	ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.404f, 0.416f, 0.435f, 1.0f));
+	if (ImGui::Button(std::string(std::string(ICON_FA_SLIDERS_H) + u8"##SlidersIcon").c_str()))
 	{
-
+		Gui.ShowAppTweaksMenu = !Gui.ShowAppTweaksMenu;
 	}
+	ImGui::PopStyleColor();
+	Utilities::GUI::TooltipOnPrevious("This menu has settings for invulnerability, infinite jetpack, player move speed, player jump height, xray vision, and more.", FontNormal);
 	ImGui::SameLine();
-	if (ImGui::Button(std::string(std::string(ICON_FA_VIAL) + u8"##ExclamationTriangleIcon").c_str()))
+	ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.961f, 0.753f, 0.698f, 1.0f));
+	if (ImGui::Button(std::string(std::string(ICON_FA_MAP_MARKED) + u8"##MapMarkedIcon").c_str()))
 	{
-
+		Gui.ShowAppTeleportMenu = !Gui.ShowAppTeleportMenu;
 	}
+	ImGui::PopStyleColor();
+	Utilities::GUI::TooltipOnPrevious("This menu allows you to teleport around the map. There are many preset locations, and you may create your own. Any of your custom locations are saved in TeleportLocations.json. You don't need to edit it by hand as you can do all the editing you need in the gui.", FontNormal);
+	ImGui::SameLine();
+	ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.361f, 0.129f, 1.0f, 1.0f));
+	if (ImGui::Button(std::string(std::string(ICON_FA_PAINT_BRUSH) + u8"##PaintBrushIcon").c_str()))
+	{
+		Gui.ShowAppThemeEditor = !Gui.ShowAppThemeEditor;
+	}
+	ImGui::PopStyleColor();
+	Utilities::GUI::TooltipOnPrevious("You can use the theme editor to change the color scheme and style of the overlay gui. It allows you to save your settings to GUIConfig.json and share that with others so they can use it. This release only supports a having a single theme, but a later release will have a themes folder so you can easily switch between them.", FontNormal);
 	ImGui::PopFont();
 	ImGui::PopStyleColor();
 	//ImGui::PopStyleColor(3);
-	ImGui::PopStyleVar();
+	//ImGui::PopStyleVar();
 
-	if (ImGui::CollapsingHeader("Notes:"))
+	ImGui::PushItemWidth(225.0f);
+	ImGui::TextWrapped("Welcome to the RFGR Script Loader overlay. Above are \
+some buttons for menus which you might find useful. Tooltips with more info \
+appear if you hover over them. You can also access all of these menus with \
+the top menu bar above.");
+	//ImGui::Text("");
+	ImGui::Text("\nUseful shortcuts:");
+	ImGui::Text("Toggle overlay: ");
+	ImGui::SameLine(); ImGui::TextColored(SecondaryTextColor, "F1");
+	ImGui::Text("Toggle lua console: ");
+	ImGui::SameLine(); ImGui::TextColored(SecondaryTextColor, "Tilde (~)");
+	ImGui::Text("Disable hud & fog: ");
+	ImGui::SameLine(); ImGui::TextColored(SecondaryTextColor, "Numpad 1");
+	ImGui::Text("Enable hud & fog: ");
+	ImGui::SameLine(); ImGui::TextColored(SecondaryTextColor, "Numpad 2");
+
+	/*if (ImGui::CollapsingHeader("Notes:"))
 	{
 		ImGui::Text("Notes");
 		ImGui::PushItemWidth(300.0f);
@@ -220,16 +146,12 @@ void MainOverlay::Draw(const char* Title)
 		ImGui::TextWrapped("- I recommend using the tool with the debug console disabled. It's an exterior window and can sometimes cause issues with the tool loading. It is off by default, so if you haven't turned it on, don't worry about it. Eventually I'll replace it completely with the in game console in the examples menu. Which is a dummy console that came with this gui library for now.");
 		ImGui::PushItemWidth(300.0f);
 		ImGui::TextWrapped("- The \"Global explosion modifiers\" section is completely broken and will make explosions stupidly overpowered rapidly. Use at your own risk. You must restart the game to revert it's effects.");
-	}
-
-	ImGui::Text("ShowAppLog: ");
-	ImGui::SameLine();
-	ImGui::TextColored(SecondaryTextColor, std::to_string(*ShowAppLog).c_str());
+	}*/
 
 	ImGui::End();
 }
 
-void MainOverlay::ShowAboutWindow(bool* p_open)
+void WelcomeGui::ShowAboutWindow(bool* p_open)
 {
 	if (!ImGui::Begin("About RFGR Script Loader", p_open, ImGuiWindowFlags_AlwaysAutoResize))
 	{

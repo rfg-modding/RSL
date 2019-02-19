@@ -76,7 +76,7 @@ void OverlayConsole::Draw(const char* Title)
 			if (Logger::LogData[i].Flags & LogInfo)
 			{
 				ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.945f, 0.945f, 0.945f, 1.0f));
-				ImGui::TextUnformatted("Info");
+				ImGui::TextUnformatted(ICON_FA_INFO);
 				ImGui::PopStyleColor();
 			}
 			else if (Logger::LogData[i].Flags & LogWarning)
@@ -126,9 +126,13 @@ void OverlayConsole::Draw(const char* Title)
 	BufferCount = 0;
 
 	//Auto-scrolls console output to bottom unless the user scrolls up.
-	if (ImGui::GetScrollY() >= abs(ImGui::GetContentRegionAvail().y) - 75.0f)
+	if (Autoscroll)
 	{
-		ImGui::SetScrollHereY();
+		ImGui::SetScrollHereY(1.0f);
+		/*if (ImGui::GetScrollY() >= abs(ImGui::GetContentRegionAvail().y) - 75.0f)
+		{
+			ImGui::SetScrollHereY();
+		}*/
 	}
 	ImGui::EndChild();
 	ImGui::PopStyleVar();
@@ -173,14 +177,17 @@ void OverlayConsole::Draw(const char* Title)
 		InputBuffer.clear();
 		ReclaimFocus = true;
 	}
+	ImGui::SameLine();
+	ImGui::Checkbox("Auto scroll", &Autoscroll);
 
 	// Auto-focus on window apparition
 	ImGui::SetItemDefaultFocus();
 	if (ReclaimFocus)
 	{
-		//ImGui::SetKeyboardFocusHere(-1); // Auto focus previous widget
+		ImGui::SetKeyboardFocusHere(-1); // Auto focus previous widget
+		ReclaimFocus = false;
 	}
-	ImGui::SetKeyboardFocusHere(-1);
+	//ImGui::SetKeyboardFocusHere(-1);
 
 	ImGui::End();
 	ImGui::PopStyleColor(3);

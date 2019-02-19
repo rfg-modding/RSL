@@ -53,6 +53,7 @@ const WORD ConsoleDefaultTextAttributes = 0 | FOREGROUND_RED | FOREGROUND_GREEN 
 
 void* GlobalRlDrawPtr = nullptr;
 bool BlockNextTildeInput = false;
+bool ScriptLoaderCloseRequested = false;
 
 extern const std::string ScriptLoaderVersion("0.1.0-Alpha");
 const char* GetScriptLoaderVersion()

@@ -618,3 +618,40 @@ else
 //ImGui::Separator();
 
 //ImGui::Text("Misc Program Values:");
+
+
+/*	//ImGui::SameLine();
+	if (ImGui::Button(std::string(std::string(ICON_FA_COG) + u8"##CogIcon").c_str()))
+	{
+
+	}
+	ImGui::SameLine();
+	if (ImGui::Button(std::string(std::string(ICON_FA_COGS) + u8"##CogsIcon").c_str()))
+	{
+
+	}
+	ImGui::SameLine();
+	if (ImGui::Button(std::string(std::string(ICON_FA_TASKS) + u8"##TasksIcon").c_str()))
+	{
+
+	}
+	ImGui::SameLine();
+	if (ImGui::Button(std::string(std::string(ICON_FA_TOOLS) + u8"##ToolsIcon").c_str()))
+	{
+
+	}
+	ImGui::SameLine();
+	if (ImGui::Button(std::string(std::string(ICON_FA_TOOLBOX) + u8"##ToolboxIcon").c_str()))
+	{
+
+	}
+	ImGui::SameLine();
+	if (ImGui::Button(std::string(std::string(ICON_FA_EXCLAMATION_TRIANGLE) + u8"##ExclamationTriangleIcon").c_str()))
+	{
+
+	}
+	ImGui::SameLine();
+	if (ImGui::Button(std::string(std::string(ICON_FA_VIAL) + u8"##ExclamationTriangleIcon").c_str()))//Also try the flask icon
+	{
+
+	}*/

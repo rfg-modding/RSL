@@ -79,7 +79,7 @@ MenuBarGui::~MenuBarGui()
 void MenuBarGui::Initialize(bool * _OpenState)
 {
 	OpenState = _OpenState;
-
+	
 	WindowFlags = 0;
 	WindowFlags |= ImGuiWindowFlags_NoTitleBar;
 	WindowFlags |= ImGuiWindowFlags_NoScrollbar;
@@ -102,19 +102,61 @@ void MenuBarGui::Draw(const char* Title)
 	{
 		if (ImGui::BeginMenu("File"))
 		{
-			ShowExampleMenuFile();
+			if (ImGui::MenuItem("Deactivate Script Loader", "Hold ctrl+alt for 5s")) { ConfirmScriptLoaderDeactivation(); }
+			//ShowExampleMenuFile();
 			ImGui::EndMenu();
 		}
-		if (ImGui::BeginMenu("Edit"))
+		if (ImGui::BeginMenu("Tools"))
 		{
-			if (ImGui::MenuItem("Undo", "CTRL+Z")) {}
-			if (ImGui::MenuItem("Redo", "CTRL+Y", false, false)) {}  // Disabled item
-			ImGui::Separator();
-			if (ImGui::MenuItem("Cut", "CTRL+X")) {}
-			if (ImGui::MenuItem("Copy", "CTRL+C")) {}
-			if (ImGui::MenuItem("Paste", "CTRL+V")) {}
+			if(ImGui::MenuItem("Tweaks", NULL, ShowAppTweaksMenu)) {}
+			if (ImGui::MenuItem("Teleport", NULL, ShowAppTeleportMenu)) {}
+			if (ImGui::MenuItem("Logger", NULL, ShowAppLogWindow)) {}
+			if (ImGui::MenuItem("Player View", NULL, ShowAppIntrospectionMenu)) {}
+			if (ImGui::MenuItem("Theme Editor", NULL, ShowAppThemeEditor)) {}
+			ImGui::EndMenu();
+		}
+		if (ImGui::BeginMenu("Scripting"))
+		{
+			if (ImGui::MenuItem("Scripts", NULL, ShowAppScriptsMenu)) {}
+			if (ImGui::MenuItem("Lua Console", NULL, ShowAppConsole)) 
+			{
+				if (*ShowAppConsole)
+				{
+					Gui.ActivateLuaConsole();
+				}
+				else
+				{
+					Gui.DeactivateLuaConsole();
+				}
+			}
+			if (ImGui::MenuItem("Script Editor", NULL, ShowAppScriptEditor)) {}
+			ImGui::EndMenu();
+		}
+		if (ImGui::BeginMenu("Help"))
+		{
+			if (ImGui::MenuItem("Welcome", NULL, ShowAppMainWindow)) {}
+			if (ImGui::MenuItem("About", NULL, ShowAppAbout)) {}
 			ImGui::EndMenu();
 		}
 		ImGui::EndMainMenuBar();
+	}
+}
+
+void MenuBarGui::ConfirmScriptLoaderDeactivation()
+{
+	ImGui::OpenPopup("Confirm Deactivation");
+	if (ImGui::BeginPopupModal("Confirm Deactivation"))
+	{
+		ImGui::Text("Are you sure you'd like to deactivate the script loader?");
+		if (ImGui::Button("Exit"))
+		{
+			ScriptLoaderCloseRequested = true;
+			ImGui::CloseCurrentPopup();
+		}
+		ImGui::SameLine();
+		if (ImGui::Button("Cancel"))
+		{
+			ImGui::CloseCurrentPopup();
+		}
 	}
 }

@@ -1,5 +1,5 @@
 #pragma once
-#include "MainOverlay.h"
+#include "WelcomeGui.h"
 
 class ScriptManager;
 
@@ -23,7 +23,7 @@ public:
 	void DeactivateLuaConsole();
 	void ActivateLuaConsole();
 
-	MainOverlay MainWindow;
+	WelcomeGui MainWindow;
 	OverlayConsole Console;
 	ThemeEditorGui ThemeEditor;
 	TeleportGui TeleportMenu;
@@ -34,25 +34,25 @@ public:
 	MenuBarGui TopMenuBar;
 	LogWindow LogGui;
 
-	bool ShowAppMainWindow = true;
+	bool ShowAppWelcome = true;
 
-	bool ShowAppConsole = true;
+	bool ShowAppConsole = false;
 	bool ShowAppMetrics = false;
-	bool ShowAppThemeEditor = true;
+	bool ShowAppThemeEditor = false;
 	bool ShowAppAbout = false;
 	bool ShowAppGameInfoOverlay = false;
 
 	bool ShowAppMainMenuBar = false;
 	bool ShowAppSimpleOverlay = false;
 
-	bool ShowAppTeleportMenu = true;
+	bool ShowAppTeleportMenu = false;
 	bool ShowAppHelpWindow = false;
-	bool ShowAppIntrospectionMenu = true;
-	bool ShowAppTweaksMenu = true;
-	bool ShowAppScriptsMenu = true;
-	bool ShowAppScriptEditor = true;
+	bool ShowAppIntrospectionMenu = false;
+	bool ShowAppTweaksMenu = false;
+	bool ShowAppScriptsMenu = false;
+	bool ShowAppScriptEditor = false;
 
-	bool ShowAppLogWindow = true;
+	bool ShowAppLogWindow = false;
 
 private:
 	bool LuaConsoleActive = false;

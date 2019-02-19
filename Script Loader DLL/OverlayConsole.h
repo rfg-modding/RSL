@@ -21,7 +21,7 @@ public:
 	ImGuiWindowFlags WindowFlags = 0;
 	ScriptManager* Scripts = nullptr;
 
-	int ConsoleLogType =  LogLua | LogError;
+	int ConsoleLogType = LogAll;// LogLua | LogError;
 	int BufferDisplayLength = 100;
 	std::string InputBuffer;
 
@@ -29,6 +29,7 @@ public:
 	unsigned int HistoryPosition = 0;
 
 	bool ReclaimFocus = true;
+	bool Autoscroll = true;
 
 private:
 	bool* OpenState = nullptr;

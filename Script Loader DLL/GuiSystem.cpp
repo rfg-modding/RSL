@@ -13,16 +13,21 @@ GuiSystem::~GuiSystem()
 
 void GuiSystem::Initialize()
 {
-	MainWindow.ShowAppConsole = &ShowAppConsole;
-	MainWindow.ShowAppMetrics = &ShowAppMetrics;
-	MainWindow.ShowAppStyleEditor = &ShowAppThemeEditor;
-	MainWindow.ShowAppAbout = &ShowAppAbout;
-	MainWindow.ShowAppGameInfoOverlay = &ShowAppGameInfoOverlay;
-	MainWindow.ShowAppMainMenuBar = &ShowAppMainMenuBar;
-	MainWindow.ShowAppLog = &ShowAppLogWindow;
-	MainWindow.ShowAppSimpleOverlay = &ShowAppSimpleOverlay;
+	TopMenuBar.ShowAppMainWindow = &ShowAppWelcome;
+	TopMenuBar.ShowAppConsole = &ShowAppConsole;
+	TopMenuBar.ShowAppThemeEditor = &ShowAppThemeEditor;
+	TopMenuBar.ShowAppAbout = &ShowAppAbout;
+	TopMenuBar.ShowAppSimpleOverlay = &ShowAppSimpleOverlay;
+	TopMenuBar.ShowAppTeleportMenu = &ShowAppTeleportMenu;
+	TopMenuBar.ShowAppHelpWindow = &ShowAppHelpWindow;
+	TopMenuBar.ShowAppIntrospectionMenu = &ShowAppIntrospectionMenu;
+	TopMenuBar.ShowAppTweaksMenu = &ShowAppTweaksMenu;
+	TopMenuBar.ShowAppScriptsMenu = &ShowAppScriptsMenu;
+	TopMenuBar.ShowAppScriptEditor = &ShowAppScriptEditor;
+	TopMenuBar.ShowAppLogWindow = &ShowAppLogWindow;
+	TopMenuBar.Initialize(&ShowAppMainMenuBar);
 
-	MainWindow.Initialize(&ShowAppMainWindow);
+	MainWindow.Initialize(&ShowAppWelcome);
 	Console.Initialize(&ShowAppConsole);
 	ThemeEditor.Initialize(&ShowAppThemeEditor);
 	TeleportMenu.Initialize(&ShowAppTeleportMenu);
@@ -33,7 +38,6 @@ void GuiSystem::Initialize()
 	ScriptEditor.Initialize(&ShowAppScriptEditor);
 	ScriptEditor.SetLanguageDefinition(TextEditor::LanguageDefinition::Lua());
 
-	TopMenuBar.Initialize(&ShowAppMainMenuBar);
 	LogGui.Initialize(&ShowAppLogWindow);
 }
 
@@ -61,8 +65,8 @@ void GuiSystem::Draw()
 
 	if (OverlayActive)
 	{
-		MainWindow.Draw("Main overlay");
-		Console.Draw("Lua Console");
+		MainWindow.Draw("Welcome");
+		//Console.Draw("Lua Console");
 		ThemeEditor.Draw("Theme Editor");
 		TeleportMenu.Draw("Teleport Menu");
 		IntrospectionMenu.Draw("Introspection Menu");
@@ -72,19 +76,15 @@ void GuiSystem::Draw()
 		TopMenuBar.Draw("Top Menu Bar");
 		LogGui.Draw("Logger");
 	}
-	else
+	if (LuaConsoleActive)
 	{
-		if (LuaConsoleActive)
-		{
-			Console.Draw("Lua Console");
-		}
+		Console.Draw("Lua Console");
 	}
 }
 
 void GuiSystem::SetPlayerPtr(Player* NewPlayerPtr)
 {
 	PlayerPtr = NewPlayerPtr;
-	MainWindow.PlayerPtr = NewPlayerPtr;
 	Console.PlayerPtr = NewPlayerPtr;
 	//ThemeEditor.PlayerPtr = NewPlayerPtr;
 	TeleportMenu.PlayerPtr = NewPlayerPtr;
@@ -101,6 +101,11 @@ void GuiSystem::SetPlayerPtr(void* NewPlayerPtr)
 void GuiSystem::ToggleLuaConsole()
 {
 	LuaConsoleActive = !LuaConsoleActive;
+	ShowAppConsole = !ShowAppConsole;
+	/*if (LuaConsoleActive && !ShowAppConsole)
+	{
+		ShowAppConsole = true;
+	}*/
 }
 
 bool GuiSystem::IsLuaConsoleActive()

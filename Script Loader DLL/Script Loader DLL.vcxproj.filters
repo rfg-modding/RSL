@@ -102,9 +102,6 @@
     <ClCompile Include="GuiSystem.cpp">
       <Filter>Overlay Gui\Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MainOverlay.cpp">
-      <Filter>Overlay Gui\Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="OverlayConsole.cpp">
       <Filter>Overlay Gui\Source Files</Filter>
     </ClCompile>
@@ -130,6 +127,9 @@
       <Filter>Overlay Gui\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="LogWindow.cpp">
+      <Filter>Overlay Gui\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="WelcomeGui.cpp">
       <Filter>Overlay Gui\Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -248,9 +248,6 @@
     <ClInclude Include="GuiSystem.h">
       <Filter>Overlay Gui\Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="MainOverlay.h">
-      <Filter>Overlay Gui\Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="OverlayConsole.h">
       <Filter>Overlay Gui\Header Files</Filter>
     </ClInclude>
@@ -276,6 +273,9 @@
       <Filter>Overlay Gui\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="LogWindow.h">
+      <Filter>Overlay Gui\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="WelcomeGui.h">
       <Filter>Overlay Gui\Header Files</Filter>
     </ClInclude>
   </ItemGroup>
