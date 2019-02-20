@@ -108,7 +108,7 @@ void MenuBarGui::Draw(const char* Title)
 		}
 		if (ImGui::BeginMenu("Tools"))
 		{
-			if(ImGui::MenuItem("Tweaks", NULL, ShowAppTweaksMenu)) {}
+			if (ImGui::MenuItem("Tweaks", NULL, ShowAppTweaksMenu)) {}
 			if (ImGui::MenuItem("Teleport", NULL, ShowAppTeleportMenu)) {}
 			if (ImGui::MenuItem("Logger", NULL, ShowAppLogWindow)) {}
 			if (ImGui::MenuItem("Player View", NULL, ShowAppIntrospectionMenu)) {}

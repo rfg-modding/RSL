@@ -76,7 +76,7 @@ void OverlayConsole::Draw(const char* Title)
 			if (Logger::LogData[i].Flags & LogInfo)
 			{
 				ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.945f, 0.945f, 0.945f, 1.0f));
-				ImGui::TextUnformatted(ICON_FA_INFO);
+				ImGui::TextUnformatted("Info");
 				ImGui::PopStyleColor();
 			}
 			else if (Logger::LogData[i].Flags & LogWarning)
