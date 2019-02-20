@@ -855,73 +855,75 @@ void TextEditor::Render(const char* aTitle, const ImVec2& aSize, bool aBorder)
 		return;
 	}
 
-	ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(4.0f, 4.0f));
+	//ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(4.0f, 4.0f));
 	ImGui::SetNextWindowSize(ImVec2(800.0f, 500.0f), ImGuiCond_FirstUseEver);
 	ImVec4* Colors = ImGui::GetStyle().Colors; //48 items
-	ImGui::PushStyleColor(ImGuiCol_ResizeGrip, Colors[ImGuiCol_WindowBg]);
-	ImGui::PushStyleColor(ImGuiCol_ResizeGripHovered, Colors[ImGuiCol_WindowBg]);
-	ImGui::PushStyleColor(ImGuiCol_ResizeGripActive, Colors[ImGuiCol_WindowBg]);
+	//ImGui::PushStyleColor(ImGuiCol_ResizeGrip, Colors[ImGuiCol_WindowBg]);
+	//ImGui::PushStyleColor(ImGuiCol_ResizeGripHovered, Colors[ImGuiCol_WindowBg]);
+	//ImGui::PushStyleColor(ImGuiCol_ResizeGripActive, Colors[ImGuiCol_WindowBg]);
 	if (!ImGui::Begin(aTitle, OpenState, ImGuiWindowFlags_MenuBar))
 	{
 		ImGui::End();
 		return;
 	}
-
+	
+	static bool ShowNewScriptPopup = false;
+	static bool ShowOpenScriptPopup = false;
+	static bool ShowSaveScriptPopup = false;
+	static bool ShowSaveAsScriptPopup = false;
 	if (ImGui::BeginMenuBar())
 	{
 		if (ImGui::BeginMenu(std::string(std::string(ICON_FA_FILE) + u8" File##ScriptEditor").c_str()))
 		{
-			//ShowExampleMenuFile();
-			ImGui::Text("New");
-			ImGui::Text("Open");
-			ImGui::Text("Save");
-			ImGui::Text("Save As");
+			if (ImGui::MenuItem("New")) { ShowNewScriptPopup = true; }
+			if (ImGui::MenuItem("Open")) { ShowOpenScriptPopup = true; }
+			if (ImGui::MenuItem("Save")) { ShowSaveScriptPopup = true; }
+			if (ImGui::MenuItem("Save as")) { ShowSaveAsScriptPopup = true; }
+			DrawNewScriptPopup();
+			DrawOpenScriptPopup();
+			DrawSaveScriptPopup();
+			DrawSaveAsScriptPopup();
 			ImGui::EndMenu();
 		}
 		if (ImGui::BeginMenu(std::string(std::string(ICON_FA_EDIT) + u8" Edit##ScriptEditor").c_str()))
 		{
-			ImGui::Text("Load");
-			//ImGui::Text(std::to_string(*ShowAppMainMenuBar).c_str());
-			//ImGui::MenuItem("Main menu bar", NULL, ShowAppMainMenuBar);
-			//ImGui::MenuItem("Console", NULL, ShowAppConsole);
-			//ImGui::MenuItem("Log", NULL, ShowAppLog);
-			//ImGui::MenuItem("Long text display", NULL, ShowAppLongText);
-			//ImGui::MenuItem("Simple overlay", NULL, ShowAppSimpleOverlay);
-			ImGui::EndMenu();
-		}
-		if (ImGui::BeginMenu("Examples")) //Todo: Maybe just make this a submenu of Help
-		{
-			ImGui::Text("Load");
-			//ImGui::Text(std::to_string(*ShowAppMainMenuBar).c_str());
-			//ImGui::MenuItem("Main menu bar", NULL, ShowAppMainMenuBar);
-			//ImGui::MenuItem("Console", NULL, ShowAppConsole);
-			//ImGui::MenuItem("Log", NULL, ShowAppLog);
-			//ImGui::MenuItem("Long text display", NULL, ShowAppLongText);
-			//ImGui::MenuItem("Simple overlay", NULL, ShowAppSimpleOverlay);
+			//if (ImGui::MenuItem("Go to")) {TextEditor::SetCursorPosition(Te)}
+			if (ImGui::MenuItem("Undo")) { Undo(); } //Check can undo and pick color depending on that.
+			if (ImGui::MenuItem("Redo")) { Redo(); }
+			ImGui::Separator();
+			if (ImGui::MenuItem("Cut")) { Cut(); }
+			if (ImGui::MenuItem("Copy")) { Copy(); }
+			if (ImGui::MenuItem("Paste")) { Paste(); }
+			if (ImGui::MenuItem("Duplicate")) { Logger::Log(GetText(mInteractiveStart, mInteractiveEnd).c_str(), LogInfo); }
 			ImGui::EndMenu();
 		}
 		///ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.556f, 0.823f, 0.541f, 1.0f));
 		if (ImGui::BeginMenu(std::string(std::string(ICON_FA_TOOLS) + u8" Tools##ScriptEditor").c_str())) //ICON_FA_VIAL
 		{
-			Logger::Log("Clicked Script Editor run button", LogInfo);
+			if (ImGui::MenuItem("Run")) 
+			{
+				std::string ScriptString = GetCurrentScriptString();
+				std::cout << "Script Editor Run Script Value: " << ScriptString << "\n";
+				Scripts->RunStringAsScript(ScriptString, "script editor run"); 
+			}
+			if (ImGui::MenuItem("Stop")) {}
+			//if (ImGui::MenuItem("Save")) {}
+			//if (ImGui::MenuItem("Save as")) {}
 			ImGui::EndMenu();
 		}
 		///ImGui::PopStyleColor(1);
 		///ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.952f, 0.545f, 0.462f, 1.0f));
-		if (ImGui::BeginMenu(std::string(std::string(ICON_FA_BUG) + u8" Debug##ScriptEditor").c_str())) //ICON_FA_BUG
+		/*if (ImGui::BeginMenu(std::string(std::string(ICON_FA_BUG) + u8" Debug##ScriptEditor").c_str())) //ICON_FA_BUG
 		{
-			Logger::Log("Clicked Script Editor stop button", LogInfo);
 			ImGui::EndMenu();
 		}
 		///ImGui::PopStyleColor(1);
-		if (ImGui::BeginMenu(std::string(std::string(ICON_FA_QUESTION) + u8" Help##ScriptEditor").c_str()))
+		if (ImGui::BeginMenu("Help")) //Todo: Maybe just make this a submenu of Help
 		{
-			ImGui::Text("Load");
-			//ImGui::MenuItem("Metrics", NULL, ShowAppMetrics);
-			//ImGui::MenuItem("Theme Editor", NULL, ShowAppStyleEditor);
-			//ImGui::MenuItem("About", NULL, ShowAppAbout);
+			if (ImGui::MenuItem("Examples")) {}
+			if (ImGui::MenuItem("Wiki")) {}
 			ImGui::EndMenu();
-		}
+		}*/
 		//ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 0.0f);
 		
 		/*ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.952f, 0.545f, 0.462f, 1.0f));
@@ -951,16 +953,42 @@ void TextEditor::Render(const char* aTitle, const ImVec2& aSize, bool aBorder)
 		}
 		ImGui::PopStyleColor(4);
 		ImGui::PopStyleVar();*/
+
 		ImGui::EndMenuBar();
 	}
-	ImGui::PopStyleVar();
+	//ImGui::PopStyleVar();
+
+	if (ShowNewScriptPopup)
+	{
+		ImGui::OpenPopup("New script");
+		ShowNewScriptPopup = false;
+	}
+	if (ShowOpenScriptPopup)
+	{
+		ImGui::OpenPopup("Open script");
+		ShowOpenScriptPopup = false;
+	}
+	if (ShowSaveScriptPopup)
+	{
+		ImGui::OpenPopup("Save script");
+		ShowSaveScriptPopup = false;
+	}
+	if (ShowSaveAsScriptPopup)
+	{
+		ImGui::OpenPopup("Save as");
+		ShowSaveAsScriptPopup = false;
+	}
+	DrawNewScriptPopup();
+	DrawOpenScriptPopup();
+	DrawSaveScriptPopup();
+	DrawSaveAsScriptPopup();
 
 	mWithinRender = true;
 	mTextChanged = false;
 	mCursorPositionChanged = false;
 
-	ImGui::PushStyleColor(ImGuiCol_ChildWindowBg, ImGui::ColorConvertU32ToFloat4(mPalette[(int)PaletteIndex::Background]));
-	ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0.0f, 0.0f));
+	///ImGui::PushStyleColor(ImGuiCol_ChildWindowBg, ImGui::ColorConvertU32ToFloat4(mPalette[(int)PaletteIndex::Background]));
+	///ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0.0f, 0.0f));
 	ImGui::BeginChild(std::string(aTitle + std::string("##TextEditorChild")).c_str(), aSize, aBorder, ImGuiWindowFlags_HorizontalScrollbar | ImGuiWindowFlags_AlwaysHorizontalScrollbar | ImGuiWindowFlags_NoMove);
 	ImGui::PushAllowKeyboardFocus(true);
 
@@ -971,13 +999,103 @@ void TextEditor::Render(const char* aTitle, const ImVec2& aSize, bool aBorder)
 
 	ImGui::PopAllowKeyboardFocus();
 	ImGui::EndChild();
-	ImGui::PopStyleVar();
-	ImGui::PopStyleColor();
+	///ImGui::PopStyleVar();
+	///ImGui::PopStyleColor();
 
 	mWithinRender = false;
 
 	ImGui::End();
-	ImGui::PopStyleColor(3);
+	//ImGui::PopStyleColor(3);
+}
+
+std::string TextEditor::GetCurrentScriptString()
+{
+	std::string ScriptString = "";
+	std::vector <std::string> LineBuffer = GetTextLines();
+	for (auto i = LineBuffer.begin(); i != LineBuffer.end(); i++)
+	{
+		ScriptString.append(i->c_str());
+		ScriptString.append("\n");
+	}
+	return ScriptString;
+}
+
+void TextEditor::DrawNewScriptPopup()
+{
+	if (ImGui::BeginPopup("New script"))
+	{
+
+		ImGui::EndPopup();
+	}
+}
+
+void TextEditor::DrawOpenScriptPopup()
+{
+	if (ImGui::BeginPopup("Open script"))
+	{
+		if (ImGui::Button("Rescan"))
+		{
+			Scripts->ScanScriptsFolder();
+		}
+		for (auto i = Scripts->Scripts.begin(); i != Scripts->Scripts.end(); ++i)
+		{
+			ImGui::Text(i->Name.c_str()); ImGui::SameLine();
+
+
+			//ImGui::PushID(0);
+			//ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 0.0f);
+			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4());
+			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4());
+			ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4());
+			/*ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.556f, 0.823f, 0.541f, 1.0f));
+			if (ImGui::Button(std::string(std::string(ICON_FA_PLAY) + u8"##" + i->FullPath).c_str()))
+			{
+				size_t ScriptIndex = std::distance(Scripts->Scripts.begin(), i);
+				bool Result = Scripts->RunScript(ScriptIndex);
+				Logger::Log("Result from running " + Scripts->Scripts[ScriptIndex].Name + ": " + std::to_string(Result), LogInfo);
+			}
+			ImGui::PopStyleColor(1);
+			ImGui::SameLine();*/
+			if (ImGui::Button(std::string(std::string(ICON_FA_EDIT) + u8"##" + i->FullPath).c_str()))
+			{
+				std::ifstream ScriptStream(i->FullPath);
+				std::string ScriptString((std::istreambuf_iterator<char>(ScriptStream)), std::istreambuf_iterator<char>());
+
+				TextEditor::mLines.clear();
+				TextEditor::SetText(ScriptString);
+				ImGui::CloseCurrentPopup();
+			}
+			/*ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.952f, 0.545f, 0.462f, 1.0f));
+			ImGui::SameLine();
+			if (ImGui::Button(std::string(std::string(ICON_FA_BAN) + u8"##" + i->FullPath).c_str()))
+			{
+
+			}*/
+			//ImGui::PopStyleColor(4);
+			ImGui::PopStyleColor(3);
+			//ImGui::PopStyleVar();
+			//ImGui::PopID();
+		}
+		ImGui::EndPopup();
+	}
+}
+
+void TextEditor::DrawSaveScriptPopup()
+{
+	if (ImGui::BeginPopup("Save script"))
+	{
+
+		ImGui::EndPopup();
+	}
+}
+
+void TextEditor::DrawSaveAsScriptPopup()
+{
+	if (ImGui::BeginPopup("Save as"))
+	{
+
+		ImGui::EndPopup();
+	}
 }
 
 void TextEditor::SetText(const std::string & aText)
@@ -1817,7 +1935,6 @@ const TextEditor::Palette & TextEditor::GetRetroBluePalette()
 	} };
 	return p;
 }
-
 
 std::string TextEditor::GetText() const
 {

@@ -244,6 +244,13 @@ public:
 	static const Palette& GetLightPalette();
 	static const Palette& GetRetroBluePalette();
 
+	std::string GetCurrentScriptString();
+
+	void DrawNewScriptPopup();
+	void DrawOpenScriptPopup();
+	void DrawSaveScriptPopup();
+	void DrawSaveAsScriptPopup();
+
 	ScriptManager* Scripts = nullptr;
 private:
 	bool* OpenState = nullptr;
