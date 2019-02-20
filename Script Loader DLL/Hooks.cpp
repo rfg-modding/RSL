@@ -230,7 +230,7 @@ HRESULT __stdcall D3D11PresentHook(IDXGISwapChain * pSwapChain, UINT SyncInterva
 		ImGui_ImplWin32_Init(hwnd);
 
 		ImGuiIO& io = ImGui::GetIO();
-		float GlobalFontSize = 20.0f;
+		float GlobalFontSize = 17.0f;
 		std::string DroidSansPath = std::string(GetEXEPath(false) + "RFGR Script Loader/Fonts/DroidSans.ttf");
 		bool DroidSansLoaded = false;
 		if (fs::exists(DroidSansPath))
