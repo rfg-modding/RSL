@@ -53,7 +53,7 @@ void TeleportGui::Draw(const char* Title, bool UseSeparateWindow)
 	}
 	if (UseSeparateWindow)
 	{
-		ImGui::SetNextWindowSize(ImVec2(600.0f, 700.0f), ImGuiCond_FirstUseEver);
+		ImGui::SetNextWindowSize(ImVec2(700.0f, 800.0f), ImGuiCond_FirstUseEver);
 		if (!ImGui::Begin(Title, OpenState, WindowFlags))
 		{
 			ImGui::End();
