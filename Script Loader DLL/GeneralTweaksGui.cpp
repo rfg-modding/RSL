@@ -28,6 +28,15 @@ void GeneralTweaksGui::Draw(const char* Title)
 		return;
 	}
 
+	if (ImGui::Button("Toggle Hud"))
+	{
+		ToggleFog();
+	}
+	if (ImGui::Button("Toggle Fog"))
+	{
+		ToggleFog();
+	}
+
 	ImGui::Text("Xray Effect Mode: ");
 	ImGui::SameLine(); ImGui::RadioButton("Backpack", &XrayEffectMode, 0);
 	ImGui::SameLine(); ImGui::RadioButton("Rail Driver", &XrayEffectMode, 1);

@@ -188,6 +188,30 @@ static void HideFog(bool Hide)
 	game_render_set_fog_enabled(!Hide);
 }
 
+static void ToggleHud()
+{
+	if (HudVisible)
+	{
+		HideHud(true);
+	}
+	else
+	{
+		HideHud(false);
+	}
+}
+
+static void ToggleFog()
+{
+	if (FogVisible)
+	{
+		HideFog(true);
+	}
+	else
+	{
+		HideFog(false);
+	}
+}
+
 //typedef void (__cdecl* explosion_create)(explosion_info* ExplosionInfo, object* Source, object* Owner, vector* Position, matrix* Orientation, vector* Directiom, weapon_info* WeaponInfo, bool FromServer)
 typedef void(__cdecl* F_explosion_create)(explosion_info* ExplosionInfo, void* Source, void* Owner, vector* Position, matrix* Orientation, vector* Direction, void* WeaponInfo, bool FromServer);
 extern F_explosion_create ExplosionCreate;

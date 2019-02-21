@@ -80,6 +80,9 @@ extern void* GlobalRlDrawPtr;
 extern bool BlockNextTildeInput;
 extern bool ScriptLoaderCloseRequested;
 
+extern bool HudVisible;
+extern bool FogVisible;
+
 extern const std::string ScriptLoaderVersion;
 
 const char* GetScriptLoaderVersion();
