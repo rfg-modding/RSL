@@ -13,7 +13,7 @@ ScriptManager::~ScriptManager()
 void ScriptManager::Initialize()
 {
 	Lua.open_libraries(sol::lib::base, sol::lib::package, sol::lib::jit);
-	Lua["HideHUD"] = HideHUD;
+	Lua["HideHud"] = HideHud;
 	Lua["HideFog"] = HideFog;
 
 	std::string ExePath = GetEXEPath(false);

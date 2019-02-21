@@ -178,7 +178,7 @@ extern F_Hud_Hide Hud_Hide;
 typedef void(__cdecl* F_game_render_set_fog_enabled)(bool Enabled);
 extern F_game_render_set_fog_enabled game_render_set_fog_enabled;
 
-static void HideHUD(bool Hide)
+static void HideHud(bool Hide)
 {
 	Hud_Hide(Hide);
 }
