@@ -2,6 +2,7 @@
 #include "OverlayConsole.h"
 
 class ScriptManager;
+class TextEditor;
 
 class ScriptSelectGui
 {
@@ -13,6 +14,8 @@ public:
 	void Draw(const char* Title);
 
 	ScriptManager* Scripts = nullptr;
+	TextEditor* ScriptEditor = nullptr;
+	bool* ScriptEditorState = nullptr;
 	ImGuiWindowFlags WindowFlags = 0;
 
 private:

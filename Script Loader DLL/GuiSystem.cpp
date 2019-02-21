@@ -33,10 +33,13 @@ void GuiSystem::Initialize()
 	TeleportMenu.Initialize(&ShowAppTeleportMenu);
 	IntrospectionMenu.Initialize(&ShowAppIntrospectionMenu);
 	TweaksMenu.Initialize(&ShowAppTweaksMenu);
-	ScriptsMenu.Initialize(&ShowAppScriptsMenu);
 
 	ScriptEditor.Initialize(&ShowAppScriptEditor);
 	ScriptEditor.SetLanguageDefinition(TextEditor::LanguageDefinition::Lua());
+
+	ScriptsMenu.ScriptEditor = &ScriptEditor;
+	ScriptsMenu.ScriptEditorState = &ShowAppScriptEditor;
+	ScriptsMenu.Initialize(&ShowAppScriptsMenu);
 
 	LogGui.Initialize(&ShowAppLogWindow);
 }
