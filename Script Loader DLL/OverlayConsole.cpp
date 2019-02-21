@@ -200,10 +200,10 @@ void OverlayConsole::Draw(const char* Title)
 template<typename T>
 inline bool OverlayConsole::InputTextLambdaWrapper(const char* Label, std::string* Buffer, ImGuiInputTextFlags Flags, T Callback, void* UserData)
 {
-	auto FreeCallback = [](ImGuiTextEditCallbackData* Data) 
+	auto FreeCallback = [](ImGuiTextEditCallbackData* Data)
 	{
 		auto& f = *static_cast<T*>(Data->UserData);
 		return f(Data);
 	};
-	return ImGui::InputText(Label, Buffer, Flags, FreeCallback, &Callback);	
+	return ImGui::InputText(Label, Buffer, Flags, FreeCallback, &Callback);
 }

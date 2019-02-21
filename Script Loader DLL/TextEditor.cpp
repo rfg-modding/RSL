@@ -877,7 +877,7 @@ void TextEditor::Render(const char* aTitle, const ImVec2& aSize, bool aBorder)
 		{
 			if (ImGui::MenuItem("New")) { ShowNewScriptPopup = true; }
 			if (ImGui::MenuItem("Open")) { ShowOpenScriptPopup = true; }
-			if (ImGui::MenuItem("Save")) { ShowSaveScriptPopup = true; }
+			if (ImGui::MenuItem("Save")) { SaveScript(); }//ShowSaveScriptPopup = true; }
 			if (ImGui::MenuItem("Save as")) { ShowSaveAsScriptPopup = true; }
 			DrawNewScriptPopup();
 			DrawOpenScriptPopup();
@@ -960,7 +960,26 @@ void TextEditor::Render(const char* aTitle, const ImVec2& aSize, bool aBorder)
 
 	if (ShowNewScriptPopup)
 	{
-		ImGui::OpenPopup("New script");
+		bool ScriptEmpty = true;
+		for (auto i = mLines.begin(); i != mLines.begin(); i++)
+		{
+			if (i->size() > 0)
+			{
+				ScriptEmpty = false;
+				break;
+			}
+		}
+
+		if (ScriptEmpty)
+		{
+			mLines.clear();
+			ScriptName = "NewEditorScript.lua";
+		}
+		else
+		{
+			ImGui::OpenPopup("New script"); /*Asks the user if they want to 
+											discard or save the current script.*/
+		}
 		ShowNewScriptPopup = false;
 	}
 	if (ShowOpenScriptPopup)
@@ -1020,11 +1039,56 @@ std::string TextEditor::GetCurrentScriptString()
 	return ScriptString;
 }
 
+bool TextEditor::SaveScript()
+{
+	std::string ScriptString = GetCurrentScriptString();
+	std::string FinalScriptName = ScriptName;
+
+	if (FinalScriptName.length() > 3)
+	{
+		std::cout << "FinalScriptName file extension: " << FinalScriptName.substr(FinalScriptName.length() - 4, 4) << "\n";
+		if (FinalScriptName.substr(FinalScriptName.length() - 4, 4) != ".lua")
+		{
+			FinalScriptName.append(".lua");
+		}
+	}
+	else
+	{
+		FinalScriptName.append(".lua");
+	}
+	std::cout << "FinalScriptName: " << FinalScriptName << "\n";
+	std::ofstream ScriptStream(GetEXEPath(false) + "RFGR Script Loader/Scripts/" + FinalScriptName);
+
+	ScriptStream << ScriptString;
+	ScriptStream.close();
+
+	return false;
+}
+
 void TextEditor::DrawNewScriptPopup()
 {
 	if (ImGui::BeginPopup("New script"))
 	{
-
+		ImGui::Text("Would you like to save your current script?");
+		if (ImGui::Button("Yes"))
+		{
+			SaveScript();
+			mLines.clear();
+			ScriptName = "NewEditorScript.lua";
+			ImGui::CloseCurrentPopup();
+		}
+		ImGui::SameLine();
+		if (ImGui::Button("No"))
+		{
+			mLines.clear();
+			ScriptName = "NewEditorScript.lua";
+			ImGui::CloseCurrentPopup();
+		}
+		ImGui::SameLine();
+		if (ImGui::Button("Cancel"))
+		{
+			ImGui::CloseCurrentPopup();
+		}
 		ImGui::EndPopup();
 	}
 }
@@ -1040,7 +1104,6 @@ void TextEditor::DrawOpenScriptPopup()
 		for (auto i = Scripts->Scripts.begin(); i != Scripts->Scripts.end(); ++i)
 		{
 			ImGui::Text(i->Name.c_str()); ImGui::SameLine();
-
 
 			//ImGui::PushID(0);
 			//ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 0.0f);
@@ -1082,18 +1145,35 @@ void TextEditor::DrawOpenScriptPopup()
 
 void TextEditor::DrawSaveScriptPopup()
 {
-	if (ImGui::BeginPopup("Save script"))
+	/*if (ImGui::BeginPopup("Save script"))
 	{
 
 		ImGui::EndPopup();
-	}
+	}*/
 }
 
 void TextEditor::DrawSaveAsScriptPopup()
 {
 	if (ImGui::BeginPopup("Save as"))
 	{
+		ImGui::PushItemWidth(400.0f);
+		ImGui::TextWrapped("Please enter the new script file name. It will automatically add the .lua extension if you dont.");
+		if (ImGui::InputText("File name", &ScriptName, ImGuiInputTextFlags_EnterReturnsTrue))
+		{
+			SaveScript();
+			ImGui::CloseCurrentPopup();
+		}
 
+		if (ImGui::Button("Save"))
+		{
+			SaveScript();
+			ImGui::CloseCurrentPopup();
+		}
+		ImGui::SameLine();
+		if (ImGui::Button("Cancel"))
+		{
+			ImGui::CloseCurrentPopup();
+		}
 		ImGui::EndPopup();
 	}
 }
