@@ -24,7 +24,10 @@ public:
 	float CustomPlayerMoveSpeed = 5.0f;
 	float CustomPlayerMaxSpeed = 50.0f;
 	float CustomJumpHeight = 1.2f;
+
 	bool NeedCustomJumpHeightSet = false;
+	bool NeedCustomMoveSpeedSet = false;
+	bool NeedCustomMaxMoveSpeedSet = false;
 
 	int XrayEffectMode = 0;
 	bool XrayModeOn = false;

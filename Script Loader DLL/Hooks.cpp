@@ -423,7 +423,13 @@ void __fastcall PlayerDoFrameHook(Player* PlayerPtr)
 	if (Gui.TweaksMenu.NeedCustomJumpHeightSet)
 	{
 		PlayerPtr->CodeDrivenJumpHeight = Gui.TweaksMenu.CustomJumpHeight;
+	}
+	if (Gui.TweaksMenu.NeedCustomMoveSpeedSet)
+	{
 		PlayerPtr->MoveSpeed = Gui.TweaksMenu.CustomPlayerMoveSpeed;
+	}
+	if (Gui.TweaksMenu.NeedCustomMaxMoveSpeedSet)
+	{
 		PlayerPtr->MaxSpeed = Gui.TweaksMenu.CustomPlayerMaxSpeed;
 	}
 
