@@ -181,11 +181,13 @@ extern F_game_render_set_fog_enabled game_render_set_fog_enabled;
 static void HideHud(bool Hide)
 {
 	Hud_Hide(Hide);
+	HudVisible = !Hide;
 }
 
 static void HideFog(bool Hide)
 {
 	game_render_set_fog_enabled(!Hide);
+	FogVisible = !Hide;
 }
 
 static void ToggleHud()
@@ -193,11 +195,14 @@ static void ToggleHud()
 	if (HudVisible)
 	{
 		HideHud(true);
+		HudVisible = false;
 	}
 	else
 	{
 		HideHud(false);
+		HudVisible = true;
 	}
+	//HudVisible = !HudVisible; //This wasn't working for some odd reason so I just set them manually.
 }
 
 static void ToggleFog()
@@ -205,11 +210,14 @@ static void ToggleFog()
 	if (FogVisible)
 	{
 		HideFog(true);
+		FogVisible = false;
 	}
 	else
 	{
 		HideFog(false);
+		FogVisible = true;
 	}
+	//FogVisible = !FogVisible; //This wasn't working for some odd reason so I just set them manually.
 }
 
 //typedef void (__cdecl* explosion_create)(explosion_info* ExplosionInfo, object* Source, object* Owner, vector* Position, matrix* Orientation, vector* Directiom, weapon_info* WeaponInfo, bool FromServer)

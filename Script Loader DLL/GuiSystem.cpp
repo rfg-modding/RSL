@@ -75,7 +75,7 @@ void GuiSystem::Draw()
 		IntrospectionMenu.Draw("Introspection Menu");
 		TweaksMenu.Draw("General Tweaks Menu");
 		ScriptsMenu.Draw("Script Select Menu");
-		ScriptEditor.Render("Script Editor");// , ImVec2(400.0f, 400.0f));
+		ScriptEditor.Render(std::string("Script Editor - " + ScriptEditor.ScriptName).c_str());// , ImVec2(400.0f, 400.0f));
 		TopMenuBar.Draw("Top Menu Bar");
 		LogGui.Draw("Logger");
 	}

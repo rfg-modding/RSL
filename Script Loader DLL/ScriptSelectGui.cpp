@@ -65,7 +65,7 @@ void ScriptSelectGui::Draw(const char* Title)
 		ImGui::SameLine();
 		if (ImGui::Button(std::string(std::string(ICON_FA_EDIT) + u8"##" + i->FullPath).c_str()))
 		{
-			ScriptEditor->LoadScript(i->FullPath);
+			ScriptEditor->LoadScript(i->FullPath, i->Name);
 			*ScriptEditorState = true;
 		}
 		ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.952f, 0.545f, 0.462f, 1.0f));

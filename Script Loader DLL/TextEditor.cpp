@@ -972,8 +972,7 @@ void TextEditor::Render(const char* aTitle, const ImVec2& aSize, bool aBorder)
 
 		if (ScriptEmpty)
 		{
-			mLines.clear();
-			ScriptName = "NewEditorScript.lua";
+			ClearScript();
 		}
 		else
 		{
@@ -1039,10 +1038,12 @@ std::string TextEditor::GetCurrentScriptString()
 	return ScriptString;
 }
 
-bool TextEditor::LoadScript(std::string FullPath)
+bool TextEditor::LoadScript(std::string FullPath, std::string NewScriptName)
 {
 	std::ifstream ScriptStream(FullPath);
 	std::string ScriptString((std::istreambuf_iterator<char>(ScriptStream)), std::istreambuf_iterator<char>());
+
+	ScriptName = NewScriptName;
 
 	TextEditor::mLines.clear();
 	TextEditor::SetText(ScriptString);
@@ -1058,7 +1059,6 @@ bool TextEditor::SaveScript()
 
 	if (FinalScriptName.length() > 3)
 	{
-		std::cout << "FinalScriptName file extension: " << FinalScriptName.substr(FinalScriptName.length() - 4, 4) << "\n";
 		if (FinalScriptName.substr(FinalScriptName.length() - 4, 4) != ".lua")
 		{
 			FinalScriptName.append(".lua");
@@ -1068,14 +1068,21 @@ bool TextEditor::SaveScript()
 	{
 		FinalScriptName.append(".lua");
 	}
-	std::cout << "FinalScriptName: " << FinalScriptName << "\n";
-	std::ofstream ScriptStream(GetEXEPath(false) + "RFGR Script Loader/Scripts/" + FinalScriptName);
+	std::cout << "Writing script to path: " << GetEXEPath(false) + "RFGR Script Loader/Scripts/" + FinalScriptName << "\n";
+	std::ofstream ScriptStream(GetEXEPath(false) + "RFGR Script Loader/Scripts/" + FinalScriptName, std::ios_base::trunc);
 
 	ScriptStream << ScriptString;
 	ScriptStream.close();
 	Scripts->ScanScriptsFolder();
 
 	return true;
+}
+
+void TextEditor::ClearScript()
+{
+	mLines.clear();
+	ScriptName = "NewScript.lua";
+	mLines.push_back(Line());
 }
 
 void TextEditor::DrawNewScriptPopup()
@@ -1086,15 +1093,13 @@ void TextEditor::DrawNewScriptPopup()
 		if (ImGui::Button("Yes"))
 		{
 			SaveScript();
-			mLines.clear();
-			ScriptName = "NewEditorScript.lua";
+			ClearScript();
 			ImGui::CloseCurrentPopup();
 		}
 		ImGui::SameLine();
 		if (ImGui::Button("No"))
 		{
-			mLines.clear();
-			ScriptName = "NewEditorScript.lua";
+			ClearScript();
 			ImGui::CloseCurrentPopup();
 		}
 		ImGui::SameLine();
@@ -1134,7 +1139,7 @@ void TextEditor::DrawOpenScriptPopup()
 			ImGui::SameLine();*/
 			if (ImGui::Button(std::string(std::string(ICON_FA_EDIT) + u8"##" + i->FullPath).c_str()))
 			{
-				LoadScript(i->FullPath);
+				LoadScript(i->FullPath, i->Name);
 			}
 			/*ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.952f, 0.545f, 0.462f, 1.0f));
 			ImGui::SameLine();

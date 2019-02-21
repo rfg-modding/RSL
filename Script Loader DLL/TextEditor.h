@@ -246,15 +246,17 @@ public:
 
 	std::string GetCurrentScriptString();
 
-	bool LoadScript(std::string FullPath);
+	bool LoadScript(std::string FullPath, std::string NewScriptName);
 	bool SaveScript();
+	void ClearScript();
 
 	void DrawNewScriptPopup();
 	void DrawOpenScriptPopup();
 	void DrawSaveScriptPopup();
 	void DrawSaveAsScriptPopup();
 
-	std::string ScriptName = "NewEditorScript.lua";
+	std::string ScriptName = "NewScript.lua";
+	const std::string DefaultScriptName = "NewScript.lua";
 	ScriptManager* Scripts = nullptr;
 private:
 	bool* OpenState = nullptr;

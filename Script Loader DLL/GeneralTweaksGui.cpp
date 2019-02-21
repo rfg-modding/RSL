@@ -30,7 +30,7 @@ void GeneralTweaksGui::Draw(const char* Title)
 
 	if (ImGui::Button("Toggle Hud"))
 	{
-		ToggleFog();
+		ToggleHud();
 	}
 	if (ImGui::Button("Toggle Fog"))
 	{
@@ -83,7 +83,7 @@ void GeneralTweaksGui::Draw(const char* Title)
 	//ImGui::TextColored(SecondaryTextColor, std::to_string(PlayerPtr->CodeDrivenJumpHeight).c_str());
 	ImGui::PushItemWidth(232.0f);
 	ImGui::InputFloat("Custom player jump height", &CustomJumpHeight, 0.5f, 2.0f, 3); ImGui::SameLine();
-	ImGui::Checkbox("Active", &NeedCustomJumpHeightSet);
+	ImGui::Checkbox("##Custom Player Jump Height", &NeedCustomJumpHeightSet);
 
 	//ImGui::Text("Player move speed:"); ImGui::SameLine();
 	//ImGui::TextColored(SecondaryTextColor, std::to_string(PlayerPtr->MoveSpeed).c_str());
