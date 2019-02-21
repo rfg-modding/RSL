@@ -1039,6 +1039,18 @@ std::string TextEditor::GetCurrentScriptString()
 	return ScriptString;
 }
 
+bool TextEditor::LoadScript(std::string FullPath)
+{
+	std::ifstream ScriptStream(FullPath);
+	std::string ScriptString((std::istreambuf_iterator<char>(ScriptStream)), std::istreambuf_iterator<char>());
+
+	TextEditor::mLines.clear();
+	TextEditor::SetText(ScriptString);
+	ImGui::CloseCurrentPopup();
+
+	return true;
+}
+
 bool TextEditor::SaveScript()
 {
 	std::string ScriptString = GetCurrentScriptString();
@@ -1061,8 +1073,9 @@ bool TextEditor::SaveScript()
 
 	ScriptStream << ScriptString;
 	ScriptStream.close();
+	Scripts->ScanScriptsFolder();
 
-	return false;
+	return true;
 }
 
 void TextEditor::DrawNewScriptPopup()
@@ -1121,12 +1134,7 @@ void TextEditor::DrawOpenScriptPopup()
 			ImGui::SameLine();*/
 			if (ImGui::Button(std::string(std::string(ICON_FA_EDIT) + u8"##" + i->FullPath).c_str()))
 			{
-				std::ifstream ScriptStream(i->FullPath);
-				std::string ScriptString((std::istreambuf_iterator<char>(ScriptStream)), std::istreambuf_iterator<char>());
-
-				TextEditor::mLines.clear();
-				TextEditor::SetText(ScriptString);
-				ImGui::CloseCurrentPopup();
+				LoadScript(i->FullPath);
 			}
 			/*ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.952f, 0.545f, 0.462f, 1.0f));
 			ImGui::SameLine();

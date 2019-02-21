@@ -246,6 +246,7 @@ public:
 
 	std::string GetCurrentScriptString();
 
+	bool LoadScript(std::string FullPath);
 	bool SaveScript();
 
 	void DrawNewScriptPopup();
