@@ -1044,11 +1044,9 @@ bool TextEditor::LoadScript(std::string FullPath, std::string NewScriptName)
 	std::string ScriptString((std::istreambuf_iterator<char>(ScriptStream)), std::istreambuf_iterator<char>());
 
 	ScriptName = NewScriptName;
-
 	TextEditor::mLines.clear();
 	TextEditor::SetText(ScriptString);
 	ImGui::CloseCurrentPopup();
-
 	return true;
 }
 

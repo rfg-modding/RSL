@@ -66,11 +66,12 @@ public:
 	static void CloseLogFile(std::string FileName);
 	static void CloseAllLogFiles();
 	
-	static void Log(std::string Message, int LogFlags, bool LogTime = false, bool NewLine = true);
+	static void Log(std::string Message, int LogFlags = LogInfo, bool LogTime = false, bool NewLine = true);
+
+	static void LogFlagWithColor(int LogFlags);
 	static std::string GetFlagString(int LogFlags);
-	static void LogTimeMessageToFile(std::string FileName);
 	static void LogToFile(std::string FileName, std::string Message, int LogFlags, bool LogTime = false, bool BypassFlagCheck = false);
-	
+
 	static std::string GetTimeString(bool MilitaryTime);
 
 	static std::map <std::string, LogFile> LogFileMap;
@@ -82,7 +83,7 @@ public:
 
 private:
 	Logger() { }
-	static void ConsoleLog(const char* Message, int LogFlags, bool PrintTimeLabel = false, bool PrintTypeLabel = true, bool NewLine = false);
+	static void LogFlags(const char* Message, int LogFlags, bool PrintTimeLabel = false, bool PrintTypeLabel = true, bool NewLine = false);
 };
 
 /*This code is a modified version of this SO answer: https://codereview.stackexchange.com/a/71330 ... Very useful.*/

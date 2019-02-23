@@ -59,28 +59,33 @@ void Logger::CloseAllLogFiles()
 
 void Logger::Log(std::string Message, int LogFlags, bool LogTime, bool NewLine)
 {
+	std::string TimeString = GetTimeString(false);
 	std::string FlagString = GetFlagString(LogFlags);
 	LogData.insert(LogData.begin(), LogEntry(FlagString, Message, LogFlags));
 	if (ConsoleLogFlags & LogFlags)
 	{
+		LogFlagWithColor(LogFlags);
+		if (LogTime)
+		{
+			std::cout << TimeString;
+		}
+		std::cout << " ";
+		std::cout << Message;
 		if (NewLine)
 		{
-			ConsoleLog(Message.c_str(), LogFlags, LogTime, true, true);
-		}
-		else
-		{
-			ConsoleLog(Message.c_str(), LogFlags, LogTime, true, false);
+			std::cout << "\n";
 		}
 	}
 	for (auto i = LogFileMap.begin(); i != LogFileMap.end(); i++)
 	{
 		if (i->second.LogFlags & LogFlags)
 		{
+			i->second.File << FlagString;
 			if (LogTime)
 			{
-				LogTimeMessageToFile(i->first);
+				i->second.File << TimeString;
 			}
-			i->second.File << FlagString;
+			i->second.File << " ";
 			i->second.File << Message;
 			if (NewLine)
 			{
@@ -111,41 +116,77 @@ void Logger::Log(std::string Message, int LogFlags, bool LogTime, bool NewLine)
 	//std::cout << "sizeof std::string vector with 10000 values: " << (sizeof(std::vector<std::string>) + (sizeof(std::string) * 10000)) / 1000 << "kB\n";
 }
 
+void Logger::LogFlagWithColor(int LogFlags)
+{
+	if (LogFlags & LogInfo)
+	{
+		std::cout << "[";
+		SetConsoleAttributes(ConsoleMessageLabelTextAttributes);
+		std::cout << "Info";
+		ResetConsoleAttributes();
+		std::cout << "]";
+	}
+	else if (LogFlags & LogWarning)
+	{
+		std::cout << "[";
+		SetConsoleAttributes(ConsoleWarningTextAttributes);
+		std::cout << "Warning";
+		ResetConsoleAttributes();
+		std::cout << "]";
+	}
+	else if (LogFlags & LogError)
+	{
+		std::cout << "[";
+		SetConsoleAttributes(ConsoleErrorTextAttributes);
+		std::cout << "Error";
+		ResetConsoleAttributes();
+		std::cout << "]";
+	}
+	else if (LogFlags & LogFatalError)
+	{
+		std::cout << "[";
+		SetConsoleAttributes(ConsoleFatalErrorTextAttributes);
+		std::cout << "Fatal Error";
+		ResetConsoleAttributes();
+		std::cout << "]";
+	}
+	else
+	{
+		//Does nothing if it's LogNone or an undefined value.
+	}
+	SetConsoleTextAttribute(ConsoleHandle, ConsoleDefaultTextAttributes);
+}
+
 std::string Logger::GetFlagString(int LogFlags)
 {
 	if (LogFlags & LogInfo)
 	{
-		return "[Info] ";
+		return "[Info]";
 	}
 	else if (LogFlags & LogWarning)
 	{
-		return "[Warning] ";
+		return "[Warning]";
 	}
 	else if (LogFlags & LogLua)
 	{
-		return "[Lua] ";
+		return "[Lua]";
 	}
 	else if (LogFlags & LogJson)
 	{
-		return "[Json] ";
+		return "[Json]";
 	}
 	else if (LogFlags & LogError)
 	{
-		return "[Error] ";
+		return "[Error]";
 	}
 	else if (LogFlags & LogFatalError)
 	{
-		return "[Fatal Error] ";
+		return "[Fatal Error]";
 	}
 	else
 	{
 		return "[+]";
 	}
-}
-
-void Logger::LogTimeMessageToFile(std::string FileName)
-{
-	LogFileMap[FileName].File << GetTimeString(false);
 }
 
 void Logger::LogToFile(std::string FileName, std::string Message, int LogFlags, bool LogTime, bool BypassFlagCheck)
@@ -157,184 +198,17 @@ void Logger::LogToFile(std::string FileName, std::string Message, int LogFlags, 
 			return;
 		}
 	}
+	LogFileMap[FileName].File << GetFlagString(LogFlags);
 	if (LogTime)
 	{
-		LogTimeMessageToFile(FileName);
+		LogFileMap[FileName].File << GetTimeString(false);
 	}
-	LogFileMap[FileName].File << GetFlagString(LogFlags);
+	LogFileMap[FileName].File << " ";
 	LogFileMap[FileName].File << Message << "\n";
-}
-
-/*Only used for debug purposed. Plan to deprecate this and use the overlay console instead.*/
-void Logger::ConsoleLog(const char* Message, int LogFlags, bool PrintTimeLabel, bool PrintTypeLabel, bool NewLine)
-{
-	if (LogFlags & LogInfo)
-	{
-		if (PrintTypeLabel)
-		{
-			printf("[");
-			SetConsoleAttributes(ConsoleMessageLabelTextAttributes);
-			printf("Info");
-			ResetConsoleAttributes();
-			if (PrintTimeLabel)
-			{
-				printf("]");
-			}
-			else
-			{
-				printf("] ");
-			}
-		}
-		if (PrintTimeLabel)
-		{
-			//printf("[");
-			printf(GetTimeString(false).c_str());
-			//printf("] ");
-		}
-#if ColorLogMessages
-		SetConsoleTextAttribute(ConsoleHandle, ConsoleMessageTextAttributes);
-#endif
-		printf(Message);
-		if (NewLine)
-		{
-			printf("\n");
-		}
-	}
-	else if (LogFlags & LogWarning)
-	{
-		if (PrintTypeLabel)
-		{
-			printf("[");
-			SetConsoleAttributes(ConsoleWarningTextAttributes);
-			printf("Warning");
-			ResetConsoleAttributes();
-			if (PrintTimeLabel)
-			{
-				printf("]");
-			}
-			else
-			{
-				printf("] ");
-			}
-		}
-		if (PrintTimeLabel)
-		{
-			//printf("[");
-			printf(GetTimeString(false).c_str());
-			//printf("] ");
-		}
-#if ColorLogMessages
-		SetConsoleTextAttribute(ConsoleHandle, ConsoleWarningTextAttributes);
-#endif
-		printf(Message);
-		if (NewLine)
-		{
-			printf("\n");
-		}
-	}
-	else if (LogFlags & LogError)
-	{
-		if (PrintTypeLabel)
-		{
-			printf("[");
-			SetConsoleAttributes(ConsoleErrorTextAttributes);
-			printf("Error");
-			ResetConsoleAttributes();
-			if (PrintTimeLabel)
-			{
-				printf("]");
-			}
-			else
-			{
-				printf("] ");
-			}
-		}
-		if (PrintTimeLabel)
-		{
-			//printf("[");
-			printf(GetTimeString(false).c_str());
-			//printf("] ");
-		}
-#if ColorLogMessages
-		SetConsoleTextAttribute(ConsoleHandle, ConsoleErrorTextAttributes);
-#endif
-		printf(Message);
-		if (NewLine)
-		{
-			printf("\n");
-		}
-	}
-	else if (LogFlags & LogFatalError)
-	{
-		if (PrintTypeLabel)
-		{
-			printf("[");
-			SetConsoleAttributes(ConsoleFatalErrorTextAttributes);
-			printf("Fatal Error");
-			ResetConsoleAttributes();
-			if (PrintTimeLabel)
-			{
-				printf("]");
-			}
-			else
-			{
-				printf("] ");
-			}
-		}
-		if (PrintTimeLabel)
-		{
-			//printf("[");
-			printf(GetTimeString(false).c_str());
-			//printf("] ");
-		}
-#if ColorLogMessages
-		SetConsoleTextAttribute(ConsoleHandle, ConsoleFatalErrorTextAttributes);
-#endif
-		printf(Message);
-		if (NewLine)
-		{
-			printf("\n");
-		}
-	}
-	else
-	{
-		//Invalid log type
-		if (PrintTypeLabel)
-		{
-			printf("[");
-			SetConsoleAttributes(ConsoleMessageLabelTextAttributes);
-			printf("+");
-			ResetConsoleAttributes();
-			if (PrintTimeLabel)
-			{
-				printf("]");
-			}
-			else
-			{
-				printf("] ");
-			}
-		}
-		if (PrintTimeLabel)
-		{
-			//printf("[");
-			printf(GetTimeString(false).c_str());
-			//printf("] ");
-		}
-#if ColorLogMessages
-		SetConsoleTextAttribute(ConsoleHandle, ConsoleMessageTextAttributes);
-#endif
-		printf(Message);
-		if (NewLine)
-		{
-			printf("\n");
-		}
-	}
-	SetConsoleTextAttribute(ConsoleHandle, ConsoleDefaultTextAttributes);// InitialConsoleScreenInfo->wAttributes);
 }
 
 std::string Logger::GetTimeString(bool MilitaryTime)
 {
-#if EnableLogging
 	std::time_t t = std::time(0);
 	std::tm now;
 	localtime_s(&now, &t);
@@ -346,7 +220,7 @@ std::string Logger::GetTimeString(bool MilitaryTime)
 	std::string Hour;
 	std::string Minutes = std::to_string(now.tm_min);
 
-	if (Minutes.size() == 1) //Changes things like 1:6 to 1:06
+	if (Minutes.size() == 1) //Changes values such as 1:6 to 1:06
 	{
 		Minutes.insert(0, 1, '0');
 	}
@@ -383,6 +257,5 @@ std::string Logger::GetTimeString(bool MilitaryTime)
 
 	//std::cout << "Date & Time:" << now.tm_year + 1900 << "/" << now.tm_mon + 1 << "/" << now.tm_mday << " - " << now.tm_hour << ":" << now.tm_min << "\n";
 
-	return "[" + DateTime + "] ";
-#endif
+	return "[" + DateTime + "]";
 }
