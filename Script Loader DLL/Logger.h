@@ -67,6 +67,10 @@ public:
 	static void CloseAllLogFiles();
 	
 	static void Log(std::string Message, int LogFlags = LogInfo, bool LogTime = false, bool NewLine = true);
+	/*template <class... Args>
+	static void Log(int LogFlags, Args... args);
+	template <class... Args>
+	static void Log(Args... args);*/
 
 	static void LogFlagWithColor(int LogFlags);
 	static std::string GetFlagString(int LogFlags);
@@ -83,8 +87,24 @@ public:
 
 private:
 	Logger() { }
-	static void LogFlags(const char* Message, int LogFlags, bool PrintTimeLabel = false, bool PrintTypeLabel = true, bool NewLine = false);
 };
+
+/*The following 2 templates are from this SO answer: https://stackoverflow.com/a/26902803 ... Used to make a variadic log function.*/
+template<class F, class...Ts, std::size_t...Is>
+void for_each_in_tuple(const std::tuple<Ts...> & tuple, F func, std::index_sequence<Is...>) 
+{
+	using expander = int[];
+	(void)expander 
+	{
+		0, ((void)func(std::get<Is>(tuple)), 0)...
+	};
+}
+
+template<class F, class...Ts>
+void for_each_in_tuple(const std::tuple<Ts...> & tuple, F func) 
+{
+	for_each_in_tuple(tuple, func, std::make_index_sequence<sizeof...(Ts)>());
+}
 
 /*This code is a modified version of this SO answer: https://codereview.stackexchange.com/a/71330 ... Very useful.*/
 template<typename Callable>

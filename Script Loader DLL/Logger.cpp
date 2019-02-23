@@ -116,6 +116,75 @@ void Logger::Log(std::string Message, int LogFlags, bool LogTime, bool NewLine)
 	//std::cout << "sizeof std::string vector with 10000 values: " << (sizeof(std::vector<std::string>) + (sizeof(std::string) * 10000)) / 1000 << "kB\n";
 }
 
+/*template <class... Args>
+void Logger::Log(int LogFlags, Args... args)
+{
+	std::string TimeString = GetTimeString(false);
+	std::string FlagString = GetFlagString(LogFlags);
+	std::tuple<Args...> ArgsTuple{ args... };
+
+	std::string MessageString = "";
+	for_each_in_tuple(ArgsTuple, [](const auto& value)
+	{
+		MessageString += std::to_string(value);
+	});
+	LogData.insert(LogData.begin(), LogEntry(FlagString, MessageString, LogFlags));
+	if (ConsoleLogFlags & LogFlags)
+	{
+		LogFlagWithColor(LogFlags);
+		std::cout << " ";
+		std::cout << MessageString;
+	}
+	for (auto i = LogFileMap.begin(); i != LogFileMap.end(); i++)
+	{
+		if (i->second.LogFlags & LogFlags)
+		{
+			i->second.File << FlagString;
+			i->second.File << " ";
+			i->second.File << MessageString;
+		}
+	}
+	if (LogData.size() > MaximumLogCount && MaximumLogCount > 0)
+	{
+		LogData.pop_back();
+	}
+}
+
+template <class... Args>
+void Logger::Log(Args... args)
+{
+	int DefaultLogFlags = LogInfo;
+	std::string TimeString = GetTimeString(false);
+	std::string FlagString = GetFlagString(DefaultLogFlags);
+	std::tuple<Args...> ArgsTuple{args...};
+	
+	std::string MessageString = "";
+	for_each_in_tuple(ArgsTuple, [&](const auto& value)
+	{
+		MessageString += value;
+	});
+	LogData.insert(LogData.begin(), LogEntry(FlagString, MessageString, DefaultLogFlags));
+	if (ConsoleLogFlags & DefaultLogFlags)
+	{
+		LogFlagWithColor(DefaultLogFlags);
+		std::cout << " ";
+		std::cout << MessageString;
+	}
+	for (auto i = LogFileMap.begin(); i != LogFileMap.end(); i++)
+	{
+		if (i->second.LogFlags & DefaultLogFlags)
+		{
+			i->second.File << FlagString;
+			i->second.File << " ";
+			i->second.File << MessageString;
+		}
+	}
+	if (LogData.size() > MaximumLogCount && MaximumLogCount > 0)
+	{
+		LogData.pop_back();
+	}
+}*/
+
 void Logger::LogFlagWithColor(int LogFlags)
 {
 	if (LogFlags & LogInfo)
