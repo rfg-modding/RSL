@@ -161,14 +161,13 @@ void ProgramManager::ProcessInput()
 	}
 	if (GetAsyncKeyState(VK_NUMPAD1) & 0x8000)
 	{
-		//Scripts.RunTestScript();
-		Sleep(100);
+		ToggleHud();
+		Sleep(175);
 	}
 	if (GetAsyncKeyState(VK_NUMPAD2))
 	{
-		//std::string ExePath = GetEXEPath(false);
-		//Scripts.RunTestScript2();
-		Sleep(100);
+		ToggleFog();
+		Sleep(175);
 	}
 	if (GetAsyncKeyState(VK_NUMPAD3))
 	{
