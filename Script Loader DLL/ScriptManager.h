@@ -45,4 +45,8 @@ private:
 	std::string GetScriptExtensionFromPath(std::string FullPath);
 	bool IsValidScriptExtensionFromPath(std::string FullPath);
 	bool IsValidScriptExtension(std::string Extension);
+
+	void SetupLua();
+	//void SetLuaFunctions();
+	//void SetLuaTypes();
 };

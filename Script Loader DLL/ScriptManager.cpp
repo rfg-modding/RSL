@@ -12,12 +12,64 @@ ScriptManager::~ScriptManager()
 
 void ScriptManager::Initialize()
 {
-	Lua.open_libraries(sol::lib::base, sol::lib::package, sol::lib::jit);
+	//See here: https://sol2.readthedocs.io/en/stable/api/state.html#lib-enum
+	//and here: https://www.lua.org/manual/5.1/manual.html#5 (LuaJIT is 5.1)
+	//Excluded the ffi lib for now. Current goal is to sandbox lua for user
+	//safety. Might change this later on.
+	Lua.open_libraries
+	(
+		sol::lib::base,
+		sol::lib::package,
+		sol::lib::coroutine,
+		sol::lib::string,
+		sol::lib::os,
+		sol::lib::math,
+		sol::lib::table,
+		sol::lib::debug,
+		sol::lib::bit32,
+		sol::lib::io,
+		sol::lib::ffi,
+		sol::lib::jit
+	);
+	SetupLua();
+}
+
+void ScriptManager::SetupLua()
+{
 	Lua["HideHud"] = HideHud;
 	Lua["HideFog"] = HideFog;
 
-	std::string ExePath = GetEXEPath(false);
-	fs::remove(ExePath + "RFGR Script Loader/Logs/Script Log.txt");
+	/*Functions to clear:*/
+	//string.dump
+	//os.execute
+	//dofile
+	//Test of ffi
+	//Figure out what the jit library adds.
+	
+	//Test if each of these works. Try replacing them with print for testing.
+	Lua.set_function("string.dump", []() 
+	{
+		Logger::Log("string.dump is disabled.");
+		return;
+	});
+	Lua.set_function("os.execute", []()
+	{
+		printf("os.execute is disabled");
+		//Logger::Log("os.execute is disabled.");
+		return;
+	});
+	/*Lua.set_function("dofile", []()
+	{
+		Logger::Log("dofile is disabled.");
+	});*/
+	/*Lua.set_function("ffi", []()
+	{
+		Logger::Log("ffi is a disabled function");
+	});*/
+	
+	//Lua["string.dump"] = sol::nil;
+	//Lua["os.exectute"] = sol::nil;
+	//Lua["dofile"] = sol::nil;
 }
 
 void ScriptManager::RunTestScript()
@@ -28,10 +80,8 @@ void ScriptManager::RunTestScript()
 	std::cout << "Trying Test.lua\n";
 	try 
 	{
-		auto CodeResult = Lua.script_file(ExePath + "RFGR Script Loader/Scripts/Test.lua", [](lua_State*, sol::protected_function_result pfr) {
-			// pfr will contain things that went wrong, for either loading or executing the script
-			// Can throw your own custom error
-			// You can also just return it, and let the call-site handle the error if necessary.
+		auto CodeResult = Lua.script_file(ExePath + "RFGR Script Loader/Scripts/Test.lua", [](lua_State*, sol::protected_function_result pfr) 
+		{
 			return pfr;
 		}, sol::load_mode::text);
 
@@ -47,7 +97,6 @@ void ScriptManager::RunTestScript()
 	{
 		std::ofstream LogFile(ExePath + "RFGR Script Loader/Logs/Script Log.txt");
 		LogFile << "Exception caught when running Test.lua: " << Exception.what() << "\n";
-		//std::cout << "Exception caught when running Test.lua: " << Exception.what() << "\n";
 		Logger::Log(std::string("Exception caught when running Test.lua: " +  std::string(Exception.what())), LogError);
 		LogFile.close();
 	}
@@ -55,26 +104,6 @@ void ScriptManager::RunTestScript()
 	{
 		std::cout << "General exception...\n";
 	}
-	/*catch (sol::protected_function_result& pfrExcept)
-	{
-		std::cout << "pfr exception: " << pfrExcept.what() << "\n";
-	}*/
-
-
-	//std::cout << "Script Path: " << ExePath + "RFGR Script Loader/Scripts/Test.script\n";
-
-	//std::ifstream ScriptFile(ExePath + "RFGR Script Loader/Scripts/Test.script");
-	//Script.assign((std::istreambuf_iterator<char>(ScriptFile)), (std::istreambuf_iterator<char>()));
-	//ScriptFile.close();
-	
-	//std::cout << "Test.script: " << Script << "\n\n";
-	
-	///ChaiScriptVM.eval(Script);
-	
-	//std::ifstream LuaTestScript(ExePath + "RFGR Script Loader/Scripts/Test.lua");
-	//Lua.do_file(std::string(ExePath + "RFGR Script Loader/Scripts/Test.lua"), sol::load_mode::text);
-	
-	//Lua.script_file(ExePath + "RFGR Script Loader/Scripts/Test.lua", sol::load_mode::text);
 }
 
 void ScriptManager::RunTestScript2()
@@ -84,10 +113,8 @@ void ScriptManager::RunTestScript2()
 
 	try
 	{
-		auto CodeResult = Lua.script_file(ExePath + "RFGR Script Loader/Scripts/Test2.lua", [](lua_State*, sol::protected_function_result pfr) {
-			// pfr will contain things that went wrong, for either loading or executing the script
-			// Can throw your own custom error
-			// You can also just return it, and let the call-site handle the error if necessary.
+		auto CodeResult = Lua.script_file(ExePath + "RFGR Script Loader/Scripts/Test2.lua", [](lua_State*, sol::protected_function_result pfr)
+		{
 			return pfr;
 		}, sol::load_mode::text);
 
@@ -100,8 +127,6 @@ void ScriptManager::RunTestScript2()
 	}
 	catch (std::exception& Exception)
 	{
-		//std::ofstream LogFile(ExePath + "RFGR Script Loader/Logs/Script Log.txt");
-		//LogFile << "Exception caught when running Test2.lua: " << Exception.what() << "\n";
 		Logger::Log(std::string("Exception caught when running Test2.lua: " + std::string(Exception.what())), LogLua | LogError);
 	}
 }
@@ -124,9 +149,9 @@ void ScriptManager::ScanScriptsFolder()
 			ThisScriptName = GetScriptNameFromPath(i.path().string());
 			Scripts.push_back(Script(ThisScriptPath, ThisScriptFolderPath, ThisScriptName));
 
-			Logger::Log(i.path().string(), LogInfo);
-			Logger::Log("Script Name: " + ThisScriptName, LogInfo);
-			Logger::Log("Script Folder: " + ThisScriptFolderPath, LogInfo);
+			//Logger::Log(i.path().string(), LogInfo);
+			//Logger::Log("Script Name: " + ThisScriptName, LogInfo);
+			//Logger::Log("Script Folder: " + ThisScriptFolderPath, LogInfo);
 		}
 	}
 }
@@ -252,7 +277,6 @@ std::string ScriptManager::GetScriptExtensionFromPath(std::string FullPath)
 	{
 		if (FullPath.compare(i, 1, ".") == 0)
 		{
-			//Logger::Log("Script extension: " + FullPath.substr(i + 1, FullPath.length() - i), LogInfo);
 			return FullPath.substr(i + 1, FullPath.length() - i);
 		}
 	}
