@@ -899,7 +899,6 @@ void TextEditor::Render(const char* aTitle, const ImVec2& aSize, bool aBorder)
 			if (ImGui::MenuItem("Run", "F5")) 
 			{
 				std::string ScriptString = GetCurrentScriptString();
-				std::cout << "Script Editor Run Script Value: " << ScriptString << "\n";
 				Scripts->RunStringAsScript(ScriptString, "script editor run"); 
 			}
 			if (ImGui::MenuItem("Stop")) {}
@@ -989,6 +988,7 @@ void TextEditor::Render(const char* aTitle, const ImVec2& aSize, bool aBorder)
 	}
 	if (ShowSaveAsScriptPopup)
 	{
+		NewNameBuffer = ScriptName;
 		ImGui::OpenPopup("Save as");
 		ShowSaveAsScriptPopup = false;
 	}
@@ -1049,27 +1049,32 @@ bool TextEditor::LoadScript(std::string FullPath, std::string NewScriptName)
 bool TextEditor::SaveScript()
 {
 	std::string ScriptString = GetCurrentScriptString();
-	std::string FinalScriptName = ScriptName;
+	std::string FinalScriptName = FixScriptExtension(ScriptName);
 
-	if (FinalScriptName.length() > 3)
-	{
-		if (FinalScriptName.substr(FinalScriptName.length() - 4, 4) != ".lua")
-		{
-			FinalScriptName.append(".lua");
-		}
-	}
-	else
-	{
-		FinalScriptName.append(".lua");
-	}
-	std::cout << "Writing script to path: " << GetEXEPath(false) + "RFGR Script Loader/Scripts/" + FinalScriptName << "\n";
-	std::ofstream ScriptStream(GetEXEPath(false) + "RFGR Script Loader/Scripts/" + FinalScriptName, std::ios_base::trunc);
+	//std::cout << "Writing script to path: " << GetEXEPath(false) + "RFGR Script Loader/Scripts/" + FinalScriptName << "\n";
+	std::ofstream ScriptStream(GetEXEPath(false) + "RFGR Script Loader/Scripts/" + ScriptName, std::ios_base::trunc);
 
 	ScriptStream << ScriptString;
 	ScriptStream.close();
 	Scripts->ScanScriptsFolder();
 
 	return true;
+}
+
+std::string TextEditor::FixScriptExtension(std::string CurrentScriptName)
+{
+	if (CurrentScriptName.length() > 3)
+	{
+		if (CurrentScriptName.substr(CurrentScriptName.length() - 4, 4) != ".lua")
+		{
+			CurrentScriptName.append(".lua");
+		}
+	}
+	else
+	{
+		CurrentScriptName.append(".lua");
+	}
+	return CurrentScriptName;
 }
 
 void TextEditor::ClearScript()
@@ -1107,6 +1112,9 @@ void TextEditor::DrawNewScriptPopup()
 
 void TextEditor::DrawOpenScriptPopup()
 {
+	static bool OpenConfirmDeletePopup = false;
+	static std::string ScriptToDelete = "";
+	static std::string ScriptToDeleteFullPath = "";
 	if (ImGui::BeginPopup("Open script"))
 	{
 		if (ImGui::Button("Rescan"))
@@ -1117,34 +1125,49 @@ void TextEditor::DrawOpenScriptPopup()
 		{
 			ImGui::Text(i->Name.c_str()); ImGui::SameLine();
 
-			//ImGui::PushID(0);
 			//ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 0.0f);
 			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4());
 			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4());
 			ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4());
-			/*ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.556f, 0.823f, 0.541f, 1.0f));
-			if (ImGui::Button(std::string(std::string(ICON_FA_PLAY) + u8"##" + i->FullPath).c_str()))
-			{
-				size_t ScriptIndex = std::distance(Scripts->Scripts.begin(), i);
-				bool Result = Scripts->RunScript(ScriptIndex);
-				Logger::Log("Result from running " + Scripts->Scripts[ScriptIndex].Name + ": " + std::to_string(Result), LogInfo);
-			}
-			ImGui::PopStyleColor(1);
-			ImGui::SameLine();*/
-			if (ImGui::Button(std::string(std::string(ICON_FA_EDIT) + u8"##" + i->FullPath).c_str()))
+			if (ImGui::Button(std::string(std::string(ICON_FA_EDIT) + u8"##OpenPopupEditButton" + i->FullPath).c_str()))
 			{
 				LoadScript(i->FullPath, i->Name);
 			}
-			/*ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.952f, 0.545f, 0.462f, 1.0f));
 			ImGui::SameLine();
-			if (ImGui::Button(std::string(std::string(ICON_FA_BAN) + u8"##" + i->FullPath).c_str()))
+			ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.952f, 0.545f, 0.462f, 1.0f));
+			if (ImGui::Button(std::string(std::string(ICON_FA_TRASH) + u8"##OpenPopupDeleteButton" + i->FullPath).c_str()))
 			{
-
-			}*/
-			//ImGui::PopStyleColor(4);
+				ScriptToDelete = i->Name;
+				ScriptToDeleteFullPath = i->FullPath;
+				OpenConfirmDeletePopup = true;
+			}
+			ImGui::PopStyleColor(4);
+		}
+		if (OpenConfirmDeletePopup)
+		{
+			ImGui::OpenPopup("Delete file?");
+			OpenConfirmDeletePopup = false;
+		}
+		if (ImGui::BeginPopup("Delete file?"))
+		{
+			ImGui::PushItemWidth(400.0f);
+			ImGui::TextWrapped(std::string("Are you sure you would like to delete " + ScriptToDelete + "?").c_str());
+			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.952f, 0.545f, 0.462f, 1.0f));
+			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.972f, 0.545f, 0.462f, 1.0f));
+			ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(1.000f, 0.545f, 0.462f, 1.0f));
+			if (ImGui::Button("Delete##DeleteConfirmPopup"))
+			{
+				fs::remove(ScriptToDeleteFullPath);
+				Scripts->ScanScriptsFolder();
+				ImGui::CloseCurrentPopup();
+			}
 			ImGui::PopStyleColor(3);
-			//ImGui::PopStyleVar();
-			//ImGui::PopID();
+			ImGui::SameLine();
+			if (ImGui::Button("Cancel##DeleteConfirmPopup"))
+			{
+				ImGui::CloseCurrentPopup();
+			}
+			ImGui::EndPopup();
 		}
 		ImGui::EndPopup();
 	}
@@ -1161,11 +1184,12 @@ void TextEditor::DrawSaveScriptPopup()
 
 void TextEditor::DrawSaveAsScriptPopup()
 {
+	static bool ShouldOpenOverwritePopup = false;
 	if (ImGui::BeginPopup("Save as"))
 	{
 		ImGui::PushItemWidth(400.0f);
-		ImGui::TextWrapped("Please enter the new script file name. It will automatically add the .lua extension if you dont.");
-		if (ImGui::InputText("File name", &ScriptName, ImGuiInputTextFlags_EnterReturnsTrue))
+		ImGui::TextWrapped("Please enter the new script file name. The .lua extension will be automatically added if you forget it.");
+		if (ImGui::InputText("File name", &NewNameBuffer, ImGuiInputTextFlags_EnterReturnsTrue))
 		{
 			SaveScript();
 			ImGui::CloseCurrentPopup();
@@ -1173,13 +1197,49 @@ void TextEditor::DrawSaveAsScriptPopup()
 
 		if (ImGui::Button("Save"))
 		{
-			SaveScript();
-			ImGui::CloseCurrentPopup();
+			std::string FinalScriptName = FixScriptExtension(NewNameBuffer);
+			if (fs::exists(GetEXEPath(false) + "RFGR Script Loader/Scripts/" + FinalScriptName))
+			{
+				ShouldOpenOverwritePopup = true;
+			}
+			else
+			{
+				ScriptName = NewNameBuffer;
+				SaveScript();
+				ImGui::CloseCurrentPopup();
+			}
 		}
 		ImGui::SameLine();
 		if (ImGui::Button("Cancel"))
 		{
 			ImGui::CloseCurrentPopup();
+		}
+
+		if (ShouldOpenOverwritePopup)
+		{
+			ImGui::OpenPopup("Overwrite script?");
+			ShouldOpenOverwritePopup = false;
+		}
+		if (ImGui::BeginPopup("Overwrite script?"))
+		{
+			ImGui::PushItemWidth(400.0f);
+			ImGui::TextWrapped(std::string("Are you sure you would like to overwrite " + FixScriptExtension(NewNameBuffer) + "?").c_str());
+			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.952f, 0.545f, 0.462f, 1.0f));
+			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.972f, 0.545f, 0.462f, 1.0f));
+			ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(1.000f, 0.545f, 0.462f, 1.0f));
+			if (ImGui::Button("Overwrite##OverwriteConfirmPopup"))
+			{
+				ScriptName = NewNameBuffer;
+				SaveScript();
+				ImGui::CloseCurrentPopup();
+			}
+			ImGui::PopStyleColor(3);
+			ImGui::SameLine();
+			if (ImGui::Button("Cancel##OverwriteConfirmPopup"))
+			{
+				ImGui::CloseCurrentPopup();
+			}
+			ImGui::EndPopup();
 		}
 		ImGui::EndPopup();
 	}

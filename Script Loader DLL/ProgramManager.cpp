@@ -251,9 +251,10 @@ void ProgramManager::ProcessInput()
 		{
 			Gui.ScriptEditor.ShowNewScriptPopup = true;
 		}
-		if (GetAsyncKeyState(VK_F5) && GetAsyncKeyState(0x4E)) //Ctrl + N
+		if (GetAsyncKeyState(VK_F5))
 		{
-			Gui.ScriptEditor.ShowNewScriptPopup = true;
+			std::string ScriptString = Gui.ScriptEditor.GetCurrentScriptString();
+			Scripts.RunStringAsScript(ScriptString, "script editor run");
 		}
 	}
 }

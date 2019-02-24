@@ -248,6 +248,7 @@ public:
 
 	bool LoadScript(std::string FullPath, std::string NewScriptName);
 	bool SaveScript();
+	std::string FixScriptExtension(std::string CurrentScriptName);
 	void ClearScript();
 
 	void DrawNewScriptPopup();
@@ -263,6 +264,8 @@ public:
 	bool ShowOpenScriptPopup = false;
 	bool ShowSaveScriptPopup = false;
 	bool ShowSaveAsScriptPopup = false;
+
+	std::string NewNameBuffer;
 private:
 	bool* OpenState = nullptr;
 

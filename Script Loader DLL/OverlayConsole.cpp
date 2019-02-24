@@ -39,7 +39,7 @@ void OverlayConsole::Draw(const char* Title)
 	ImGui::SetNextWindowSize(ImVec2((float)(WindowRect.right - WindowRect.left) - 10.0f, 400.0f), ImGuiCond_Once);
 	if (OverlayActive)
 	{
-		ImGui::SetNextWindowPos(ImVec2(0.0f, 25.0f));
+		ImGui::SetNextWindowPos(ImVec2(0.0f, 22.0f)); //FontSize + 5.0f seems to work for menu bar alignment.
 	}
 	else
 	{
