@@ -580,7 +580,7 @@ bool ThemeEditorGui::LoadGUIConfig()
 	}
 	Logger::Log("No read exceptions detected.", LogInfo);
 
-	Logger::Log("Done loading \"Settings.json\".", LogInfo);
+	Logger::Log("Done loading \"GUIConfig.json\".", LogInfo);
 	return true;
 }
 

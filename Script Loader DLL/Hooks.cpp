@@ -316,7 +316,7 @@ HRESULT __stdcall D3D11PresentHook(IDXGISwapChain * pSwapChain, UINT SyncInterva
 
 		//ImGui_ImplDX11_Init(D3D11Device, D3D11Context);
 		ImGui_ImplDX11_CreateDeviceObjects();
-		Logger::Log("Finish reforming after resize.", LogInfo);
+		Logger::Log("Finished reforming after resize.", LogInfo);
 		UpdateD3D11Pointers = false;
 	}
 	if (!ImGuiInitialized)
@@ -341,7 +341,10 @@ HRESULT __stdcall D3D11PresentHook(IDXGISwapChain * pSwapChain, UINT SyncInterva
 		}
 	}
 #endif
-	Gui.Draw();
+	if (!ScriptLoaderCloseRequested)
+	{
+		Gui.Draw();
+	}
 
 	D3D11Context->OMSetRenderTargets(1, &MainRenderTargetView, NULL);
 	ImGui::Render();

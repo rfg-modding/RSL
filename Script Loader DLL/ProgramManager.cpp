@@ -254,6 +254,7 @@ void ProgramManager::ProcessInput()
 		{
 			std::string ScriptString = Gui.ScriptEditor.GetCurrentScriptString();
 			Scripts.RunStringAsScript(ScriptString, "script editor run");
+			Sleep(175);
 		}
 	}
 }
@@ -359,6 +360,7 @@ void ProgramManager::Update()
 {
 	if (ScriptLoaderCloseRequested)
 	{
+		Sleep(1000);
 		ExitKeysPressCount = 10;
 	}
 	/*if (PeekMessage(&msg, NULL, 0U, 0U, PM_REMOVE)) //Todo: Figure out if I really need this for the overlay to work.

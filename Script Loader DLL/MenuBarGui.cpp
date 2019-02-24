@@ -29,6 +29,7 @@ void MenuBarGui::Initialize(bool * _OpenState)
 
 void MenuBarGui::Draw(const char* Title)
 {
+	static bool ShowDeactivationConfirmationPopup = false;
 	if (!OpenState)
 	{
 		return;
@@ -37,7 +38,7 @@ void MenuBarGui::Draw(const char* Title)
 	{
 		if (ImGui::BeginMenu("File"))
 		{
-			if (ImGui::MenuItem("Deactivate Script Loader", "Hold ctrl+alt for 5s")) { ConfirmScriptLoaderDeactivation(); }
+			if (ImGui::MenuItem("Deactivate Script Loader", "Hold ctrl+alt for 5s")) { ShowDeactivationConfirmationPopup = true; }
 			//ShowExampleMenuFile();
 			ImGui::EndMenu();
 		}
@@ -75,11 +76,16 @@ void MenuBarGui::Draw(const char* Title)
 		}
 		ImGui::EndMainMenuBar();
 	}
+	if (ShowDeactivationConfirmationPopup)
+	{
+		ImGui::OpenPopup("Confirm Deactivation");
+		ShowDeactivationConfirmationPopup = false;
+	}
+	ConfirmScriptLoaderDeactivation();
 }
 
 void MenuBarGui::ConfirmScriptLoaderDeactivation()
 {
-	ImGui::OpenPopup("Confirm Deactivation");
 	if (ImGui::BeginPopupModal("Confirm Deactivation"))
 	{
 		ImGui::Text("Are you sure you'd like to deactivate the script loader?");

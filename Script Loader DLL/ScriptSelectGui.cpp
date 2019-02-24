@@ -59,7 +59,7 @@ void ScriptSelectGui::Draw(const char* Title)
 		{
 			size_t ScriptIndex = std::distance(Scripts->Scripts.begin(), i);
 			bool Result = Scripts->RunScript(ScriptIndex);
-			Logger::Log("Result from running " + Scripts->Scripts[ScriptIndex].Name + ": " + std::to_string(Result), LogInfo);
+			//Logger::Log("Result from running " + Scripts->Scripts[ScriptIndex].Name + ": " + std::to_string(Result), LogInfo);
 		}
 		ImGui::PopStyleColor(1);
 		ImGui::SameLine();

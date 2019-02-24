@@ -208,7 +208,6 @@ void TeleportGui::Draw(const char* Title, bool UseSeparateWindow)
 	{
 		Logger::Log("Exception while drawing teleport menu!", LogFatalError);
 		Logger::Log(Exception.what(), LogFatalError);
-		Sleep(6000);
 	}
 	catch (...)
 	{
