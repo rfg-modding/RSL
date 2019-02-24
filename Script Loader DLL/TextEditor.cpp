@@ -1115,7 +1115,8 @@ void TextEditor::DrawOpenScriptPopup()
 	static bool OpenConfirmDeletePopup = false;
 	static std::string ScriptToDelete = "";
 	static std::string ScriptToDeleteFullPath = "";
-	if (ImGui::BeginPopup("Open script"))
+	ImGui::SetNextWindowSize(ImVec2(280.0f, 0.0f));
+	if (ImGui::BeginPopup("Open script"))//, ImGuiWindowFlags_AlwaysAutoResize))
 	{
 		if (ImGui::Button("Rescan"))
 		{
@@ -1123,7 +1124,11 @@ void TextEditor::DrawOpenScriptPopup()
 		}
 		for (auto i = Scripts->Scripts.begin(); i != Scripts->Scripts.end(); ++i)
 		{
+			ImGui::Columns(2);
+			ImGui::SetColumnWidth(-1, 200.0f);
 			ImGui::Text(i->Name.c_str()); ImGui::SameLine();
+			ImGui::NextColumn();
+			ImGui::SetColumnWidth(-1, 400.0f);
 
 			//ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 0.0f);
 			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4());
@@ -1142,6 +1147,7 @@ void TextEditor::DrawOpenScriptPopup()
 				OpenConfirmDeletePopup = true;
 			}
 			ImGui::PopStyleColor(4);
+			ImGui::NextColumn();
 		}
 		if (OpenConfirmDeletePopup)
 		{
