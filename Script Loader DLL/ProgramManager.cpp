@@ -360,7 +360,9 @@ void ProgramManager::Update()
 {
 	if (ScriptLoaderCloseRequested)
 	{
-		Sleep(1000);
+		std::cout << "Sleeping...\n";
+		Sleep(300);
+		std::cout << "Done sleeping.\n";
 		ExitKeysPressCount = 10;
 	}
 	/*if (PeekMessage(&msg, NULL, 0U, 0U, PM_REMOVE)) //Todo: Figure out if I really need this for the overlay to work.

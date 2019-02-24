@@ -70,7 +70,7 @@ void ScriptSelectGui::Draw(const char* Title)
 		}
 		ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.952f, 0.545f, 0.462f, 1.0f));
 		ImGui::SameLine();
-		if (ImGui::Button(std::string(std::string(ICON_FA_BAN) + u8"##" + i->FullPath).c_str()))
+		if (ImGui::Button(std::string(std::string(ICON_FA_STOP) + u8"##" + i->FullPath).c_str()))
 		{
 
 		}

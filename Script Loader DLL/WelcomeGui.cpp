@@ -49,7 +49,7 @@ void WelcomeGui::Draw(const char* Title)
 	//ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4());
 	ImGui::PushFont(FontHuge);
 	ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.556f, 0.823f, 0.541f, 1.0f));
-	if (ImGui::Button(std::string(std::string(ICON_FA_CODE) + u8"##CodeIcon").c_str()))
+	if (ImGui::Button(std::string(std::string(ICON_FA_CODE) + u8"##ScriptSelectIcon").c_str()))
 	{
 		Gui.ShowAppScriptsMenu = !Gui.ShowAppScriptsMenu;
 	}
@@ -57,7 +57,7 @@ void WelcomeGui::Draw(const char* Title)
 	Utilities::GUI::TooltipOnPrevious("This menu displays all the scripts detected in the scripts folder and lets you run, edit, and stop them on command. If the script isn't using event hooks then stopping it does nothing, since it stops after running once.", FontNormal);
 	ImGui::SameLine();
 	ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.357f, 0.659f, 0.863f, 1.0f));
-	if (ImGui::Button(std::string(std::string(ICON_FA_TERMINAL) + u8"##TerminalIcon").c_str()))
+	if (ImGui::Button(std::string(std::string(ICON_FA_TERMINAL) + u8"##LuaConsoleIcon").c_str()))
 	{
 		Gui.ToggleLuaConsole();
 	}
@@ -65,7 +65,7 @@ void WelcomeGui::Draw(const char* Title)
 	Utilities::GUI::TooltipOnPrevious("The console is useful for quickly setting values or calling functions without writing a script. Anything that scripts have access to, the console does too. The console is just running your input into it as a script.", FontNormal);
 	ImGui::SameLine();
 	ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 0.808f, 0.267f, 1.0f));
-	if (ImGui::Button(std::string(std::string(ICON_FA_EDIT) + u8"##EditIcon").c_str()))
+	if (ImGui::Button(std::string(std::string(ICON_FA_EDIT) + u8"##ScriptEditorIcon").c_str()))
 	{
 		Gui.ShowAppScriptEditor = !Gui.ShowAppScriptEditor;
 	}
@@ -73,7 +73,7 @@ void WelcomeGui::Draw(const char* Title)
 	Utilities::GUI::TooltipOnPrevious("The script editor allows you to save, load, edit, and run lua scripts in game, and provides basic lua syntax highlighting.", FontNormal);
 	ImGui::SameLine();
 	ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.404f, 0.416f, 0.435f, 1.0f));
-	if (ImGui::Button(std::string(std::string(ICON_FA_SLIDERS_H) + u8"##SlidersIcon").c_str()))
+	if (ImGui::Button(std::string(std::string(ICON_FA_SLIDERS_H) + u8"##TweaksIcon").c_str()))
 	{
 		Gui.ShowAppTweaksMenu = !Gui.ShowAppTweaksMenu;
 	}
@@ -81,7 +81,7 @@ void WelcomeGui::Draw(const char* Title)
 	Utilities::GUI::TooltipOnPrevious("This menu has settings for invulnerability, infinite jetpack, player move speed, player jump height, xray vision, and more.", FontNormal);
 	ImGui::SameLine();
 	ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.961f, 0.753f, 0.698f, 1.0f));
-	if (ImGui::Button(std::string(std::string(ICON_FA_MAP_MARKED) + u8"##MapMarkedIcon").c_str()))
+	if (ImGui::Button(std::string(std::string(ICON_FA_MAP_MARKED) + u8"##TeleportIcon").c_str()))
 	{
 		Gui.ShowAppTeleportMenu = !Gui.ShowAppTeleportMenu;
 	}
@@ -89,7 +89,7 @@ void WelcomeGui::Draw(const char* Title)
 	Utilities::GUI::TooltipOnPrevious("This menu allows you to teleport around the map. There are many preset locations, and you may create your own. Any of your custom locations are saved in TeleportLocations.json. You don't need to edit it by hand as you can do all the editing you need in the gui.", FontNormal);
 	ImGui::SameLine();
 	ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.361f, 0.129f, 1.0f, 1.0f));
-	if (ImGui::Button(std::string(std::string(ICON_FA_PAINT_BRUSH) + u8"##PaintBrushIcon").c_str()))
+	if (ImGui::Button(std::string(std::string(ICON_FA_PALETTE) + u8"##ThemeEditorIcon").c_str()))
 	{
 		Gui.ShowAppThemeEditor = !Gui.ShowAppThemeEditor;
 	}

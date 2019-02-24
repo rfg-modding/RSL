@@ -871,10 +871,10 @@ void TextEditor::Render(const char* aTitle, const ImVec2& aSize, bool aBorder)
 	{
 		if (ImGui::BeginMenu(std::string(std::string(ICON_FA_FILE) + u8" File##ScriptEditor").c_str()))
 		{
-			if (ImGui::MenuItem("New", "Ctrl+N")) { ShowNewScriptPopup = true; }
-			if (ImGui::MenuItem("Open", "Ctrl+O")) { ShowOpenScriptPopup = true; }
-			if (ImGui::MenuItem("Save", "Ctrl+S")) { SaveScript(); }//ShowSaveScriptPopup = true; }
-			if (ImGui::MenuItem("Save as", "Ctrl+Shift+S")) { ShowSaveAsScriptPopup = true; }
+			if (ImGui::MenuItem(std::string(std::string(ICON_FA_PLUS) + u8" New").c_str(), "Ctrl+N")) { ShowNewScriptPopup = true; }
+			if (ImGui::MenuItem(std::string(std::string(ICON_FA_FILE_IMPORT) + u8" Open").c_str(), "Ctrl+O")) { ShowOpenScriptPopup = true; }
+			if (ImGui::MenuItem(std::string(std::string(ICON_FA_FILE_EXPORT) + u8" Save").c_str(), "Ctrl+S")) { SaveScript(); }//ShowSaveScriptPopup = true; }
+			if (ImGui::MenuItem(std::string(std::string(ICON_FA_FILE_SIGNATURE) + u8" Save as").c_str(), "Ctrl+Shift+S")) { ShowSaveAsScriptPopup = true; }
 			DrawNewScriptPopup();
 			DrawOpenScriptPopup();
 			DrawSaveScriptPopup();
@@ -884,24 +884,24 @@ void TextEditor::Render(const char* aTitle, const ImVec2& aSize, bool aBorder)
 		if (ImGui::BeginMenu(std::string(std::string(ICON_FA_EDIT) + u8" Edit##ScriptEditor").c_str()))
 		{
 			//if (ImGui::MenuItem("Go to")) {TextEditor::SetCursorPosition(Te)}
-			if (ImGui::MenuItem("Undo", "Ctrl+Z")) { Undo(); } //Check can undo and pick color depending on that.
-			if (ImGui::MenuItem("Redo", "Ctrl+Y")) { Redo(); }
+			if (ImGui::MenuItem(std::string(std::string(ICON_FA_UNDO_ALT) + u8" Undo").c_str(), "Ctrl+Z")) { Undo(); } //Check can undo and pick color depending on that.
+			if (ImGui::MenuItem(std::string(std::string(ICON_FA_REDO_ALT) + u8" Redo").c_str(), "Ctrl+Y")) { Redo(); }
 			ImGui::Separator();
-			if (ImGui::MenuItem("Cut", "Ctrl+X")) { Cut(); }
-			if (ImGui::MenuItem("Copy", "Ctrl+C")) { Copy(); }
-			if (ImGui::MenuItem("Paste", "Ctrl+V")) { Paste(); }
-			if (ImGui::MenuItem("Select All", "Ctrl+A")) { SelectAll(); }
+			if (ImGui::MenuItem(std::string(std::string(ICON_FA_CUT) + u8" Cut").c_str(), "Ctrl+X")) { Cut(); }
+			if (ImGui::MenuItem(std::string(std::string(ICON_FA_COPY) + u8" Copy").c_str(), "Ctrl+C")) { Copy(); }
+			if (ImGui::MenuItem(std::string(std::string(ICON_FA_PASTE) + u8" Paste").c_str(), "Ctrl+V")) { Paste(); }
+			if (ImGui::MenuItem(std::string(std::string(ICON_FA_HIGHLIGHTER) + u8" Select all").c_str(), "Ctrl+A")) { SelectAll(); }
 			ImGui::EndMenu();
 		}
 		///ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.556f, 0.823f, 0.541f, 1.0f));
 		if (ImGui::BeginMenu(std::string(std::string(ICON_FA_FLASK) + u8" Test##ScriptEditor").c_str())) //ICON_FA_VIAL
 		{
-			if (ImGui::MenuItem("Run", "F5")) 
+			if (ImGui::MenuItem(std::string(std::string(ICON_FA_PLAY) + u8" Run").c_str(), "F5"))
 			{
 				std::string ScriptString = GetCurrentScriptString();
 				Scripts->RunStringAsScript(ScriptString, "script editor run"); 
 			}
-			if (ImGui::MenuItem("Stop")) {}
+			if (ImGui::MenuItem(std::string(std::string(ICON_FA_STOP) + u8" Stop").c_str())) {}
 			//if (ImGui::MenuItem("Save")) {}
 			//if (ImGui::MenuItem("Save as")) {}
 			ImGui::EndMenu();

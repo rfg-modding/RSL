@@ -328,27 +328,25 @@ HRESULT __stdcall D3D11PresentHook(IDXGISwapChain * pSwapChain, UINT SyncInterva
 		return D3D11PresentObject(pSwapChain, SyncInterval, Flags);
 	}*/
 
-	ImGui_ImplDX11_NewFrame();
-	ImGui_ImplWin32_NewFrame();
-	ImGui::NewFrame();
-
-#if !PublicMode
-	if (OverlayActive)
-	{
-		if (show_demo_window)
-		{
-			ImGui::ShowDemoWindow(&show_demo_window);
-		}
-	}
-#endif
 	if (!ScriptLoaderCloseRequested)
 	{
+		ImGui_ImplDX11_NewFrame();
+		ImGui_ImplWin32_NewFrame();
+		ImGui::NewFrame();
+#if !PublicMode
+		if (OverlayActive)
+		{
+			if (show_demo_window)
+			{
+				ImGui::ShowDemoWindow(&show_demo_window);
+			}
+		}
+#endif
 		Gui.Draw();
+		D3D11Context->OMSetRenderTargets(1, &MainRenderTargetView, NULL);
+		ImGui::Render();
+		ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 	}
-
-	D3D11Context->OMSetRenderTargets(1, &MainRenderTargetView, NULL);
-	ImGui::Render();
-	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 
 	return D3D11PresentObject(pSwapChain, SyncInterval, Flags);
 }
