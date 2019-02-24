@@ -276,6 +276,12 @@ void ProgramManager::Exit()
 	ImGui_ImplDX11_Shutdown();
 	ImGui_ImplWin32_Shutdown();
 
+	if (GlobalPlayerPtr)
+	{
+		Player* TempPtr = (Player*)GlobalPlayerPtr;
+		TempPtr->Flags.invulnerable = false;
+	}
+
 	Beep(900, 100);
 	Beep(700, 100);
 	Beep(600, 200);
