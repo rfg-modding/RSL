@@ -38,38 +38,6 @@ void ScriptManager::SetupLua()
 {
 	Lua["HideHud"] = HideHud;
 	Lua["HideFog"] = HideFog;
-
-	/*Functions to clear:*/
-	//string.dump
-	//os.execute
-	//dofile
-	//Test of ffi
-	//Figure out what the jit library adds.
-	
-	//Test if each of these works. Try replacing them with print for testing.
-	Lua.set_function("string.dump", []() 
-	{
-		Logger::Log("string.dump is disabled.");
-		return;
-	});
-	Lua.set_function("os.execute", []()
-	{
-		printf("os.execute is disabled");
-		//Logger::Log("os.execute is disabled.");
-		return;
-	});
-	/*Lua.set_function("dofile", []()
-	{
-		Logger::Log("dofile is disabled.");
-	});*/
-	/*Lua.set_function("ffi", []()
-	{
-		Logger::Log("ffi is a disabled function");
-	});*/
-	
-	//Lua["string.dump"] = sol::nil;
-	//Lua["os.exectute"] = sol::nil;
-	//Lua["dofile"] = sol::nil;
 }
 
 void ScriptManager::RunTestScript()
