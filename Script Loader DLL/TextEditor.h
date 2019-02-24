@@ -258,6 +258,11 @@ public:
 	std::string ScriptName = "NewScript.lua";
 	const std::string DefaultScriptName = "NewScript.lua";
 	ScriptManager* Scripts = nullptr;
+
+	bool ShowNewScriptPopup = false;
+	bool ShowOpenScriptPopup = false;
+	bool ShowSaveScriptPopup = false;
+	bool ShowSaveAsScriptPopup = false;
 private:
 	bool* OpenState = nullptr;
 

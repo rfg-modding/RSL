@@ -161,13 +161,13 @@ void ProgramManager::ProcessInput()
 	}
 	if (GetAsyncKeyState(VK_NUMPAD1) & 0x8000)
 	{
-		Scripts.RunTestScript();
+		//Scripts.RunTestScript();
 		Sleep(100);
 	}
 	if (GetAsyncKeyState(VK_NUMPAD2))
 	{
-		std::string ExePath = GetEXEPath(false);
-		Scripts.RunTestScript2();
+		//std::string ExePath = GetEXEPath(false);
+		//Scripts.RunTestScript2();
 		Sleep(100);
 	}
 	if (GetAsyncKeyState(VK_NUMPAD3))
@@ -225,9 +225,36 @@ void ProgramManager::ProcessInput()
 	}
 	if (GetAsyncKeyState(VK_F2))
 	{
+		Gui.ShowAppScriptEditor = !Gui.ShowAppScriptEditor;
+	}
+	/*if (GetAsyncKeyState(VK_F2))
+	{
 		FirstPersonModeActive = !FirstPersonModeActive;
 		Logger::Log(std::string("FPS Mode active value: " + std::to_string(FirstPersonModeActive)), LogInfo);
 		Sleep(150);
+	}*/
+	if (Gui.ShowAppScriptEditor)
+	{
+		if (GetAsyncKeyState(VK_LCONTROL) && GetAsyncKeyState(0x53)) //Ctrl + S
+		{
+			Gui.ScriptEditor.SaveScript();
+		}
+		if (GetAsyncKeyState(VK_CONTROL) && GetAsyncKeyState(VK_SHIFT) && GetAsyncKeyState(0x53)) //Ctrl + Shift + S
+		{
+			Gui.ScriptEditor.ShowSaveAsScriptPopup = true;
+		}
+		if (GetAsyncKeyState(VK_LCONTROL) && GetAsyncKeyState(0x4F)) //Ctrl + O
+		{
+			Gui.ScriptEditor.ShowOpenScriptPopup = true;
+		}
+		if (GetAsyncKeyState(VK_LCONTROL) && GetAsyncKeyState(0x4E)) //Ctrl + N
+		{
+			Gui.ScriptEditor.ShowNewScriptPopup = true;
+		}
+		if (GetAsyncKeyState(VK_F5) && GetAsyncKeyState(0x4E)) //Ctrl + N
+		{
+			Gui.ScriptEditor.ShowNewScriptPopup = true;
+		}
 	}
 }
 
