@@ -111,9 +111,9 @@ the top menu bar above.");
 	ImGui::SameLine(); ImGui::TextColored(SecondaryTextColor, "F1");
 	ImGui::Text("Toggle lua console: ");
 	ImGui::SameLine(); ImGui::TextColored(SecondaryTextColor, "Tilde (~)");
-	ImGui::Text("Disable hud & fog: ");
+	ImGui::Text("Toggle hud: ");
 	ImGui::SameLine(); ImGui::TextColored(SecondaryTextColor, "Numpad 1");
-	ImGui::Text("Enable hud & fog: ");
+	ImGui::Text("Toggle fog: ");
 	ImGui::SameLine(); ImGui::TextColored(SecondaryTextColor, "Numpad 2");
 
 	/*if (ImGui::CollapsingHeader("Notes:"))
