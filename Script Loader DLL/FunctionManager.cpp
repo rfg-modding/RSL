@@ -76,4 +76,8 @@ void FunctionManager::Initialize()
 
 	rl_draw_tristrip_2d_begin = (F_rl_draw_tristrip_2d_begin)(ModuleBase + 0x10DDA0);
 	rl_draw_string = (F_rl_draw_string)(ModuleBase + 0x155BC0); //.text:00985BC0 rfg.exe:$155BC0 #154FC0 <rl_draw::string>
+
+	IsGamePaused = (F_is_game_paused)(ModuleBase + 0x3C1690); //.text:015C1690 rfg.exe:$3C1690 #3C0A90 <game_is_paused>
+	world_do_frame = (F_world_do_frame)(ModuleBase + 0x540AB0); //.text:01740AB0 rfg.exe:$540AB0 #53FEB0 <world::do_frame>
+	world_get_object_name = (F_world_get_object_name)(ModuleBase + 0x51C8A0); //.text:0171C8A0 rfg.exe:$51C8A0 #51BCA0 <world::get_object_name>
 }

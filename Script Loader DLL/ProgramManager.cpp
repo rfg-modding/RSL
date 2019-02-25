@@ -61,7 +61,6 @@ void ProgramManager::Initialize()
 	}
 	GameWindowHandle = find_main_window(GetProcessID("rfg.exe"));
 
-
 	CreateGameHooks(true);
 #if !PublicMode
 	Logger::ConsoleLog("Finished hooking game functions.", LogInfo, false, true, true);
@@ -343,6 +342,8 @@ void ProgramManager::CreateGameHooks(bool EnableNow)
 	/*End of MP Detection Hooks*/
 
 	Hooks.CreateHook("rl_draw::tristrip_2d_begin", GAMEHOOK, (DWORD*)(ModuleBase + 0x10DDA0), rl_draw_tristrip_2d_begin_hook, (LPVOID*)&rl_draw_tristrip_2d_begin, EnableNow);
+
+	Hooks.CreateHook("world::do_frame", GAMEHOOK, (DWORD*)(ModuleBase + 0x540AB0), world_do_frame_hook, (LPVOID*)&world_do_frame, EnableNow);
 }
 
 void ProgramManager::CreateD3D11Hooks(bool EnableNow)

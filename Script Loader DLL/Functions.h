@@ -2,8 +2,10 @@
 ///#include "Globals.h"
 #include "SnippetManager.h"
 //#include "RFGR_Types_Player.h"
-#include "RFGR_Type_UI.h"
+#include "RFGR_Types_World.h"
 //#include "RFGR Structs/KeenNamespace.h"
+
+extern World* GlobalRfgWorldPtr;
 
 static void DisableCameraCode(DWORD AddressY, DWORD AddressZ) //Takes addresses for instructions affecting y and z. Alternatively x and z may work, since one piece seems to be shared between two coords.
 {
@@ -350,6 +352,25 @@ extern F_rl_draw_tristrip_2d_begin rl_draw_tristrip_2d_begin;
 //void __thiscall rl_draw::string(rl_draw *this, float sx, float sy, const char *s, bool centered, int fontnum, rl_primitive_state *state)
 typedef void(__fastcall* F_rl_draw_string)(void* This, void* edx, float sx, float sy, const char* s, bool centered, int fontnum, rl_primitive_state* state); //2nd arg is edx, needed for __thiscall functions.
 extern F_rl_draw_string rl_draw_string;
+
+//.text:015C1690 rfg.exe:$3C1690 #3C0A90 <game_is_paused>
+typedef bool(__cdecl* F_is_game_paused)();
+extern F_is_game_paused IsGamePaused;
+
+//.text:01740AB0 rfg.exe:$540AB0 #53FEB0 <world::do_frame> //bool __thiscall world::do_frame(world *this, bool hard_load)
+typedef void(__fastcall* F_world_do_frame)(World* This, void* edx, bool HardLoad); //2nd arg is edx, needed for __thiscall functions.
+extern F_world_do_frame world_do_frame;
+
+//.text:0171C8A0 rfg.exe:$51C8A0 #51BCA0 <world::get_object_name> //const char *__thiscall world::get_object_name(world *this, object *objp)
+typedef const char*(__fastcall* F_world_get_object_name)(World* This, void* edx, Object* ObjectPtr); //2nd arg is edx, needed for __thiscall functions.
+extern F_world_get_object_name world_get_object_name;
+
+
+//.text:0171D9F0 rfg.exe:$51D9F0 #51CDF0 <world::get_object_zone_by_index> //obj_zone *__thiscall world::get_object_zone_by_index(world *this, int index)
+
+//.text:0171DA20 rfg.exe:$51DA20 #51CE20 <world::get_object_zone_by_grid_id> //obj_zone *__thiscall world::get_object_zone_by_grid_id(world *this, unsigned __int16 id)
+
+
 
 //.text:00679AC0 rfg.exe:$2C9AC0 #2C8EC0 <camera_start_first_person>
 //.text:00679B60 rfg.exe:$2C9B60 #2C8F60 <camera_stop_first_person>

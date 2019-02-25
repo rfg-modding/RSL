@@ -278,6 +278,9 @@
     <ClInclude Include="WelcomeGui.h">
       <Filter>Overlay Gui\Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="RFGR_Types_World.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="RFGR Structs\rfg.h">

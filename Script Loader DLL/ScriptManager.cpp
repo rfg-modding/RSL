@@ -53,7 +53,7 @@ void ScriptManager::SetupLua()
 	LogTypeTable["Json"] = LogJson;
 	LogTypeTable["All"] = LogAll;
 
-	auto LoggerTable = Lua["Logger"].get_or_create<sol::table>(); //Todo: Add to RSL table
+	auto LoggerTable = Lua["Logger"].get_or_create<sol::table>(); //Todo: Add to RSL table.
 	LoggerTable["OpenLogFile"] = Logger::OpenLogFile;
 	LoggerTable["CloseLogFile"] = Logger::CloseLogFile;
 	LoggerTable["CloseAllLogFiles"] = Logger::CloseAllLogFiles;

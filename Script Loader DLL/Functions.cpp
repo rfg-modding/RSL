@@ -1,5 +1,6 @@
 #include "Functions.h"
 
+World* GlobalRfgWorldPtr = nullptr;
 
 F_Camera_Start_Slew_Mode Camera_Start_Slew_Mode;
 F_Camera_Stop_Slew_Mode Camera_Stop_Slew_Mode;
@@ -91,3 +92,7 @@ F_ui_tool_tips_add_tip UiToolTipsAddTip;
 
 F_rl_draw_tristrip_2d_begin rl_draw_tristrip_2d_begin;
 F_rl_draw_string rl_draw_string;
+
+F_is_game_paused IsGamePaused;
+F_world_do_frame world_do_frame;
+F_world_get_object_name world_get_object_name;
