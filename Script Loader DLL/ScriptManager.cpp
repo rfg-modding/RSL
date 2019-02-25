@@ -36,8 +36,32 @@ void ScriptManager::Initialize()
 
 void ScriptManager::SetupLua()
 {
-	Lua["HideHud"] = HideHud;
-	Lua["HideFog"] = HideFog;
+	//If necessary can make variables read-only: sol::readonly(&some_class::variable)
+	auto RslTable = Lua["rsl"].get_or_create<sol::table>();
+	
+	auto RfgTable = Lua["rfg"].get_or_create<sol::table>();
+	RfgTable["HideHud"] = HideHud;
+	RfgTable["HideFog"] = HideFog;
+
+	auto LogTypeTable = Lua["LogType"].get_or_create<sol::table>(); //Todo: Add to RSL table.
+	LogTypeTable["None"] = LogNone;
+	LogTypeTable["Info"] = LogInfo;
+	LogTypeTable["Warning"] = LogWarning;
+	LogTypeTable["Error"] = LogError;
+	LogTypeTable["FatalError"] = LogFatalError;
+	LogTypeTable["Lua"] = LogLua;
+	LogTypeTable["Json"] = LogJson;
+	LogTypeTable["All"] = LogAll;
+
+	auto LoggerTable = Lua["Logger"].get_or_create<sol::table>(); //Todo: Add to RSL table
+	LoggerTable["OpenLogFile"] = Logger::OpenLogFile;
+	LoggerTable["CloseLogFile"] = Logger::CloseLogFile;
+	LoggerTable["CloseAllLogFiles"] = Logger::CloseAllLogFiles;
+	LoggerTable["Log"] = Logger::Log;
+	LoggerTable["LogFlagWithColor"] = Logger::LogFlagWithColor;
+	LoggerTable["GetFlagString"] = Logger::GetFlagString;
+	LoggerTable["LogToFile"] = Logger::LogToFile;
+	LoggerTable["GetTimeString"] = Logger::GetTimeString;
 }
 
 void ScriptManager::RunTestScript()
