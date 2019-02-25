@@ -838,7 +838,7 @@ void TextEditor::Render()
 	}
 
 
-	ImGui::Dummy(ImVec2((longest + 2), mLines.size() * mCharAdvance.y));
+	ImGui::Dummy(ImVec2((longest + 2) - 0.3f, mLines.size() * mCharAdvance.y));
 
 	if (mScrollToCursor)
 	{
@@ -1418,7 +1418,7 @@ void TextEditor::EnterCharacter(Char aChar, bool aShift)
 		const size_t whitespaceSize = newLine.size();
 		newLine.insert(newLine.end(), line.begin() + coord.mColumn, line.end());
 		line.erase(line.begin() + coord.mColumn, line.begin() + line.size());
-		SetCursorPosition(Coordinates(coord.mLine + 1, (int)whitespaceSize));
+		SetCursorPosition(Coordinates(coord.mLine, (int)whitespaceSize)); //Note: Was previously coord.mLine + 1, changed to fix bug with improper cursor position.
 	}
 	else
 	{
