@@ -32,6 +32,15 @@ public:
 	int XrayEffectMode = 0;
 	bool XrayModeOn = false;
 
+	vector CustomLevelAmbientLight;
+	vector CustomLevelBackgroundAmbientLight;
+	bool UseCustomLevelAmbientLight = false;
+	bool UseCustomLevelBackgroundAmbientLight = false;
+
+	explosion_info CustomExplosionInfo; 
+	bool MiddleMouseBoomActive = false;
+	int MiddleMouseExplosionsPerSecond = 20;
+
 private:
 	bool* OpenState = nullptr;
 };

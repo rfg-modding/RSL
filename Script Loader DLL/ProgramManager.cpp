@@ -201,6 +201,15 @@ void ProgramManager::ProcessInput()
 		}
 		Sleep(5);
 	}
+	if (GetAsyncKeyState(VK_MBUTTON))
+	{
+		if (Gui.TweaksMenu.MiddleMouseBoomActive)
+		{
+			ExplosionCreate(&Gui.TweaksMenu.CustomExplosionInfo, Gui.TweaksMenu.PlayerPtr, Gui.TweaksMenu.PlayerPtr,
+				&Gui.TweaksMenu.PlayerPtr->aim_pos, &Gui.TweaksMenu.PlayerPtr->mp_camera_orient, &Gui.TweaksMenu.PlayerPtr->aim_pos, NULL, false);
+		}
+		Sleep(1000 / Gui.TweaksMenu.MiddleMouseExplosionsPerSecond);
+	}
 	if (GetAsyncKeyState(VK_F1))
 	{
 		OverlayActive = !OverlayActive;

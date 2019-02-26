@@ -724,5 +724,17 @@ void __fastcall world_do_frame_hook(World* This, void* edx, bool HardLoad) //.te
 		std::cout << "RFGWorldPtr Changed!\n";
 	}
 
+	if (Gui.TweaksMenu.UseCustomLevelAmbientLight)
+	{
+		GlobalRfgWorldPtr->level_ambient.x = Gui.TweaksMenu.CustomLevelAmbientLight.x;
+		GlobalRfgWorldPtr->level_ambient.y = Gui.TweaksMenu.CustomLevelAmbientLight.y;
+		GlobalRfgWorldPtr->level_ambient.z = Gui.TweaksMenu.CustomLevelAmbientLight.z;
+	}
+	if (Gui.TweaksMenu.UseCustomLevelBackgroundAmbientLight)
+	{
+		GlobalRfgWorldPtr->level_back_ambient.x = Gui.TweaksMenu.CustomLevelBackgroundAmbientLight.x;
+		GlobalRfgWorldPtr->level_back_ambient.y = Gui.TweaksMenu.CustomLevelBackgroundAmbientLight.y;
+		GlobalRfgWorldPtr->level_back_ambient.z = Gui.TweaksMenu.CustomLevelBackgroundAmbientLight.z;
+	}
 	return world_do_frame(This, edx, HardLoad);
 }
