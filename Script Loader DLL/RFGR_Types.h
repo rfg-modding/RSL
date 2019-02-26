@@ -241,6 +241,11 @@ enum cf_error_codes
 	CF_ERROR_NUM_CODES = 0x4,
 };
 
+struct timestamp_realtime
+{
+	int value;
+};
+
 /* 5492 */
 struct MultiTimestamp //4
 {
@@ -929,6 +934,14 @@ struct KeenGraphicsSystem : GraphicsSystemBase //Todo: Make Keen namespace event
 	unsigned int windowModeWidth;
 	unsigned int windowModeHeight;
 };*/
+
+struct vector4 //16
+{
+	float x;
+	float y;
+	float z;
+	float w;
+};
 
 /* 5181 */
 const struct __declspec(align(4)) explosion_info //340 Bytes
