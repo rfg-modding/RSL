@@ -174,19 +174,19 @@ void GeneralTweaksGui::Draw(const char* Title)
 	ImGui::Checkbox("##ToggleLevelBackgroundAmbientLight", &UseCustomLevelBackgroundAmbientLight);
 
 	//Has always been empty in my tests. Try using the world_zone** var.
-	/*if (ImGui::Button("Print all zone names"))
+	if (ImGui::Button("Print all zone names"))
 	{
-		std::cout << "Address of globalzonegrid[]: " << GlobalRfgWorldPtr->global_zone_grid << "\n";
+		std::cout << "Address of globalzonegrid[]: " << GlobalRfgWorldPtr->all_zones << "\n";
 		if (GlobalRfgWorldPtr)
 		{
 			std::cout << "\nPrinting all world zone names...\n";
-			if (GlobalRfgWorldPtr->num_territory_zones > 0)
+			//if (GlobalRfgWorldPtr->num_territory_zones > 0)
 			{
-				for (int i = 0; i < GlobalRfgWorldPtr->num_territory_zones; i++)
+				for (int i = 0; i < 257; i++)//GlobalRfgWorldPtr->num_territory_zones; i++)
 				{
-					if (GlobalRfgWorldPtr->global_zone_grid[i] != nullptr && GlobalRfgWorldPtr->global_zone_grid[i] != NULL)
+					if (&*GlobalRfgWorldPtr->all_zones[i] != nullptr && &*GlobalRfgWorldPtr->all_zones[i] != NULL)
 					{
-						std::cout << "Index: " << i << ", Zone name: " << GlobalRfgWorldPtr->global_zone_grid[i]->name << "\n";
+						std::cout << "Index: " << i << ", Zone name: " << *GlobalRfgWorldPtr->all_zones[i]->name << "\n";
 					}
 					else
 					{
@@ -200,7 +200,7 @@ void GeneralTweaksGui::Draw(const char* Title)
 		{
 			Logger::Log("Could not print zone names, the world pointer is null!\n", LogError);
 		}
-	}*/
+	}
 	ImGui::Separator();
 	if (ImGui::Button("Print misc world values"))
 	{
@@ -303,25 +303,13 @@ void GeneralTweaksGui::Draw(const char* Title)
 	//Material reference array
 	
 	ImGui::Text("Salvage material type:");
-	if (ImGui::RadioButton("Invalid material", true))
-	{
-		CustomExplosionInfo.salvage_material = INVALID_SALVAGE_MATERIAL;
-	}
+	ImGui::RadioButton("Invalid Material", (int*)&CustomExplosionInfo.salvage_material, INVALID_SALVAGE_MATERIAL);
 	ImGui::SameLine();
-	if (ImGui::RadioButton("Metal", true))
-	{
-		CustomExplosionInfo.salvage_material = SALVAGE_MATERIAL_METAL;
-	}
+	ImGui::RadioButton("Metal", (int*)&CustomExplosionInfo.salvage_material, SALVAGE_MATERIAL_METAL);
 	ImGui::SameLine();
-	if (ImGui::RadioButton("Ore", true))
-	{
-		CustomExplosionInfo.salvage_material = SALVAGE_MATERIAL_ORE;
-	}
+	ImGui::RadioButton("Ore", (int*)&CustomExplosionInfo.salvage_material, SALVAGE_MATERIAL_ORE);
 	ImGui::SameLine();
-	if (ImGui::RadioButton("Chemical", true))
-	{
-		CustomExplosionInfo.salvage_material = SALVAGE_MATERIAL_CHEMICAL;
-	}
+	ImGui::RadioButton("Chemical", (int*)&CustomExplosionInfo.salvage_material, SALVAGE_MATERIAL_CHEMICAL);
 	
 	ImGui::InputInt("Salvage max pieces", &CustomExplosionInfo.salvage_max_pieces);
 	ImGui::InputFloat("Salvage probability", &CustomExplosionInfo.salvage_probability);
