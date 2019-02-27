@@ -1355,7 +1355,7 @@ struct __declspec(align(8)) World //11108
 	vector pending_game_load_warp_to_pos; //12
 	matrix pending_game_load_warp_to_orient; //36
 	volatile bool load_aborted; //4
-	void* grid; //stream_grid* grid; //4
+	stream_grid* grid; //4
 	vector stream_pos; //12
 	int num_territory_zones; //4
 	world_zone** all_zones; //4
