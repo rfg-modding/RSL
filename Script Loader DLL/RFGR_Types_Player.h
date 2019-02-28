@@ -143,14 +143,6 @@ enum AudiolibCuePriority
 	NUM_AUDIOLIB_CUE_PRIORITIES = 0xC,
 };
 
-/* 588 */
-enum VoiceLineHandle
-{
-	INVALID_VOICE_LINE_HANDLE = 0xFFFFFFFF,
-	VOICE_LINE_HANDLE_IS_DLC = 0x8000,
-	VOICE_LINE_HANDLE_FORCE_TO_32_BIT = 0x7FFFFFFF,
-};
-
 /* 410 */
 enum spinebend_interest
 {
@@ -2395,7 +2387,7 @@ struct Human : Object //3786 + 175 = 3961 Bytes
 	HumanTeams CurrentTeam;  //4, enum
 	HumanTeams UndercoverTeam; //4, enum
 	int DialogueFoleyInfo; //4
-	VoiceLineHandle QueuedVoiceLine; //4, enum
+	voice_line_handle QueuedVoiceLine; //4, enum
 	VoiceLines SituationalVoiceLine; //4, enum
 	VoiceLinePriorities VoicePriority; //4, enum
 	AudiolibCuePriority VoiceCuePriority; //4, enum

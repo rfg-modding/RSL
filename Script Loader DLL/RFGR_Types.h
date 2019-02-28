@@ -20,6 +20,40 @@ struct Player;
 //struct rl_partition_sector_entry;
 //struct linked_list_p;// <rl_partition_sector_entry>;
 
+enum rl_light_light_type
+{
+	LIGHT_TYPE_DIRECTIONAL = 0x0,
+	LIGHT_TYPE_POINT = 0x1,
+	LIGHT_TYPE_SPOT_LIGHT = 0x2,
+	LIGHT_TYPE_FORCE_SIZEOF_INT = 0xFFFFFFFF,
+};
+
+enum voice_line_handle
+{
+	INVALID_VOICE_LINE_HANDLE = 0xFFFFFFFF,
+	VOICE_LINE_HANDLE_IS_DLC = 0x8000,
+	VOICE_LINE_HANDLE_FORCE_TO_32_BIT = 0x7FFFFFFF,
+};
+
+enum game_clock_time_of_day
+{
+	GC_INVALID = 0xFFFFFFFF,
+	GC_DAY = 0x0,
+	GC_NIGHT = 0x1,
+	GC_TIME_OF_DAY_COUNT = 0x2,
+};
+
+enum game_clock_tod_partitioned
+{
+	GC_EARLY_DAY = 0x0,
+	GC_MID_DAY = 0x1,
+	GC_LATE_DAY = 0x2,
+	GC_EARLY_NIGHT = 0x3,
+	GC_MID_NIGHT = 0x4,
+	GC_LATE_NIGHT = 0x5,
+	NUM_TOD_PARTITIONS = 0x6,
+};
+
 enum vint_res_offset
 {
 	VINT_RES_OFFSET_INHERIT = 0x0,

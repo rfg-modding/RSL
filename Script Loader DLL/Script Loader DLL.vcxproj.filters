@@ -191,9 +191,6 @@
     <ClInclude Include="RFGR Structs\KaikoNamespace.h">
       <Filter>RFGR Structs</Filter>
     </ClInclude>
-    <ClInclude Include="RFGR Structs\KeenNamespacePrototype.h">
-      <Filter>RFGR Structs</Filter>
-    </ClInclude>
     <ClInclude Include="RFGR Structs\KeenNamespace.h">
       <Filter>RFGR Structs</Filter>
     </ClInclude>
@@ -280,6 +277,9 @@
     </ClInclude>
     <ClInclude Include="RFGR_Types_World.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="KeenNamespace2.h">
+      <Filter>RFGR Structs</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

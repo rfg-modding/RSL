@@ -1,6 +1,6 @@
 #pragma once
-#include "KeenNamespace.h"
-#include "Unit4Namespace.h"
+//#include "KeenNamespace.h"
+//#include "Unit4Namespace.h"
 
 namespace kaiko
 {

@@ -1,14 +1,68 @@
 #pragma once
-#include "KeenNamespace.h"
-#include "KaikoNamespace.h"
+//#include "KeenNamespace.h"
+//#include "KaikoNamespace.h"
 
 /*#define __int8 char
 #define __int16 short
 #define __int32 int
 #define __int64 long long*/
 
+#include "KeenNamespace2.h"
+
 namespace unit4
 {
+	//namespace SystemServices
+	//{
+		enum SendRankingStep
+		{
+			SendRankingStep_Invalid = 0x0,
+			SendRankingStep_FindLeaderboard = 0x1,
+			SendRankingStep_UploadScore = 0x2,
+		};
+
+		enum ReceiveRankingStep
+		{
+			ReceiveRankingStep_Invalid = 0x0,
+			ReceiveRankingStep_FindLeaderboard = 0x1,
+			ReceiveRankingStep_DownloadLeaderboard = 0x2,
+		};
+	//}
+
+	enum RankingListQueryType
+	{
+		RankingListQueryType_AllWithOffset = 0x0,
+		RankingListQueryType_AllCenteredOnUser = 0x1,
+		RankingListQueryType_FriendsWithOffset = 0x2,
+		RankingListQueryType_FriendsCenteredOnUser = 0x3,
+	};
+
+	enum LocalPlayerType
+	{
+		LocalPlayerType_WithAccount = 0x0,
+		LocalPlayerType_Guest = 0x1,
+	};
+
+	enum LocalUserState //LocalGameSession::LocalUserState
+	{
+		LocalUserState_Unused = 0x0,
+		LocalUserState_NoAccount = 0x1,
+		LocalUserState_NoSavedata = 0x2,
+		LocalUserState_Savedata = 0x3,
+		LocalUserState_SkippedSignIn = 0x4,
+		LocalUserState_SignedOut = 0x5,
+		LocalUserState_SwitchedAccount = 0x6,
+		LocalUserState_Exited = 0x7,
+	};
+
+	enum InteractionStarter //unit4::LocalGameSession::InteractionStarter
+	{
+		InteractionStarter_Invalid = 0x0,
+		InteractionStarter_SaveData = 0x1,
+		InteractionStarter_SystemServices = 0x2,
+		InteractionStarter_Input = 0x3,
+		InteractionStarter_UserAccountSystem = 0x4,
+	};
+
 	struct SaveDataDescriptionInterfaceVtbl;
 	/* 4543 */
 	struct SaveDataDescriptionInterface
@@ -25,7 +79,6 @@ namespace unit4
 		void(__thiscall *initializeSaveDataToDefault)(unit4::SaveDataDescriptionInterface* This, void*);
 	};
 
-	/* 4552 */
 	struct SessionInteractionData
 	{
 		unsigned int id;
@@ -57,7 +110,6 @@ namespace unit4
 		char displayName[64];
 	};
 
-	/* 2994 */
 	struct RankingSendData
 	{
 		unsigned __int16 tableId;
@@ -67,16 +119,20 @@ namespace unit4
 		unsigned int numScoreDetails;
 	};
 
-	/* 201 */
-	enum RankingListQueryType
+	struct Array__unit4_RankingSendData
 	{
-		RankingListQueryType_AllWithOffset = 0x0,
-		RankingListQueryType_AllCenteredOnUser = 0x1,
-		RankingListQueryType_FriendsWithOffset = 0x2,
-		RankingListQueryType_FriendsCenteredOnUser = 0x3,
+		RankingSendData* m_pData;
+		unsigned int m_size;
 	};
 
-	/* 2997 */
+	struct Queue__unit4_RankingSendData
+	{
+		unsigned int m_size;
+		unsigned int m_bottom;
+		unsigned int m_top;
+		Array__unit4_RankingSendData m_data;
+	};
+
 	struct RankingListEntry
 	{
 		unit4::NamedRemoteUserId userInfo;
@@ -146,43 +202,60 @@ namespace unit4
 		RankingError_FailedRetryOrDisable = 0x2006,
 	};
 
-	/* 3003 */
 	struct SystemServicesBase
 	{
 		unsigned int currentTimeInMs;
 		bool rankingSendInProgress;
 		unit4::RankingSendData currentRankingSendData;
-		keen::Queue<unit4::RankingSendData> rankingSendDataQueue;
+		Queue__unit4_RankingSendData rankingSendDataQueue; //keen::Queue<unit4::RankingSendData> rankingSendDataQueue;
 		unit4::RankingReceiveData rankingReceiveData;
 		unit4::RankingError currentRankingError;
 		unit4::SystemServicesInteractionData rankingSendInteraction;
 		unit4::SystemServicesInteractionData onlineInteraction;
 	};
-	/* 3011 */
+
 	struct __declspec(align(8)) SystemServices : SystemServicesBase
 	{
 		keen::SteamAchievements steamAchievements;
 		keen::SteamStats steamStats;
 		const char *pPresenceStrings[64];
 		unsigned int presenceStringCount;
-		unit4::SystemServices::SendRankingStep sendRankingStep;
+		SendRankingStep sendRankingStep;
 		unsigned __int64 sendRankingCall;
-		unit4::SystemServices::ReceiveRankingStep receiveRankingStep;
+		ReceiveRankingStep receiveRankingStep;
 		unsigned __int64 receiveRankingCall;
-		INetworkListManager *pNetworkListManager;
+		INetworkListManager* pNetworkListManager;
+	};
+
+	struct __declspec(align(4)) LocalUserData //LocalGameSession::LocalUserData
+	{
+		bool skippedSignIn;
+		bool hasExpectedUserId;
+		keen::UserAccount expectedUser;
+		LocalUserState state;
+		LocalUserState stateBeforeProfileChange;
+		unit4::LocalPlayerType playerType;
+		unsigned int saveProfileIndex;
+		bool controllerDisconnected;
+	};
+
+	struct Array__unit4_LocalGameSession_LocalUserData
+	{
+		LocalUserData *m_pData;
+		unsigned int m_size;
 	};
 
 	struct LocalGameSession
 	{
 		unit4::SaveDataDescriptionInterface *m_pSaveDataInterface;
-		keen::SaveDataHandler *m_pSaveDataHandler;
-		keen::UserAccountSystem *m_pUserAccountSystem;
-		unit4::SystemServices *m_pSystemServices;
+		keen::SaveDataHandler* m_pSaveDataHandler;
+		keen::UserAccountSystem* m_pUserAccountSystem;
+		unit4::SystemServices* m_pSystemServices;
 		keen::InputSystem *m_pInputSystem;
 		bool m_showingSignInUi;
-		keen::Array<unit4::LocalGameSession::LocalUserData> m_userData;
+		Array__unit4_LocalGameSession_LocalUserData m_userData;
 		unsigned int m_userAccountOperationHandle;
 		keen::ControllerInfo m_lastUsedControllerInfo;
-		unit4::LocalGameSession::InteractionStarter m_lastInteractionStartedBy;
+		InteractionStarter m_lastInteractionStartedBy;
 	};
 }

@@ -131,14 +131,6 @@ enum rl_outline_layer
 	RLOL_USE_COLOR1 = 0x2,
 };
 
-enum rl_light_light_type
-{
-	LIGHT_TYPE_DIRECTIONAL = 0x0,
-	LIGHT_TYPE_POINT = 0x1,
-	LIGHT_TYPE_SPOT_LIGHT = 0x2,
-	LIGHT_TYPE_FORCE_SIZEOF_INT = 0xFFFFFFFF,
-};
-
 struct rl_base_object
 {
 	rl_base_objectVtbl *vfptr;
@@ -238,6 +230,15 @@ struct rl_color_float
 	float green;
 	float blue;
 	float alpha;
+};
+
+struct __declspec(align(4)) rl_skybox_orbital_params
+{
+	rl_color_float tint;
+	vector position;
+	float scale;
+	int texture_handle;
+	bool alpha_blend;
 };
 
 struct rl_color_correct_state
@@ -1159,6 +1160,31 @@ struct district_flags
 	__int8 play_capstone_unlocked_lines : 1;
 	__int8 disable_morale_change : 1;
 	__int8 disable_control_change : 1;
+};
+
+struct __declspec(align(4)) district : Object
+{
+	float control;
+	float morale;
+	float control_max;
+	float morale_max;
+	float liberated_tech_level;
+	int liberated_marauder_level;
+	int liberated_edf_level;
+	voice_line_handle liberated_radio_line_handle;
+	voice_line_handle capstone_line_1;
+	voice_line_handle capstone_line_2;
+	int min_edf_progression_level;
+	bool liberated;
+	bool needs_to_play_radio_line;
+	district_flags flags;
+	color col;
+	unsigned int localized_name_hash;
+	farray__grid_info_21 grid_ids;
+	char district_index;
+	rl_color_float m_vfx_tint;
+	const char *load_screen_images[5];
+	char num_load_screen_images;
 };
 
 struct t_district

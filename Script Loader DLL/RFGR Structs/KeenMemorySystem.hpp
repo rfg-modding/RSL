@@ -1,5 +1,5 @@
 #pragma once
-#include "KeenNamespace.h"
+//#include "KeenNamespace.h"
 
 namespace keen
 {
@@ -26,16 +26,6 @@ namespace keen
 	{
 		char *pStart;
 		unsigned int size;
-	};
-
-	/* 2415 */
-	struct BasePoolAllocator
-	{
-		keen::MemoryBlock m_memoryBlock;
-		unsigned int m_capacity;
-		unsigned int m_size;
-		unsigned int m_elementSize;
-		unsigned int m_firstFreeIndex;
 	};
 
 	/* 2342 */

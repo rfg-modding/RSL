@@ -1,5 +1,5 @@
 #pragma once
-#include "KeenNamespace.h"
+//#include "KeenNamespace.h"
 
 namespace keen
 {
@@ -519,33 +519,10 @@ namespace keen
 		unsigned int m_size;
 	};
 
-	/* 2410 */
-	struct Resource
-	{
-		unsigned __int16 m_flags;
-		char m_tag;
-		char m_unused;
-		unsigned int m_key;
-	};
-
 	/* 2919 */
 	struct SoundDefinitionResource : keen::Resource
 	{
 		keen::SoundSystem::SoundDefinition *m_pData;
-	};
-
-	/* 2933 */
-	struct SoundDeviceChangedCallback
-	{
-		keen::SoundDeviceChangedCallbackVtbl *vfptr;
-		keen::SoundDeviceChangedCallback *m_pNext;
-	};
-
-	/* 2936 */
-	struct SoundDeviceChangedCallbackVtbl
-	{
-		void(__thiscall *handleAboutToDestroyMasteringVoice)(keen::SoundDeviceChangedCallback *This, keen::SoundSystem::System *);
-		void(__thiscall *handleMasteringVoiceCreated)(keen::SoundDeviceChangedCallback *This, keen::SoundSystem::System *);
 	};
 
 	/* SOUND SYSTEM END*/
