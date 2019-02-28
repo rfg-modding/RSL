@@ -208,6 +208,25 @@ void ProgramManager::ProcessInput()
 			ExplosionCreate(&Gui.TweaksMenu.CustomExplosionInfo, Gui.TweaksMenu.PlayerPtr, Gui.TweaksMenu.PlayerPtr,
 				&Gui.TweaksMenu.PlayerPtr->aim_pos, &Gui.TweaksMenu.PlayerPtr->mp_camera_orient, &Gui.TweaksMenu.PlayerPtr->aim_pos, NULL, false);
 		}
+		//For whatever reason this causes a crash. Might need to call at a specific time to not piss off havok or something.
+		/*if (Gui.TweaksMenu.MiddleMouseRepairSphereActive)
+		{
+			if (Gui.TweaksMenu.PlayerPtr)
+			{
+				if (Gui.TweaksMenu.RepairPosition == 0)
+				{
+					const float Radius = Gui.TweaksMenu.RepairRadius;
+					const int Duration = Gui.TweaksMenu.RepairDuration;
+					rfg_dyn_repair_sphere(&Gui.TweaksMenu.PlayerPtr->Position, Radius, Duration, Gui.TweaksMenu.PlayerPtr);
+				}
+				else if (Gui.TweaksMenu.RepairPosition == 1)
+				{
+					const float Radius = Gui.TweaksMenu.RepairRadius;
+					const int Duration = Gui.TweaksMenu.RepairDuration;
+					rfg_dyn_repair_sphere(&Gui.TweaksMenu.PlayerPtr->aim_pos, Radius, Duration, Gui.TweaksMenu.PlayerPtr);
+				}
+			}
+		}*/
 		Sleep(1000 / Gui.TweaksMenu.MiddleMouseExplosionsPerSecond);
 	}
 	if (GetAsyncKeyState(VK_F1))

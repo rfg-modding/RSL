@@ -98,6 +98,9 @@ void GeneralTweaksGui::Draw(const char* Title)
 		ToggleFog();
 	}
 	ImGui::Separator();
+
+
+	//ImGui::Separator();
 	
 	ImGui::Text("Alert level: ");
 	ImGui::SameLine();
@@ -230,42 +233,79 @@ void GeneralTweaksGui::Draw(const char* Title)
 	//all_zones and global_zone_grid in rfg::world are always empty. 
 	static int ZoneScanRange = 2000;
 	ImGui::InputInt("Zone scan range", &ZoneScanRange);
-	if (ImGui::Button("Print all zone names"))
+	static float CustomMinWindSpeed = 0.0f;
+	static float CustomMaxWindSpeed = 0.0f;
+	ImGui::InputFloat("Custom min wind speed", &CustomMinWindSpeed);
+	ImGui::InputFloat("Custom max wind speed", &CustomMaxWindSpeed);
+	if (ImGui::Button("Set all zone wind speeds"))
 	{
-		//std::cout << "Address of globalzonegrid[]: " << GlobalRfgWorldPtr->all_zones << "\n";
 		if (GlobalRfgWorldPtr)
 		{
-			int NumberOfZonesFound = 0;
-			Logger::Log("\nPrinting all world zone names...\n", LogInfo);
-			for (int i = 0; i < ZoneScanRange; i++)//GlobalRfgWorldPtr->num_territory_zones; i++)
+			int ValidWorldZoneCount = 0;
+			int ValidObjectZoneCount = 0;
+			for (int i = 0; i < ZoneScanRange; i++)
 			{
 				world_zone* CurrentWorldZone = get_world_zone_by_index(GlobalRfgWorldPtr, NULL, i);
 				if (CurrentWorldZone)
 				{
-					NumberOfZonesFound++;
-					Logger::Log("\nPrinting all world zone names...\n", LogInfo);
-					Logger::Log(std::string("Index: " + std::to_string(i)), LogInfo);
-					Logger::Log(std::string("Zone name: " + std::string(CurrentWorldZone->name)), LogInfo);
-					Logger::Log(std::string("srid: " + std::to_string(CurrentWorldZone->srid)), LogInfo);
-					Logger::Log(std::string("gid: " + std::to_string(CurrentWorldZone->gid)), LogInfo);
-					Logger::Log(std::string("Border zone: " + std::to_string(CurrentWorldZone->is_border_zone) + std::string("\n")), LogInfo);
+					ValidWorldZoneCount++;
+					if (CurrentWorldZone->zone_objp)
+					{
+						ValidObjectZoneCount++;
+						CurrentWorldZone->zone_objp->wind_min_speed = CustomMinWindSpeed;
+						CurrentWorldZone->zone_objp->wind_max_speed = CustomMaxWindSpeed;
+					}
 				}
-				else
-				{
-					//std::cout << "The zone pointer at index " << i << " is null. Stopping.\n";
-					//break;
-				}
-				/*if (&*GlobalRfgWorldPtr->all_zones[i] != nullptr && &*GlobalRfgWorldPtr->all_zones[i] != NULL)
-				{
-					std::cout << "Index: " << i << ", Zone name: " << *GlobalRfgWorldPtr->all_zones[i]->name << "\n";
-				}
-				else
-				{
-					std::cout << "The zone pointer at index " << i << " is null\n";
-				}*/
 			}
-			Logger::Log("Done printing all world zone info", LogInfo);
-			Logger::Log(std::string("Number of zones found: " + std::to_string(NumberOfZonesFound)), LogInfo);
+			Logger::Log("Done setting zone wind speeds", LogInfo);
+			Logger::Log(std::string("# of valid world zones: " + std::to_string(ValidWorldZoneCount)).c_str(), LogInfo);
+			Logger::Log(std::string("# of valid object zones: " + std::to_string(ValidObjectZoneCount)).c_str(), LogInfo);
+		}
+	}
+
+	if (ImGui::Button("Dump zone info"))
+	{
+		if (GlobalRfgWorldPtr)
+		{
+			int NumberOfWorldZonesFound = 0;
+			int NumberOfObjectZonesFound = 0;
+			std::ofstream ZoneDump(GetEXEPath(false) + "RFGR Script Loader/ZoneInfoDump.txt", std::ios_base::trunc);
+			ZoneDump << "\nPrinting all world zone names...\n";
+			Logger::Log("\nPrinting all world zone names...\n", LogInfo);
+			for (int i = 0; i < ZoneScanRange; i++)
+			{
+				world_zone* CurrentWorldZone = get_world_zone_by_index(GlobalRfgWorldPtr, NULL, i);
+				if (CurrentWorldZone)
+				{
+					NumberOfWorldZonesFound++;
+					ZoneDump << "Index: " << i << "\n";
+					ZoneDump << "Zone name: " << CurrentWorldZone->name << "\n";
+					ZoneDump << "srid: " << CurrentWorldZone->srid << "\n";
+					ZoneDump << "gid: " << CurrentWorldZone->gid << "\n";
+					ZoneDump << "Border zone: " << CurrentWorldZone->is_border_zone << "\n";
+					if (CurrentWorldZone->zone_objp)
+					{
+						NumberOfObjectZonesFound++;
+						ZoneDump << "Object zone:\n";
+						ZoneDump << "    All index: " << CurrentWorldZone->zone_objp->AllIndex << "\n";
+						ZoneDump << "    Min wind speed: " << CurrentWorldZone->zone_objp->wind_min_speed << "\n";
+						ZoneDump << "    Max wind speed: " << CurrentWorldZone->zone_objp->wind_max_speed << "\n";
+						ZoneDump << "    Handle: " << CurrentWorldZone->zone_objp->Handle << "\n";
+						ZoneDump << "    Havok handle: " << CurrentWorldZone->zone_objp->HavokHandle << "\n";
+						ZoneDump << "    Terrain filename: " << CurrentWorldZone->zone_objp->terrain->filename << "\n\n";
+					}
+					else
+					{
+						ZoneDump << "--Invalid object zone--\n\n";
+					}
+				}
+			}
+			Logger::Log("Done printing all world zone info. Check ZoneInfoDump.txt in the script loader folder.", LogInfo);
+			Logger::Log(std::string("Number of world zones found: " + std::to_string(NumberOfWorldZonesFound)), LogInfo);
+			Logger::Log(std::string("Number of object zones found: " + std::to_string(NumberOfObjectZonesFound)), LogInfo);
+			ZoneDump << "Done printing all world zone info\n";
+			ZoneDump << "Number of zones found: " << NumberOfWorldZonesFound;
+			ZoneDump << "Number of zones found: " << NumberOfObjectZonesFound;
 		}
 		else
 		{
@@ -282,8 +322,8 @@ void GeneralTweaksGui::Draw(const char* Title)
 			std::cout << "Tech level: " << GlobalRfgWorldPtr->tech_level << "\n";
 			std::cout << "Tech level max: " << GlobalRfgWorldPtr->tech_level_max << "\n";
 			std::cout << "Pending filename: " << GlobalRfgWorldPtr->pending_filename << "\n";
-			std::cout << "GlobalRfgWorldPtr->all_objects.array_size: " << GlobalRfgWorldPtr->all_objects.array_size << "\n";
-			std::cout << "GlobalRfgWorldPtr->all_objects.num: " << GlobalRfgWorldPtr->all_objects.num << "\n";
+			std::cout << "Object list capacity: " << GlobalRfgWorldPtr->all_objects.Capacity() << "\n";
+			std::cout << "Object list size: " << GlobalRfgWorldPtr->all_objects.Size() << "\n";
 			std::cout << "Num territory zones: " << GlobalRfgWorldPtr->num_territory_zones << "\n";
 		}
 		else
@@ -296,31 +336,42 @@ void GeneralTweaksGui::Draw(const char* Title)
 	{
 		if (GlobalRfgWorldPtr)
 		{
-			std::cout << "\nDumping all object info to ObjectInfoDump.txt...\n";
+			Logger::Log("\nDumping all object info to ObjectInfoDump.txt.\n", LogInfo);
 			std::ofstream PositionsDump(GetEXEPath(false) + "RFGR Script Loader/ObjectInfoDump.txt", std::ios_base::trunc);
 			PositionsDump << "Start of object info dump...\n";
-			PositionsDump << "Objects array capacity: " << GlobalRfgWorldPtr->all_objects.array_size << "\n";
-			PositionsDump << "Objects array objects contained: " << GlobalRfgWorldPtr->all_objects.num << "\n\n";
-			for (int i = 0; i < GlobalRfgWorldPtr->all_objects.num; i++)
+			PositionsDump << "Objects array capacity: " << GlobalRfgWorldPtr->all_objects.Capacity() << "\n";
+			PositionsDump << "Objects array objects contained: " << GlobalRfgWorldPtr->all_objects.Size() << "\n\n";
+			for (int i = 0; i < GlobalRfgWorldPtr->all_objects.Size(); i++)
 			{
-				if (&*GlobalRfgWorldPtr->all_objects.elt[i] != NULL && &*GlobalRfgWorldPtr->all_objects.elt[i] != nullptr)
+				if (GlobalRfgWorldPtr->all_objects[i])
 				{
 					PositionsDump << "Index: " << i << "\n";
-					PositionsDump << "Name: " << world_get_object_name(GlobalRfgWorldPtr, NULL, &*GlobalRfgWorldPtr->all_objects.elt[i]) << "\n";
-					PositionsDump << "Type: " << (int)(*GlobalRfgWorldPtr->all_objects.elt[i]).ObjectType << "\n";
-					PositionsDump << "Subtype: " << (int)(*GlobalRfgWorldPtr->all_objects.elt[i]).SubType << "\n";
+					PositionsDump << "Name: " << world_get_object_name(GlobalRfgWorldPtr, NULL, GlobalRfgWorldPtr->all_objects[i]) << "\n";
+					PositionsDump << "Type: " << (int)(*GlobalRfgWorldPtr->all_objects[i]).ObjectType << "\n";
+					PositionsDump << "Subtype: " << (int)(*GlobalRfgWorldPtr->all_objects[i]).SubType << "\n";
 					PositionsDump << "Position:\n";
-					PositionsDump << "    x: " << (*GlobalRfgWorldPtr->all_objects.elt[i]).Position.x << "\n";
-					PositionsDump << "    y: " << (*GlobalRfgWorldPtr->all_objects.elt[i]).Position.y << "\n";
-					PositionsDump << "    z: " << (*GlobalRfgWorldPtr->all_objects.elt[i]).Position.z << "\n\n";
+					PositionsDump << "    x: " << (*GlobalRfgWorldPtr->all_objects[i]).Position.x << "\n";
+					PositionsDump << "    y: " << (*GlobalRfgWorldPtr->all_objects[i]).Position.y << "\n";
+					PositionsDump << "    z: " << (*GlobalRfgWorldPtr->all_objects[i]).Position.z << "\n";
+
+					world_zone* ObjectWorldZone = get_world_zone_by_object_handle(GlobalRfgWorldPtr, NULL, (*GlobalRfgWorldPtr->all_objects[i]).Handle);
+					if (ObjectWorldZone)
+					{
+						PositionsDump << "Zone:\n";
+						PositionsDump << "    Name: " << ObjectWorldZone->name << "\n\n";
+					}
+					else
+					{
+						PositionsDump << "--Invalid world zone--\n\n";
+					}
 				}
 				else
 				{
-					PositionsDump << "Skipping object at index " << i << ", invalid pointer.\n";
+					PositionsDump << "Skipping object at index " << i << ", invalid pointer.\n\n";
 				}
 			}
 			PositionsDump << "End of object info dump.";
-			std::cout << "Finished dumped all object into to ObjectInfoDump.txt!\n";
+			Logger::Log("Finished dumped all object into to ObjectInfoDump.txt!", LogInfo);
 			PositionsDump.close();
 		}
 		else
@@ -330,69 +381,14 @@ void GeneralTweaksGui::Draw(const char* Title)
 	}
 	ImGui::Separator();
 
-	if (ImGui::CollapsingHeader("Time of day light")) //Todo: Add rl_scene_entity and rl_3d_entity info to this.
-	{
-		if (GlobalTODLightPtr)
-		{
-			ImGui::Text("Light type:");
-			ImGui::RadioButton("Directional", (int*)&GlobalTODLightPtr->m_light_type, LIGHT_TYPE_DIRECTIONAL);
-			ImGui::SameLine();
-			ImGui::RadioButton("Point", (int*)&GlobalTODLightPtr->m_light_type, LIGHT_TYPE_POINT);
-			ImGui::SameLine();
-			ImGui::RadioButton("Spot light", (int*)&GlobalTODLightPtr->m_light_type, LIGHT_TYPE_SPOT_LIGHT);
-			ImGui::SameLine();
-			ImGui::RadioButton("Force size of int", (int*)&GlobalTODLightPtr->m_light_type, LIGHT_TYPE_FORCE_SIZEOF_INT);
-
-			ImGui::Text("Color:");
-			ImGui::Checkbox("Use custom color", &UseCustomTimeOfDayLight);
-			Utilities::GUI::TooltipOnPrevious("This needs to be checked for your values to be properly set");
-			ImGui::InputFloat("Red", &CustomTimeOfDayLightColor.red, 0.01, 0.1, 3);
-			ImGui::InputFloat("Green", &CustomTimeOfDayLightColor.green, 0.01, 0.1, 3);
-			ImGui::InputFloat("Blue", &CustomTimeOfDayLightColor.blue, 0.01, 0.1, 3);
-			ImGui::InputFloat("Alpha", &CustomTimeOfDayLightColor.alpha, 0.01, 0.1, 3);
-
-			ImGui::InputFloat("Attenuation start", &GlobalTODLightPtr->m_attenuation_start, 0.01, 0.1, 3);
-			ImGui::InputFloat("Attenuation end", &GlobalTODLightPtr->m_attenuation_end, 0.01, 0.1, 3);
-			ImGui::InputFloat("Hotspot falloff size", &GlobalTODLightPtr->m_hotspot_falloff_size, 0.01, 0.1, 3);
-			ImGui::InputFloat("Hotspot size", &GlobalTODLightPtr->m_hotspot_size, 0.01, 0.1, 3);
-
-			ImGui::Text("Clip minimum:");
-			ImGui::InputFloat("x", &GlobalTODLightPtr->m_clip_min.x, 0.01, 0.1, 3);
-			ImGui::InputFloat("y", &GlobalTODLightPtr->m_clip_min.y, 0.01, 0.1, 3);
-			ImGui::InputFloat("z", &GlobalTODLightPtr->m_clip_min.z, 0.01, 0.1, 3);
-
-			ImGui::Text("Clip maximum:");
-			ImGui::InputFloat("x", &GlobalTODLightPtr->m_clip_max.x, 0.01, 0.1, 3);
-			ImGui::InputFloat("y", &GlobalTODLightPtr->m_clip_max.y, 0.01, 0.1, 3);
-			ImGui::InputFloat("z", &GlobalTODLightPtr->m_clip_max.z, 0.01, 0.1, 3);
-
-			ImGui::Text("Light direction:");
-			ImGui::InputFloat("x", &GlobalTODLightPtr->m_light_direction.x, 0.01, 0.1, 3);
-			ImGui::InputFloat("y", &GlobalTODLightPtr->m_light_direction.y, 0.01, 0.1, 3);
-			ImGui::InputFloat("z", &GlobalTODLightPtr->m_light_direction.z, 0.01, 0.1, 3);
-
-			//Todo: Add the following vars:
-			//rl_renderable_instance *m_clip_mesh;
-			//unsigned __int16 m_vis_pass_index;
-			//unsigned __int16 m_shadow_vis_pass_index;
-		}
-		else
-		{
-			ImGui::Text("TOD Light pointer is null");
-		}
-	}
-	else
-	{
-		ImGui::SameLine();
-		ImGui::TextColored(ColorRed, "[Experimental]");
-	}
-	ImGui::Separator();
-
+	//ImGui::InputInt("Middle mouse spawns per second", &MiddleMouseExplosionsPerSecond);
+	//Utilities::GUI::TooltipOnPrevious("Used to determine how many time per second and explosion or repair sphere can be spawned per second by the middle mouse. Used to prevent lag from 100's of explosions per second.");
 	if (ImGui::CollapsingHeader("Custom explosion info"))
 	{
 		ImGui::Text("Explosion create info:");
-		ImGui::Checkbox("Allow explosion spawn with middle mouse?", &MiddleMouseBoomActive);
-		ImGui::InputInt("Middle mouse explosions per second", &MiddleMouseExplosionsPerSecond);
+		ImGui::Checkbox("Spawn explosion with middle mouse?", &MiddleMouseBoomActive);
+		ImGui::InputInt("Middle mouse explosions per second limit", &MiddleMouseExplosionsPerSecond);
+		Utilities::GUI::TooltipOnPrevious("Used to prevent lag from 100s of explosions per second since the script loader thread is currently uncapped.");
 		if (ImGui::Button("Boom"))
 		{
 			ExplosionCreate(&CustomExplosionInfo, PlayerPtr, PlayerPtr, &PlayerPtr->aim_pos, &PlayerPtr->Orientation, &PlayerPtr->aim_pos, NULL, false);
@@ -454,6 +450,77 @@ void GeneralTweaksGui::Draw(const char* Title)
 		ImGui::InputFloat("Camera shake falloff", &CustomExplosionInfo.camera_shake_falloff);
 		ImGui::Checkbox("Ignore orientation", &CustomExplosionInfo.ignore_orientation);
 		ImGui::Checkbox("Always ragdoll", &CustomExplosionInfo.always_ragdoll);
+	}
+	ImGui::Separator();
+
+	/*if (ImGui::CollapsingHeader("Repair sphere"))
+	{
+		ImGui::Checkbox("Spawn repair sphere with middle mouse?", &MiddleMouseRepairSphereActive);
+		ImGui::InputFloat("Radius", &RepairRadius);
+		ImGui::InputInt("Duration", &RepairDuration);
+		
+		ImGui::Text("Spawn position:");
+		ImGui::RadioButton("Player position", &RepairPosition, 0);
+		ImGui::SameLine();
+		ImGui::RadioButton("Aim position", &RepairPosition, 1);
+	}
+	ImGui::Separator();*/
+
+	if (ImGui::CollapsingHeader("Time of day light")) //Todo: Add rl_scene_entity and rl_3d_entity info to this.
+	{
+		if (GlobalTODLightPtr)
+		{
+			ImGui::Text("Light type:");
+			ImGui::RadioButton("Directional", (int*)&GlobalTODLightPtr->m_light_type, LIGHT_TYPE_DIRECTIONAL);
+			ImGui::SameLine();
+			ImGui::RadioButton("Point", (int*)&GlobalTODLightPtr->m_light_type, LIGHT_TYPE_POINT);
+			ImGui::SameLine();
+			ImGui::RadioButton("Spot light", (int*)&GlobalTODLightPtr->m_light_type, LIGHT_TYPE_SPOT_LIGHT);
+			ImGui::SameLine();
+			ImGui::RadioButton("Force size of int", (int*)&GlobalTODLightPtr->m_light_type, LIGHT_TYPE_FORCE_SIZEOF_INT);
+
+			ImGui::Text("Color:");
+			ImGui::Checkbox("Use custom color", &UseCustomTimeOfDayLight);
+			Utilities::GUI::TooltipOnPrevious("This needs to be checked for your values to be properly set");
+			ImGui::InputFloat("Red", &CustomTimeOfDayLightColor.red, 0.01, 0.1, 3);
+			ImGui::InputFloat("Green", &CustomTimeOfDayLightColor.green, 0.01, 0.1, 3);
+			ImGui::InputFloat("Blue", &CustomTimeOfDayLightColor.blue, 0.01, 0.1, 3);
+			ImGui::InputFloat("Alpha", &CustomTimeOfDayLightColor.alpha, 0.01, 0.1, 3);
+
+			ImGui::InputFloat("Attenuation start", &GlobalTODLightPtr->m_attenuation_start, 0.01, 0.1, 3);
+			ImGui::InputFloat("Attenuation end", &GlobalTODLightPtr->m_attenuation_end, 0.01, 0.1, 3);
+			ImGui::InputFloat("Hotspot falloff size", &GlobalTODLightPtr->m_hotspot_falloff_size, 0.01, 0.1, 3);
+			ImGui::InputFloat("Hotspot size", &GlobalTODLightPtr->m_hotspot_size, 0.01, 0.1, 3);
+
+			ImGui::Text("Clip minimum:");
+			ImGui::InputFloat("x", &GlobalTODLightPtr->m_clip_min.x, 0.01, 0.1, 3);
+			ImGui::InputFloat("y", &GlobalTODLightPtr->m_clip_min.y, 0.01, 0.1, 3);
+			ImGui::InputFloat("z", &GlobalTODLightPtr->m_clip_min.z, 0.01, 0.1, 3);
+
+			ImGui::Text("Clip maximum:");
+			ImGui::InputFloat("x", &GlobalTODLightPtr->m_clip_max.x, 0.01, 0.1, 3);
+			ImGui::InputFloat("y", &GlobalTODLightPtr->m_clip_max.y, 0.01, 0.1, 3);
+			ImGui::InputFloat("z", &GlobalTODLightPtr->m_clip_max.z, 0.01, 0.1, 3);
+
+			ImGui::Text("Light direction:");
+			ImGui::InputFloat("x", &GlobalTODLightPtr->m_light_direction.x, 0.01, 0.1, 3);
+			ImGui::InputFloat("y", &GlobalTODLightPtr->m_light_direction.y, 0.01, 0.1, 3);
+			ImGui::InputFloat("z", &GlobalTODLightPtr->m_light_direction.z, 0.01, 0.1, 3);
+
+			//Todo: Add the following vars:
+			//rl_renderable_instance *m_clip_mesh;
+			//unsigned __int16 m_vis_pass_index;
+			//unsigned __int16 m_shadow_vis_pass_index;
+		}
+		else
+		{
+			ImGui::Text("TOD Light pointer is null");
+		}
+	}
+	else
+	{
+		ImGui::SameLine();
+		ImGui::TextColored(ColorRed, "[Experimental]");
 	}
 
 	ImGui::End();

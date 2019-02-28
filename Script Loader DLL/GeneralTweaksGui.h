@@ -46,6 +46,11 @@ public:
 
 	gfm_alert_levels CustomAlertLevel;
 
+	bool MiddleMouseRepairSphereActive = false;
+	float RepairRadius = 6.0f;
+	int RepairDuration = 1;
+	int RepairPosition = 0;
+
 private:
 	bool* OpenState = nullptr;
 };
