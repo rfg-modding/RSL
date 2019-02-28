@@ -718,10 +718,16 @@ void __fastcall world_do_frame_hook(World* This, void* edx, bool HardLoad) //.te
 		std::cout << "backpacks_unlocked.raw_data[7]:" << GlobalRfgWorldPtr->pending_game_save_slot->new_data.backpacks_unlocked.raw_data[7] << "\n";
 		std::cout << "Jetpack unlock level:" << GlobalRfgWorldPtr->pending_game_save_slot->new_data.jetpack_unlock_level << "\n";
 		std::cout << "\n";
+
+		GlobalTODLightPtr = game_render_get_TOD_light();
 	});
 	if (GlobalRfgWorldPtr != This)
 	{
 		std::cout << "RFGWorldPtr Changed!\n";
+	}
+	if (!GlobalTODLightPtr)
+	{
+		GlobalTODLightPtr = game_render_get_TOD_light();
 	}
 
 	if (Gui.TweaksMenu.UseCustomLevelAmbientLight)
@@ -736,5 +742,13 @@ void __fastcall world_do_frame_hook(World* This, void* edx, bool HardLoad) //.te
 		GlobalRfgWorldPtr->level_back_ambient.y = Gui.TweaksMenu.CustomLevelBackgroundAmbientLight.y;
 		GlobalRfgWorldPtr->level_back_ambient.z = Gui.TweaksMenu.CustomLevelBackgroundAmbientLight.z;
 	}
+	if (Gui.TweaksMenu.UseCustomTimeOfDayLight)
+	{
+		GlobalTODLightPtr->m_color.red = Gui.TweaksMenu.CustomTimeOfDayLightColor.red;
+		GlobalTODLightPtr->m_color.green = Gui.TweaksMenu.CustomTimeOfDayLightColor.green;
+		GlobalTODLightPtr->m_color.blue = Gui.TweaksMenu.CustomTimeOfDayLightColor.blue;
+		GlobalTODLightPtr->m_color.alpha = Gui.TweaksMenu.CustomTimeOfDayLightColor.alpha;
+	}																   
+
 	return world_do_frame(This, edx, HardLoad);
 }

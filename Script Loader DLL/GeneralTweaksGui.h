@@ -41,6 +41,11 @@ public:
 	bool MiddleMouseBoomActive = false;
 	int MiddleMouseExplosionsPerSecond = 20;
 
+	bool UseCustomTimeOfDayLight = false;
+	rl_color_float CustomTimeOfDayLightColor;
+
+	gfm_alert_levels CustomAlertLevel;
+
 private:
 	bool* OpenState = nullptr;
 };
