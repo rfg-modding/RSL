@@ -252,6 +252,7 @@
     </None>
     <ClInclude Include="Logger.h" />
     <ClInclude Include="LogWindow.h" />
+    <ClInclude Include="RFGR_Containers.h" />
     <ClInclude Include="RFGR_Types_World.h" />
     <ClInclude Include="WelcomeGui.h" />
     <ClInclude Include="Includes.h" />

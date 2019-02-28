@@ -735,7 +735,7 @@ struct handle_manager_7280
 	unsigned int upper_bits;
 };
 
-struct base_array__human_info_const_ptr__Vtbl;
+/*struct base_array__human_info_const_ptr__Vtbl;
 struct base_array__human_info_const_ptr
 {
 	base_array__human_info_const_ptr__Vtbl *vfptr;
@@ -747,12 +747,12 @@ struct base_array__human_info_const_ptr
 struct base_array__human_info_const_ptr__Vtbl
 {
 	void *(__thiscall *__vecDelDtor)(base_array__human_info_const_ptr* This, unsigned int);
-};
+};*/
 
 const struct __declspec(align(4)) human_spawn_group_info
 {
 	const char *group_name;
-	base_array__human_info_const_ptr h_info_list;
+	rfg::base_array<HumanInfo const*> h_info_list; //base_array__human_info_const_ptr h_info_list;
 	unsigned int name_crc;
 	bool homogeneous_team;
 };
@@ -760,6 +760,11 @@ const struct __declspec(align(4)) human_spawn_group_info
 struct base_array__vehicle_info_const_ptr__Vtbl;
 struct base_array__vehicle_info_const_ptr
 {
+	//Todo: Fill out vehicle_info struct
+	/*const vehicle_info& operator [](int index) { return elt[index]; };
+	int size() { return num; }
+	int capacity() { return array_size; }*/
+
 	base_array__vehicle_info_const_ptr__Vtbl* vfptr;
 	void** elt; //vehicle_info** elt;
 	int array_size;
@@ -806,6 +811,10 @@ struct vehicle_reservation_info
 struct base_array__vehicle_reservation_info__Vtbl;
 struct base_array__vehicle_reservation_info
 {
+	const vehicle_reservation_info& operator [](int index) { return elt[index]; };
+	int size() { return num; }
+	int capacity() { return array_size; }
+
 	base_array__vehicle_reservation_info__Vtbl* vfptr;
 	vehicle_reservation_info *elt;
 	int array_size;
@@ -831,8 +840,12 @@ struct human_reservation_info
 struct base_array__human_reservation_info__Vtbl;
 struct base_array__human_reservation_info
 {
+	const human_reservation_info& operator [](int index) { return elt[index]; };
+	int size() { return num; }
+	int capacity() { return array_size; }
+
 	base_array__human_reservation_info__Vtbl* vfptr;
-	human_reservation_info *elt;
+	human_reservation_info* elt;
 	int array_size;
 	int num;
 };
@@ -981,87 +994,6 @@ struct bb_pfg_zone
 	unsigned int vehicle_pfg_havok_handle;
 };
 
-struct base_array__rl_terrain_occluder_ptr__Vtbl;
-struct base_array__rl_terrain_occluder_ptr
-{
-	struct base_array__rl_terrain_occluder_ptr__Vtbl *vfptr;
-	rl_terrain_occluder **elt;
-	int array_size;
-	int num;
-};
-
-struct base_array__rl_terrain_occluder_ptr__Vtbl
-{
-	void *(__thiscall *__vecDelDtor)(base_array__rl_terrain_occluder_ptr* This, unsigned int);
-};
-
-struct farray__rl_terrain_occluder_ptr_40 : base_array__rl_terrain_occluder_ptr
-{
-	rl_terrain_occluder* data[40]; //160
-};
-
-struct obj_zone : Object
-{
-	bb_pfg_zone zone_pfg;
-	unsigned int heightfield_shape;
-	unsigned int stitch_piece_havok_handle;
-	unsigned int district_handle;
-	spawn_resource_data* spawn_res_data;
-	ambient_spawn_info* amb_spawn_info;
-	float wind_min_speed;
-	float wind_max_speed;
-	rfg_terrain* terrain;
-	farray__rl_terrain_occluder_ptr_40 m_occluders;
-	vector local_bmin;
-	vector local_bmax;
-	int aabb_phantom_index;
-};
-
-struct __declspec(align(4)) world_zone
-{
-	vector bmin;
-	vector bmax;
-	char name[64];
-	world_zone_state state;
-	zone_header* deserialize_header;
-	void* deserialize_header_f;//cfile* deserialize_header_f;
-	void* deserialize_f;//cfile* deserialize_f;
-	world_state_buf stored_zone_state;
-	obj_zone* zone_objp;
-	unsigned int srid;
-	bool is_border_zone;
-	handle_manager_7280 obj_handle_mgr;
-	unsigned __int16 gid;
-};
-
-struct base_array__unsigned_short__Vtbl;
-struct base_array__unsigned_short
-{
-	base_array__unsigned_short__Vtbl* vfptr;
-	unsigned __int16* elt;
-	int array_size;
-	int num;
-};
-
-struct base_array__unsigned_short__Vtbl
-{
-	void *(__thiscall *__vecDelDtor)(base_array__unsigned_short* This, unsigned int);
-};
-
-struct base_array__object_ptr__Vtbl;
-struct base_array__object_ptr //base_array<object *>
-{
-	base_array__object_ptr__Vtbl* vfptr;
-	Object** elt;
-	int array_size;
-	int num;
-};
-
-struct base_array__object_ptr__Vtbl
-{
-	void *(__thiscall *__vecDelDtor)(base_array__object_ptr* This, unsigned int);
-};
-
 struct save_load_info
 {
 	__int8 pending_new_game : 1;
@@ -1137,8 +1069,12 @@ struct __declspec(align(2)) grid_info
 struct base_array__grid_info__Vtbl;
 struct base_array__grid_info
 {
+	const grid_info& operator [](int index) { return elt[index]; };
+	int size() { return num; }
+	int capacity() { return array_size; }
+
 	base_array__grid_info__Vtbl* vfptr;
-	grid_info *elt;
+	grid_info* elt;
 	int array_size;
 	int num;
 };
@@ -1273,6 +1209,10 @@ struct stream_layer_masked_cell
 struct base_array__stream_layer_masked_cell_Vtbl;
 struct base_array__stream_layer_masked_cell
 {
+	const stream_layer_masked_cell& operator [](int index) { return elt[index]; };
+	int size() { return num; }
+	int capacity() { return array_size; }
+
 	base_array__stream_layer_masked_cell_Vtbl* vfptr;
 	stream_layer_masked_cell* elt;
 	int array_size;
@@ -1292,8 +1232,12 @@ struct farray__stream_layer_masked_cell_50 : base_array__stream_layer_masked_cel
 struct base_array__stream_grid_cell_ptr_Vtbl;
 struct base_array__stream_grid_cell_ptr
 {
+	const stream_grid_cell& operator [](int index) { return *elt[index]; };
+	int size() { return num; }
+	int capacity() { return array_size; }
+
 	base_array__stream_grid_cell_ptr_Vtbl* vfptr;
-	stream_grid_cell **elt;
+	stream_grid_cell** elt;
 	int array_size;
 	int num;
 };
@@ -1347,7 +1291,106 @@ struct stream_grid
 	void* m_tmp_table; //str_data_hash_table<unsigned char, 255, 64, unsigned char> *m_tmp_table;
 };
 
-/* 5386 */
+struct base_array__rl_terrain_occluder_ptr__Vtbl;
+struct base_array__rl_terrain_occluder_ptr
+{
+	const rl_terrain_occluder& operator [](int index) { return *elt[index]; };
+	int size() { return num; }
+	int capacity() { return array_size; }
+
+	struct base_array__rl_terrain_occluder_ptr__Vtbl *vfptr;
+	rl_terrain_occluder** elt;
+	int array_size;
+	int num;
+};
+
+struct base_array__rl_terrain_occluder_ptr__Vtbl
+{
+	void *(__thiscall *__vecDelDtor)(base_array__rl_terrain_occluder_ptr* This, unsigned int);
+};
+
+struct farray__rl_terrain_occluder_ptr_40 : base_array__rl_terrain_occluder_ptr
+{
+	rl_terrain_occluder* data[40]; //160
+};
+
+/*struct base_array__unsigned_short__Vtbl;
+struct base_array__unsigned_short
+{
+	const unsigned __int16& operator [](int index) { return elt[index]; };
+	int size() { return num; }
+	int capacity() { return array_size; }
+
+	base_array__unsigned_short__Vtbl* vfptr;
+	unsigned __int16* elt;
+	int array_size;
+	int num;
+};
+
+struct base_array__unsigned_short__Vtbl
+{
+	void *(__thiscall *__vecDelDtor)(base_array__unsigned_short* This, unsigned int);
+};
+
+struct base_array__object_ptr__Vtbl;
+struct base_array__object_ptr
+{
+	const Object& operator [](int index) 
+	{
+		if (index < num)
+		{
+			return *elt[index];
+		}		
+	};
+	int size() { return num; }
+	int capacity() { return array_size; }
+
+private:
+	base_array__object_ptr__Vtbl* vfptr;
+	Object** elt;
+	int array_size;
+	int num; 
+};
+
+struct base_array__object_ptr__Vtbl
+{
+	void *(__thiscall *__vecDelDtor)(base_array__object_ptr* This, unsigned int);
+};*/
+
+struct obj_zone : Object
+{
+	bb_pfg_zone zone_pfg;
+	unsigned int heightfield_shape;
+	unsigned int stitch_piece_havok_handle;
+	unsigned int district_handle;
+	spawn_resource_data* spawn_res_data;
+	ambient_spawn_info* amb_spawn_info;
+	float wind_min_speed;
+	float wind_max_speed;
+	rfg_terrain* terrain;
+	farray__rl_terrain_occluder_ptr_40 m_occluders;
+	vector local_bmin;
+	vector local_bmax;
+	int aabb_phantom_index;
+};
+
+struct __declspec(align(4)) world_zone
+{
+	vector bmin;
+	vector bmax;
+	char name[64];
+	world_zone_state state;
+	zone_header* deserialize_header;
+	void* deserialize_header_f;//cfile* deserialize_header_f;
+	void* deserialize_f;//cfile* deserialize_f;
+	world_state_buf stored_zone_state;
+	obj_zone* zone_objp;
+	unsigned int srid;
+	bool is_border_zone;
+	handle_manager_7280 obj_handle_mgr;
+	unsigned __int16 gid;
+};
+
 struct __declspec(align(8)) World //11108
 {
 	bool mission_object_creation_mode; //1
@@ -1355,9 +1398,9 @@ struct __declspec(align(8)) World //11108
 	vector level_back_ambient; //12
 	char last_loaded_territory[64]; //64
 	int max_world_objects; //4
-	base_array__object_ptr all_objects; //16
-	base_array__unsigned_short type_objects[53]; //848
-	base_array__unsigned_short subtype_objects[11]; //176
+	rfg::base_array<Object*> all_objects; //16
+	rfg::base_array<unsigned short> type_objects[53]; //848
+	rfg::base_array<unsigned short> subtype_objects[11]; //176
 	float tech_level; //4
 	float tech_level_max; //4
 	volatile unsigned int thread_id; //4

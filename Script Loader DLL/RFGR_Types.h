@@ -1,4 +1,5 @@
 #pragma once
+#include "RFGR_Containers.h"
 
 struct rl_base_objectVtbl;
 struct rl_base_object;
