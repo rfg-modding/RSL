@@ -1,11 +1,11 @@
 #pragma once
 ///#include "Globals.h"
 #include "SnippetManager.h"
-//#include "RFGR_Types_Player.h"
 #include "RFGR_Types_World.h"
 //#include "RFGR Structs/KeenNamespace.h"
 
 extern World* GlobalRfgWorldPtr;
+extern rl_light* GlobalTODLightPtr;
 
 static void DisableCameraCode(DWORD AddressY, DWORD AddressZ) //Takes addresses for instructions affecting y and z. Alternatively x and z may work, since one piece seems to be shared between two coords.
 {
@@ -366,11 +366,117 @@ typedef const char*(__fastcall* F_world_get_object_name)(World* This, void* edx,
 extern F_world_get_object_name world_get_object_name;
 
 
+
 //.text:0171D9F0 rfg.exe:$51D9F0 #51CDF0 <world::get_object_zone_by_index> //obj_zone *__thiscall world::get_object_zone_by_index(world *this, int index)
-
+typedef obj_zone*(__fastcall* F_world_get_object_zone_by_index)(World* This, void* edx, int Index); //2nd arg is edx, needed for __thiscall functions.
+extern F_world_get_object_zone_by_index world_get_object_zone_by_index;
 //.text:0171DA20 rfg.exe:$51DA20 #51CE20 <world::get_object_zone_by_grid_id> //obj_zone *__thiscall world::get_object_zone_by_grid_id(world *this, unsigned __int16 id)
+typedef obj_zone*(__fastcall* F_world_get_object_zone_by_grid_id)(World* This, void* edx, unsigned __int16 id); //2nd arg is edx, needed for __thiscall functions.
+extern F_world_get_object_zone_by_grid_id world_get_object_zone_by_grid_id;
+
+//.text:010DD610 rfg.exe:$35D610 #35CA10 <gsm_get_alert_level> //gfm_alert_levels __cdecl gsm_get_alert_level()
+typedef gfm_alert_levels(__cdecl* F_gsm_get_alert_level)();
+extern F_gsm_get_alert_level gsm_get_alert_level;
+//.text:0112A740 rfg.exe:$3AA740 #3A9B40 <gsm_set_alert_level> //void __cdecl gsm_set_alert_level(gfm_alert_levels new_alert_level)
+typedef void(__cdecl* F_gsm_set_alert_level)(gfm_alert_levels new_alert_level);
+extern F_gsm_set_alert_level gsm_set_alert_level;
+
+//.text:010DD630 rfg.exe:$35D630 #35CA30 <gsm_get_alert_value> //float __cdecl gsm_get_alert_value()
+typedef float(__cdecl* F_gsm_get_alert_value)();
+extern F_gsm_get_alert_value gsm_get_alert_value;
+//.text:011244B0 rfg.exe:$3A44B0 #3A38B0 <gsm_set_alert_value> //void __cdecl gsm_set_alert_value(float new_alert_value)
+typedef void(__cdecl* F_gsm_set_alert_value)(float new_alert_value);
+extern F_gsm_set_alert_value gsm_set_alert_value;
+
+//.text:010DD680 rfg.exe:$35D680 #35CA80 <gsm_get_alert_level_cap> //void __cdecl gsm_get_alert_level_cap(gfm_alert_levels *min, gfm_alert_levels *max)
+typedef void(__cdecl* F_gsm_get_alert_level_cap)(gfm_alert_levels* min, gfm_alert_levels* max);
+extern F_gsm_get_alert_level_cap gsm_get_alert_level_cap;
+//.text:0112A770 rfg.exe:$3AA770 #3A9B70 <gsm_set_alert_level_cap> //void __cdecl gsm_set_alert_level_cap(gfm_alert_levels min, gfm_alert_levels max)
+typedef void(__cdecl* F_gsm_set_alert_level_cap)(gfm_alert_levels min, gfm_alert_levels max);
+extern F_gsm_set_alert_level_cap gsm_set_alert_level_cap;
+
+//.text:01142960 rfg.exe:$3C2960 #3C1D60 <game_render_get_TOD_light> //rl_light *__cdecl fav::game_render_get_TOD_light()
+typedef rl_light*(__cdecl* F_game_render_get_TOD_light)();
+extern F_game_render_get_TOD_light game_render_get_TOD_light;
+//.text:01142930 rfg.exe:$3C2930 #3C1D30 <game_render_set_TOD_light> //void __cdecl fav::game_render_set_TOD_light(rl_light *light_p)
+typedef void(__cdecl* F_game_render_set_TOD_light)(rl_light* light_p);
+extern F_game_render_set_TOD_light game_render_set_TOD_light;
+
+//.text:01143000 rfg.exe:$3C3000 #3C2400 <game_render_get_tod_on_off_value> //void __cdecl fav::game_render_get_tod_on_off_value(float *val)
+typedef void(__cdecl* F_game_render_get_tod_on_off_value)(float* Value);
+extern F_game_render_get_tod_on_off_value game_render_get_tod_on_off_value;
+//.text:01142FF0 rfg.exe:$3C2FF0 #3C23F0 <game_render_set_tod_on_off_value> //void __cdecl fav::game_render_set_tod_on_off_value(float val)
+typedef void(__cdecl* F_game_render_set_tod_on_off_value)(float Value);
+extern F_game_render_set_tod_on_off_value game_render_set_tod_on_off_value;
+
+//.text:01142990 rfg.exe:$3C2990 #3C1D90 <game_render_set_TOD_light_color> //void __cdecl fav::game_render_set_TOD_light_color(rl_color_float *color)
+typedef void(__cdecl* F_game_render_set_TOD_light_color)(rl_color_float* color);
+extern F_game_render_set_TOD_light_color game_render_set_TOD_light_color;
+
+//.text:011415C0 rfg.exe:$3C15C0 #3C09C0 <game_clock_get_tod_partitioned> //game_clock_tod_partitioned __cdecl fav::game_clock_get_tod_partitioned()
+typedef game_clock_tod_partitioned(__cdecl* F_game_clock_get_tod_partitioned)();
+extern F_game_clock_get_tod_partitioned game_clock_get_tod_partitioned;
+
+//.text:011415E0 rfg.exe:$3C15E0 #3C09E0 <game_clock_get_time_of_day> //game_clock_time_of_day __cdecl fav::game_clock_get_time_of_day()
+typedef game_clock_time_of_day(__cdecl* F_game_clock_get_time_of_day)();
+extern F_game_clock_get_time_of_day game_clock_get_time_of_day;
+//.text:01141770 rfg.exe:$3C1770 #3C0B70 <game_clock_set_time> //void __cdecl fav::game_clock_set_time(int hours, int minutes, int seconds)
+typedef void(__cdecl* F_game_clock_set_time)(int hours, int minutes, int seconds);
+extern F_game_clock_set_time game_clock_set_time;
+
+//.text:0115FA10 rfg.exe:$3DFA10 #3DEE10 <game_time_of_day_get_skybox_tod_colors> //void __cdecl game_time_of_day_get_skybox_tod_colors(rl_color_float *colors)
+typedef void(__cdecl* F_game_time_of_day_get_skybox_tod_colors)(rl_color_float* Colors);
+extern F_game_time_of_day_get_skybox_tod_colors game_time_of_day_get_skybox_tod_colors;
+//.text:01145880 rfg.exe:$3C5880 #3C4C80 <game_time_of_day_get_weather_settings> //void __cdecl fav::game_time_of_day_get_weather_settings(vector4 *horizon_strengths, vector4 *overhead_strengths)
+typedef void(__cdecl* F_game_time_of_day_get_weather_settings)(vector4* horizon_strengths, vector4* overhead_strengths);
+extern F_game_time_of_day_get_weather_settings game_time_of_day_get_weather_settings;
+//.text:011458C0 rfg.exe:$3C58C0 #3C4CC0 <game_time_of_day_get_cloud_scroll_values> //void __cdecl fav::game_time_of_day_get_cloud_scroll_values(float *layer01_scroll, float *layer23_scroll)
+typedef void(__cdecl* F_game_time_of_day_get_cloud_scroll_values)(float* layer01_scroll, float* layer23_scroll);
+extern F_game_time_of_day_get_cloud_scroll_values game_time_of_day_get_cloud_scroll_values;
+//.text:011520C0 rfg.exe:$3D20C0 #3D14C0 <game_time_of_day_get_num_orbitals> //int __cdecl fav::game_time_of_day_get_num_orbitals()
+typedef int(__cdecl* F_game_time_of_day_get_num_orbitals)();
+extern F_game_time_of_day_get_num_orbitals game_time_of_day_get_num_orbitals;
+//.text:011631B0 rfg.exe:$3E31B0 #3E25B0 <game_time_of_day_get_cloud_lighting> //void __cdecl game_time_of_day_get_cloud_lighting(rl_color_float *horizon_front_ambient, rl_color_float *horizon_back_ambient, rl_color_float *overhead_front_ambient, rl_color_float *overhead_back_ambient, float *backlight_strength, float *backlight_power, vector *light_direction)
+typedef void(__cdecl* F_game_time_of_day_get_cloud_lighting)(rl_color_float* horizon_front_ambient, rl_color_float* horizon_back_ambient, rl_color_float* overhead_front_ambient, rl_color_float* overhead_back_ambient, float* backlight_strength, float* backlight_power, vector* light_direction);
+extern F_game_time_of_day_get_cloud_lighting game_time_of_day_get_cloud_lighting;
+//.text:01165400 rfg.exe:$3E5400 #3E4800 <game_time_of_day_get_orbital_params> //void __cdecl game_time_of_day_get_orbital_params(int idx, rl_skybox_orbital_params *params)
+typedef void(__cdecl* F_game_time_of_day_get_orbital_params)(int Index, rl_skybox_orbital_params* Params);
+extern F_game_time_of_day_get_orbital_params game_time_of_day_get_orbital_params;
+
+//.text:011EC4D0 rfg.exe:$46C4D0 #46B8D0 <district_from_name> //district *__cdecl district_from_name(const char *name)
+typedef district*(__cdecl* F_district_from_name)(const char *name);
+extern F_district_from_name district_from_name;
+
+//.text:0129D950 rfg.exe:$51D950 #51CD50 <world::get_world_zone_by_index> //world_zone *__thiscall world::get_world_zone_by_index(world *this, int index)
+typedef world_zone*(__fastcall* F_get_world_zone_by_index)(World* This, void* edx, int Index); //2nd arg is edx, needed for __thiscall functions.
+extern F_get_world_zone_by_index get_world_zone_by_index;
+//.text:0129D970 rfg.exe:$51D970 #51CD70 <world::get_world_zone_by_grid_id> //world_zone *__thiscall world::get_world_zone_by_grid_id(world *this, unsigned __int16 id)
+typedef world_zone*(__fastcall* F_get_world_zone_by_grid_id)(World* This, void* edx, unsigned __int16 id); //2nd arg is edx, needed for __thiscall functions.
+extern F_get_world_zone_by_grid_id get_world_zone_by_grid_id;
+//.text:0129D9A0 rfg.exe:$51D9A0 #51CDA0 <world::get_world_zone_by_name> //world_zone *__thiscall world::get_world_zone_by_name(world *this, const char *name)
+typedef world_zone*(__fastcall* F_get_world_zone_by_name)(World* This, void* edx, const char* name); //2nd arg is edx, needed for __thiscall functions.
+extern F_get_world_zone_by_name get_world_zone_by_name;
+//.text:012A3BA0 rfg.exe:$523BA0 #522FA0 <world::get_world_zone_by_pos> //world_zone *__thiscall world::get_world_zone_by_pos(world *this, vector *pos)
+typedef world_zone*(__fastcall* F_get_world_zone_by_pos)(World* This, void* edx, vector* Position); //2nd arg is edx, needed for __thiscall functions.
+extern F_get_world_zone_by_pos get_world_zone_by_pos;
+//.text:012A3C00 rfg.exe:$523C00 #523000 <world::get_world_zone_by_object_handle> //world_zone *__thiscall world::get_world_zone_by_object_handle(world *this, unsigned int handle)
+typedef world_zone*(__fastcall* F_get_world_zone_by_object_handle)(World* This, void* edx, unsigned int handle); //2nd arg is edx, needed for __thiscall functions.
+extern F_get_world_zone_by_object_handle get_world_zone_by_object_handle;
+
+//.text:010924D0 rfg.exe:$3124D0 #3118D0 <rfg_dyn_apply_point_impulse> //void __usercall rfg_dyn_apply_point_impulse(int havok_handle, vector *impulse@<eax>, vector *impulse_pos, float mass@<xmm10>)
+typedef void(__cdecl* F_rfg_dyn_apply_point_impulse)(int havok_handle, vector* impulse, vector* impulse_pos, float mass); ///Figure out the proper calling convention...
+extern F_rfg_dyn_apply_point_impulse rfg_dyn_apply_point_impulse;
+//.text:01094820 rfg.exe:$314820 #313C20 <rfg_dyn_repair_sphere> //void __cdecl rfg_dyn_repair_sphere(vector *pos, const float radius, const int duration, human *hp)
+typedef void(__cdecl* F_rfg_dyn_repair_sphere)(vector* pos, const float radius, const int duration, Human* hp);
+extern F_rfg_dyn_repair_sphere rfg_dyn_repair_sphere;
 
 
+
+
+
+
+
+/*Many of the funcs below were defined above when the style was different.*/
 
 //.text:00679AC0 rfg.exe:$2C9AC0 #2C8EC0 <camera_start_first_person>
 //.text:00679B60 rfg.exe:$2C9B60 #2C8F60 <camera_stop_first_person>

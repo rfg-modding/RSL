@@ -1,6 +1,7 @@
 #include "Functions.h"
 
 World* GlobalRfgWorldPtr = nullptr;
+rl_light* GlobalTODLightPtr = nullptr;
 
 F_Camera_Start_Slew_Mode Camera_Start_Slew_Mode;
 F_Camera_Stop_Slew_Mode Camera_Stop_Slew_Mode;
@@ -96,3 +97,48 @@ F_rl_draw_string rl_draw_string;
 F_is_game_paused IsGamePaused;
 F_world_do_frame world_do_frame;
 F_world_get_object_name world_get_object_name;
+
+
+
+F_world_get_object_zone_by_index world_get_object_zone_by_index;
+F_world_get_object_zone_by_grid_id world_get_object_zone_by_grid_id;
+
+F_gsm_get_alert_level gsm_get_alert_level;
+F_gsm_set_alert_level gsm_set_alert_level;
+
+F_gsm_get_alert_value gsm_get_alert_value;
+F_gsm_set_alert_value gsm_set_alert_value;
+
+F_gsm_get_alert_level_cap gsm_get_alert_level_cap;
+F_gsm_set_alert_level_cap gsm_set_alert_level_cap;
+
+F_game_render_get_TOD_light game_render_get_TOD_light;
+F_game_render_set_TOD_light game_render_set_TOD_light;
+
+F_game_render_get_tod_on_off_value game_render_get_tod_on_off_value;
+F_game_render_set_tod_on_off_value game_render_set_tod_on_off_value;
+
+F_game_render_set_TOD_light_color game_render_set_TOD_light_color;
+
+F_game_clock_get_tod_partitioned game_clock_get_tod_partitioned;
+
+F_game_clock_get_time_of_day game_clock_get_time_of_day;
+F_game_clock_set_time game_clock_set_time;
+
+F_game_time_of_day_get_skybox_tod_colors game_time_of_day_get_skybox_tod_colors;
+F_game_time_of_day_get_weather_settings game_time_of_day_get_weather_settings;
+F_game_time_of_day_get_cloud_scroll_values game_time_of_day_get_cloud_scroll_values;
+F_game_time_of_day_get_num_orbitals game_time_of_day_get_num_orbitals;
+F_game_time_of_day_get_cloud_lighting game_time_of_day_get_cloud_lighting;
+F_game_time_of_day_get_orbital_params game_time_of_day_get_orbital_params;
+
+F_district_from_name district_from_name;
+
+F_get_world_zone_by_index get_world_zone_by_index;
+F_get_world_zone_by_grid_id get_world_zone_by_grid_id;
+F_get_world_zone_by_name get_world_zone_by_name;
+F_get_world_zone_by_pos get_world_zone_by_pos;
+F_get_world_zone_by_object_handle get_world_zone_by_object_handle;
+
+F_rfg_dyn_apply_point_impulse rfg_dyn_apply_point_impulse;
+F_rfg_dyn_repair_sphere rfg_dyn_repair_sphere;
