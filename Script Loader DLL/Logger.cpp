@@ -254,7 +254,7 @@ std::string Logger::GetFlagString(int LogFlags)
 	}
 	else
 	{
-		return "[+]";
+		return "";
 	}
 }
 

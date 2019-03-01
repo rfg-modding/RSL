@@ -11,13 +11,13 @@ logs for lua, json, and general messages can be separate. Also allows for
 easy sorting in the overlay console and logging windows.*/
 enum LogType
 {
-	LogNone = 0,
-	LogInfo = 1 << 0,
-	LogWarning = 1 << 1,
-	LogError = 1 << 2,
-	LogFatalError = 1 << 3,
-	LogLua = 1 << 4,
-	LogJson = 1 << 5,
+	LogNone = 0, //0
+	LogInfo = 1 << 0, //1
+	LogWarning = 1 << 1,  //2
+	LogError = 1 << 2, //4
+	LogFatalError = 1 << 3, //8
+	LogLua = 1 << 4, //16
+	LogJson = 1 << 5, //32
 	LogAll = 63
 };
 /*inline constexpr LogType operator | (LogType a, LogType b)
