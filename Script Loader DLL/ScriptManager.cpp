@@ -62,6 +62,8 @@ void ScriptManager::SetupLua()
 	LoggerTable["GetFlagString"] = Logger::GetFlagString;
 	LoggerTable["LogToFile"] = Logger::LogToFile;
 	LoggerTable["GetTimeString"] = Logger::GetTimeString;
+
+	RunScript(GetEXEPath(false) + "RFGR Script Loader/Core/CoreInit.lua");
 }
 
 void ScriptManager::RunTestScript()
