@@ -43,7 +43,7 @@ void ScriptManager::SetupLua()
 	RfgTable["HideHud"] = HideHud;
 	RfgTable["HideFog"] = HideFog;
 
-	auto LogTypeTable = Lua["LogType"].get_or_create<sol::table>(); //Todo: Add to RSL table.
+	/*auto LogTypeTable = Lua["LogType"].get_or_create<sol::table>(); //Todo: Add to RSL table.
 	LogTypeTable["None"] = LogNone;
 	LogTypeTable["Info"] = LogInfo;
 	LogTypeTable["Warning"] = LogWarning;
@@ -51,7 +51,7 @@ void ScriptManager::SetupLua()
 	LogTypeTable["FatalError"] = LogFatalError;
 	LogTypeTable["Lua"] = LogLua;
 	LogTypeTable["Json"] = LogJson;
-	LogTypeTable["All"] = LogAll;
+	LogTypeTable["All"] = LogAll;*/
 
 	auto LoggerTable = Lua["Logger"].get_or_create<sol::table>(); //Todo: Add to RSL table.
 	LoggerTable["OpenLogFile"] = Logger::OpenLogFile;

@@ -142,3 +142,10 @@ F_get_world_zone_by_object_handle get_world_zone_by_object_handle;
 
 F_rfg_dyn_apply_point_impulse rfg_dyn_apply_point_impulse;
 F_rfg_dyn_repair_sphere rfg_dyn_repair_sphere;
+
+
+
+Human* CastObjectToHuman(Object* ObjectPtr) { return (Human*)ObjectPtr; }
+Player* CastObjectToPlayer(Object* ObjectPtr) { return (Player*)ObjectPtr; }
+obj_zone* CastObjectToObjZone(Object* ObjectPtr) { return (obj_zone*)ObjectPtr; }
+district* CastObjectToDistrict(Object* ObjectPtr) { return (district*)ObjectPtr; }

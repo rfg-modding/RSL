@@ -470,13 +470,19 @@ extern F_rfg_dyn_apply_point_impulse rfg_dyn_apply_point_impulse;
 typedef void(__cdecl* F_rfg_dyn_repair_sphere)(vector* pos, const float radius, const int duration, Human* hp);
 extern F_rfg_dyn_repair_sphere rfg_dyn_repair_sphere;
 
+//.text:00F78A10 rfg.exe:$1F8A10 #1F7E10 <world::object_cast<human>> //human *__thiscall world::object_cast<human>(world *this, object *objp)
+//.text:00F78C10 rfg.exe:$1F8C10 #1F8010 <world::object_cast<human>> //human *__thiscall world::object_cast<human>(world *this, object *objp)
 
 
 
+extern Human* CastObjectToHuman(Object* ObjectPtr);
+extern Player* CastObjectToPlayer(Object* ObjectPtr);
+extern obj_zone* CastObjectToObjZone(Object* ObjectPtr);
+extern district* CastObjectToDistrict(Object* ObjectPtr);
 
 
 
-/*Many of the funcs below were defined above when the style was different.*/
+/*Many of the funcs below were defined above when the code style was different.*/
 
 //.text:00679AC0 rfg.exe:$2C9AC0 #2C8EC0 <camera_start_first_person>
 //.text:00679B60 rfg.exe:$2C9B60 #2C8F60 <camera_stop_first_person>
