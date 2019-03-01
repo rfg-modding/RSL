@@ -8,10 +8,7 @@ namespace rfg
 	public:
 		const T& operator[](int Index)
 		{
-			if (Index < NumberOfElements)
-			{
-				return Elements[Index];
-			}
+			return Elements[Index];
 		}
 		int Size() { return NumberOfElements; }
 		int Capacity() { return ArraySize; }
@@ -27,6 +24,6 @@ namespace rfg
 	class farray : base_array<T>
 	{
 	public:
-		T* data[InitialSize];
+		T data[InitialSize];
 	};
 }
