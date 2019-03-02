@@ -11,7 +11,6 @@ public:
 
 	void Initialize(bool* _OpenState);
 	void Draw(const char* Title);
-	void DrawFilterSettingsPopup();
 
 	ImGuiWindowFlags WindowFlags = 0;
 	int ConsoleLogType = LogAll;
