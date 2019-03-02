@@ -69,7 +69,7 @@ void ProgramManager::Initialize()
 	MouseGenericPollMouseVisible = FindPattern((char*)"rfg.exe", (char*)"\x84\xD2\x74\x08\x38\x00\x00\x00\x00\x00\x75\x02", (char*)"xxxxx?????xx");
 	CenterMouseCursorCall = FindPattern((char*)"rfg.exe", (char*)"\xE8\x00\x00\x00\x00\x89\x46\x4C\x89\x56\x50", (char*)"x????xxxxxx");
 
-	Logger::Log("Now monitoring RFGR State", LogInfo);
+	///Logger::Log("Now monitoring RFGR State", LogInfo);
 	GameState RFGRState = GameseqGetState();;
 	auto StartTime = std::chrono::steady_clock::now();
 	auto EndTime = std::chrono::steady_clock::now();
@@ -81,13 +81,13 @@ void ProgramManager::Initialize()
 		{
 			RFGRState = GameseqGetState();
 			StartTime = EndTime;
-			std::cout << "TimeElapsed: " << TimeElapsed << "\n";
-			std::cout << "Current RFGR State: " << (UINT32)RFGRState << "\n";
+			///std::cout << "TimeElapsed: " << TimeElapsed << "\n";
+			///std::cout << "Current RFGR State: " << (UINT32)RFGRState << "\n";
 		}
 		EndTime = std::chrono::steady_clock::now();
 	} 
 	while (RFGRState < 0 || RFGRState > 63); //Todo: Consider changing to hex values for consistency with enum definition. Alternatively change enum to decimal.
-	Logger::Log(std::string("RFGR State > 0. Value: " + std::to_string(RFGRState)), LogInfo);
+	///Logger::Log(std::string("RFGR State > 0. Value: " + std::to_string(RFGRState)), LogInfo);
 
 	OriginalWndProc = (WNDPROC)SetWindowLongPtr(GameWindowHandle, GWLP_WNDPROC, (__int3264)(LONG_PTR)WndProc);
 	Logger::Log("Custom WndProc set.", LogInfo);
@@ -106,7 +106,7 @@ void ProgramManager::Initialize()
 		long long TimeElapsed = std::chrono::duration_cast<std::chrono::milliseconds>(EndTime - StartTime).count();
 		if (TimeElapsed > 2000LL) 
 		{
-			Logger::Log("Waiting for ImGui to be initialized.", LogInfo);
+			///Logger::Log("Waiting for ImGui to be initialized.", LogInfo);
 		}
 		EndTime = StartTime;
 		StartTime = std::chrono::steady_clock::now();
@@ -123,7 +123,7 @@ void ProgramManager::ProcessInput()
 {
 	if ((GetAsyncKeyState(VK_OEM_3))) //126 = virtual keycode for tilde
 	{
-		Logger::Log("Tilde pressed", LogInfo);
+		///Logger::Log("Tilde pressed", LogInfo);
 		Gui.ToggleLuaConsole();
 		if (Gui.IsLuaConsoleActive())
 		{
@@ -232,7 +232,7 @@ void ProgramManager::ProcessInput()
 	if (GetAsyncKeyState(VK_F1))
 	{
 		OverlayActive = !OverlayActive;
-		Logger::Log(std::string("Overlay active value: " + std::to_string(OverlayActive)), LogInfo);
+		///Logger::Log(std::string("Overlay active value: " + std::to_string(OverlayActive)), LogInfo);
 		if (OverlayActive)
 		{
 			if (!Gui.IsLuaConsoleActive())
@@ -395,9 +395,9 @@ void ProgramManager::Update()
 {
 	if (ScriptLoaderCloseRequested)
 	{
-		std::cout << "Sleeping...\n";
+		///std::cout << "Sleeping...\n";
 		Sleep(300);
-		std::cout << "Done sleeping.\n";
+		///std::cout << "Done sleeping.\n";
 		ExitKeysPressCount = 10;
 	}
 	/*if (PeekMessage(&msg, NULL, 0U, 0U, PM_REMOVE)) //Todo: Figure out if I really need this for the overlay to work.

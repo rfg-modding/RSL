@@ -226,7 +226,7 @@ HRESULT __stdcall D3D11PresentHook(IDXGISwapChain * pSwapChain, UINT SyncInterva
 		}
 		else
 		{
-			Logger::Log("GetWindowRect() Succeeded", LogWarning);
+			//Logger::Log("GetWindowRect() Succeeded", LogWarning);
 		}
 		ImGui_ImplWin32_Init(hwnd);
 
@@ -241,11 +241,11 @@ HRESULT __stdcall D3D11PresentHook(IDXGISwapChain * pSwapChain, UINT SyncInterva
 		}
 		else
 		{
-			Logger::Log("DroidSans.ttf not found. Using default font.", LogInfo);
+			//Logger::Log("DroidSans.ttf not found. Using default font.", LogInfo);
 			io.Fonts->AddFontDefault();
 		}
 
-		Logger::Log("Merging FontAwesome...", LogWarning);
+		//Logger::Log("Merging FontAwesome...", LogWarning);
 		static const ImWchar IconsRanges[] = { ICON_MIN_FA, ICON_MAX_FA, 0 };
 		ImFontConfig IconsConfig;
 		IconsConfig.MergeMode = true;
@@ -253,7 +253,7 @@ HRESULT __stdcall D3D11PresentHook(IDXGISwapChain * pSwapChain, UINT SyncInterva
 		std::string FontAwesomeSolidPath(GetEXEPath(false) + "RFGR Script Loader/Fonts/fa-solid-900.ttf");
 		Logger::Log(FontAwesomeSolidPath, LogWarning);
 		FontNormal = io.Fonts->AddFontFromFileTTF(FontAwesomeSolidPath.c_str(), GlobalFontSize, &IconsConfig, IconsRanges);
-		Logger::Log("Done merging FontAwesome...", LogWarning);
+		//Logger::Log("Done merging FontAwesome...", LogWarning);
 		
 
 		/*Start of FontLarge loading*/
@@ -354,8 +354,8 @@ HRESULT __stdcall D3D11PresentHook(IDXGISwapChain * pSwapChain, UINT SyncInterva
 
 bool __cdecl KeenGraphicsResizeRenderSwapchainHook(void* KeenSwapchain, unsigned int NewWidth, unsigned int NewHeight)
 {
-	Logger::Log("In KeenGraphicsResizeSwapchainHook()", LogFatalError);
-	std::cout << "NewWidth: " << NewWidth << ", NewHeight: " << NewHeight << "\n";
+	//Logger::Log("In KeenGraphicsResizeSwapchainHook()", LogFatalError);
+	//std::cout << "NewWidth: " << NewWidth << ", NewHeight: " << NewHeight << "\n";
 	UpdateD3D11Pointers = true;
 
 	return KeenGraphicsResizeRenderSwapchain(KeenSwapchain, NewWidth, NewHeight);
@@ -455,11 +455,11 @@ void __cdecl ExplosionCreateHook(explosion_info * ExplosionInfo, void * Source, 
 
 	if (UseGlobalExplosionStrengthMultiplier)
 	{
-		std::cout << "Address of ExplosionInfo: " << ExplosionInfo << ", Hex: " << std::hex << std::uppercase << ExplosionInfo << "\n";
+		/*std::cout << "Address of ExplosionInfo: " << ExplosionInfo << ", Hex: " << std::hex << std::uppercase << ExplosionInfo << "\n";
 		Logger::Log(std::string("ExplosionInfo->m_name: " + std::string(NewExplosionInfo.m_name)), LogInfo);
 		Logger::Log(std::string("ExplosionInfo->m_unique_id: " + std::to_string(NewExplosionInfo.m_unique_id)), LogInfo);
 		Logger::Log(std::string("Before, Explosion radius: " + std::to_string(NewExplosionInfo.m_radius)), LogInfo);
-		Logger::Log(std::string("Increasing explosion values by a factor of " + std::to_string(GlobalExplosionStrengthMultiplier)), LogInfo);
+		Logger::Log(std::string("Increasing explosion values by a factor of " + std::to_string(GlobalExplosionStrengthMultiplier)), LogInfo);*/
 
 		NewExplosionInfo.m_radius *= GlobalExplosionStrengthMultiplier;
 		NewExplosionInfo.m_impulse_magnitude *= GlobalExplosionStrengthMultiplier;
@@ -467,12 +467,12 @@ void __cdecl ExplosionCreateHook(explosion_info * ExplosionInfo, void * Source, 
 		NewExplosionInfo.m_secondary_radius *= GlobalExplosionStrengthMultiplier;
 		NewExplosionInfo.m_structural_damage = (int)(GlobalExplosionStrengthMultiplier * (float)(NewExplosionInfo.m_structural_damage)); //Did this instead of *= to avoid a compiler error. Probably unecessary.
 
-		Logger::Log(std::string("After, Explosion radius: " + std::to_string(NewExplosionInfo.m_radius)), LogInfo);
-		std::cout << "\n";
+		//Logger::Log(std::string("After, Explosion radius: " + std::to_string(NewExplosionInfo.m_radius)), LogInfo);
+		//std::cout << "\n";
 
 		*ExplosionInfo = NewExplosionInfo;
 	}
-	std::cout << "\n";
+	//std::cout << "\n";
 
 	if (UseExplosionRadiusLimits)
 	{
@@ -623,7 +623,7 @@ void __fastcall CharacterControllerSetPosHook(CharacterController* CharControlle
 		}
 	}*/
 
-	std::cout << "CharacterController Address: " << std::hex << std::uppercase << CharController << "\n";
+	//std::cout << "CharacterController Address: " << std::hex << std::uppercase << CharController << "\n";
 
 	return CharacterControllerSetPos(CharController, Position);
 }
@@ -665,7 +665,7 @@ void __fastcall rl_draw_tristrip_2d_begin_hook(void* This, void* edx, rl_primiti
 	std::call_once(HookRlDrawTristip2dInitialCall, [&]()
 	{
 		GlobalRlDrawPtr = This;
-		std::cout << "First time in rl_draw::tristrip_2d_begin() hook..." << "\n";
+		/*std::cout << "First time in rl_draw::tristrip_2d_begin() hook..." << "\n";
 		std::cout << "Alpha mode: " << PrimitiveState->d.v.m_alpha_mode << "\n";
 		std::cout << "Clamp mode: " << PrimitiveState->d.v.m_clamp_mode << "\n";
 		std::cout << "Color write mode: " << PrimitiveState->d.v.m_color_write_mode << "\n";
@@ -676,7 +676,7 @@ void __fastcall rl_draw_tristrip_2d_begin_hook(void* This, void* edx, rl_primiti
 		std::cout << "Stencil mode: " << PrimitiveState->d.v.m_stencil_mode << "\n";
 		std::cout << "Valid: " << PrimitiveState->d.v.m_valid << "\n";
 		std::cout << "Z-Bias mode: " << PrimitiveState->d.v.m_zbias_mode << "\n";
-		std::cout << "Z-Buffer mode: " << PrimitiveState->d.v.m_zbuf_mode << "\n";
+		std::cout << "Z-Buffer mode: " << PrimitiveState->d.v.m_zbuf_mode << "\n";*/
 	});
 
 	return rl_draw_tristrip_2d_begin(This, edx, PrimitiveState);
@@ -688,7 +688,7 @@ void __fastcall world_do_frame_hook(World* This, void* edx, bool HardLoad) //.te
 	{
 		GlobalRfgWorldPtr = This;
 		Logger::Log("RFG::World hooked!", LogInfo);
-		std::cout << "\nPending Save Info:";
+		/*std::cout << "\nPending Save Info:";
 		std::cout << "Number of missions completed:" << GlobalRfgWorldPtr->pending_game_save_slot->num_missions_completed << "\n";
 		std::cout << "Number of activites completed:" << GlobalRfgWorldPtr->pending_game_save_slot->num_activities_completed << "\n";
 		std::cout << "Districts liberated:" << GlobalRfgWorldPtr->pending_game_save_slot->districts_liberated << "\n";
@@ -717,13 +717,13 @@ void __fastcall world_do_frame_hook(World* This, void* edx, bool HardLoad) //.te
 		std::cout << "backpacks_unlocked.raw_data[6]:" << GlobalRfgWorldPtr->pending_game_save_slot->new_data.backpacks_unlocked.raw_data[6] << "\n";
 		std::cout << "backpacks_unlocked.raw_data[7]:" << GlobalRfgWorldPtr->pending_game_save_slot->new_data.backpacks_unlocked.raw_data[7] << "\n";
 		std::cout << "Jetpack unlock level:" << GlobalRfgWorldPtr->pending_game_save_slot->new_data.jetpack_unlock_level << "\n";
-		std::cout << "\n";
+		std::cout << "\n";*/
 
 		GlobalTODLightPtr = game_render_get_TOD_light();
 	});
 	if (GlobalRfgWorldPtr != This)
 	{
-		std::cout << "RFGWorldPtr Changed!\n";
+		//std::cout << "RFGWorldPtr Changed!\n";
 	}
 	if (!GlobalTODLightPtr)
 	{
