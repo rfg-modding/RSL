@@ -53,10 +53,10 @@ void LogWindow::Draw(const char * Title)
 	static bool ShowLua = ConsoleLogType & LogLua ? true : false;
 	static bool ShowJson = ConsoleLogType & LogJson ? true : false;
 
-	ImGui::PushItemWidth(225.0f);
-	ImGui::TextWrapped("Select which message types you wish to see in the logger below.");
+	//ImGui::PushItemWidth(225.0f);
+	//ImGui::TextWrapped("Select which message types you wish to see in the logger below.");
 
-	ImGui::Text(" | Filtering: ");
+	ImGui::Text("Filtering: ");
 	ImGui::SameLine();
 	ImGui::Checkbox("All", &ShowAll);
 	if (!ShowAll)
@@ -73,7 +73,7 @@ void LogWindow::Draw(const char * Title)
 		ImGui::Checkbox("Lua", &ShowLua);
 		ImGui::SameLine();
 		ImGui::Checkbox("Json", &ShowJson);
-		ImGui::SameLine();
+		//ImGui::SameLine();
 	}
 
 	if (ShowAll)

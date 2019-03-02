@@ -36,7 +36,7 @@ void ScriptManager::Initialize()
 
 void ScriptManager::SetupLua()
 {
-	RunScript(GetEXEPath(false) + "RFGR Script Loader/Core/CoreInit.lua");
+	//RunScript(GetEXEPath(false) + "RFGR Script Loader/Core/CoreInit.lua");
 
 	//Todo: Make necessary vars read only with sol::readonly(&some_class::variable)
 	auto RslTable = Lua["rsl"].get_or_create<sol::table>();
