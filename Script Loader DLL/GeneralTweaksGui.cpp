@@ -230,157 +230,6 @@ void GeneralTweaksGui::Draw(const char* Title)
 	ImGui::Checkbox("##ToggleLevelBackgroundAmbientLight", &UseCustomLevelBackgroundAmbientLight);
 	ImGui::Separator();
 
-	//all_zones and global_zone_grid in rfg::world are always empty. 
-	static int ZoneScanRange = 2000;
-	ImGui::InputInt("Zone scan range", &ZoneScanRange);
-	static float CustomMinWindSpeed = 0.0f;
-	static float CustomMaxWindSpeed = 0.0f;
-	ImGui::InputFloat("Custom min wind speed", &CustomMinWindSpeed);
-	ImGui::InputFloat("Custom max wind speed", &CustomMaxWindSpeed);
-	if (ImGui::Button("Set all zone wind speeds"))
-	{
-		if (GlobalRfgWorldPtr)
-		{
-			int ValidWorldZoneCount = 0;
-			int ValidObjectZoneCount = 0;
-			for (int i = 0; i < ZoneScanRange; i++)
-			{
-				world_zone* CurrentWorldZone = get_world_zone_by_index(GlobalRfgWorldPtr, NULL, i);
-				if (CurrentWorldZone)
-				{
-					ValidWorldZoneCount++;
-					if (CurrentWorldZone->zone_objp)
-					{
-						ValidObjectZoneCount++;
-						CurrentWorldZone->zone_objp->wind_min_speed = CustomMinWindSpeed;
-						CurrentWorldZone->zone_objp->wind_max_speed = CustomMaxWindSpeed;
-					}
-				}
-			}
-			Logger::Log("Done setting zone wind speeds", LogInfo);
-			Logger::Log(std::string("# of valid world zones: " + std::to_string(ValidWorldZoneCount)).c_str(), LogInfo);
-			Logger::Log(std::string("# of valid object zones: " + std::to_string(ValidObjectZoneCount)).c_str(), LogInfo);
-		}
-	}
-
-	if (ImGui::Button("Dump zone info"))
-	{
-		if (GlobalRfgWorldPtr)
-		{
-			int NumberOfWorldZonesFound = 0;
-			int NumberOfObjectZonesFound = 0;
-			std::ofstream ZoneDump(GetEXEPath(false) + "RFGR Script Loader/ZoneInfoDump.txt", std::ios_base::trunc);
-			ZoneDump << "\nPrinting all world zone names...\n";
-			Logger::Log("\nPrinting all world zone names...\n", LogInfo);
-			for (int i = 0; i < ZoneScanRange; i++)
-			{
-				world_zone* CurrentWorldZone = get_world_zone_by_index(GlobalRfgWorldPtr, NULL, i);
-				if (CurrentWorldZone)
-				{
-					NumberOfWorldZonesFound++;
-					ZoneDump << "Index: " << i << "\n";
-					ZoneDump << "Zone name: " << CurrentWorldZone->name << "\n";
-					ZoneDump << "srid: " << CurrentWorldZone->srid << "\n";
-					ZoneDump << "gid: " << CurrentWorldZone->gid << "\n";
-					ZoneDump << "Border zone: " << CurrentWorldZone->is_border_zone << "\n";
-					if (CurrentWorldZone->zone_objp)
-					{
-						NumberOfObjectZonesFound++;
-						ZoneDump << "Object zone:\n";
-						ZoneDump << "    All index: " << CurrentWorldZone->zone_objp->AllIndex << "\n";
-						ZoneDump << "    Min wind speed: " << CurrentWorldZone->zone_objp->wind_min_speed << "\n";
-						ZoneDump << "    Max wind speed: " << CurrentWorldZone->zone_objp->wind_max_speed << "\n";
-						ZoneDump << "    Handle: " << CurrentWorldZone->zone_objp->Handle << "\n";
-						ZoneDump << "    Havok handle: " << CurrentWorldZone->zone_objp->HavokHandle << "\n";
-						ZoneDump << "    Terrain filename: " << CurrentWorldZone->zone_objp->terrain->filename << "\n\n";
-					}
-					else
-					{
-						ZoneDump << "--Invalid object zone--\n\n";
-					}
-				}
-			}
-			Logger::Log("Done printing all world zone info. Check ZoneInfoDump.txt in the script loader folder.", LogInfo);
-			Logger::Log(std::string("Number of world zones found: " + std::to_string(NumberOfWorldZonesFound)), LogInfo);
-			Logger::Log(std::string("Number of object zones found: " + std::to_string(NumberOfObjectZonesFound)), LogInfo);
-			ZoneDump << "Done printing all world zone info\n";
-			ZoneDump << "Number of zones found: " << NumberOfWorldZonesFound;
-			ZoneDump << "Number of zones found: " << NumberOfObjectZonesFound;
-		}
-		else
-		{
-			Logger::Log("Could not print zone names, the world pointer is null!\n", LogError);
-		}
-	}
-
-	if (ImGui::Button("Print misc world values"))
-	{
-		std::cout << "\nPrinting all misc world values...\n";
-		if (GlobalRfgWorldPtr)
-		{
-			std::cout << "Max world objects: " << GlobalRfgWorldPtr->max_world_objects << "\n";
-			std::cout << "Tech level: " << GlobalRfgWorldPtr->tech_level << "\n";
-			std::cout << "Tech level max: " << GlobalRfgWorldPtr->tech_level_max << "\n";
-			std::cout << "Pending filename: " << GlobalRfgWorldPtr->pending_filename << "\n";
-			std::cout << "Object list capacity: " << GlobalRfgWorldPtr->all_objects.Capacity() << "\n";
-			std::cout << "Object list size: " << GlobalRfgWorldPtr->all_objects.Size() << "\n";
-			std::cout << "Num territory zones: " << GlobalRfgWorldPtr->num_territory_zones << "\n";
-		}
-		else
-		{
-			Logger::Log("Could not print misc world values, the world pointer is null!\n", LogError);
-		}
-		std::cout << "Done!\n";
-	}
-	if (ImGui::Button("Dump all object info"))
-	{
-		if (GlobalRfgWorldPtr)
-		{
-			Logger::Log("\nDumping all object info to ObjectInfoDump.txt.\n", LogInfo);
-			std::ofstream PositionsDump(GetEXEPath(false) + "RFGR Script Loader/ObjectInfoDump.txt", std::ios_base::trunc);
-			PositionsDump << "Start of object info dump...\n";
-			PositionsDump << "Objects array capacity: " << GlobalRfgWorldPtr->all_objects.Capacity() << "\n";
-			PositionsDump << "Objects array objects contained: " << GlobalRfgWorldPtr->all_objects.Size() << "\n\n";
-			for (int i = 0; i < GlobalRfgWorldPtr->all_objects.Size(); i++)
-			{
-				if (GlobalRfgWorldPtr->all_objects[i])
-				{
-					PositionsDump << "Index: " << i << "\n";
-					PositionsDump << "Name: " << world_get_object_name(GlobalRfgWorldPtr, NULL, GlobalRfgWorldPtr->all_objects[i]) << "\n";
-					PositionsDump << "Type: " << (int)(*GlobalRfgWorldPtr->all_objects[i]).ObjectType << "\n";
-					PositionsDump << "Subtype: " << (int)(*GlobalRfgWorldPtr->all_objects[i]).SubType << "\n";
-					PositionsDump << "Position:\n";
-					PositionsDump << "    x: " << (*GlobalRfgWorldPtr->all_objects[i]).Position.x << "\n";
-					PositionsDump << "    y: " << (*GlobalRfgWorldPtr->all_objects[i]).Position.y << "\n";
-					PositionsDump << "    z: " << (*GlobalRfgWorldPtr->all_objects[i]).Position.z << "\n";
-
-					world_zone* ObjectWorldZone = get_world_zone_by_object_handle(GlobalRfgWorldPtr, NULL, (*GlobalRfgWorldPtr->all_objects[i]).Handle);
-					if (ObjectWorldZone)
-					{
-						PositionsDump << "Zone:\n";
-						PositionsDump << "    Name: " << ObjectWorldZone->name << "\n\n";
-					}
-					else
-					{
-						PositionsDump << "--Invalid world zone--\n\n";
-					}
-				}
-				else
-				{
-					PositionsDump << "Skipping object at index " << i << ", invalid pointer.\n\n";
-				}
-			}
-			PositionsDump << "End of object info dump.";
-			Logger::Log("Finished dumped all object into to ObjectInfoDump.txt!", LogInfo);
-			PositionsDump.close();
-		}
-		else
-		{
-			Logger::Log("Could not print zone names, the world pointer is null!", LogError);
-		}
-	}
-	ImGui::Separator();
-
 	//ImGui::InputInt("Middle mouse spawns per second", &MiddleMouseExplosionsPerSecond);
 	//Utilities::GUI::TooltipOnPrevious("Used to determine how many time per second and explosion or repair sphere can be spawned per second by the middle mouse. Used to prevent lag from 100's of explosions per second.");
 	if (ImGui::CollapsingHeader("Custom explosion info"))
@@ -388,16 +237,23 @@ void GeneralTweaksGui::Draw(const char* Title)
 		ImGui::Text("Explosion create info:");
 		ImGui::Checkbox("Spawn explosion with middle mouse?", &MiddleMouseBoomActive);
 		ImGui::InputInt("Middle mouse explosions per second limit", &MiddleMouseExplosionsPerSecond);
-		Utilities::GUI::TooltipOnPrevious("Used to prevent lag from 100s of explosions per second since the script loader thread is currently uncapped.");
+		ImGui::SameLine();
+		Utilities::GUI::ShowHelpMarker("Used to prevent lag from 100s of explosions per second since the script loader thread is currently uncapped.");
 		if (ImGui::Button("Boom"))
 		{
 			ExplosionCreate(&CustomExplosionInfo, PlayerPtr, PlayerPtr, &PlayerPtr->aim_pos, &PlayerPtr->Orientation, &PlayerPtr->aim_pos, NULL, false);
 		}
+		ImGui::SameLine();
+		Utilities::GUI::ShowHelpMarker("Spawns an explosion with the values entered below where the player is aiming. The middle mouse button option is much more convenient.");
 		ImGui::Separator();
 
 		ImGui::InputText("Name", (char*)&CustomExplosionInfo.m_name, 32);
 		ImGui::InputInt("Unique ID", &CustomExplosionInfo.m_unique_id);
+		ImGui::SameLine();
+		Utilities::GUI::ShowHelpMarker("Make sure that you use a unique value for the unique id variable or you might get behavior not matching the variables you've set. I believe that all of the games explosions use the lower unique id values. So if you just use a value larger than 1000 you shouldn't have an issue.");
 		ImGui::InputInt("Name CRC", (int*)&CustomExplosionInfo.m_name_crc_str); //Todo: Need to make a wrapper for this so the range isn't limited to the signed range.
+		ImGui::SameLine();
+		Utilities::GUI::ShowHelpMarker("You also need to be careful that this value is unique. Currently there's no easy way to check that, but the default value never seems to have issues.");
 		ImGui::InputFloat("Radius", &CustomExplosionInfo.m_radius);
 		ImGui::InputFloat("Secondary radius", &CustomExplosionInfo.m_secondary_radius);
 		ImGui::InputFloat("Knockdown radius", &CustomExplosionInfo.m_knockdown_radius);
@@ -417,6 +273,8 @@ void GeneralTweaksGui::Draw(const char* Title)
 		ImGui::InputInt("Expanding explosion delay", (int*)&CustomExplosionInfo.expanding_explosion_delay);
 		ImGui::InputInt("Number of effects", (int*)&CustomExplosionInfo.m_num_effects);
 		ImGui::InputInt("Effect 0", (int*)&CustomExplosionInfo.m_effects[0]);
+		ImGui::SameLine();
+		Utilities::GUI::ShowHelpMarker("Try some of the values up in the hundreds. You can try checking the values in EffectsInfo.txt, but they don't seem to match up with these values. I'll try to figure out a better way to choose an explosion effect other than guessing.");
 		ImGui::InputInt("Effect 1", (int*)&CustomExplosionInfo.m_effects[1]);
 		ImGui::InputInt("Effect 2", (int*)&CustomExplosionInfo.m_effects[2]);
 		ImGui::InputInt("Effect 3", (int*)&CustomExplosionInfo.m_effects[3]);
@@ -465,6 +323,172 @@ void GeneralTweaksGui::Draw(const char* Title)
 		ImGui::RadioButton("Aim position", &RepairPosition, 1);
 	}
 	ImGui::Separator();*/
+
+	ImGui::Text("Experimental Options");
+	ImGui::Separator();
+
+	if (ImGui::CollapsingHeader("Info dumps"))
+	{
+		//all_zones and global_zone_grid in rfg::world are always empty. 
+		static int ZoneScanRange = 2000;
+		ImGui::InputInt("Zone scan range", &ZoneScanRange);
+		static float CustomMinWindSpeed = 0.0f;
+		static float CustomMaxWindSpeed = 0.0f;
+		ImGui::InputFloat("Custom min wind speed", &CustomMinWindSpeed);
+		ImGui::InputFloat("Custom max wind speed", &CustomMaxWindSpeed);
+		if (ImGui::Button("Set all zone wind speeds"))
+		{
+			if (GlobalRfgWorldPtr)
+			{
+				int ValidWorldZoneCount = 0;
+				int ValidObjectZoneCount = 0;
+				for (int i = 0; i < ZoneScanRange; i++)
+				{
+					world_zone* CurrentWorldZone = get_world_zone_by_index(GlobalRfgWorldPtr, NULL, i);
+					if (CurrentWorldZone)
+					{
+						ValidWorldZoneCount++;
+						if (CurrentWorldZone->zone_objp)
+						{
+							ValidObjectZoneCount++;
+							CurrentWorldZone->zone_objp->wind_min_speed = CustomMinWindSpeed;
+							CurrentWorldZone->zone_objp->wind_max_speed = CustomMaxWindSpeed;
+						}
+					}
+				}
+				Logger::Log("Done setting zone wind speeds", LogInfo);
+				Logger::Log(std::string("# of valid world zones: " + std::to_string(ValidWorldZoneCount)).c_str(), LogInfo);
+				Logger::Log(std::string("# of valid object zones: " + std::to_string(ValidObjectZoneCount)).c_str(), LogInfo);
+			}
+		}
+		ImGui::SameLine();
+		Utilities::GUI::ShowHelpMarker("Sets the min and max wind speed values you've chosen in any zones it finds in the range you've chosen. Added for experimentation. I haven't see any changes from this.");
+
+		if (ImGui::Button("Dump zone info"))
+		{
+			if (GlobalRfgWorldPtr)
+			{
+				int NumberOfWorldZonesFound = 0;
+				int NumberOfObjectZonesFound = 0;
+				std::ofstream ZoneDump(GetEXEPath(false) + "RFGR Script Loader/ZoneInfoDump.txt", std::ios_base::trunc);
+				ZoneDump << "\nPrinting all world zone names...\n";
+				Logger::Log("\nPrinting all world zone names...\n", LogInfo);
+				for (int i = 0; i < ZoneScanRange; i++)
+				{
+					world_zone* CurrentWorldZone = get_world_zone_by_index(GlobalRfgWorldPtr, NULL, i);
+					if (CurrentWorldZone)
+					{
+						NumberOfWorldZonesFound++;
+						ZoneDump << "Index: " << i << "\n";
+						ZoneDump << "Zone name: " << CurrentWorldZone->name << "\n";
+						ZoneDump << "srid: " << CurrentWorldZone->srid << "\n";
+						ZoneDump << "gid: " << CurrentWorldZone->gid << "\n";
+						ZoneDump << "Border zone: " << CurrentWorldZone->is_border_zone << "\n";
+						if (CurrentWorldZone->zone_objp)
+						{
+							NumberOfObjectZonesFound++;
+							ZoneDump << "Object zone:\n";
+							ZoneDump << "    All index: " << CurrentWorldZone->zone_objp->AllIndex << "\n";
+							ZoneDump << "    Min wind speed: " << CurrentWorldZone->zone_objp->wind_min_speed << "\n";
+							ZoneDump << "    Max wind speed: " << CurrentWorldZone->zone_objp->wind_max_speed << "\n";
+							ZoneDump << "    Handle: " << CurrentWorldZone->zone_objp->Handle << "\n";
+							ZoneDump << "    Havok handle: " << CurrentWorldZone->zone_objp->HavokHandle << "\n";
+							ZoneDump << "    Terrain filename: " << CurrentWorldZone->zone_objp->terrain->filename << "\n\n";
+						}
+						else
+						{
+							ZoneDump << "--Invalid object zone--\n\n";
+						}
+					}
+				}
+				Logger::Log("Done printing all world zone info. Check ZoneInfoDump.txt in the script loader folder.", LogInfo);
+				Logger::Log(std::string("Number of world zones found: " + std::to_string(NumberOfWorldZonesFound)), LogInfo);
+				Logger::Log(std::string("Number of object zones found: " + std::to_string(NumberOfObjectZonesFound)), LogInfo);
+				ZoneDump << "Done printing all world zone info\n";
+				ZoneDump << "Number of zones found: " << NumberOfWorldZonesFound;
+				ZoneDump << "Number of zones found: " << NumberOfObjectZonesFound;
+			}
+			else
+			{
+				Logger::Log("Could not print zone names, the world pointer is null!\n", LogError);
+			}
+		}
+		ImGui::SameLine();
+		Utilities::GUI::ShowHelpMarker("Prints info about the any world_zones it finds to ZoneInfoDump.txt. Many zone indices don't have a valid zone, and so the range set above is scanned through and only valid zones are printed to the file.");
+
+		if (ImGui::Button("Print misc world values"))
+		{
+			std::cout << "\nPrinting all misc world values...\n";
+			std::ofstream WorldDump(GetEXEPath(false) + "RFGR Script Loader/WorldInfoDump.txt", std::ios_base::trunc);
+			if (GlobalRfgWorldPtr)
+			{
+				WorldDump << "Max world objects: " << GlobalRfgWorldPtr->max_world_objects << "\n";
+				WorldDump << "Tech level: " << GlobalRfgWorldPtr->tech_level << "\n";
+				WorldDump << "Tech level max: " << GlobalRfgWorldPtr->tech_level_max << "\n";
+				WorldDump << "Pending filename: " << GlobalRfgWorldPtr->pending_filename << "\n";
+				WorldDump << "Object list capacity: " << GlobalRfgWorldPtr->all_objects.Capacity() << "\n";
+				WorldDump << "Object list size: " << GlobalRfgWorldPtr->all_objects.Size() << "\n";
+				WorldDump << "Num territory zones: " << GlobalRfgWorldPtr->num_territory_zones << "\n";
+			}
+			else
+			{
+				WorldDump << "Could not print misc world values, the world pointer is null!\n";
+				Logger::Log("Could not print misc world values, the world pointer is null!\n", LogError);
+			}
+			std::cout << "Done!\n";
+		}
+		ImGui::SameLine();
+		Utilities::GUI::ShowHelpMarker("Prints info about the rfg world to WorldInfoDump.txt. Much shorter than the other info dumps.");
+		if (ImGui::Button("Dump all object info"))
+		{
+			if (GlobalRfgWorldPtr)
+			{
+				Logger::Log("\nDumping all object info to ObjectInfoDump.txt.\n", LogInfo);
+				std::ofstream PositionsDump(GetEXEPath(false) + "RFGR Script Loader/ObjectInfoDump.txt", std::ios_base::trunc);
+				PositionsDump << "Start of object info dump...\n";
+				PositionsDump << "Objects array capacity: " << GlobalRfgWorldPtr->all_objects.Capacity() << "\n";
+				PositionsDump << "Objects array objects contained: " << GlobalRfgWorldPtr->all_objects.Size() << "\n\n";
+				for (int i = 0; i < GlobalRfgWorldPtr->all_objects.Size(); i++)
+				{
+					if (GlobalRfgWorldPtr->all_objects[i])
+					{
+						PositionsDump << "Index: " << i << "\n";
+						PositionsDump << "Name: " << world_get_object_name(GlobalRfgWorldPtr, NULL, GlobalRfgWorldPtr->all_objects[i]) << "\n";
+						PositionsDump << "Type: " << (int)(*GlobalRfgWorldPtr->all_objects[i]).ObjectType << "\n";
+						PositionsDump << "Subtype: " << (int)(*GlobalRfgWorldPtr->all_objects[i]).SubType << "\n";
+						PositionsDump << "Position:\n";
+						PositionsDump << "    x: " << (*GlobalRfgWorldPtr->all_objects[i]).Position.x << "\n";
+						PositionsDump << "    y: " << (*GlobalRfgWorldPtr->all_objects[i]).Position.y << "\n";
+						PositionsDump << "    z: " << (*GlobalRfgWorldPtr->all_objects[i]).Position.z << "\n";
+
+						world_zone* ObjectWorldZone = get_world_zone_by_object_handle(GlobalRfgWorldPtr, NULL, (*GlobalRfgWorldPtr->all_objects[i]).Handle);
+						if (ObjectWorldZone)
+						{
+							PositionsDump << "Zone:\n";
+							PositionsDump << "    Name: " << ObjectWorldZone->name << "\n\n";
+						}
+						else
+						{
+							PositionsDump << "--Invalid world zone--\n\n";
+						}
+					}
+					else
+					{
+						PositionsDump << "Skipping object at index " << i << ", invalid pointer.\n\n";
+					}
+				}
+				PositionsDump << "End of object info dump.";
+				Logger::Log("Finished dumped all object into to ObjectInfoDump.txt!", LogInfo);
+				PositionsDump.close();
+			}
+			else
+			{
+				Logger::Log("Could not print zone names, the world pointer is null!", LogError);
+			}
+		}
+		ImGui::SameLine();
+		Utilities::GUI::ShowHelpMarker("Prints info about all rfg objects into ObjectInfoDump.txt. Overwrites data from the previous write each time.");
+	}
 
 	if (ImGui::CollapsingHeader("Time of day light")) //Todo: Add rl_scene_entity and rl_3d_entity info to this.
 	{
