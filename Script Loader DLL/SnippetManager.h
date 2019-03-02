@@ -8,8 +8,8 @@ public:
 	CodeSnippet() { } 
 	CodeSnippet(DWORD Address_, DWORD Length_) : Address(Address_), Length(Length_) { }
 
-	DWORD Address;
-	DWORD Length;
+	DWORD Address = 0;
+	DWORD Length = 0;
 	std::vector <int> Opcodes;
 };
 

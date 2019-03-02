@@ -1,5 +1,9 @@
 #include "Globals.h"
 
+ImFont* FontNormal;
+ImFont* FontLarge;
+ImFont* FontHuge;
+
 bool OpenDebugConsole = false;
 nlohmann::json MainConfig;
 float DefaultFreeCameraSpeed = 0.3f;
@@ -10,7 +14,8 @@ ID3D11Device* D3D11Device = nullptr;
 ID3D11DeviceContext* D3D11Context = nullptr;
 ID3D11RenderTargetView* MainRenderTargetView = nullptr;
 HWND hwnd = NULL;
-ImVec4* Colors = nullptr;
+RECT WindowRect = { 0 };
+//ImVec4* Colors = nullptr;
 
 //MainOverlay Overlay;
 bool ShowMainOverlay = true;
@@ -46,10 +51,17 @@ const WORD ConsoleFatalErrorTextAttributes = 0 | FOREGROUND_RED | FOREGROUND_INT
 const WORD ConsoleSuccessTextAttributes = 0 | FOREGROUND_GREEN | FOREGROUND_INTENSITY;
 const WORD ConsoleDefaultTextAttributes = 0 | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE;
 
+void* GlobalRlDrawPtr = nullptr;
+bool BlockNextTildeInput = false;
+bool ScriptLoaderCloseRequested = false;
 
+bool HudVisible = true;
+bool FogVisible = true;
+
+extern const std::string ScriptLoaderVersion("0.1.0-Alpha");
 const char* GetScriptLoaderVersion()
 {
-	return ScriptLoaderVersion;
+	return ScriptLoaderVersion.c_str();
 }
 
 void ShowHelpMarker(const char* desc)
@@ -166,14 +178,14 @@ DWORD GetProcessID(std::string ProcessName)
 		if (!strcmp(ProcessSnapshotStructure.szExeFile, ProcessName.c_str()))
 		{
 			CloseHandle(Snapshot);
-			//std::cout << "[+]Process name is: " << ProcessName << "\n[+]Process ID: " << ProcessSnapshotStructure.th32ProcessID << std::endl;
-			//std::cout << "PID: " << ProcessSnapshotStructure.th32ProcessID << std::endl;
+			//std::cout << "[+]Process name is: " << ProcessName << "\n[+]Process ID: " << ProcessSnapshotStructure.th32ProcessID << "\n";
+			//std::cout << "PID: " << ProcessSnapshotStructure.th32ProcessID << "\n";
 			return ProcessSnapshotStructure.th32ProcessID;
 		}
 	}
 	CloseHandle(Snapshot);
 
-	//std::cerr << "[!]Unable to find Process ID" << std::endl;
+	//std::cerr << "[!]Unable to find Process ID\n";
 	return 0;
 }
 
@@ -214,8 +226,8 @@ std::string GetEXEPath(bool IncludeExeInPath)
 
 	//WCHAR PathWide[4096];// = { 0 };
 	//DWORD Return = GetModuleFileNameW(NULL, PathWide, 4096);
-	//std::cout << "EXE Path Wide: " << PathWide << ", PathString: " << PathString << ", PathString.length: " << PathString.length() << std::endl;
-	//std::cout << "Return = " << Return << ", First Error = " << FirstError << std::endl;
+	//std::cout << "EXE Path Wide: " << PathWide << ", PathString: " << PathString << ", PathString.length: " << PathString.length() << "\n";
+	//std::cout << "Return = " << Return << ", First Error = " << FirstError << "\n";
 
 	if (IncludeExeInPath)
 	{
@@ -226,17 +238,17 @@ std::string GetEXEPath(bool IncludeExeInPath)
 		unsigned int ExeNameStart = PathString.length();
 		for (unsigned int i = PathString.length(); i > 0; i--)
 		{
-			//std::cout << "PathString[" << i << "] = " << PathString[i] << std::endl;
+			//std::cout << "PathString[" << i << "] = " << PathString[i] << "\n";
 			if (PathString.compare(i, 1, "\\") == 0 || PathString.compare(i, 1, "/") == 0)
 			{
-				//std::cout << "\\ or / found at " << i << ", PathString[i] = " << PathString[i] << std::endl;
+				//std::cout << "\\ or / found at " << i << ", PathString[i] = " << PathString[i] << "\n";
 				ExeNameStart = i;
 				break;
 			}
 		}
-		//std::cout << "EXENameStart = " << ExeNameStart << std::endl;
+		//std::cout << "EXENameStart = " << ExeNameStart << "\n";
 		PathString = PathString.substr(0, ExeNameStart + 1);
-		//std::cout << "Final EXE Path: " << PathString << std::endl;
+		//std::cout << "Final EXE Path: " << PathString << "\n";
 		return PathString;
 	}
 }
@@ -246,18 +258,18 @@ void PlaceNOP(BYTE* Address, DWORD Length)
 	DWORD OriginalProtectionPermissions;
 	DWORD Backup;
 	//DWORD RelativeAddress;
-	//std::cout << "1" << std::endl;
+	//std::cout << "1\n";
 	VirtualProtect(Address, Length, PAGE_EXECUTE_READWRITE, &OriginalProtectionPermissions);
-	//std::cout << "2" << std::endl;
+	//std::cout << "2\n";
 	for (DWORD i = 0x0; i < Length; i++)
 	{
 		*(Address + i) = 0x90; //NOP, 144 as int, using int when storing opcodes
 	}
 	//*(Address) = 0x90;
 	//memset(Address, 0x90, 1);
-	//std::cout << "3" << std::endl;
+	//std::cout << "3\n";
 	VirtualProtect(Address, Length, OriginalProtectionPermissions, &Backup); //Todo: Try using NULL or nullptr instead of Backup, since it's not needed.
-	//std::cout << "4" << std::endl;
+	//std::cout << "4\n";
 }
 
 //Get all module related info, this will include the base DLL. 
@@ -303,8 +315,8 @@ DWORD FindPattern(char *module, char *pattern, char *mask)
 			return base + i;
 		}
 	}
-	std::cout << "Error! FindPattern() returning NULL" << std::endl;
-	//ConsoleLog("FindPattern() returning NULL", LOGERROR, false, true);
+	std::cout << "Error! FindPattern() returning NULL\n";
+	//ConsoleLog("FindPattern() returning NULL", LogError, false, true);
 	return NULL;
 }
 

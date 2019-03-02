@@ -1,15 +1,16 @@
 #pragma once
-
+/*Random snippets of code which may be useful in the future go here. Mostly
+experimental stuff that was removed for better code clarity.*/
 
 /*void __stdcall D3D11CreateQueryHook(ID3D11Device* pDevice, const D3D11_QUERY_DESC* pQueryDesc, ID3D11Query** ppQuery)
 {
 	std::call_once(HookD3D11CreateQueryInitialMessage, [&]()
 	{
-		ConsoleLog("First time in D3D11CreateQuery() hook.\n", LOGSUCCESS, false, true);
+		ConsoleLog("First time in D3D11CreateQuery() hook.\n", LogInfo, false, true);
 		g_pd3dDevice = pDevice;
 		D3D11DeviceFound = true;
 	});
-	//std::cout << "10 CREATEQUERYHOOK" << std::endl;
+	//std::cout << "10 CREATEQUERYHOOK" << "\n";
 	return D3D11CreateQueryObject(pDevice, pQueryDesc, ppQuery);
 }
 
@@ -17,11 +18,11 @@ void __stdcall D3D11DrawIndexedHook(ID3D11DeviceContext* pContext, UINT IndexCou
 {
 	std::call_once(HookD3D11DrawIndexedInitialMessage, [&]()
 	{
-		ConsoleLog("First time in D3D11DrawIndexed() hook.\n", LOGSUCCESS, false, true);
+		ConsoleLog("First time in D3D11DrawIndexed() hook.\n", LogInfo, false, true);
 		g_pd3dDeviceContext = pContext;
 		D3D11DeviceContextFound = true;
 	});
-	std::cout << "11 DRAWINDEXEDHOOK" << std::endl;
+	std::cout << "11 DRAWINDEXEDHOOK" << "\n";
 	return D3D11DrawIndexedObject(pContext, IndexCount, StartIndexLocation, BaseVertexLocation);
 }
 
@@ -29,11 +30,11 @@ HRESULT __stdcall D3D11CheckFeatureSupportHook(ID3D11Device* pDevice, D3D11_FEAT
 {
 	std::call_once(HookD3D11CheckFeatureSupportInitialMessage, [&]()
 	{
-		ConsoleLog("First time in D3D11CheckFeatureSupport() hook.\n", LOGSUCCESS, false, true);
+		ConsoleLog("First time in D3D11CheckFeatureSupport() hook.\n", LogInfo, false, true);
 		g_pd3dDevice = pDevice;
 		D3D11DeviceFound = true;
 	});
-	std::cout << "12 CHECKFEATURESUPPORTHOOK" << std::endl;
+	std::cout << "12 CHECKFEATURESUPPORTHOOK" << "\n";
 	return D3D11CheckFeatureSupportObject(pDevice, Feature, FeatureSupportData, FeatureSupportDataSize);
 }
 
@@ -41,11 +42,11 @@ void __stdcall D3D11GetDeviceHook(ID3D11DeviceChild* Child, ID3D11Device** Devic
 {
 	std::call_once(HookD3D11GetDeviceInitialMessage, [&]()
 	{
-		ConsoleLog("First time in D3D11CheckFeatureSupport() hook.\n", LOGSUCCESS, false, true);
+		ConsoleLog("First time in D3D11CheckFeatureSupport() hook.\n", LogInfo, false, true);
 		g_pd3dDevice = *Device;
 		D3D11DeviceFound = true;
 	});
-	std::cout << "13 GETDEVICEHOOK" << std::endl;
+	std::cout << "13 GETDEVICEHOOK" << "\n";
 	return D3D11GetDeviceObject(Child, Device);
 }
 
@@ -53,31 +54,31 @@ void __stdcall D3D11BeginHook(ID3D11DeviceContext* Context, ID3D11Asynchronous* 
 {
 	std::call_once(HookD3D11BeginInitialMessage, [&]()
 	{
-		ConsoleLog("First time in D3D11Begin() hook.\n", LOGSUCCESS, false, true);
+		ConsoleLog("First time in D3D11Begin() hook.\n", LogInfo, false, true);
 		g_pd3dDeviceContext = Context;
 		D3D11DeviceContextFound = true;
 	});
-	//std::cout << "14 BEGINHOOK" << std::endl;
+	//std::cout << "14 BEGINHOOK" << "\n";
 	return D3D11BeginObject(Context, Async);
 }*/
 
 /*	
-ConsoleLog("Hooking GraphicsBeginFrame().\n", LOGMESSAGE, false, true);
+ConsoleLog("Hooking GraphicsBeginFrame().\n", LogInfo, false, true);
 if (MH_CreateHook((DWORD*)(ModuleBase + 0x86DD00), GraphicsBeginFrameHook, (LPVOID*)&GraphicsBeginFrame) != MH_OK)
 {
-	ConsoleLog("Failed to create GraphicsBeginFrame() hook. RFGR Script loader deactivating.", LOGERROR, false, true, true);
+	ConsoleLog("Failed to create GraphicsBeginFrame() hook. RFGR Script loader deactivating.", LogError, false, true, true);
 	FreeLibraryAndExitThread(hModule, 0);
 	return 0;
 }
-ConsoleLog("Successfully created GraphicsBeginFrame() hook.", LOGSUCCESS, false, true, true);
+ConsoleLog("Successfully created GraphicsBeginFrame() hook.", LogInfo, false, true, true);
 if (MH_EnableHook((DWORD*)(ModuleBase + 0x86DD00)) != MH_OK)
 {
-	ConsoleLog("Failed to enable GraphicsBeginFrame() hook. RFGR Script loader deactivating.", LOGERROR, false, true, true);
+	ConsoleLog("Failed to enable GraphicsBeginFrame() hook. RFGR Script loader deactivating.", LogError, false, true, true);
 	FreeLibraryAndExitThread(hModule, 0);
 	return 0;
 }
-ConsoleLog("Sucessfully enabled GraphicsBeginFrame() hook.", LOGSUCCESS, false, true, true);
-ConsoleLog("Sucessfully hooked GraphicsBeginFrame().\n", LOGSUCCESS, false, true);*/
+ConsoleLog("Sucessfully enabled GraphicsBeginFrame() hook.", LogInfo, false, true, true);
+ConsoleLog("Sucessfully hooked GraphicsBeginFrame().\n", LogInfo, false, true);*/
 
 
 
@@ -88,7 +89,7 @@ B* BTestPointer = &BTest;
 unsigned char* bytePtr = reinterpret_cast<unsigned char*>(BTestPointer);
 bytePtr += 4;
 
-std::cout << "*(int*)(BTestPointer + 0x4): " << *(int*)(bytePtr) << std::endl;// *(int*)(BTestPointer + 0x4) << std::endl;
+std::cout << "*(int*)(BTestPointer + 0x4): " << *(int*)(bytePtr) << "\n";// *(int*)(BTestPointer + 0x4) << "\n";
 */
 
 
@@ -106,7 +107,7 @@ void ProgramManager::LoadDataFromConfig()
 	else
 	{
 	CreateDirectoryIfNull(ExePath + "RFGR Script Loader/");
-	std::cout << "Settings.txt not found. Creating from default values." << std::endl;
+	std::cout << "Settings.txt not found. Creating from default values.\n";
 
 	MainConfig["Default free camera speed"] = 0.3;
 	//MainConfig["Default rotation speed"] = 0.7;
@@ -142,23 +143,23 @@ void ProgramManager::LoadDataFromConfig()
 
 	// write prettified JSON to another file
 	std::ofstream ConfigOutput(ExePath + "RFGR Script Loader/Settings.txt");
-	ConfigOutput << std::setw(4) << MainConfig << std::endl;
+	ConfigOutput << std::setw(4) << MainConfig << "\n";
 	ConfigOutput.close();
 	}
 
 	HKL KeyboardLayout = GetKeyboardLayout(0);
 	//VkKeyScanEx(YOUR_CHAR, currentKBL);
 
-	//ConsoleLog("Keyboard layout created", LOGWARNING, false, true, true);
+	//ConsoleLog("Keyboard layout created", LogWarning, false, true, true);
 
 	DefaultFreeCameraSpeed = MainConfig["Default free camera speed"].get<float>();
 	//DefaultRotationSpeed = MainConfig["Default rotation speed"].get<float>();
 	//UseConsole = MainConfig["Create output console"].get<bool>();
 
-	ConsoleLog("Loading keybinds", LOGWARNING, false, true, true);
+	ConsoleLog("Loading keybinds", LogWarning, false, true, true);
 
 	KeyDecreaseCameraSpeed = VkKeyScanEx(MainConfig["Keybinds"]["Decrease camera speed"].get<int>(), KeyboardLayout);
-	ConsoleLog("KeyDecreaseCameraSpeed Set", LOGERROR, false, true, true);
+	ConsoleLog("KeyDecreaseCameraSpeed Set", LogError, false, true, true);
 	KeyIncreaseCameraSpeed = VkKeyScanEx(MainConfig["Keybinds"]["Increase camera speed"].get<char>(), KeyboardLayout);
 	KeyToggleFreecamera = VkKeyScanEx(MainConfig["Keybinds"]["Toggle free camera"].get<char>(), KeyboardLayout);
 	KeyToggleHud = VkKeyScanEx(MainConfig["Keybinds"]["Toggle hud"].get<char>(), KeyboardLayout);
@@ -170,7 +171,7 @@ void ProgramManager::LoadDataFromConfig()
 	KeyCameraUp = VkKeyScanEx(MainConfig["Keybinds"]["Camera up"].get<char>(), KeyboardLayout);
 	KeyCameraDown = VkKeyScanEx(MainConfig["Keybinds"]["Camera down"].get<char>(), KeyboardLayout);
 
-	ConsoleLog("Loading rotation control keybinds", LOGWARNING, false, true, true);
+	ConsoleLog("Loading rotation control keybinds", LogWarning, false, true, true);
 
 	KeyDecreaseRotationSpeed = VkKeyScanEx(MainConfig["Keybinds"]["Decrease rotation speed"].get<char>(), KeyboardLayout);
 	KeyIncreaseRotationSpeed = VkKeyScanEx(MainConfig["Keybinds"]["Inrease rotation speed"].get<char>(), KeyboardLayout);
@@ -293,7 +294,7 @@ __declspec(naked) void GetPlayerYaxis()
 		PlayerPtr->Position.z = PlayerPositionTargetArray[2];
 		//NeedPlayerPosSet = true;
 
-		std::cout << "Unsafely teleporting player to (" << PlayerPositionTargetArray[0] << ", " << PlayerPositionTargetArray[1] << ", " << PlayerPositionTargetArray[2] << ")!" << std::endl;
+		std::cout << "Unsafely teleporting player to (" << PlayerPositionTargetArray[0] << ", " << PlayerPositionTargetArray[1] << ", " << PlayerPositionTargetArray[2] << ")!" << "\n";
 		HumanTeleportUnsafe(PlayerPtr, vector(PlayerPositionTargetArray[0], PlayerPositionTargetArray[1], PlayerPositionTargetArray[2]), PlayerPtr->Orientation);
 	}
 
@@ -322,89 +323,89 @@ __declspec(naked) void GetPlayerYaxis()
 /*#define JsonCatchAll(FileName) \
 catch (nlohmann::json::parse_error& Exception) \
 { \
-	Logger::Log(std::string("Parse exception caught while parsing " + "\"" + FileName + "\""), LOGFATALERROR); \
-	Logger::Log(std::string(Exception.what()), LOGFATALERROR); \
+	Logger::Log(std::string("Parse exception caught while parsing " + "\"" + FileName + "\""), LogFatalError); \
+	Logger::Log(std::string(Exception.what()), LogFatalError); \
  \
 	std::string ExceptionMessage(std::string("Parse exception caught while parsing " + "\"" + FileName + "\"")); \
 	ExceptionMessage += "Message: "; \
 	ExceptionMessage += Exception.what(); \
  \
 	MessageBoxA(find_main_window(GetProcessID("rfg.exe")), ExceptionMessage.c_str(), "Json parse exception caught", MB_OK); \
-	Logger::Log("Failed to parse " + "\"" + FileName + "\", exiting.", LOGFATALERROR); \
+	Logger::Log("Failed to parse " + "\"" + FileName + "\", exiting.", LogFatalError); \
 	return false; \
 } \
 catch (nlohmann::json::basic_json::invalid_iterator& Exception) \
 { \
-	Logger::Log("Invalid iterator exception caught while parsing" + "\"" + FileName + "\"", LOGFATALERROR); \
-	Logger::Log(std::string(Exception.what()), LOGFATALERROR); \
+	Logger::Log("Invalid iterator exception caught while parsing" + "\"" + FileName + "\"", LogFatalError); \
+	Logger::Log(std::string(Exception.what()), LogFatalError); \
  \
 	std::string ExceptionMessage("Invalid iterator exception caught while parsing " + "\"" + FileName + "\""); \
 	ExceptionMessage += "Message: "; \
 	ExceptionMessage += Exception.what(); \
  \
 	MessageBoxA(find_main_window(GetProcessID("rfg.exe")), ExceptionMessage.c_str(), "Json invalid iterator exception caught", MB_OK); \
-	Logger::Log("Failed to parse " + "\"" + FileName + "\", exiting.", LOGFATALERROR); \
+	Logger::Log("Failed to parse " + "\"" + FileName + "\", exiting.", LogFatalError); \
 	return false; \
 } \
 catch (nlohmann::json::basic_json::type_error& Exception) \
 { \
-	Logger::Log("Type error exception caught while parsing " + "\"" + FileName + "\"", LOGFATALERROR); \
-	Logger::Log(std::string(Exception.what()), LOGFATALERROR); \
+	Logger::Log("Type error exception caught while parsing " + "\"" + FileName + "\"", LogFatalError); \
+	Logger::Log(std::string(Exception.what()), LogFatalError); \
  \
 	std::string ExceptionMessage("Type error exception caught while parsing " + "\"" + FileName + "\""); \
 	ExceptionMessage += "Message: "; \
 	ExceptionMessage += Exception.what(); \
  \
 	MessageBoxA(find_main_window(GetProcessID("rfg.exe")), ExceptionMessage.c_str(), "Json type error exception caught", MB_OK); \
-	Logger::Log("Failed to parse " + "\"" + FileName + "\", exiting.", LOGFATALERROR); \
+	Logger::Log("Failed to parse " + "\"" + FileName + "\", exiting.", LogFatalError); \
 	return false; \
 } \
 catch (nlohmann::json::basic_json::out_of_range& Exception) \
 { \
-	Logger::Log("Out of range exception caught while parsing " + "\"" + FileName + "\"", LOGFATALERROR); \
-	Logger::Log(std::string(Exception.what()), LOGFATALERROR); \
+	Logger::Log("Out of range exception caught while parsing " + "\"" + FileName + "\"", LogFatalError); \
+	Logger::Log(std::string(Exception.what()), LogFatalError); \
  \
 	std::string ExceptionMessage("Out of range exception caught while parsing " + "\"" + FileName + "\""); \
 	ExceptionMessage += "Message: "; \
 	ExceptionMessage += Exception.what(); \
  \
 	MessageBoxA(find_main_window(GetProcessID("rfg.exe")), ExceptionMessage.c_str(), "Json out of range exception caught", MB_OK); \
-	Logger::Log("Failed to parse " + "\"" + FileName + "\", exiting.", LOGFATALERROR); \
+	Logger::Log("Failed to parse " + "\"" + FileName + "\", exiting.", LogFatalError); \
 	return false; \
 } \
 catch (nlohmann::json::basic_json::other_error& Exception) \
 { \
-	Logger::Log("Other error exception caught while parsing " + "\"" + FileName + "\"", LOGFATALERROR); \
-	Logger::Log(std::string(Exception.what()), LOGFATALERROR); \
+	Logger::Log("Other error exception caught while parsing " + "\"" + FileName + "\"", LogFatalError); \
+	Logger::Log(std::string(Exception.what()), LogFatalError); \
  \
 	std::string ExceptionMessage("Other error exception caught while parsing " + "\"" + FileName + "\""); \
 	ExceptionMessage += "Message: "; \
 	ExceptionMessage += Exception.what(); \
  \
 	MessageBoxA(find_main_window(GetProcessID("rfg.exe")), ExceptionMessage.c_str(), "Other error parse exception caught", MB_OK); \
-	Logger::Log("Failed to parse " + "\"" + FileName + "\", exiting.", LOGFATALERROR); \
+	Logger::Log("Failed to parse " + "\"" + FileName + "\", exiting.", LogFatalError); \
 	return false; \
 } \
 catch (std::exception& Exception) \
 { \
-	Logger::Log("General exception caught while parsing " + "\"" + FileName + "\"", LOGFATALERROR); \
-	Logger::Log(std::string(Exception.what()), LOGFATALERROR); \
+	Logger::Log("General exception caught while parsing " + "\"" + FileName + "\"", LogFatalError); \
+	Logger::Log(std::string(Exception.what()), LogFatalError); \
  \
 	std::string ExceptionMessage("General exception caught while parsing " + "\"" + FileName + "\""); \
 	ExceptionMessage += "Message: "; \
 	ExceptionMessage += Exception.what(); \
  \
 	MessageBoxA(find_main_window(GetProcessID("rfg.exe")), ExceptionMessage.c_str(), "Json general exception caught", MB_OK); \
-	Logger::Log("Failed to parse " + "\"" + FileName + "\", exiting.", LOGFATALERROR); \
+	Logger::Log("Failed to parse " + "\"" + FileName + "\", exiting.", LogFatalError); \
  \
 	return false; \
 } \
 catch (...) \
 { \
-	Logger::Log("Default exception caught while parsing " + "\"" + FileName + "\"", LOGFATALERROR); \
+	Logger::Log("Default exception caught while parsing " + "\"" + FileName + "\"", LogFatalError); \
  \
 	MessageBoxA(find_main_window(GetProcessID("rfg.exe")), "Default exception caught while parsing " + "\"" + FileName + "\"", "Json default exception caught", MB_OK); \
-	Logger::Log("Failed to parse " + "\"" + FileName + "\", exiting.", LOGFATALERROR); \
+	Logger::Log("Failed to parse " + "\"" + FileName + "\", exiting.", LogFatalError); \
  \
 	return false; \
 } */
@@ -419,90 +420,238 @@ auto JsonExceptionHandler(Callable&& Function, std::string FileName, std::string
 	}
 	catch (nlohmann::json::parse_error& Exception)
 	{
-		Logger::Log("Parse exception caught while " + ActionConjugated + " \"" + FileName + "\"!", LOGFATALERROR);
-		Logger::Log(std::string(Exception.what()), LOGFATALERROR);
+		Logger::Log("Parse exception caught while " + ActionConjugated + " \"" + FileName + "\"!", LogFatalError);
+		Logger::Log(std::string(Exception.what()), LogFatalError);
 
 		std::string ExceptionMessage("Parse exception caught while " + ActionConjugated + " \"" + FileName + "\"! See logs.");
 		ExceptionMessage += "Message: ";
 		ExceptionMessage += Exception.what();
 
 		MessageBoxA(find_main_window(GetProcessID("rfg.exe")), ExceptionMessage.c_str(), "Json parse exception caught", MB_OK);
-		Logger::Log("Failed to " + Action + " \"" + FileName + "\", exiting.", LOGFATALERROR);
+		Logger::Log("Failed to " + Action + " \"" + FileName + "\", exiting.", LogFatalError);
 		return false;
 	}
 	catch (nlohmann::json::basic_json::invalid_iterator& Exception)
 	{
-		Logger::Log("Invalid iterator exception caught while " + ActionConjugated + " \"" + FileName + "\"!", LOGFATALERROR);
-		Logger::Log(std::string(Exception.what()), LOGFATALERROR);
+		Logger::Log("Invalid iterator exception caught while " + ActionConjugated + " \"" + FileName + "\"!", LogFatalError);
+		Logger::Log(std::string(Exception.what()), LogFatalError);
 
 		std::string ExceptionMessage("Invalid iterator exception caught while " + ActionConjugated + " \"" + FileName + "\"! See logs.");
 		ExceptionMessage += "Message: ";
 		ExceptionMessage += Exception.what();
 
 		MessageBoxA(find_main_window(GetProcessID("rfg.exe")), ExceptionMessage.c_str(), "Json invalid iterator exception caught", MB_OK);
-		Logger::Log("Failed to " + Action + " \"" + FileName + "\", exiting.", LOGFATALERROR);
+		Logger::Log("Failed to " + Action + " \"" + FileName + "\", exiting.", LogFatalError);
 		return false;
 	}
 	catch (nlohmann::json::basic_json::type_error& Exception)
 	{
-		Logger::Log("Type error exception caught while " + ActionConjugated + " \"" + FileName + "\"!", LOGFATALERROR);
-		Logger::Log(std::string(Exception.what()), LOGFATALERROR);
+		Logger::Log("Type error exception caught while " + ActionConjugated + " \"" + FileName + "\"!", LogFatalError);
+		Logger::Log(std::string(Exception.what()), LogFatalError);
 
 		std::string ExceptionMessage("Type error exception caught while " + ActionConjugated + " \"" + FileName + "\"! See logs.");
 		ExceptionMessage += "Message: ";
 		ExceptionMessage += Exception.what();
 
 		MessageBoxA(find_main_window(GetProcessID("rfg.exe")), ExceptionMessage.c_str(), "Json type error exception caught", MB_OK);
-		Logger::Log("Failed to " + Action + " \"" + FileName + "\", exiting.", LOGFATALERROR);
+		Logger::Log("Failed to " + Action + " \"" + FileName + "\", exiting.", LogFatalError);
 		return false;
 	}
 	catch (nlohmann::json::basic_json::out_of_range& Exception)
 	{
-		Logger::Log("Out of range exception caught while " + ActionConjugated + " \"" + FileName + "\"!", LOGFATALERROR);
-		Logger::Log(std::string(Exception.what()), LOGFATALERROR);
+		Logger::Log("Out of range exception caught while " + ActionConjugated + " \"" + FileName + "\"!", LogFatalError);
+		Logger::Log(std::string(Exception.what()), LogFatalError);
 
 		std::string ExceptionMessage("Parse exception caught while " + ActionConjugated + " \"" + FileName + "\"! See logs.");
 		ExceptionMessage += "Message: ";
 		ExceptionMessage += Exception.what();
 
 		MessageBoxA(find_main_window(GetProcessID("rfg.exe")), ExceptionMessage.c_str(), "Json out of range exception caught", MB_OK);
-		Logger::Log("Failed to " + Action + " \"" + FileName + "\", exiting.", LOGFATALERROR);
+		Logger::Log("Failed to " + Action + " \"" + FileName + "\", exiting.", LogFatalError);
 		return false;
 	}
 	catch (nlohmann::json::basic_json::other_error& Exception)
 	{
-		Logger::Log("Other error exception caught while " + ActionConjugated + " \"" + FileName + "\"!", LOGFATALERROR);
-		Logger::Log(std::string(Exception.what()), LOGFATALERROR);
+		Logger::Log("Other error exception caught while " + ActionConjugated + " \"" + FileName + "\"!", LogFatalError);
+		Logger::Log(std::string(Exception.what()), LogFatalError);
 
 		std::string ExceptionMessage("Other error exception caught while " + ActionConjugated + " \"" + FileName + "\"! See logs.");
 		ExceptionMessage += "Message: ";
 		ExceptionMessage += Exception.what();
 
 		MessageBoxA(find_main_window(GetProcessID("rfg.exe")), ExceptionMessage.c_str(), "Json other error exception caught", MB_OK);
-		Logger::Log("Failed to " + Action + " \"" + FileName + "\", exiting.", LOGFATALERROR);
+		Logger::Log("Failed to " + Action + " \"" + FileName + "\", exiting.", LogFatalError);
 		return false;
 	}
 	catch (std::exception& Exception)
 	{
-		Logger::Log("General exception caught while " + ActionConjugated + " \"" + FileName + "\"!", LOGFATALERROR);
-		Logger::Log(std::string(Exception.what()), LOGFATALERROR);
+		Logger::Log("General exception caught while " + ActionConjugated + " \"" + FileName + "\"!", LogFatalError);
+		Logger::Log(std::string(Exception.what()), LogFatalError);
 
 		std::string ExceptionMessage("General exception caught while " + ActionConjugated + " \"" + FileName + "\"! See logs.");
 		ExceptionMessage += "Message: ";
 		ExceptionMessage += Exception.what();
 
 		MessageBoxA(find_main_window(GetProcessID("rfg.exe")), ExceptionMessage.c_str(), "Json general exception caught", MB_OK);
-		Logger::Log("Failed to " + Action + " \"" + FileName + "\", exiting.", LOGFATALERROR);
+		Logger::Log("Failed to " + Action + " \"" + FileName + "\", exiting.", LogFatalError);
 		return false;
 	}
 	catch (...)
 	{
-		Logger::Log("Default exception caught while " + ActionConjugated + " \"" + FileName + "\"!", LOGFATALERROR);
+		Logger::Log("Default exception caught while " + ActionConjugated + " \"" + FileName + "\"!", LogFatalError);
 
 		std::string ExceptionMessage("Default exception caught while " + ActionConjugated + " \"" + FileName + "\"! See logs.");
 		MessageBoxA(find_main_window(GetProcessID("rfg.exe")), ExceptionMessage.c_str(), "Json default exception caught", MB_OK);
-		Logger::Log("Failed to " + Action + " \"" + FileName + "\", exiting.", LOGFATALERROR);
+		Logger::Log("Failed to " + Action + " \"" + FileName + "\", exiting.", LogFatalError);
 		return false;
 	}
 }
 */
+
+
+
+/*Test of rl_draw::string(). Currently this just freezes the game. Will
+probably end up just using an external lib to render text for now.*/
+/*if (ImGui::Button("Test draw string"))
+{
+	rl_primitive_state* PrimitiveState;
+	PrimitiveState = new rl_primitive_state;
+	PrimitiveState->d.v.m_alpha_mode = 5;
+	PrimitiveState->d.v.m_clamp_mode = 0;
+	PrimitiveState->d.v.m_color_write_mode = 0;
+	PrimitiveState->d.v.m_const_alpha = 0xFF;
+	PrimitiveState->d.v.m_cull_mode = 0;
+	PrimitiveState->d.v.m_msaa = 0;
+	PrimitiveState->d.v.m_scissor = 0;
+	PrimitiveState->d.v.m_stencil_mode = 0;
+	PrimitiveState->d.v.m_valid = 1;
+	PrimitiveState->d.v.m_zbias_mode = 0;
+	PrimitiveState->d.v.m_zbuf_mode = 0;
+
+	rl_draw_string(GlobalRlDrawPtr, nullptr, 100.0f, 100.0f, "Test string draw!!!", true, 0, PrimitiveState);
+}*/
+
+/*This is experimental code meant to manipulate the remnants of the games
+debug console. Currently just tries to activate it. Later on I'll try to
+manually add commands to it and run them. If that works, then I'll add them
+to the lua system and port them through the overlay lua console.*/
+/*ImGui::Text("Console Mode: "); ImGui::SameLine();
+ImGui::TextColored(SecondaryTextColor, std::to_string((int)console_get_console_mode).c_str());
+if (ImGui::Button("VCM_NORMAL (0)"))
+{
+	console_set_console_mode(VCM_NORMAL);
+}
+if (ImGui::Button("VCM_CHAT (1)"))
+{
+	console_set_console_mode(VCM_CHAT);
+}
+if (ImGui::Button("VCM_TEAMCHAT (2)"))
+{
+	console_set_console_mode(VCM_TEAMCHAT);
+}
+
+if (ImGui::Button("Console init"))
+{
+	vconsole_config* ConsoleConfig;
+	ConsoleConfig = new vconsole_config; //Todo: Fix this if actually using. This is for testing purposes only and will cause a memory leak.
+	ConsoleConfig->screen_width = 1680;
+	ConsoleConfig->screen_height = 1050;
+	ConsoleConfig->save_history = true;
+	ConsoleConfig->safe_area_left = 0;
+	Console_Init(ConsoleConfig);
+}
+if (ImGui::Button("Console activate"))
+{
+	Console_Activate();
+}
+if (ImGui::Button("Console deactivate"))
+{
+	Console_Deactivate();
+}*/
+
+
+
+
+
+
+
+/*ImGui::Separator();
+
+if (ImGui::CollapsingHeader("Globals"))
+{
+
+}
+ImGui::Separator();*/
+
+//ImGui::Text("FPS: ");
+//ImGui::Separator();
+
+/*if (ImGui::CollapsingHeader("Global explosion modifiers##GlobalExplosionModifiersMain"))
+{
+	if (ImGui::Button("Reset to defaults##GlobalExplosionModifiersMain"))
+	{
+		GlobalExplosionStrengthMultiplier = 1.0f;
+		UseGlobalExplosionStrengthMultiplier = false;
+		UseExplosionRadiusLimits = true;
+		MinimumExplosionRadius = 0.0f;
+		MaximumExplosionRadius = 12.0f;
+	}
+	ImGui::PushItemWidth(232.0f);
+	ImGui::SliderFloat("Global explosion strength multiplier", &GlobalExplosionStrengthMultiplier, 0.01f, 10.0f);
+	ImGui::SameLine(); ImGui::Checkbox("Use", &UseGlobalExplosionStrengthMultiplier);
+	ImGui::Checkbox("Use explosion radius limits", &UseExplosionRadiusLimits);
+	Utilities::GUI::TooltipOnPrevious("If you turn this off be very very careful with the explosion multipliers. Too high and it's very easy to freeze/crash the game. My game froze at 4x explosions with no radius limits.");
+	ImGui::InputFloat("Minimum explosion radius", &MinimumExplosionRadius, 0.1f, 1.0f, 3);
+	ImGui::InputFloat("Maximum explosion radius", &MaximumExplosionRadius, 0.1f, 1.0f, 3);
+}
+else
+{
+	ImGui::SameLine(); ImGui::TextColored(ColorRed, " [Experimental]");
+}*/
+
+//ImGui::Separator();
+
+//DrawTeleportGui(false, "Teleport", &TeleportWindowOpen, MainOverlayWindowFlags);
+//ImGui::Separator();
+
+//DrawPlayerVariablesGui(false, "Player variables", &PlayerVariablesGuiOpen, MainOverlayWindowFlags);
+//ImGui::Separator();
+
+//ImGui::Text("Misc Program Values:");
+
+
+/*	//ImGui::SameLine();
+	if (ImGui::Button(std::string(std::string(ICON_FA_COG) + u8"##CogIcon").c_str()))
+	{
+
+	}
+	ImGui::SameLine();
+	if (ImGui::Button(std::string(std::string(ICON_FA_COGS) + u8"##CogsIcon").c_str()))
+	{
+
+	}
+	ImGui::SameLine();
+	if (ImGui::Button(std::string(std::string(ICON_FA_TASKS) + u8"##TasksIcon").c_str()))
+	{
+
+	}
+	ImGui::SameLine();
+	if (ImGui::Button(std::string(std::string(ICON_FA_TOOLS) + u8"##ToolsIcon").c_str()))
+	{
+
+	}
+	ImGui::SameLine();
+	if (ImGui::Button(std::string(std::string(ICON_FA_TOOLBOX) + u8"##ToolboxIcon").c_str()))
+	{
+
+	}
+	ImGui::SameLine();
+	if (ImGui::Button(std::string(std::string(ICON_FA_EXCLAMATION_TRIANGLE) + u8"##ExclamationTriangleIcon").c_str()))
+	{
+
+	}
+	ImGui::SameLine();
+	if (ImGui::Button(std::string(std::string(ICON_FA_VIAL) + u8"##ExclamationTriangleIcon").c_str()))//Also try the flask icon
+	{
+
+	}*/

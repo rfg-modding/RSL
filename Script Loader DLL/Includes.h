@@ -1,8 +1,6 @@
 #pragma once
 /*RFGR Script Loader DLL*/
 
-#define _CRT_SECURE_NO_WARNINGS true
-
 #include <sstream>
 #include <windows.h>
 #include <stdio.h>
@@ -15,9 +13,11 @@
 #include <vector>
 #include <map>
 #include <utility>
+#include <tuple>
 
 #include <ctype.h>
 #include <math.h>
+#include <random>
 
 #include <chrono>
 #include <iostream>
@@ -51,12 +51,14 @@
 //#include <d3d11.h>
 //#pragma comment(lib, "d3d11.lib")
 
-#include "kiero/kiero.h"
-#include "MinHook/MinHook.h"
+#include <kiero/kiero.h>
+#include <MinHook/MinHook.h>
 
 #include <imgui.h>
 #include "imgui_impl_win32.h"
 #include "imgui_impl_dx11.h"
+#include <IconsFontAwesome5.h>
+#include "imgui_stdlib.h"
 
 #include <DXGI.h>
 #include <d3d11.h>
@@ -78,7 +80,8 @@
 //#include <lua.h>
 //#include <lualib.h>
 //#include <lauxlib.h>
-#include "sol.hpp"
+#define SOL_CHECK_ARGUMENTS 1
+#include <sol.hpp>
 
 #include <windef.h>
 

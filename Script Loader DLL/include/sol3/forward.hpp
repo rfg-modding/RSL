@@ -20,8 +20,8 @@
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 // This file was generated with a script.
-// Generated 2018-12-23 18:17:39.332965 UTC
-// This header was generated with sol v2.20.6 (revision a6abc0a)
+// Generated 2019-01-28 17:33:06.880854 UTC
+// This header was generated with sol v2.20.6 (revision e1f3e5f)
 // https://github.com/ThePhD/sol2
 
 #ifndef SOL_SINGLE_INCLUDE_FORWARD_HPP
@@ -269,12 +269,12 @@ namespace sol {
 	using stack_table_core = basic_table_core<b, stack_reference>;
 	template <typename base_type>
 	using basic_table = basic_table_core<false, base_type>;
-	typedef table_core<false> table;
-	typedef table_core<true> global_table;
-	typedef main_table_core<false> main_table;
-	typedef main_table_core<true> main_global_table;
-	typedef stack_table_core<false> stack_table;
-	typedef stack_table_core<true> stack_global_table;
+	using table = table_core<false>;
+	using global_table = table_core<true>;
+	using main_table = main_table_core<false>;
+	using main_global_table = main_table_core<true>;
+	using stack_table = stack_table_core<false>;
+	using stack_global_table = stack_table_core<true>;
 
 	template <typename T, typename base_type>
 	class basic_usertype;
@@ -332,6 +332,8 @@ namespace sol {
 #endif
 
 	template <typename base_t>
+	class basic_object_base;
+	template <typename base_t>
 	class basic_object;
 	template <typename base_t>
 	class basic_userdata;
@@ -366,10 +368,15 @@ namespace sol {
 	struct this_main_state;
 	struct this_environment;
 
+	class state_view;
+	class state;
+
 	template <typename T>
 	struct as_table_t;
 	template <typename T>
 	struct as_container_t;
+	template <typename T>
+	struct force_t;
 	template <typename T>
 	struct nested;
 	template <typename T>
@@ -417,6 +424,14 @@ namespace sol {
 	namespace stack {
 		struct record;
 	}
+
+#if !defined(SOL_USE_BOOST) || (SOL_USE_BOOST == 0)
+	template <class T>
+	class optional;
+
+	template <class T>
+	class optional<T&>;
+#endif
 
 } // namespace sol
 

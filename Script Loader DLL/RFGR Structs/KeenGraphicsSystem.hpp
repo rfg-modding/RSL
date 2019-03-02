@@ -1,5 +1,5 @@
 #pragma once
-#include "KeenNamespace.h"
+//#include "KeenNamespace.h"
 #include <DXGI.h>
 #include <d3d11.h>
 #include <d3dcompiler.h>

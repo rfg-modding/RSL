@@ -1,7 +1,7 @@
 #pragma once
 
 	/* 2457 */
-	union __m128i
+	/*union __m128i
 	{
 	  char m128i_i8[16];
 	  short m128i_i16[8];
@@ -11,10 +11,10 @@
 	  unsigned short m128i_u16[8];
 	  unsigned int m128i_u32[4];
 	  unsigned long long m128i_u64[2];
-	};
+	};*/
 
 	/* 2327 */
-	union __m128 //144
+	/*union __m128 //144
 	{
 		float m128_f32[4]; //16
 		unsigned __int64 m128_u64[2]; //16
@@ -25,7 +25,7 @@
 		char m128_u8[16]; //16
 		unsigned __int16 m128_u16[8]; //16
 		unsigned int m128_u32[4]; //16
-	};
+	};*/
 
 	/* 3241 */
 	struct _XMFLOAT2
@@ -44,6 +44,7 @@
 			unsigned int m_capacity;
 		};
 
+		struct base_array_unsigned_char_Vtbl;
 		/* 6419 */
 		struct base_array_unsigned_char
 		{

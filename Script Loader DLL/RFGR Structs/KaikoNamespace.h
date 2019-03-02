@@ -1,6 +1,6 @@
 #pragma once
-#include "KeenNamespace.h"
-#include "Unit4Namespace.h"
+//#include "KeenNamespace.h"
+//#include "Unit4Namespace.h"
 
 namespace kaiko
 {
@@ -107,7 +107,8 @@ namespace kaiko
 		GameSessionInteractionParameterType_UserNameString = 0x1,
 	};
 
-	namespace GameSessionInteractionParameter
+	/* 3573 */
+	struct GameSessionInteractionParameter
 	{
 		/* 3572 */
 		union GameSessionInteractionParameterValue
@@ -115,11 +116,7 @@ namespace kaiko
 			int sint32Value;
 			char stringValue[64];
 		};
-	}
 
-	/* 3573 */
-	struct GameSessionInteractionParameter
-	{
 		kaiko::GameSessionInteractionParameterType type;
 		kaiko::GameSessionInteractionParameter::GameSessionInteractionParameterValue value;
 	};

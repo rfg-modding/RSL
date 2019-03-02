@@ -12,32 +12,116 @@ ScriptManager::~ScriptManager()
 
 void ScriptManager::Initialize()
 {
-	Lua.open_libraries(sol::lib::base, sol::lib::package, sol::lib::jit);
-	Lua["HideHUD"] = HideHUD;
-	Lua["HideFog"] = HideFog;
-
-	std::string ExePath = GetEXEPath(false);
-	fs::remove(ExePath + "RFGR Script Loader/Logs/Script Log.txt");
+	//See here: https://sol2.readthedocs.io/en/stable/api/state.html#lib-enum
+	//and here: https://www.lua.org/manual/5.1/manual.html#5 (LuaJIT is 5.1)
+	//Excluded the ffi lib for now. Current goal is to sandbox lua for user
+	//safety. Might change this later on.
+	Lua.open_libraries
+	(
+		sol::lib::base,
+		sol::lib::package,
+		sol::lib::coroutine,
+		sol::lib::string,
+		sol::lib::os,
+		sol::lib::math,
+		sol::lib::table,
+		sol::lib::debug,
+		sol::lib::bit32,
+		sol::lib::io,
+		sol::lib::ffi,
+		sol::lib::jit
+	);
+	SetupLua();
 }
+
+void ScriptManager::SetupLua()
+{
+	//RunScript(GetEXEPath(false) + "RFGR Script Loader/Core/CoreInit.lua");
+
+	//Todo: Make necessary vars read only with sol::readonly(&some_class::variable)
+	auto RslTable = Lua["rsl"].get_or_create<sol::table>();
+	
+	auto RfgTable = Lua["rfg"].get_or_create<sol::table>();
+	RfgTable["HideHud"] = HideHud;
+	RfgTable["HideFog"] = HideFog;
+
+	/*auto LogTypeTable = Lua["LogType"].get_or_create<sol::table>(); //Todo: Add to RSL table.
+	LogTypeTable["None"] = LogNone;
+	LogTypeTable["Info"] = LogInfo;
+	LogTypeTable["Warning"] = LogWarning;
+	LogTypeTable["Error"] = LogError;
+	LogTypeTable["FatalError"] = LogFatalError;
+	LogTypeTable["Lua"] = LogLua;
+	LogTypeTable["Json"] = LogJson;
+	LogTypeTable["All"] = LogAll;*/
+
+	auto LoggerTable = Lua["Logger"].get_or_create<sol::table>(); //Todo: Add to RSL table.
+	LoggerTable["OpenLogFile"] = Logger::OpenLogFile;
+	LoggerTable["CloseLogFile"] = Logger::CloseLogFile;
+	LoggerTable["CloseAllLogFiles"] = Logger::CloseAllLogFiles;
+	LoggerTable["Log"] = Logger::Log;
+	LoggerTable["LogFlagWithColor"] = Logger::LogFlagWithColor;
+	LoggerTable["GetFlagString"] = Logger::GetFlagString;
+	LoggerTable["LogToFile"] = Logger::LogToFile;
+	LoggerTable["GetTimeString"] = Logger::GetTimeString;
+
+	/*RfgTable.new_usertype<vector>
+	(
+		"vector",
+		"new", sol::constructors< sol::types<float>, sol::types<float, float, float>>(),
+		sol::meta_function::addition, &vector::operator+,
+		sol::meta_function::subtraction, &vector::operator-,
+		sol::meta_function::multiplication, &vector::operator*,
+		sol::meta_function::equal_to, &vector::operator==,
+		"Cross", &vector::Cross,
+		"Magnitude", &vector::Magnitude,
+		"x", &vector::x,
+		"y", &vector::y,
+		"z", &vector::z
+	);*/
+}
+
+/*struct A {
+	int a = 10;
+	virtual int call() { return 0; }
+};
+struct B : A {
+	int b = 11;
+	virtual int call() override { return 20; }
+};
+
+int main (int, char*[]) {
+
+	sol::state lua;
+
+	lua.new_usertype<B>( "A",
+		"call", &A::call
+	);
+
+	lua.new_usertype<B>( "B",
+		"call", &B::call,
+		sol::base_classes, sol::bases<A>()
+	);
+
+	return 0;
+}*/
 
 void ScriptManager::RunTestScript()
 {
 	std::string Script;
 	std::string ExePath = GetEXEPath(false);
 
-	std::cout << "Trying Test.lua" << std::endl;
+	std::cout << "Trying Test.lua\n";
 	try 
 	{
-		auto CodeResult = Lua.script_file(ExePath + "RFGR Script Loader/Scripts/Test.lua", [](lua_State*, sol::protected_function_result pfr) {
-			// pfr will contain things that went wrong, for either loading or executing the script
-			// Can throw your own custom error
-			// You can also just return it, and let the call-site handle the error if necessary.
+		auto CodeResult = Lua.script_file(ExePath + "RFGR Script Loader/Scripts/Test.lua", [](lua_State*, sol::protected_function_result pfr) 
+		{
 			return pfr;
 		}, sol::load_mode::text);
 
 		if (!CodeResult.valid())
 		{
-			std::cout << "Test.lua not valid. Throwing exception." << std::endl;
+			std::cout << "Test.lua not valid. Throwing exception.\n";
 			sol::error ScriptError = CodeResult;
 			std::exception ScriptException(ScriptError.what());
 			throw(ScriptException);
@@ -46,35 +130,14 @@ void ScriptManager::RunTestScript()
 	catch (std::exception& Exception)
 	{
 		std::ofstream LogFile(ExePath + "RFGR Script Loader/Logs/Script Log.txt");
-		LogFile << "Exception caught when running Test.lua: " << Exception.what() << std::endl;
-		//std::cout << "Exception caught when running Test.lua: " << Exception.what() << std::endl;
-		Logger::Log(std::string("Exception caught when running Test.lua: " +  std::string(Exception.what())), LOGERROR);
+		LogFile << "Exception caught when running Test.lua: " << Exception.what() << "\n";
+		Logger::Log(std::string("Exception caught when running Test.lua: " +  std::string(Exception.what())), LogError);
 		LogFile.close();
 	}
 	catch (...)
 	{
-		std::cout << "General exception..." << std::endl;
+		std::cout << "General exception...\n";
 	}
-	/*catch (sol::protected_function_result& pfrExcept)
-	{
-		std::cout << "pfr exception: " << pfrExcept.what() << std::endl;
-	}*/
-
-
-	//std::cout << "Script Path: " << ExePath + "RFGR Script Loader/Scripts/Test.script" << std::endl;
-
-	//std::ifstream ScriptFile(ExePath + "RFGR Script Loader/Scripts/Test.script");
-	//Script.assign((std::istreambuf_iterator<char>(ScriptFile)), (std::istreambuf_iterator<char>()));
-	//ScriptFile.close();
-	
-	//std::cout << "Test.script: " << Script << std::endl << std::endl;
-	
-	///ChaiScriptVM.eval(Script);
-	
-	//std::ifstream LuaTestScript(ExePath + "RFGR Script Loader/Scripts/Test.lua");
-	//Lua.do_file(std::string(ExePath + "RFGR Script Loader/Scripts/Test.lua"), sol::load_mode::text);
-	
-	//Lua.script_file(ExePath + "RFGR Script Loader/Scripts/Test.lua", sol::load_mode::text);
 }
 
 void ScriptManager::RunTestScript2()
@@ -84,10 +147,8 @@ void ScriptManager::RunTestScript2()
 
 	try
 	{
-		auto CodeResult = Lua.script_file(ExePath + "RFGR Script Loader/Scripts/Test2.lua", [](lua_State*, sol::protected_function_result pfr) {
-			// pfr will contain things that went wrong, for either loading or executing the script
-			// Can throw your own custom error
-			// You can also just return it, and let the call-site handle the error if necessary.
+		auto CodeResult = Lua.script_file(ExePath + "RFGR Script Loader/Scripts/Test2.lua", [](lua_State*, sol::protected_function_result pfr)
+		{
 			return pfr;
 		}, sol::load_mode::text);
 
@@ -100,8 +161,178 @@ void ScriptManager::RunTestScript2()
 	}
 	catch (std::exception& Exception)
 	{
-		std::ofstream LogFile(ExePath + "RFGR Script Loader/Logs/Script Log.txt");
-		LogFile << "Exception caught when running Test2.lua: " << Exception.what() << std::endl;
-		Logger::Log(std::string("Exception caught when running Test2.lua: ", Exception.what()), LOGERROR);
+		Logger::Log(std::string("Exception caught when running Test2.lua: " + std::string(Exception.what())), LogLua | LogError);
 	}
 }
+
+void ScriptManager::ScanScriptsFolder()
+{
+	Scripts.clear();
+	std::string ScriptFolderPath(GetEXEPath(false) + "RFGR Script Loader/Scripts/");
+
+	std::string ThisScriptPath;
+	std::string ThisScriptFolderPath;
+	std::string ThisScriptName;
+
+	for (auto& i : fs::directory_iterator(ScriptFolderPath))
+	{
+		if (IsValidScriptExtensionFromPath(i.path().string()))
+		{
+			ThisScriptPath = i.path().string();
+			ThisScriptFolderPath = GetScriptFolderFromPath(i.path().string());
+			ThisScriptName = GetScriptNameFromPath(i.path().string());
+			Scripts.push_back(Script(ThisScriptPath, ThisScriptFolderPath, ThisScriptName));
+
+			//Logger::Log(i.path().string(), LogInfo);
+			//Logger::Log("Script Name: " + ThisScriptName, LogInfo);
+			//Logger::Log("Script Folder: " + ThisScriptFolderPath, LogInfo);
+		}
+	}
+}
+
+void ScriptManager::ScanScriptsSubFolders()
+{
+
+}
+
+bool ScriptManager::RunScript(std::string FullPath)
+{
+	if (IsValidScriptExtensionFromPath(FullPath))
+	{
+		try
+		{
+			auto CodeResult = Lua.script_file(FullPath, [](lua_State*, sol::protected_function_result pfr)
+			{
+				return pfr;
+			}, sol::load_mode::text);
+
+			if (!CodeResult.valid())
+			{
+				sol::error ScriptError = CodeResult;
+				std::exception ScriptException(ScriptError.what());
+				throw(ScriptException);
+			}
+			return true;
+		}
+		catch (std::exception& Exception)
+		{
+			Logger::Log(std::string("Exception caught when running " + GetScriptNameFromPath(FullPath) + std::string(Exception.what())), LogLua | LogError);
+			return false;
+		}
+	}
+	else
+	{
+		return false;
+	}
+}
+
+bool ScriptManager::RunScript(size_t Index)
+{
+	std::string FullPath = Scripts[Index].FullPath;
+	try
+	{
+		auto CodeResult = Lua.script_file(FullPath, [](lua_State*, sol::protected_function_result pfr)
+		{
+			return pfr;
+		}, sol::load_mode::text);
+
+		if (!CodeResult.valid())
+		{
+			sol::error ScriptError = CodeResult;
+			std::exception ScriptException(ScriptError.what());
+			throw(ScriptException);
+		}
+		return true;
+	}
+	catch (std::exception& Exception)
+	{
+		Logger::Log(std::string("Exception caught when running " + Scripts[Index].Name + std::string(Exception.what())), LogLua | LogError);
+		return false;
+	}
+}
+
+bool ScriptManager::RunStringAsScript(std::string Buffer, std::string Name)
+{
+	try
+	{
+		auto CodeResult = Lua.script(Buffer, [](lua_State*, sol::protected_function_result pfr)
+		{
+			return pfr;
+		});
+
+		if (!CodeResult.valid())
+		{
+			sol::error ScriptError = CodeResult;
+			std::exception ScriptException(ScriptError.what());
+			throw(ScriptException);
+		}
+		return true;
+	}
+	catch (std::exception& Exception)
+	{
+		Logger::Log(std::string("Exception caught when running " + Name + std::string(Exception.what())), LogLua | LogError);
+		return false;
+	}
+}
+
+std::string ScriptManager::GetScriptNameFromPath(std::string FullPath)
+{
+	for (int i = FullPath.length() - 1; i > 0; i--)
+	{
+		if (i != FullPath.length())
+		{
+			if (FullPath.compare(i, 1, "\\") == 0 || FullPath.compare(i, 1, "/") == 0)
+			{
+				return FullPath.substr(i + 1, FullPath.length() - i);
+			}
+		}
+	}
+	return std::string();
+}
+
+std::string ScriptManager::GetScriptFolderFromPath(std::string FullPath)
+{
+	for (int i = FullPath.length() - 1; i > 0; i--)
+	{
+		if (i != FullPath.length())
+		{
+			if (FullPath.compare(i, 1, "\\") == 0 || FullPath.compare(i, 1, "/") == 0)
+			{
+				return FullPath.substr(0, i + 1);
+			}
+		}
+	}
+	return std::string();
+}
+
+std::string ScriptManager::GetScriptExtensionFromPath(std::string FullPath)
+{
+	for (int i = FullPath.length() - 1; i > 0; i--)
+	{
+		if (FullPath.compare(i, 1, ".") == 0)
+		{
+			return FullPath.substr(i + 1, FullPath.length() - i);
+		}
+	}
+	return std::string();
+}
+
+bool ScriptManager::IsValidScriptExtensionFromPath(std::string FullPath)
+{
+	if (IsValidScriptExtension(GetScriptExtensionFromPath(FullPath)))
+	{
+		return true;
+	}
+	return false;
+}
+
+bool ScriptManager::IsValidScriptExtension(std::string Extension)
+{
+	std::transform(Extension.begin(), Extension.end(), Extension.begin(), ::tolower);
+	if (Extension == "lua")
+	{
+		return true;
+	}
+	return false;
+}
+

@@ -24,13 +24,13 @@ public:
 	bool ShouldClose();
 	void ProcessInput();
 	void Update();
-	MSG msg;
-
+	///MSG msg;
+	
 	void CloseConsole();
 	void Exit();
 
 	HMODULE ScriptLoaderModule;
-	HWND GameWindowHandle;
+	HWND GameWindowHandle = nullptr;
 
 	CameraWrapper Camera;
 	FunctionManager Functions;

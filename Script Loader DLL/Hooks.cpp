@@ -2,7 +2,8 @@
 
 D3D11Present D3D11PresentObject;
 
-MainOverlay Overlay;
+//MainOverlay Overlay;
+GuiSystem Gui;
 
 std::once_flag HookD3D11PresentInitialCall;
 std::once_flag HookExplosionCreateInitialCall;
@@ -23,11 +24,28 @@ vector NewObjectPosition;
 
 bool UpdateD3D11Pointers = true;
 
+std::once_flag HookRlDrawTristip2dInitialCall;
+std::once_flag HookWorldDoFrameInitialCall;
+
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 LRESULT __stdcall WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-	if (OverlayActive)
+	if (OverlayActive || Gui.IsLuaConsoleActive())
 	{
+		//This check doesn't work currently :/
+		//Am just deleting the whole Console InputBuffer each time the console
+		//is toggled for now.
+		/*if (BlockNextTildeInput)
+		{
+			if(msg == WM_KEYDOWN)//if (msg == WM_CHAR)
+			{
+				if (wParam == VK_OEM_3)
+				{
+					return true; //Block tilde input if console is being opened or closed.
+								 //This way, input is conserved and
+				}
+			}
+		}*/
 		if (ImGui_ImplWin32_WndProcHandler(hWnd, msg, wParam, lParam))
 			return true;
 		return true;
@@ -35,39 +53,39 @@ LRESULT __stdcall WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 
 	//LRESULT ImGuiWndProcResult = ImGui_ImplWin32_WndProcHandler(hWnd, msg, wParam, lParam);
-	//std::cout << "ImGuiWndProcResult: " << ImGuiWndProcResult << std::endl << std::endl;
+	//std::cout << "ImGuiWndProcResult: " << ImGuiWndProcResult << "\n\n";
 
-	/*Logger::ConsoleLog("WndProc: Window resized", LOGWARNING, false, true, true);
-	std::cout << "WndProc D3D11Device: " << std::hex << std::uppercase << D3D11Device << std::endl;
-	std::cout << "WndProc D3D11Context: " << std::hex << std::uppercase << D3D11Context << std::endl;
+	/*Logger::ConsoleLog("WndProc: Window resized", LogWarning, false, true, true);
+	std::cout << "WndProc D3D11Device: " << std::hex << std::uppercase << D3D11Device << "\n";
+	std::cout << "WndProc D3D11Context: " << std::hex << std::uppercase << D3D11Context << "\n";
 	UpdateD3D11Pointers = true;
 	if (D3D11SwapchainPtr != nullptr)
 	{
-		Logger::ConsoleLog("WndProc: D3D11SwapchainPtr is not a nullptr", LOGSUCCESS, false, true, true);
+		Logger::ConsoleLog("WndProc: D3D11SwapchainPtr is not a nullptr", LogInfo, false, true, true);
 	}
 	if (D3D11Device != nullptr)
 	{
-		Logger::ConsoleLog("WndProc: D3D11Device is not a nullptr", LOGSUCCESS, false, true, true);
+		Logger::ConsoleLog("WndProc: D3D11Device is not a nullptr", LogInfo, false, true, true);
 	}
 	if (D3D11Context != nullptr)
 	{
-		Logger::ConsoleLog("WndProc: D3D11Context is not a nullptr", LOGSUCCESS, false, true, true);
+		Logger::ConsoleLog("WndProc: D3D11Context is not a nullptr", LogInfo, false, true, true);
 	}
 	if (D3D11Device == nullptr && wParam != SIZE_MINIMIZED)//g_pd3dDevice != NULL && wParam != SIZE_MINIMIZED)
 	{
-		Logger::ConsoleLog("Window resize test 1 passed, setting UpdateD3D11Pointers to true", LOGWARNING, false, true, true);
+		Logger::ConsoleLog("Window resize test 1 passed, setting UpdateD3D11Pointers to true", LogWarning, false, true, true);
 		//UpdateD3D11Pointers = true;
 		//CleanupRenderTarget();
 		//g_pSwapChain->ResizeBuffers(0, (UINT)LOWORD(lParam), (UINT)HIWORD(lParam), DXGI_FORMAT_UNKNOWN, 0);
 		//CreateRenderTarget();
 	}*/
 
-	//Logger::ConsoleLog("You better see this #1", LOGSUCCESS, false, true, true);
+	//Logger::ConsoleLog("You better see this #1", LogInfo, false, true, true);
 	
 	switch (msg)
 	{
 	case WM_SIZE:
-		Logger::Log("WM_SIZE Recieved in custom WndProc. Invalidating ImGui DX11 device object. Releasing MainRenderTargetView.", LOGWARNING);
+		Logger::Log("WM_SIZE Recieved in custom WndProc. Invalidating ImGui DX11 device object. Releasing MainRenderTargetView.", LogWarning);
 		ImGui_ImplDX11_InvalidateDeviceObjects();
 		UpdateD3D11Pointers = true;
 		D3D11Context->OMSetRenderTargets(0, 0, 0);
@@ -88,20 +106,20 @@ LRESULT __stdcall WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			//HRESULT Result = D3D11SwapchainPtr->ResizeBuffers(0, 0, 0, DXGI_FORMAT_UNKNOWN, 0);
 			if (Result != S_OK)
 			{
-				Logger::ConsoleLog(std::string("ResizeBuffers() failed, return value: " + std::to_string(Result)).c_str(), LOGFATALERROR, false, true, true);
+				Logger::ConsoleLog(std::string("ResizeBuffers() failed, return value: " + std::to_string(Result)).c_str(), LogFatalError, false, true, true);
 			}
 
 			ID3D11Texture2D* BackBuffer;
 			Result = D3D11SwapchainPtr->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)&BackBuffer);
 			if (Result != S_OK)
 			{
-				Logger::ConsoleLog(std::string("GetBuffer() failed, return value: " + std::to_string(Result)).c_str(), LOGFATALERROR, false, true, true);
+				Logger::ConsoleLog(std::string("GetBuffer() failed, return value: " + std::to_string(Result)).c_str(), LogFatalError, false, true, true);
 			}
 
 			Result = D3D11Device->CreateRenderTargetView(BackBuffer, NULL, &MainRenderTargetView);
 			if (Result != S_OK)
 			{
-				Logger::ConsoleLog(std::string("CreateRenderTargetView() failed, return value: " + std::to_string(Result)).c_str(), LOGFATALERROR, false, true, true);
+				Logger::ConsoleLog(std::string("CreateRenderTargetView() failed, return value: " + std::to_string(Result)).c_str(), LogFatalError, false, true, true);
 			}
 
 			BackBuffer->Release();
@@ -139,7 +157,7 @@ HRESULT D3D11_DEVICE_CONTEXT_FROM_SWAPCHAIN(IDXGISwapChain * pSwapChain, ID3D11D
 
 	if(Result != S_OK)
 	{
-		Logger::Log(std::string("ID3D11SwapChain::GetDevice() failed, return value: " + std::to_string(Result)), LOGFATALERROR);
+		Logger::Log(std::string("ID3D11SwapChain::GetDevice() failed, return value: " + std::to_string(Result)), LogFatalError);
 		return E_FAIL;
 	}
 	(*ppDevice)->GetImmediateContext(ppContext);
@@ -152,14 +170,14 @@ HRESULT __stdcall D3D11PresentHook(IDXGISwapChain * pSwapChain, UINT SyncInterva
 	std::call_once(HookD3D11PresentInitialCall, [&]()
 	{
 #if !PublicMode
-		Logger::ConsoleLog("First time in D3D11Present() hook.", LOGSUCCESS, false, true, true);
+		Logger::ConsoleLog("First time in D3D11Present() hook.", LogInfo, false, true, true);
 #endif
 		HRESULT Result;
 
 		Result = D3D11_DEVICE_CONTEXT_FROM_SWAPCHAIN(pSwapChain, &D3D11Device, &D3D11Context);
 		if (Result != S_OK)
 		{
-			Logger::Log(std::string("D3D11DeviceContextFromSwapchain() failed, return value: " + std::to_string(Result)), LOGFATALERROR);
+			Logger::Log(std::string("D3D11DeviceContextFromSwapchain() failed, return value: " + std::to_string(Result)), LogFatalError);
 			return E_FAIL;
 		}
 		D3D11SwapchainPtr = pSwapChain;
@@ -168,68 +186,114 @@ HRESULT __stdcall D3D11PresentHook(IDXGISwapChain * pSwapChain, UINT SyncInterva
 		Result = pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&BackBuffer);
 		if (Result != S_OK)
 		{
-			Logger::Log(std::string("GetBuffer() failed, return value: " + std::to_string(Result)).c_str(), LOGFATALERROR);
+			Logger::Log(std::string("GetBuffer() failed, return value: " + std::to_string(Result)).c_str(), LogFatalError);
 			return E_FAIL;
 		}
 
-		Result = D3D11Device->CreateRenderTargetView(BackBuffer, NULL, &MainRenderTargetView);
+		D3D11_RENDER_TARGET_VIEW_DESC desc = {};
+		memset(&desc, 0, sizeof(desc));
+		desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM; // most important change!
+		desc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
+		Result = D3D11Device->CreateRenderTargetView(BackBuffer, &desc, &MainRenderTargetView);
 		if (Result != S_OK)
 		{
-			Logger::Log(std::string("CreateRenderTargetView() failed, return value: " + std::to_string(Result)), LOGFATALERROR);
+			Logger::Log(std::string("CreateRenderTargetView() failed, return value: " + std::to_string(Result)), LogFatalError);
 			return E_FAIL;
 		}
-
 		BackBuffer->Release();
 
 		/*DXGI_SWAP_CHAIN_DESC SwapChainDescription;
 		pSwapChain->GetDesc(&SwapChainDescription);
-		Logger::ConsoleLog(std::string("Initial buffer count: " + std::to_string(SwapChainDescription.BufferCount)).c_str(), LOGWARNING, false, true, true);
-		Logger::ConsoleLog(std::string("Initial flags: " + std::to_string(SwapChainDescription.Flags)).c_str(), LOGWARNING, false, true, true);
-		Logger::ConsoleLog(std::string("Initial format: " + std::to_string(SwapChainDescription.BufferDesc.Format)).c_str(), LOGWARNING, false, true, true);*/
-		
-		Logger::Log("Initializing ImGui.", LOGMESSAGE);
+		Logger::ConsoleLog(std::string("Initial buffer count: " + std::to_string(SwapChainDescription.BufferCount)).c_str(), LogWarning, false, true, true);
+		Logger::ConsoleLog(std::string("Initial flags: " + std::to_string(SwapChainDescription.Flags)).c_str(), LogWarning, false, true, true);
+		Logger::ConsoleLog(std::string("Initial format: " + std::to_string(SwapChainDescription.BufferDesc.Format)).c_str(), LogWarning, false, true, true);*/
+
+		Logger::Log("Initializing ImGui.", LogInfo);
 
 		IMGUI_CHECKVERSION();
 		ImGui::CreateContext();
-		io = ImGui::GetIO(); (void)io;
+		io = ImGui::GetIO();
 		io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
 		ImGui::StyleColorsDark();
 
 		ImGui_ImplDX11_Init(D3D11Device, D3D11Context);
 		hwnd = find_main_window(GetProcessID("rfg.exe"));
-		ImGui_ImplWin32_Init(hwnd);
-
-		std::string DroidSansPath = std::string(GetEXEPath(false) + "RFGR Script Loader/Fonts/DroidSans.ttf");
-		if (fs::exists(DroidSansPath))
+		bool RectResult = GetWindowRect(hwnd, &WindowRect);
+		if (!RectResult)
 		{
-			ImGui::GetIO().Fonts->AddFontFromFileTTF(DroidSansPath.c_str(), 17.0f);
+			std::cout << "GetWindowRect Failed! Result: " << GetLastError() << "\n";
+			//Sleep(10000);
 		}
 		else
 		{
-			Logger::Log("DroidSans.ttf not found. Using default font.", LOGERROR);
+			Logger::Log("GetWindowRect() Succeeded", LogWarning);
+		}
+		ImGui_ImplWin32_Init(hwnd);
+
+		ImGuiIO& io = ImGui::GetIO();
+		float GlobalFontSize = 17.0f;
+		std::string DroidSansPath = std::string(GetEXEPath(false) + "RFGR Script Loader/Fonts/DroidSans.ttf");
+		bool DroidSansLoaded = false;
+		if (fs::exists(DroidSansPath))
+		{	
+			io.Fonts->AddFontFromFileTTF(DroidSansPath.c_str(), GlobalFontSize);
+			DroidSansLoaded = true;
+		}
+		else
+		{
+			Logger::Log("DroidSans.ttf not found. Using default font.", LogInfo);
+			io.Fonts->AddFontDefault();
 		}
 
-		/*if (OverlayActive)
-		{
-			OriginalWndProc = (WNDPROC)SetWindowLongPtr(hwnd, GWLP_WNDPROC, (__int3264)(LONG_PTR)WndProc);
-		}*/
+		Logger::Log("Merging FontAwesome...", LogWarning);
+		static const ImWchar IconsRanges[] = { ICON_MIN_FA, ICON_MAX_FA, 0 };
+		ImFontConfig IconsConfig;
+		IconsConfig.MergeMode = true;
+		IconsConfig.PixelSnapH = true;
+		std::string FontAwesomeSolidPath(GetEXEPath(false) + "RFGR Script Loader/Fonts/fa-solid-900.ttf");
+		Logger::Log(FontAwesomeSolidPath, LogWarning);
+		FontNormal = io.Fonts->AddFontFromFileTTF(FontAwesomeSolidPath.c_str(), GlobalFontSize, &IconsConfig, IconsRanges);
+		Logger::Log("Done merging FontAwesome...", LogWarning);
+		
 
-		Overlay.Initialize();
+		/*Start of FontLarge loading*/
+		float GlobalLargeFontSize = 35.0f;
+		if (DroidSansLoaded)
+		{
+			io.Fonts->AddFontFromFileTTF(DroidSansPath.c_str(), GlobalLargeFontSize);
+		}
+		FontLarge = io.Fonts->AddFontFromFileTTF(FontAwesomeSolidPath.c_str(), GlobalLargeFontSize, &IconsConfig, IconsRanges);
+		/*End of FontLarge loading*/
+
+		/*Start of FontHuge loading*/
+		float GlobalHugeFontSize = 70.0f;
+		if (DroidSansLoaded)
+		{
+			io.Fonts->AddFontFromFileTTF(DroidSansPath.c_str(), GlobalHugeFontSize);
+		}
+		FontHuge = io.Fonts->AddFontFromFileTTF(FontAwesomeSolidPath.c_str(), GlobalHugeFontSize, &IconsConfig, IconsRanges);
+		/*End of FontHuge loading*/
+
+
+		//Overlay.Initialize();
+		Gui.Initialize();
 		ImGuiInitialized = true;
 		UpdateD3D11Pointers = false;
-		Logger::Log("ImGui Initialized.", LOGSUCCESS);
+
+		Logger::Log("ImGui Initialized.", LogInfo);
+		return S_OK;
 	});
 
 	if (UpdateD3D11Pointers)
 	{
-		Logger::Log("UpdateD3D11Pointers = true. Reforming MainRenderTargetView and ImGui DX11 Devices.", LOGWARNING);
+		Logger::Log("UpdateD3D11Pointers = true. Reforming MainRenderTargetView and ImGui DX11 Devices.", LogWarning);
 
 		HRESULT Result;
 
 		Result = D3D11_DEVICE_CONTEXT_FROM_SWAPCHAIN(pSwapChain, &D3D11Device, &D3D11Context);
 		if (Result != S_OK)
 		{
-			Logger::Log(std::string("D3D11DeviceContextFromSwapchain() failed, return value: " + std::to_string(Result)), LOGFATALERROR);
+			Logger::Log(std::string("D3D11DeviceContextFromSwapchain() failed, return value: " + std::to_string(Result)), LogFatalError);
 			return E_FAIL;
 		}
 		D3D11SwapchainPtr = pSwapChain;
@@ -238,14 +302,14 @@ HRESULT __stdcall D3D11PresentHook(IDXGISwapChain * pSwapChain, UINT SyncInterva
 		Result = pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&BackBuffer);
 		if (Result != S_OK)
 		{
-			Logger::Log(std::string("GetBuffer() failed, return value: " + std::to_string(Result)), LOGFATALERROR);
+			Logger::Log(std::string("GetBuffer() failed, return value: " + std::to_string(Result)), LogFatalError);
 			return E_FAIL;
 		}
 
 		Result = D3D11Device->CreateRenderTargetView(BackBuffer, NULL, &MainRenderTargetView);
 		if (Result != S_OK)
 		{
-			Logger::Log(std::string("CreateRenderTargetView() failed, return value: " + std::to_string(Result)), LOGFATALERROR);
+			Logger::Log(std::string("CreateRenderTargetView() failed, return value: " + std::to_string(Result)), LogFatalError);
 			return E_FAIL;
 		}
 
@@ -253,38 +317,45 @@ HRESULT __stdcall D3D11PresentHook(IDXGISwapChain * pSwapChain, UINT SyncInterva
 
 		//ImGui_ImplDX11_Init(D3D11Device, D3D11Context);
 		ImGui_ImplDX11_CreateDeviceObjects();
-		Logger::Log("Finish reforming after resize.", LOGSUCCESS);
+		Logger::Log("Finished reforming after resize.", LogInfo);
 		UpdateD3D11Pointers = false;
 	}
 	if (!ImGuiInitialized)
 	{
 		return D3D11PresentObject(pSwapChain, SyncInterval, Flags);
 	}
-	if (!OverlayActive)
+	/*if (!OverlayActive)
 	{
 		return D3D11PresentObject(pSwapChain, SyncInterval, Flags);
+	}*/
+
+	if (!ScriptLoaderCloseRequested)
+	{
+		ImGui_ImplDX11_NewFrame();
+		ImGui_ImplWin32_NewFrame();
+		ImGui::NewFrame();
+#if !PublicMode
+		if (OverlayActive)
+		{
+			if (show_demo_window)
+			{
+				ImGui::ShowDemoWindow(&show_demo_window);
+			}
+		}
+#endif
+		Gui.Draw();
+		D3D11Context->OMSetRenderTargets(1, &MainRenderTargetView, NULL);
+		ImGui::Render();
+		ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 	}
-
-	ImGui_ImplDX11_NewFrame();
-	ImGui_ImplWin32_NewFrame();
-	ImGui::NewFrame();
-
-	/*if (show_demo_window)
-		ImGui::ShowDemoWindow(&show_demo_window);*/
-
-	Overlay.Draw("Main Overlay", &ShowMainOverlay);
-
-	D3D11Context->OMSetRenderTargets(1, &MainRenderTargetView, NULL);
-	ImGui::Render();
-	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 
 	return D3D11PresentObject(pSwapChain, SyncInterval, Flags);
 }
 
 bool __cdecl KeenGraphicsResizeRenderSwapchainHook(void* KeenSwapchain, unsigned int NewWidth, unsigned int NewHeight)
 {
-	Logger::Log("In KeenGraphicsResizeSwapchainHook()", LOGFATALERROR);
-	std::cout << "NewWidth: " << NewWidth << ", NewHeight: " << NewHeight << std::endl;
+	Logger::Log("In KeenGraphicsResizeSwapchainHook()", LogFatalError);
+	std::cout << "NewWidth: " << NewWidth << ", NewHeight: " << NewHeight << "\n";
 	UpdateD3D11Pointers = true;
 
 	return KeenGraphicsResizeRenderSwapchain(KeenSwapchain, NewWidth, NewHeight);
@@ -293,7 +364,8 @@ bool __cdecl KeenGraphicsResizeRenderSwapchainHook(void* KeenSwapchain, unsigned
 void __fastcall PlayerConstructorHook(Player* PlayerPtr)
 {
 	GlobalPlayerPtr = (DWORD*)PlayerPtr;
-	Overlay.PlayerPtr = PlayerPtr;
+	//Overlay.PlayerPtr = PlayerPtr;
+	Gui.SetPlayerPtr(PlayerPtr);
 	if (!GlobalPlayerPtrInitialized)
 	{
 		GlobalPlayerPtrInitialized = true;
@@ -311,24 +383,26 @@ void __fastcall PlayerDoFrameHook(Player* PlayerPtr)
 			GlobalPlayerPtr = (DWORD*)PlayerPtr;
 			GlobalPlayerPtrInitialized = true;
 
-			Overlay.PlayerPtr = PlayerPtr;
+			//Overlay.PlayerPtr = PlayerPtr;
+			Gui.SetPlayerPtr(PlayerPtr);
 
 #if !PublicMode
-			std::cout << "PlayerPtr: " << std::hex << std::uppercase << PlayerPtr << std::endl;
-			std::cout << "PlayerPtr->Position.x: " << std::hex << std::uppercase << &PlayerPtr->Position.x << std::endl;
-			std::cout << "PlayerPtr->FrametimeMultiplier: " << std::hex << std::uppercase << &PlayerPtr->FrametimeMultiplier << std::endl;
+			std::cout << "PlayerPtr: " << std::hex << std::uppercase << PlayerPtr << "\n";
+			std::cout << "PlayerPtr->Position.x: " << std::hex << std::uppercase << &PlayerPtr->Position.x << "\n";
+			std::cout << "PlayerPtr->FrametimeMultiplier: " << std::hex << std::uppercase << &PlayerPtr->FrametimeMultiplier << "\n";
 #endif
 		}
 	});
 	if (GlobalPlayerPtr != (DWORD*)PlayerPtr)
 	{
 		GlobalPlayerPtr = (DWORD*)PlayerPtr;
-		Overlay.PlayerPtr = PlayerPtr;
+		//Overlay.PlayerPtr = PlayerPtr;
+		Gui.SetPlayerPtr(PlayerPtr);
 
 #if !PublicMode
-		std::cout << "PlayerPtr: " << std::hex << std::uppercase << PlayerPtr << std::endl;
-		std::cout << "PlayerPtr->Position.x: " << std::hex << std::uppercase << &PlayerPtr->Position.x << std::endl;
-		std::cout << "PlayerPtr->FrametimeMultiplier: " << std::hex << std::uppercase << &PlayerPtr->FrametimeMultiplier << std::endl;
+		std::cout << "PlayerPtr: " << std::hex << std::uppercase << PlayerPtr << "\n";
+		std::cout << "PlayerPtr->Position.x: " << std::hex << std::uppercase << &PlayerPtr->Position.x << "\n";
+		std::cout << "PlayerPtr->FrametimeMultiplier: " << std::hex << std::uppercase << &PlayerPtr->FrametimeMultiplier << "\n";
 #endif
 	}
 
@@ -338,7 +412,7 @@ void __fastcall PlayerDoFrameHook(Player* PlayerPtr)
 	{
 		PlayerPtr->JetpackFuelPercent = 1.0f;
 	}
-	if (Overlay.Invulnerable)
+	if (Gui.TweaksMenu.Invulnerable)
 	{
 		PlayerPtr->Flags.invulnerable = true;
 		//PlayerPtr->Flags.super_jump = true;
@@ -347,6 +421,18 @@ void __fastcall PlayerDoFrameHook(Player* PlayerPtr)
 		//PlayerPtr->MaxHitPoints = 2147483647;
 		//PlayerPtr->HitPoints = 2147483647.0f;
 		//PlayerPtr->InitialMaxHitPoints = 2147483647;
+	}
+	if (Gui.TweaksMenu.NeedCustomJumpHeightSet)
+	{
+		PlayerPtr->CodeDrivenJumpHeight = Gui.TweaksMenu.CustomJumpHeight;
+	}
+	if (Gui.TweaksMenu.NeedCustomMoveSpeedSet)
+	{
+		PlayerPtr->MoveSpeed = Gui.TweaksMenu.CustomPlayerMoveSpeed;
+	}
+	if (Gui.TweaksMenu.NeedCustomMaxMoveSpeedSet)
+	{
+		PlayerPtr->MaxSpeed = Gui.TweaksMenu.CustomPlayerMaxSpeed;
 	}
 
 	return PlayerDoFrame(&NewPlayerObject);
@@ -357,7 +443,7 @@ void __cdecl ExplosionCreateHook(explosion_info * ExplosionInfo, void * Source, 
 	std::call_once(HookExplosionCreateInitialCall, [&]()
 	{
 #if !PublicMode
-		Logger::ConsoleLog("First time in ExplosionCreate() hook.\n", LOGSUCCESS, false, true);
+		Logger::ConsoleLog("First time in ExplosionCreate() hook.\n", LogInfo, false, true);
 #endif
 	});
 
@@ -367,18 +453,13 @@ void __cdecl ExplosionCreateHook(explosion_info * ExplosionInfo, void * Source, 
 		MinimumExplosionRadius = 0.000000f;
 	}
 
-	std::cout << "Address of ExplosionInfo: " << ExplosionInfo << ", Hex: " << std::hex << std::uppercase << ExplosionInfo << std::endl;
-	Logger::Log(std::string("ExplosionInfo->m_name: " + std::string(NewExplosionInfo.m_name)), LOGMESSAGE);
-	Logger::Log(std::string("ExplosionInfo->m_unique_id: " + std::to_string(NewExplosionInfo.m_unique_id)), LOGMESSAGE);
-	Logger::Log(std::string("Before, Explosion radius: " + std::to_string(NewExplosionInfo.m_radius)), LOGMESSAGE);
-
 	if (UseGlobalExplosionStrengthMultiplier)
 	{
-		/*std::cout << "Address of ExplosionInfo: " << ExplosionInfo << ", Hex: " << std::hex << std::uppercase << ExplosionInfo << std::endl;
-		Logger::Log(std::string("ExplosionInfo->m_name: " + std::string(NewExplosionInfo.m_name)), LOGMESSAGE);
-		Logger::Log(std::string("ExplosionInfo->m_unique_id: " + std::to_string(NewExplosionInfo.m_unique_id)), LOGMESSAGE);
-		Logger::Log(std::string("Before, Explosion radius: " + std::to_string(NewExplosionInfo.m_radius)), LOGMESSAGE);*/
-		Logger::Log(std::string("Increasing explosion values by a factor of " + std::to_string(GlobalExplosionStrengthMultiplier)), LOGMESSAGE);
+		std::cout << "Address of ExplosionInfo: " << ExplosionInfo << ", Hex: " << std::hex << std::uppercase << ExplosionInfo << "\n";
+		Logger::Log(std::string("ExplosionInfo->m_name: " + std::string(NewExplosionInfo.m_name)), LogInfo);
+		Logger::Log(std::string("ExplosionInfo->m_unique_id: " + std::to_string(NewExplosionInfo.m_unique_id)), LogInfo);
+		Logger::Log(std::string("Before, Explosion radius: " + std::to_string(NewExplosionInfo.m_radius)), LogInfo);
+		Logger::Log(std::string("Increasing explosion values by a factor of " + std::to_string(GlobalExplosionStrengthMultiplier)), LogInfo);
 
 		NewExplosionInfo.m_radius *= GlobalExplosionStrengthMultiplier;
 		NewExplosionInfo.m_impulse_magnitude *= GlobalExplosionStrengthMultiplier;
@@ -386,12 +467,12 @@ void __cdecl ExplosionCreateHook(explosion_info * ExplosionInfo, void * Source, 
 		NewExplosionInfo.m_secondary_radius *= GlobalExplosionStrengthMultiplier;
 		NewExplosionInfo.m_structural_damage = (int)(GlobalExplosionStrengthMultiplier * (float)(NewExplosionInfo.m_structural_damage)); //Did this instead of *= to avoid a compiler error. Probably unecessary.
 
-		Logger::Log(std::string("After, Explosion radius: " + std::to_string(NewExplosionInfo.m_radius)), LOGMESSAGE);
-		std::cout << std::endl;
+		Logger::Log(std::string("After, Explosion radius: " + std::to_string(NewExplosionInfo.m_radius)), LogInfo);
+		std::cout << "\n";
 
 		*ExplosionInfo = NewExplosionInfo;
 	}
-	std::cout << std::endl;
+	std::cout << "\n";
 
 	if (UseExplosionRadiusLimits)
 	{
@@ -408,17 +489,17 @@ void __fastcall ObjectUpdatePosAndOrientHook(Object* ObjectPtr, void* edx, vecto
 	std::call_once(HookObjectUpdatePosAndOrientInitialCall, [&]()
 	{
 #if !PublicMode
-		Logger::ConsoleLog("First time in ObjectUpdatePosAndOrient() hook.\n", LOGSUCCESS, false, true);
+		Logger::ConsoleLog("First time in ObjectUpdatePosAndOrient() hook.\n", LogInfo, false, true);
 #endif
 	});
-	//Logger::ConsoleLog("1\n", LOGSUCCESS, false, true);
+	//Logger::ConsoleLog("1\n", LogInfo, false, true);
 	/*if (Overlay.NeedPlayerPosSet)
 	{
 		if (GlobalPlayerPtrInitialized)
 		{
 			if (GlobalPlayerPtr == (DWORD*)ObjectPtr)
 			{
-				//Logger::ConsoleLog("Manually setting Player.Object.Position in ObjectUpdatePosAndOrient() hook.\n", LOGWARNING, false, true);
+				//Logger::ConsoleLog("Manually setting Player.Object.Position in ObjectUpdatePosAndOrient() hook.\n", LogWarning, false, true);
 				NewObjectPosition = *UpdatedPosition;
 				
 				NewObjectPosition.x = Overlay.PlayerPositionTargetArray[0];
@@ -429,73 +510,76 @@ void __fastcall ObjectUpdatePosAndOrientHook(Object* ObjectPtr, void* edx, vecto
 				//UpdatedPosition->y = Overlay.PlayerPositionTargetArray[1];
 				//UpdatedPosition->z = Overlay.PlayerPositionTargetArray[2];
 
-				//Logger::ConsoleLog("Done manually setting Player.Object.Position in ObjectUpdatePosAndOrient() hook.\n", LOGSUCCESS, false, true);
+				//Logger::ConsoleLog("Done manually setting Player.Object.Position in ObjectUpdatePosAndOrient() hook.\n", LogInfo, false, true);
 				Overlay.NeedPlayerPosSet = false;
 				return ObjectUpdatePosAndOrient(ObjectPtr, edx, &NewObjectPosition, UpdatedOrientation, SetHavokData);
-				//Logger::ConsoleLog("You shouldn't see this. In ObjectUpdatePosAndOrient() hook\n", LOGSUCCESS, false, true);
+				//Logger::ConsoleLog("You shouldn't see this. In ObjectUpdatePosAndOrient() hook\n", LogInfo, false, true);
 			}
 		}
 	}*/
-	//Logger::ConsoleLog("2\n", LOGSUCCESS, false, true);
+	//Logger::ConsoleLog("2\n", LogInfo, false, true);
 	if (GlobalPlayerPtrInitialized)
 	{
 		if (GlobalPlayerPtr == (DWORD*)ObjectPtr)
 		{
-			///std::cout << "PlayerSetHavokData: " << SetHavokData << std::endl;
+			///std::cout << "PlayerSetHavokData: " << SetHavokData << "\n";
 		}
 	}
 	///SetHavokData = true;
-	//Logger::ConsoleLog("3\n", LOGSUCCESS, false, true);
+	//Logger::ConsoleLog("3\n", LogInfo, false, true);
 	return ObjectUpdatePosAndOrient(ObjectPtr, edx, UpdatedPosition, UpdatedOrientation, SetHavokData);
 }
 
+/*Note: Attempts to manually set the player pos here failed. Required it to be 
+repeatedly set else you'd return to where the game last had you. 
+Might've been fighting with havok.*/
 void __fastcall HumanUpdatePosAndOrientHook(Human* HumanPtr, void* edx, vector* UpdatedPosition, matrix* UpdatedOrientation, bool SetHavokData)
 {
 	std::call_once(HookHumanUpdatePosAndOrientInitialCall, [&]()
 	{
 #if !PublicMode
-		Logger::ConsoleLog("First time in HumanUpdatePosAndOrient() hook.\n", LOGSUCCESS, false, true);
+		Logger::ConsoleLog("First time in HumanUpdatePosAndOrient() hook.\n", LogInfo, false, true);
 #endif
 	});
-	if (Overlay.NeedPlayerPosSet)
+	/*if (Gui.MainWindow.NeedPlayerPosSet)
 	{
 		if (GlobalPlayerPtrInitialized)
 		{
 			if (GlobalPlayerPtr == (DWORD*)HumanPtr)
 			{
-				//std::cout << "Player HumanPtr found!" << std::endl;
-				//std::cout << "Proof, HumanPtr->Position.y: " << HumanPtr->Position.y << std::endl;
-				Logger::Log("Manually setting Player.Object.Position in HumanUpdatePosAndOrient() hook.\n", LOGWARNING);
+				//std::cout << "Player HumanPtr found!" << "\n";
+				//std::cout << "Proof, HumanPtr->Position.y: " << HumanPtr->Position.y << "\n";
+				Logger::Log("Manually setting Player.Object.Position in HumanUpdatePosAndOrient() hook.\n", LogWarning);
 				NewObjectPosition = *UpdatedPosition;
 
-				NewObjectPosition.x = Overlay.PlayerPositionTargetArray[0];
-				NewObjectPosition.y = Overlay.PlayerPositionTargetArray[1];
-				NewObjectPosition.z = Overlay.PlayerPositionTargetArray[2];
+				NewObjectPosition.x = Gui.MainWindow.PlayerPositionTargetArray[0];
+				NewObjectPosition.y = Gui.MainWindow.PlayerPositionTargetArray[1];
+				NewObjectPosition.z = Gui.MainWindow.PlayerPositionTargetArray[2];
 
-				Overlay.NeedPlayerPosSet = false;
+				Gui.MainWindow.NeedPlayerPosSet = false;
 
 				return HumanUpdatePosAndOrient(HumanPtr, edx, &NewObjectPosition, UpdatedOrientation, SetHavokData);
 			}
 		}
 	}
-	if (Overlay.NeedPlayerVelocitySet)
+	if (Gui.MainWindow.NeedPlayerVelocitySet)
 	{
 		if (GlobalPlayerPtrInitialized)
 		{
 			if (GlobalPlayerPtr == (DWORD*)HumanPtr)
 			{
-					HumanPtr->Velocity.x = Overlay.PlayerVelocityTargetArray[0];
-					HumanPtr->Velocity.y = Overlay.PlayerVelocityTargetArray[1];
-					HumanPtr->Velocity.z = Overlay.PlayerVelocityTargetArray[2];
+					HumanPtr->Velocity.x = Gui.MainWindow.PlayerVelocityTargetArray[0];
+					HumanPtr->Velocity.y = Gui.MainWindow.PlayerVelocityTargetArray[1];
+					HumanPtr->Velocity.z = Gui.MainWindow.PlayerVelocityTargetArray[2];
 			}
 		}
-	}
+	}*/
 
 	//HumanPtr->Flags.start_jump = 2147483647;
 	//HumanPtr->Flags.super_jump = 2147483647;
 
-	//std::cout << "HumanPtr->Flags.start_jump: " << HumanPtr->Flags.start_jump << std::endl;
-	//std::cout << "HumanPtr->Flags.super_jump: " << HumanPtr->Flags.super_jump << std::endl;
+	//std::cout << "HumanPtr->Flags.start_jump: " << HumanPtr->Flags.start_jump << "\n";
+	//std::cout << "HumanPtr->Flags.super_jump: " << HumanPtr->Flags.super_jump << "\n";
 
 	return HumanUpdatePosAndOrient(HumanPtr, edx, UpdatedPosition, UpdatedOrientation, SetHavokData);
 }
@@ -539,7 +623,7 @@ void __fastcall CharacterControllerSetPosHook(CharacterController* CharControlle
 		}
 	}*/
 
-	std::cout << "CharacterController Address: " << std::hex << std::uppercase << CharController << std::endl;
+	std::cout << "CharacterController Address: " << std::hex << std::uppercase << CharController << "\n";
 
 	return CharacterControllerSetPos(CharController, Position);
 }
@@ -575,3 +659,96 @@ void __cdecl HudUiMultiplayerEnterHook()
 	return HudUiMultiplayerEnter();
 }
 /*End of MP Detection Hooks*/
+
+void __fastcall rl_draw_tristrip_2d_begin_hook(void* This, void* edx, rl_primitive_state* PrimitiveState)
+{
+	std::call_once(HookRlDrawTristip2dInitialCall, [&]()
+	{
+		GlobalRlDrawPtr = This;
+		std::cout << "First time in rl_draw::tristrip_2d_begin() hook..." << "\n";
+		std::cout << "Alpha mode: " << PrimitiveState->d.v.m_alpha_mode << "\n";
+		std::cout << "Clamp mode: " << PrimitiveState->d.v.m_clamp_mode << "\n";
+		std::cout << "Color write mode: " << PrimitiveState->d.v.m_color_write_mode << "\n";
+		std::cout << "Const alpha: " << PrimitiveState->d.v.m_const_alpha << "\n";
+		std::cout << "Cull mode: " << PrimitiveState->d.v.m_cull_mode << "\n";
+		std::cout << "MSAA: " << PrimitiveState->d.v.m_msaa << "\n";
+		std::cout << "Scissor: " << PrimitiveState->d.v.m_scissor << "\n";
+		std::cout << "Stencil mode: " << PrimitiveState->d.v.m_stencil_mode << "\n";
+		std::cout << "Valid: " << PrimitiveState->d.v.m_valid << "\n";
+		std::cout << "Z-Bias mode: " << PrimitiveState->d.v.m_zbias_mode << "\n";
+		std::cout << "Z-Buffer mode: " << PrimitiveState->d.v.m_zbuf_mode << "\n";
+	});
+
+	return rl_draw_tristrip_2d_begin(This, edx, PrimitiveState);
+}
+
+void __fastcall world_do_frame_hook(World* This, void* edx, bool HardLoad) //.text:01740AB0 rfg.exe:$540AB0 #53FEB0 <world::do_frame>
+{
+	std::call_once(HookWorldDoFrameInitialCall, [&]()
+	{
+		GlobalRfgWorldPtr = This;
+		Logger::Log("RFG::World hooked!", LogInfo);
+		std::cout << "\nPending Save Info:";
+		std::cout << "Number of missions completed:" << GlobalRfgWorldPtr->pending_game_save_slot->num_missions_completed << "\n";
+		std::cout << "Number of activites completed:" << GlobalRfgWorldPtr->pending_game_save_slot->num_activities_completed << "\n";
+		std::cout << "Districts liberated:" << GlobalRfgWorldPtr->pending_game_save_slot->districts_liberated << "\n";
+		std::cout << "Territory index:" << GlobalRfgWorldPtr->pending_game_save_slot->territory_index << "\n";
+		std::cout << "District index:" << GlobalRfgWorldPtr->pending_game_save_slot->district_index << "\n";
+		std::cout << "Day:" << GlobalRfgWorldPtr->pending_game_save_slot->day << "\n";
+		std::cout << "Month:" << GlobalRfgWorldPtr->pending_game_save_slot->month << "\n";
+		std::cout << "Year:" << GlobalRfgWorldPtr->pending_game_save_slot->year << "\n";
+		std::cout << "Hours:" << GlobalRfgWorldPtr->pending_game_save_slot->hours << "\n";
+		std::cout << "Minutes:" << GlobalRfgWorldPtr->pending_game_save_slot->minutes << "\n";
+		std::cout << "Seconds:" << GlobalRfgWorldPtr->pending_game_save_slot->seconds << "\n";
+		std::cout << "Auto save:" << GlobalRfgWorldPtr->pending_game_save_slot->auto_save << "\n";
+		std::cout << "Used slot:" << GlobalRfgWorldPtr->pending_game_save_slot->used_slot << "\n";
+		std::cout << "DLC ID:" << GlobalRfgWorldPtr->pending_game_save_slot->dlc_id << "\n";
+		std::cout << "Save slot index:" << GlobalRfgWorldPtr->pending_game_save_slot->save_slot_index << "\n";
+		std::cout << "Hammers unlocked:" << GlobalRfgWorldPtr->pending_game_save_slot->hammers_unlocked << "\n";
+		std::cout << "Golden hammer desired:" << GlobalRfgWorldPtr->pending_game_save_slot->golden_hammer_desired << "\n";
+		std::cout << "hammers_unlocked_large.raw_data[0]:" << GlobalRfgWorldPtr->pending_game_save_slot->new_data.hammers_unlocked_large.raw_data[0] << "\n";
+		std::cout << "hammers_unlocked_large.raw_data[1]:" << GlobalRfgWorldPtr->pending_game_save_slot->new_data.hammers_unlocked_large.raw_data[1] << "\n";
+		std::cout << "backpacks_unlocked.raw_data[0]:" << GlobalRfgWorldPtr->pending_game_save_slot->new_data.backpacks_unlocked.raw_data[0] << "\n";
+		std::cout << "backpacks_unlocked.raw_data[1]:" << GlobalRfgWorldPtr->pending_game_save_slot->new_data.backpacks_unlocked.raw_data[1] << "\n";
+		std::cout << "backpacks_unlocked.raw_data[2]:" << GlobalRfgWorldPtr->pending_game_save_slot->new_data.backpacks_unlocked.raw_data[2] << "\n";
+		std::cout << "backpacks_unlocked.raw_data[3]:" << GlobalRfgWorldPtr->pending_game_save_slot->new_data.backpacks_unlocked.raw_data[3] << "\n";
+		std::cout << "backpacks_unlocked.raw_data[4]:" << GlobalRfgWorldPtr->pending_game_save_slot->new_data.backpacks_unlocked.raw_data[4] << "\n";
+		std::cout << "backpacks_unlocked.raw_data[5]:" << GlobalRfgWorldPtr->pending_game_save_slot->new_data.backpacks_unlocked.raw_data[5] << "\n";
+		std::cout << "backpacks_unlocked.raw_data[6]:" << GlobalRfgWorldPtr->pending_game_save_slot->new_data.backpacks_unlocked.raw_data[6] << "\n";
+		std::cout << "backpacks_unlocked.raw_data[7]:" << GlobalRfgWorldPtr->pending_game_save_slot->new_data.backpacks_unlocked.raw_data[7] << "\n";
+		std::cout << "Jetpack unlock level:" << GlobalRfgWorldPtr->pending_game_save_slot->new_data.jetpack_unlock_level << "\n";
+		std::cout << "\n";
+
+		GlobalTODLightPtr = game_render_get_TOD_light();
+	});
+	if (GlobalRfgWorldPtr != This)
+	{
+		std::cout << "RFGWorldPtr Changed!\n";
+	}
+	if (!GlobalTODLightPtr)
+	{
+		GlobalTODLightPtr = game_render_get_TOD_light();
+	}
+
+	if (Gui.TweaksMenu.UseCustomLevelAmbientLight)
+	{
+		GlobalRfgWorldPtr->level_ambient.x = Gui.TweaksMenu.CustomLevelAmbientLight.x;
+		GlobalRfgWorldPtr->level_ambient.y = Gui.TweaksMenu.CustomLevelAmbientLight.y;
+		GlobalRfgWorldPtr->level_ambient.z = Gui.TweaksMenu.CustomLevelAmbientLight.z;
+	}
+	if (Gui.TweaksMenu.UseCustomLevelBackgroundAmbientLight)
+	{
+		GlobalRfgWorldPtr->level_back_ambient.x = Gui.TweaksMenu.CustomLevelBackgroundAmbientLight.x;
+		GlobalRfgWorldPtr->level_back_ambient.y = Gui.TweaksMenu.CustomLevelBackgroundAmbientLight.y;
+		GlobalRfgWorldPtr->level_back_ambient.z = Gui.TweaksMenu.CustomLevelBackgroundAmbientLight.z;
+	}
+	if (Gui.TweaksMenu.UseCustomTimeOfDayLight)
+	{
+		GlobalTODLightPtr->m_color.red = Gui.TweaksMenu.CustomTimeOfDayLightColor.red;
+		GlobalTODLightPtr->m_color.green = Gui.TweaksMenu.CustomTimeOfDayLightColor.green;
+		GlobalTODLightPtr->m_color.blue = Gui.TweaksMenu.CustomTimeOfDayLightColor.blue;
+		GlobalTODLightPtr->m_color.alpha = Gui.TweaksMenu.CustomTimeOfDayLightColor.alpha;
+	}																   
+
+	return world_do_frame(This, edx, HardLoad);
+}

@@ -1,5 +1,6 @@
 #pragma once
-#include "KeenNamespace.h"
+//#include "KeenNamespace.h"
+//#include "KeenFileSystem.h"
 
 namespace keen
 {
@@ -26,7 +27,6 @@ namespace keen
 		FatalErrorTypeId_Count = 0x1,
 	};
 
-	/* 4595 */
 	struct __declspec(align(4)) GameFrameworkSystem : GameFrameworkSystemNative
 	{
 		keen::MemorySystem *pMemorySystem;
@@ -43,7 +43,7 @@ namespace keen
 		keen::SoundSystem::System *pSoundSystem;
 		keen::UserAccountSystem *pUserAccountSystem;
 		keen::SaveDataSystem *pSaveDataSystem;
-		unit4::SystemServices *pSystemServices;
+		unit4::SystemServices* pSystemServices;
 		bool useSteam;
 		keen::SteamworksSystem *pSteamworksSystem;
 		unsigned int debugMountHandle;
@@ -74,14 +74,13 @@ namespace keen
 		char **argv;
 	};
 
-	/* 4589 */
+	struct GameApplicationVtbl;
 	struct __declspec(align(4)) GameApplication
 	{
 		GameApplicationVtbl *vfptr;
 		bool m_isShutdownRequested;
 	};
 
-	/* 4596 */
 	struct GameApplicationVtbl
 	{
 		void* (__thiscall* __vecDelDtor)(GameApplication* This, unsigned int);

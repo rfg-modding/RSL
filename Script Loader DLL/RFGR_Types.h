@@ -1,4 +1,5 @@
 #pragma once
+#include "RFGR_Containers.h"
 
 struct rl_base_objectVtbl;
 struct rl_base_object;
@@ -19,6 +20,40 @@ struct Player;
 //struct rl_partition_sector;
 //struct rl_partition_sector_entry;
 //struct linked_list_p;// <rl_partition_sector_entry>;
+
+enum rl_light_light_type
+{
+	LIGHT_TYPE_DIRECTIONAL = 0x0,
+	LIGHT_TYPE_POINT = 0x1,
+	LIGHT_TYPE_SPOT_LIGHT = 0x2,
+	LIGHT_TYPE_FORCE_SIZEOF_INT = 0xFFFFFFFF,
+};
+
+enum voice_line_handle
+{
+	INVALID_VOICE_LINE_HANDLE = 0xFFFFFFFF,
+	VOICE_LINE_HANDLE_IS_DLC = 0x8000,
+	VOICE_LINE_HANDLE_FORCE_TO_32_BIT = 0x7FFFFFFF,
+};
+
+enum game_clock_time_of_day
+{
+	GC_INVALID = 0xFFFFFFFF,
+	GC_DAY = 0x0,
+	GC_NIGHT = 0x1,
+	GC_TIME_OF_DAY_COUNT = 0x2,
+};
+
+enum game_clock_tod_partitioned
+{
+	GC_EARLY_DAY = 0x0,
+	GC_MID_DAY = 0x1,
+	GC_LATE_DAY = 0x2,
+	GC_EARLY_NIGHT = 0x3,
+	GC_MID_NIGHT = 0x4,
+	GC_LATE_NIGHT = 0x5,
+	NUM_TOD_PARTITIONS = 0x6,
+};
 
 enum vint_res_offset
 {
@@ -241,6 +276,11 @@ enum cf_error_codes
 	CF_ERROR_NUM_CODES = 0x4,
 };
 
+struct timestamp_realtime
+{
+	int value;
+};
+
 /* 5492 */
 struct MultiTimestamp //4
 {
@@ -263,11 +303,45 @@ struct TimestampPercent : Timestamp //8
 	int set_milliseconds;
 };
 
-struct vector
+class vector
 {
-	vector() { }
+public:
+	vector() { };
 	vector(float InitialValue) : x(InitialValue), y(InitialValue), z(InitialValue) { }
 	vector(float x_, float y_, float z_) : x(x_), y(y_), z(z_) { }
+	vector operator+(const vector& B)
+	{
+		return vector(x + B.x, y + B.y, z + B.z);
+	}
+	vector operator-(const vector& B)
+	{
+		return vector(x - B.x, y - B.y, z - B.z);
+	}
+	float operator*(const vector& B)
+	{
+		return (x * B.x) + (y * B.y) + (z * B.z);
+	}
+	bool operator==(const vector& B)
+	{
+		return (x == B.x && y == B.y && z == B.z);
+	}
+	bool operator!=(const vector& B)
+	{
+		return !(*this == B);
+	}
+	vector Cross(const vector& B)
+	{
+		vector C;
+		C.x = (y * B.z) - (B.y * z);
+		C.y = (B.x * z) - (y * B.z);
+		C.z = (x * B.y) - (B.x * y);
+		return C;
+	}
+	float Magnitude()
+	{
+		return sqrtf((x * x) + (y * y) + (z * z));
+	}
+
 	float x;
 	float y;
 	float z;
@@ -929,6 +1003,14 @@ struct KeenGraphicsSystem : GraphicsSystemBase //Todo: Make Keen namespace event
 	unsigned int windowModeWidth;
 	unsigned int windowModeHeight;
 };*/
+
+struct vector4 //16
+{
+	float x;
+	float y;
+	float z;
+	float w;
+};
 
 /* 5181 */
 const struct __declspec(align(4)) explosion_info //340 Bytes

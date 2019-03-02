@@ -24,7 +24,7 @@ public:
 
 	std::ofstream File;
 	LogType LogLevel;
-	std::ios_base::openmode OpenMode;
+	std::ios_base::openmode OpenMode = std::ios_base::out;
 	std::string FilePath;
 };
 

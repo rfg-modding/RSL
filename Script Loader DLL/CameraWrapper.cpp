@@ -61,30 +61,30 @@ void CameraWrapper::Initialize(float InitialCameraSpeed, float InitialCameraRota
 void CameraWrapper::PrintCameraInfo()
 {
 #if !PublicMode
-	std::cout << "~~~ Camera data dump ~~~" << std::endl;
-	std::cout << "CameraX = " << *(float*)RealX << std::endl;
-	std::cout << "CameraY = " << *(float*)RealY << std::endl;
-	std::cout << "CameraZ = " << *(float*)RealZ << std::endl;
+	std::cout << "~~~ Camera data dump ~~~" << "\n";
+	std::cout << "CameraX = " << *(float*)RealX << "\n";
+	std::cout << "CameraY = " << *(float*)RealY << "\n";
+	std::cout << "CameraZ = " << *(float*)RealZ << "\n";
 
-	std::cout << "CameraRightX = " << *(float*)RealRightX << std::endl;
-	std::cout << "CameraRightY = " << *(float*)RealRightY << std::endl;
-	std::cout << "CameraRightZ = " << *(float*)RealRightZ << std::endl;
+	std::cout << "CameraRightX = " << *(float*)RealRightX << "\n";
+	std::cout << "CameraRightY = " << *(float*)RealRightY << "\n";
+	std::cout << "CameraRightZ = " << *(float*)RealRightZ << "\n";
 
-	std::cout << "CameraUpX = " << *(float*)RealUpX << std::endl;
-	std::cout << "CameraUpY = " << *(float*)RealUpY << std::endl;
-	std::cout << "CameraUpZ = " << *(float*)RealUpZ << std::endl;
+	std::cout << "CameraUpX = " << *(float*)RealUpX << "\n";
+	std::cout << "CameraUpY = " << *(float*)RealUpY << "\n";
+	std::cout << "CameraUpZ = " << *(float*)RealUpZ << "\n";
 
-	std::cout << "CameraDirectionX = " << *(float*)RealDirectionX << std::endl;
-	std::cout << "CameraDirectionY = " << *(float*)RealDirectionY << std::endl;
-	std::cout << "CameraDirectionZ = " << *(float*)RealDirectionZ << std::endl;
+	std::cout << "CameraDirectionX = " << *(float*)RealDirectionX << "\n";
+	std::cout << "CameraDirectionY = " << *(float*)RealDirectionY << "\n";
+	std::cout << "CameraDirectionZ = " << *(float*)RealDirectionZ << "\n";
 
-	std::cout << "CameraVelocity = " << CameraSpeed << std::endl;
+	std::cout << "CameraVelocity = " << CameraSpeed << "\n";
 
-	std::cout << "Pitch = " << Pitch << std::endl;
-	std::cout << "Yaw = " << Yaw << std::endl;
-	std::cout << "Roll = " << Roll << std::endl;
+	std::cout << "Pitch = " << Pitch << "\n";
+	std::cout << "Yaw = " << Yaw << "\n";
+	std::cout << "Roll = " << Roll << "\n";
 
-	std::cout << std::endl;
+	std::cout << "\n";
 #endif
 }
 
@@ -124,7 +124,7 @@ void CameraWrapper::MoveFreeCamera(CameraDirection Direction)
 	}
 	else
 	{
-		Logger::Log("Invalid camera direction passed to MoveFreeCamera()", LOGERROR);
+		Logger::Log("Invalid camera direction passed to MoveFreeCamera()", LogError);
 	}
 }
 
@@ -149,7 +149,7 @@ void CameraWrapper::RecalculateOrientationMatrix()
 
 void CameraWrapper::ActivateFreeCamera()
 {
-	Logger::Log("Activating free camera", LOGMESSAGE);
+	Logger::Log("Activating free camera", LogInfo);
 	FreeCameraActive = true;
 	DisableCameraCode(CameraYWriteAddress, CameraZWriteAddress);
 
@@ -167,7 +167,7 @@ void CameraWrapper::ActivateFreeCamera()
 
 void CameraWrapper::ActivateRotationControl()
 {
-	Logger::Log("Activating rotation control", LOGMESSAGE);
+	Logger::Log("Activating rotation control", LogInfo);
 	DisableCameraDirectionCode(CameraRealOrientWrite1, CameraRealOrientWrite2, CameraRealOrientWrite3, CameraRealOrientWrite4, CameraRealOrientWrite5);
 
 	//Roll = 0;
@@ -181,7 +181,7 @@ void CameraWrapper::ActivateRotationControl()
 
 void CameraWrapper::DeactivateFreeCamera()
 {
-	Logger::Log("Deactivating free camera", LOGMESSAGE);
+	Logger::Log("Deactivating free camera", LogInfo);
 	RestoreCameraCode();
 
 #if EnableSpectatorMode
@@ -196,7 +196,7 @@ void CameraWrapper::DeactivateFreeCamera()
 
 void CameraWrapper::DeactivateRotationControl()
 {
-	Logger::Log("Deactivating rotation control", LOGMESSAGE);
+	Logger::Log("Deactivating rotation control", LogInfo);
 	RestoreCameraDirectionCode();
 	RotationControlActive = false;
 	RollLocked = false;
@@ -571,7 +571,7 @@ void CameraWrapper::SetCameraSpeed(float Value, bool LogValue)
 	CameraSpeed = Value;
 	if (LogValue)
 	{
-		Logger::Log(std::string("Camera Speed: " + std::to_string(CameraSpeed)), LOGMESSAGE);
+		Logger::Log(std::string("Camera Speed: " + std::to_string(CameraSpeed)), LogInfo);
 	}
 }
 
@@ -580,7 +580,7 @@ void CameraWrapper::SetCameraRotationSpeed(float Value, bool LogValue)
 	CameraRotationSpeed = Value;
 	if (LogValue)
 	{
-		Logger::Log(std::string("Rotation Speed: " + std::to_string(CameraRotationSpeed)), LOGMESSAGE);
+		Logger::Log(std::string("Rotation Speed: " + std::to_string(CameraRotationSpeed)), LogInfo);
 	}
 }
 
@@ -698,7 +698,7 @@ void CameraWrapper::AdjustPitch(float Value)
 	if (!PitchLocked)
 	{
 		Pitch += Value;
-		Logger::Log(std::string("Pitch: " + std::to_string(Pitch)), LOGMESSAGE);
+		Logger::Log(std::string("Pitch: " + std::to_string(Pitch)), LogInfo);
 	}
 }
 
@@ -707,7 +707,7 @@ void CameraWrapper::AdjustYaw(float Value)
 	if (!YawLocked)
 	{
 		Yaw += Value;
-		Logger::Log(std::string("Yaw: " + std::to_string(Yaw)), LOGMESSAGE);
+		Logger::Log(std::string("Yaw: " + std::to_string(Yaw)), LogInfo);
 		//RecalculateOrientationMatrix();
 	}
 }
@@ -717,14 +717,14 @@ void CameraWrapper::AdjustRoll(float Value)
 	if (!RollLocked)
 	{
 		Roll += Value;
-		Logger::Log(std::string("Roll: " + std::to_string(Roll)), LOGMESSAGE);
+		Logger::Log(std::string("Roll: " + std::to_string(Roll)), LogInfo);
 		//RecalculateOrientationMatrix();
 	}
 }
 
 void CameraWrapper::AdjustCameraSpeed(float Value)
 {
-	Logger::Log(std::string("Camera Speed: " + std::to_string(CameraSpeed)), LOGMESSAGE);
+	Logger::Log(std::string("Camera Speed: " + std::to_string(CameraSpeed)), LogInfo);
 	CameraSpeed += Value;
 	if (CameraSpeed < 0.0f)
 	{
@@ -734,7 +734,7 @@ void CameraWrapper::AdjustCameraSpeed(float Value)
 
 void CameraWrapper::AdjustCameraRotationSpeed(float Value)
 {
-	Logger::Log(std::string("Rotation Speed: " + std::to_string(CameraRotationSpeed)), LOGMESSAGE);
+	Logger::Log(std::string("Rotation Speed: " + std::to_string(CameraRotationSpeed)), LogInfo);
 	CameraRotationSpeed += Value;
 }
 

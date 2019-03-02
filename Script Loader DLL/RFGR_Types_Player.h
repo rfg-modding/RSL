@@ -143,14 +143,6 @@ enum AudiolibCuePriority
 	NUM_AUDIOLIB_CUE_PRIORITIES = 0xC,
 };
 
-/* 588 */
-enum VoiceLineHandle
-{
-	INVALID_VOICE_LINE_HANDLE = 0xFFFFFFFF,
-	VOICE_LINE_HANDLE_IS_DLC = 0x8000,
-	VOICE_LINE_HANDLE_FORCE_TO_32_BIT = 0x7FFFFFFF,
-};
-
 /* 410 */
 enum spinebend_interest
 {
@@ -933,8 +925,7 @@ enum IK_Type
 	NUM_ANIMATION_IK_TYPES = 0x4,
 };
 
-/* 598 */
-enum ObjectType
+enum object_type
 {
 	OT_UNDEFINED = 0xFFFFFFFF,
 	OT_HUMAN = 0x0,
@@ -992,7 +983,6 @@ enum ObjectType
 	OT_AREA_DEFENSE_NODE = 0x34,
 	NUM_OBJECT_TYPES = 0x35,
 };
-
 /* 675 */
 enum LipsyncDataHandle
 {
@@ -1902,40 +1892,7 @@ struct ObjectRenderDistance //8
 	int last_frame_processed; //4
 };
 
-/*/* 5248 /
-struct objectVtbl
-{
-	void *(__thiscall *__vecDelDtor)(object *this, unsigned int);
-	_BYTE gap4[16];
-	bool(__thiscall *serialize)(object *this, obj_prop_block *, bool);
-	obj_serialize_mode(__thiscall *serialize_mode)(object *this);
-	bool(__thiscall *stream)(object *this, bool);
-	bool(__thiscall *serialize_restore_if_missing_in_save_file)(object *this, obj_prop_block *);
-	bool(__thiscall *serialize_restore_if_resetting_destruction)(object *this, obj_prop_block *);
-	void(__thiscall *free_this)(object *this);
-	void(__thiscall *destroy_notify)(object *this);
-	void(__thiscall *update_pos_and_orient)(object *this, vector *, matrix *, bool);
-	int(__thiscall *get_tag_index_from_name)(object *this, const char *);
-	bool(__thiscall *get_tag_world_coords)(object *this, int, vector *, matrix *, vector *, matrix *);
-	bool(__thiscall *get_tag_local_coords)(object *this, int, vector *, matrix *);
-	const struct rl_renderable_mesh *(__thiscall *get_static_mesh)(object *this);
-	void(__thiscall *update_render)(object *this, rl_renderer *);
-	bool(__thiscall *enable_object_outline)(object *this, int);
-	bool(__thiscall *disable_object_outline)(object *this);
-	int(__thiscall *attach_index)(object *this, vector *, unsigned int);
-	bool(__thiscall *attach_index_is_valid)(object *this, int);
-	float(__thiscall *get_mass)(object *this);
-	char(__thiscall *get_physical_material)(object *this, unsigned int, vector *, hkpWorldObject *);
-	char(__thiscall *get_effect_material)(object *this, unsigned int, vector *, hkpWorldObject *);
-	float(__thiscall *get_energy_scale)(object *this);
-	void(__thiscall *process_bullet_hit)(object *this, human *, float, weapon_fire_info *);
-	bool(__thiscall *process_melee_hit)(object *this, object *, float, vector *, vector *, vector *, unsigned int, weapon_info *);
-	void(__thiscall *hierarchy_notify)(object *this, hierarchy_notify_code);
-	bool(__thiscall *ready_to_stream_out)(object *this);
-	unsigned int(__thiscall *get_alt_hk_body_handle)(object *this, unsigned int);
-	unsigned int(__thiscall *get_alt_hk_body_handle_index)(object *this, unsigned int);
-	void(__thiscall *pool_free)(object *this);
-}; */
+
 
 /* 5213 */
 struct human_info_inventory_info //12
@@ -2182,6 +2139,42 @@ struct ObjectFlags //23 * 1 = 23 Bytes
 	__int8 render_flags : 4;
 };
 
+/*/* 5248 /
+struct Object;
+struct objectVtbl
+{
+	void *(__thiscall *__vecDelDtor)(object *this, unsigned int);
+	_BYTE gap4[16];
+	bool(__thiscall *serialize)(object *this, obj_prop_block *, bool);
+	obj_serialize_mode(__thiscall *serialize_mode)(object *this);
+	bool(__thiscall *stream)(object *this, bool);
+	bool(__thiscall *serialize_restore_if_missing_in_save_file)(object *this, obj_prop_block *);
+	bool(__thiscall *serialize_restore_if_resetting_destruction)(object *this, obj_prop_block *);
+	void(__thiscall *free_this)(object *this);
+	void(__thiscall *destroy_notify)(object *this);
+	void(__thiscall *update_pos_and_orient)(object *this, vector *, matrix *, bool);
+	int(__thiscall *get_tag_index_from_name)(object *this, const char *);
+	bool(__thiscall *get_tag_world_coords)(object *this, int, vector *, matrix *, vector *, matrix *);
+	bool(__thiscall *get_tag_local_coords)(object *this, int, vector *, matrix *);
+	const struct rl_renderable_mesh *(__thiscall *get_static_mesh)(object *this);
+	void(__thiscall *update_render)(object *this, rl_renderer *);
+	bool(__thiscall *enable_object_outline)(object *this, int);
+	bool(__thiscall *disable_object_outline)(object *this);
+	int(__thiscall *attach_index)(object *this, vector *, unsigned int);
+	bool(__thiscall *attach_index_is_valid)(object *this, int);
+	float(__thiscall *get_mass)(object *this);
+	char(__thiscall *get_physical_material)(object *this, unsigned int, vector *, hkpWorldObject *);
+	char(__thiscall *get_effect_material)(object *this, unsigned int, vector *, hkpWorldObject *);
+	float(__thiscall *get_energy_scale)(object *this);
+	void(__thiscall *process_bullet_hit)(object *this, human *, float, weapon_fire_info *);
+	bool(__thiscall *process_melee_hit)(object *this, object *, float, vector *, vector *, vector *, unsigned int, weapon_info *);
+	void(__thiscall *hierarchy_notify)(object *this, hierarchy_notify_code);
+	bool(__thiscall *ready_to_stream_out)(object *this);
+	unsigned int(__thiscall *get_alt_hk_body_handle)(object *this, unsigned int);
+	unsigned int(__thiscall *get_alt_hk_body_handle_index)(object *this, unsigned int);
+	void(__thiscall *pool_free)(object *this);
+}; */
+
 /* 4698 */
 struct Object //175
 {
@@ -2394,7 +2387,7 @@ struct Human : Object //3786 + 175 = 3961 Bytes
 	HumanTeams CurrentTeam;  //4, enum
 	HumanTeams UndercoverTeam; //4, enum
 	int DialogueFoleyInfo; //4
-	VoiceLineHandle QueuedVoiceLine; //4, enum
+	voice_line_handle QueuedVoiceLine; //4, enum
 	VoiceLines SituationalVoiceLine; //4, enum
 	VoiceLinePriorities VoicePriority; //4, enum
 	AudiolibCuePriority VoiceCuePriority; //4, enum

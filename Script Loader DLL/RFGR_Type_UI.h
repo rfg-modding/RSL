@@ -1,6 +1,104 @@
 #pragma once
 #include "RFGR_Types_Player.h"
 
+/* 3866 */
+struct $59F8883BC9B599DCF3E2EDB95DC2BDBD
+{
+	unsigned __int32 m_alpha_mode : 5;
+	unsigned __int32 m_clamp_mode : 1;
+	unsigned __int32 m_zbuf_mode : 3;
+	unsigned __int32 m_stencil_mode : 4;
+	unsigned __int32 m_cull_mode : 2;
+	unsigned __int32 m_color_write_mode : 3;
+	unsigned __int32 m_scissor : 1;
+	unsigned __int32 m_msaa : 1;
+	unsigned __int32 m_zbias_mode : 3;
+	unsigned __int32 m_const_alpha : 8;
+	unsigned __int32 m_valid : 1;
+};
+
+/* 3867 */
+union $51A79B7A66E5C28407BD75AAA2D6EED8
+{
+	unsigned int m_bits;
+	$59F8883BC9B599DCF3E2EDB95DC2BDBD v;
+};
+
+/* 3868 */
+struct rl_primitive_state
+{
+	$51A79B7A66E5C28407BD75AAA2D6EED8 d;
+};
+
+/* 1081 */
+enum dcf_type
+{
+	DCF_TYPE_NONE = 0xFFFFFFFF,
+	DCF_TYPE_BOOL = 0x0,
+	DCF_TYPE_INT = 0x1,
+	DCF_TYPE_FLOAT = 0x2,
+	DCF_TYPE_FUNC = 0x3,
+	DCF_TYPE_VECTOR3 = 0x4,
+};
+
+/* 1631 */
+enum dcf_search_mode
+{
+	DCF_SM_AND = 0x0,
+	DCF_SM_OR = 0x1,
+	DCF_SM_AND_NOT = 0x2,
+	DCF_SM_OR_NOT = 0x3,
+};
+
+/* 1632 */
+enum vconsole_mode
+{
+	VCM_NORMAL = 0x0,
+	VCM_CHAT = 0x1,
+	VCM_TEAMCHAT = 0x2,
+};
+
+/* 4032 */
+struct color
+{
+	char red;
+	char green;
+	char blue;
+	char alpha;
+};
+
+/* 8725 */
+union $04AA5955D090ADAEDDBF970246D4F262
+{
+	void(__cdecl *vfunc)();
+	bool(__cdecl *bfunc)();
+	int(__cdecl *ifunc)();
+	float(__cdecl *ffunc)();
+	vector *(__cdecl *v3func)(vector *result);
+};
+
+/* 8726 */
+struct __declspec(align(4)) console_command
+{
+	const char *name;
+	const char *help;
+	$04AA5955D090ADAEDDBF970246D4F262 func;
+	dcf_type type;
+	bool enabled;
+};
+
+/* 4064 */
+struct __declspec(align(4)) vconsole_config
+{
+	void(__cdecl *draw_rect)(int, int, int, int, color *);
+	void(__cdecl *draw_str)(const char *, int, int, int, int *, int *, color *);
+	void(__cdecl *update_func)(vconsole_config *);
+	int safe_area_left;
+	int screen_width;
+	int screen_height;
+	bool save_history;
+};
+
 /* 566 */
 enum control_button_action
 {

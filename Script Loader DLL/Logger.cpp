@@ -5,16 +5,20 @@
 // Instantiate static variables
 std::map <std::string, LogFile> Logger::LogFileMap;
 std::vector <LogEntry> Logger::LogData;
-LogType Logger::ConsoleLogLevel = LOGMESSAGE;
+int Logger::ConsoleLogFlags = LogAll;
 std::string Logger::DefaultLogPath;
+unsigned int Logger::MaximumLogCount;
 
-void Logger::Init(LogType _ConsoleLogLevel, std::string _DefaultLogPath)
+void Logger::Init(int _ConsoleLogFlags, std::string _DefaultLogPath, unsigned int _MaximumLogCount)
 {
-	ConsoleLogLevel = _ConsoleLogLevel;
+	ConsoleLogFlags = _ConsoleLogFlags;
 	DefaultLogPath = _DefaultLogPath;
+	MaximumLogCount = _MaximumLogCount;
+
+	CreateDirectoryIfNull(DefaultLogPath);
 }
 
-void Logger::OpenLogFile(std::string FileName, LogType LogLevel, std::ios_base::openmode Mode, std::string CustomFilePath)
+void Logger::OpenLogFile(std::string FileName, int LogFlags, std::ios_base::openmode Mode, std::string CustomFilePath)
 {
 	std::string Path;
 	if (CustomFilePath == "DEFAULT")
@@ -29,14 +33,13 @@ void Logger::OpenLogFile(std::string FileName, LogType LogLevel, std::ios_base::
 	{
 		if (i->first == FileName)
 		{
-			Log(std::string(FileName + " already exists. New log file not created."), LOGERROR);
+			Log(std::string(FileName + " already exists. New log file not created."), LogError);
 			return;
 		}
 	}
-	std::cout << "Opening log file at: " << Path + FileName << std::endl;
-	//LogFileMap[FileName] = LogFile(Path, LogLevel, Mode);
-	LogFileMap.insert_or_assign(FileName, LogFile(Path + FileName, LogLevel, Mode));
+	LogFileMap.insert_or_assign(FileName, LogFile(Path + FileName, LogFlags, Mode));
 	LogFileMap[FileName].File.open(Path + FileName, Mode);
+	LogFileMap[FileName].File << GetTimeString(false) << "[Info] " << "Start of " << FileName << "\n";
 }
 
 void Logger::CloseLogFile(std::string FileName)
@@ -54,256 +57,227 @@ void Logger::CloseAllLogFiles()
 	LogFileMap.erase(LogFileMap.begin(), LogFileMap.end());
 }
 
-void Logger::Log(std::string Message, LogType LogLevel, bool LogTime, bool NewLine)
+void Logger::Log(std::string Message, int LogFlags, bool LogTime, bool NewLine)
 {
-	LogData.push_back(LogEntry(Message, LogLevel));
-	if (LogLevel >= ConsoleLogLevel)
+	std::string TimeString = GetTimeString(false);
+	std::string FlagString = GetFlagString(LogFlags);
+	LogData.insert(LogData.begin(), LogEntry(FlagString, Message, LogFlags));
+	if (ConsoleLogFlags & LogFlags)
 	{
+		LogFlagWithColor(LogFlags);
+		if (LogTime)
+		{
+			std::cout << TimeString;
+		}
+		std::cout << " ";
+		std::cout << Message;
 		if (NewLine)
 		{
-			ConsoleLog(Message.c_str(), LogLevel, LogTime, true, true);
-		}
-		else
-		{
-			ConsoleLog(Message.c_str(), LogLevel, LogTime, true, false);
+			std::cout << "\n";
 		}
 	}
 	for (auto i = LogFileMap.begin(); i != LogFileMap.end(); i++)
 	{
-		if (LogLevel >= i->second.LogLevel)
+		if (i->second.LogFlags & LogFlags)
 		{
+			i->second.File << FlagString;
 			if (LogTime)
 			{
-				LogTimeMessageToFile(i->first);
+				i->second.File << TimeString;
 			}
-			LogTypeMessageToFile(i->first, LogLevel);
+			i->second.File << " ";
 			i->second.File << Message;
 			if (NewLine)
 			{
-				i->second.File << std::endl;
+				i->second.File << "\n";
 			}
 		}
+	}
+	if (LogData.size() > MaximumLogCount && MaximumLogCount > 0)
+	{
+		LogData.pop_back();
+	}
+	/*if (LogData.size() >= 500)
+	{
+		std::cout << "LogData.size(): " << LogData.size() << "\n";
+		int TotalMessageSize = 0;
+		for (auto i = LogData.begin(); i != LogData.end(); i++)
+		{
+			TotalMessageSize += i->Message.length();
+			TotalMessageSize += i->FlagString.length();
+			TotalMessageSize += sizeof(i->Flags);
+		}
+		int VectorSize = sizeof(std::vector<std::string>);
+		std::cout << "Size of vector: " << VectorSize << " Bytes\n";
+		std::cout << "Size of all strings" << TotalMessageSize << " Bytes\n";
+		TotalMessageSize += VectorSize;
+		std::cout << "Total size of both: " << TotalMessageSize << " Bytes | " << TotalMessageSize / 1000 << " KiloBytes\n";
+	}*/
+	//std::cout << "sizeof std::string vector with 10000 values: " << (sizeof(std::vector<std::string>) + (sizeof(std::string) * 10000)) / 1000 << "kB\n";
+}
+
+/*template <class... Args>
+void Logger::Log(int LogFlags, Args... args)
+{
+	std::string TimeString = GetTimeString(false);
+	std::string FlagString = GetFlagString(LogFlags);
+	std::tuple<Args...> ArgsTuple{ args... };
+
+	std::string MessageString = "";
+	for_each_in_tuple(ArgsTuple, [](const auto& value)
+	{
+		MessageString += std::to_string(value);
+	});
+	LogData.insert(LogData.begin(), LogEntry(FlagString, MessageString, LogFlags));
+	if (ConsoleLogFlags & LogFlags)
+	{
+		LogFlagWithColor(LogFlags);
+		std::cout << " ";
+		std::cout << MessageString;
+	}
+	for (auto i = LogFileMap.begin(); i != LogFileMap.end(); i++)
+	{
+		if (i->second.LogFlags & LogFlags)
+		{
+			i->second.File << FlagString;
+			i->second.File << " ";
+			i->second.File << MessageString;
+		}
+	}
+	if (LogData.size() > MaximumLogCount && MaximumLogCount > 0)
+	{
+		LogData.pop_back();
 	}
 }
 
-void Logger::LogTypeMessageToFile(std::string FileName, LogType LogLevel)
+template <class... Args>
+void Logger::Log(Args... args)
 {
-	if (LogLevel == LogType::LOGMESSAGE)
+	int DefaultLogFlags = LogInfo;
+	std::string TimeString = GetTimeString(false);
+	std::string FlagString = GetFlagString(DefaultLogFlags);
+	std::tuple<Args...> ArgsTuple{args...};
+	
+	std::string MessageString = "";
+	for_each_in_tuple(ArgsTuple, [&](const auto& value)
 	{
-		LogFileMap[FileName].File << "[+] ";
-	}
-	else if (LogLevel == LogType::LOGWARNING)
+		MessageString += value;
+	});
+	LogData.insert(LogData.begin(), LogEntry(FlagString, MessageString, DefaultLogFlags));
+	if (ConsoleLogFlags & DefaultLogFlags)
 	{
-		LogFileMap[FileName].File << "[Warning] ";
+		LogFlagWithColor(DefaultLogFlags);
+		std::cout << " ";
+		std::cout << MessageString;
 	}
-	else if (LogLevel == LogType::LOGERROR)
+	for (auto i = LogFileMap.begin(); i != LogFileMap.end(); i++)
 	{
-		LogFileMap[FileName].File << "[Error] ";
+		if (i->second.LogFlags & DefaultLogFlags)
+		{
+			i->second.File << FlagString;
+			i->second.File << " ";
+			i->second.File << MessageString;
+		}
 	}
-	else if (LogLevel == LogType::LOGFATALERROR)
+	if (LogData.size() > MaximumLogCount && MaximumLogCount > 0)
 	{
-		LogFileMap[FileName].File << "[Fatal Error] ";
+		LogData.pop_back();
 	}
-	else if (LogLevel == LogType::LOGSUCCESS)
-	{
-		LogFileMap[FileName].File << "[Success] ";
-	}
-}
+}*/
 
-void Logger::LogTimeMessageToFile(std::string FileName)
+void Logger::LogFlagWithColor(int LogFlags)
 {
-	LogFileMap[FileName].File << "[" << GetTimeString(false) << "]";
-}
-
-void Logger::LogToFile(std::string FileName, std::string Message, LogType LogLevel, bool LogTime)
-{
-	if (LogLevel >= LogFileMap[FileName].LogLevel)
+	if (LogFlags & LogInfo)
 	{
-		if (LogTime)
-		{
-			LogTimeMessageToFile(FileName);
-		}
-		LogTypeMessageToFile(FileName, LogLevel);
-		LogFileMap[FileName].File << Message << std::endl;
+		std::cout << "[";
+		SetConsoleAttributes(ConsoleMessageLabelTextAttributes);
+		std::cout << "Info";
+		ResetConsoleAttributes();
+		std::cout << "]";
 	}
-}
-
-void Logger::ConsoleLog(const char* Message, LogType Type, bool PrintTimeLabel, bool PrintTypeLabel, bool NewLine)
-{
-	/*HANDLE ConsoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
-	PCONSOLE_SCREEN_BUFFER_INFO InitialConsoleScreenInfo = NULL;
-	GetConsoleScreenBufferInfo(ConsoleHandle, InitialConsoleScreenInfo); //Returns bool if error checking is needed later.*/
-
-	if (Type == LOGMESSAGE)
+	else if (LogFlags & LogWarning)
 	{
-		if (PrintTypeLabel)
-		{
-			printf("[");
-			SetConsoleAttributes(ConsoleMessageLabelTextAttributes);
-			printf("+");
-			ResetConsoleAttributes();
-			if (PrintTimeLabel)
-			{
-				printf("]");
-			}
-			else
-			{
-				printf("] ");
-			}
-		}
-		if (PrintTimeLabel)
-		{
-			printf("[");
-			printf(GetTimeString(false).c_str());
-			printf("] ");
-		}
-#if ColorLogMessages
-		SetConsoleTextAttribute(ConsoleHandle, ConsoleMessageTextAttributes);
-#endif
-		printf(Message);
-		if (NewLine)
-		{
-			printf("\n");
-		}
+		std::cout << "[";
+		SetConsoleAttributes(ConsoleWarningTextAttributes);
+		std::cout << "Warning";
+		ResetConsoleAttributes();
+		std::cout << "]";
 	}
-	else if (Type == LOGWARNING)
+	else if (LogFlags & LogError)
 	{
-		if (PrintTypeLabel)
-		{
-			printf("[");
-			SetConsoleAttributes(ConsoleWarningTextAttributes);
-			printf("Warning");
-			ResetConsoleAttributes();
-			if (PrintTimeLabel)
-			{
-				printf("]");
-			}
-			else
-			{
-				printf("] ");
-			}
-		}
-		if (PrintTimeLabel)
-		{
-			printf("[");
-			printf(GetTimeString(false).c_str());
-			printf("] ");
-		}
-#if ColorLogMessages
-		SetConsoleTextAttribute(ConsoleHandle, ConsoleWarningTextAttributes);
-#endif
-		printf(Message);
-		if (NewLine)
-		{
-			printf("\n");
-		}
+		std::cout << "[";
+		SetConsoleAttributes(ConsoleErrorTextAttributes);
+		std::cout << "Error";
+		ResetConsoleAttributes();
+		std::cout << "]";
 	}
-	else if (Type == LOGERROR)
+	else if (LogFlags & LogFatalError)
 	{
-		if (PrintTypeLabel)
-		{
-			printf("[");
-			SetConsoleAttributes(ConsoleErrorTextAttributes);
-			printf("Error");
-			ResetConsoleAttributes();
-			if (PrintTimeLabel)
-			{
-				printf("]");
-			}
-			else
-			{
-				printf("] ");
-			}
-		}
-		if (PrintTimeLabel)
-		{
-			printf("[");
-			printf(GetTimeString(false).c_str());
-			printf("] ");
-		}
-#if ColorLogMessages
-		SetConsoleTextAttribute(ConsoleHandle, ConsoleErrorTextAttributes);
-#endif
-		printf(Message);
-		if (NewLine)
-		{
-			printf("\n");
-		}
-	}
-	else if (Type == LOGFATALERROR)
-	{
-		if (PrintTypeLabel)
-		{
-			printf("[");
-			SetConsoleAttributes(ConsoleFatalErrorTextAttributes);
-			printf("Fatal Error");
-			ResetConsoleAttributes();
-			if (PrintTimeLabel)
-			{
-				printf("]");
-			}
-			else
-			{
-				printf("] ");
-			}
-		}
-		if (PrintTimeLabel)
-		{
-			printf("[");
-			printf(GetTimeString(false).c_str());
-			printf("] ");
-		}
-#if ColorLogMessages
-		SetConsoleTextAttribute(ConsoleHandle, ConsoleFatalErrorTextAttributes);
-#endif
-		printf(Message);
-		if (NewLine)
-		{
-			printf("\n");
-		}
-	}
-	else if (Type == LOGSUCCESS)
-	{
-		if (PrintTypeLabel)
-		{
-			printf("[");
-			SetConsoleAttributes(ConsoleSuccessTextAttributes);
-			printf("Success");
-			ResetConsoleAttributes();
-			if (PrintTimeLabel)
-			{
-				printf("]");
-			}
-			else
-			{
-				printf("] ");
-			}
-		}
-		if (PrintTimeLabel)
-		{
-			printf("[");
-			printf(GetTimeString(false).c_str());
-			printf("] ");
-		}
-#if ColorLogMessages
-		SetConsoleTextAttribute(ConsoleHandle, ConsoleSuccessTextAttributes);
-#endif
-		printf(Message);
-		if (NewLine)
-		{
-			printf("\n");
-		}
+		std::cout << "[";
+		SetConsoleAttributes(ConsoleFatalErrorTextAttributes);
+		std::cout << "Fatal Error";
+		ResetConsoleAttributes();
+		std::cout << "]";
 	}
 	else
 	{
-		//Invalid log type
+		//Does nothing if it's LogNone or an undefined value.
 	}
-	SetConsoleTextAttribute(ConsoleHandle, ConsoleDefaultTextAttributes);// InitialConsoleScreenInfo->wAttributes);
+	SetConsoleTextAttribute(ConsoleHandle, ConsoleDefaultTextAttributes);
+}
+
+std::string Logger::GetFlagString(int LogFlags)
+{
+	if (LogFlags & LogInfo)
+	{
+		return "[Info]";
+	}
+	else if (LogFlags & LogWarning)
+	{
+		return "[Warning]";
+	}
+	else if (LogFlags & LogLua)
+	{
+		return "[Lua]";
+	}
+	else if (LogFlags & LogJson)
+	{
+		return "[Json]";
+	}
+	else if (LogFlags & LogError)
+	{
+		return "[Error]";
+	}
+	else if (LogFlags & LogFatalError)
+	{
+		return "[Fatal Error]";
+	}
+	else
+	{
+		return "";
+	}
+}
+
+void Logger::LogToFile(std::string FileName, std::string Message, int LogFlags, bool LogTime, bool BypassFlagCheck)
+{
+	if (!BypassFlagCheck) //Allows things such as using LogInfo for the first message in an error log.
+	{
+		if (!(LogFileMap[FileName].LogFlags & LogFlags))
+		{
+			return;
+		}
+	}
+	LogFileMap[FileName].File << GetFlagString(LogFlags);
+	if (LogTime)
+	{
+		LogFileMap[FileName].File << GetTimeString(false);
+	}
+	LogFileMap[FileName].File << " ";
+	LogFileMap[FileName].File << Message << "\n";
 }
 
 std::string Logger::GetTimeString(bool MilitaryTime)
 {
-#if EnableLogging
 	std::time_t t = std::time(0);
 	std::tm now;
 	localtime_s(&now, &t);
@@ -315,7 +289,7 @@ std::string Logger::GetTimeString(bool MilitaryTime)
 	std::string Hour;
 	std::string Minutes = std::to_string(now.tm_min);
 
-	if (Minutes.size() == 1) //Changes things like 1:6 to 1:06
+	if (Minutes.size() == 1) //Changes values such as 1:6 to 1:06
 	{
 		Minutes.insert(0, 1, '0');
 	}
@@ -348,10 +322,9 @@ std::string Logger::GetTimeString(bool MilitaryTime)
 
 	DateTime += Month + "/" + Day + "/" + Year;
 
-	//std::cout << DateTime << std::endl;
+	//std::cout << DateTime << "\n";
 
-	//std::cout << "Date & Time:" << now.tm_year + 1900 << "/" << now.tm_mon + 1 << "/" << now.tm_mday << " - " << now.tm_hour << ":" << now.tm_min << std::endl;
+	//std::cout << "Date & Time:" << now.tm_year + 1900 << "/" << now.tm_mon + 1 << "/" << now.tm_mday << " - " << now.tm_hour << ":" << now.tm_min << "\n";
 
-	return DateTime;
-#endif
+	return "[" + DateTime + "]";
 }
