@@ -58,7 +58,7 @@ bool ScriptLoaderCloseRequested = false;
 bool HudVisible = true;
 bool FogVisible = true;
 
-extern const std::string ScriptLoaderVersion("0.1.0-Alpha");
+extern const std::string ScriptLoaderVersion("0.2.0-Alpha");
 const char* GetScriptLoaderVersion()
 {
 	return ScriptLoaderVersion.c_str();

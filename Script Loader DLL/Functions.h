@@ -182,14 +182,30 @@ extern F_game_render_set_fog_enabled game_render_set_fog_enabled;
 
 static void HideHud(bool Hide)
 {
+	//HudVisible = !HudVisible; //This wasn't working for some odd reason so I just set them manually. Same for HideFog.
 	Hud_Hide(Hide);
-	HudVisible = !Hide;
+	if (Hide)
+	{
+		HudVisible = false;
+	}
+	else
+	{
+		HudVisible = true;
+	}
 }
 
 static void HideFog(bool Hide)
 {
 	game_render_set_fog_enabled(!Hide);
-	FogVisible = !Hide;
+	//FogVisible = !Hide;
+	if (Hide)
+	{
+		FogVisible = false;
+	}
+	else
+	{
+		FogVisible = true;
+	}
 }
 
 static void ToggleHud()
