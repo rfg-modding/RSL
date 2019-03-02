@@ -6,7 +6,7 @@ return {
     ["Effect"] = 4,
     ["Debris"] = 5,
     ["Turret"] = 6,
-    ["Light"] = 7,
+    ["Light"] = 7, --obj_light, not rl_light
     ["PlayerStart"] = 8,
     ["CoverNode"] = 9,
     ["NavPoint"] = 10,
@@ -18,7 +18,7 @@ return {
     ["Skybox"] = 16,
     ["Ladder"] = 17,
     ["Constraint"] = 18,
-    ["Zone"] = 19,
+    ["Zone"] = 19, --obj_zone, not world_zone
     ["TriggerRegion"] = 20,
     ["MarauderAmbushRegion"] = 21,
     ["RestrictedArea"] = 22,
@@ -31,7 +31,7 @@ return {
     ["SquadSpawnNode"] = 29,
     ["RoadblockNode"] = 30,
     ["ShapeCutter"] = 31,
-    ["District"] = 32,
+    ["District"] = 32, --district, not t_district
     ["MultiMarker"] = 33,
     ["PathRoad"] = 34,
     ["LightParams"] = 35,
