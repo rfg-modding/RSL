@@ -36,7 +36,9 @@ void ScriptManager::Initialize()
 
 void ScriptManager::SetupLua()
 {
-	//If necessary can make variables read-only: sol::readonly(&some_class::variable)
+	RunScript(GetEXEPath(false) + "RFGR Script Loader/Core/CoreInit.lua");
+
+	//Todo: Make necessary vars read only with sol::readonly(&some_class::variable)
 	auto RslTable = Lua["rsl"].get_or_create<sol::table>();
 	
 	auto RfgTable = Lua["rfg"].get_or_create<sol::table>();
@@ -63,8 +65,46 @@ void ScriptManager::SetupLua()
 	LoggerTable["LogToFile"] = Logger::LogToFile;
 	LoggerTable["GetTimeString"] = Logger::GetTimeString;
 
-	RunScript(GetEXEPath(false) + "RFGR Script Loader/Core/CoreInit.lua");
+	/*RfgTable.new_usertype<vector>
+	(
+		"vector",
+		"new", sol::constructors< sol::types<float>, sol::types<float, float, float>>(),
+		sol::meta_function::addition, &vector::operator+,
+		sol::meta_function::subtraction, &vector::operator-,
+		sol::meta_function::multiplication, &vector::operator*,
+		sol::meta_function::equal_to, &vector::operator==,
+		"Cross", &vector::Cross,
+		"Magnitude", &vector::Magnitude,
+		"x", &vector::x,
+		"y", &vector::y,
+		"z", &vector::z
+	);*/
 }
+
+/*struct A {
+	int a = 10;
+	virtual int call() { return 0; }
+};
+struct B : A {
+	int b = 11;
+	virtual int call() override { return 20; }
+};
+
+int main (int, char*[]) {
+
+	sol::state lua;
+
+	lua.new_usertype<B>( "A",
+		"call", &A::call
+	);
+
+	lua.new_usertype<B>( "B",
+		"call", &B::call,
+		sol::base_classes, sol::bases<A>()
+	);
+
+	return 0;
+}*/
 
 void ScriptManager::RunTestScript()
 {

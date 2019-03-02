@@ -185,12 +185,6 @@
     <ClInclude Include="ProgramManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="RFGR_Types.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="RFGR_Types_Player.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="ScriptManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -207,9 +201,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="HookManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="RFGR_Type_UI.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Utilities.h">
@@ -248,19 +239,25 @@
     <ClInclude Include="WelcomeGui.h">
       <Filter>Overlay Gui\Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="RFGR_Types_World.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="RFGR_Containers.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RFGR_Type_UI.h">
+      <Filter>RFGR Structs</Filter>
+    </ClInclude>
+    <ClInclude Include="RFGR_Types_World.h">
+      <Filter>RFGR Structs</Filter>
+    </ClInclude>
+    <ClInclude Include="RFGR_Types.h">
+      <Filter>RFGR Structs</Filter>
+    </ClInclude>
+    <ClInclude Include="RFGR_Types_Player.h">
+      <Filter>RFGR Structs</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="RFGR Structs\rfg.h">
       <Filter>RFGR Structs</Filter>
-    </None>
-    <None Include="RFGR Structs\KeenNamespace2.h">
-      <Filter>Header Files</Filter>
     </None>
     <None Include="RFGR Structs\KeenFileSystem.h">
       <Filter>RFGR Structs</Filter>
@@ -274,35 +271,38 @@
     <None Include="RFGR Structs\KeenTaskSystem.h">
       <Filter>RFGR Structs</Filter>
     </None>
-    <None Include="KeenNamespace2.h">
-      <Filter>Header Files</Filter>
-    </None>
-    <None Include="RFGR Structs\BasicTypes.h">
-      <Filter>Header Files</Filter>
-    </None>
     <None Include="RFGR Structs\KaikoNamespace.h">
-      <Filter>Header Files</Filter>
+      <Filter>RFGR Structs</Filter>
     </None>
     <None Include="RFGR Structs\KeenGameFrameworkSystem.hpp">
-      <Filter>Header Files</Filter>
+      <Filter>RFGR Structs</Filter>
     </None>
     <None Include="RFGR Structs\KeenGraphicsSystem.hpp">
-      <Filter>Header Files</Filter>
+      <Filter>RFGR Structs</Filter>
     </None>
     <None Include="RFGR Structs\KeenMemorySystem.hpp">
-      <Filter>Header Files</Filter>
+      <Filter>RFGR Structs</Filter>
     </None>
     <None Include="RFGR Structs\KeenNamespace.h">
-      <Filter>Header Files</Filter>
+      <Filter>RFGR Structs</Filter>
+    </None>
+    <None Include="KeenNamespace2.h">
+      <Filter>RFGR Structs</Filter>
+    </None>
+    <None Include="RFGR Structs\KeenNamespace2.h">
+      <Filter>RFGR Structs</Filter>
     </None>
     <None Include="RFGR Structs\KeenSoundSystem.hpp">
-      <Filter>Header Files</Filter>
+      <Filter>RFGR Structs</Filter>
     </None>
     <None Include="RFGR Structs\MiscTypes.h">
-      <Filter>Header Files</Filter>
+      <Filter>RFGR Structs</Filter>
     </None>
     <None Include="RFGR Structs\Unit4Namespace.h">
-      <Filter>Header Files</Filter>
+      <Filter>RFGR Structs</Filter>
+    </None>
+    <None Include="RFGR Structs\BasicTypes.h">
+      <Filter>RFGR Structs</Filter>
     </None>
   </ItemGroup>
 </Project>

@@ -303,11 +303,45 @@ struct TimestampPercent : Timestamp //8
 	int set_milliseconds;
 };
 
-struct vector
+class vector
 {
-	vector() { }
+public:
+	vector() { };
 	vector(float InitialValue) : x(InitialValue), y(InitialValue), z(InitialValue) { }
 	vector(float x_, float y_, float z_) : x(x_), y(y_), z(z_) { }
+	vector operator+(const vector& B)
+	{
+		return vector(x + B.x, y + B.y, z + B.z);
+	}
+	vector operator-(const vector& B)
+	{
+		return vector(x - B.x, y - B.y, z - B.z);
+	}
+	float operator*(const vector& B)
+	{
+		return (x * B.x) + (y * B.y) + (z * B.z);
+	}
+	bool operator==(const vector& B)
+	{
+		return (x == B.x && y == B.y && z == B.z);
+	}
+	bool operator!=(const vector& B)
+	{
+		return !(*this == B);
+	}
+	vector Cross(const vector& B)
+	{
+		vector C;
+		C.x = (y * B.z) - (B.y * z);
+		C.y = (B.x * z) - (y * B.z);
+		C.z = (x * B.y) - (B.x * y);
+		return C;
+	}
+	float Magnitude()
+	{
+		return sqrtf((x * x) + (y * y) + (z * z));
+	}
+
 	float x;
 	float y;
 	float z;
