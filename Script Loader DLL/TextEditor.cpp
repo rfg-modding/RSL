@@ -875,10 +875,10 @@ void TextEditor::Render(const char* aTitle, const ImVec2& aSize, bool aBorder)
 			if (ImGui::MenuItem(std::string(std::string(ICON_FA_FILE_IMPORT) + u8" Open").c_str(), "Ctrl+O")) { ShowOpenScriptPopup = true; }
 			if (ImGui::MenuItem(std::string(std::string(ICON_FA_FILE_EXPORT) + u8" Save").c_str(), "Ctrl+S")) { SaveScript(); }//ShowSaveScriptPopup = true; }
 			if (ImGui::MenuItem(std::string(std::string(ICON_FA_FILE_SIGNATURE) + u8" Save as").c_str(), "Ctrl+Shift+S")) { ShowSaveAsScriptPopup = true; }
-			DrawNewScriptPopup();
-			DrawOpenScriptPopup();
-			DrawSaveScriptPopup();
-			DrawSaveAsScriptPopup();
+			//DrawNewScriptPopup();
+			//DrawOpenScriptPopup();
+			//DrawSaveScriptPopup();
+			//DrawSaveAsScriptPopup();
 			ImGui::EndMenu();
 		}
 		if (ImGui::BeginMenu(std::string(std::string(ICON_FA_EDIT) + u8" Edit##ScriptEditor").c_str()))
