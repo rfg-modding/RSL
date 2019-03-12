@@ -131,6 +131,19 @@ enum rl_outline_layer
 	RLOL_USE_COLOR1 = 0x2,
 };
 
+enum rl_camera_type
+{
+	RLCT_PERSPECTIVE = 0x0,
+	RLCT_ORTHO = 0x1,
+	NUM_RL_CAMERA_TYPES = 0x2,
+};
+
+enum rl_camera_motion_blur_type
+{
+	MOTION_BLUR_TYPE_RADIAL = 0x0,
+	MOTION_BLUR_TYPE_CAMERA = 0x1,
+};
+
 struct rl_base_object
 {
 	rl_base_objectVtbl *vfptr;
@@ -222,6 +235,68 @@ struct __declspec(align(16)) rl_scene_entity : rl_3d_entity
 	rl_partition_system* m_partition_system_p;
 	rl_partition_sector_entry m_partition_sector_entry;
 	rl_scene *m_scene_p;
+};
+
+struct __declspec(align(8)) plane_info //32 (25 align(8) -> 32) //rl_frustum_base::plane_info
+{
+	vector4 m_plane; //16
+	int m_neg_verts; //4
+	int m_pos_verts; //4
+	bool m_active; //1
+};
+
+struct __declspec(align(4)) frustum_cache //212 (209 align(4) -> 212) //rl_frustum_base::frustum_cache
+{
+	vector m_absPlanes[9]; //108
+	int m_numValidCornerPoints; //4
+	vector m_corners[8]; //96
+	bool m_dirty; //1
+};
+
+struct rl_frustum_base //508
+{
+	int m_num_active_planes; //4
+	int m_max_planes; //4
+	__declspec(align(16)) plane_info m_planes[9]; //288
+	frustum_cache m_cache; //212
+};
+
+struct rl_frustum : rl_frustum_base
+{
+
+};
+
+/* 3722 */
+struct __declspec(align(8)) rl_view_frustum : rl_frustum_base
+{
+	vector m_view_point;
+};
+
+struct rl_camera : rl_scene_entity
+{
+	matrix44 m_projection_transform;
+	matrix44 m_view_transform;
+	float m_fov;
+	__declspec(align(16)) rl_view_frustum m_frustum;
+	rl_view_frustum m_high_lod_frustum;
+	float m_near_clip;
+	float m_far_clip;
+	float m_high_lod_far_clip;
+	rl_camera_type m_type;
+	bool m_use_pixel_aspect_ratio;
+	bool m_depth_of_field_enabled;
+	float m_focus_start_A;
+	float m_focus_start_B;
+	float m_focus_end_A;
+	float m_focus_end_B;
+	bool m_motion_blur_enabled;
+	rl_camera_motion_blur_type m_motion_blur_type;
+	float m_motion_blur_amount;
+	float m_radial_blur_radius;
+	vector2 m_radial_blur_position;
+	float m_frame_override_blur;
+	float m_signal_noise_scale;
+	float m_signal_noise_frequency;
 };
 
 struct rl_color_float
@@ -508,36 +583,6 @@ struct __declspec(align(4)) rl_occluder : rl_scene_entity
 	rl_occluder *next;
 	rl_handle m_handle;
 	bool m_occluded;
-};
-
-struct __declspec(align(8)) plane_info //32 (25 align(8) -> 32) //rl_frustum_base::plane_info
-{
-	vector4 m_plane; //16
-	int m_neg_verts; //4
-	int m_pos_verts; //4
-	bool m_active; //1
-};
-
-/* 3758 */
-struct __declspec(align(4)) frustum_cache //212 (209 align(4) -> 212) //rl_frustum_base::frustum_cache
-{
-	vector m_absPlanes[9]; //108
-	int m_numValidCornerPoints; //4
-	vector m_corners[8]; //96
-	bool m_dirty; //1
-};
-
-struct rl_frustum_base //508
-{
-	int m_num_active_planes; //4
-	int m_max_planes; //4
-	__declspec(align(16)) plane_info m_planes[9]; //288
-	frustum_cache m_cache; //212
-};
-
-struct rl_frustum : rl_frustum_base
-{
-
 };
 
 struct rl_metrics : rl_base_object
