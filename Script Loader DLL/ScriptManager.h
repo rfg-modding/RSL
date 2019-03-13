@@ -26,8 +26,6 @@ public:
 	~ScriptManager();
 
 	void Initialize();
-	void RunTestScript();
-	void RunTestScript2();
 
 	void ScanScriptsFolder();
 	void ScanScriptsSubFolders();

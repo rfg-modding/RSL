@@ -106,65 +106,6 @@ int main (int, char*[]) {
 	return 0;
 }*/
 
-void ScriptManager::RunTestScript()
-{
-	std::string Script;
-	std::string ExePath = GetEXEPath(false);
-
-	std::cout << "Trying Test.lua\n";
-	try 
-	{
-		auto CodeResult = Lua.script_file(ExePath + "RFGR Script Loader/Scripts/Test.lua", [](lua_State*, sol::protected_function_result pfr) 
-		{
-			return pfr;
-		}, sol::load_mode::text);
-
-		if (!CodeResult.valid())
-		{
-			std::cout << "Test.lua not valid. Throwing exception.\n";
-			sol::error ScriptError = CodeResult;
-			std::exception ScriptException(ScriptError.what());
-			throw(ScriptException);
-		}
-	}
-	catch (std::exception& Exception)
-	{
-		std::ofstream LogFile(ExePath + "RFGR Script Loader/Logs/Script Log.txt");
-		LogFile << "Exception caught when running Test.lua: " << Exception.what() << "\n";
-		Logger::Log(std::string("Exception caught when running Test.lua: " +  std::string(Exception.what())), LogError);
-		LogFile.close();
-	}
-	catch (...)
-	{
-		std::cout << "General exception...\n";
-	}
-}
-
-void ScriptManager::RunTestScript2()
-{
-	std::string Script;
-	std::string ExePath = GetEXEPath(false);
-
-	try
-	{
-		auto CodeResult = Lua.script_file(ExePath + "RFGR Script Loader/Scripts/Test2.lua", [](lua_State*, sol::protected_function_result pfr)
-		{
-			return pfr;
-		}, sol::load_mode::text);
-
-		if (!CodeResult.valid())
-		{
-			sol::error ScriptError = CodeResult;
-			std::exception ScriptException(ScriptError.what());
-			throw(ScriptException);
-		}
-	}
-	catch (std::exception& Exception)
-	{
-		Logger::Log(std::string("Exception caught when running Test2.lua: " + std::string(Exception.what())), LogLua | LogError);
-	}
-}
-
 void ScriptManager::ScanScriptsFolder()
 {
 	Scripts.clear();
