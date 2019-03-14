@@ -12,27 +12,58 @@
 
 DWORD WINAPI MainThread(HMODULE hModule)
 {
-	Logger::Init(LogAll, GetEXEPath(false) + "RFGR Script Loader/Logs/", 10000);
-	Logger::OpenLogFile("Load Log.txt", LogAll, std::ios_base::trunc);
-	Logger::Log("RFGR Script Loader started. Activating.", LogInfo, true);
+	MainModule = hModule;
+
+	try
+	{
+		Logger::Init(LogAll, GetEXEPath(false) + "RFGR Script Loader/Logs/", 10000);
+		Logger::OpenLogFile("Load Log.txt", LogAll, std::ios_base::trunc);
+		Logger::Log("RFGR Script Loader started. Activating.", LogInfo, true);
+	}
+	catch (std::exception& Ex)
+	{
+		//MessageBoxA(FindTopWindow(GetProcessID("rfg.exe")), "Exception detected during Logger initialization. Will attempt to use secondary logging location...", "Logger failed to initialize!", MB_OK);
+		std::string MessageBoxString = "Exception detected during Logger initialization! Please show this to the current script loader maintainer. It's much harder to fix any further problems which might occur without logs. \n";
+		MessageBoxString += Ex.what();
+		MessageBoxA(FindTopWindow(GetProcessID("rfg.exe")), MessageBoxString.c_str(), "Logger failed to initialize!", MB_OK);
+		Logger::CloseAllLogFiles();
+	}
 
 	ProgramManager Program(hModule);
-	if (!Program.LoadDataFromConfig())
+	try
 	{
-		FreeLibraryAndExitThread(hModule, 0);
-		return 0;
+		if (!Program.LoadDataFromConfig())
+		{
+			FreeLibraryAndExitThread(hModule, 0);
+			return 0;
+		}
+		Program.OpenConsole();
+		Program.SetMemoryLocations();
+		Program.Initialize();
 	}
-	Program.OpenConsole();
-	Program.SetMemoryLocations();
-	Program.Initialize();
+	catch(std::exception& Ex)
+	{
+		std::string MessageBoxString = "Exception detected during script loader initialization! Please provide this and a zip file with your logs folder (./RFGR Script Loader/Logs/) to the maintainer. \n";
+		MessageBoxString += Ex.what();
+		MessageBoxA(FindTopWindow(GetProcessID("rfg.exe")), MessageBoxString.c_str(), "Script loader failed to initialize!", MB_OK);
+	}
 
-	Logger::Log("RFGR script loader successfully activated.", LogInfo, true);
-	Logger::CloseLogFile("Load Log.txt");
+	try
+	{
+		Logger::Log("RFGR script loader successfully activated.", LogInfo, true);
+		Logger::CloseLogFile("Load Log.txt");
 
-	Logger::OpenLogFile("General Log.txt", LogInfo, std::ios_base::trunc);
-	Logger::OpenLogFile("Error Log.txt", LogWarning | LogError | LogFatalError, std::ios_base::trunc);
-	Logger::OpenLogFile("Json Log.txt", LogJson, std::ios_base::trunc);
-	Logger::OpenLogFile("Lua Log.txt", LogLua, std::ios_base::trunc);
+		Logger::OpenLogFile("General Log.txt", LogInfo, std::ios_base::trunc);
+		Logger::OpenLogFile("Error Log.txt", LogWarning | LogError | LogFatalError, std::ios_base::trunc);
+		Logger::OpenLogFile("Json Log.txt", LogJson, std::ios_base::trunc);
+		Logger::OpenLogFile("Lua Log.txt", LogLua, std::ios_base::trunc);
+	}
+	catch(std::exception& Ex)
+	{
+		std::string MessageBoxString = "Exception detected when opening the default log files. Please show this to the current script loader maintainer. It's much harder to fix any further problems which might occur without logs. \n";
+		MessageBoxString += Ex.what();
+		MessageBoxA(FindTopWindow(GetProcessID("rfg.exe")), MessageBoxString.c_str(), "Logger failed to open default log files!", MB_OK);
+	}
 
 	Program.Scripts.ScanScriptsFolder();
 
@@ -54,7 +85,7 @@ DWORD WINAPI MainThread(HMODULE hModule)
 			RFGRState == GS_MULTIPLAYER_LIVE_FIND_SERVERS)
 		{
 			//MessageBoxA(FindTopWindow(GetProcessID("rfg.exe")), "MP usage detected, shutting down!", "Multiplayer mode detected", MB_OK);
-			Logger::Log("Error in UI hook, script loader crashing!", LogFatalError, true);
+ 			Logger::Log("Error in UI hook, script loader crashing!", LogFatalError, true);
 			FreeLibraryAndExitThread(hModule, 0);
 			return 0;
 		}

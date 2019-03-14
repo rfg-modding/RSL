@@ -1,5 +1,7 @@
 #include "Globals.h"
 
+HMODULE MainModule = nullptr;
+
 ImFont* FontNormal;
 ImFont* FontLarge;
 ImFont* FontHuge;
@@ -91,9 +93,48 @@ bool DirectoryExists(std::string Directory)
 
 void CreateDirectoryIfNull(std::string Directory)
 {
-	if (!DirectoryExists(Directory))
+	try
 	{
-		fs::create_directory(Directory);
+		if (!DirectoryExists(Directory))
+		{
+			fs::create_directory(Directory);
+		}
+	}
+	catch (fs::filesystem_error& Ex)
+	{
+		std::string ExceptionInfo = Ex.what();
+		ExceptionInfo += " \nstd::filesystem::filesystem_error, Additional info: ";
+		ExceptionInfo += "File: ";
+		ExceptionInfo += __FILE__;
+		ExceptionInfo += ", Function: ";
+		ExceptionInfo += __func__;
+		ExceptionInfo += ", Line: ";
+		ExceptionInfo += __LINE__;		
+		throw(std::exception(ExceptionInfo.c_str()));
+	}
+	catch (std::exception& Ex)
+	{
+		std::string ExceptionInfo = Ex.what();
+		ExceptionInfo += " \nstd::exception, Additional info: ";
+		ExceptionInfo += "File: ";
+		ExceptionInfo += __FILE__;
+		ExceptionInfo += ", Function: ";
+		ExceptionInfo += __func__;
+		ExceptionInfo += ", Line: ";
+		ExceptionInfo += __LINE__;
+		throw(std::exception(ExceptionInfo.c_str()));
+	}
+	catch (...)
+	{
+		std::string ExceptionInfo;
+		ExceptionInfo += " \nDefault exception detected caught! Additional info: ";
+		ExceptionInfo += "File: ";
+		ExceptionInfo += __FILE__;
+		ExceptionInfo += ", Function: ";
+		ExceptionInfo += __func__;
+		ExceptionInfo += ", Line: ";
+		ExceptionInfo += __LINE__;
+		throw std::exception(ExceptionInfo.c_str());
 	}
 }
 

@@ -1048,17 +1048,71 @@ bool TextEditor::LoadScript(std::string FullPath, std::string NewScriptName)
 
 bool TextEditor::SaveScript()
 {
-	std::string ScriptString = GetCurrentScriptString();
-	std::string FinalScriptName = FixScriptExtension(ScriptName);
+	bool Successful = true;
+	try
+	{
+		std::string ScriptString = GetCurrentScriptString();
+		std::string FinalScriptName = FixScriptExtension(ScriptName);
 
-	//std::cout << "Writing script to path: " << GetEXEPath(false) + "RFGR Script Loader/Scripts/" + FinalScriptName << "\n";
-	std::ofstream ScriptStream(GetEXEPath(false) + "RFGR Script Loader/Scripts/" + ScriptName, std::ios_base::trunc);
+		//std::cout << "Writing script to path: " << GetEXEPath(false) + "RFGR Script Loader/Scripts/" + FinalScriptName << "\n";
+		std::ofstream ScriptStream;
+		ScriptStream.exceptions(std::ios::failbit | std::ios::badbit);
+		ScriptStream.open(GetEXEPath(false) + "RFGR Script Loader/Scripts/" + ScriptName, std::ios_base::trunc);
 
-	ScriptStream << ScriptString;
-	ScriptStream.close();
-	Scripts->ScanScriptsFolder();
+		ScriptStream << ScriptString;
+		ScriptStream.close();
+		Scripts->ScanScriptsFolder();
+	}
+	catch (std::ios_base::failure& Ex)
+	{
+		Successful = false;
+		std::string ExceptionInfo = Ex.what();
+		ExceptionInfo += " \nstd::ios_base::failure when saving ";
+		ExceptionInfo += ScriptName;
+		ExceptionInfo += ", Additional info: ";
+		ExceptionInfo += "File: ";
+		ExceptionInfo += __FILE__;
+		ExceptionInfo += ", Function: ";
+		ExceptionInfo += __func__;
+		ExceptionInfo += ", Line: ";
+		ExceptionInfo += __LINE__;
+		Logger::Log(ExceptionInfo, LogError, true, true);
+		MessageBoxA(FindTopWindow(GetProcessID("rfg.exe")), ExceptionInfo.c_str(), "Failed to save script!", MB_OK);
+	}
+	catch (std::exception& Ex)
+	{
+		Successful = false;
+		std::string ExceptionInfo = Ex.what();
+		ExceptionInfo += " \nstd::exception when saving ";
+		ExceptionInfo += ScriptName;
+		ExceptionInfo += ", Additional info: ";
+		ExceptionInfo += "File: ";
+		ExceptionInfo += __FILE__;
+		ExceptionInfo += ", Function: ";
+		ExceptionInfo += __func__;
+		ExceptionInfo += ", Line: ";
+		ExceptionInfo += __LINE__;
+		Logger::Log(ExceptionInfo, LogError, true, true);
+		MessageBoxA(FindTopWindow(GetProcessID("rfg.exe")), ExceptionInfo.c_str(), "Failed to save script!", MB_OK);
+	}
+	catch (...)
+	{
+		Successful = false;
+		std::string ExceptionInfo;// = Ex.what();
+		ExceptionInfo += " \nDefault exception when saving ";
+		ExceptionInfo += ScriptName;
+		ExceptionInfo += ", Additional info: ";
+		ExceptionInfo += "File: ";
+		ExceptionInfo += __FILE__;
+		ExceptionInfo += ", Function: ";
+		ExceptionInfo += __func__;
+		ExceptionInfo += ", Line: ";
+		ExceptionInfo += __LINE__;
+		Logger::Log(ExceptionInfo, LogError, true, true);
+		MessageBoxA(FindTopWindow(GetProcessID("rfg.exe")), ExceptionInfo.c_str(), "Failed to save script!", MB_OK);
+	}
 
-	return true;
+	return Successful;
 }
 
 std::string TextEditor::FixScriptExtension(std::string CurrentScriptName)

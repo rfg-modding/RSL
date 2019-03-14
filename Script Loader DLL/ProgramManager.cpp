@@ -170,6 +170,65 @@ void ProgramManager::ProcessInput()
 	}
 	if (GetAsyncKeyState(VK_NUMPAD3))
 	{
+		Camera.ToggleFreeCamera();
+		Sleep(175);
+	}
+	if (Camera.IsFreeCameraActive())
+	{
+		static int MovementSleepTime = 4;
+		if (GetAsyncKeyState(0x51) & 0x8000) //q
+		{
+			Camera.AdjustCameraSpeed(-0.02f);
+			Sleep(50);
+		}
+		if (GetAsyncKeyState(0x45) & 0x8000) //e
+		{
+			Camera.AdjustCameraSpeed(0.02f);
+			Sleep(50);
+		}
+		/*if (GetAsyncKeyState(0x54) & 0x8000) //t
+		{
+			Camera.AdjustCameraRotationSpeed(-0.02f);
+			Sleep(50);
+		}
+		if (GetAsyncKeyState(0x59) & 0x8000) //y
+		{
+			Camera.AdjustCameraRotationSpeed(0.02f);
+			Sleep(50);
+		}*/
+		if (GetKeyState(0x5A) & 0x8000) //z
+		{
+			Camera.MoveFreeCamera(DOWN);
+			Sleep(MovementSleepTime);
+		}
+		if (GetAsyncKeyState(0x58) & 0x8000) //x
+		{
+			Camera.MoveFreeCamera(UP);
+			Sleep(MovementSleepTime);
+		}
+		if (GetAsyncKeyState(VK_UP) & 0x8000) //Up arrow key
+		{
+			Camera.MoveFreeCamera(FORWARD);
+			Sleep(MovementSleepTime);
+		}
+		if (GetAsyncKeyState(VK_DOWN) & 0x8000) //Down arrow key
+		{
+			Camera.MoveFreeCamera(BACKWARD);
+			Sleep(MovementSleepTime);
+		}
+		if (GetAsyncKeyState(VK_RIGHT) & 0x8000) //Right arrow key
+		{
+			Camera.MoveFreeCamera(RIGHT);
+			Sleep(MovementSleepTime);
+		}
+		if (GetAsyncKeyState(VK_LEFT) & 0x8000) //Left arrow key
+		{
+			Camera.MoveFreeCamera(LEFT);
+			Sleep(MovementSleepTime);
+		}
+	}
+	if (GetAsyncKeyState(VK_NUMPAD4))
+	{
 		std::random_device RandomDevice; // obtain a random number from hardware
 		std::mt19937 Generator(RandomDevice()); // seed the generator
 		std::uniform_int_distribution<> Distribution(0, 5); // define the range
@@ -227,7 +286,14 @@ void ProgramManager::ProcessInput()
 				}
 			}
 		}*/
-		Sleep(1000 / Gui.TweaksMenu.MiddleMouseExplosionsPerSecond);
+		if (Gui.TweaksMenu.MiddleMouseExplosionsPerSecond >= 1)
+		{
+			Sleep(1000 / Gui.TweaksMenu.MiddleMouseExplosionsPerSecond);
+		}
+		else
+		{
+			Sleep(1000);
+		}
 	}
 	if (GetAsyncKeyState(VK_F1))
 	{
@@ -261,10 +327,19 @@ void ProgramManager::ProcessInput()
 	}*/
 	if (Gui.ShowAppScriptEditor)
 	{
-		if (GetAsyncKeyState(VK_LCONTROL) && GetAsyncKeyState(0x53)) //Ctrl + S
+		try
 		{
-			Gui.ScriptEditor.SaveScript();
+			if (GetAsyncKeyState(VK_LCONTROL) && GetAsyncKeyState(0x53)) //Ctrl + S
+			{
+				Gui.ScriptEditor.SaveScript();
+			}
 		}
+		catch (const std::exception& Ex)
+		{
+			Logger::Log(std::string("Exception when using Ctrl+S save script shortcut. Message: " + std::string(Ex.what())), LogFatalError);
+		}
+
+
 		if (GetAsyncKeyState(VK_CONTROL) && GetAsyncKeyState(VK_SHIFT) && GetAsyncKeyState(0x53)) //Ctrl + Shift + S
 		{
 			Gui.ScriptEditor.ShowSaveAsScriptPopup = true;

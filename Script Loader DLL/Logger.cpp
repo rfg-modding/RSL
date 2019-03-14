@@ -20,26 +20,73 @@ void Logger::Init(int _ConsoleLogFlags, std::string _DefaultLogPath, unsigned in
 
 void Logger::OpenLogFile(std::string FileName, int LogFlags, std::ios_base::openmode Mode, std::string CustomFilePath)
 {
-	std::string Path;
-	if (CustomFilePath == "DEFAULT")
+	try
 	{
-		Path = DefaultLogPath;
-	}
-	else
-	{
-		Path = CustomFilePath;
-	}
-	for (auto i = LogFileMap.begin(); i != LogFileMap.end(); i++)
-	{
-		if (i->first == FileName)
+		std::string Path;
+		if (CustomFilePath == "DEFAULT")
 		{
-			Log(std::string(FileName + " already exists. New log file not created."), LogError);
-			return;
+			Path = DefaultLogPath;
 		}
+		else
+		{
+			Path = CustomFilePath;
+		}
+		for (auto i = LogFileMap.begin(); i != LogFileMap.end(); i++)
+		{
+			if (i->first == FileName)
+			{
+				Log(std::string(FileName + " already exists. New log file not created."), LogError);
+				return;
+			}
+		}
+		LogFileMap.insert_or_assign(FileName, LogFile(Path + FileName, LogFlags, Mode));
+		LogFileMap[FileName].File.exceptions(std::ios::failbit | std::ios::badbit);
+		LogFileMap[FileName].File.open(Path + FileName, Mode);
+		LogFileMap[FileName].File << GetTimeString(false) << "[Info] " << "Start of " << FileName << "\n";
+		LogFileMap[FileName].File << std::flush;
 	}
-	LogFileMap.insert_or_assign(FileName, LogFile(Path + FileName, LogFlags, Mode));
-	LogFileMap[FileName].File.open(Path + FileName, Mode);
-	LogFileMap[FileName].File << GetTimeString(false) << "[Info] " << "Start of " << FileName << "\n";
+	catch(std::ios_base::failure& Ex)
+	{
+		std::string ExceptionInfo = Ex.what();
+		ExceptionInfo += " \nstd::ios_base::failure when opening ";
+		ExceptionInfo += FileName;
+		ExceptionInfo += ", Additional info: ";
+		ExceptionInfo += "File: ";
+		ExceptionInfo += __FILE__;
+		ExceptionInfo += ", Function: ";
+		ExceptionInfo += __func__;
+		ExceptionInfo += ", Line: ";
+		ExceptionInfo += __LINE__;
+		throw(std::exception(ExceptionInfo.c_str()));
+	}
+	catch (std::exception& Ex)
+	{
+		std::string ExceptionInfo = Ex.what();
+		ExceptionInfo += " \nstd::exception when opening ";
+		ExceptionInfo += FileName;
+		ExceptionInfo += ", Additional info: ";
+		ExceptionInfo += "File: ";
+		ExceptionInfo += __FILE__;
+		ExceptionInfo += ", Function: ";
+		ExceptionInfo += __func__;
+		ExceptionInfo += ", Line: ";
+		ExceptionInfo += __LINE__;
+		throw(std::exception(ExceptionInfo.c_str()));
+	}
+	catch (...)
+	{
+		std::string ExceptionInfo;// = Ex.what();
+		ExceptionInfo += " \nDefault exception when opening ";
+		ExceptionInfo += FileName;
+		ExceptionInfo += ", Additional info: ";
+		ExceptionInfo += "File: ";
+		ExceptionInfo += __FILE__;
+		ExceptionInfo += ", Function: ";
+		ExceptionInfo += __func__;
+		ExceptionInfo += ", Line: ";
+		ExceptionInfo += __LINE__;
+		throw std::exception(ExceptionInfo.c_str());
+	}
 }
 
 void Logger::CloseLogFile(std::string FileName)
@@ -64,39 +111,103 @@ void Logger::Log(std::string Message, int LogFlags, bool LogTime, bool NewLine)
 	LogData.insert(LogData.begin(), LogEntry(FlagString, Message, LogFlags));
 	if (ConsoleLogFlags & LogFlags)
 	{
-		LogFlagWithColor(LogFlags);
-		if (LogTime)
+		try
 		{
-			std::cout << TimeString;
+			LogFlagWithColor(LogFlags);
+			if (LogTime)
+			{
+				std::cout << TimeString;
+			}
+			std::cout << " ";
+			std::cout << Message;
+			if (NewLine)
+			{
+				std::cout << "\n";
+			}
 		}
-		std::cout << " ";
-		std::cout << Message;
-		if (NewLine)
+		catch (std::exception& Ex)
 		{
-			std::cout << "\n";
+			std::string ExceptionInfo = Ex.what();
+			ExceptionInfo += " \nstd::exception caught while logging to external console!";
+			ExceptionInfo += " Additional info: ";
+			ExceptionInfo += "File: ";
+			ExceptionInfo += __FILE__;
+			ExceptionInfo += ", Function: ";
+			ExceptionInfo += __func__;
+			ExceptionInfo += ", Line: ";
+			ExceptionInfo += __LINE__;
+			Logger::Log(ExceptionInfo, LogError, true, true);
+			MessageBoxA(FindTopWindow(GetProcessID("rfg.exe")), ExceptionInfo.c_str(), "Failed to log to external console!", MB_OK);
+		}
+		catch (...)
+		{
+			std::string ExceptionInfo = "Default exception caught while logging to external console!";
+			ExceptionInfo += " Additional info: ";
+			ExceptionInfo += "File: ";
+			ExceptionInfo += __FILE__;
+			ExceptionInfo += ", Function: ";
+			ExceptionInfo += __func__;
+			ExceptionInfo += ", Line: ";
+			ExceptionInfo += __LINE__;
+			Logger::Log(ExceptionInfo, LogError, true, true);
+			MessageBoxA(FindTopWindow(GetProcessID("rfg.exe")), ExceptionInfo.c_str(), "Failed to log to external console!", MB_OK);
 		}
 	}
 	for (auto i = LogFileMap.begin(); i != LogFileMap.end(); i++)
 	{
-		if (i->second.LogFlags & LogFlags)
+		try
 		{
-			i->second.File << FlagString;
-			if (LogTime)
+			if (i->second.LogFlags & LogFlags)
 			{
-				i->second.File << TimeString;
+				i->second.File << FlagString;
+				if (LogTime)
+				{
+					i->second.File << TimeString;
+				}
+				i->second.File << " ";
+				i->second.File << Message;
+				if (NewLine)
+				{
+					i->second.File << "\n";
+				}
+				i->second.File << std::flush;
 			}
-			i->second.File << " ";
-			i->second.File << Message;
-			if (NewLine)
-			{
-				i->second.File << "\n";
-			}
+		}
+		catch (std::exception& Ex)
+		{
+			std::string ExceptionInfo = Ex.what();
+			ExceptionInfo += " \nstd::exception caught while logging to ";
+			ExceptionInfo += i->second.FilePath;
+			ExceptionInfo += ", Additional info: ";
+			ExceptionInfo += "File: ";
+			ExceptionInfo += __FILE__;
+			ExceptionInfo += ", Function: ";
+			ExceptionInfo += __func__;
+			ExceptionInfo += ", Line: ";
+			ExceptionInfo += __LINE__;
+			Logger::Log(ExceptionInfo, LogError, true, true);
+			MessageBoxA(FindTopWindow(GetProcessID("rfg.exe")), ExceptionInfo.c_str(), "Failed to log to file!", MB_OK);
+		}
+		catch (...)
+		{
+			std::string ExceptionInfo = "Default exception caught while logging to ";
+			ExceptionInfo += i->second.FilePath;
+			ExceptionInfo += ", Additional info: ";
+			ExceptionInfo += "File: ";
+			ExceptionInfo += __FILE__;
+			ExceptionInfo += ", Function: ";
+			ExceptionInfo += __func__;
+			ExceptionInfo += ", Line: ";
+			ExceptionInfo += __LINE__;
+			Logger::Log(ExceptionInfo, LogError, true, true);
+			MessageBoxA(FindTopWindow(GetProcessID("rfg.exe")), ExceptionInfo.c_str(), "Failed to log to file!", MB_OK);
 		}
 	}
 	if (LogData.size() > MaximumLogCount && MaximumLogCount > 0)
 	{
 		LogData.pop_back();
 	}
+	
 	/*if (LogData.size() >= 500)
 	{
 		std::cout << "LogData.size(): " << LogData.size() << "\n";

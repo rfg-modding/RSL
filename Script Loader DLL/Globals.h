@@ -24,6 +24,8 @@ static const ImVec4 ColorBlue2 = ImVec4(0.10f, 0.40f, 0.75f, 1.0f);
  
 static const float pi = 3.14159265f;
 
+extern HMODULE MainModule;
+
 extern ImFont* FontNormal;
 extern ImFont* FontLarge;
 extern ImFont* FontHuge;

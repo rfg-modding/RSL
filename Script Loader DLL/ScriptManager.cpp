@@ -106,28 +106,46 @@ int main (int, char*[]) {
 	return 0;
 }*/
 
+
 void ScriptManager::ScanScriptsFolder()
 {
-	Scripts.clear();
-	std::string ScriptFolderPath(GetEXEPath(false) + "RFGR Script Loader/Scripts/");
-
-	std::string ThisScriptPath;
-	std::string ThisScriptFolderPath;
-	std::string ThisScriptName;
-
-	for (auto& i : fs::directory_iterator(ScriptFolderPath))
+	try 
 	{
-		if (IsValidScriptExtensionFromPath(i.path().string()))
-		{
-			ThisScriptPath = i.path().string();
-			ThisScriptFolderPath = GetScriptFolderFromPath(i.path().string());
-			ThisScriptName = GetScriptNameFromPath(i.path().string());
-			Scripts.push_back(Script(ThisScriptPath, ThisScriptFolderPath, ThisScriptName));
+		Scripts.clear();
+		std::string ScriptFolderPath(GetEXEPath(false) + "RFGR Script Loader/Scripts/");
 
-			//Logger::Log(i.path().string(), LogInfo);
-			//Logger::Log("Script Name: " + ThisScriptName, LogInfo);
-			//Logger::Log("Script Folder: " + ThisScriptFolderPath, LogInfo);
+		std::string ThisScriptPath;
+		std::string ThisScriptFolderPath;
+		std::string ThisScriptName;
+
+		for (auto& i : fs::directory_iterator(ScriptFolderPath))
+		{
+			if (IsValidScriptExtensionFromPath(i.path().string()))
+			{
+				ThisScriptPath = i.path().string();
+				ThisScriptFolderPath = GetScriptFolderFromPath(i.path().string());
+				ThisScriptName = GetScriptNameFromPath(i.path().string());
+				Scripts.push_back(Script(ThisScriptPath, ThisScriptFolderPath, ThisScriptName));
+
+				//Logger::Log(i.path().string(), LogInfo);
+				//Logger::Log("Script Name: " + ThisScriptName, LogInfo);
+				//Logger::Log("Script Folder: " + ThisScriptFolderPath, LogInfo);
+			}
 		}
+	}
+	catch(std::exception& Ex)
+	{
+		std::string ExceptionInfo = Ex.what();
+		ExceptionInfo += " \nstd::exception when scanning scripts folder, Additional info: ";
+		ExceptionInfo += "File: ";
+		ExceptionInfo += __FILE__;
+		ExceptionInfo += ", Function: ";
+		ExceptionInfo += __func__;
+		ExceptionInfo += ", Line: ";
+		ExceptionInfo += __LINE__;
+		Logger::Log(ExceptionInfo, LogFatalError, true, true);
+		//strcpy(Ex.what, ExceptionInfo.c_str());
+		//throw(Ex);
 	}
 }
 
