@@ -76,6 +76,7 @@ void MenuBarGui::Draw(const char* Title)
 		if (ImGui::BeginMenu("Help"))
 		{
 			if (ImGui::MenuItem(std::string(std::string(ICON_FA_HOME) + u8" Welcome").c_str(), NULL, ShowAppMainWindow)) {}
+			if (ImGui::MenuItem(std::string(std::string(ICON_FA_INFO) + u8" Metrics").c_str(), NULL, Gui.ShowAppMetrics)) { ImGui::ShowMetricsWindow(&Gui.ShowAppMetrics); }
 			if (ImGui::MenuItem(std::string(std::string(ICON_FA_INFO) + u8" About").c_str(), NULL, ShowAppAbout)) {}
 			ImGui::EndMenu();
 		}
