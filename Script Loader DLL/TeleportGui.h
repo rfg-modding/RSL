@@ -1,5 +1,5 @@
 #pragma once
-#include "ThemeEditorGui.h"
+#include "BaseGui.h"
 
 class TeleportGui
 {

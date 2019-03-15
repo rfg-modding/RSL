@@ -1,5 +1,5 @@
 #pragma once
-#include "OverlayConsole.h"
+#include "BaseGui.h"
 
 class ScriptManager;
 class TextEditor;

@@ -1,7 +1,5 @@
 #pragma once
-///#include "Globals.h"
-///#include "RFGR_Types_Player.h"
-#include "TeleportGui.h"
+#include "BaseGui.h"
 
 class ScriptManager;
 

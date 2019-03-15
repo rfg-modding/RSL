@@ -1,8 +1,5 @@
 #pragma once
-#include "TextEditor.h"
-//#include "Functions.h"
-//#include "imgui_stdlib.h"
-//#include "IconsFontAwesome5.h"
+#include "BaseGui.h"
 
 class ScriptManager;
 

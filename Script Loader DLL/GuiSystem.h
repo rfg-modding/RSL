@@ -1,5 +1,14 @@
 #pragma once
 #include "WelcomeGui.h"
+#include "TeleportGui.h"
+#include "ThemeEditorGui.h"
+#include "IntrospectionGui.h"
+#include "GeneralTweaksGui.h"
+#include "ScriptSelectGui.h"
+#include "OverlayConsole.h"
+#include "TextEditor.h"
+#include "MenuBarGui.h"
+#include "LogWindow.h"
 
 class ScriptManager;
 

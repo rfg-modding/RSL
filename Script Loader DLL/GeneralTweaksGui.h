@@ -1,5 +1,5 @@
 #pragma once
-#include "ScriptSelectGui.h"
+#include "BaseGui.h"
 
 class GeneralTweaksGui
 {

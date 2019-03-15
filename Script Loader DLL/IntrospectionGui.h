@@ -1,5 +1,5 @@
 #pragma once
-#include "GeneralTweaksGui.h"
+#include "BaseGui.h"
 
 class IntrospectionGui
 {

@@ -1,5 +1,5 @@
 #pragma once
-#include "LogWindow.h"
+#include "BaseGui.h"
 
 class ScriptManager;
 
