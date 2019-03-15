@@ -179,6 +179,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BaseGui.cpp" />
     <ClCompile Include="CameraWrapper.cpp" />
     <ClCompile Include="FunctionManager.cpp" />
     <ClCompile Include="Functions.cpp" />
@@ -218,6 +219,7 @@
     <ClCompile Include="Utilities.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BaseGui.h" />
     <ClInclude Include="CameraWrapper.h" />
     <ClInclude Include="DeepCodeStorage.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
