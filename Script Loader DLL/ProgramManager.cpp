@@ -37,7 +37,6 @@ void ProgramManager::Initialize()
 	Functions.Initialize();
 	Scripts.Initialize();
 	
-
 	NewObjectPosition.x = 0.0f;
 	NewObjectPosition.y = 0.0f;
 	NewObjectPosition.z = 0.0f;
@@ -109,7 +108,9 @@ void ProgramManager::Initialize()
 		EndTime = StartTime;
 		StartTime = std::chrono::steady_clock::now();
 	}
+	//Gui.Initialize() is gaurunteed to be called before here because it's called during ImGui initialization.
 	Gui.SetScriptManager(&Scripts);
+	Gui.FreeCamSettings->Camera = &Camera;
 
 	Beep(600, 100);
 	Beep(700, 100);

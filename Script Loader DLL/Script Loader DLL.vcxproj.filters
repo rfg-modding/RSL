@@ -135,6 +135,9 @@
     <ClCompile Include="BaseGui.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="FreeCamGui.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CameraWrapper.h">
@@ -258,6 +261,9 @@
       <Filter>RFGR Structs</Filter>
     </ClInclude>
     <ClInclude Include="BaseGui.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FreeCamGui.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

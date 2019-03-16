@@ -170,6 +170,11 @@ public:
 	void AdjustPreLockYaw(float Value);
 	void AdjustPreLockRoll(float Value);
 
+	float CameraSpeed = 0.7f;
+	DWORD* RealFOV;
+	DWORD* IdealFOV;
+	float CustomFOV = 50.0f;
+
 private:
 	glm::mat3x3 RealOrientationMatrix;
 	glm::vec3 RealPositionVector;
@@ -194,15 +199,15 @@ private:
 	DWORD* RealDirectionY;
 	DWORD* RealDirectionZ;
 
-	DWORD* RealFOV;
-	DWORD* IdealFOV;
-
-	float CustomFOV = 50.0f;
+// 	DWORD* RealFOV;
+// 	DWORD* IdealFOV;
+// 
+// 	float CustomFOV = 50.0f;
 	float Pitch = 0.0f;
 	float Yaw = 0.0f;
 	float Roll = 0.0f;
 
-	float CameraSpeed = 0.7f;
+	//float CameraSpeed = 0.7f;
 	float CameraRotationSpeed = 5.0f;
 
 	bool FreeCameraActive = false;

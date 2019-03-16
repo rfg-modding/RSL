@@ -50,6 +50,7 @@ void MenuBarGui::Draw()
 			if (ImGui::MenuItem(std::string(std::string(ICON_FA_LIST) + u8" Logger").c_str(), NULL, &Gui->ShowAppLogWindow)) {}
 			if (ImGui::MenuItem(std::string(std::string(ICON_FA_SEARCH) + u8" Player view").c_str(), NULL, &Gui->ShowAppIntrospectionMenu)) {}
 			if (ImGui::MenuItem(std::string(std::string(ICON_FA_PALETTE) + u8" Theme editor").c_str(), NULL, &Gui->ShowAppThemeEditor)) {}
+			if (ImGui::MenuItem(std::string(std::string(ICON_FA_CAMERA) + u8" Free cam settings").c_str(), NULL, &Gui->ShowAppFreeCamSettings)) {}
 			ImGui::EndMenu();
 		}
 		if (ImGui::BeginMenu("Scripting"))

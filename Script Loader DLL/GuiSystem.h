@@ -9,6 +9,7 @@
 #include "TextEditor.h"
 #include "MenuBarGui.h"
 #include "LogWindow.h"
+#include "FreeCamGui.h"
 
 class ScriptManager;
 
@@ -49,6 +50,7 @@ public:
 	TextEditor* ScriptEditor = nullptr;
 	ScriptSelectGui* ScriptList = nullptr;
 	LogWindow* LogGui = nullptr;
+	FreeCamGui* FreeCamSettings = nullptr;
 
 	bool ShowAppWelcome = true;
 
@@ -58,7 +60,7 @@ public:
 	bool ShowAppAbout = false;
 	bool ShowAppGameInfoOverlay = false;
 
-	bool ShowAppMainMenuBar = false;
+	bool ShowAppMainMenuBar = true;
 	bool ShowAppSimpleOverlay = false;
 
 	bool ShowAppTeleportMenu = false;
@@ -69,6 +71,7 @@ public:
 	bool ShowAppScriptEditor = false;
 
 	bool ShowAppLogWindow = false;
+	bool ShowAppFreeCamSettings = false;
 
 private:
 	bool LuaConsoleActive = false;
