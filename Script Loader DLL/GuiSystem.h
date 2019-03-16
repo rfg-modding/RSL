@@ -32,16 +32,23 @@ public:
 	void DeactivateLuaConsole();
 	void ActivateLuaConsole();
 
-	WelcomeGui MainWindow;
-	OverlayConsole Console;
-	ThemeEditorGui ThemeEditor;
-	TeleportGui TeleportMenu;
-	IntrospectionGui IntrospectionMenu;
-	GeneralTweaksGui TweaksMenu;
-	ScriptSelectGui ScriptsMenu;
-	TextEditor ScriptEditor;
-	MenuBarGui TopMenuBar;
-	LogWindow LogGui;
+	std::vector <BaseGui*> GuiList;
+
+	std::once_flag InitialDrawCheck;
+	bool DrawPassedOnce = false;
+
+	//These pointers are used by any other class which wants quick access to a gui's state
+	//Avoids the cost of a search for each access.
+	MenuBarGui* MainMenuBar = nullptr;
+	WelcomeGui* Welcome = nullptr;
+	OverlayConsole* Console = nullptr;
+	ThemeEditorGui* ThemeEditor = nullptr;
+	TeleportGui* Teleport = nullptr;
+	IntrospectionGui* Introspection = nullptr;
+	GeneralTweaksGui* TweaksMenu = nullptr;
+	TextEditor* ScriptEditor = nullptr;
+	ScriptSelectGui* ScriptList = nullptr;
+	LogWindow* LogGui = nullptr;
 
 	bool ShowAppWelcome = true;
 

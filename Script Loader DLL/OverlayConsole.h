@@ -3,20 +3,17 @@
 
 class ScriptManager;
 
-class OverlayConsole
+class OverlayConsole : public BaseGui
 {
 public:
-	OverlayConsole();
+	OverlayConsole(bool* _OpenState, std::string _Title);
 	~OverlayConsole();
 
-	void Initialize(bool* _OpenState);
-	void Draw(const char* Title);
+	void Draw();
 
 	template <typename T> bool InputTextLambdaWrapper(const char* Label, std::string* Buffer, ImGuiInputTextFlags Flags = 0, T Callback = nullptr, void* UserData = nullptr);
 
-	Player* PlayerPtr = nullptr;
 	ImGuiWindowFlags WindowFlags = 0;
-	ScriptManager* Scripts = nullptr;
 
 	int ConsoleLogType = LogAll;// LogLua | LogError;
 	int BufferDisplayLength = 100;
@@ -29,7 +26,6 @@ public:
 	bool Autoscroll = true;
 
 private:
-	bool* OpenState = nullptr;
 	int BufferEnd = 0;
 	int BufferCount = 0;
 };

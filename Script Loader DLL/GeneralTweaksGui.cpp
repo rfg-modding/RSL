@@ -1,21 +1,12 @@
 #include "GeneralTweaksGui.h"
 
-GeneralTweaksGui::GeneralTweaksGui()
-{
-
-}
-
-GeneralTweaksGui::~GeneralTweaksGui()
-{
-
-}
-
-void GeneralTweaksGui::Initialize(bool* _OpenState)
+GeneralTweaksGui::GeneralTweaksGui(bool* _OpenState, std::string _Title)
 {
 	OpenState = _OpenState;
+	Title = _Title;
 
 	strcpy_s(CustomExplosionInfo.m_name, "Custom Explosion");
-	CustomExplosionInfo.m_unique_id = 268; //A value of 255 caused explosions to cause no damage.
+	CustomExplosionInfo.m_unique_id = 268; //A value of 255 caused explosions to cause no damage. Want to make sure it's actually unique to avoid issues.
 	CustomExplosionInfo.m_name_crc_str = 1234535;
 	CustomExplosionInfo.flags = 1;
 	CustomExplosionInfo.m_radius = 4.0f;
@@ -76,14 +67,19 @@ void GeneralTweaksGui::Initialize(bool* _OpenState)
 	CustomAlertLevel = ALERT_LEVEL_GREEN;
 }
 
-void GeneralTweaksGui::Draw(const char* Title)
+GeneralTweaksGui::~GeneralTweaksGui()
+{
+
+}
+
+void GeneralTweaksGui::Draw()
 {
 	if (!*OpenState)
 	{
 		return;
 	}
 	ImGui::SetNextWindowSize(ImVec2(600.0f, 700.0f), ImGuiCond_FirstUseEver);
-	if (!ImGui::Begin(Title, OpenState))
+	if (!ImGui::Begin(Title.c_str(), OpenState))
 	{
 		ImGui::End();
 		return;
@@ -332,6 +328,8 @@ void GeneralTweaksGui::Draw(const char* Title)
 		//all_zones and global_zone_grid in rfg::world are always empty. 
 		static int ZoneScanRange = 2000;
 		ImGui::InputInt("Zone scan range", &ZoneScanRange);
+		ImGui::SameLine();
+		Utilities::GUI::ShowHelpMarker("Only used by the first 2 buttons below this. A working list of zones in the games memory hasn't been found yet, so instead, a function that grabs zones by index is used to check every zone in this range. 2000 seems to be a good default, and setting it higher I never found any more zones.");
 		static float CustomMinWindSpeed = 0.0f;
 		static float CustomMaxWindSpeed = 0.0f;
 		ImGui::InputFloat("Custom min wind speed", &CustomMinWindSpeed);
@@ -415,6 +413,7 @@ void GeneralTweaksGui::Draw(const char* Title)
 		}
 		ImGui::SameLine();
 		Utilities::GUI::ShowHelpMarker("Prints info about the any world_zones it finds to ZoneInfoDump.txt. Many zone indices don't have a valid zone, and so the range set above is scanned through and only valid zones are printed to the file.");
+		ImGui::Separator();
 
 		if (ImGui::Button("Print misc world values"))
 		{

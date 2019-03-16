@@ -85,7 +85,7 @@ LRESULT __stdcall WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	switch (msg)
 	{
 	case WM_SIZE:
-		Logger::Log("WM_SIZE Recieved in custom WndProc. Invalidating ImGui DX11 device object. Releasing MainRenderTargetView.", LogWarning);
+		Logger::Log("WM_SIZE Received in custom WndProc. Invalidating ImGui DX11 device object. Releasing MainRenderTargetView.", LogWarning);
 		ImGui_ImplDX11_InvalidateDeviceObjects();
 		UpdateD3D11Pointers = true;
 		D3D11Context->OMSetRenderTargets(0, 0, 0);
@@ -405,14 +405,17 @@ void __fastcall PlayerDoFrameHook(Player* PlayerPtr)
 		std::cout << "PlayerPtr->FrametimeMultiplier: " << std::hex << std::uppercase << &PlayerPtr->FrametimeMultiplier << "\n";
 #endif
 	}
-
-	NewPlayerObject = *PlayerPtr;
+	if (!Gui.TweaksMenu)
+	{
+		return PlayerDoFrame(PlayerPtr);
+	}
+	//NewPlayerObject = *PlayerPtr;
 
 	if (InfiniteJetpack)
 	{
 		PlayerPtr->JetpackFuelPercent = 1.0f;
 	}
-	if (Gui.TweaksMenu.Invulnerable)
+	if (Gui.TweaksMenu->Invulnerable)
 	{
 		PlayerPtr->Flags.invulnerable = true;
 		//PlayerPtr->Flags.super_jump = true;
@@ -422,20 +425,20 @@ void __fastcall PlayerDoFrameHook(Player* PlayerPtr)
 		//PlayerPtr->HitPoints = 2147483647.0f;
 		//PlayerPtr->InitialMaxHitPoints = 2147483647;
 	}
-	if (Gui.TweaksMenu.NeedCustomJumpHeightSet)
+	if (Gui.TweaksMenu->NeedCustomJumpHeightSet)
 	{
-		PlayerPtr->CodeDrivenJumpHeight = Gui.TweaksMenu.CustomJumpHeight;
+		PlayerPtr->CodeDrivenJumpHeight = Gui.TweaksMenu->CustomJumpHeight;
 	}
-	if (Gui.TweaksMenu.NeedCustomMoveSpeedSet)
+	if (Gui.TweaksMenu->NeedCustomMoveSpeedSet)
 	{
-		PlayerPtr->MoveSpeed = Gui.TweaksMenu.CustomPlayerMoveSpeed;
+		PlayerPtr->MoveSpeed = Gui.TweaksMenu->CustomPlayerMoveSpeed;
 	}
-	if (Gui.TweaksMenu.NeedCustomMaxMoveSpeedSet)
+	if (Gui.TweaksMenu->NeedCustomMaxMoveSpeedSet)
 	{
-		PlayerPtr->MaxSpeed = Gui.TweaksMenu.CustomPlayerMaxSpeed;
+		PlayerPtr->MaxSpeed = Gui.TweaksMenu->CustomPlayerMaxSpeed;
 	}
 
-	return PlayerDoFrame(&NewPlayerObject);
+	return PlayerDoFrame(PlayerPtr);
 }
 
 void __cdecl ExplosionCreateHook(explosion_info * ExplosionInfo, void * Source, void * Owner, vector * Position, matrix * Orientation, vector * Direction, void * WeaponInfo, bool FromServer)
@@ -584,6 +587,7 @@ void __fastcall HumanUpdatePosAndOrientHook(Human* HumanPtr, void* edx, vector* 
 	return HumanUpdatePosAndOrient(HumanPtr, edx, UpdatedPosition, UpdatedOrientation, SetHavokData);
 }
 
+/*Disabled atm since I experience a crash with it, and it's not needed for the moment.*/
 void __cdecl CameraViewDataSetViewHook(CameraViewData* ViewData, CameraViewTableEntry* ViewTableEntry, bool SkipTransition)
 {
 	/*if (FirstPersonModeActive)
@@ -729,25 +733,29 @@ void __fastcall world_do_frame_hook(World* This, void* edx, bool HardLoad) //.te
 	{
 		GlobalTODLightPtr = game_render_get_TOD_light();
 	}
+	if (!Gui.TweaksMenu)
+	{
+		return world_do_frame(This, edx, HardLoad);
+	}
 
-	if (Gui.TweaksMenu.UseCustomLevelAmbientLight)
+	if (Gui.TweaksMenu->UseCustomLevelAmbientLight)
 	{
-		GlobalRfgWorldPtr->level_ambient.x = Gui.TweaksMenu.CustomLevelAmbientLight.x;
-		GlobalRfgWorldPtr->level_ambient.y = Gui.TweaksMenu.CustomLevelAmbientLight.y;
-		GlobalRfgWorldPtr->level_ambient.z = Gui.TweaksMenu.CustomLevelAmbientLight.z;
+		GlobalRfgWorldPtr->level_ambient.x = Gui.TweaksMenu->CustomLevelAmbientLight.x;
+		GlobalRfgWorldPtr->level_ambient.y = Gui.TweaksMenu->CustomLevelAmbientLight.y;
+		GlobalRfgWorldPtr->level_ambient.z = Gui.TweaksMenu->CustomLevelAmbientLight.z;
 	}
-	if (Gui.TweaksMenu.UseCustomLevelBackgroundAmbientLight)
+	if (Gui.TweaksMenu->UseCustomLevelBackgroundAmbientLight)
 	{
-		GlobalRfgWorldPtr->level_back_ambient.x = Gui.TweaksMenu.CustomLevelBackgroundAmbientLight.x;
-		GlobalRfgWorldPtr->level_back_ambient.y = Gui.TweaksMenu.CustomLevelBackgroundAmbientLight.y;
-		GlobalRfgWorldPtr->level_back_ambient.z = Gui.TweaksMenu.CustomLevelBackgroundAmbientLight.z;
+		GlobalRfgWorldPtr->level_back_ambient.x = Gui.TweaksMenu->CustomLevelBackgroundAmbientLight.x;
+		GlobalRfgWorldPtr->level_back_ambient.y = Gui.TweaksMenu->CustomLevelBackgroundAmbientLight.y;
+		GlobalRfgWorldPtr->level_back_ambient.z = Gui.TweaksMenu->CustomLevelBackgroundAmbientLight.z;
 	}
-	if (Gui.TweaksMenu.UseCustomTimeOfDayLight)
+	if (Gui.TweaksMenu->UseCustomTimeOfDayLight)
 	{
-		GlobalTODLightPtr->m_color.red = Gui.TweaksMenu.CustomTimeOfDayLightColor.red;
-		GlobalTODLightPtr->m_color.green = Gui.TweaksMenu.CustomTimeOfDayLightColor.green;
-		GlobalTODLightPtr->m_color.blue = Gui.TweaksMenu.CustomTimeOfDayLightColor.blue;
-		GlobalTODLightPtr->m_color.alpha = Gui.TweaksMenu.CustomTimeOfDayLightColor.alpha;
+		GlobalTODLightPtr->m_color.red = Gui.TweaksMenu->CustomTimeOfDayLightColor.red;
+		GlobalTODLightPtr->m_color.green = Gui.TweaksMenu->CustomTimeOfDayLightColor.green;
+		GlobalTODLightPtr->m_color.blue = Gui.TweaksMenu->CustomTimeOfDayLightColor.blue;
+		GlobalTODLightPtr->m_color.alpha = Gui.TweaksMenu->CustomTimeOfDayLightColor.alpha;
 	}																   
 
 	return world_do_frame(This, edx, HardLoad);

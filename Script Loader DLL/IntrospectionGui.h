@@ -1,20 +1,15 @@
 #pragma once
 #include "BaseGui.h"
 
-class IntrospectionGui
+class IntrospectionGui : public BaseGui
 {
 public:
-	IntrospectionGui();
+	IntrospectionGui(bool* _OpenState, std::string _Title);
 	~IntrospectionGui();
 
-	void Initialize(bool* _OpenState);
-	void Draw(const char* Title);
+	void Draw();
 	void DrawPlayerIntrospectionGui(const char* Title);
 
 	ImGuiWindowFlags WindowFlags = 0;
-	Player* PlayerPtr = nullptr;
-
-private:
-	bool* OpenState = nullptr;
 };
 

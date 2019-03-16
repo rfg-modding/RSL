@@ -1,19 +1,9 @@
 #include "LogWindow.h"
-#include "ScriptManager.h"
 
-LogWindow::LogWindow()
-{
-
-}
-
-LogWindow::~LogWindow()
-{
-
-}
-
-void LogWindow::Initialize(bool * _OpenState)
+LogWindow::LogWindow(bool* _OpenState, std::string _Title)
 {
 	OpenState = _OpenState;
+	Title = _Title;
 
 	WindowFlags = 0;
 	//WindowFlags |= ImGuiWindowFlags_NoTitleBar;
@@ -27,7 +17,12 @@ void LogWindow::Initialize(bool * _OpenState)
 	//WindowFlags |= ImGuiWindowFlags_NoBringToFrontOnFocus;
 }
 
-void LogWindow::Draw(const char * Title)
+LogWindow::~LogWindow()
+{
+
+}
+
+void LogWindow::Draw()
 {
 	//auto StartTime = std::chrono::steady_clock::now();
 	if (!*OpenState)
@@ -36,7 +31,7 @@ void LogWindow::Draw(const char * Title)
 	}
 
 	ImGui::SetNextWindowSize(ImVec2(800.0f, 700.0f), ImGuiCond_Once);
-	if (!ImGui::Begin(Title, OpenState, WindowFlags))
+	if (!ImGui::Begin(Title.c_str(), OpenState, WindowFlags))
 	{
 		ImGui::End();
 		return;

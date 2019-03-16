@@ -1,14 +1,13 @@
 #pragma once
 #include "BaseGui.h"
 
-class ThemeEditorGui
+class ThemeEditorGui : public BaseGui
 {
 public:
-	ThemeEditorGui();
+	ThemeEditorGui(bool* _OpenState, std::string _Title);
 	~ThemeEditorGui();
 
-	void Initialize(bool* _OpenState);
-	void Draw(const char* Title);
+	void Draw();
 
 	bool ShowStyleSelector(const char* Label);
 	void ShowFontSelector(const char* Label);
@@ -17,8 +16,5 @@ public:
 	bool SaveGUIConfig(std::string ThemeName, std::string Description, std::string Author, std::string Readme, std::string Filename);
 
 	nlohmann::json GUIConfig;
-
-private:
-	bool* OpenState = nullptr;
 };
 

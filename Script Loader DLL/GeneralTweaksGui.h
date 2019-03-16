@@ -1,23 +1,13 @@
 #pragma once
 #include "BaseGui.h"
 
-class GeneralTweaksGui
+class GeneralTweaksGui : public BaseGui
 {
 public:
-	GeneralTweaksGui();
+	GeneralTweaksGui(bool* _OpenState, std::string _Title);
 	~GeneralTweaksGui();
 
-	void Initialize(bool* _OpenState);
-	void Draw(const char* Title);
-
-	Player* PlayerPtr = nullptr;
-
-	bool TeleportWindowOpen = false;
-	bool PlayerVariablesGuiOpen = false;
-
-	bool UseUnsafeTeleport = false;
-	float SafeTeleportPlacementRange = 10.0f;
-	bool AllowSafeTeleportFail = false;
+	void Draw();
 
 	bool Invulnerable = false;
 
@@ -50,8 +40,5 @@ public:
 	float RepairRadius = 6.0f;
 	int RepairDuration = 1;
 	int RepairPosition = 0;
-
-private:
-	bool* OpenState = nullptr;
 };
 

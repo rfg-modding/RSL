@@ -1,19 +1,10 @@
 #include "OverlayConsole.h"
 #include "ScriptManager.h"
 
-OverlayConsole::OverlayConsole()
-{
-
-}
-
-OverlayConsole::~OverlayConsole()
-{
-
-}
-
-void OverlayConsole::Initialize(bool* _OpenState)
+OverlayConsole::OverlayConsole(bool* _OpenState, std::string _Title)
 {
 	OpenState = _OpenState;
+	Title = _Title;
 
 	WindowFlags = 0;
 	WindowFlags |= ImGuiWindowFlags_NoTitleBar;
@@ -27,7 +18,12 @@ void OverlayConsole::Initialize(bool* _OpenState)
 	//WindowFlags |= ImGuiWindowFlags_NoBringToFrontOnFocus;
 }
 
-void OverlayConsole::Draw(const char* Title)
+OverlayConsole::~OverlayConsole()
+{
+
+}
+
+void OverlayConsole::Draw()
 {
 	//auto StartTime = std::chrono::steady_clock::now();
 	if (!*OpenState)
@@ -50,7 +46,7 @@ void OverlayConsole::Draw(const char* Title)
 	ImGui::PushStyleColor(ImGuiCol_ResizeGrip, Colors[ImGuiCol_WindowBg]);
 	ImGui::PushStyleColor(ImGuiCol_ResizeGripHovered, Colors[ImGuiCol_WindowBg]);
 	ImGui::PushStyleColor(ImGuiCol_ResizeGripActive, Colors[ImGuiCol_WindowBg]);
-	if (!ImGui::Begin(Title, OpenState, WindowFlags))
+	if (!ImGui::Begin(Title.c_str(), OpenState, WindowFlags))
 	{
 		ImGui::End();
 		return;
@@ -144,7 +140,7 @@ void OverlayConsole::Draw(const char* Title)
 	//ReclaimFocus = false;
 	if (InputTextLambdaWrapper("##LuaConsoleInput", &InputBuffer, ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_CallbackHistory, [&](ImGuiInputTextCallbackData* CallbackData)
 	{
-		//Callback lambda which handles up/down keypresses
+		//Callback lambda which handles up/down key presses
 		if (CallbackData->EventFlag == ImGuiInputTextFlags_CallbackHistory)
 		{
 			if (CallbackData->EventKey == ImGuiKey_UpArrow)
@@ -204,6 +200,7 @@ inline bool OverlayConsole::InputTextLambdaWrapper(const char* Label, std::strin
 	{
 		auto& f = *static_cast<T*>(Data->UserData);
 		return f(Data);
+
 	};
 	return ImGui::InputText(Label, Buffer, Flags, FreeCallback, &Callback);
 }

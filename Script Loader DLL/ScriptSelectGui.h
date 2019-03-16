@@ -1,24 +1,17 @@
 #pragma once
 #include "BaseGui.h"
 
-class ScriptManager;
 class TextEditor;
+class ScriptManager;
 
-class ScriptSelectGui
+class ScriptSelectGui : public BaseGui
 {
 public:
-	ScriptSelectGui();
+	ScriptSelectGui(bool* _OpenState, std::string _Title);
 	~ScriptSelectGui();
 
-	void Initialize(bool* _OpenState);
-	void Draw(const char* Title);
+	void Draw();
 
-	ScriptManager* Scripts = nullptr;
-	TextEditor* ScriptEditor = nullptr;
-	bool* ScriptEditorState = nullptr;
 	ImGuiWindowFlags WindowFlags = 0;
-
-private:
-	bool* OpenState = nullptr;
 };
 

@@ -1,7 +1,5 @@
 #include "ProgramManager.h"
 
-//#include <cstdarg>
-
 ProgramManager::ProgramManager(HMODULE hModule)
 {
 	ScriptLoaderModule = hModule;
@@ -38,7 +36,7 @@ void ProgramManager::Initialize()
 	Camera.Initialize(DefaultFreeCameraSpeed, 5.0);
 	Functions.Initialize();
 	Scripts.Initialize();
-	Gui.SetScriptManager(&Scripts);
+	
 
 	NewObjectPosition.x = 0.0f;
 	NewObjectPosition.y = 0.0f;
@@ -111,6 +109,7 @@ void ProgramManager::Initialize()
 		EndTime = StartTime;
 		StartTime = std::chrono::steady_clock::now();
 	}
+	Gui.SetScriptManager(&Scripts);
 
 	Beep(600, 100);
 	Beep(700, 100);
@@ -121,18 +120,14 @@ void ProgramManager::Initialize()
 
 void ProgramManager::ProcessInput()
 {
-	if ((GetAsyncKeyState(VK_OEM_3))) //126 = virtual keycode for tilde
+	if ((GetAsyncKeyState(VK_OEM_3))) //126 = virtual key code for tilde
 	{
 		///Logger::Log("Tilde pressed", LogInfo);
 		Gui.ToggleLuaConsole();
 		if (Gui.IsLuaConsoleActive())
 		{
-			Gui.Console.InputBuffer.clear();
-			if (Gui.Console.InputBuffer[Gui.Console.InputBuffer.length() - 1] == '`')
-			{
-				Gui.Console.InputBuffer[Gui.Console.InputBuffer.length() - 1] = '\0';
-			}
-			Gui.Console.ReclaimFocus = true; //Tell console to set focus to it's text input.
+			Gui.Console->InputBuffer.clear();
+			Gui.Console->ReclaimFocus = true; //Tell console to set focus to it's text input.
 			if (!OverlayActive)
 			{
 				SnippetManager::BackupSnippet("MouseGenericPollMouseVisible", MouseGenericPollMouseVisible, 12, true);
@@ -141,10 +136,7 @@ void ProgramManager::ProcessInput()
 		}
 		else
 		{
-			if (Gui.Console.InputBuffer[Gui.Console.InputBuffer.length() - 1] == '`')
-			{
-				Gui.Console.InputBuffer[Gui.Console.InputBuffer.length() - 1] = '\0';
-			}
+			Gui.Console->InputBuffer.clear();
 			if (!OverlayActive)
 			{
 				SnippetManager::RestoreSnippet("MouseGenericPollMouseVisible", true);
@@ -262,10 +254,10 @@ void ProgramManager::ProcessInput()
 	}
 	if (GetAsyncKeyState(VK_MBUTTON))
 	{
-		if (Gui.TweaksMenu.MiddleMouseBoomActive)
+		if (Gui.TweaksMenu->MiddleMouseBoomActive)
 		{
-			ExplosionCreate(&Gui.TweaksMenu.CustomExplosionInfo, Gui.TweaksMenu.PlayerPtr, Gui.TweaksMenu.PlayerPtr,
-				&Gui.TweaksMenu.PlayerPtr->aim_pos, &Gui.TweaksMenu.PlayerPtr->mp_camera_orient, &Gui.TweaksMenu.PlayerPtr->aim_pos, NULL, false);
+			ExplosionCreate(&Gui.TweaksMenu->CustomExplosionInfo, Gui.TweaksMenu->PlayerPtr, Gui.TweaksMenu->PlayerPtr,
+				&Gui.TweaksMenu->PlayerPtr->aim_pos, &Gui.TweaksMenu->PlayerPtr->mp_camera_orient, &Gui.TweaksMenu->PlayerPtr->aim_pos, NULL, false);
 		}
 		//For whatever reason this causes a crash. Might need to call at a specific time to not piss off havok or something.
 		/*if (Gui.TweaksMenu.MiddleMouseRepairSphereActive)
@@ -286,9 +278,9 @@ void ProgramManager::ProcessInput()
 				}
 			}
 		}*/
-		if (Gui.TweaksMenu.MiddleMouseExplosionsPerSecond >= 1)
+		if (Gui.TweaksMenu->MiddleMouseExplosionsPerSecond >= 1)
 		{
-			Sleep(1000 / Gui.TweaksMenu.MiddleMouseExplosionsPerSecond);
+			Sleep(1000 / Gui.TweaksMenu->MiddleMouseExplosionsPerSecond);
 		}
 		else
 		{
@@ -331,7 +323,7 @@ void ProgramManager::ProcessInput()
 		{
 			if (GetAsyncKeyState(VK_LCONTROL) && GetAsyncKeyState(0x53)) //Ctrl + S
 			{
-				Gui.ScriptEditor.SaveScript();
+				Gui.ScriptEditor->SaveScript();
 			}
 		}
 		catch (const std::exception& Ex)
@@ -342,19 +334,19 @@ void ProgramManager::ProcessInput()
 
 		if (GetAsyncKeyState(VK_CONTROL) && GetAsyncKeyState(VK_SHIFT) && GetAsyncKeyState(0x53)) //Ctrl + Shift + S
 		{
-			Gui.ScriptEditor.ShowSaveAsScriptPopup = true;
+			Gui.ScriptEditor->ShowSaveAsScriptPopup = true;
 		}
 		if (GetAsyncKeyState(VK_LCONTROL) && GetAsyncKeyState(0x4F)) //Ctrl + O
 		{
-			Gui.ScriptEditor.ShowOpenScriptPopup = true;
+			Gui.ScriptEditor->ShowOpenScriptPopup = true;
 		}
 		if (GetAsyncKeyState(VK_LCONTROL) && GetAsyncKeyState(0x4E)) //Ctrl + N
 		{
-			Gui.ScriptEditor.ShowNewScriptPopup = true;
+			Gui.ScriptEditor->ShowNewScriptPopup = true;
 		}
 		if (GetAsyncKeyState(VK_F5))
 		{
-			std::string ScriptString = Gui.ScriptEditor.GetCurrentScriptString();
+			std::string ScriptString = Gui.ScriptEditor->GetCurrentScriptString();
 			Scripts.RunStringAsScript(ScriptString, "script editor run");
 			Sleep(175);
 		}
@@ -432,11 +424,11 @@ void ProgramManager::CreateGameHooks(bool EnableNow)
 	Hooks.CreateHook("HumanUpdatePosAndOrient", GAMEHOOK, (DWORD*)(ModuleBase + 0x69AF70), HumanUpdatePosAndOrientHook, (LPVOID*)&HumanUpdatePosAndOrient, EnableNow);
 	//Hooks.CreateHook("CharacterControllerSetPos", GAMEHOOK, (DWORD*)(ModuleBase + 0x4153D0), CharacterControllerSetPosHook, (LPVOID*)&CharacterControllerSetPos, EnableNow);
 	Hooks.CreateHook("ExplosionCreate", GAMEHOOK, (DWORD*)(ModuleBase + 0x2EC720), ExplosionCreateHook, (LPVOID*)&ExplosionCreate, EnableNow);
-	Hooks.CreateHook("CameraViewDataSetView", GAMEHOOK, (DWORD*)(ModuleBase + 0x2D0290), CameraViewDataSetViewHook, (LPVOID*)&CameraViewDataSetView, EnableNow);
+	//Hooks.CreateHook("CameraViewDataSetView", GAMEHOOK, (DWORD*)(ModuleBase + 0x2D0290), CameraViewDataSetViewHook, (LPVOID*)&CameraViewDataSetView, EnableNow);
 	//Hooks.CreateHook("KeenGraphicsResizeRenderSwapchain", GAMEHOOK, (DWORD*)(ModuleBase + 0x86AB20), KeenGraphicsResizeRenderSwapchainHook, (LPVOID*)&KeenGraphicsResizeRenderSwapchain, EnableNow);
 
 	/*Start of MP Detection Hooks*/
-	//Using phony names to make finding the MP hooks a bit harder to find.
+	//Using phony names to make finding the MP hooks a bit more difficult.
 	Hooks.CreateHook("CameraViewNormalizeMatrix", GAMEHOOK, (DWORD*)(ModuleBase + 0x1D0DD0), IsValidGameLinkLobbyKaikoHook, (LPVOID*)&IsValidGameLinkLobbyKaiko, EnableNow);
 	Hooks.CreateHook("CameraZoomFixAlignment", GAMEHOOK, (DWORD*)(ModuleBase + 0x3CC750), GameMusicMultiplayerStartHook, (LPVOID*)&GameMusicMultiplayerStart, EnableNow);
 	Hooks.CreateHook("CameraViewDataFlipMatrix", GAMEHOOK, (DWORD*)(ModuleBase + 0x497740), InitMultiplayerDataItemRespawnHook, (LPVOID*)&InitMultiplayerDataItemRespawn, EnableNow);

@@ -1,16 +1,13 @@
 #pragma once
 #include "BaseGui.h"
 
-class ScriptManager;
-
-class LogWindow
+class LogWindow : public BaseGui
 {
 public:
-	LogWindow();
+	LogWindow(bool* _OpenState, std::string _Title);
 	~LogWindow();
 
-	void Initialize(bool* _OpenState);
-	void Draw(const char* Title);
+	void Draw();
 
 	ImGuiWindowFlags WindowFlags = 0;
 	int ConsoleLogType = LogAll;
@@ -18,7 +15,6 @@ public:
 	bool AutoScroll = true;
 
 private:
-	bool* OpenState = nullptr;
 	int BufferEnd = 0;
 	int BufferCount = 0;
 };

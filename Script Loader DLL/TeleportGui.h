@@ -1,14 +1,13 @@
 #pragma once
 #include "BaseGui.h"
 
-class TeleportGui
+class TeleportGui : public BaseGui
 {
 public:
-	TeleportGui();
+	TeleportGui(bool* _OpenState, std::string _Title);
 	~TeleportGui();
 
-	void Initialize(bool* _OpenState);
-	void Draw(const char* Title, bool UseSeparateWindow = true);
+	void Draw();
 
 	bool LoadTeleportLocations();
 	bool SaveTeleportLocations();
@@ -20,7 +19,6 @@ public:
 	void HumanTeleportSafe(vector NewPosition, int TimeToHover = 5000);
 
 	nlohmann::json TeleportLocations;
-	Player* PlayerPtr = nullptr;
 
 	bool TeleportEditPopupOpen = false;
 	std::string NewTeleportName;
@@ -31,8 +29,5 @@ public:
 
 	ImGuiWindowFlags WindowFlags = 0;
 	ImGuiWindowFlags ModalFlags = 0;
-
-private:
-	bool* OpenState = nullptr;
 };
 

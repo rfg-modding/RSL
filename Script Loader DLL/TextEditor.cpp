@@ -28,7 +28,7 @@ bool equals(InputIt1 first1, InputIt1 last1,
 	return first1 == last1 && first2 == last2;
 }
 
-TextEditor::TextEditor()
+TextEditor::TextEditor(bool* _OpenState, std::string _Title)
 	: mLineSpacing(1.0f)
 	, mUndoIndex(0)
 	, mTabSize(4)
@@ -47,6 +47,9 @@ TextEditor::TextEditor()
 	, mCheckComments(true)
 	, mLastClick(-1.0f)
 {
+	OpenState = _OpenState;
+	Title = _Title;
+
 	SetPalette(GetDarkPalette());
 	SetLanguageDefinition(LanguageDefinition::HLSL());
 	mLines.push_back(Line());
@@ -54,11 +57,12 @@ TextEditor::TextEditor()
 
 TextEditor::~TextEditor()
 {
+
 }
 
-void TextEditor::Initialize(bool * _OpenState)
+void TextEditor::Draw()
 {
-	OpenState = _OpenState;
+	Render(std::string("Script Editor - " + ScriptName).c_str());
 }
 
 void TextEditor::SetLanguageDefinition(const LanguageDefinition & aLanguageDef)
@@ -1036,28 +1040,87 @@ std::string TextEditor::GetCurrentScriptString()
 
 bool TextEditor::LoadScript(std::string FullPath, std::string NewScriptName)
 {
-	std::ifstream ScriptStream(FullPath);
-	std::string ScriptString((std::istreambuf_iterator<char>(ScriptStream)), std::istreambuf_iterator<char>());
+	bool Successful = true;
+	try
+	{
+		std::ifstream ScriptStream;
+		ScriptStream.exceptions(std::ios::failbit | std::ios::badbit);
+		ScriptStream.open(FullPath);
+		std::string ScriptString((std::istreambuf_iterator<char>(ScriptStream)), std::istreambuf_iterator<char>());
 
-	ScriptName = NewScriptName;
-	TextEditor::mLines.clear();
-	TextEditor::SetText(ScriptString);
-	ImGui::CloseCurrentPopup();
-	return true;
+		ScriptName = NewScriptName;
+		mLines.clear();
+		SetText(ScriptString);
+		ImGui::CloseCurrentPopup();
+	}
+	catch (std::ios_base::failure& Ex)
+	{
+		Successful = false;
+		std::string ExceptionInfo = Ex.what();
+		ExceptionInfo += " \nstd::ios_base::failure when loading ";
+		ExceptionInfo += FullPath;
+		ExceptionInfo += ", Additional info: ";
+		ExceptionInfo += "Error code: ";
+		ExceptionInfo += Ex.code().message();
+		ExceptionInfo += ", File: ";
+		ExceptionInfo += __FILE__;
+		ExceptionInfo += ", Function: ";
+		ExceptionInfo += __func__;
+		ExceptionInfo += ", Line: ";
+		ExceptionInfo += __LINE__;
+		Logger::Log(ExceptionInfo, LogError, true, true);
+		MessageBoxA(FindTopWindow(GetProcessID("rfg.exe")), ExceptionInfo.c_str(), "Failed to load script!", MB_OK);
+	}
+	catch (std::exception& Ex)
+	{
+		Successful = false;
+		std::string ExceptionInfo = Ex.what();
+		ExceptionInfo += " \nstd::exception when loading ";
+		ExceptionInfo += FullPath;
+		ExceptionInfo += ", Additional info: ";
+		ExceptionInfo += "File: ";
+		ExceptionInfo += __FILE__;
+		ExceptionInfo += ", Function: ";
+		ExceptionInfo += __func__;
+		ExceptionInfo += ", Line: ";
+		ExceptionInfo += __LINE__;
+		Logger::Log(ExceptionInfo, LogError, true, true);
+		MessageBoxA(FindTopWindow(GetProcessID("rfg.exe")), ExceptionInfo.c_str(), "Failed to load script!", MB_OK);
+	}
+	catch (...)
+	{
+		Successful = false;
+		std::string ExceptionInfo;// = Ex.what();
+		ExceptionInfo += " \nDefault exception when loading ";
+		ExceptionInfo += FullPath;
+		ExceptionInfo += ", Additional info: ";
+		ExceptionInfo += "File: ";
+		ExceptionInfo += __FILE__;
+		ExceptionInfo += ", Function: ";
+		ExceptionInfo += __func__;
+		ExceptionInfo += ", Line: ";
+		ExceptionInfo += __LINE__;
+		Logger::Log(ExceptionInfo, LogError, true, true);
+		MessageBoxA(FindTopWindow(GetProcessID("rfg.exe")), ExceptionInfo.c_str(), "Failed to load script!", MB_OK);
+	}
+
+	return Successful;
 }
 
 bool TextEditor::SaveScript()
 {
 	bool Successful = true;
+	std::string FullPath;
 	try
 	{
 		std::string ScriptString = GetCurrentScriptString();
 		std::string FinalScriptName = FixScriptExtension(ScriptName);
 
 		//std::cout << "Writing script to path: " << GetEXEPath(false) + "RFGR Script Loader/Scripts/" + FinalScriptName << "\n";
+		FullPath = GetEXEPath(false) + "RFGR Script Loader/Scripts/" + ScriptName;
 		std::ofstream ScriptStream;
 		ScriptStream.exceptions(std::ios::failbit | std::ios::badbit);
-		ScriptStream.open(GetEXEPath(false) + "RFGR Script Loader/Scripts/" + ScriptName, std::ios_base::trunc);
+		ScriptStream.open(FullPath, std::ios_base::trunc);
 
 		ScriptStream << ScriptString;
 		ScriptStream.close();
@@ -1068,9 +1131,11 @@ bool TextEditor::SaveScript()
 		Successful = false;
 		std::string ExceptionInfo = Ex.what();
 		ExceptionInfo += " \nstd::ios_base::failure when saving ";
-		ExceptionInfo += ScriptName;
+		ExceptionInfo += FullPath;
 		ExceptionInfo += ", Additional info: ";
-		ExceptionInfo += "File: ";
+		ExceptionInfo += "Error code: ";
+		ExceptionInfo += Ex.code().message();
+		ExceptionInfo += ", File: ";
 		ExceptionInfo += __FILE__;
 		ExceptionInfo += ", Function: ";
 		ExceptionInfo += __func__;
@@ -1084,7 +1149,7 @@ bool TextEditor::SaveScript()
 		Successful = false;
 		std::string ExceptionInfo = Ex.what();
 		ExceptionInfo += " \nstd::exception when saving ";
-		ExceptionInfo += ScriptName;
+		ExceptionInfo += FullPath;
 		ExceptionInfo += ", Additional info: ";
 		ExceptionInfo += "File: ";
 		ExceptionInfo += __FILE__;
@@ -1100,7 +1165,7 @@ bool TextEditor::SaveScript()
 		Successful = false;
 		std::string ExceptionInfo;// = Ex.what();
 		ExceptionInfo += " \nDefault exception when saving ";
-		ExceptionInfo += ScriptName;
+		ExceptionInfo += FullPath;
 		ExceptionInfo += ", Additional info: ";
 		ExceptionInfo += "File: ";
 		ExceptionInfo += __FILE__;

@@ -13,7 +13,7 @@
 
 class ScriptManager;
 
-class TextEditor
+class TextEditor : public BaseGui
 {
 public:
 	enum class PaletteIndex
@@ -178,10 +178,10 @@ public:
 		static const LanguageDefinition& Lua();
 	};
 
-	TextEditor();
+	TextEditor(bool* _OpenState, std::string _Title);
 	~TextEditor();
 
-	void Initialize(bool* _OpenState);
+	void Draw();
 
 	void SetLanguageDefinition(const LanguageDefinition& aLanguageDef);
 	const LanguageDefinition& GetLanguageDefinition() const { return mLanguageDefinition; }
@@ -258,7 +258,7 @@ public:
 
 	std::string ScriptName = "NewScript.lua";
 	const std::string DefaultScriptName = "NewScript.lua";
-	ScriptManager* Scripts = nullptr;
+	//ScriptManager* Scripts = nullptr;
 
 	bool ShowNewScriptPopup = false;
 	bool ShowOpenScriptPopup = false;

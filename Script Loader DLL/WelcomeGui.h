@@ -1,24 +1,15 @@
 #pragma once
 #include "BaseGui.h"
 
-class ScriptManager;
-
-class WelcomeGui
+class WelcomeGui : public BaseGui
 {
 public:
-	WelcomeGui();
+	WelcomeGui(bool* _OpenState, std::string _Title);
 	~WelcomeGui();
 
-	void Initialize(bool* _OpenState);
-	void Draw(const char* Title);
-	void ShowAboutWindow(bool* p_open);
+	void Draw();
 
 	ImGuiWindowFlags MainOverlayWindowFlags = 0;
 	ImGuiWindowFlags MainOverlayPopupFlags = 0;
 	ImGuiInputTextFlags MainOverlayTeleportEditTextFlags = 0;
-
-	ScriptManager* Scripts = nullptr;
-
-private:
-	bool* OpenState;
 };

@@ -53,7 +53,7 @@ void Logger::OpenLogFile(std::string FileName, int LogFlags, std::ios_base::open
 		ExceptionInfo += ", Additional info: ";
 		ExceptionInfo += "Error code: ";
 		ExceptionInfo += Ex.code().message();
-		ExceptionInfo += "File: ";
+		ExceptionInfo += ", File: ";
 		ExceptionInfo += __FILE__;
 		ExceptionInfo += ", Function: ";
 		ExceptionInfo += __func__;

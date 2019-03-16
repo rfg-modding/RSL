@@ -1,18 +1,9 @@
 #include "TeleportGui.h"
 
-TeleportGui::TeleportGui()
-{
-
-}
-
-TeleportGui::~TeleportGui()
-{
-
-}
-
-void TeleportGui::Initialize(bool* _OpenState)
+TeleportGui::TeleportGui(bool* _OpenState, std::string _Title)
 {
 	OpenState = _OpenState;
+	Title = _Title;
 
 	LoadTeleportLocations();
 
@@ -45,20 +36,28 @@ void TeleportGui::Initialize(bool* _OpenState)
 	NewTeleportDescription = "";
 }
 
-void TeleportGui::Draw(const char* Title, bool UseSeparateWindow)
+TeleportGui::~TeleportGui()
+{
+
+}
+
+void TeleportGui::Draw()
 {
 	if (!*OpenState)
 	{
 		return;
 	}
-	if (UseSeparateWindow)
+	ImGui::SetNextWindowSize(ImVec2(700.0f, 800.0f), ImGuiCond_FirstUseEver);
+	if (!ImGui::Begin(Title.c_str(), OpenState, WindowFlags))
 	{
-		ImGui::SetNextWindowSize(ImVec2(700.0f, 800.0f), ImGuiCond_FirstUseEver);
-		if (!ImGui::Begin(Title, OpenState, WindowFlags))
-		{
-			ImGui::End();
-			return;
-		}
+		ImGui::End();
+		return;
+	}
+	if (!PlayerPtr)
+	{
+		ImGui::Text("Player pointer is null. Please load a save and try to re-opening this.");
+		ImGui::End();
+		return;
 	}
 
 	//ImGui::Text("Teleport:"); 
