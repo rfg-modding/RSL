@@ -1,11 +1,5 @@
 #pragma once
-//#include "Globals.h"
-//#include "CameraWrapper.h"
-//#include "FunctionManager.h"
-//#include "Hooks.h"
 #include "ScriptManager.h"
-
-//#include "Polyhook2/Enums.hpp"
 
 class ProgramManager
 {
@@ -36,12 +30,6 @@ public:
 	FunctionManager Functions;
 	ScriptManager Scripts;
 	HookManager Hooks;
-
-	/*bool show_demo_window = true;
-	bool ImGuiInitialized = false;
-	ImGuiIO io;
-	bool OverlayActive = false;
-	WNDPROC OriginalWndProc;*/
 
 	bool LoadFailed = false;
 	bool PreExistingConsole = true;
