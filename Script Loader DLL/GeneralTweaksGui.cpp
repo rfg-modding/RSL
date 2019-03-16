@@ -442,11 +442,34 @@ void GeneralTweaksGui::Draw()
 		{
 			if (GlobalRfgWorldPtr)
 			{
-				Logger::Log("\nDumping all object info to ObjectInfoDump.txt.\n", LogInfo);
-				std::ofstream PositionsDump(GetEXEPath(false) + "RFGR Script Loader/ObjectInfoDump.txt", std::ios_base::trunc);
+				CreateDirectoryIfNull(GetEXEPath(false) + "RFGR Script Loader/Info dumps/");
+				CreateDirectoryIfNull(GetEXEPath(false) + "RFGR Script Loader/Info dumps/Object info dumps/");
+				/*std::string DumpFileName = Logger::GetTimeString(false);
+				DumpFileName = DumpFileName.substr(1, DumpFileName.size() - 2);
+				DumpFileName += ".txt";
+				for (auto& i : DumpFileName)
+				{
+					if (i == '/' || i == '\\')
+					{
+						i = '-';
+					}
+					if (i == ':')
+					{
+						i = '\0';
+					}
+				}*/
+				std::string DumpFileName = "ObjectInfoDump - ";
+				DumpFileName += std::to_string(time(NULL));
+				DumpFileName += ".txt";
+				std::cout << "Dump file name: " << DumpFileName << "\n";
+				std::cout << "Dump file path: " << GetEXEPath(false) + "RFGR Script Loader/Info dumps/Object info dumps/" + DumpFileName << "\n";
+				Logger::Log(std::string("\nDumping all object info to /RFGR Script Loader/Info dumps/Object info dumps/") + std::string(DumpFileName) + std::string(".\n"), LogInfo);
+				std::ofstream PositionsDump(GetEXEPath(false) + "RFGR Script Loader/Info dumps/Object info dumps/" + DumpFileName.c_str(), std::ios_base::trunc);
 				PositionsDump << "Start of object info dump...\n";
 				PositionsDump << "Objects array capacity: " << GlobalRfgWorldPtr->all_objects.Capacity() << "\n";
-				PositionsDump << "Objects array objects contained: " << GlobalRfgWorldPtr->all_objects.Size() << "\n\n";
+				PositionsDump << "Objects array objects contained: " << GlobalRfgWorldPtr->all_objects.Size() << "\n";
+				//PositionsDump << "Sector name: " << GlobalRfgWorldPtr->territory_name << "\n\n";
+
 				for (int i = 0; i < GlobalRfgWorldPtr->all_objects.Size(); i++)
 				{
 					if (GlobalRfgWorldPtr->all_objects[i])
