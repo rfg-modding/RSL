@@ -362,7 +362,8 @@ void ProgramManager::Exit()
 		SnippetManager::RestoreSnippet("CenterMouseCursorCall", true);
 	}
 	SetWindowLongPtr(GameWindowHandle, GWLP_WNDPROC, (LONG_PTR)OriginalWndProc);
-	
+	Camera.DeactivateFreeCamera();
+
 	//Hooks.DisableAllHooksOfType(GAMEHOOK);
 	//Hooks.DisableAllHooksOfType(D3D11HOOK);
 	Hooks.DisableAllHooks();

@@ -38,8 +38,13 @@ void FreeCamGui::Draw()
 		Camera->ToggleFreeCamera();
 	}
 	ImGui::InputFloat("Move speed", &Camera->CameraSpeed, 0.1, 5.0, 3);
-	ImGui::InputFloat("Real FOV", (float*)Camera->RealFOV, 0.1, 5.0, 3);
-	ImGui::InputFloat("Ideal FOV", (float*)Camera->IdealFOV, 0.1, 5.0, 3);
+
+	//ImGui::Checkbox("Have player follow camera", &PlayerFollowCam);
+	//ImGui::SameLine();
+	//Utilities::GUI::ShowHelpMarker("This causes the player to follow the camera via teleportation. This is a workaround to make npc and vehicles spawns work.");
+	
+	//ImGui::InputFloat("Real FOV", (float*)Camera->RealFOV, 0.1, 5.0, 3);
+	//ImGui::InputFloat("Ideal FOV", (float*)Camera->IdealFOV, 0.1, 5.0, 3);
 
 	ImGui::End();
 }

@@ -12,5 +12,10 @@ public:
 	void Draw();
 
 	CameraWrapper* Camera;
+
+	/*WARNING: If this option is disabled two bugs are introduced. 
+	1. The game will often crash if the player clicks when far from the character.
+	2. The players weapon aim is incorrect since the camera is in an unexpected position.*/
+	bool PlayerFollowCam = true;
 };
 

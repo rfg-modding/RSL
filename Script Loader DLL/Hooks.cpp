@@ -1,4 +1,5 @@
 #include "Hooks.h"
+#include "CameraWrapper.h"
 
 D3D11Present D3D11PresentObject;
 
@@ -405,7 +406,7 @@ void __fastcall PlayerDoFrameHook(Player* PlayerPtr)
 		std::cout << "PlayerPtr->FrametimeMultiplier: " << std::hex << std::uppercase << &PlayerPtr->FrametimeMultiplier << "\n";
 #endif
 	}
-	if (!Gui.TweaksMenu)
+	if (!Gui.TweaksMenu || !Gui.FreeCamSettings || !Gui.FreeCamSettings->Camera)
 	{
 		return PlayerDoFrame(PlayerPtr);
 	}
@@ -415,15 +416,15 @@ void __fastcall PlayerDoFrameHook(Player* PlayerPtr)
 	{
 		PlayerPtr->JetpackFuelPercent = 1.0f;
 	}
-	if (Gui.TweaksMenu->Invulnerable)
+	if (Gui.TweaksMenu->Invulnerable || (Gui.FreeCamSettings->Camera->IsFreeCameraActive() && Gui.FreeCamSettings->PlayerFollowCam))
 	{
 		PlayerPtr->Flags.invulnerable = true;
 		//PlayerPtr->Flags.super_jump = true;
 		//PlayerPtr->Flags.use_bigsteps = true;
 		//PlayerPtr->PFlags.UnlimitedAmmo = true;
-		//PlayerPtr->MaxHitPoints = 2147483647;
-		//PlayerPtr->HitPoints = 2147483647.0f;
-		//PlayerPtr->InitialMaxHitPoints = 2147483647;
+		PlayerPtr->MaxHitPoints = 2147483647;
+		PlayerPtr->HitPoints = 2147483647.0f;
+		PlayerPtr->InitialMaxHitPoints = 2147483647;
 	}
 	if (Gui.TweaksMenu->NeedCustomJumpHeightSet)
 	{
@@ -436,6 +437,13 @@ void __fastcall PlayerDoFrameHook(Player* PlayerPtr)
 	if (Gui.TweaksMenu->NeedCustomMaxMoveSpeedSet)
 	{
 		PlayerPtr->MaxSpeed = Gui.TweaksMenu->CustomPlayerMaxSpeed;
+	}
+
+	if (Gui.FreeCamSettings->Camera->IsFreeCameraActive() && Gui.FreeCamSettings->PlayerFollowCam)
+	{
+		CameraWrapper* Cam = Gui.FreeCamSettings->Camera;
+		vector CameraPos(Cam->GetRealX(), Cam->GetRealY() + 1.5f, Cam->GetRealZ());
+		HumanTeleportUnsafe(PlayerPtr, CameraPos, PlayerPtr->Orientation);
 	}
 
 	return PlayerDoFrame(PlayerPtr);
