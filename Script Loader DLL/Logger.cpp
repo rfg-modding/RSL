@@ -51,6 +51,8 @@ void Logger::OpenLogFile(std::string FileName, int LogFlags, std::ios_base::open
 		ExceptionInfo += " \nstd::ios_base::failure when opening ";
 		ExceptionInfo += FileName;
 		ExceptionInfo += ", Additional info: ";
+		ExceptionInfo += "Error code: ";
+		ExceptionInfo += Ex.code().message();
 		ExceptionInfo += "File: ";
 		ExceptionInfo += __FILE__;
 		ExceptionInfo += ", Function: ";
@@ -173,6 +175,23 @@ void Logger::Log(std::string Message, int LogFlags, bool LogTime, bool NewLine)
 				i->second.File << std::flush;
 			}
 		}
+		catch (std::ios_base::failure& Ex)
+		{
+			std::string ExceptionInfo = Ex.what();
+			ExceptionInfo += " \nstd::ios_base::failure exception caught while logging to ";
+			ExceptionInfo += i->second.FilePath;
+			ExceptionInfo += ", Additional info: ";
+			ExceptionInfo += "Error code: ";
+			ExceptionInfo += Ex.code().message();
+			ExceptionInfo += "File: ";
+			ExceptionInfo += __FILE__;
+			ExceptionInfo += ", Function: ";
+			ExceptionInfo += __func__;
+			ExceptionInfo += ", Line: ";
+			ExceptionInfo += __LINE__;
+			Logger::Log(ExceptionInfo, LogError, true, true);
+			MessageBoxA(FindTopWindow(GetProcessID("rfg.exe")), ExceptionInfo.c_str(), "Failed to log to file!", MB_OK);
+		}	
 		catch (std::exception& Ex)
 		{
 			std::string ExceptionInfo = Ex.what();
