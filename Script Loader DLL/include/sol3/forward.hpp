@@ -1,6 +1,6 @@
 // The MIT License (MIT)
 
-// Copyright (c) 2013-2018 Rapptz, ThePhD and contributors
+// Copyright (c) 2013-2019 Rapptz, ThePhD and contributors
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
 // this software and associated documentation files (the "Software"), to deal in
@@ -20,8 +20,8 @@
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 // This file was generated with a script.
-// Generated 2019-01-28 17:33:06.880854 UTC
-// This header was generated with sol v2.20.6 (revision e1f3e5f)
+// Generated 2019-03-18 11:44:35.615829 UTC
+// This header was generated with sol v3.0.0-beta (revision b63d7af)
 // https://github.com/ThePhD/sol2
 
 #ifndef SOL_SINGLE_INCLUDE_FORWARD_HPP
@@ -245,6 +245,14 @@
 #include <utility>
 #include <type_traits>
 
+#if defined(SOL_USING_CXX_LUA) && SOL_USING_CXX_LUA
+struct lua_State;
+#else
+extern "C" {
+	struct lua_State;
+}
+#endif // C++ Mangling for Lua vs. Not
+
 namespace sol {
 
 	template <bool b>
@@ -253,13 +261,18 @@ namespace sol {
 	using main_reference = basic_reference<true>;
 	class stack_reference;
 
+	template <typename A>
+	class basic_bytecode;
+
+	struct lua_value;
+
 	struct proxy_base_tag;
-	template <typename Super>
+	template <typename>
 	struct proxy_base;
-	template <typename Table, typename Key>
+	template <typename, typename>
 	struct proxy;
 
-	template <bool, typename base_type>
+	template <bool, typename>
 	class basic_table_core;
 	template <bool b>
 	using table_core = basic_table_core<b, reference>;
@@ -275,6 +288,11 @@ namespace sol {
 	using main_global_table = main_table_core<true>;
 	using stack_table = stack_table_core<false>;
 	using stack_global_table = stack_table_core<true>;
+
+	template <typename>
+	struct basic_lua_table;
+	using lua_table = basic_lua_table<reference>;
+	using stack_lua_table = basic_lua_table<stack_reference>;
 
 	template <typename T, typename base_type>
 	class basic_usertype;
@@ -375,8 +393,6 @@ namespace sol {
 	struct as_table_t;
 	template <typename T>
 	struct as_container_t;
-	template <typename T>
-	struct force_t;
 	template <typename T>
 	struct nested;
 	template <typename T>

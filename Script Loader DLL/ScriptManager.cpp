@@ -10,6 +10,11 @@ ScriptManager::~ScriptManager()
 
 }
 
+const char* TestFunc()
+{
+	return "Test";
+}
+
 void ScriptManager::Initialize()
 {
 	//See here: https://sol2.readthedocs.io/en/stable/api/state.html#lib-enum
@@ -31,7 +36,11 @@ void ScriptManager::Initialize()
 		sol::lib::ffi,
 		sol::lib::jit
 	);
-	SetupLua();
+	Lua["TestFunc"] = TestFunc;
+	//Lua.set_function("TestFunc", TestFunc);
+	//Lua["GetScriptLoaderVersion"] = GetScriptLoaderVersion;
+	//Lua.set_function("HideHud", HideHud);
+	//SetupLua();
 }
 
 void ScriptManager::SetupLua()
@@ -39,23 +48,14 @@ void ScriptManager::SetupLua()
 	//RunScript(GetEXEPath(false) + "RFGR Script Loader/Core/CoreInit.lua");
 
 	//Todo: Make necessary vars read only with sol::readonly(&some_class::variable)
-	auto RslTable = Lua["rsl"].get_or_create<sol::table>();
+	//auto RslTable = Lua["rsl"].get_or_create<sol::table>();
 	
-	auto RfgTable = Lua["rfg"].get_or_create<sol::table>();
-	RfgTable["HideHud"] = HideHud;
-	RfgTable["HideFog"] = HideFog;
+	//auto RfgTable = Lua["rfg"].get_or_create<sol::table>();
+	//Lua["GetScriptLoaderVersion"] = &GetScriptLoaderVersion;
+	//Lua["HideHud"] = &HideHud;
+	//RfgTable["HideFog"] = HideFog;
 
-	/*auto LogTypeTable = Lua["LogType"].get_or_create<sol::table>(); //Todo: Add to RSL table.
-	LogTypeTable["None"] = LogNone;
-	LogTypeTable["Info"] = LogInfo;
-	LogTypeTable["Warning"] = LogWarning;
-	LogTypeTable["Error"] = LogError;
-	LogTypeTable["FatalError"] = LogFatalError;
-	LogTypeTable["Lua"] = LogLua;
-	LogTypeTable["Json"] = LogJson;
-	LogTypeTable["All"] = LogAll;*/
-
-	auto LoggerTable = Lua["Logger"].get_or_create<sol::table>(); //Todo: Add to RSL table.
+	/*auto LoggerTable = Lua["Logger"].get_or_create<sol::table>(); //Todo: Add to RSL table.
 	LoggerTable["OpenLogFile"] = Logger::OpenLogFile;
 	LoggerTable["CloseLogFile"] = Logger::CloseLogFile;
 	LoggerTable["CloseAllLogFiles"] = Logger::CloseAllLogFiles;
@@ -64,6 +64,16 @@ void ScriptManager::SetupLua()
 	LoggerTable["GetFlagString"] = Logger::GetFlagString;
 	LoggerTable["LogToFile"] = Logger::LogToFile;
 	LoggerTable["GetTimeString"] = Logger::GetTimeString;
+
+	/*auto LogTypeTable = Lua["LogType"].get_or_create<sol::table>(); //Todo: Add to RSL table.
+LogTypeTable["None"] = LogNone;
+LogTypeTable["Info"] = LogInfo;
+LogTypeTable["Warning"] = LogWarning;
+LogTypeTable["Error"] = LogError;
+LogTypeTable["FatalError"] = LogFatalError;
+LogTypeTable["Lua"] = LogLua;
+LogTypeTable["Json"] = LogJson;
+LogTypeTable["All"] = LogAll;*/
 
 	/*RfgTable.new_usertype<vector>
 	(

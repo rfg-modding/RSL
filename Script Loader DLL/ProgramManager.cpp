@@ -43,7 +43,7 @@ void ProgramManager::Initialize()
 
 	ModuleBase = (uintptr_t)GetModuleHandle(NULL);
 
-	if (!kiero::init(kiero::RenderType::D3D11) == kiero::Status::Success)
+	if (kiero::init(kiero::RenderType::D3D11) != kiero::Status::Success)
 	{
 		Logger::Log(std::string("Kiero error: " + std::to_string(kiero::init(kiero::RenderType::D3D11))), LogFatalError, true);
 		Logger::Log("Failed to initialize kiero for D3D11. RFGR Script loader deactivating.", LogFatalError, true);
