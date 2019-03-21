@@ -154,65 +154,65 @@ void IntrospectionGui::DrawPlayerIntrospectionGui(const char * Title)
 			if (ImGui::TreeNode("Object flags"))
 			{
 				ImGui::Text("Flagged list state: "); ImGui::SameLine();
-				ImGui::TextColored(SecondaryTextColor, std::to_string(PlayerPtr->ObjectFlags.flagged_list_state).c_str());
+				ImGui::TextColored(SecondaryTextColor, std::to_string(PlayerPtr->ObjFlags.flagged_list_state).c_str());
 				ImGui::Text("Lighting set once: "); ImGui::SameLine();
-				ImGui::TextColored(SecondaryTextColor, std::to_string(PlayerPtr->ObjectFlags.lighting_set_once).c_str());
+				ImGui::TextColored(SecondaryTextColor, std::to_string(PlayerPtr->ObjFlags.lighting_set_once).c_str());
 				ImGui::Text("Destroyed: "); ImGui::SameLine();
-				ImGui::TextColored(SecondaryTextColor, std::to_string(PlayerPtr->ObjectFlags.destroyed).c_str());
+				ImGui::TextColored(SecondaryTextColor, std::to_string(PlayerPtr->ObjFlags.destroyed).c_str());
 				ImGui::Text("No save: "); ImGui::SameLine();
-				ImGui::TextColored(SecondaryTextColor, std::to_string(PlayerPtr->ObjectFlags.no_save).c_str());
+				ImGui::TextColored(SecondaryTextColor, std::to_string(PlayerPtr->ObjFlags.no_save).c_str());
 				ImGui::Text("Force full save: "); ImGui::SameLine();
-				ImGui::TextColored(SecondaryTextColor, std::to_string(PlayerPtr->ObjectFlags.force_full_save).c_str());
+				ImGui::TextColored(SecondaryTextColor, std::to_string(PlayerPtr->ObjFlags.force_full_save).c_str());
 				ImGui::Text("Destroy on stream: "); ImGui::SameLine();
-				ImGui::TextColored(SecondaryTextColor, std::to_string(PlayerPtr->ObjectFlags.destroy_on_stream).c_str());
+				ImGui::TextColored(SecondaryTextColor, std::to_string(PlayerPtr->ObjFlags.destroy_on_stream).c_str());
 				ImGui::Text("Created by mission or activity: "); ImGui::SameLine();
-				ImGui::TextColored(SecondaryTextColor, std::to_string(PlayerPtr->ObjectFlags.created_by_mission_or_activity).c_str());
+				ImGui::TextColored(SecondaryTextColor, std::to_string(PlayerPtr->ObjFlags.created_by_mission_or_activity).c_str());
 				ImGui::Text("Don't transform: "); ImGui::SameLine();
-				ImGui::TextColored(SecondaryTextColor, std::to_string(PlayerPtr->ObjectFlags.dont_transform).c_str());
+				ImGui::TextColored(SecondaryTextColor, std::to_string(PlayerPtr->ObjFlags.dont_transform).c_str());
 				ImGui::Text("World free: "); ImGui::SameLine();
-				ImGui::TextColored(SecondaryTextColor, std::to_string(PlayerPtr->ObjectFlags.world_free).c_str());
+				ImGui::TextColored(SecondaryTextColor, std::to_string(PlayerPtr->ObjFlags.world_free).c_str());
 				ImGui::Text("Streaming: "); ImGui::SameLine();
-				ImGui::TextColored(SecondaryTextColor, std::to_string(PlayerPtr->ObjectFlags.streaming).c_str());
+				ImGui::TextColored(SecondaryTextColor, std::to_string(PlayerPtr->ObjFlags.streaming).c_str());
 				ImGui::Text("Streamed: "); ImGui::SameLine();
-				ImGui::TextColored(SecondaryTextColor, std::to_string(PlayerPtr->ObjectFlags.streamed).c_str());
+				ImGui::TextColored(SecondaryTextColor, std::to_string(PlayerPtr->ObjFlags.streamed).c_str());
 				ImGui::Text("Persistent: "); ImGui::SameLine();
-				ImGui::TextColored(SecondaryTextColor, std::to_string(PlayerPtr->ObjectFlags.persistent).c_str());
+				ImGui::TextColored(SecondaryTextColor, std::to_string(PlayerPtr->ObjFlags.persistent).c_str());
 				ImGui::Text("Original: "); ImGui::SameLine();
-				ImGui::TextColored(SecondaryTextColor, std::to_string(PlayerPtr->ObjectFlags.original).c_str());
+				ImGui::TextColored(SecondaryTextColor, std::to_string(PlayerPtr->ObjFlags.original).c_str());
 				ImGui::Text("Stub: "); ImGui::SameLine();
-				ImGui::TextColored(SecondaryTextColor, std::to_string(PlayerPtr->ObjectFlags.stub).c_str());
+				ImGui::TextColored(SecondaryTextColor, std::to_string(PlayerPtr->ObjFlags.stub).c_str());
 				ImGui::Text("Preserve handle: "); ImGui::SameLine();
-				ImGui::TextColored(SecondaryTextColor, std::to_string(PlayerPtr->ObjectFlags.preserve_handle).c_str());
+				ImGui::TextColored(SecondaryTextColor, std::to_string(PlayerPtr->ObjFlags.preserve_handle).c_str());
 				ImGui::Text("BPO index: "); ImGui::SameLine();
-				ImGui::TextColored(SecondaryTextColor, std::to_string(PlayerPtr->ObjectFlags.bpo_index).c_str());
+				ImGui::TextColored(SecondaryTextColor, std::to_string(PlayerPtr->ObjFlags.bpo_index).c_str());
 				ImGui::Text("Is dependent: "); ImGui::SameLine();
-				ImGui::TextColored(SecondaryTextColor, std::to_string(PlayerPtr->ObjectFlags.is_dependent).c_str());
+				ImGui::TextColored(SecondaryTextColor, std::to_string(PlayerPtr->ObjFlags.is_dependent).c_str());
 				ImGui::Text("Visited: "); ImGui::SameLine();
-				ImGui::TextColored(SecondaryTextColor, std::to_string(PlayerPtr->ObjectFlags.visited).c_str());
+				ImGui::TextColored(SecondaryTextColor, std::to_string(PlayerPtr->ObjFlags.visited).c_str());
 				ImGui::Text("Special lifetime: "); ImGui::SameLine();
-				ImGui::TextColored(SecondaryTextColor, std::to_string(PlayerPtr->ObjectFlags.special_lifetime).c_str());
+				ImGui::TextColored(SecondaryTextColor, std::to_string(PlayerPtr->ObjFlags.special_lifetime).c_str());
 				ImGui::Text("Serialize protected: "); ImGui::SameLine();
-				ImGui::TextColored(SecondaryTextColor, std::to_string(PlayerPtr->ObjectFlags.serialize_protected).c_str());
+				ImGui::TextColored(SecondaryTextColor, std::to_string(PlayerPtr->ObjFlags.serialize_protected).c_str());
 				ImGui::Text("Dont use me: "); ImGui::SameLine();
-				ImGui::TextColored(SecondaryTextColor, std::to_string(PlayerPtr->ObjectFlags._dont_use_me).c_str());
+				ImGui::TextColored(SecondaryTextColor, std::to_string(PlayerPtr->ObjFlags._dont_use_me).c_str());
 				ImGui::Text("Streaming fixed: "); ImGui::SameLine();
-				ImGui::TextColored(SecondaryTextColor, std::to_string(PlayerPtr->ObjectFlags.streaming_fixed).c_str());
+				ImGui::TextColored(SecondaryTextColor, std::to_string(PlayerPtr->ObjFlags.streaming_fixed).c_str());
 				ImGui::Text("Render flags: "); ImGui::SameLine();
-				ImGui::TextColored(SecondaryTextColor, std::to_string(PlayerPtr->ObjectFlags.render_flags).c_str());
+				ImGui::TextColored(SecondaryTextColor, std::to_string(PlayerPtr->ObjFlags.render_flags).c_str());
 				ImGui::TreePop();
 			}
 			if (ImGui::TreeNode("Remote object flags"))
 			{
 				ImGui::Text("Remote object: "); ImGui::SameLine();
-				ImGui::TextColored(SecondaryTextColor, std::to_string(PlayerPtr->RemoteObjectFlags.remote_object).c_str());
+				ImGui::TextColored(SecondaryTextColor, std::to_string(PlayerPtr->RemoteObjFlags.remote_object).c_str());
 				ImGui::Text("Client sync: "); ImGui::SameLine();
-				ImGui::TextColored(SecondaryTextColor, std::to_string(PlayerPtr->RemoteObjectFlags.client_sync).c_str());
+				ImGui::TextColored(SecondaryTextColor, std::to_string(PlayerPtr->RemoteObjFlags.client_sync).c_str());
 				ImGui::Text("Client destroy permission: "); ImGui::SameLine();
-				ImGui::TextColored(SecondaryTextColor, std::to_string(PlayerPtr->RemoteObjectFlags.client_destroy_permission).c_str());
+				ImGui::TextColored(SecondaryTextColor, std::to_string(PlayerPtr->RemoteObjFlags.client_destroy_permission).c_str());
 				ImGui::Text("No destroy packet: "); ImGui::SameLine();
-				ImGui::TextColored(SecondaryTextColor, std::to_string(PlayerPtr->RemoteObjectFlags.no_destroy_packet).c_str());
+				ImGui::TextColored(SecondaryTextColor, std::to_string(PlayerPtr->RemoteObjFlags.no_destroy_packet).c_str());
 				ImGui::Text("Common create: "); ImGui::SameLine();
-				ImGui::TextColored(SecondaryTextColor, std::to_string(PlayerPtr->RemoteObjectFlags.common_create).c_str());
+				ImGui::TextColored(SecondaryTextColor, std::to_string(PlayerPtr->RemoteObjFlags.common_create).c_str());
 				ImGui::TreePop();
 			}
 
@@ -223,7 +223,7 @@ void IntrospectionGui::DrawPlayerIntrospectionGui(const char * Title)
 			ImGui::Text("Name index: "); ImGui::SameLine();
 			ImGui::TextColored(SecondaryTextColor, std::to_string(PlayerPtr->NameIndex).c_str());
 
-			//Todo: Eventually haved linked list traversal, or object menu. Try adding names to menu as well if possible.
+			//Todo: Eventually have linked list traversal, or object menu. Try adding names to menu as well if possible.
 			//FlaggedNext
 			//FlaggedPrevious
 

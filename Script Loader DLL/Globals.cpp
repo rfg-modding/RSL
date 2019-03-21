@@ -39,7 +39,7 @@ DWORD* GlobalPlayerPtr = nullptr;
 
 bool InfiniteJetpack = false;
 
-sol::state Lua;
+//sol::state Lua;
 
 HANDLE ConsoleHandle = { 0 };
 DWORD* InMultiplayer = nullptr;

@@ -2074,30 +2074,72 @@ struct HavokBPO : hkpBroadPhaseHandle
 	void *user_data;
 };
 
-/* 5258 */
-struct AttachInfoData
+class AttachInfoData
 {
+public:
+	AttachInfoData()
+	{
+		parent_handle = 0;
+		parent_prop_point = 0;
+		child_prop_point = 0;
+		relative_transform.SetAll(0.0f);
+		use_relative_transform = 0;
+		update_physics = 0;
+		updated = 0;
+	}
+	AttachInfoData(const AttachInfoData& Copy)
+	{
+		parent_handle = Copy.parent_handle;
+		parent_prop_point = Copy.parent_prop_point;
+		child_prop_point = Copy.child_prop_point;
+		relative_transform = Copy.relative_transform;
+		use_relative_transform = Copy.use_relative_transform;
+		update_physics = Copy.update_physics;
+		updated = Copy.updated;
+	}
 	int parent_handle;
 	int parent_prop_point;
 	int child_prop_point;
-	matrix43 relative_transform;
+	matrix43 relative_transform; //60 bytes including this
 	unsigned __int32 use_relative_transform : 1;
 	unsigned __int32 update_physics : 1;
 	unsigned __int32 updated : 1;
 };
 
-/* 5259 */
-struct ContactNode //16
+class ContactNode //16
 {
+public:
+	ContactNode()
+	{
+		m_contacted_object = 0;
+		m_num_contacts = 0;
+		prev = nullptr;
+		next = nullptr;
+	}
+	ContactNode(const ContactNode& Copy)
+	{
+		m_contacted_object = Copy.m_contacted_object;
+		m_num_contacts = Copy.m_num_contacts;
+		prev = Copy.prev;
+		next = Copy.next;
+	}
 	unsigned int m_contacted_object; //4
 	unsigned __int16 m_num_contacts; //4
-	ContactNode *prev; //4
-	ContactNode *next; //4
+	ContactNode* prev; //4
+	ContactNode* next; //4
 };
 
-/* 5260 */
-struct ObjectContactInfo //4
+class ObjectContactInfo //4
 {
+public:
+	ObjectContactInfo()
+	{
+		m_contact_list = nullptr;
+	}
+	ObjectContactInfo(const ObjectContactInfo& Copy)
+	{
+		m_contact_list = Copy.m_contact_list;
+	}
 	ContactNode* m_contact_list; //4
 };
 
@@ -2189,8 +2231,8 @@ struct Object //175
 	AttachInfoData* AttachInfo; //4
 	unsigned int HavokHandle; //4 //Starts at offset=76 (4C in hex)
 	ObjectContactInfo ContactInfo; //4
-	ObjectFlags ObjectFlags; //23 - Play around with this in memory later, seems interesting.
-	RemoteObjectFlags RemoteObjectFlags; //5
+	ObjectFlags ObjFlags; //23 - Play around with this in memory later, seems interesting.
+	RemoteObjectFlags RemoteObjFlags; //5
 	char MPDcmoIndex; //1
 	int CheckingReset; //4
 	unsigned __int16 NameIndex; //2

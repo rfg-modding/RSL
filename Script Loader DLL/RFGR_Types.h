@@ -306,7 +306,18 @@ struct TimestampPercent : Timestamp //8
 class vector
 {
 public:
-	vector() { };
+	vector() 
+	{
+		x = 0.0f;
+		y = 0.0f;
+		z = 0.0f;
+	};
+	vector(const vector& CopyVector)
+	{
+		x = CopyVector.x;
+		y = CopyVector.y;
+		z = CopyVector.z;
+	}
 	vector(float InitialValue) : x(InitialValue), y(InitialValue), z(InitialValue) { }
 	vector(float x_, float y_, float z_) : x(x_), y(y_), z(z_) { }
 	vector operator+(const vector& B)
@@ -341,15 +352,68 @@ public:
 	{
 		return sqrtf((x * x) + (y * y) + (z * z));
 	}
+	void SetAll(float Value)
+	{
+		x = Value;
+		y = Value;
+		z = Value;
+	}
 
-	float x;
-	float y;
-	float z;
+	float x = 0.0f;
+	float y = 0.0f;
+	float z = 0.0f;
 };
 
-struct matrix //3x3
+class matrix //3x3
 {
-	matrix() { }
+public:
+	matrix() 
+	{
+		rvec.SetAll(0.0f);
+		uvec.SetAll(0.0f);
+		fvec.SetAll(0.0f);
+	}
+	matrix(const matrix& CopyMatrix)
+	{
+		rvec = CopyMatrix.rvec;
+		uvec = CopyMatrix.uvec;
+		fvec = CopyMatrix.fvec;
+	}
+	matrix(float InitialValue)
+	{
+		rvec.SetAll(InitialValue);
+		uvec.SetAll(InitialValue);
+		fvec.SetAll(InitialValue);
+	}
+	matrix(vector Right, vector Up, vector Forward)
+	{
+		rvec = Right;
+		uvec = Up;
+		fvec = Forward;
+	}
+	matrix operator+(const matrix& B)
+	{
+		return matrix(rvec + B.rvec, uvec + B.uvec, fvec + B.fvec);
+	}
+	matrix operator-(const matrix& B)
+	{
+		return matrix(rvec - B.rvec, uvec - B.uvec, fvec - B.fvec);
+	}
+	bool operator==(const matrix& B)
+	{
+		return(rvec == B.rvec && uvec == B.uvec && fvec == B.fvec);
+	}
+	bool operator!=(const matrix& B)
+	{
+		return !(*this == B);
+	}
+	void SetAll(float Value)
+	{
+		rvec.SetAll(Value);
+		uvec.SetAll(Value);
+		fvec.SetAll(Value);
+	}
+
 	vector rvec;
 	vector uvec;
 	vector fvec;
@@ -361,8 +425,51 @@ struct matrix23
 	float elem[2][3];
 };
 
-struct matrix43
+class matrix43
 {
+public:
+public:
+	matrix43()
+	{
+		m_rotation.SetAll(0.0f);
+		m_translation.SetAll(0.0f);
+	}
+	matrix43(const matrix43& CopyMatrix)
+	{
+		m_rotation = CopyMatrix.m_rotation;
+		m_translation = CopyMatrix.m_translation;
+	}
+	matrix43(float InitialValue)
+	{
+		m_rotation.SetAll(InitialValue);
+		m_translation.SetAll(InitialValue);
+	}
+	matrix43(matrix Rotation, vector Translation)
+	{
+		m_rotation = Rotation;
+		m_translation = Translation;
+	}
+	matrix43 operator+(const matrix43& B)
+	{
+		return matrix43(m_rotation + B.m_rotation, m_translation + B.m_translation);
+	}
+	matrix43 operator-(const matrix43& B)
+	{
+		return matrix43(m_rotation - B.m_rotation, m_translation - B.m_translation);
+	}
+	bool operator==(const matrix43& B)
+	{
+		return(m_rotation == B.m_rotation && m_translation == B.m_translation);
+	}
+	bool operator!=(const matrix43& B)
+	{
+		return !(*this == B);
+	}
+	void SetAll(float Value)
+	{
+		m_rotation.SetAll(Value);
+		m_translation.SetAll(Value);
+	}
 	matrix m_rotation;
 	vector m_translation;
 };

@@ -177,7 +177,10 @@ void LogWindow::Draw()
 	//Auto-scrolls console output to bottom unless the user scrolls up.
 	if (AutoScroll)
 	{
-		ImGui::SetScrollHereY(1.0f);
+		if (ImGui::GetScrollMaxY() - ImGui::GetScrollY() < 50.0f)
+		{
+			ImGui::SetScrollHereY(1.0f);
+		}
 	}
 	ImGui::EndChild();
 	ImGui::PopStyleVar();

@@ -275,7 +275,7 @@ HRESULT __stdcall D3D11PresentHook(IDXGISwapChain * pSwapChain, UINT SyncInterva
 		FontHuge = io.Fonts->AddFontFromFileTTF(FontAwesomeSolidPath.c_str(), GlobalHugeFontSize, &IconsConfig, IconsRanges);
 		/*End of FontHuge loading*/
 
-
+		
 		//Overlay.Initialize();
 		Gui.Initialize();
 		ImGuiInitialized = true;

@@ -903,7 +903,7 @@ void TextEditor::Render(const char* aTitle, const ImVec2& aSize, bool aBorder)
 			if (ImGui::MenuItem(std::string(std::string(ICON_FA_PLAY) + u8" Run").c_str(), "F5"))
 			{
 				std::string ScriptString = GetCurrentScriptString();
-				Scripts->RunStringAsScript(ScriptString, "script editor run"); 
+				Scripts->RunStringAsScript(ScriptString, ScriptName + " from the script editor: \n"); 
 			}
 			if (ImGui::MenuItem(std::string(std::string(ICON_FA_STOP) + u8" Stop").c_str())) {}
 			//if (ImGui::MenuItem("Save")) {}

@@ -1,11 +1,7 @@
 #pragma once
-//#include "Globals.h"
-//#include <chaiscript/chaiscript.hpp>
-//#include "Functions.h"
 #include "CameraWrapper.h"
-#include "FunctionManager.h"
+#include "LuaFunctions.h"
 #include "HookManager.h"
-//#include "Hooks.h"
 
 class Script
 {
@@ -35,6 +31,7 @@ public:
 
 	bool RunStringAsScript(std::string Buffer, std::string Name);
 
+	sol::state LuaState;
 	std::vector <Script> Scripts;
 
 private:

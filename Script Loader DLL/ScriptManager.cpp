@@ -21,7 +21,7 @@ void ScriptManager::Initialize()
 	//and here: https://www.lua.org/manual/5.1/manual.html#5 (LuaJIT is 5.1)
 	//Excluded the ffi lib for now. Current goal is to sandbox lua for user
 	//safety. Might change this later on.
-	Lua.open_libraries
+	LuaState.open_libraries
 	(
 		sol::lib::base,
 		sol::lib::package,
@@ -36,26 +36,23 @@ void ScriptManager::Initialize()
 		sol::lib::ffi,
 		sol::lib::jit
 	);
-	Lua["TestFunc"] = TestFunc;
-	//Lua.set_function("TestFunc", TestFunc);
-	//Lua["GetScriptLoaderVersion"] = GetScriptLoaderVersion;
-	//Lua.set_function("HideHud", HideHud);
-	//SetupLua();
+	SetupLua();
 }
 
 void ScriptManager::SetupLua()
 {
-	//RunScript(GetEXEPath(false) + "RFGR Script Loader/Core/CoreInit.lua");
+	RunScript(GetEXEPath(false) + "RFGR Script Loader/Core/CoreInit.lua");
 
 	//Todo: Make necessary vars read only with sol::readonly(&some_class::variable)
-	//auto RslTable = Lua["rsl"].get_or_create<sol::table>();
+	auto RslTable = LuaState["rsl"].get_or_create<sol::table>();
 	
-	//auto RfgTable = Lua["rfg"].get_or_create<sol::table>();
-	//Lua["GetScriptLoaderVersion"] = &GetScriptLoaderVersion;
-	//Lua["HideHud"] = &HideHud;
-	//RfgTable["HideFog"] = HideFog;
+	auto RfgTable = LuaState["rfg"].get_or_create<sol::table>();
+	LuaState["GetScriptLoaderVersion"] = &GetScriptLoaderVersion;
+	LuaState["HideHud"] = HideHud;
+	RfgTable["HideFog"] = HideFog;
 
-	/*auto LoggerTable = Lua["Logger"].get_or_create<sol::table>(); //Todo: Add to RSL table.
+	//LogType enums defined in lua
+	auto LoggerTable = LuaState["Logger"].get_or_create<sol::table>(); //Todo: Add to RSL table.
 	LoggerTable["OpenLogFile"] = Logger::OpenLogFile;
 	LoggerTable["CloseLogFile"] = Logger::CloseLogFile;
 	LoggerTable["CloseAllLogFiles"] = Logger::CloseAllLogFiles;
@@ -64,58 +61,75 @@ void ScriptManager::SetupLua()
 	LoggerTable["GetFlagString"] = Logger::GetFlagString;
 	LoggerTable["LogToFile"] = Logger::LogToFile;
 	LoggerTable["GetTimeString"] = Logger::GetTimeString;
-
-	/*auto LogTypeTable = Lua["LogType"].get_or_create<sol::table>(); //Todo: Add to RSL table.
-LogTypeTable["None"] = LogNone;
-LogTypeTable["Info"] = LogInfo;
-LogTypeTable["Warning"] = LogWarning;
-LogTypeTable["Error"] = LogError;
-LogTypeTable["FatalError"] = LogFatalError;
-LogTypeTable["Lua"] = LogLua;
-LogTypeTable["Json"] = LogJson;
-LogTypeTable["All"] = LogAll;*/
-
-	/*RfgTable.new_usertype<vector>
+	
+	RfgTable.new_usertype<vector>
 	(
 		"vector",
-		"new", sol::constructors< sol::types<float>, sol::types<float, float, float>>(),
+		"new", sol::constructors<sol::types<const vector&>, sol::types<float>, sol::types<float, float, float>>(),
 		sol::meta_function::addition, &vector::operator+,
 		sol::meta_function::subtraction, &vector::operator-,
 		sol::meta_function::multiplication, &vector::operator*,
 		sol::meta_function::equal_to, &vector::operator==,
 		"Cross", &vector::Cross,
 		"Magnitude", &vector::Magnitude,
+		"SetAll", &vector::SetAll,
 		"x", &vector::x,
 		"y", &vector::y,
 		"z", &vector::z
-	);*/
+	);
+	RfgTable.new_usertype<matrix>
+	(
+		"matrix",
+		"new", sol::constructors<sol::types<const matrix&>, sol::types<float>, sol::types<vector, vector, vector>>(),
+		sol::meta_function::addition, &matrix::operator+,
+		sol::meta_function::subtraction, &matrix::operator-,
+		sol::meta_function::equal_to, &matrix::operator==,
+		"SetAll", &matrix::SetAll,
+		"rvec", &matrix::rvec,
+		"uvec", &matrix::uvec,
+		"fvec", &matrix::fvec
+	);	
+	RfgTable.new_usertype<matrix43>
+	(
+		"matrix43",
+		"new", sol::constructors<sol::types<const matrix43&>, sol::types<float>, sol::types<matrix, vector>>(),
+		sol::meta_function::addition, &matrix43::operator+,
+		sol::meta_function::subtraction, &matrix43::operator-,
+		sol::meta_function::equal_to, &matrix43::operator==,
+		"SetAll", &matrix43::SetAll,
+		"Rotation", &matrix43::m_rotation,
+		"Translation", &matrix43::m_translation
+	);
+	RfgTable.new_usertype<AttachInfoData> //Note: I have no idea if the last 3 vars are correct. Bit fields are odd with sol2.
+	(
+		"AttachInfoData",
+		"new", sol::constructors<sol::types<const AttachInfoData&>>(),
+		"ParentHandle", &AttachInfoData::parent_handle,
+		"ParentPropPoint", &AttachInfoData::parent_prop_point,
+		"ChildPropPoint", &AttachInfoData::child_prop_point,
+		"RelativeTransform", &AttachInfoData::relative_transform,
+		"UseRelativeTransform", sol::property(itsy_bitsy::read<AttachInfoData, 60>, itsy_bitsy::write<AttachInfoData, 60>),
+		"UpdatePhysics", sol::property(itsy_bitsy::read<AttachInfoData, 61>, itsy_bitsy::write<AttachInfoData, 61>),
+		"Updated", sol::property(itsy_bitsy::read<AttachInfoData, 60>, itsy_bitsy::write<AttachInfoData, 60>)
+	);
+	RfgTable.new_usertype<ContactNode>
+	(
+		"ContactNode",
+		"new", sol::constructors<sol::types<const ContactNode&>>(),
+		"ContactedObject", &ContactNode::m_contacted_object,
+		"NumberOfContacts", &ContactNode::m_num_contacts,
+		"Previous", &ContactNode::prev,
+		"Next", &ContactNode::next
+	);
+	RfgTable.new_usertype<ObjectContactInfo>
+	(
+		"ObjectContactInfo",
+		"new", sol::constructors<sol::types<const ObjectContactInfo&>>(),
+		"ContactList", &ObjectContactInfo::m_contact_list
+	);
+
+	//Next is ObjectFlags bitfield
 }
-
-/*struct A {
-	int a = 10;
-	virtual int call() { return 0; }
-};
-struct B : A {
-	int b = 11;
-	virtual int call() override { return 20; }
-};
-
-int main (int, char*[]) {
-
-	sol::state lua;
-
-	lua.new_usertype<B>( "A",
-		"call", &A::call
-	);
-
-	lua.new_usertype<B>( "B",
-		"call", &B::call,
-		sol::base_classes, sol::bases<A>()
-	);
-
-	return 0;
-}*/
-
 
 void ScriptManager::ScanScriptsFolder()
 {
@@ -170,7 +184,7 @@ bool ScriptManager::RunScript(std::string FullPath)
 	{
 		try
 		{
-			auto CodeResult = Lua.script_file(FullPath, [](lua_State*, sol::protected_function_result pfr)
+			auto CodeResult = LuaState.script_file(FullPath, [](lua_State*, sol::protected_function_result pfr)
 			{
 				return pfr;
 			}, sol::load_mode::text);
@@ -200,7 +214,7 @@ bool ScriptManager::RunScript(size_t Index)
 	std::string FullPath = Scripts[Index].FullPath;
 	try
 	{
-		auto CodeResult = Lua.script_file(FullPath, [](lua_State*, sol::protected_function_result pfr)
+		auto CodeResult = LuaState.script_file(FullPath, [](lua_State*, sol::protected_function_result pfr)
 		{
 			return pfr;
 		}, sol::load_mode::text);
@@ -224,7 +238,7 @@ bool ScriptManager::RunStringAsScript(std::string Buffer, std::string Name)
 {
 	try
 	{
-		auto CodeResult = Lua.script(Buffer, [](lua_State*, sol::protected_function_result pfr)
+		auto CodeResult = LuaState.script(Buffer, [](lua_State*, sol::protected_function_result pfr)
 		{
 			return pfr;
 		});

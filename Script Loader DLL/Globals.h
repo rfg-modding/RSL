@@ -64,7 +64,7 @@ extern DWORD* GlobalPlayerPtr;
 
 extern bool InfiniteJetpack;
 
-extern sol::state Lua;
+//extern sol::state LuaState;
 
 extern HANDLE ConsoleHandle;
 extern DWORD* InMultiplayer;
