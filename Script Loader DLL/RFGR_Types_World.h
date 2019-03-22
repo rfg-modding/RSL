@@ -1,6 +1,250 @@
 #pragma once
 #include "RFGR_Type_UI.h"
 
+namespace keen
+{
+	enum PixelFormat
+	{
+		PixelFormat_None = 0x0,
+		PixelFormat_Bc1 = 0x1,
+		PixelFormat_Bc1_Gamma = 0x2,
+		PixelFormat_Bc2 = 0x3,
+		PixelFormat_Bc2_Gamma = 0x4,
+		PixelFormat_Bc3 = 0x5,
+		PixelFormat_Bc3_Gamma = 0x6,
+		PixelFormat_Bc4 = 0x7,
+		PixelFormat_Bc4_Gamma = 0x8,
+		PixelFormat_Bc5 = 0x9,
+		PixelFormat_Bc5_Gamma = 0xA,
+		PixelFormat_Bc6H_SF16 = 0xB,
+		PixelFormat_Bc6H_UF16 = 0xC,
+		PixelFormat_Bc7 = 0xD,
+		PixelFormat_Bc7_Gamma = 0xE,
+		PixelFormat_Index4 = 0xF,
+		PixelFormat_A4 = 0x10,
+		PixelFormat_L4 = 0x11,
+		PixelFormat_A8 = 0x12,
+		PixelFormat_L8 = 0x13,
+		PixelFormat_Index8 = 0x14,
+		PixelFormat_L4A4 = 0x15,
+		PixelFormat_G8R8 = 0x16,
+		PixelFormat_R8G8 = 0x17,
+		PixelFormat_R5G6B5 = 0x18,
+		PixelFormat_R5G5B5A1 = 0x19,
+		PixelFormat_R4G4B4A4 = 0x1A,
+		PixelFormat_R5G5B5A3 = 0x1B,
+		PixelFormat_Index14x2 = 0x1C,
+		PixelFormat_R8G8B8 = 0x1D,
+		PixelFormat_R8G8B8_Gamma = 0x1E,
+		PixelFormat_R32F = 0x1F,
+		PixelFormat_Y16X16 = 0x20,
+		PixelFormat_A8R8G8B8 = 0x21,
+		PixelFormat_A8R8G8B8_Gamma = 0x22,
+		PixelFormat_X8R8G8B8 = 0x23,
+		PixelFormat_X8R8G8B8_Gamma = 0x24,
+		PixelFormat_A8B8G8R8 = 0x25,
+		PixelFormat_A8B8G8R8_Gamma = 0x26,
+		PixelFormat_R8G8B8A8 = 0x27,
+		PixelFormat_R8G8B8A8_Gamma = 0x28,
+		PixelFormat_A2R10G10B10F = 0x29,
+		PixelFormat_A16B16G16R16F = 0x2A,
+		PixelFormat_A32B32G32R32F = 0x2B,
+		PixelFormat_Depth8 = 0x2C,
+		PixelFormat_Depth16 = 0x2D,
+		PixelFormat_Depth24Stencil8 = 0x2E,
+		PixelFormat_ETC1_RGB8 = 0x2F,
+		PixelFormat_ETC1_RGB8A4 = 0x30,
+		PixelFormat_Pvrtc2 = 0x31,
+		PixelFormat_Pvrtc4 = 0x32,
+		PixelFormat_Pvrtc2A = 0x33,
+		PixelFormat_Pvrtc4A = 0x34,
+		PixelFormat_Ctx1 = 0x35,
+		PixelFormat_DxN = 0x36,
+		PixelFormat_Depth32F = 0x37,
+		PixelFormat_Depth24FStencil8 = 0x38,
+		PixelFormat_R11G11B10F = 0x39,
+		PixelFormat_Depth32FStencil8 = 0x3A,
+		PixelFormat_Depth16Stencil8 = 0x3B,
+		PixelFormat_Count = 0x3C,
+		PixelFormat_Invalid = 0x3C,
+		PixelFormat_Native_RGBA32 = 0x27,
+		PixelFormat_Native_RGBA32_Gamma = 0x28,
+		PixelFormat_Default_Depth = 0x2E,
+		PixelFormat_Dxt1 = 0x1,
+		PixelFormat_Dxt1_Gamma = 0x2,
+		PixelFormat_Dxt23 = 0x3,
+		PixelFormat_Dxt23_Gamma = 0x4,
+		PixelFormat_Dxt45 = 0x5,
+		PixelFormat_Dxt45_Gamma = 0x6,
+	};
+
+	enum IndexFormat
+	{
+		IndexFormat_Invalid = 0x0,
+		IndexFormat_Uint16 = 0x1,
+		IndexFormat_Uint32 = 0x2,
+		IndexFormat_Count = 0x3,
+	};
+
+	enum PrimitiveType
+	{
+		PrimitiveType_Invalid = 0xFFFFFFFF,
+		PrimitiveType_TriangleList = 0x0,
+		PrimitiveType_TriangleStrip = 0x1,
+		PrimitiveType_LineList = 0x2,
+		PrimitiveType_LineStrip = 0x3,
+		PrimitiveType_QuadList = 0x4,
+		PrimitiveType_Count = 0x5,
+	};
+};
+
+enum rl_shadow_lod
+{
+	RL_SHADOW_LOD_OFF = 0x0,
+	RL_SHADOW_LOD_LOW = 0x1,
+	RL_SHADOW_LOD_MED = 0x2,
+	RL_SHADOW_LOD_HIGH = 0x3,
+	RL_NUM_SHADOW_LODS = 0x4,
+};
+
+enum rl_antialias_lod
+{
+	RL_AA_LOD_OFF = 0x0,
+	RL_AA_LOD_2X = 0x1,
+	RL_AA_LOD_4X = 0x2,
+	RL_AA_LOD_8X = 0x3,
+	RL_AA_LOD_16X = 0x4,
+	RL_AA_LOD_8XQ = 0x5,
+	RL_AA_LOD_16XQ = 0x6,
+	RL_NUM_AA_LODS = 0x7,
+};
+
+enum rl_particle_lod
+{
+	RL_PARTICLE_LOD_LOW = 0x0,
+	RL_PARTICLE_LOD_MED = 0x1,
+	RL_PARTICLE_LOD_HIGH = 0x2,
+	RL_PARTICLE_LOD_VERY_HIGH = 0x3,
+	RL_NUM_PARTICLE_LODS = 0x4,
+};
+
+enum rl_anisotropic_filtering_lod
+{
+	RL_AF_LOD_OFF = 0x0,
+	RL_AF_LOD_LOW = 0x1,
+	RL_AF_LOD_MED = 0x2,
+	RL_AF_LOD_HIGH = 0x3,
+	RL_NUM_AF_LODS = 0x4,
+};
+
+enum rl_dev_vertex_format
+{
+	RLVF_INVALID = 0xFFFFFFFF,
+	RLVF_PIXLIT = 0x0,
+	RLVF_PIXLIT_CA = 0x1,
+	RLVF_PIXLIT_NMAP = 0x2,
+	RLVF_PIXLIT_NMAP_CA = 0x3,
+	RLVF_UNLIT = 0x4,
+	RLVF_PARTICLE_POINTSPRITE = 0x5,
+	RLVF_PARTICLE_BILLBOARD = 0x6,
+	RLVF_PARTICLE_RADIAL = 0x7,
+	RLVF_PARTICLE_DROP = 0x8,
+	RLVF_PARTICLE_RIBBON = 0x9,
+	RLVF_PARTICLE_ORIENTED = 0xA,
+	RLVF_PRIMITIVE_3D = 0xB,
+	RLVF_PRIMITIVE_2D = 0xC,
+	RLVF_SG_MESH = 0xD,
+	RLVF_HEIGHT_MESH = 0xE,
+	RLVF_HEIGHT_MESH_LOW_LOD = 0xF,
+	RLVF_PARTICLE_PARAMETRIC = 0x10,
+	RLVF_COMPOSITOR = 0x11,
+	RLVF_CLONE_UVS = 0x12,
+	RLVF_CLONE_NMAP = 0x13,
+	RLVF_CLONE_CLR = 0x14,
+	RLVF_2D_SPLINE = 0x15,
+	RLVF_PARTICLE_CORONA = 0x16,
+	RLVF_PARTICLE_RIBBON_PARAMETRIC = 0x17,
+	RLVF_CONDITIONAL_BBOX = 0x18,
+	RLVF_TERRAIN_ROAD = 0x19,
+	RLVF_HEIGHT_MESH_LANDMARK_LOD = 0x1A,
+	RLVF_STAR_FIELD_POINT = 0x1B,
+	RLVF_STAR_FIELD_BILLBOARD = 0x1C,
+	RLVF_METEOR_SHOWER_LINE = 0x1D,
+	RLVF_PIXLIT_0UV = 0x1E,
+	RLVF_PIXLIT_1UV = 0x1F,
+	RLVF_PIXLIT_1UV_CA = 0x20,
+	RLVF_PIXLIT_1UV_NMAP = 0x21,
+	RLVF_PIXLIT_1UV_NMAP_CA = 0x22,
+	RLVF_PIXLIT_2UV = 0x23,
+	RLVF_PIXLIT_2UV_CA = 0x24,
+	RLVF_PIXLIT_2UV_NMAP = 0x25,
+	RLVF_PIXLIT_2UV_NMAP_CA = 0x26,
+	RLVF_PIXLIT_3UV = 0x27,
+	RLVF_PIXLIT_3UV_CA = 0x28,
+	RLVF_PIXLIT_3UV_NMAP = 0x29,
+	RLVF_PIXLIT_3UV_NMAP_CA = 0x2A,
+	RLVF_PIXLIT_4UV = 0x2B,
+	RLVF_PIXLIT_4UV_CA = 0x2C,
+	RLVF_PIXLIT_4UV_NMAP = 0x2D,
+	RLVF_PIXLIT_4UV_NMAP_CA = 0x2E,
+	RLVF_CLONE_1UV_UVS = 0x2F,
+	RLVF_CLONE_2UV_UVS = 0x30,
+	RLVF_UNCOMPRESSED_MORPH = 0x31,
+	RLVF_NUM_FORMATS = 0x32,
+};
+
+enum rl_shader_type
+{
+	shader_type_invalid = 0xFFFFFFFF,
+	shader_type_generic = 0x0,
+	shader_type_standard = 0x1,
+	shader_type_character = 0x2,
+	shader_type_terrain = 0x3,
+	num_rl_shader_types = 0x4,
+};
+
+enum rl_cull_mode
+{
+	RL_CULL_CCW = 0x0,
+	RL_CULL_CW = 0x1,
+	RL_CULL_NONE = 0x2,
+	RL_CULL_SHADER_DRIVEN = 0x3,
+	NUM_RL_CULL_MODE_VALS = 0x4,
+};
+
+enum rl_fill_mode
+{
+	RL_FILL_POINT = 0x0,
+	RL_FILL_LINE = 0x1,
+	RL_FILL_SOLID = 0x2,
+	NUM_RL_FILL_MODE_VALS = 0x3,
+};
+
+enum rl_prim_zbias_mode
+{
+	RLPZB_NONE = 0x0,
+	RLPZB_DECAL = 0x1,
+	RLPZB_SHADOW = 0x2,
+	RLPZB_DISTORTION = 0x3,
+	RLPZB_TERRAIN_LOW_LOD = 0x4,
+	RLPZB_NUM_ZBIAS_MODES = 0x5,
+};
+
+enum rl_dev_present_result
+{
+	RL_ACQUIRED = 0x0,
+	RL_LOST = 0x1,
+	RL_READY = 0x2,
+};
+
+struct rl_rect
+{
+	int m_left;
+	int m_top;
+	int m_right;
+	int m_bottom;
+};
+
 enum ambient_spawn_density
 {
 	AMB_SPAWN_DENSITY_INVALID = 0xFFFFFFFF,
@@ -538,67 +782,6 @@ struct pool_list__rl_occluder_ptr : base_array__rl_occluder_ptr
 	unsigned int m_min_used;
 };
 
-struct rl_dev_blend_state
-{
-	keen::BlendState* m_internal_state_p;
-};
-
-struct  rl_dev_sampler_state
-{
-	keen::SamplerState* m_internal_state_p;
-};
-
-struct  rl_dev_depth_stencil_state
-{
-	keen::DepthStencilState* m_internal_state_p;
-};
-
-struct  rl_dev_rasterizer_state
-{
-	keen::RasterizerState* m_internal_state_p;
-};
-
-struct new_rl_level_of_detail_settings
-{
-	char m_texture_reduction;
-	rl_anisotropic_filtering_lod m_anisotropic_filtering;
-};
-
-struct  rl_level_of_detail
-{
-	rl_shadow_lod m_shadow_lod;
-	rl_antialias_lod m_aa_lod;
-	rl_particle_lod m_particle_lod;
-	bool m_soft_shadows;
-	bool m_bloom_enabled;
-	bool m_motion_blur_enabled;
-	bool m_depth_of_field_enabled;
-	bool m_distortion_enabled;
-	bool m_ssao_enabled;
-	bool m_sun_shafts_enabled;
-	new_rl_level_of_detail_settings m_new_data;
-	char padding[120];
-};
-
-struct  new_rl_screen_info_settings
-{
-
-};
-
-struct  __declspec(align(4)) rl_screen_info
-{
-	int m_current_width;
-	int m_current_height;
-	int m_rr_num;
-	int m_rr_den;
-	float m_aspect_ratio;
-	unsigned int m_monitor;
-	keen::graphics::WindowMode m_window_mode;
-	bool m_vsync_enabled;
-	new_rl_screen_info_settings m_new_info;
-	char padding[127];
-};
-
 namespace keen
 {
 	const struct FragmentShader
@@ -1011,6 +1194,67 @@ namespace keen
 	};
 };
 
+struct rl_dev_blend_state
+{
+	keen::BlendState* m_internal_state_p;
+};
+
+struct  rl_dev_sampler_state
+{
+	keen::SamplerState* m_internal_state_p;
+};
+
+struct  rl_dev_depth_stencil_state
+{
+	keen::DepthStencilState* m_internal_state_p;
+};
+
+struct  rl_dev_rasterizer_state
+{
+	keen::RasterizerState* m_internal_state_p;
+};
+
+struct new_rl_level_of_detail_settings
+{
+	char m_texture_reduction;
+	rl_anisotropic_filtering_lod m_anisotropic_filtering;
+};
+
+struct  rl_level_of_detail
+{
+	rl_shadow_lod m_shadow_lod;
+	rl_antialias_lod m_aa_lod;
+	rl_particle_lod m_particle_lod;
+	bool m_soft_shadows;
+	bool m_bloom_enabled;
+	bool m_motion_blur_enabled;
+	bool m_depth_of_field_enabled;
+	bool m_distortion_enabled;
+	bool m_ssao_enabled;
+	bool m_sun_shafts_enabled;
+	new_rl_level_of_detail_settings m_new_data;
+	char padding[120];
+};
+
+struct  new_rl_screen_info_settings
+{
+
+};
+
+struct  __declspec(align(4)) rl_screen_info
+{
+	int m_current_width;
+	int m_current_height;
+	int m_rr_num;
+	int m_rr_den;
+	float m_aspect_ratio;
+	unsigned int m_monitor;
+	keen::graphics::WindowMode m_window_mode;
+	bool m_vsync_enabled;
+	new_rl_screen_info_settings m_new_info;
+	char padding[127];
+};
+
 struct rl_dev_render_target
 {
 	keen::RenderTarget* pData;
@@ -1180,6 +1424,7 @@ struct __declspec(align(4)) rl_scene_renderer_deferred_sort_entry
 	bool opacity_fade;
 };
 
+struct rl_renderer;
 struct rl_scene_renderer_Part2Params
 {
 	rl_renderer* p_deferredRenderer;
@@ -1194,6 +1439,7 @@ struct rl_scene_renderer_Part2Params
 	rl_rect* p_original_vp;
 };
 
+struct rl_metrics;
 struct  rl_scene_renderer : rl_base_object
 {
 	void* m_compositor_p; //rl_compositor *m_compositor_p;
@@ -1297,8 +1543,8 @@ struct __declspec(align(8)) rl_scene : rl_base_object
 	rl_light* m_largest_light_default_p;
 	rl_light* m_largest_light_p;
 	void* m_visibility_manager_p; //rl_visibility_manager* m_visibility_manager_p;
-	void* m_default_scene_renderer_p; //rl_scene_renderer* m_default_scene_renderer_p;
-	void* m_scene_renderer; //rl_scene_renderer* m_scene_renderer_p;
+	rl_scene_renderer* m_default_scene_renderer_p;
+	rl_scene_renderer* m_scene_renderer_p;
 	rl_partition_system* m_partition_system_p;
 	rl_partition_system* m_light_partition_system_p;
 	rl_partition_system* m_low_lod_partition_system_p;

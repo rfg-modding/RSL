@@ -7,6 +7,8 @@ rl_renderer* GlobalRlRendererPtr = nullptr;
 rl_render_lib* GlobalRlRenderLibPtr = nullptr;
 rl_state_manager* GlobalRlStateManagerPtr = nullptr;
 rl_scene* GlobalMainScenePtr = nullptr;
+rl_scene_renderer* GlobalMainSceneRendererPtr;
+rl_camera* GlobalMainSceneCameraPtr;
 
 F_Camera_Start_Slew_Mode Camera_Start_Slew_Mode;
 F_Camera_Stop_Slew_Mode Camera_Stop_Slew_Mode;

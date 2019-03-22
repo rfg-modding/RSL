@@ -11,6 +11,8 @@ extern rl_renderer* GlobalRlRendererPtr;
 extern rl_render_lib* GlobalRlRenderLibPtr;
 extern rl_state_manager* GlobalRlStateManagerPtr;
 extern rl_scene* GlobalMainScenePtr;
+extern rl_scene_renderer* GlobalMainSceneRendererPtr;
+extern rl_camera* GlobalMainSceneCameraPtr;
 
 static void DisableCameraCode(DWORD AddressY, DWORD AddressZ) //Takes addresses for instructions affecting y and z. Alternatively x and z may work, since one piece seems to be shared between two coords.
 {

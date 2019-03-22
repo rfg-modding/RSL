@@ -68,6 +68,3 @@ namespace rfg
 		rl_sampling_vector Values[T];
 	};
 }
-
-bool m_init_dynamic;
-unsigned int m_min_used;

@@ -19,5 +19,7 @@ public:
 	bool PlayerFollowCam = true;
 
 	float CustomFarClipDistance = 475.0f;
+	float CustomTimeValue = 100.0f;
+	float CustomTODValue = 100.0f;
 };
 

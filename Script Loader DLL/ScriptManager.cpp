@@ -37,6 +37,7 @@ void ScriptManager::Initialize()
 		sol::lib::jit
 	);
 	SetupLua();
+	//RunMainLua();
 }
 
 void ScriptManager::SetupLua()
@@ -50,6 +51,7 @@ void ScriptManager::SetupLua()
 	LuaState["GetScriptLoaderVersion"] = &GetScriptLoaderVersion;
 	LuaState["HideHud"] = HideHud;
 	RfgTable["HideFog"] = HideFog;
+	RfgTable["SetFarClipDistance"] = game_render_set_far_clip_distance;
 
 	//LogType enums defined in lua
 	auto LoggerTable = LuaState["Logger"].get_or_create<sol::table>(); //Todo: Add to RSL table.

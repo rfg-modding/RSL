@@ -791,6 +791,11 @@ void __fastcall rl_camera_render_begin_hook(rl_camera* This, void* edx, rl_rende
 		}
 
 		GlobalMainScenePtr = game_render_get_main_scene();
+		if (GlobalMainScenePtr)
+		{
+			GlobalMainSceneRendererPtr = GlobalMainScenePtr->m_scene_renderer_p;
+			GlobalMainSceneCameraPtr = GlobalMainSceneRendererPtr->m_part2_params.p_camera;
+		}
 	});
 	if (This != GlobalRlCameraPtr)
 	{

@@ -68,22 +68,24 @@ void FreeCamGui::Draw()
 	ImGui::Text("Additional camera settings:");
 	ImGui::PopFont();
 	ImGui::Separator();
-	if (GlobalRlCameraPtr)
+	if (GlobalMainSceneCameraPtr)
 	{
-		ImGui::InputFloat("FOV", &GlobalRlCameraPtr->m_fov, 1.0, 5.0, 3);
-		ImGui::InputFloat("Near clip", &GlobalRlCameraPtr->m_near_clip, 1.0, 5.0, 3);
-		ImGui::InputFloat("Far clip", &GlobalRlCameraPtr->m_far_clip, 1.0, 5.0, 3);
-		ImGui::InputFloat("High lod far clip", &GlobalRlCameraPtr->m_high_lod_far_clip, 1.0, 5.0, 3);
+		ImGui::InputFloat("FOV", &GlobalMainSceneCameraPtr->m_fov, 1.0, 5.0, 3);
+		ImGui::InputFloat("Near clip", &GlobalMainSceneCameraPtr->m_near_clip, 1.0, 5.0, 3);
+		ImGui::InputFloat("Far clip", &GlobalMainSceneCameraPtr->m_far_clip, 1.0, 5.0, 3);
+		ImGui::InputFloat("High lod far clip", &GlobalMainSceneCameraPtr->m_high_lod_far_clip, 1.0, 5.0, 3);
 	}
 	else
 	{
-		ImGui::Text("Camera hook has not been completed. Can't display additional camera tweaks.");
+		ImGui::Text("Main scene camera hook has not been completed. Can't display additional camera tweaks.");
 	}
 
 	if (GlobalMainScenePtr)
 	{
 		ImGui::SliderFloat("Time value", &GlobalMainScenePtr->m_time_val, 0.0f, 5000.0f);
 		ImGui::SliderFloat("Time of day value", &GlobalMainScenePtr->m_time_of_day_val, 0.0f, 5000.0f);
+
+		
 	}
 	else
 	{
