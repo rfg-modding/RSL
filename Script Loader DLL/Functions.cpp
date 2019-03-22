@@ -2,6 +2,11 @@
 
 World* GlobalRfgWorldPtr = nullptr;
 rl_light* GlobalTODLightPtr = nullptr;
+rl_camera* GlobalRlCameraPtr = nullptr;
+rl_renderer* GlobalRlRendererPtr = nullptr;
+rl_render_lib* GlobalRlRenderLibPtr = nullptr;
+rl_state_manager* GlobalRlStateManagerPtr = nullptr;
+rl_scene* GlobalMainScenePtr = nullptr;
 
 F_Camera_Start_Slew_Mode Camera_Start_Slew_Mode;
 F_Camera_Stop_Slew_Mode Camera_Stop_Slew_Mode;
@@ -149,3 +154,9 @@ Human* CastObjectToHuman(Object* ObjectPtr) { return (Human*)ObjectPtr; }
 Player* CastObjectToPlayer(Object* ObjectPtr) { return (Player*)ObjectPtr; }
 obj_zone* CastObjectToObjZone(Object* ObjectPtr) { return (obj_zone*)ObjectPtr; }
 district* CastObjectToDistrict(Object* ObjectPtr) { return (district*)ObjectPtr; }
+
+F_rl_camera_render_begin rl_camera_render_begin;
+
+F_game_render_set_far_clip_distance game_render_set_far_clip_distance;
+F_game_render_get_far_clip_distance game_render_get_far_clip_distance;
+F_game_render_get_main_scene game_render_get_main_scene;

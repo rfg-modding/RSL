@@ -3,6 +3,7 @@
 HMODULE MainModule = nullptr;
 
 ImFont* FontNormal;
+ImFont* FontBig;
 ImFont* FontLarge;
 ImFont* FontHuge;
 

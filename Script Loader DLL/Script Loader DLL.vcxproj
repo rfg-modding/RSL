@@ -269,6 +269,7 @@
     <ClInclude Include="LogWindow.h" />
     <ClInclude Include="LuaFunctions.h" />
     <ClInclude Include="RFGR_Containers.h" />
+    <ClInclude Include="RFGR_Types_StateManager.h" />
     <ClInclude Include="RFGR_Types_World.h" />
     <ClInclude Include="WelcomeGui.h" />
     <ClInclude Include="Includes.h" />

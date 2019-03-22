@@ -60,3 +60,6 @@ extern std::once_flag HookRlDrawTristip2dInitialCall;
 
 void __fastcall world_do_frame_hook(World* This, void* edx, bool HardLoad); //.text:01740AB0 rfg.exe:$540AB0 #53FEB0 <world::do_frame>
 extern std::once_flag HookWorldDoFrameInitialCall;
+
+void __fastcall rl_camera_render_begin_hook(rl_camera* This, void* edx, rl_renderer* Renderer); //.text:01027660 rfg.exe:$137660 #136A60 <rl_camera::render_begin>
+extern std::once_flag HookRlCameraRenderBegin;

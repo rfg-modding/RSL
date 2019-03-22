@@ -66,7 +66,13 @@ void TeleportGui::Draw()
 	//ImGui::Checkbox("Allow safe teleport fail", &AllowSafeTeleportFail);
 	//ImGui::InputFloat("Safe teleport placement range: ", &SafeTeleportPlacementRange, 1.0, 5.0, 3);
 	static bool NameAlreadyUsedWarning = false;
+
+	//ImGui::Separator();
+	ImGui::PushFont(FontBig);
 	ImGui::Text("Manual:");
+	ImGui::PopFont();
+	ImGui::Separator();
+
 	//ImGui::Separator();
 	ImGui::Text("Current player position: ");
 	ImGui::SameLine();
@@ -152,7 +158,10 @@ void TeleportGui::Draw()
 	*/
 
 	ImGui::Separator();
+	ImGui::PushFont(FontBig);
 	ImGui::Text("Saved locations:");
+	ImGui::PopFont();
+	ImGui::Separator();
 	try
 	{
 		for (auto i : TeleportLocations)

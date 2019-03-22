@@ -28,6 +28,8 @@ bool UpdateD3D11Pointers = true;
 std::once_flag HookRlDrawTristip2dInitialCall;
 std::once_flag HookWorldDoFrameInitialCall;
 
+std::once_flag HookRlCameraRenderBegin;
+
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 LRESULT __stdcall WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
@@ -256,6 +258,12 @@ HRESULT __stdcall D3D11PresentHook(IDXGISwapChain * pSwapChain, UINT SyncInterva
 		FontNormal = io.Fonts->AddFontFromFileTTF(FontAwesomeSolidPath.c_str(), GlobalFontSize, &IconsConfig, IconsRanges);
 		//Logger::Log("Done merging FontAwesome...", LogWarning);
 		
+		float GlobalBigFontSize = 24.0f;
+		if (DroidSansLoaded)
+		{
+			io.Fonts->AddFontFromFileTTF(DroidSansPath.c_str(), GlobalBigFontSize);
+		}
+		FontBig = io.Fonts->AddFontFromFileTTF(FontAwesomeSolidPath.c_str(), GlobalBigFontSize, &IconsConfig, IconsRanges);
 
 		/*Start of FontLarge loading*/
 		float GlobalLargeFontSize = 35.0f;
@@ -767,4 +775,28 @@ void __fastcall world_do_frame_hook(World* This, void* edx, bool HardLoad) //.te
 	}																   
 
 	return world_do_frame(This, edx, HardLoad);
+}
+
+void __fastcall rl_camera_render_begin_hook(rl_camera* This, void* edx, rl_renderer* Renderer) //.text:01027660 rfg.exe:$137660 #136A60 <rl_camera::render_begin>
+{
+	std::call_once(HookRlCameraRenderBegin, [&]()
+	{
+		GlobalRlCameraPtr = This;
+		GlobalRlRendererPtr = Renderer;
+	
+		if (Renderer)
+		{
+			GlobalRlRenderLibPtr = Renderer->m_pRenderLib;
+			GlobalRlStateManagerPtr = Renderer->m_state_p;
+		}
+
+		GlobalMainScenePtr = game_render_get_main_scene();
+	});
+	if (This != GlobalRlCameraPtr)
+	{
+		//Logger::Log("GlobalRlCameraPtr address changed!", LogWarning);
+		GlobalRlCameraPtr = This;
+	}
+
+	return rl_camera_render_begin(This, edx, Renderer);
 }

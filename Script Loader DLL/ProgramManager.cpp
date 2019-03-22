@@ -441,6 +441,7 @@ void ProgramManager::CreateGameHooks(bool EnableNow)
 	Hooks.CreateHook("rl_draw::tristrip_2d_begin", GAMEHOOK, (DWORD*)(ModuleBase + 0x10DDA0), rl_draw_tristrip_2d_begin_hook, (LPVOID*)&rl_draw_tristrip_2d_begin, EnableNow);
 
 	Hooks.CreateHook("world::do_frame", GAMEHOOK, (DWORD*)(ModuleBase + 0x540AB0), world_do_frame_hook, (LPVOID*)&world_do_frame, EnableNow);
+	Hooks.CreateHook("rl_camera::render_begin", GAMEHOOK, (DWORD*)(ModuleBase + 0x137660), rl_camera_render_begin_hook, (LPVOID*)&rl_camera_render_begin, EnableNow);
 }
 
 void ProgramManager::CreateD3D11Hooks(bool EnableNow)

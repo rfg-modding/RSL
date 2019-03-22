@@ -123,4 +123,10 @@ void FunctionManager::Initialize()
 
 	rfg_dyn_apply_point_impulse = (F_rfg_dyn_apply_point_impulse)(ModuleBase + 0x3124D0); //.text:010924D0 rfg.exe:$3124D0 #3118D0 <rfg_dyn_apply_point_impulse>
 	rfg_dyn_repair_sphere = (F_rfg_dyn_repair_sphere)(ModuleBase + 0x314820); //.text:01094820 rfg.exe:$314820 #313C20 <rfg_dyn_repair_sphere>
+
+	rl_camera_render_begin = (F_rl_camera_render_begin)(ModuleBase + 0x137660); //.text:01027660 rfg.exe:$137660 #136A60 <rl_camera::render_begin>
+
+	game_render_set_far_clip_distance = (F_game_render_set_far_clip_distance)(ModuleBase + 0x3C2C40); //.text:012B2C40 rfg.exe:$3C2C40 #3C2040 <game_render_set_far_clip_distance>
+	game_render_get_far_clip_distance = (F_game_render_get_far_clip_distance)(ModuleBase + 0x3C2C50); //.text:012B2C50 rfg.exe:$3C2C50 #3C2050 <game_render_get_far_clip_distance>
+	game_render_get_main_scene = (F_game_render_get_main_scene)(ModuleBase + 0x3C2920); //.text:012B2920 rfg.exe:$3C2920 #3C1D20 <game_render_get_main_scene>
 }

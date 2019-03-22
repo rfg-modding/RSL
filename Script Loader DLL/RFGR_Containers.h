@@ -26,4 +26,18 @@ namespace rfg
 	public:
 		T data[InitialSize];
 	};
+
+	template <class T>
+	class Array
+	{
+	public:
+		const T& operator[](int Index)
+		{
+			return Data[Index];
+		}
+		unsigned int GetSize() { return Size; }
+	private:
+		T* Data;
+		unsigned int Size;
+	};
 }

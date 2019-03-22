@@ -1,11 +1,16 @@
 #pragma once
 ///#include "Globals.h"
 #include "SnippetManager.h"
-#include "RFGR_Types_World.h"
+#include "RFGR_Types_StateManager.h"
 //#include "RFGR Structs/KeenNamespace.h"
 
 extern World* GlobalRfgWorldPtr;
 extern rl_light* GlobalTODLightPtr;
+extern rl_camera* GlobalRlCameraPtr;
+extern rl_renderer* GlobalRlRendererPtr;
+extern rl_render_lib* GlobalRlRenderLibPtr;
+extern rl_state_manager* GlobalRlStateManagerPtr;
+extern rl_scene* GlobalMainScenePtr;
 
 static void DisableCameraCode(DWORD AddressY, DWORD AddressZ) //Takes addresses for instructions affecting y and z. Alternatively x and z may work, since one piece seems to be shared between two coords.
 {
@@ -625,3 +630,21 @@ extern district* CastObjectToDistrict(Object* ObjectPtr);
 
 //.text:005B09C0 rfg.exe:$2D09C0 #2CFDC0 <camera_stop_slew_mode>
 //.text:005A9AC0 rfg.exe:$2C9AC0 #2C8EC0 <camera_start_first_person>
+
+
+//void __thiscall rl_camera::render_begin(rl_camera *this, rl_renderer *renderer)
+//.text:01027660 rfg.exe:$137660 #136A60 <rl_camera::render_begin>
+typedef void(__fastcall* F_rl_camera_render_begin)(rl_camera* This, void* edx, void* Renderer); //2nd arg is edx, needed for __thiscall functions.
+extern F_rl_camera_render_begin rl_camera_render_begin;
+
+//.text:012B2C40 rfg.exe:$3C2C40 #3C2040 <game_render_set_far_clip_distance> //void __cdecl fav::game_render_set_far_clip_distance(float distance)
+typedef void(__cdecl* F_game_render_set_far_clip_distance)(float Distance);
+extern F_game_render_set_far_clip_distance game_render_set_far_clip_distance;
+
+//.text:012B2C50 rfg.exe:$3C2C50 #3C2050 <game_render_get_far_clip_distance> //float __cdecl fav::game_render_get_far_clip_distance()
+typedef float(__cdecl* F_game_render_get_far_clip_distance)();
+extern F_game_render_get_far_clip_distance game_render_get_far_clip_distance;
+
+//.text:012B2920 rfg.exe:$3C2920 #3C1D20 <game_render_get_main_scene> //rl_scene *__cdecl fav::game_render_get_main_scene()
+typedef rl_scene*(__cdecl* F_game_render_get_main_scene)();
+extern F_game_render_get_main_scene game_render_get_main_scene;

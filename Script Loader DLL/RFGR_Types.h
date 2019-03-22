@@ -303,6 +303,52 @@ struct TimestampPercent : Timestamp //8
 	int set_milliseconds;
 };
 
+namespace keen
+{
+	struct GraphicsMatrix43
+	{
+		float row0[4];
+		float row1[4];
+		float row2[4];
+	};
+
+	struct GraphicsMatrix44
+	{
+		float row0[4];
+		float row1[4];
+		float row2[4];
+		float row3[4];
+	};
+
+	struct String
+	{
+		const char* pStart;
+		const char* pEnd;
+	};
+
+	struct float2
+	{
+		float x;
+		float y;
+	};
+
+	struct float3
+	{
+		float x;
+		float y;
+		float z;
+	};
+
+	struct float4
+	{
+		float x;
+		float y;
+		float z;
+		float w;
+	};
+};
+
+
 class vector
 {
 public:

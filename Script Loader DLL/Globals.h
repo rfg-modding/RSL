@@ -27,6 +27,7 @@ static const float pi = 3.14159265f;
 extern HMODULE MainModule;
 
 extern ImFont* FontNormal;
+extern ImFont* FontBig;
 extern ImFont* FontLarge;
 extern ImFont* FontHuge;
 
