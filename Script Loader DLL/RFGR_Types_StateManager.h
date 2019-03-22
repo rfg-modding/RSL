@@ -625,23 +625,6 @@ namespace keen
 	};
 };
 
-
-struct rl_dev_render_target
-{
-	keen::RenderTarget* pData;
-};
-
-struct rl_dev_depth_stencil_target
-{
-	keen::RenderTarget* pData;
-};
-
-struct  rl_material_state_store
-{
-	rl_primitive_state old_state[8];
-	rl_primitive_state implicit_state;
-};
-
 struct rl_singleton__rl_render_lib__Vtbl;
 struct  rl_singleton__rl_render_lib
 {
@@ -651,67 +634,6 @@ struct  rl_singleton__rl_render_lib
 struct rl_singleton__rl_render_lib__Vtbl
 {
 	void *(__thiscall *__vecDelDtor)(rl_singleton__rl_render_lib* This, unsigned int);
-};
-
-struct rl_dev_blend_state
-{
-	keen::BlendState* m_internal_state_p;
-};
-
-struct  rl_dev_sampler_state
-{
-	keen::SamplerState* m_internal_state_p;
-};
-
-struct  rl_dev_depth_stencil_state
-{
-	keen::DepthStencilState* m_internal_state_p;
-};
-
-struct  rl_dev_rasterizer_state
-{
-	keen::RasterizerState* m_internal_state_p;
-};
-
-struct new_rl_level_of_detail_settings
-{
-	char m_texture_reduction;
-	rl_anisotropic_filtering_lod m_anisotropic_filtering;
-};
-
-struct  rl_level_of_detail
-{
-	rl_shadow_lod m_shadow_lod;
-	rl_antialias_lod m_aa_lod;
-	rl_particle_lod m_particle_lod;
-	bool m_soft_shadows;
-	bool m_bloom_enabled;
-	bool m_motion_blur_enabled;
-	bool m_depth_of_field_enabled;
-	bool m_distortion_enabled;
-	bool m_ssao_enabled;
-	bool m_sun_shafts_enabled;
-	new_rl_level_of_detail_settings m_new_data;
-	char padding[120];
-};
-
-struct  new_rl_screen_info_settings
-{
-
-};
-
-struct  __declspec(align(4)) rl_screen_info
-{
-	int m_current_width;
-	int m_current_height;
-	int m_rr_num;
-	int m_rr_den;
-	float m_aspect_ratio;
-	unsigned int m_monitor;
-	keen::graphics::WindowMode m_window_mode;
-	bool m_vsync_enabled;
-	new_rl_screen_info_settings m_new_info;
-	char padding[127];
 };
 
 struct mempool_base

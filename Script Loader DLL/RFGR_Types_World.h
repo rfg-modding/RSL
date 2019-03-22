@@ -538,6 +538,748 @@ struct pool_list__rl_occluder_ptr : base_array__rl_occluder_ptr
 	unsigned int m_min_used;
 };
 
+struct rl_dev_blend_state
+{
+	keen::BlendState* m_internal_state_p;
+};
+
+struct  rl_dev_sampler_state
+{
+	keen::SamplerState* m_internal_state_p;
+};
+
+struct  rl_dev_depth_stencil_state
+{
+	keen::DepthStencilState* m_internal_state_p;
+};
+
+struct  rl_dev_rasterizer_state
+{
+	keen::RasterizerState* m_internal_state_p;
+};
+
+struct new_rl_level_of_detail_settings
+{
+	char m_texture_reduction;
+	rl_anisotropic_filtering_lod m_anisotropic_filtering;
+};
+
+struct  rl_level_of_detail
+{
+	rl_shadow_lod m_shadow_lod;
+	rl_antialias_lod m_aa_lod;
+	rl_particle_lod m_particle_lod;
+	bool m_soft_shadows;
+	bool m_bloom_enabled;
+	bool m_motion_blur_enabled;
+	bool m_depth_of_field_enabled;
+	bool m_distortion_enabled;
+	bool m_ssao_enabled;
+	bool m_sun_shafts_enabled;
+	new_rl_level_of_detail_settings m_new_data;
+	char padding[120];
+};
+
+struct  new_rl_screen_info_settings
+{
+
+};
+
+struct  __declspec(align(4)) rl_screen_info
+{
+	int m_current_width;
+	int m_current_height;
+	int m_rr_num;
+	int m_rr_den;
+	float m_aspect_ratio;
+	unsigned int m_monitor;
+	keen::graphics::WindowMode m_window_mode;
+	bool m_vsync_enabled;
+	new_rl_screen_info_settings m_new_info;
+	char padding[127];
+};
+
+namespace keen
+{
+	const struct FragmentShader
+	{
+		ID3D11PixelShader *pPixelShader;
+	};
+
+	const struct VertexShader
+	{
+		rfg::Array<unsigned char> shaderCode;
+		ID3D11VertexShader* pVertexShader;
+		rfg::Array<_D3D11_SIGNATURE_PARAMETER_DESC> inputSignature;
+		unsigned int inputSignatureHash;
+	};
+
+	/* 3262 */
+	struct ShaderPipeline
+	{
+		keen::VertexShader *pVertexShader;
+		keen::FragmentShader *pFragmentShader;
+	};
+
+	struct GraphicsStateObject
+	{
+		unsigned int hash;
+		unsigned int refCount;
+	};
+
+	struct VertexAttributeDescription
+	{
+		char id;
+		char format;
+		char inputStreamIndex;
+		char instanceStepRate;
+	};
+
+	const struct VertexFormat : keen::GraphicsStateObject
+	{
+		keen::VertexAttributeDescription attributes[17];
+		unsigned int attributeOffsets[17];
+		unsigned int attributeCount;
+		unsigned int attributeIndices[17];
+		unsigned int streamStride[6];
+		unsigned int instanceDataStreamIndex;
+	};
+
+	const struct VertexInputBinding : keen::GraphicsStateObject
+	{
+		keen::VertexFormat *pVertexFormat;
+		ID3D11InputLayout *pLayout;
+		unsigned int geometryModeMask;
+	};
+
+	struct DynamicConstantBuffer
+	{
+		ID3D11Buffer *pBuffer;
+		unsigned int sizeInBytes;
+	};
+
+	struct VertexBufferData
+	{
+		ID3D11Buffer* pBuffer;
+		unsigned int vertexCount;
+		unsigned int offset;
+	};
+
+	struct GeometryInstancingBuffer
+	{
+		ID3D11DeviceContext* pContext;
+		ID3D11Buffer* pVertexBuffer;
+		unsigned int currentPosition;
+		unsigned int size;
+	};
+
+	struct CommonVertexShaderConstants
+	{
+		keen::GraphicsMatrix44 projTM;
+		keen::GraphicsMatrix44 viewTM;
+		keen::GraphicsMatrix43 camRot;
+		keen::float4 camPos;
+		keen::float4 time;
+		keen::float4 fogDistance;
+		keen::float3 renderOffset;
+		float renderOffset_dummy0;
+		keen::float4 targetDimensions;
+	};
+
+	struct CommonFragmentShaderConstants
+	{
+		keen::float2 saturation;
+		float dummy0;
+		float dummy1;
+		keen::float4 time;
+		keen::float4 ambient;
+		keen::float4 backAmbient;
+		keen::float4 fogColor;
+		keen::float4 shadowFadeParams;
+		keen::float4 targetDimensions;
+		keen::float4 indirectLightParams;
+		float substanceSpecAlphaScale;
+		float substanceSpecPowerScale;
+		float substanceDiffuseScale;
+		float substanceFresnelAlphaScale;
+		float substanceFresnelPowerScale;
+		float glassFresnelBias;
+		float glassFresnelPower;
+		float glassReflectionEnabled;
+		float glassDirtEnabled;
+		float dummy2;
+		float dummy3;
+		float dummy4;
+	};
+
+	struct InstanceVertexShaderConstants
+	{
+		keen::GraphicsMatrix43 objTM;
+		keen::float4 instanceData;
+		keen::float3 Terrain_subzone_offset;
+		float Terrain_subzone_offset_Dummy0;
+	};
+
+	struct InstanceFragmentShaderConstants
+	{
+		keen::float4 tint;
+		float alphaTestRef;
+		unsigned int doExplicitAlphaTest;
+		unsigned int doExplicitAlphaTest_dummy0;
+		unsigned int doExplicitAlphaTest_dummy1;
+	};
+
+	struct DecalVertexShaderConstants
+	{
+		keen::float3 xvec;
+		float xvec_Dummy0;
+		keen::float3 yvec;
+		float yvec_Dummy0;
+		keen::float3 zvec;
+		float zvec_Dummy0;
+		keen::float3 pos;
+		float pos_Dummy0;
+		keen::float4 tint;
+		keen::float4 params1;
+		keen::float4 params2;
+	};
+
+	/*struct DownsampleDepthContext
+	{
+		keen::DownsampleDepthVariants shaders;
+		keen::CopyDepthVariants copyDepthShader;
+		keen::DynamicConstantBuffer *pConstantBuffer;
+		keen::RasterizerState *pRasterizerState;
+		keen::SamplerState *pDepthBufferSamplerState;
+		keen::VertexInputBinding *pVertexInputBinding;
+		keen::VertexInputBinding *pCopyVertexInputBinding;
+		keen::BlendState *pDepthBlendState;
+		keen::DepthStencilState *pDepthDepthStencilState;
+		keen::BlendState *pStencilBlendState;
+		keen::DepthStencilState *pStencilDepthStencilState;
+		keen::StockVertexPos2f vertexData[3];
+	};*/
+
+	struct RenderTarget;
+	struct GraphicsCommandBuffer
+	{
+		ID3D11DeviceContext *pContext;
+		ID3D11Buffer *pMappedConstantBuffer;
+		keen::RenderTarget *pCurrentRenderTarget;
+		void* pSkinningBuffer; //keen::SkinningD3D11 *pSkinningBuffer;
+		ID3D11Buffer *pImmediateVertexData;
+		unsigned int immediateVertexBufferOffset;
+		unsigned int immediateVertexBufferSize;
+		unsigned int immediateVertexDataStride;
+		unsigned int immediateVertexCount;
+		keen::PrimitiveType immediatePrimitiveType;
+		void* pDownsampleDepthContext; //keen::DownsampleDepthContext *pDownsampleDepthContext;
+		keen::VertexFormat* pCurrentlyBoundVertexFormat;
+		void *pRenderCommandBufferStorage;
+		bool quadlistImmediateCommand;
+		char *pCurrentImmediateBuffer;
+		char quadBuffer[65536];
+	};
+
+	/*struct TextureData;
+	struct GraphicsCommandWriter
+	{
+		keen::GraphicsCommandBuffer* m_pBuffer;
+		keen::GraphicsSystem* m_pGraphicsSystem;
+		keen::RenderTarget* m_pRenderTarget;
+		keen::VertexInputBinding* m_pVertexInputBinding;
+		keen::BlendState* m_pBlendState;
+		keen::RasterizerState* m_pRasterizerState;
+		keen::DepthStencilState* m_pDepthStencilState;
+		keen::SamplerState* m_fragmentShaderSamplerStates[16];
+		keen::TextureData* m_fragmentShaderTextures[16];
+		keen::ShaderPipeline* m_pShaderPipeline;
+		keen::TextureData* m_vertexShaderTextures[16];
+		keen::SamplerState* m_vertexShaderSamplerStates[16];
+		keen::VertexFormat* m_screenQuadVertexFormats[3];
+		keen::RenderTarget* m_renderPassStack[4];
+		keen::StaticConstantBuffer* m_currentStaticVertexConstantBuffers[8];
+		keen::StaticConstantBuffer* m_currentStaticFragmentConstantBuffers[8];
+		unsigned int m_renderPassStackIndex;
+		unsigned int m_stencilRefValue;
+		unsigned int m_mappedConstantBufferSlotIndex;
+	};*/
+
+	struct BlendState : keen::GraphicsStateObject
+	{
+		ID3D11BlendState* pState;
+	};
+
+	struct DepthStencilState : keen::GraphicsStateObject
+	{
+		ID3D11DepthStencilState *pState;
+	};
+
+	struct RasterizerState : keen::GraphicsStateObject
+	{
+		ID3D11RasterizerState* pState;
+	};
+
+	struct SamplerState : keen::GraphicsStateObject
+	{
+		ID3D11SamplerState *pState;
+	};
+
+	struct SizedArray__unsigned_int
+	{
+		unsigned int *m_pData;
+		unsigned int m_size;
+		unsigned int m_capacity;
+	};
+
+	struct Stack__unsigned_int
+	{
+		keen::SizedArray__unsigned_int m_data;
+	};
+
+	struct MemoryBlock
+	{
+		char* pStart;
+		unsigned int size;
+	};
+
+	struct ZoneAllocator
+	{
+		keen::MemoryBlock m_memory;
+		char* m_pCurrentAddress;
+	};
+
+	struct ZoneAllocatorAdapter
+	{
+		ZoneAllocator m_allocator;
+		unsigned int m_allocationCount;
+	};
+
+	struct MemoryAllocator
+	{
+		void* vfptr; //keen::MemoryAllocatorVtbl *vfptr;
+	};
+
+	struct Mutex
+	{
+		char m_name[32];
+		unsigned int m_criticalSectionData[6];
+	};
+
+	struct BaseMemoryAllocator__keen_ZoneAllocatorAdapter : keen::MemoryAllocator
+	{
+		keen::Mutex m_mutex;
+		char m_name[128];
+		keen::ZoneAllocatorAdapter m_allocator;
+		keen::MemoryBlock m_memoryBlock;
+		unsigned int m_allocatedSize;
+		unsigned int m_maxAllocatedSize;
+		unsigned int m_allocationCount;
+		unsigned int m_flags;
+	};
+
+	struct ZoneMemoryAllocator : keen::BaseMemoryAllocator__keen_ZoneAllocatorAdapter
+	{
+
+	};
+
+	struct OcclusionQuery
+	{
+		ID3D11Query* pQuery;
+	};
+
+	struct OcclusionQueryManager
+	{
+		rfg::Array<keen::OcclusionQuery> m_occlusionQueryPool;
+		Stack__unsigned_int m_freeOcclusionQueries;
+		keen::ZoneMemoryAllocator m_gpuMemoryAllocator;
+	};
+
+	struct TextureDescription
+	{
+		unsigned __int16 width;
+		unsigned __int16 height;
+		unsigned __int16 depth;
+		unsigned __int16 flags;
+		char type;
+		char format;
+		char lutFormat;
+		char multiSampleType;
+		char addressModeU;
+		char addressModeV;
+		char addressModeW;
+		char levelCount;
+		char cpuAccessMode;
+		char gpuAccessMode;
+	};
+
+	struct TextureData
+	{
+		keen::TextureDescription description;
+		ID3D11Resource *pTexture;
+		ID3D11ShaderResourceView *pShaderView;
+		DXGI_FORMAT d3dFormat;
+	};
+
+	struct RenderTargetBuffer
+	{
+		keen::PixelFormat format;
+		keen::TextureData* pDataBuffer;
+	};
+
+	const struct RenderTarget
+	{
+		ID3D11RenderTargetView* renderTargetViews[8];
+		ID3D11DepthStencilView* pDepthBufferView;
+		keen::RenderTargetBuffer colorBuffers[8];
+		keen::RenderTargetBuffer depthBuffer;
+		unsigned int colorBufferCount;
+		unsigned int width;
+		unsigned int height;
+	};
+
+	struct GaussBlurVariants
+	{
+		keen::FragmentShader *m_fragmentShaders[1];
+		keen::VertexShader *m_vertexShaders[1];
+		keen::ShaderPipeline m_pipelines[1];
+	};
+
+	struct SsaoCalcVariants
+	{
+		keen::FragmentShader *m_fragmentShaders[6];
+		keen::VertexShader *m_vertexShaders[1];
+		keen::ShaderPipeline m_pipelines[6];
+	};
+
+	struct SsaoBlurVariants
+	{
+		keen::FragmentShader *m_fragmentShaders[3];
+		keen::VertexShader *m_vertexShaders[1];
+		keen::ShaderPipeline m_pipelines[3];
+	};
+
+	struct SsaoMinifyVariants
+	{
+		keen::FragmentShader *m_fragmentShaders[1];
+		keen::VertexShader *m_vertexShaders[1];
+		keen::ShaderPipeline m_pipelines[1];
+	};
+
+	struct FxaaShaderVariants
+	{
+		keen::FragmentShader* m_fragmentShaders[2];
+		keen::VertexShader* m_vertexShaders[1];
+		keen::ShaderPipeline m_pipelines[2];
+	};
+
+	struct FxaaContext
+	{
+		keen::BlendState *pBlendState;
+		keen::RasterizerState *pRasterizerState;
+		keen::DepthStencilState *pDepthStencilState;
+		keen::SamplerState *pSamplerState;
+		keen::VertexInputBinding *pVertexInputBinding;
+		keen::FxaaShaderVariants shaderVariants;
+		keen::DynamicConstantBuffer *pConstantBuffer;
+	};
+
+	struct Event
+	{
+		void *m_eventHandle;
+	};
+
+	struct Thread
+	{
+		void* m_threadHandle;
+		unsigned int m_threadId;
+		volatile void* m_pArgument;
+		char m_identifier[64];
+		bool m_quitRequested;
+		int(__cdecl *m_pFunction)(keen::Thread*);
+	};
+
+	namespace graphics
+	{
+		enum WindowMode
+		{
+			WindowMode_Windowed = 0x0,
+			WindowMode_Borderless = 0x1,
+			WindowMode_Fullscreen = 0x2,
+			WindowMode_Count = 0x3,
+		};
+	};
+};
+
+struct rl_dev_render_target
+{
+	keen::RenderTarget* pData;
+};
+
+struct rl_dev_depth_stencil_target
+{
+	keen::RenderTarget* pData;
+};
+
+struct  rl_material_state_store
+{
+	rl_primitive_state old_state[8];
+	rl_primitive_state implicit_state;
+};
+
+struct  rl_iterrain_renderer : rl_base_object
+{
+
+};
+
+struct __declspec(align(4)) rl_deferred_batch_item
+{
+	unsigned int def_id;
+	float dist_sq;
+	bool opacity_fade;
+};
+
+struct rl_deferred_batch_info
+{
+	rl_deferred_batch_item *m_elem;
+	unsigned int m_max_items;
+	volatile unsigned int m_num_items;
+};
+
+struct rl_dev_texture
+{
+	keen::TextureData *pData;
+};
+
+struct rl_dyn_texture_base : rl_base_object
+{
+	int m_tex_handle;
+};
+
+struct rl_dyn_texture : rl_dyn_texture_base
+{
+	rl_dev_texture m_dev_texture;
+};
+
+struct rl_render_texture
+{
+	rl_dyn_texture* m_dyn_texture_p;
+	rl_dev_texture m_msaa_texture;
+	rl_dev_render_target m_render_target;
+	rl_dev_depth_stencil_target m_depth_stencil_target;
+	unsigned int m_flags;
+};
+
+struct rl_shader_const_ref
+{
+	unsigned int m_ref;
+};
+
+struct rl_gaussian5x5_blur_kernel : rl_sampling_offsets
+{
+	rl_sampling_vector m_values[17];
+};
+
+struct rl_scene_renderer_saved_texture
+{
+	rl_render_texture* m_render_texture_p;
+	rl_dev_texture m_saved_texture;
+	unsigned int m_width;
+	unsigned int m_height;
+};
+
+struct SsaoContext
+{
+	keen::SsaoCalcVariants ssaoCalcVariants;
+	keen::SsaoBlurVariants ssaoBlurVariants;
+	keen::SsaoMinifyVariants ssaoMinifyVariants;
+	keen::DynamicConstantBuffer *pCalcFragmentShaderConstants;
+	keen::DynamicConstantBuffer *pBlurFragmentShaderConstants;
+	keen::VertexInputBinding *pInputBindingCalc[5];
+	keen::VertexInputBinding *pInputBindingBlur[3];
+	keen::SamplerState *pDepthMapSamplerState;
+	keen::DepthStencilState *pDepthStencilState[2];
+	keen::BlendState *pBlendState[2];
+	keen::RasterizerState *pRasterizerState;
+};
+
+struct GaussBlurContext
+{
+	keen::GaussBlurVariants gaussBlurVariants;
+	keen::DynamicConstantBuffer *pFragmentShaderConstants;
+	keen::VertexInputBinding *pInputBinding;
+	keen::SamplerState *pSamplerState;
+	keen::DepthStencilState *pDepthStencilState;
+	keen::BlendState *pBlendState;
+	keen::RasterizerState *pRasterizerState;
+};
+
+struct rl_depth_of_field
+{
+	unsigned int m_dof_effect;
+	rl_shader_const_ref m_near_clip_params;
+	rl_shader_const_ref m_focal_params;
+	rl_shader_const_ref m_dof_equation_near;
+	rl_shader_const_ref m_dof_lerp_scale;
+	rl_shader_const_ref m_dof_lerp_bias;
+	rl_shader_const_ref m_override_blur_percent;
+	rl_shader_const_ref m_dof_equation_far;
+	rl_shader_const_ref m_depth_sampling_offsets_const;
+	rfg::rl_downscale_sampling_offsets<9> m_depth_sampling_offsets;
+};
+
+struct rl_shader_technique_ref
+{
+	int m_ref;
+};
+
+struct rl_distortion
+{
+	unsigned int m_distortion_effect;
+	rl_shader_const_ref m_distortion_scale;
+	rl_shader_const_ref m_blur_scale;
+	rl_shader_technique_ref m_technique_base;
+	rl_shader_technique_ref m_technique_diffraction;
+};
+
+struct rl_motion_blur
+{
+	unsigned int m_motion_blur_effect;
+	rl_shader_technique_ref m_camera_based_tech;
+	rl_shader_technique_ref m_radial_tech;
+	rl_shader_const_ref m_curr_to_prev_const;
+	rl_shader_const_ref m_blur_scale;
+	rl_shader_const_ref m_blur_clamp;
+	rl_shader_const_ref m_radial_blur_radius;
+	rl_shader_const_ref m_radial_blur_position;
+	matrix44 m_view_proj_prev;
+	vector m_render_offset_prev;
+};
+
+struct rl_shadow_render_parameters
+{
+	matrix44 shadow_texture_matrix;
+	unsigned int shadows_enabled;
+	unsigned int use_clb_shadows;
+	float shadow_max_dist;
+	float shadow_fade_start;
+	unsigned int shadow_aa_enabled;
+	float shadow_percent;
+	float shadow_percent_bias;
+};
+
+struct __declspec(align(4)) rl_scene_renderer_deferred_sort_entry
+{
+	rl_renderable_instance* renderable_instance_p;
+	rl_renderable_instance_sort_method sort_method;
+	unsigned int generic_id;
+	int sort_priority;
+	float dist_to_camera_sq;
+	struct rl_render_pass* render_pass_p;
+	int secondary_sort_priority;
+	bool opacity_fade;
+};
+
+struct rl_scene_renderer_Part2Params
+{
+	rl_renderer* p_deferredRenderer;
+	rl_camera* p_camera;
+	bool msaa_enabled;
+	rl_scene* p_scene;
+	rl_dev_render_target* p_original_rt;
+	rl_shadow_render_parameters* p_shadow_render_params;
+	rl_hdr_state* p_hdr_state;
+	rl_color_correct_state* p_color_correct_state;
+	rl_dev_depth_stencil_target* p_original_ds;
+	rl_rect* p_original_vp;
+};
+
+struct  rl_scene_renderer : rl_base_object
+{
+	void* m_compositor_p; //rl_compositor *m_compositor_p;
+	void* m_hdr_compositor; //rl_hdr_compositor *m_hdr_compositor_p;
+	void* m_outline_compositor; //rl_outline_compositor *m_outline_compositor_p;
+	unsigned int m_flags;
+	rl_scene *m_scene_p;
+	rl_iterrain_renderer *m_terrain_renderer_p;
+	rfg::pool_list<rl_renderable_instance*> m_visible_renderable_instances;
+	rfg::pool_list<rl_light*> m_visible_lights;
+	void* m_base_batched_pass; //rl_batched_pass *m_base_batched_pass;
+	rl_deferred_batch_info m_deferred_ids_to_add;
+	rl_metrics *m_metrics_p;
+	unsigned int m_num_transparent_shadow_objects;
+	rl_renderable_instance *m_transparent_shadow_objects[100];
+	int m_main_scene_target_width;
+	int m_main_scene_target_height;
+	int m_half_target_width;
+	int m_half_target_height;
+	int m_particle_brightpass_width;
+	int m_particle_brightpass_height;
+	int m_distortion_width;
+	int m_distortion_height;
+	rl_render_texture m_main_scene_render_target;
+	rl_render_texture m_half_render_target;
+	rl_render_texture m_half_depth_target;
+	rl_render_texture m_full_res_particle_target;
+	rl_render_texture m_particle_brightpass_target;
+	rl_render_texture m_particle_fog_color_target;
+	rl_render_texture m_distortion_target;
+	rl_dev_depth_stencil_target m_main_scene_depth_stencil_target;
+	keen::TextureData *m_pMainSceneDepthTexture;
+	rl_dev_depth_stencil_target m_half_depth_stencil_target;
+	keen::RenderTarget *m_pMainSceneDepthTarget;
+	rl_dev_depth_stencil_target m_main_scene_depth_stencil_target_msaa;
+	int m_main_scene_downsample_width;
+	int m_main_scene_downsample_height;
+	rl_render_texture m_main_scene_downsample_target;
+	rl_render_texture m_main_scene_blur_target;
+	rl_render_texture m_main_scene_temp_target[2];
+	int m_outline_width;
+	int m_outline_height;
+	rl_render_texture m_outline_target;
+	int m_ssao_width;
+	int m_ssao_height;
+	keen::TextureData *m_pSsaoBlurTexture[2];
+	keen::RenderTarget *m_pSsaoBlurTarget[2];
+	int m_sun_shafts_skybox_mask_width;
+	int m_sun_shafts_skybox_mask_height;
+	rl_render_texture m_sun_shafts_skybox_mask_target;
+	int m_clb_width;
+	int m_clb_height;
+	keen::TextureData *m_pClbTexture;
+	keen::RenderTarget *m_pClbTarget;
+	GaussBlurContext *m_pGaussBlurContext;
+	int m_shadow_map_width;
+	int m_shadow_map_height;
+	rl_render_texture m_shadow_map_target;
+	rl_color_float m_particle_fog_color;
+	SsaoContext *m_pSsaoContext;
+	rl_depth_of_field m_depth_of_field;
+	rl_distortion m_distortion;
+	rl_motion_blur m_motion_blur;
+	keen::FxaaContext *m_pFxaaContext;
+	rl_level_of_detail m_level_of_detail;
+	rl_level_of_detail m_new_level_of_detail;
+	rl_gaussian5x5_blur_kernel m_blur_kernel;
+	volatile unsigned int m_num_deferred_sort_entries;
+	rl_scene_renderer_deferred_sort_entry m_deferred_sort_entries[9216];
+	volatile unsigned int m_num_deferred_sort_entries_first;
+	rl_scene_renderer_deferred_sort_entry m_deferred_sort_entries_first[200];
+	volatile unsigned int m_num_deferred_sort_entries_last;
+	rl_scene_renderer_deferred_sort_entry m_deferred_sort_entries_last[200];
+	rfg::farray<rl_renderable_instance *, 50> m_distortion_only_entries;
+	rfg::farray<rl_scene_renderer_saved_texture, 16> m_saved_textures;
+	rl_dev_texture m_locked_framebuffer_texture;
+	unsigned int m_blit_shader;
+	void* m_pRecordedCommandBuffer; //struct keen::RecordedCommandBuffer *m_pRecordedCommandBuffer;
+	keen::Event m_startPart2Event;
+	keen::Event m_endPart2Event;
+	keen::Thread m_part2Thread;
+	keen::Mutex m_gpuVisMutex;
+	rl_scene_renderer_Part2Params m_part2_params;
+	keen::MemoryBlock m_commandBufferMemory;
+};
+
 //struct rl_base_object;
 struct __declspec(align(8)) rl_scene : rl_base_object
 {

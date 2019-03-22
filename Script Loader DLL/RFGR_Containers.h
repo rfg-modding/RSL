@@ -1,5 +1,19 @@
 #pragma once
 
+struct rl_sampling_vector
+{
+	float x;
+	float y;
+	float z;
+	float w;
+};
+
+struct rl_sampling_offsets
+{
+	rl_sampling_vector *m_values_p;
+	int m_num_samples;
+};
+
 namespace rfg
 {
 	template<class T>
@@ -40,4 +54,20 @@ namespace rfg
 		T* Data;
 		unsigned int Size;
 	};
+
+	template <class T>
+	class pool_list : base_array<T>
+	{
+		bool DynamicInit;
+		unsigned int MinUsed;
+	};
+
+	template <unsigned int T>
+	class rl_downscale_sampling_offsets : rl_sampling_offsets
+	{
+		rl_sampling_vector Values[T];
+	};
 }
+
+bool m_init_dynamic;
+unsigned int m_min_used;
