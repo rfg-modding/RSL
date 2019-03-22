@@ -1,7 +1,7 @@
 #pragma once
 ///#include "Globals.h"
 #include "SnippetManager.h"
-#include "RFGR_Types_StateManager.h"
+#include "RFGR_Types_Havok.h"
 //#include "RFGR Structs/KeenNamespace.h"
 
 extern World* GlobalRfgWorldPtr;
