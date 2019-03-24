@@ -63,3 +63,9 @@ extern std::once_flag HookWorldDoFrameInitialCall;
 
 void __fastcall rl_camera_render_begin_hook(rl_camera* This, void* edx, rl_renderer* Renderer); //.text:01027660 rfg.exe:$137660 #136A60 <rl_camera::render_begin>
 extern std::once_flag HookRlCameraRenderBegin;
+
+void __fastcall hkpWorld_stepDeltaTime_hook(hkpWorld* This, void* edx, float PhysicsDeltaTime); //0x9E1A70
+extern std::once_flag HookhkpWorld_stepDeltaTime;
+
+void __fastcall ApplicationUpdateTimeHook(void* This, void* edx, float TimeStep); //0x9E1A70
+extern std::once_flag HookApplicationUpdateTime;

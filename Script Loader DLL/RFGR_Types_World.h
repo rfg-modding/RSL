@@ -1440,7 +1440,7 @@ struct rl_scene_renderer_Part2Params
 };
 
 struct rl_metrics;
-struct  rl_scene_renderer : rl_base_object
+struct rl_scene_renderer : rl_base_object
 {
 	void* m_compositor_p; //rl_compositor *m_compositor_p;
 	void* m_hdr_compositor; //rl_hdr_compositor *m_hdr_compositor_p;

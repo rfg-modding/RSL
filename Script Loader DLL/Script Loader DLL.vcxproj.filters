@@ -132,13 +132,16 @@
     <ClCompile Include="WelcomeGui.cpp">
       <Filter>Overlay Gui\Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="BaseGui.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="LuaFunctions.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="FreeCamGui.cpp">
+      <Filter>Overlay Gui\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseGui.cpp">
+      <Filter>Overlay Gui\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PhysicsGui.cpp">
       <Filter>Overlay Gui\Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -248,9 +251,6 @@
     <ClInclude Include="WelcomeGui.h">
       <Filter>Overlay Gui\Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="RFGR_Containers.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="RFGR_Type_UI.h">
       <Filter>RFGR Structs</Filter>
     </ClInclude>
@@ -263,9 +263,6 @@
     <ClInclude Include="RFGR_Types_Player.h">
       <Filter>RFGR Structs</Filter>
     </ClInclude>
-    <ClInclude Include="BaseGui.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="LuaFunctions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -275,8 +272,20 @@
     <ClInclude Include="FreeCamGui.h">
       <Filter>Overlay Gui\Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="RFGR_Containers.h">
+      <Filter>RFGR Structs</Filter>
+    </ClInclude>
     <ClInclude Include="RFGR_Types_StateManager.h">
-      <Filter>Header Files</Filter>
+      <Filter>RFGR Structs</Filter>
+    </ClInclude>
+    <ClInclude Include="RFGR_Types_Havok.h">
+      <Filter>RFGR Structs</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseGui.h">
+      <Filter>Overlay Gui\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PhysicsGui.h">
+      <Filter>Overlay Gui\Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

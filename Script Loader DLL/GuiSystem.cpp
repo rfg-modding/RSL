@@ -38,6 +38,8 @@ void GuiSystem::Initialize()
 	LogGui = (LogWindow*)GuiList.back();
 	GuiList.push_back(new FreeCamGui(&ShowAppFreeCamSettings, "Free cam settings"));
 	FreeCamSettings = (FreeCamGui*)GuiList.back();
+	GuiList.push_back(new PhysicsGui(&ShowAppPhysicsSettings, "Physics settings"));
+	PhysicsSettings = (PhysicsGui*)GuiList.back();
 
 	for (const auto& i : GuiList)
 	{

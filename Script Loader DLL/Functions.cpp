@@ -7,8 +7,9 @@ rl_renderer* GlobalRlRendererPtr = nullptr;
 rl_render_lib* GlobalRlRenderLibPtr = nullptr;
 rl_state_manager* GlobalRlStateManagerPtr = nullptr;
 rl_scene* GlobalMainScenePtr = nullptr;
-rl_scene_renderer* GlobalMainSceneRendererPtr;
-rl_camera* GlobalMainSceneCameraPtr;
+rl_scene_renderer* GlobalMainSceneRendererPtr = nullptr;
+rl_camera* GlobalMainSceneCameraPtr = nullptr;
+hkpWorld* GlobalhkpWorldPtr = nullptr;
 
 F_Camera_Start_Slew_Mode Camera_Start_Slew_Mode;
 F_Camera_Stop_Slew_Mode Camera_Stop_Slew_Mode;
@@ -162,3 +163,9 @@ F_rl_camera_render_begin rl_camera_render_begin;
 F_game_render_set_far_clip_distance game_render_set_far_clip_distance;
 F_game_render_get_far_clip_distance game_render_get_far_clip_distance;
 F_game_render_get_main_scene game_render_get_main_scene;
+
+F_hkpWorld_stepDeltaTime hkpWorld_stepDeltaTime;
+F_ApplicationUpdateTime ApplicationUpdateTime;
+
+F_hkpWorldGetGravity hkpWorldGetGravity;
+F_hkpWorldSetGravity hkpWorldSetGravity;

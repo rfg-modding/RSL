@@ -14,6 +14,7 @@ void FunctionManager::Initialize()
 {
 	ModuleBase = (uintptr_t)GetModuleHandle(NULL);
 	//std::cout << "ModuleBase, hex: " << std::hex << std::uppercase << ModuleBase << std::dec << ", decimal: " << ModuleBase << "\n";
+
 	Camera_Start_Slew_Mode = (F_Camera_Start_Slew_Mode)(ModuleBase + 0x2D09B0); //483B60
 	Camera_Stop_Slew_Mode = (F_Camera_Stop_Slew_Mode)(ModuleBase + 0x2D09C0);
 
@@ -129,4 +130,11 @@ void FunctionManager::Initialize()
 	game_render_set_far_clip_distance = (F_game_render_set_far_clip_distance)(ModuleBase + 0x3C2C40); //.text:012B2C40 rfg.exe:$3C2C40 #3C2040 <game_render_set_far_clip_distance>
 	game_render_get_far_clip_distance = (F_game_render_get_far_clip_distance)(ModuleBase + 0x3C2C50); //.text:012B2C50 rfg.exe:$3C2C50 #3C2050 <game_render_get_far_clip_distance>
 	game_render_get_main_scene = (F_game_render_get_main_scene)(ModuleBase + 0x3C2920); //.text:012B2920 rfg.exe:$3C2920 #3C1D20 <game_render_get_main_scene>
+
+	hkpWorld_stepDeltaTime = (F_hkpWorld_stepDeltaTime)(ModuleBase + 0x9E1A70); //.text:01B01A70 rfg.exe:$9E1A70 #9E0E70 <hkpWorld::stepDeltaTime>
+
+	ApplicationUpdateTime = (F_ApplicationUpdateTime)(ModuleBase + 0x5A880);
+
+	hkpWorldGetGravity = (F_hkpWorldGetGravity)(ModuleBase + 0x40D040);
+	hkpWorldSetGravity = (F_hkpWorldSetGravity)(ModuleBase + 0x9E0E20);
 }

@@ -85,6 +85,21 @@ void GeneralTweaksGui::Draw()
 		return;
 	}
 
+	if (GlobalMainScenePtr)
+	{
+		//Todo: Mess with main scene settings
+		if (GlobalMainSceneRendererPtr)
+		{
+			ImGui::PushFont(FontBig);
+			ImGui::Text("Main scene renderer settings:");
+			ImGui::PopFont();
+			ImGui::Separator();
+			
+			ImGui::InputInt("Shadow map width", &GlobalMainSceneRendererPtr->m_shadow_map_width);
+			ImGui::InputInt("Shadow map height", &GlobalMainSceneRendererPtr->m_shadow_map_height);
+		}
+	}
+
 	if (ImGui::Button("Toggle Hud"))
 	{
 		ToggleHud();
@@ -190,8 +205,12 @@ void GeneralTweaksGui::Draw()
 	ImGui::SameLine();
 	ImGui::Checkbox("##Player move speed checkbox", &NeedCustomMoveSpeedSet);
 	
-	//ImGui::Text("Player max speed:"); ImGui::SameLine();
-	//ImGui::TextColored(SecondaryTextColor, std::to_string(PlayerPtr->MaxSpeed).c_str());
+	ImGui::PushItemWidth(232.0f);
+	ImGui::InputFloat("Player max speed", &CustomPlayerMaxSpeed, 1.0f, 5.0f, 3);
+	ImGui::SameLine();
+	ImGui::Checkbox("##Player max move speed checkbox", &NeedCustomMaxMoveSpeedSet);
+	ImGui::Separator();
+
 	if (!UseCustomLevelAmbientLight)
 	{
 		CustomLevelAmbientLight.x = GlobalRfgWorldPtr->level_ambient.x;
@@ -211,12 +230,6 @@ void GeneralTweaksGui::Draw()
 		CustomTimeOfDayLightColor.blue = GlobalTODLightPtr->m_color.blue;
 		CustomTimeOfDayLightColor.alpha = GlobalTODLightPtr->m_color.alpha;
 	}
-
-	ImGui::PushItemWidth(232.0f);
-	ImGui::InputFloat("Player max speed", &CustomPlayerMaxSpeed, 1.0f, 5.0f, 3);
-	ImGui::SameLine();
-	ImGui::Checkbox("##Player max move speed checkbox", &NeedCustomMaxMoveSpeedSet);
-	ImGui::Separator();
 
 	ImGui::InputFloat3("Level ambient light", (float*)&CustomLevelAmbientLight, 3);
 	ImGui::SameLine();

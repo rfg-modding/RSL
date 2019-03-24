@@ -13,6 +13,7 @@ extern rl_state_manager* GlobalRlStateManagerPtr;
 extern rl_scene* GlobalMainScenePtr;
 extern rl_scene_renderer* GlobalMainSceneRendererPtr;
 extern rl_camera* GlobalMainSceneCameraPtr;
+extern hkpWorld* GlobalhkpWorldPtr;
 
 static void DisableCameraCode(DWORD AddressY, DWORD AddressZ) //Takes addresses for instructions affecting y and z. Alternatively x and z may work, since one piece seems to be shared between two coords.
 {
@@ -650,3 +651,21 @@ extern F_game_render_get_far_clip_distance game_render_get_far_clip_distance;
 //.text:012B2920 rfg.exe:$3C2920 #3C1D20 <game_render_get_main_scene> //rl_scene *__cdecl fav::game_render_get_main_scene()
 typedef rl_scene*(__cdecl* F_game_render_get_main_scene)();
 extern F_game_render_get_main_scene game_render_get_main_scene;
+
+//hkpStepResult __thiscall fav::hkpWorld::stepDeltaTime(hkpWorld *this, float physicsDeltaTime) //0x9E1A70
+typedef void(__fastcall* F_hkpWorld_stepDeltaTime)(hkpWorld* This, void* edx, float PhysicsDeltaTime); //2nd arg is edx, needed for __thiscall functions.
+extern F_hkpWorld_stepDeltaTime hkpWorld_stepDeltaTime;
+
+//.text:0117A880 rfg.exe:$5A880 #59C80 <keen::rfg::Application::updateTime> //void __thiscall fav::keen::rfg::Application::updateTime(keen::rfg::Application *this, float timeStep)
+typedef void(__fastcall* F_ApplicationUpdateTime)(void* This, void* edx, float TimeStep); //2nd arg is edx, needed for __thiscall functions.
+extern F_ApplicationUpdateTime ApplicationUpdateTime;
+
+//.text:0152D040 rfg.exe:$40D040 #40C440 <hkpWorld::getGravity> //hkVector4f *__thiscall fav::hkpWorld::getGravity(hkpWorld* this)
+typedef hkVector4f*(__fastcall* F_hkpWorldGetGravity)(hkpWorld* This, void* edx); //2nd arg is edx, needed for __thiscall functions.
+extern F_hkpWorldGetGravity hkpWorldGetGravity;
+
+//.text:01B00E20 rfg.exe:$9E0E20 #9E0220 <hkpWorld::setGravity> //void __thiscall fav::hkpWorld::setGravity(hkpWorld* this, hkVector4f* gravity)
+typedef void(__fastcall* F_hkpWorldSetGravity)(hkpWorld* This, void* edx, hkVector4f* Gravity); //2nd arg is edx, needed for __thiscall functions.
+extern F_hkpWorldSetGravity hkpWorldSetGravity;
+
+//.text:014306A0 rfg.exe:$3106A0 #30FAA0 <hkVector4f::set> //void __thiscall hkVector4f::set(hkVector4f *this, float a, float b, float c, float d)

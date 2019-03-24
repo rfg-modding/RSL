@@ -29,6 +29,8 @@ std::once_flag HookRlDrawTristip2dInitialCall;
 std::once_flag HookWorldDoFrameInitialCall;
 
 std::once_flag HookRlCameraRenderBegin;
+std::once_flag HookhkpWorld_stepDeltaTime;
+std::once_flag HookApplicationUpdateTime;
 
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 LRESULT __stdcall WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
@@ -794,7 +796,14 @@ void __fastcall rl_camera_render_begin_hook(rl_camera* This, void* edx, rl_rende
 		if (GlobalMainScenePtr)
 		{
 			GlobalMainSceneRendererPtr = GlobalMainScenePtr->m_scene_renderer_p;
+			if (!GlobalMainSceneRendererPtr)
+			{
+				GlobalMainSceneRendererPtr = GlobalMainScenePtr->m_default_scene_renderer_p;
+			}
 			GlobalMainSceneCameraPtr = GlobalMainSceneRendererPtr->m_part2_params.p_camera;
+
+			std::cout << "Shadow map width: " << GlobalMainSceneRendererPtr->m_shadow_map_width << "\n";
+			std::cout << "Shadow map height: " << GlobalMainSceneRendererPtr->m_shadow_map_height << "\n";
 		}
 	});
 	if (This != GlobalRlCameraPtr)
@@ -805,3 +814,61 @@ void __fastcall rl_camera_render_begin_hook(rl_camera* This, void* edx, rl_rende
 
 	return rl_camera_render_begin(This, edx, Renderer);
 }
+
+void __fastcall hkpWorld_stepDeltaTime_hook(hkpWorld* This, void* edx, float PhysicsDeltaTime) //0x9E1A70
+{
+	std::call_once(HookhkpWorld_stepDeltaTime, [&]()
+	{
+		GlobalhkpWorldPtr = This;
+		if (Gui.PhysicsSettings)
+		{
+			Gui.PhysicsSettings->CurrentGravity = hkpWorldGetGravity(GlobalhkpWorldPtr, NULL);
+
+			Gui.PhysicsSettings->CustomGravityVector.m_quad.m128_f32[0] = Gui.PhysicsSettings->CurrentGravity->m_quad.m128_f32[0];
+			Gui.PhysicsSettings->CustomGravityVector.m_quad.m128_f32[1] = Gui.PhysicsSettings->CurrentGravity->m_quad.m128_f32[1];
+			Gui.PhysicsSettings->CustomGravityVector.m_quad.m128_f32[2] = Gui.PhysicsSettings->CurrentGravity->m_quad.m128_f32[2];
+			Gui.PhysicsSettings->CustomGravityVector.m_quad.m128_f32[3] = Gui.PhysicsSettings->CurrentGravity->m_quad.m128_f32[3];
+				
+			Gui.PhysicsSettings->DefaultGravityVector.m_quad.m128_f32[0] = Gui.PhysicsSettings->CurrentGravity->m_quad.m128_f32[0];
+			Gui.PhysicsSettings->DefaultGravityVector.m_quad.m128_f32[1] = Gui.PhysicsSettings->CurrentGravity->m_quad.m128_f32[1];
+			Gui.PhysicsSettings->DefaultGravityVector.m_quad.m128_f32[2] = Gui.PhysicsSettings->CurrentGravity->m_quad.m128_f32[2];
+			Gui.PhysicsSettings->DefaultGravityVector.m_quad.m128_f32[3] = Gui.PhysicsSettings->CurrentGravity->m_quad.m128_f32[3];
+		}
+	});
+	if (This != GlobalhkpWorldPtr)
+	{
+		Logger::Log("GlobalhkpWorldPtr address changed!", LogWarning);
+		GlobalhkpWorldPtr = This;
+	}
+
+	if (Gui.TweaksMenu)
+	{
+		if (Gui.PhysicsSettings->UseCustomPhysicsTimestepMultiplier)
+		{
+			PhysicsDeltaTime *= Gui.PhysicsSettings->CustomPhysicsTimeStepMultiplier;
+		}
+	}
+
+	return hkpWorld_stepDeltaTime(This, edx, PhysicsDeltaTime);
+}
+
+void __fastcall ApplicationUpdateTimeHook(void* This, void* edx, float TimeStep)
+{
+	std::call_once(HookApplicationUpdateTime, [&]()
+	{
+		//GlobalApplicationPtr = This;
+	});
+
+	/*if (Gui.TweaksMenu)
+	{
+		if (Gui.TweaksMenu->UseCustomPhysicsTimestepMultiplier)
+		{
+			TimeStep *= Gui.TweaksMenu->CustomPhysicsTimeStepMultiplier;
+		}
+	}*/
+
+	return ApplicationUpdateTime(This, edx, TimeStep);
+}
+//.text:0117A880 rfg.exe:$5A880 #59C80 <keen::rfg::Application::updateTime> //void __thiscall fav::keen::rfg::Application::updateTime(keen::rfg::Application *this, float timeStep)
+//typedef void(__fastcall* F_ApplicationUpdateTime)(void* This, void* edx, float TimeStep); //2nd arg is edx, needed for __thiscall functions.
+//extern F_ApplicationUpdateTime ApplicationUpdateTime;

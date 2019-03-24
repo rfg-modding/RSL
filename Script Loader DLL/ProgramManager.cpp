@@ -442,6 +442,8 @@ void ProgramManager::CreateGameHooks(bool EnableNow)
 
 	Hooks.CreateHook("world::do_frame", GAMEHOOK, (DWORD*)(ModuleBase + 0x540AB0), world_do_frame_hook, (LPVOID*)&world_do_frame, EnableNow);
 	Hooks.CreateHook("rl_camera::render_begin", GAMEHOOK, (DWORD*)(ModuleBase + 0x137660), rl_camera_render_begin_hook, (LPVOID*)&rl_camera_render_begin, EnableNow);
+	Hooks.CreateHook("hkpWorld::stepDeltaTime", GAMEHOOK, (DWORD*)(ModuleBase + 0x9E1A70), hkpWorld_stepDeltaTime_hook, (LPVOID*)&hkpWorld_stepDeltaTime, EnableNow);
+	Hooks.CreateHook("Application::UpdateTime", GAMEHOOK, (DWORD*)(ModuleBase + 0x5A880), ApplicationUpdateTimeHook, (LPVOID*)&ApplicationUpdateTime, EnableNow);
 }
 
 void ProgramManager::CreateD3D11Hooks(bool EnableNow)

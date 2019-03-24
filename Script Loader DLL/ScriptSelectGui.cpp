@@ -30,6 +30,7 @@ void ScriptSelectGui::Draw()
 	{
 		return;
 	}
+	ImGui::SetNextWindowSize(ImVec2(400.0f, 500.0f), ImGuiCond_FirstUseEver);
 	if (!ImGui::Begin(Title.c_str(), OpenState, WindowFlags))
 	{
 		ImGui::End();

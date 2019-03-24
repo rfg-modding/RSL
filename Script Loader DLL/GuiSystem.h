@@ -10,6 +10,7 @@
 #include "MenuBarGui.h"
 #include "LogWindow.h"
 #include "FreeCamGui.h"
+#include "PhysicsGui.h"
 
 class ScriptManager;
 
@@ -51,6 +52,7 @@ public:
 	ScriptSelectGui* ScriptList = nullptr;
 	LogWindow* LogGui = nullptr;
 	FreeCamGui* FreeCamSettings = nullptr;
+	PhysicsGui* PhysicsSettings = nullptr;
 
 	bool ShowAppWelcome = true;
 
@@ -72,6 +74,7 @@ public:
 
 	bool ShowAppLogWindow = false;
 	bool ShowAppFreeCamSettings = false;
+	bool ShowAppPhysicsSettings = false;
 
 private:
 	bool LuaConsoleActive = false;
