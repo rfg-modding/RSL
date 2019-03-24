@@ -4,6 +4,7 @@
 #include "RFGR_Types_Havok.h"
 //#include "RFGR Structs/KeenNamespace.h"
 
+extern Player* GlobalPlayerPtr;
 extern World* GlobalRfgWorldPtr;
 extern rl_light* GlobalTODLightPtr;
 extern rl_camera* GlobalRlCameraPtr;

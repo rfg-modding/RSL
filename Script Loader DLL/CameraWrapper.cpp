@@ -156,6 +156,11 @@ void CameraWrapper::ActivateFreeCamera()
 	uintptr_t ModuleBase = (uintptr_t)GetModuleHandle(NULL);
 	InMultiplayer = (DWORD*)(*(DWORD*)(ModuleBase + 0x002CA210)); //Todo: Fix this. For some reason this needs to be set again here even though it was already set in MainThread().
 	
+	//Slight adjustments so the player ends up roughly in their original position.
+	OriginalCameraPosition.x = *(float*)RealX + 2.171509;
+	OriginalCameraPosition.y = *(float*)RealY;
+	OriginalCameraPosition.z = *(float*)RealZ + 1.8545898;
+
 #if EnableSpectatorMode
 	if (*(bool*)InMultiplayer)
 	{
@@ -179,7 +184,7 @@ void CameraWrapper::ActivateRotationControl()
 	RotationControlActive = true;
 }
 
-void CameraWrapper::DeactivateFreeCamera()
+void CameraWrapper::DeactivateFreeCamera(bool Shutdown)
 {
 	Logger::Log("Deactivating free camera", LogInfo);
 	RestoreCameraCode();
@@ -192,6 +197,10 @@ void CameraWrapper::DeactivateFreeCamera()
 	}
 #endif
 	FreeCameraActive = false;
+	if (!Shutdown) //Don't want the player thrown in the air when they deactivate the script loader.
+	{
+		NeedPostDeactivationCleanup = true; 
+	}
 }
 
 void CameraWrapper::DeactivateRotationControl()
@@ -206,7 +215,7 @@ void CameraWrapper::ToggleFreeCamera()
 {
 	if (FreeCameraActive)
 	{
-		DeactivateFreeCamera();
+		DeactivateFreeCamera(false);
 	}
 	else
 	{

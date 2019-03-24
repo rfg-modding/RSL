@@ -21,5 +21,8 @@ public:
 	float CustomFarClipDistance = 475.0f;
 	float CustomTimeValue = 100.0f;
 	float CustomTODValue = 100.0f;
+
+	bool ReturnPlayerToOriginalPosition = false;
+	vector OriginalPosition;
 };
 

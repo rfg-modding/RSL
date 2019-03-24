@@ -386,6 +386,12 @@ public:
 	{
 		return !(*this == B);
 	}
+	void operator=(const vector& B)
+	{
+		x = B.x;
+		y = B.y;
+		z = B.z;
+	}
 	vector Cross(const vector& B)
 	{
 		vector C;

@@ -1,5 +1,6 @@
 #include "Functions.h"
 
+Player* GlobalPlayerPtr;
 World* GlobalRfgWorldPtr = nullptr;
 rl_light* GlobalTODLightPtr = nullptr;
 rl_camera* GlobalRlCameraPtr = nullptr;

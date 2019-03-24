@@ -36,7 +36,6 @@ bool UseGlobalExplosionStrengthMultiplier = false;
 bool UseExplosionRadiusLimits = true;
 float MinimumExplosionRadius = 0.0f;
 float MaximumExplosionRadius = 12.0f;
-DWORD* GlobalPlayerPtr = nullptr;
 
 bool InfiniteJetpack = false;
 

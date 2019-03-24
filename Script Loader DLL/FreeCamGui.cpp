@@ -42,6 +42,9 @@ void FreeCamGui::Draw()
 	{
 		Camera->ToggleFreeCamera();
 	}
+	ImGui::Checkbox("Return player to original position?", &ReturnPlayerToOriginalPosition);
+	ImGui::SameLine();
+	Utilities::GUI::ShowHelpMarker("If this is on the player will be teleported back to their original position after the free cam is disabled. If it's off then the player will be dropped wherever the free cam deactivates. So be careful.");
 	ImGui::InputFloat("Move speed", &Camera->CameraSpeed, 0.1, 5.0, 3);
 
 	//ImGui::Checkbox("Have player follow camera", &PlayerFollowCam);

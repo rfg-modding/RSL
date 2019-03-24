@@ -374,7 +374,7 @@ bool __cdecl KeenGraphicsResizeRenderSwapchainHook(void* KeenSwapchain, unsigned
 
 void __fastcall PlayerConstructorHook(Player* PlayerPtr)
 {
-	GlobalPlayerPtr = (DWORD*)PlayerPtr;
+	GlobalPlayerPtr = PlayerPtr;
 	//Overlay.PlayerPtr = PlayerPtr;
 	Gui.SetPlayerPtr(PlayerPtr);
 	if (!GlobalPlayerPtrInitialized)
@@ -391,7 +391,7 @@ void __fastcall PlayerDoFrameHook(Player* PlayerPtr)
 	{
 		if (!GlobalPlayerPtrInitialized)
 		{
-			GlobalPlayerPtr = (DWORD*)PlayerPtr;
+			GlobalPlayerPtr = PlayerPtr;
 			GlobalPlayerPtrInitialized = true;
 
 			//Overlay.PlayerPtr = PlayerPtr;
@@ -404,9 +404,9 @@ void __fastcall PlayerDoFrameHook(Player* PlayerPtr)
 #endif
 		}
 	});
-	if (GlobalPlayerPtr != (DWORD*)PlayerPtr)
+	if (GlobalPlayerPtr != PlayerPtr)
 	{
-		GlobalPlayerPtr = (DWORD*)PlayerPtr;
+		GlobalPlayerPtr = PlayerPtr;
 		//Overlay.PlayerPtr = PlayerPtr;
 		Gui.SetPlayerPtr(PlayerPtr);
 
@@ -454,6 +454,11 @@ void __fastcall PlayerDoFrameHook(Player* PlayerPtr)
 		CameraWrapper* Cam = Gui.FreeCamSettings->Camera;
 		vector CameraPos(Cam->GetRealX(), Cam->GetRealY() + 1.5f, Cam->GetRealZ());
 		HumanTeleportUnsafe(PlayerPtr, CameraPos, PlayerPtr->Orientation);
+	}
+	if (!Gui.FreeCamSettings->Camera->IsFreeCameraActive() && Gui.FreeCamSettings->Camera->NeedPostDeactivationCleanup)
+	{
+		HumanTeleportUnsafe(PlayerPtr, Gui.FreeCamSettings->Camera->OriginalCameraPosition, PlayerPtr->Orientation);
+		Gui.FreeCamSettings->Camera->NeedPostDeactivationCleanup = false;
 	}
 
 	return PlayerDoFrame(PlayerPtr);
@@ -541,7 +546,7 @@ void __fastcall ObjectUpdatePosAndOrientHook(Object* ObjectPtr, void* edx, vecto
 	//Logger::ConsoleLog("2\n", LogInfo, false, true);
 	if (GlobalPlayerPtrInitialized)
 	{
-		if (GlobalPlayerPtr == (DWORD*)ObjectPtr)
+		if (GlobalPlayerPtr == ObjectPtr)
 		{
 			///std::cout << "PlayerSetHavokData: " << SetHavokData << "\n";
 		}

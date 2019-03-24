@@ -61,7 +61,6 @@ extern bool UseGlobalExplosionStrengthMultiplier;
 extern bool UseExplosionRadiusLimits;
 extern float MinimumExplosionRadius;
 extern float MaximumExplosionRadius;
-extern DWORD* GlobalPlayerPtr;
 
 extern bool InfiniteJetpack;
 

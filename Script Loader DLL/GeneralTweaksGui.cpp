@@ -85,21 +85,6 @@ void GeneralTweaksGui::Draw()
 		return;
 	}
 
-	if (GlobalMainScenePtr)
-	{
-		//Todo: Mess with main scene settings
-		if (GlobalMainSceneRendererPtr)
-		{
-			ImGui::PushFont(FontBig);
-			ImGui::Text("Main scene renderer settings:");
-			ImGui::PopFont();
-			ImGui::Separator();
-			
-			ImGui::InputInt("Shadow map width", &GlobalMainSceneRendererPtr->m_shadow_map_width);
-			ImGui::InputInt("Shadow map height", &GlobalMainSceneRendererPtr->m_shadow_map_height);
-		}
-	}
-
 	if (ImGui::Button("Toggle Hud"))
 	{
 		ToggleHud();
@@ -333,7 +318,10 @@ void GeneralTweaksGui::Draw()
 	}
 	ImGui::Separator();*/
 
-	ImGui::Text("Experimental Options");
+	ImGui::Separator();
+	ImGui::PushFont(FontBig);
+	ImGui::Text("Experimental settings:");
+	ImGui::PopFont();
 	ImGui::Separator();
 
 	if (ImGui::CollapsingHeader("Info dumps"))
@@ -580,6 +568,34 @@ void GeneralTweaksGui::Draw()
 	{
 		ImGui::SameLine();
 		ImGui::TextColored(ColorRed, "[Experimental]");
+	}
+
+	if (GlobalMainScenePtr)
+	{
+		//Todo: Mess with main scene settings
+		if (GlobalMainSceneRendererPtr)
+		{
+			//ImGui::PushFont(FontBig);
+			ImGui::Text("Main scene renderer settings:");
+			//ImGui::PopFont();
+			ImGui::Separator();
+
+			ImGui::InputInt("Shadow map width", &GlobalMainSceneRendererPtr->m_shadow_map_width);
+			ImGui::InputInt("Shadow map height", &GlobalMainSceneRendererPtr->m_shadow_map_height);
+
+			//None of the options in this are changeable.
+			/*if (GlobalMainSceneRendererPtr->m_part2_params.p_shadow_render_params)
+			{
+				ImGui::InputInt("Shadows enabled", (int*)&GlobalMainSceneRendererPtr->m_part2_params.p_shadow_render_params->shadows_enabled);
+				ImGui::InputInt("Use clb shadows", (int*)&GlobalMainSceneRendererPtr->m_part2_params.p_shadow_render_params->use_clb_shadows);
+				ImGui::InputInt("Shadow AA enabled", (int*)&GlobalMainSceneRendererPtr->m_part2_params.p_shadow_render_params->shadow_aa_enabled);
+
+				ImGui::InputFloat("Shadow max distance", &GlobalMainSceneRendererPtr->m_part2_params.p_shadow_render_params->shadow_max_dist, 10.0f, 100.0f, 3);
+				ImGui::InputFloat("Shadow fade start", &GlobalMainSceneRendererPtr->m_part2_params.p_shadow_render_params->shadow_fade_start, 10.0f, 100.0f, 3);
+				ImGui::InputFloat("Shadow percent", &GlobalMainSceneRendererPtr->m_part2_params.p_shadow_render_params->shadow_percent, 10.0f, 100.0f, 3);
+				ImGui::InputFloat("Shadow percent bias", &GlobalMainSceneRendererPtr->m_part2_params.p_shadow_render_params->shadow_percent_bias, 10.0f, 100.0f, 3);
+			}*/
+		}
 	}
 
 	ImGui::End();

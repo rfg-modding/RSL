@@ -29,7 +29,7 @@ public:
 	void ActivateFreeCamera();
 	void ActivateRotationControl();
 
-	void DeactivateFreeCamera();
+	void DeactivateFreeCamera(bool Shutdown);
 	void DeactivateRotationControl();
 
 	void ToggleFreeCamera();
@@ -174,6 +174,9 @@ public:
 	DWORD* RealFOV;
 	DWORD* IdealFOV;
 	float CustomFOV = 50.0f;
+
+	vector OriginalCameraPosition;
+	bool NeedPostDeactivationCleanup = false;
 
 private:
 	glm::mat3x3 RealOrientationMatrix;
