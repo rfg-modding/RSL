@@ -364,6 +364,9 @@ void ProgramManager::Exit()
 	SetWindowLongPtr(GameWindowHandle, GWLP_WNDPROC, (LONG_PTR)OriginalWndProc);
 	Camera.DeactivateFreeCamera();
 
+	HideHud(false);
+	HideFog(false);
+
 	//Hooks.DisableAllHooksOfType(GAMEHOOK);
 	//Hooks.DisableAllHooksOfType(D3D11HOOK);
 	Hooks.DisableAllHooks();
