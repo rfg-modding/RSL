@@ -93,21 +93,79 @@ void PhysicsGui::Draw()
 		ImGui::PopFont();
 		ImGui::Separator();
 		hkpSolverInfo* SolverPtr = &GlobalhkpWorldPtr->m_dynamicsStepInfo.m_solverInfo;
+		if (ImGui::Button("Reset all"))
+		{
+			SolverPtr->m_tau = 0.600f;
+			SolverPtr->m_damping = 1.000f;
+			SolverPtr->m_frictionTau = 0.300f;
+			SolverPtr->m_dampDivTau = 1.667f;
+			SolverPtr->m_tauDivDamp = 0.600f;
+			SolverPtr->m_dampDivFrictionTau = 3.333f;
+			SolverPtr->m_frictionTauDivDamp = 0.300f;
+			SolverPtr->m_contactRestingVelocity = 0.200f;
+			SolverPtr->m_numSteps = 4;
+			SolverPtr->m_numMicroSteps = 1;
+			SolverPtr->m_forceCoherentConstraintOrderingInSolver.m_bool = (char)false;
+		}
+
 		if (SolverPtr)
 		{
 			//ImGui::InputFloat("Padding", &SolverPtr->m_padding, 0.01, 0.1, 3);
 			ImGui::InputFloat("Tau", &SolverPtr->m_tau, 0.01, 0.1, 3);
+			ImGui::SameLine();
+			if (ImGui::Button("Reset##Tau"))
+			{
+				SolverPtr->m_tau = 0.600f;
+			}
 			ImGui::InputFloat("Damping", &SolverPtr->m_damping, 0.01, 0.1, 3);
+			ImGui::SameLine();
+			if (ImGui::Button("Reset##Damping"))
+			{
+				SolverPtr->m_damping = 1.000f;
+			}
 			ImGui::InputFloat("Friction tau", &SolverPtr->m_frictionTau, 0.01, 0.1, 3);
+			ImGui::SameLine();
+			if (ImGui::Button("Reset##FrictionTau"))
+			{
+				SolverPtr->m_frictionTau = 0.300f;
+			}
 			///hkVector4f m_globalAccelerationPerSubStep;
 			///hkVector4f m_globalAccelerationPerStep;
 			///hkVector4f m_integrateVelocityFactor;
 			///hkVector4f m_invIntegrateVelocityFactor;
 			ImGui::InputFloat("Damp div tau", &SolverPtr->m_dampDivTau, 0.01, 0.1, 3);
+			ImGui::SameLine();
+			if (ImGui::Button("Reset##DampDivTau"))
+			{
+				SolverPtr->m_dampDivTau = 1.667f;
+			}
 			ImGui::InputFloat("Tau div damp", &SolverPtr->m_tauDivDamp, 0.01, 0.1, 3);
+			ImGui::SameLine();
+			if (ImGui::Button("Reset##TauDivDamp"))
+			{
+				SolverPtr->m_tauDivDamp = 0.600f;
+			}
+			ImGui::PushItemWidth(230.0f);
 			ImGui::InputFloat("Damp div friction tau", &SolverPtr->m_dampDivFrictionTau, 0.01, 0.1, 3);
+			ImGui::SameLine();
+			if (ImGui::Button("Reset##DampDivFrictionTau"))
+			{
+				SolverPtr->m_dampDivFrictionTau = 3.333f;
+			}
+			ImGui::PushItemWidth(230.0f);
 			ImGui::InputFloat("Friction tau div damp", &SolverPtr->m_frictionTauDivDamp, 0.01, 0.1, 3);
+			ImGui::SameLine();
+			if (ImGui::Button("Reset##FrictionTauDivDamp"))
+			{
+				SolverPtr->m_frictionTauDivDamp = 0.300f;
+			}
+			ImGui::PushItemWidth(230.0f);
 			ImGui::InputFloat("Contact resting velocity", &SolverPtr->m_contactRestingVelocity, 0.01, 0.1, 3);
+			ImGui::SameLine();
+			if (ImGui::Button("Reset##ContactRestingVelocity"))
+			{
+				SolverPtr->m_contactRestingVelocity = 0.200f;
+			}
 			///hkpSolverInfo_DeactivationInfo m_deactivationInfo[6];
 			ImGui::Text("Delta time: ");
 			ImGui::SameLine();
@@ -115,7 +173,18 @@ void PhysicsGui::Draw()
 			//ImGui::InputFloat("Delta time", &, 0.01, 0.1, 3);
 			//ImGui::InputFloat("Inverse delta time", &SolverPtr->m_invDeltaTime, 0.01, 0.1, 3);
 			ImGui::InputInt("Num steps", &SolverPtr->m_numSteps);
+			ImGui::SameLine();
+			if (ImGui::Button("Reset##NumSteps"))
+			{
+				SolverPtr->m_numSteps = 4;
+			}
+			ImGui::PushItemWidth(230.0f);
 			ImGui::InputInt("Num micro steps", &SolverPtr->m_numMicroSteps);
+			ImGui::SameLine();
+			if (ImGui::Button("Reset##NumMicroSteps"))
+			{
+				SolverPtr->m_numMicroSteps = 1;
+			}
 			//
 			//ImGui::InputFloat("Inverse num micro steps", &SolverPtr->m_invNumMicroSteps, 0.01, 0.1, 3);
 			//ImGui::InputFloat("Inverse num steps", &SolverPtr->m_invNumSteps, 0.01, 0.1, 3);
