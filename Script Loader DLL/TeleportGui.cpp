@@ -162,6 +162,7 @@ void TeleportGui::Draw()
 	ImGui::Text("Saved locations:");
 	ImGui::PopFont();
 	ImGui::Separator();
+	ImGui::Text("Credit to TimeFlier for many of the default locations.");
 	try
 	{
 		for (auto i : TeleportLocations)
@@ -170,7 +171,10 @@ void TeleportGui::Draw()
 			{
 				HumanTeleportUnsafe(PlayerPtr, vector(i["Position"][0].get<float>(), i["Position"][1].get<float>(), i["Position"][2].get<float>()), PlayerPtr->Orientation);
 			}
-			Utilities::GUI::TooltipOnPrevious(i["TooltipDescription"].get<std::string>().c_str());
+			Utilities::GUI::TooltipOnPrevious(std::string(i["TooltipDescription"].get<std::string>() 
+				+ std::string(" Position: (") + to_string_precise(i["Position"][0].get<float>())
+				+ std::string(", ") + to_string_precise(i["Position"][1].get<float>())
+				+ std::string(", ") + to_string_precise(i["Position"][2].get<float>()) + std::string(")")).c_str());
 			ImGui::SameLine();
 			if (ImGui::Button(std::string("Edit##" + i["Name"].get<std::string>()).c_str()))
 			{
@@ -253,25 +257,56 @@ bool TeleportGui::LoadTeleportLocations()
 			Logger::Log("\"Teleport Locations.json\" not found. Creating from default values.", LogWarning);
 			CreateDirectoryIfNull(ExePath + "RFGR Script Loader/Settings/");
 
-			SetTeleportLocation("Tutorial Area Hilltop", -2328.29f, 30.0f, -2317.9f, "Tutorial area at the start of the game. Position: (-2328.29, 30.0, -2317.9)");
-			SetTeleportLocation("Parker - Safehouse", -1877.77f, 27.0f, -1452.0f, "Game starting safehouse. Near ore processing plant. Position: (-1877.77, 27.0, -1452.0)");
-			SetTeleportLocation("Dust - Northern Safehouse", -387.0f, 38.0f, -820.0f, "Near tharsis point wind farm and Dust town hall. Position: (-387.0, 38.0, -820.0)");
-			SetTeleportLocation("Dust - Southern Safehouse", -113.59f, 30.0f, -2449.58f, "Near chemical plant. Position: (-113.59, 30.0, -2449.58)");
-			SetTeleportLocation("Badlands - Safehouse / RFHQ", 2411.90f, 58.0f, -239.77f, "Main safehouse in Badlands. Also the HQ of the Red Faction. Position: (2411.90, 58.0, -239.77)");
-			SetTeleportLocation("Badlands - Mohole", 1420.27f, -28.0f, -734.28f, "Big 'ol hole in the ground used to pull heat from Mars' core for terraforming purposes. There's a smaller one in Dust. Position: (1420.27, -28.0, -734.28)");
-			SetTeleportLocation("Badlands - Harrington Memorial Bridge", 948.14f, -5.0f, -417.68f, "The big one. Position: (948.14, -5.0, -417.68)");
-			SetTeleportLocation("Badlands - EDF Barracks", 899.91f, 2.0f, -885.64f, "EDF Barracks sitting in a hilly area south of the EDF airbase in Badlands. Position: (899.91, 2.0, -885.64)");
-			SetTeleportLocation("Badlands - Marauder Safehouse", 2458.47f, 58.0f, -1210.17f, "Safehouse in marauder territory. Unless you want hostile marauders, wait until you've completed certain missions to go here. Position: (2458.47, 58.0, -1210.17)");
-			SetTeleportLocation("Oasis - Safehouse", 1434.29f, 18.0f, 691.65f, "Near EDF vehicle depot. Position: (1434.29, 18.0, 691.65)");
-			SetTeleportLocation("Free Fire Zone - Artillery Base", -1752.03f, 9.0f, -132.59f, "Base which runs and protects the EDF Artillery Gun. Deadly to be here until the FFZ has been liberated. Position: (-1752.03, 9.0, -132.59)");
-			SetTeleportLocation("Free Fire Zone - Artillery Gun", -1944.92f, 38.0f, -65.49f, "Bottom of the EDF Artillery Gun. Deadly to be here until the FFZ has been liberated. Position: (-1944.92, 38.0, -65.49)");
-			SetTeleportLocation("EOS - Western Safehouse", -1726.0f, 50.0f, 438.0f, "Near FFZ entrance/exit and Eos Memorial Bridge. Position: (-1726.0, 50.0, 438.0)");
-			SetTeleportLocation("EOS - Eastern Safehouse", -1390.95f, 30.0f, 561.08f, "Near construction site. Position: (-1390.95, 30.0, 561.08)");
-			SetTeleportLocation("EOS - Outside EDF Central Command", -1428.61f, 8.0f, 2013.5f, "Right outside the defense shield. Position: (-1428.61, 8.0, 2013.5)");
-			SetTeleportLocation("EOS - Inside EDF Central Command", -1458.75f, 8.0f, 2050.16f, "Right inside past the defense shield. Position: (-1458.75, 8.0, 2050.16)");
-			SetTeleportLocation("EOS - EDF Central Command Main Building", -1474.53f, 38.0f, 2397.49f, "The final building at the peak of the inner valley / cliffsides. Position: (-1474.53, 38.0, 2397.49)");
-			SetTeleportLocation("Mount Vogel - Base", -670.37f, 47.0f, 2423.75f, "Bottom of Mount Vogel and mass accelerator. Several old buildings. Position: (-670.37, 47.0, 2423.75)");
-			SetTeleportLocation("Mount Vogel - Peak", -285.77f, 183.0f, 2423.4f, "Peak of Mount Vogel with mass accelerator exit. Position: (-285.77, 183.0, 2423.4)");
+			SetTeleportLocation("Parker - Tutorial Area", -2328.29f, 30.0f, -2317.9f, "Tutorial area at the start of the game.");
+			SetTeleportLocation("Parker - Safehouse", -1877.77f, 23.0f, -1452.0f, "Game starting safehouse. Near ore processing plant.");
+			SetTeleportLocation("Parker - Abandoned Safehouse", -1813.3, 22.0, -1159.4, "Abandoned red faction safehouse in Parker.");
+			SetTeleportLocation("Parker - Sand Sifter Factory", -1833.5, 21.0, -1250.1, "Next to an ore collecting funnel and across the road from several large gas tanks.");
+			SetTeleportLocation("Parker - Ore Processing Plant", -1625.1, 38.0, -1178.3, "A restricted EDF target with two smokestacks and a building. EDF vehicles are usually parked here.");
+			SetTeleportLocation("Parker - Mountain", -1736.6, 90.0, -1323.6, "On top of a mountain in Dust overlooking the small town of Red Rock.");
+			SetTeleportLocation("Dust - Safehouse (North)", -387.0f, 38.0f, -820.0f, "Near tharsis point wind farm and Dust town hall.");
+			SetTeleportLocation("Dust - Safehouse (South)", -113.59f, 30.0f, -2449.58f, "Near chemical plant.");
+			SetTeleportLocation("Dust - Quarry", -887.1f, -20.0f, -1249.2f, "Inside the quarry. Includes several storage buildings with explosions and a large mining excavator.");
+			SetTeleportLocation("Dust - Town of Dust", 211.5f, 33.0f, -1428.8f, "On a hill overlooking the town of Dust. Has several stores, a bar, a prison, and medical clinic.");
+			SetTeleportLocation("Dust - Windfarm", -244.5f, 74.0f, -224.5f, "The center of the Windfarm in northern Dust. Several windmills and EDF guard towers.");
+			SetTeleportLocation("Dust - Town Hall", 206.2f, 55.0f, -695.4f, "Outside of the EDF controlled Dust Town Hall.");
+			SetTeleportLocation("Dust - EDF Executive Housing", 0.770f, 70.0f, -1196.61f, "On a hill overlooking a housing complex used by EDF officers. The area below is restricted.");
+			SetTeleportLocation("Dust - Chemical Depot", -208.6f, 3.0f, -2298.3f, "Entrance of the chemical depot in Dust. Has several offices, a workers apartment, and many gas tanks.");
+			SetTeleportLocation("Dust - Mohole", -801.7f, 71.0f, -589.6f, "Next to the small mohole in dust. In a restricted area.");
+			SetTeleportLocation("Dust - Mountain", -125.3f, 135.0f, -1147.4f, "Top of a large mountain/ridge in Dust.");
+			SetTeleportLocation("Badlands - Safehouse (RF HQ)", 2411.90f, 58.0f, -239.77f, "Main safehouse in Badlands. Also the HQ of the Red Faction.");
+			SetTeleportLocation("Badlands - Safehouse (Marauder)", 2458.47f, 58.0f, -1210.17f, "Safehouse in marauder territory. Unless you want hostile marauders, wait until you've completed certain missions to go here.");
+			SetTeleportLocation("Badlands - EDF Outpost", 1133.3f, -3.0f, -313.6f, "The big one.");
+			SetTeleportLocation("Badlands - Mohole", 1420.27f, -32.0f, -734.28f, "Big 'ol hole in the ground used to pull heat from Mars' core for terraforming purposes. There's a smaller one in Dust.");
+			SetTeleportLocation("Badlands - Harrington Memorial Bridge", 948.14f, -5.0f, -417.68f, "The big one.");
+			SetTeleportLocation("Badlands - EDF Barracks", 899.91f, 2.0f, -885.64f, "EDF Barracks sitting in a hilly area south of the EDF airbase in Badlands.");
+			SetTeleportLocation("Badlands - Marauder Territory", 1072.0f, 3.0f, -1366.0f, "Entrance to a Marauder base.");
+			SetTeleportLocation("Badlands - Ultor Ruins", 1279.9f, 20.0f, -1448.6f, "Large abandoned Ultor ruins in Marauder territory.");
+			SetTeleportLocation("Badlands - Irradiated Zone", 1685.5f, 28.0f, -1093.9f, "In the middle of the irradiated zone.");
+			SetTeleportLocation("Badlands - Old Coot", 1496.9f, -12.0f, -766.7f, "Old coots shack next to the Mohole.");
+			SetTeleportLocation("Badlands - Mars Rover", 2100.8f, 29.0f, -484.8f, "The mars rover easter egg.");
+			SetTeleportLocation("Oasis - Safehouse", 1434.29f, 18.0f, 691.65f, "Near EDF vehicle depot.");
+			SetTeleportLocation("Oasis - Residential District", 1728.2f, 17.0f, 211.38f, "Residential area of Oasis. Has several apartment buildings and gas stations.");
+			SetTeleportLocation("Oasis - Industrial District", 176.5f, 33.0f, 777.0f, "In the middle of the Industrial District of Oasis. Has several smokestacks and factories.");
+			SetTeleportLocation("Oasis - EDF Barracks", 916.2f, 23.0f, 240.7f, "Outside of an EDF Barracks in Oasis, near the Arc Reactor.");
+			SetTeleportLocation("Oasis - Reactor Core", 640.4f, 50.0f, 384.7f, "On a hillside overlooking the Arc Reactor.");
+			SetTeleportLocation("Free Fire Zone - Minor Safehouse", -1908.5f, 25.0f, -779.2f, "Abandoned EDF base in the free fire zone. Manned by guerrilla fighters.");
+			SetTeleportLocation("Free Fire Zone - Artillery Border (South)", -1606.6f, 0.0f, -785.9f, "Southern border of the artillery kill zone. Next to the EDF border checkpoint.");
+			SetTeleportLocation("Free Fire Zone - Artillery Border (North)", -1813.5f, 5.0f, -250.2f, "Northern border of the artillery kill zone. Next to the bridge.");
+			SetTeleportLocation("Free Fire Zone - Artillery Base", -1752.03f, 9.0f, -132.59f, "Base which runs and protects the EDF Artillery Gun. Deadly to be here until the FFZ has been liberated.");
+			SetTeleportLocation("Free Fire Zone - Artillery Gun", -1944.92f, 38.0f, -65.49f, "Bottom of the EDF Artillery Gun. Deadly to be here until the FFZ has been liberated.");
+			SetTeleportLocation("EOS - Safehouse (West)", -1726.0f, 44.0f, 438.0f, "Near FFZ entrance/exit and Eos Memorial Bridge.");
+			SetTeleportLocation("EOS - Safehouse (East)", -1390.95f, 30.0f, 561.08f, "Near construction site.");
+			SetTeleportLocation("EOS - South Border", -1714.9f, 18.0f, 22.8f, "Border of EOS and the Free Fire Zone");
+			SetTeleportLocation("EOS - Residential District", -1753.4f, -2.0f, 764.0f, "Residential area north of the western EOS safehouse. Has two apartment buildings, two bridges, and a EDF monument.");
+			SetTeleportLocation("EOS - Martian Council", -1174.7f, 17.0f, 1386.5f, "Martian Council building in northern EOS. The EDF are hostile here.");
+			SetTeleportLocation("EOS - Outside EDF Central Command", -1428.61f, 5.0f, 2013.5f, "Right outside the defense shield.");
+			SetTeleportLocation("EOS - Inside EDF Central Command", -1458.75f, 5.0f, 2050.16f, "Right inside past the defense shield.");
+			SetTeleportLocation("EOS - EDF Central Command Main Building", -1474.53f, 27.0f, 2397.49f, "The final building at the peak of the inner valley / cliffsides.");
+			SetTeleportLocation("Mount Vogel - Border", -1017.1f, 6.0f, 2474.3f, "Border of Mount Vogel and EOS");
+			SetTeleportLocation("Mount Vogel - Base", -670.37f, 47.0f, 2423.75f, "Bottom of Mount Vogel and mass accelerator. Several old buildings.");
+			SetTeleportLocation("Mount Vogel - Peak", -285.77f, 183.0f, 2423.4f, "Peak of Mount Vogel with mass accelerator exit.");
+			SetTeleportLocation("Map Center (OUT OF BOUNDS)", -1.719f, 117.0f, -1.348f, "Center of the game map. Out of bounds, so make sure that you have infinite jetpack on so you don't fall through the map.");
+			SetTeleportLocation("Dust - Crater Grounds (OUT OF BOUNDS)", -1.677f, 60.0f, -2386.9f, "Area south of dust overlooking the crater grounds. Be careful not to fall out of the map.");
 
 			std::ofstream ConfigOutput(ExePath + "RFGR Script Loader/Settings/Teleport Locations.json");
 			ConfigOutput << std::setw(4) << TeleportLocations << "\n";

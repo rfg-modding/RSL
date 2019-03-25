@@ -109,3 +109,12 @@ DWORD FindPattern(char *module, char *pattern, char *mask);
 HWND find_main_window(unsigned long process_id);
 BOOL CALLBACK enum_windows_callback(HWND handle, LPARAM lParam);
 BOOL is_main_window(HWND handle);
+
+template <typename T>
+std::string to_string_precise(const T Value, const int Precision = 1)
+{
+	std::ostringstream Out;
+	Out.precision(Precision);
+	Out << std::fixed << Value;
+	return Out.str();
+}
