@@ -31,6 +31,11 @@ void PhysicsGui::Draw()
 		ImGui::Text("Physics settings:");
 		ImGui::PopFont();
 		ImGui::Separator();
+		ImGui::PushStyleColor(ImGuiCol_Text, ColorRed);
+		ImGui::PushItemWidth(400.0f);
+		ImGui::TextWrapped("Warning: Be very careful with this menu if you want your game to be stable. Changing these values can make things go wacky quick.");
+		ImGui::PopStyleColor();
+		ImGui::Separator();
 
 		ImGui::PushItemWidth(230.0f);
 		ImGui::InputFloat("Custom physics timestep multiplier", &CustomPhysicsTimeStepMultiplier, 0.01, 0.5, 3);

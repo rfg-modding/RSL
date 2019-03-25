@@ -133,6 +133,8 @@ void GeneralTweaksGui::Draw()
 	{
 		gsm_set_alert_level(CustomAlertLevel);
 	}
+	ImGui::SameLine();
+	ImGui::Checkbox("Lock", &LockAlertLevel);
 	ImGui::Separator();
 
 	ImGui::Text("Xray Effect Mode: ");
@@ -171,7 +173,10 @@ void GeneralTweaksGui::Draw()
 	}
 
 	ImGui::Checkbox("Infinite jetpack", &InfiniteJetpack);
-	ImGui::Checkbox("Invulnerability", &Invulnerable);
+	if (ImGui::Checkbox("Invulnerability", &Invulnerable))
+	{
+		PlayerPtr->HitPoints = PlayerPtr->MaxHitPoints;
+	}
 	if (!Invulnerable)
 	{
 		PlayerPtr->Flags.invulnerable = false;

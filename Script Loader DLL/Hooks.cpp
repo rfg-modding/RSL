@@ -432,9 +432,9 @@ void __fastcall PlayerDoFrameHook(Player* PlayerPtr)
 		//PlayerPtr->Flags.super_jump = true;
 		//PlayerPtr->Flags.use_bigsteps = true;
 		//PlayerPtr->PFlags.UnlimitedAmmo = true;
-		PlayerPtr->MaxHitPoints = 2147483647;
+		//PlayerPtr->MaxHitPoints = 2147483647;
 		PlayerPtr->HitPoints = 2147483647.0f;
-		PlayerPtr->InitialMaxHitPoints = 2147483647;
+		//PlayerPtr->InitialMaxHitPoints = 2147483647;
 	}
 	if (Gui.TweaksMenu->NeedCustomJumpHeightSet)
 	{
@@ -448,6 +448,10 @@ void __fastcall PlayerDoFrameHook(Player* PlayerPtr)
 	{
 		PlayerPtr->MaxSpeed = Gui.TweaksMenu->CustomPlayerMaxSpeed;
 	}
+	if (Gui.TweaksMenu->LockAlertLevel)
+	{
+		gsm_set_alert_level(Gui.TweaksMenu->CustomAlertLevel);
+	}
 
 	if (Gui.FreeCamSettings->Camera->IsFreeCameraActive() && Gui.FreeCamSettings->PlayerFollowCam)
 	{
@@ -457,7 +461,10 @@ void __fastcall PlayerDoFrameHook(Player* PlayerPtr)
 	}
 	if (!Gui.FreeCamSettings->Camera->IsFreeCameraActive() && Gui.FreeCamSettings->Camera->NeedPostDeactivationCleanup)
 	{
-		HumanTeleportUnsafe(PlayerPtr, Gui.FreeCamSettings->Camera->OriginalCameraPosition, PlayerPtr->Orientation);
+		if (Gui.FreeCamSettings->ReturnPlayerToOriginalPosition)
+		{
+			HumanTeleportUnsafe(PlayerPtr, Gui.FreeCamSettings->Camera->OriginalCameraPosition, PlayerPtr->Orientation);
+		}
 		Gui.FreeCamSettings->Camera->NeedPostDeactivationCleanup = false;
 	}
 

@@ -46,10 +46,10 @@ void ScriptManager::SetupLua()
 
 	//Todo: Make necessary vars read only with sol::readonly(&some_class::variable)
 	auto RslTable = LuaState["rsl"].get_or_create<sol::table>();
-	
+	RslTable["GetScriptLoaderVersion"] = GetScriptLoaderVersion;
+
 	auto RfgTable = LuaState["rfg"].get_or_create<sol::table>();
-	LuaState["GetScriptLoaderVersion"] = &GetScriptLoaderVersion;
-	LuaState["HideHud"] = HideHud;
+	RfgTable["HideHud"] = HideHud;
 	RfgTable["HideFog"] = HideFog;
 	RfgTable["SetFarClipDistance"] = game_render_set_far_clip_distance;
 

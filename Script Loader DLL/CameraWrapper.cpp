@@ -201,6 +201,7 @@ void CameraWrapper::DeactivateFreeCamera(bool Shutdown)
 	{
 		NeedPostDeactivationCleanup = true; 
 	}
+	GlobalPlayerPtr->HitPoints = GlobalPlayerPtr->MaxHitPoints;
 }
 
 void CameraWrapper::DeactivateRotationControl()
