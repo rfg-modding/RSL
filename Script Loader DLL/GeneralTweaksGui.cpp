@@ -85,6 +85,11 @@ void GeneralTweaksGui::Draw()
 		return;
 	}
 
+	ImGui::PushFont(FontBig);
+	ImGui::Text("General tweaks:");
+	ImGui::PopFont();
+	ImGui::Separator();
+
 	if (ImGui::Button("Toggle Hud"))
 	{
 		ToggleHud();
@@ -231,9 +236,14 @@ void GeneralTweaksGui::Draw()
 
 	//ImGui::InputInt("Middle mouse spawns per second", &MiddleMouseExplosionsPerSecond);
 	//Utilities::GUI::TooltipOnPrevious("Used to determine how many time per second and explosion or repair sphere can be spawned per second by the middle mouse. Used to prevent lag from 100's of explosions per second.");
-	if (ImGui::CollapsingHeader("Custom explosion info"))
+	if (ImGui::CollapsingHeader("Custom explosion info settings"))
 	{
-		ImGui::Text("Explosion create info:");
+		ImGui::Separator();
+		ImGui::PushFont(FontBig);
+		ImGui::Text("Explosion info:");
+		ImGui::PopFont();
+		ImGui::Separator();
+
 		ImGui::Checkbox("Spawn explosion with middle mouse?", &MiddleMouseBoomActive);
 		ImGui::InputInt("Middle mouse explosions per second limit", &MiddleMouseExplosionsPerSecond);
 		ImGui::SameLine();

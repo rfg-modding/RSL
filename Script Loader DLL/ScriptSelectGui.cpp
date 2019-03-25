@@ -37,6 +37,11 @@ void ScriptSelectGui::Draw()
 		return;
 	}
 
+	ImGui::PushFont(FontBig);
+	ImGui::Text("Scripts folder:");
+	ImGui::PopFont();
+	ImGui::Separator();
+
 	if (ImGui::Button("Rescan"))
 	{
 		Scripts->ScanScriptsFolder();

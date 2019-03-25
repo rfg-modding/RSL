@@ -40,6 +40,11 @@ void IntrospectionGui::DrawPlayerIntrospectionGui(const char * Title)
 		return;
 	}
 
+	ImGui::PushFont(FontBig);
+	ImGui::Text("Player variables (WIP): ");
+	ImGui::PopFont();
+	ImGui::Separator();
+
 	if (PlayerPtr != nullptr)
 	{
 		if (ImGui::TreeNode("Useful info"))
