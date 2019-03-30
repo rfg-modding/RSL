@@ -1856,7 +1856,6 @@ struct HumanMPFlags //17 * 4 = 68 Bytes
 	unsigned __int32 jetpack : 1;
 };
 
-/* 5109 */
 struct HumanResourceDependentData
 {   //Todo: Define character controller.
 	void* CharacterController; ///character_controller *controller;
@@ -1891,8 +1890,6 @@ struct ObjectRenderDistance //8
 	float apparent_distance; //4
 	int last_frame_processed; //4
 };
-
-
 
 /* 5213 */
 struct human_info_inventory_info //12
@@ -2064,6 +2061,28 @@ struct hkpBroadPhaseHandle
 /* 5263 */
 struct HavokBPO : hkpBroadPhaseHandle
 {
+	HavokBPO()
+	{
+		flags = 0;
+		state = 0;
+		bpo_index = 0;
+		state_index = 0;
+		owner = 0;
+		next = 0;
+		prev = 0;
+		user_data = nullptr;
+	}
+	HavokBPO(const HavokBPO& Copy)
+	{
+		flags = Copy.flags;
+		state = Copy.state;
+		bpo_index = Copy.bpo_index;
+		state_index = Copy.state_index;
+		owner = Copy.owner;
+		next = Copy.next;
+		prev = Copy.prev;
+		user_data = Copy.user_data;
+	}
 	char flags;
 	char state;
 	__int16 bpo_index;
@@ -2146,6 +2165,22 @@ public:
 /* 5262 */
 struct RemoteObjectFlags //5
 {
+	RemoteObjectFlags()
+	{
+		remote_object = 0;
+		client_sync = 0;
+		client_destroy_permission = 0;
+		no_destroy_packet = 0;
+		common_create = 0;
+	}
+	RemoteObjectFlags(const RemoteObjectFlags& Copy)
+	{
+		remote_object = Copy.remote_object;
+		client_sync = Copy.client_sync;
+		client_destroy_permission = Copy.client_destroy_permission;
+		no_destroy_packet = Copy.no_destroy_packet;
+		common_create = Copy.common_create;
+	}
 	__int8 remote_object : 1;
 	__int8 client_sync : 1;
 	__int8 client_destroy_permission : 1;
@@ -2156,6 +2191,59 @@ struct RemoteObjectFlags //5
 /* 5261 */
 struct ObjectFlags //23 * 1 = 23 Bytes
 {
+public:
+	ObjectFlags()
+	{
+		flagged_list_state = 0;
+		lighting_set_once = 0;
+		destroyed = 0;
+		no_save = 0;
+		force_full_save = 0;
+		destroy_on_stream = 0;
+		created_by_mission_or_activity = 0;
+		dont_transform = 0;
+		world_free = 0;
+		streaming = 0;
+		streamed = 0;
+		persistent = 0;
+		original = 0;
+		stub = 0;
+		preserve_handle = 0;
+		bpo_index = 0;
+		is_dependent = 0;
+		visited = 0;
+		special_lifetime = 0;
+		serialize_protected = 0;
+		_dont_use_me = 0;
+		streaming_fixed = 0;
+		render_flags = 0;
+	}
+	ObjectFlags(const ObjectFlags& Copy)
+	{
+		flagged_list_state = Copy.flagged_list_state;
+		lighting_set_once = Copy.lighting_set_once;
+		destroyed = Copy.destroyed;
+		no_save = Copy.no_save;
+		force_full_save = Copy.force_full_save;
+		destroy_on_stream = Copy.destroy_on_stream;
+		created_by_mission_or_activity = Copy.created_by_mission_or_activity;
+		dont_transform = Copy.dont_transform;
+		world_free = Copy.world_free;
+		streaming = Copy.streaming;
+		streamed = Copy.streamed;
+		persistent = Copy.persistent;
+		original = Copy.original;
+		stub = Copy.stub;
+		preserve_handle = Copy.preserve_handle;
+		bpo_index = Copy.bpo_index;
+		is_dependent = Copy.is_dependent;
+		visited = Copy.visited;
+		special_lifetime = Copy.special_lifetime;
+		serialize_protected = Copy.serialize_protected;
+		_dont_use_me = Copy._dont_use_me;
+		streaming_fixed = Copy.streaming_fixed;
+		render_flags = Copy.render_flags;
+	}
 	__int8 flagged_list_state : 3; //1 - offset = 84
 	__int8 lighting_set_once : 1; //1 - offset = 85
 	__int8 destroyed : 1; // - offset = 86
@@ -2217,9 +2305,70 @@ struct objectVtbl
 	void(__thiscall *pool_free)(object *this);
 }; */
 
-/* 4698 */
 struct Object //175
 {
+	Object()
+	{
+		Position.SetAll(0.0f);
+		Orientation.SetAll(0.0f);
+		ChildPtr = nullptr;
+		ChildNext = nullptr;
+		ChildPrevious = nullptr;
+		ChildConstraintPtr = nullptr;
+		HostConstraintPtr = nullptr;
+		AttachInfo = nullptr;
+		HavokHandle = 0;
+		//ContactInfo = Copy.ContactInfo;
+		//ObjFlags = Copy.ObjFlags;
+		//RemoteObjFlags = Copy.RemoteObjFlags;
+		MPDcmoIndex = 0;
+		CheckingReset = 0;
+		NameIndex = 0;
+		FlaggedNext = nullptr;
+		FlaggedPrevious = nullptr;
+		Handle = 0;
+		Parent = 0;
+		BPOHandle = nullptr;
+		AllIndex = 0;
+		TypeIndex = 0;
+		SubtypeIndex = 0;
+		ObjectType = 0;
+		SubType = 0;
+		//LastKnownBMin = Copy.LastKnownBMin;
+		//LastKnownBMax = Copy.LastKnownBMax;
+		SRID = 0;
+	}
+	Object(const Object& Copy)
+	{
+		Position = Copy.Position;
+		Orientation = Copy.Orientation;
+		ChildPtr = Copy.ChildPtr;
+		ChildNext = Copy.ChildNext;
+		ChildPrevious = Copy.ChildPrevious;
+		ChildConstraintPtr = Copy.ChildConstraintPtr;
+		HostConstraintPtr = Copy.HostConstraintPtr;
+		AttachInfo = Copy.AttachInfo;
+		HavokHandle = Copy.HavokHandle;
+		ContactInfo = Copy.ContactInfo;
+		ObjFlags = Copy.ObjFlags;
+		RemoteObjFlags = Copy.RemoteObjFlags;
+		MPDcmoIndex = Copy.MPDcmoIndex;
+		CheckingReset = Copy.CheckingReset;
+		NameIndex = Copy.NameIndex;
+		FlaggedNext = Copy.FlaggedNext;
+		FlaggedPrevious = Copy.FlaggedPrevious;
+		Handle = Copy.Handle;
+		Parent = Copy.Parent;
+		BPOHandle = Copy.BPOHandle;
+		AllIndex = Copy.AllIndex;
+		TypeIndex = Copy.TypeIndex;
+		SubtypeIndex = Copy.SubtypeIndex;
+		ObjectType = Copy.ObjectType;
+		SubType = Copy.SubType;
+		LastKnownBMin = Copy.LastKnownBMin;
+		LastKnownBMax = Copy.LastKnownBMax;
+		SRID = Copy.SRID;
+	}
 	void* Vfptr; //ObjectVtbl* vfptr; //4 - Research this more later. Has some interesting members.
 	vector Position; //12
 	matrix Orientation; //36
@@ -2268,7 +2417,7 @@ struct Human : Object //3786 + 175 = 3961 Bytes
 	vector LastPosition; //12 //646 Bytes including this member
 	HumanPathData PathData; //280
 	vector TurnToTarget; //12
-	unsigned int BavCellDetourRequestHandle; //4
+	unsigned int NavCellDetourRequestHandle; //4
 	HumanRaycastHitInfo RaycastHitInfo; //44
 	vector Velocity; //12
 	vector ActualVelocity; //12
@@ -2335,12 +2484,12 @@ struct Human : Object //3786 + 175 = 3961 Bytes
 	int MaxKnockdownHits; //4
 	float KnockdownHits; //4
 	Timestamp KnockdownTimestamp; //4
-	Timestamp KnockdownTimeoutTS; //4
+	Timestamp KnockdownTimeoutTimestamp; //4
 	HumanCombat Combat; //230
 	Timestamp CollisionDamageTimer; //4
 	float CurrentCollisionDamage; //4
-	Timestamp DoRagdollTS; //4
-	Timestamp FacialPoseTS; //4
+	Timestamp DoRagdollTimestamp; //4
+	Timestamp FacialPoseTimestamp; //4
 	Timestamp TurretHoldAnimations; //4
 	float Cash; //4
 	InventoryItem* Inventory; //4
@@ -2390,12 +2539,12 @@ struct Human : Object //3786 + 175 = 3961 Bytes
 	vector LookAtPos; //12
 	unsigned int LookAtHandle; //4
 	float LookAtSpeed; //4
-	vector AimOverrideDir; //12
+	vector AimOverrideDirection; //12
 	float DamagePercent; //4
 	unsigned __int16 DamageFunctionHandle; //2
 	unsigned __int16 DeathFunctionHandle; //2
 	Timestamp BreathTimer; //4
-	Timestamp CrouchToStandTestTS; //4
+	Timestamp CrouchToStandTestTimestamp; //4
 	unsigned int LadderHandle; //4
 	float LadderSlideSpeed; //4
 	int LadderGrabRung; //4
