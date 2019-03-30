@@ -6,7 +6,7 @@ GeneralTweaksGui::GeneralTweaksGui(bool* _OpenState, std::string _Title)
 	Title = _Title;
 
 	strcpy_s(CustomExplosionInfo.m_name, "Custom Explosion");
-	CustomExplosionInfo.m_unique_id = 268; //A value of 255 caused explosions to cause no damage. Want to make sure it's actually unique to avoid issues.
+	CustomExplosionInfo.m_unique_id = 303; //A value of 255 caused explosions to cause no damage. Want to make sure it's actually unique to avoid issues.
 	CustomExplosionInfo.m_name_crc_str = 1234535;
 	CustomExplosionInfo.flags = 1;
 	CustomExplosionInfo.m_radius = 4.0f;
