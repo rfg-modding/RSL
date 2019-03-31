@@ -43,9 +43,9 @@ void MenuBarGui::Draw()
 			//ShowExampleMenuFile();
 			ImGui::EndMenu();
 		}
-		if (ImGui::BeginMenu("Tools"))
+		if (ImGui::BeginMenu("Tweaks"))
 		{
-			if (ImGui::MenuItem(std::string(std::string(ICON_FA_SLIDERS_H) + u8" Tweaks").c_str(), NULL, &Gui->ShowAppTweaksMenu)) {}
+			if (ImGui::MenuItem(std::string(std::string(ICON_FA_SLIDERS_H) + u8" General Tweaks").c_str(), NULL, &Gui->ShowAppTweaksMenu)) {}
 			if (ImGui::MenuItem(std::string(std::string(ICON_FA_MAP_MARKED) + u8" Teleport").c_str(), NULL, &Gui->ShowAppTeleportMenu)) {}
 			if (ImGui::MenuItem(std::string(std::string(ICON_FA_LIST) + u8" Logger").c_str(), NULL, &Gui->ShowAppLogWindow)) {}
 			if (ImGui::MenuItem(std::string(std::string(ICON_FA_SEARCH) + u8" Player view").c_str(), NULL, &Gui->ShowAppIntrospectionMenu)) {}

@@ -236,7 +236,7 @@ void GeneralTweaksGui::Draw()
 
 	//ImGui::InputInt("Middle mouse spawns per second", &MiddleMouseExplosionsPerSecond);
 	//Utilities::GUI::TooltipOnPrevious("Used to determine how many time per second and explosion or repair sphere can be spawned per second by the middle mouse. Used to prevent lag from 100's of explosions per second.");
-	if (ImGui::CollapsingHeader("Custom explosion info settings"))
+	if (ImGui::CollapsingHeader("Custom explosion spawn settings"))
 	{
 		ImGui::Separator();
 		ImGui::PushFont(FontBig);
