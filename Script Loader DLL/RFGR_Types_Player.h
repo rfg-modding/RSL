@@ -1700,10 +1700,271 @@ struct __declspec(align(8)) HumanPathData //278 align(8) -> 280
 	$44C0BA19B9554B4F1413675B767343EF flags; //3
 };
 
-
-/* 5111 */
-struct HumanFlags //128 * 4 = 512 Bytes
+class HumanFlags //128 * 4 = 512 Bytes
 {
+public:
+	HumanFlags()
+	{
+		bored_headtrack_disabled = 0;
+		hidden = 0;
+		cap_speed = 0;
+		was_rendered = 0;
+		locked_controller = 0;
+		invulnerable = 0;
+		mission_invulnerable = 0;
+		no_damage = 0;
+		activity_engage = 0;
+		considered_armed = 0;
+		riot_shield = 0;
+		safehouse_vip = 0;
+		radio_operator = 0;
+		activity_raid_required = 0;
+		activity_raid_optional = 0;
+		activity_ha_hostage = 0;
+		raid_introduction_lines = 0;
+		miner_persona_lines = 0;
+		damaged_by_player = 0;
+		ai_ignore = 0;
+		casts_shadows = 0;
+		casts_drop_shadows = 0;
+		is_turning = 0;
+		is_falling = 0;
+		dont_deform_bones = 0;
+		dont_lod_bones = 0;
+		playing_equip_anim = 0;
+		playing_unequip_anim = 0;
+		do_instant_equip = 0;
+		anim_direct_blend = 0;
+		start_jump = 0;
+		super_jump  = 0;
+		processed_this_frame = 0;
+		silent_vehicle_start = 0;
+		suppress_flee_on_vehicle_exit = 0;
+		death_func_done = 0;
+		fading_in = 0;
+		fading_out = 0;
+		fading_out_from_nano = 0;
+		is_nano_effect_currently_applied = 0;
+		on_fire = 0;
+		dropped_cash = 0;
+		on_mover = 0;
+		recalculate_at_node = 0;
+		spinebending_done = 0;
+		last_dest_in_repulsor = 0;
+		jumping_from_building = 0;
+		is_on_ladder = 0;
+		ladder_force_slide = 0;
+		ladder_force_exit = 0;
+		ladder_reequip_weapon = 0;
+		allow_flying_equips = 0;
+		corpse_spotted = 0;
+		corpse_spotted_by_enemy = 0;
+		death_reported = 0;
+		raid_death_ack = 0;
+		anchor_orient = 0;
+		bones_transformed_this_frame = 0;
+		use_current_velocity = 0;
+		use_as_final_velocity = 0;
+		aim_at_pos = 0;
+		block_forced_movement = 0;
+		cancelling_melee_attack = 0;
+		do_continuous_melee_damage = 0;
+		in_air_melee = 0;
+		cant_hit_with_melee = 0;
+		invulnerable_to_debris = 0;
+		override_default_anim_state = 0;
+		override_default_fire_anim = 0;
+		moving_and_transitioning_states = 0;
+		check_for_cover = 0;
+		jump_take_off = 0;
+		rotate_internal_heading_updated = 0;
+		crouch_cover = 0;
+		cover_crouch_high_only = 0;
+		cover_crouch_no_lean = 0;
+		side_firing = 0;
+		side_firing_walk_back = 0;
+		ragdoll_on_impact_all_collisions = 0;
+		ragdoll_on_impact_use_ragdoll_pos = 0;
+		dive_capsule = 0;
+		maintain_ambient_props = 0;
+		leaning_disabled = 0; 
+		override_steering_heading_offset = 0;
+		pushes_other_humans = 0;
+		pushes_debris_scripted = 0;
+		allow_steep_slopes = 0;
+		external_force_applied = 0;
+		ragdoll_shot = 0;
+		saved_pushes_debris_scripted = 0;
+		filter_handle_valid = 0;
+		just_got_up_from_ragdoll = 0;
+		disable_path_smoothing_for_request = 0;
+		disable_all_path_smoothing = 0;
+		in_fetal_position = 0;
+		disallow_vehicle_exit = 0;
+		limited_vehicle_exit = 0;
+		driverless_exit_only = 0;
+		stuck_in_vehicle = 0;
+		convoy_vehicle_exit = 0;
+		disallow_vehicle_entry = 0;
+		disallow_vehicle_drive = 0;
+		ambient_edf = 0;
+		bashed_character_controller = 0;
+		head_loaded = 0;
+		lod_head_loaded = 0;
+		in_vehicle_invisible = 0;
+		high_priority_target = 0;
+		health_change_was_negative = 0;
+		voice_line_play_2d = 0;
+		voice_line_pain_only = 0;
+		killed_by_killzone = 0;
+		first_time_streamed = 0;
+		tired = 0;
+		use_bigsteps = 0;
+		stuck = 0;
+		last_pf_failed = 0;
+		extended_stuck = 0;
+		xray_visible = 0;
+		was_gibbed = 0;
+		prevent_ragdoll_sfx = 0;
+		always_show_on_minimap = 0;
+		used_death_buffer = 0;
+		do_not_convert_to_guerrilla = 0;
+		do_not_play_ambient_or_greet_lines = 0;
+		disallow_flinches_and_ragdolls = 0;
+		only_use_action_nodes = 0;
+		complain_when_shot = 0;
+	}
+	HumanFlags(const HumanFlags& Copy)
+	{
+		bored_headtrack_disabled = Copy.bored_headtrack_disabled;
+		hidden = Copy.hidden;
+		cap_speed = Copy.cap_speed;
+		was_rendered = Copy.was_rendered;
+		locked_controller = Copy.locked_controller;
+		invulnerable = Copy.invulnerable;
+		mission_invulnerable = Copy.mission_invulnerable;
+		no_damage = Copy.no_damage;
+		activity_engage = Copy.activity_engage;
+		considered_armed = Copy.considered_armed;
+		riot_shield = Copy.riot_shield;
+		safehouse_vip = Copy.safehouse_vip;
+		radio_operator = Copy.radio_operator;
+		activity_raid_required = Copy.activity_raid_required;
+		activity_raid_optional = Copy.activity_raid_optional;
+		activity_ha_hostage = Copy.activity_ha_hostage;
+		raid_introduction_lines = Copy.raid_introduction_lines;
+		miner_persona_lines = Copy.miner_persona_lines;
+		damaged_by_player = Copy.damaged_by_player;
+		ai_ignore = Copy.ai_ignore;
+		casts_shadows = Copy.casts_shadows;
+		casts_drop_shadows = Copy.casts_drop_shadows;
+		is_turning = Copy.is_turning;
+		is_falling = Copy.is_falling;
+		dont_deform_bones = Copy.dont_deform_bones;
+		dont_lod_bones = Copy.dont_lod_bones;
+		playing_equip_anim = Copy.playing_equip_anim;
+		playing_unequip_anim = Copy.playing_unequip_anim;
+		do_instant_equip = Copy.do_instant_equip;
+		anim_direct_blend = Copy.anim_direct_blend;
+		start_jump = Copy.start_jump;
+		super_jump = Copy.super_jump;
+		processed_this_frame = Copy.processed_this_frame;
+		silent_vehicle_start = Copy.silent_vehicle_start;
+		suppress_flee_on_vehicle_exit = Copy.suppress_flee_on_vehicle_exit;
+		death_func_done = Copy.death_func_done;
+		fading_in = Copy.fading_in;
+		fading_out = Copy.fading_out;
+		fading_out_from_nano = Copy.fading_out_from_nano;
+		is_nano_effect_currently_applied = Copy.is_nano_effect_currently_applied;
+		on_fire = Copy.on_fire;
+		dropped_cash = Copy.dropped_cash;
+		on_mover = Copy.on_mover;
+		recalculate_at_node = Copy.recalculate_at_node;
+		spinebending_done = Copy.spinebending_done;
+		last_dest_in_repulsor = Copy.last_dest_in_repulsor;
+		jumping_from_building = Copy.jumping_from_building;
+		is_on_ladder = Copy.is_on_ladder;
+		ladder_force_slide = Copy.ladder_force_slide;
+		ladder_force_exit = Copy.ladder_force_exit;
+		ladder_reequip_weapon = Copy.ladder_reequip_weapon;
+		allow_flying_equips = Copy.allow_flying_equips;
+		corpse_spotted = Copy.corpse_spotted;
+		corpse_spotted_by_enemy = Copy.corpse_spotted_by_enemy;
+		death_reported = Copy.death_reported;
+		raid_death_ack = Copy.raid_death_ack;
+		anchor_orient = Copy.anchor_orient;
+		bones_transformed_this_frame = Copy.bones_transformed_this_frame;
+		use_current_velocity = Copy.use_current_velocity;
+		use_as_final_velocity = Copy.use_as_final_velocity;
+		aim_at_pos = Copy.aim_at_pos;
+		block_forced_movement = Copy.block_forced_movement;
+		cancelling_melee_attack = Copy.cancelling_melee_attack;
+		do_continuous_melee_damage = Copy.do_continuous_melee_damage;
+		in_air_melee = Copy.in_air_melee;
+		cant_hit_with_melee = Copy.cant_hit_with_melee;
+		invulnerable_to_debris = Copy.invulnerable_to_debris;
+		override_default_anim_state = Copy.override_default_anim_state;
+		override_default_fire_anim = Copy.override_default_fire_anim;
+		moving_and_transitioning_states = Copy.moving_and_transitioning_states;
+		check_for_cover = Copy.check_for_cover;
+		jump_take_off = Copy.jump_take_off;
+		rotate_internal_heading_updated = Copy.rotate_internal_heading_updated;
+		crouch_cover = Copy.crouch_cover;
+		cover_crouch_high_only = Copy.cover_crouch_high_only;
+		cover_crouch_no_lean = Copy.cover_crouch_no_lean;
+		side_firing = Copy.side_firing;
+		side_firing_walk_back = Copy.side_firing_walk_back;
+		ragdoll_on_impact_all_collisions = Copy.ragdoll_on_impact_all_collisions;
+		ragdoll_on_impact_use_ragdoll_pos = Copy.ragdoll_on_impact_use_ragdoll_pos;
+		dive_capsule = Copy.dive_capsule;
+		maintain_ambient_props = Copy.maintain_ambient_props;
+		leaning_disabled = Copy.leaning_disabled;
+		override_steering_heading_offset = Copy.override_steering_heading_offset;
+		pushes_other_humans = Copy.pushes_other_humans;
+		pushes_debris_scripted = Copy.pushes_debris_scripted;
+		allow_steep_slopes = Copy.allow_steep_slopes;
+		external_force_applied = Copy.external_force_applied;
+		ragdoll_shot = Copy.ragdoll_shot;
+		saved_pushes_debris_scripted = Copy.saved_pushes_debris_scripted;
+		filter_handle_valid = Copy.filter_handle_valid;
+		just_got_up_from_ragdoll = Copy.just_got_up_from_ragdoll;
+		disable_path_smoothing_for_request = Copy.disable_path_smoothing_for_request;
+		disable_all_path_smoothing = Copy.disable_all_path_smoothing;
+		in_fetal_position = Copy.in_fetal_position;
+		disallow_vehicle_exit = Copy.disallow_vehicle_exit;
+		limited_vehicle_exit = Copy.limited_vehicle_exit;
+		driverless_exit_only = Copy.driverless_exit_only;
+		stuck_in_vehicle = Copy.stuck_in_vehicle;
+		convoy_vehicle_exit = Copy.convoy_vehicle_exit;
+		disallow_vehicle_entry = Copy.disallow_vehicle_entry;
+		disallow_vehicle_drive = Copy.disallow_vehicle_drive;
+		ambient_edf = Copy.ambient_edf;
+		bashed_character_controller = Copy.bashed_character_controller;
+		head_loaded = Copy.head_loaded;
+		lod_head_loaded = Copy.lod_head_loaded;
+		in_vehicle_invisible = Copy.in_vehicle_invisible;
+		high_priority_target = Copy.high_priority_target;
+		health_change_was_negative = Copy.health_change_was_negative;
+		voice_line_play_2d = Copy.voice_line_play_2d;
+		voice_line_pain_only = Copy.voice_line_pain_only;
+		killed_by_killzone = Copy.killed_by_killzone;
+		first_time_streamed = Copy.first_time_streamed;
+		tired = Copy.tired;
+		use_bigsteps = Copy.use_bigsteps;
+		stuck = Copy.stuck;
+		last_pf_failed = Copy.last_pf_failed;
+		extended_stuck = Copy.extended_stuck;
+		xray_visible = Copy.xray_visible;
+		was_gibbed = Copy.was_gibbed;
+		prevent_ragdoll_sfx = Copy.prevent_ragdoll_sfx;
+		always_show_on_minimap= Copy.always_show_on_minimap;
+		used_death_buffer = Copy.used_death_buffer;
+		do_not_convert_to_guerrilla = Copy.do_not_convert_to_guerrilla;
+		do_not_play_ambient_or_greet_lines = Copy.do_not_play_ambient_or_greet_lines;
+		disallow_flinches_and_ragdolls = Copy.disallow_flinches_and_ragdolls;
+		only_use_action_nodes = Copy.only_use_action_nodes;
+		complain_when_shot= Copy.complain_when_shot;
+	}
 	unsigned __int32 bored_headtrack_disabled : 1;
 	unsigned __int32 hidden : 1;
 	unsigned __int32 cap_speed : 1;
@@ -1834,9 +2095,49 @@ struct HumanFlags //128 * 4 = 512 Bytes
 	unsigned __int32 complain_when_shot : 1;
 };
 
-/* 5112 */
-struct HumanMPFlags //17 * 4 = 68 Bytes
+class HumanMPFlags //17 * 4 = 68 Bytes
 {
+public:
+	HumanMPFlags()
+	{
+		is_multiplayer = 0;
+		melee_primary_id = 0;
+		melee_secondary_id = 0;
+		melee_tertiary_id = 0;
+		melee_firearm_id = 0;
+		jump_id = 0;
+		vehicle = 0;
+		turret = 0;
+		swap_weapon = 0;
+		firearm_trigger_down_id = 0;
+		firearm_trigger_up_id = 0;
+		throw_attack_id = 0;
+		charge_weapon = 0;
+		running_attack = 0;
+		in_air_detonate = 0;
+		detonated_charges = 0;
+		jetpack = 0;
+	}	
+	HumanMPFlags(const HumanMPFlags& Copy)
+	{
+		is_multiplayer = Copy.is_multiplayer;
+		melee_primary_id = Copy.melee_primary_id;
+		melee_secondary_id = Copy.melee_secondary_id;
+		melee_tertiary_id = Copy.melee_tertiary_id;
+		melee_firearm_id = Copy.melee_firearm_id;
+		jump_id = Copy.jump_id;
+		vehicle	= Copy.vehicle;
+		turret = Copy.turret;
+		swap_weapon = Copy.swap_weapon;
+		firearm_trigger_down_id = Copy.firearm_trigger_down_id;
+		firearm_trigger_up_id = Copy.firearm_trigger_up_id;
+		throw_attack_id = Copy.throw_attack_id;
+		charge_weapon = Copy.charge_weapon;
+		running_attack = Copy.running_attack;
+		in_air_detonate = Copy.in_air_detonate;
+		detonated_charges = Copy.detonated_charges;
+		jetpack = Copy.jetpack;
+	}
 	unsigned __int32 is_multiplayer : 1;
 	unsigned __int32 melee_primary_id : 2;
 	unsigned __int32 melee_secondary_id : 2;
@@ -1986,7 +2287,6 @@ struct human_info_flags //19
 
 struct base_array_human_voice_persona_pointer_Vtbl;
 
-/* 5194 */
 struct base_array_human_voice_persona_pointer //16
 {
 	base_array_human_voice_persona_pointer_Vtbl *vfptr; //4
@@ -1995,7 +2295,6 @@ struct base_array_human_voice_persona_pointer //16
 	int num; //4
 };
 
-/* 5195 */
 struct base_array_human_voice_persona_pointer_Vtbl //4
 {
 	void *(__thiscall *__vecDelDtor)(base_array_human_voice_persona_pointer* This, unsigned int); //4
@@ -2006,9 +2305,9 @@ struct voice_persona_list //16
 	base_array_human_voice_persona_pointer voice_list; //16
 };
 
-/* 5218 */
-const struct HumanInfo //397
+class HumanInfo //397
 {
+public:
   int max_hit_points; //4
   int max_knockdown_hits; //4
   float max_speed; //4
@@ -2052,15 +2351,15 @@ const struct HumanInfo //397
   human_info_flags flags; //19
 };
 
-/* 4848 */
-struct hkpBroadPhaseHandle
+class hkpBroadPhaseHandle
 {
+public:
 	unsigned int m_id;
 };
 
-/* 5263 */
-struct HavokBPO : hkpBroadPhaseHandle
+class HavokBPO : hkpBroadPhaseHandle
 {
+public:
 	HavokBPO()
 	{
 		flags = 0;
@@ -2162,9 +2461,9 @@ public:
 	ContactNode* m_contact_list; //4
 };
 
-/* 5262 */
-struct RemoteObjectFlags //5
+class RemoteObjectFlags //5
 {
+public:
 	RemoteObjectFlags()
 	{
 		remote_object = 0;
@@ -2188,8 +2487,7 @@ struct RemoteObjectFlags //5
 	__int8 common_create : 1;
 };
 
-/* 5261 */
-struct ObjectFlags //23 * 1 = 23 Bytes
+class ObjectFlags //23 * 1 = 23 Bytes
 {
 public:
 	ObjectFlags()
@@ -2305,8 +2603,9 @@ struct objectVtbl
 	void(__thiscall *pool_free)(object *this);
 }; */
 
-struct Object //175
+class Object //175
 {
+public:
 	Object()
 	{
 		Position.SetAll(0.0f);
@@ -2400,9 +2699,9 @@ struct Object //175
 	unsigned int SRID; //4
 };
 
-/* 5121 */
-struct Human : Object //3786 + 175 = 3961 Bytes
+class Human : Object //3786 + 175 = 3961 Bytes
 {
+public:
 	HumanResourceDependentDataContainer ResourceDependentData; //8
 	HumanFlags Flags; //512
 	HumanMPFlags MPFlags; //68
