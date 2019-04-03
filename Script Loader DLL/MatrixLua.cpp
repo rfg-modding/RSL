@@ -1,0 +1,19 @@
+#include "MatrixLua.h"
+#include "Functions.h"
+
+void Lua::BindMatrix(sol::state& LuaState)
+{
+	auto RfgTable = LuaState["rfg"].get_or_create<sol::table>();
+	RfgTable.new_usertype<matrix>
+	(
+		"matrix",
+		"new", sol::constructors<matrix(), matrix(const matrix&), matrix(float), matrix(vector, vector, vector)>(),
+		sol::meta_function::addition, &matrix::operator+,
+		sol::meta_function::subtraction, &matrix::operator-,
+		sol::meta_function::equal_to, &matrix::operator==,
+		"SetAll", &matrix::SetAll,
+		"rvec", &matrix::rvec,
+		"uvec", &matrix::uvec,
+		"fvec", &matrix::fvec
+	);
+}

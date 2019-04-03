@@ -34,6 +34,9 @@
     <Filter Include="Overlay Gui\Source Files">
       <UniqueIdentifier>{8cf5668e-7dab-4a97-b150-32b57f0c4179}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Lua Binding">
+      <UniqueIdentifier>{a6816808-2e5b-4a81-85a5-515bcf4d5ea4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CameraWrapper.cpp">
@@ -143,6 +146,42 @@
     </ClCompile>
     <ClCompile Include="PhysicsGui.cpp">
       <Filter>Overlay Gui\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="VectorLua.cpp">
+      <Filter>Lua Binding</Filter>
+    </ClCompile>
+    <ClCompile Include="MatrixLua.cpp">
+      <Filter>Lua Binding</Filter>
+    </ClCompile>
+    <ClCompile Include="Matrix43Lua.cpp">
+      <Filter>Lua Binding</Filter>
+    </ClCompile>
+    <ClCompile Include="AttachInfoDataLua.cpp">
+      <Filter>Lua Binding</Filter>
+    </ClCompile>
+    <ClCompile Include="ContactNodeLua.cpp">
+      <Filter>Lua Binding</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectContactInfoLua.cpp">
+      <Filter>Lua Binding</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectFlagsLua.cpp">
+      <Filter>Lua Binding</Filter>
+    </ClCompile>
+    <ClCompile Include="HavokBPOLua.cpp">
+      <Filter>Lua Binding</Filter>
+    </ClCompile>
+    <ClCompile Include="HumanFlagsLua.cpp">
+      <Filter>Lua Binding</Filter>
+    </ClCompile>
+    <ClCompile Include="HumanMPFlagsLua.cpp">
+      <Filter>Lua Binding</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectLua.cpp">
+      <Filter>Lua Binding</Filter>
+    </ClCompile>
+    <ClCompile Include="HumanLua.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -286,6 +325,45 @@
     </ClInclude>
     <ClInclude Include="PhysicsGui.h">
       <Filter>Overlay Gui\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="VectorLua.h">
+      <Filter>Lua Binding</Filter>
+    </ClInclude>
+    <ClInclude Include="MatrixLua.h">
+      <Filter>Lua Binding</Filter>
+    </ClInclude>
+    <ClInclude Include="Matrix43Lua.h">
+      <Filter>Lua Binding</Filter>
+    </ClInclude>
+    <ClInclude Include="AttachInfoDataLua.h">
+      <Filter>Lua Binding</Filter>
+    </ClInclude>
+    <ClInclude Include="ContactNodeLua.h">
+      <Filter>Lua Binding</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectContactInfoLua.h">
+      <Filter>Lua Binding</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectFlagsLua.h">
+      <Filter>Lua Binding</Filter>
+    </ClInclude>
+    <ClInclude Include="SolStateForward.h">
+      <Filter>Lua Binding</Filter>
+    </ClInclude>
+    <ClInclude Include="HavokBPOLua.h">
+      <Filter>Lua Binding</Filter>
+    </ClInclude>
+    <ClInclude Include="HumanFlagsLua.h">
+      <Filter>Lua Binding</Filter>
+    </ClInclude>
+    <ClInclude Include="HumanMPFlagsLua.h">
+      <Filter>Lua Binding</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectLua.h">
+      <Filter>Lua Binding</Filter>
+    </ClInclude>
+    <ClInclude Include="HumanLua.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

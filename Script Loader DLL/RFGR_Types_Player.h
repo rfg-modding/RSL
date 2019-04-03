@@ -2699,7 +2699,7 @@ public:
 	unsigned int SRID; //4
 };
 
-class Human : Object //3786 + 175 = 3961 Bytes
+class Human : public Object //3786 + 175 = 3961 Bytes
 {
 public:
 	HumanResourceDependentDataContainer ResourceDependentData; //8

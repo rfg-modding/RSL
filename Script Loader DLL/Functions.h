@@ -3,6 +3,7 @@
 #include "SnippetManager.h"
 #include "RFGR_Types_Havok.h"
 //#include "RFGR Structs/KeenNamespace.h"
+#include "ItsyBitsy.h"
 
 extern Player* GlobalPlayerPtr;
 extern World* GlobalRfgWorldPtr;
