@@ -4,7 +4,35 @@
 void Lua::BindObject(sol::state & LuaState)
 {
 	auto RfgTable = LuaState["rfg"].get_or_create<sol::table>();
-	RfgTable.new_usertype<Object>
+	auto Utype = RfgTable.create_simple_usertype<Object>();
+	Utype.set("new", sol::constructors<Object(), Object(const Object&)>());
+	Utype.set("Position", &Object::Position);
+	Utype.set("ChildPtr", &Object::ChildPtr);
+	Utype.set("ChildNext", &Object::ChildNext);
+	Utype.set("ChildPrevious", &Object::ChildPrevious);
+	Utype.set("AttachInfo", &Object::AttachInfo);
+	Utype.set("HavokHandle", &Object::HavokHandle);
+	Utype.set("ContactInfo", &Object::ContactInfo);
+	Utype.set("ObjFlags", &Object::ObjFlags);
+	//Utype.set("RemoteObjFlags", &Object::RemoteObjFlags);
+	//Utype.set("MPDcmoIndex", &Object::MPDcmoIndex);
+	Utype.set("CheckingReset", &Object::CheckingReset);
+	Utype.set("NameIndex", &Object::NameIndex);
+	Utype.set("FlaggedNext", &Object::FlaggedNext);
+	Utype.set("FlaggedPrevious", &Object::FlaggedPrevious);
+	Utype.set("Handle", &Object::Handle);
+	Utype.set("Parent", &Object::Parent);
+	Utype.set("BPOHandle", &Object::BPOHandle);
+	Utype.set("AllIndex", &Object::AllIndex);
+	Utype.set("TypeIndex", &Object::TypeIndex);
+	Utype.set("SubtypeIndex", &Object::SubtypeIndex);
+	Utype.set("ObjectType", &Object::ObjectType);
+	Utype.set("SubType", &Object::SubType);
+	Utype.set("LastKnownBMin", &Object::LastKnownBMin);
+	Utype.set("LastKnownBMax", &Object::LastKnownBMax);
+	Utype.set("SRID", &Object::SRID);
+
+	/*RfgTable.new_usertype<Object>
 	(
 		"Object",
 		"new", sol::constructors<Object(), Object(const Object&)>(),
@@ -33,5 +61,5 @@ void Lua::BindObject(sol::state & LuaState)
 		"LastKnownBMin", &Object::LastKnownBMin,
 		"LastKnownBMax", &Object::LastKnownBMax,
 		"SRID", &Object::SRID
-	);
+	);*/
 }

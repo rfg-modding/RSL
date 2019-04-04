@@ -4,7 +4,18 @@
 void Lua::BindHavokBPO(sol::state & LuaState)
 {
 	auto RfgTable = LuaState["rfg"].get_or_create<sol::table>();
-	RfgTable.new_usertype<HavokBPO>
+	auto Utype = RfgTable.create_simple_usertype<HavokBPO>();
+	Utype.set("new", sol::constructors<HavokBPO(), HavokBPO(const HavokBPO&)>());
+	Utype.set("Flags", &HavokBPO::flags);
+	Utype.set("State", &HavokBPO::state);
+	Utype.set("BpoIndex", &HavokBPO::bpo_index);
+	Utype.set("StateIndex", &HavokBPO::state_index);
+	Utype.set("Owner", &HavokBPO::owner);
+	Utype.set("Next", &HavokBPO::next);
+	Utype.set("Prev", &HavokBPO::prev);
+	//Utype.set("Userdata", &HavokBPO::user_data);
+
+	/*RfgTable.new_usertype<HavokBPO>
 	(
 		"HavokBPO",
 		"new", sol::constructors<HavokBPO(), HavokBPO(const HavokBPO&)>(),
@@ -16,5 +27,5 @@ void Lua::BindHavokBPO(sol::state & LuaState)
 		"Next", &HavokBPO::next,
 		"Prev", &HavokBPO::prev
 		//"Userdata", &HavokBPO::user_data
-	);
+	);*/
 }

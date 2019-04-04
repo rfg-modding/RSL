@@ -181,7 +181,7 @@
       <Filter>Lua Binding</Filter>
     </ClCompile>
     <ClCompile Include="HumanLua.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Lua Binding</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -363,7 +363,7 @@
       <Filter>Lua Binding</Filter>
     </ClInclude>
     <ClInclude Include="HumanLua.h">
-      <Filter>Header Files</Filter>
+      <Filter>Lua Binding</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

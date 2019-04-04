@@ -4,8 +4,139 @@
 void Lua::BindHumanFlags(sol::state & LuaState)
 {
 	auto RfgTable = LuaState["rfg"].get_or_create<sol::table>();
-/*
-	RfgTable.new_usertype<HumanFlags>
+	//auto Utype = RfgTable.create_simple_usertype<HumanFlags>();
+	//Utype.set("new", sol::constructors<HumanFlags(), HumanFlags(const HumanFlags&)>());
+	//Utype.set("BoredHeadtrackDisabled", sol::property(itsy_bitsy::read<HumanFlags, 0>, itsy_bitsy::write<HumanFlags, 0>)); //int32 - 1
+	//Utype.set("Hidden", sol::property(itsy_bitsy::read<HumanFlags, 1>, itsy_bitsy::write<HumanFlags, 1>)); //int32 - 1
+	//Utype.set("CapSpeed", sol::property(itsy_bitsy::read<HumanFlags, 2>, itsy_bitsy::write<HumanFlags, 2>)); //int32 - 1
+	//Utype.set("WasRendered", sol::property(itsy_bitsy::read<HumanFlags, 3>, itsy_bitsy::write<HumanFlags, 3>)); //int32 - 1
+	//Utype.set("LockedController", sol::property(itsy_bitsy::read<HumanFlags, 4>, itsy_bitsy::write<HumanFlags, 4>)); //int32 - 1
+	//Utype.set("Invulnerable", sol::property(itsy_bitsy::read<HumanFlags, 5>, itsy_bitsy::write<HumanFlags, 5>)); //int32 - 1
+	//Utype.set("MissionInvulnerable", sol::property(itsy_bitsy::read<HumanFlags, 6>, itsy_bitsy::write<HumanFlags, 6>)); //int32 - 1
+	//Utype.set("NoDamage", sol::property(itsy_bitsy::read<HumanFlags, 7>, itsy_bitsy::write<HumanFlags, 7>)); //int32 - 1
+	//Utype.set("ActivityEngage", sol::property(itsy_bitsy::read<HumanFlags, 8>, itsy_bitsy::write<HumanFlags, 8>)); //int32 - 1
+	//Utype.set("ConsideredArmed", sol::property(itsy_bitsy::read<HumanFlags, 9>, itsy_bitsy::write<HumanFlags, 9>)); //int32 - 1
+	//Utype.set("RiotShield", sol::property(itsy_bitsy::read<HumanFlags, 10>, itsy_bitsy::write<HumanFlags, 10>)); //int32 - 1
+	//Utype.set("SafehouseVIP", sol::property(itsy_bitsy::read<HumanFlags, 11>, itsy_bitsy::write<HumanFlags, 11>)); //int32 - 1
+	//Utype.set("RadioOperator", sol::property(itsy_bitsy::read<HumanFlags, 12>, itsy_bitsy::write<HumanFlags, 12>)); //int32 - 1
+	//Utype.set("ActivityRaidRequired", sol::property(itsy_bitsy::read<HumanFlags, 13>, itsy_bitsy::write<HumanFlags, 13>)); //int32 - 1
+	//Utype.set("ActivityRaidOptional", sol::property(itsy_bitsy::read<HumanFlags, 14>, itsy_bitsy::write<HumanFlags, 14>)); //int32 - 1
+	//Utype.set("ActivateHouseArrestHostage", sol::property(itsy_bitsy::read<HumanFlags, 15>, itsy_bitsy::write<HumanFlags, 15>)); //int32 - 1
+	//Utype.set("RaidIntroductionLines", sol::property(itsy_bitsy::read<HumanFlags, 16>, itsy_bitsy::write<HumanFlags, 16>)); //int32 - 1
+	//Utype.set("MinerPersonaLines", sol::property(itsy_bitsy::read<HumanFlags, 17>, itsy_bitsy::write<HumanFlags, 17>)); //int32 - 1
+	//Utype.set("DamagedByPlayer", sol::property(itsy_bitsy::read<HumanFlags, 18>, itsy_bitsy::write<HumanFlags, 18>)); //int32 - 1
+	//Utype.set("AiIgnore", sol::property(itsy_bitsy::read<HumanFlags, 19>, itsy_bitsy::write<HumanFlags, 19>)); //int32 - 1
+	//Utype.set("CastsShadows", sol::property(itsy_bitsy::read<HumanFlags, 20>, itsy_bitsy::write<HumanFlags, 20>)); //int32 - 1
+	//Utype.set("CastsDropShadows", sol::property(itsy_bitsy::read<HumanFlags, 21>, itsy_bitsy::write<HumanFlags, 21>)); //int32 - 1
+	//Utype.set("IsTurning", sol::property(itsy_bitsy::read<HumanFlags, 22>, itsy_bitsy::write<HumanFlags, 22>)); //int32 - 1 
+	//Utype.set("IsFalling", sol::property(itsy_bitsy::read<HumanFlags, 23>, itsy_bitsy::write<HumanFlags, 23>)); //int32 - 1 
+	//Utype.set("DontDeformBones", sol::property(itsy_bitsy::read<HumanFlags, 24>, itsy_bitsy::write<HumanFlags, 24>)); //int32 - 1 
+	//Utype.set("DontLodBones", sol::property(itsy_bitsy::read<HumanFlags, 25>, itsy_bitsy::write<HumanFlags, 25>)); //int32 - 1 
+	//Utype.set("PlayingEquipAnim", sol::property(itsy_bitsy::read<HumanFlags, 26>, itsy_bitsy::write<HumanFlags, 26>)); //int32 - 1 
+	//Utype.set("PlayingUnequipAnim", sol::property(itsy_bitsy::read<HumanFlags, 27>, itsy_bitsy::write<HumanFlags, 27>)); //int32 - 1 
+	//Utype.set("DoInstantEquip", sol::property(itsy_bitsy::read<HumanFlags, 28>, itsy_bitsy::write<HumanFlags, 28>)); //int32 - 1 
+	//Utype.set("AnimDirectBlend", sol::property(itsy_bitsy::read<HumanFlags, 29>, itsy_bitsy::write<HumanFlags, 29>)); //int32 - 1 
+	//Utype.set("StartJump", sol::property(itsy_bitsy::read<HumanFlags, 30>, itsy_bitsy::write<HumanFlags, 30>)); //int32 - 1 
+	//Utype.set("SuperJump", sol::property(itsy_bitsy::read<HumanFlags, 31>, itsy_bitsy::write<HumanFlags, 31>)); //int32 - 1 
+	//Utype.set("ProcessedThisFrame", sol::property(itsy_bitsy::read<HumanFlags, 32>, itsy_bitsy::write<HumanFlags, 32>)); //int32 - 1 
+	//Utype.set("SilentVehicleStart", sol::property(itsy_bitsy::read<HumanFlags, 33>, itsy_bitsy::write<HumanFlags, 33>)); //int32 - 1 
+	//Utype.set("SupressFleeOnVehicleExit", sol::property(itsy_bitsy::read<HumanFlags, 34>, itsy_bitsy::write<HumanFlags, 34>)); //int32 - 1 
+	//Utype.set("DeathFunctionDone", sol::property(itsy_bitsy::read<HumanFlags, 35>, itsy_bitsy::write<HumanFlags, 35>)); //int32 - 1 
+	//Utype.set("FadingIn", sol::property(itsy_bitsy::read<HumanFlags, 36>, itsy_bitsy::write<HumanFlags, 36>)); //int32 - 1 
+	//Utype.set("FadingOut", sol::property(itsy_bitsy::read<HumanFlags, 37>, itsy_bitsy::write<HumanFlags, 37>)); //int32 - 1 
+	//Utype.set("FadingOutFromNano", sol::property(itsy_bitsy::read<HumanFlags, 38>, itsy_bitsy::write<HumanFlags, 38>)); //int32 - 1 
+	//Utype.set("IsNanoEffectCurrentlyApplied", sol::property(itsy_bitsy::read<HumanFlags, 39>, itsy_bitsy::write<HumanFlags, 39>)); //int32 - 1 
+	//Utype.set("OnFire", sol::property(itsy_bitsy::read<HumanFlags, 40>, itsy_bitsy::write<HumanFlags, 40>)); //int32 - 1 
+	//Utype.set("DroppedCash", sol::property(itsy_bitsy::read<HumanFlags, 41>, itsy_bitsy::write<HumanFlags, 41>)); //int32 - 1 
+	//Utype.set("OnMover", sol::property(itsy_bitsy::read<HumanFlags, 42>, itsy_bitsy::write<HumanFlags, 42>)); //int32 - 1 
+	//Utype.set("RecalculateAtNode", sol::property(itsy_bitsy::read<HumanFlags, 43>, itsy_bitsy::write<HumanFlags, 43>)); //int32 - 1 
+	//Utype.set("SpinebendingDone", sol::property(itsy_bitsy::read<HumanFlags, 44>, itsy_bitsy::write<HumanFlags, 44>)); //int32 - 1 
+	//Utype.set("LastDestinationInRepulsor", sol::property(itsy_bitsy::read<HumanFlags, 45>, itsy_bitsy::write<HumanFlags, 45>)); //int32 - 1 
+	//Utype.set("JumpingFromBuilding", sol::property(itsy_bitsy::read<HumanFlags, 46>, itsy_bitsy::write<HumanFlags, 46>)); //int32 - 1 
+	//Utype.set("IsOnLadder", sol::property(itsy_bitsy::read<HumanFlags, 47>, itsy_bitsy::write<HumanFlags, 47>)); //int32 - 1 
+	//Utype.set("LadderForceSlide", sol::property(itsy_bitsy::read<HumanFlags, 48>, itsy_bitsy::write<HumanFlags, 48>)); //int32 - 1 
+	//Utype.set("LadderForceExit", sol::property(itsy_bitsy::read<HumanFlags, 49>, itsy_bitsy::write<HumanFlags, 49>)); //int32 - 1 
+	//Utype.set("LadderReEquipWeapon", sol::property(itsy_bitsy::read<HumanFlags, 50>, itsy_bitsy::write<HumanFlags, 50>)); //int32 - 1 
+	//Utype.set("AllowFlyingEquips", sol::property(itsy_bitsy::read<HumanFlags, 51>, itsy_bitsy::write<HumanFlags, 51>)); //int32 - 1 
+	//Utype.set("CorpseSpotted", sol::property(itsy_bitsy::read<HumanFlags, 52>, itsy_bitsy::write<HumanFlags, 52>)); //int32 - 1 
+	//Utype.set("CorpseSpottedByEnemy", sol::property(itsy_bitsy::read<HumanFlags, 53>, itsy_bitsy::write<HumanFlags, 53>)); //int32 - 1 
+	//Utype.set("DeathReported", sol::property(itsy_bitsy::read<HumanFlags, 54>, itsy_bitsy::write<HumanFlags, 54>)); //int32 - 1 
+	//Utype.set("RaidDeathAck", sol::property(itsy_bitsy::read<HumanFlags, 55>, itsy_bitsy::write<HumanFlags, 55>)); //int32 - 1 
+	//Utype.set("AnchorOrient", sol::property(itsy_bitsy::read<HumanFlags, 56>, itsy_bitsy::write<HumanFlags, 56>)); //int32 - 1 
+	//Utype.set("BonesTransformedThisFrame", sol::property(itsy_bitsy::read<HumanFlags, 57>, itsy_bitsy::write<HumanFlags, 57>)); //int32 - 1 
+	//Utype.set("UseCurrentVelocity", sol::property(itsy_bitsy::read<HumanFlags, 58>, itsy_bitsy::write<HumanFlags, 58>)); //int32 - 1 
+	//Utype.set("UseAsFinalVelocity", sol::property(itsy_bitsy::read<HumanFlags, 59>, itsy_bitsy::write<HumanFlags, 59>)); //int32 - 1 
+	//Utype.set("AimAtPos", sol::property(itsy_bitsy::read<HumanFlags, 60>, itsy_bitsy::write<HumanFlags, 60>)); //int32 - 1 
+	//Utype.set("BlockForcedMovement", sol::property(itsy_bitsy::read<HumanFlags, 61>, itsy_bitsy::write<HumanFlags, 61>)); //int32 - 1 
+	//Utype.set("CancellingMeleeAttack", sol::property(itsy_bitsy::read<HumanFlags, 62>, itsy_bitsy::write<HumanFlags, 62>)); //int32 - 1 
+	//Utype.set("DoContinuousMeleeDamage", sol::property(itsy_bitsy::read<HumanFlags, 63>, itsy_bitsy::write<HumanFlags, 63>)); //int32 - 1 
+	//Utype.set("InAirMelee", sol::property(itsy_bitsy::read<HumanFlags, 64>, itsy_bitsy::write<HumanFlags, 64>)); //int32 - 1 
+	//Utype.set("CantHitWithMelee", sol::property(itsy_bitsy::read<HumanFlags, 65>, itsy_bitsy::write<HumanFlags, 65>)); //int32 - 1 
+	//Utype.set("InvulnerableToDebris", sol::property(itsy_bitsy::read<HumanFlags, 66>, itsy_bitsy::write<HumanFlags, 66>)); //int32 - 1 
+	//Utype.set("OverrideDefaultAnimState", sol::property(itsy_bitsy::read<HumanFlags, 67>, itsy_bitsy::write<HumanFlags, 67>)); //int32 - 1 
+	//Utype.set("OverrideDefaultFireAnim", sol::property(itsy_bitsy::read<HumanFlags, 68>, itsy_bitsy::write<HumanFlags, 68>)); //int32 - 1 
+	//Utype.set("MovingAndTransitioningStates", sol::property(itsy_bitsy::read<HumanFlags, 69>, itsy_bitsy::write<HumanFlags, 69>)); //int32 - 1 
+	//Utype.set("CheckForCover", sol::property(itsy_bitsy::read<HumanFlags, 70>, itsy_bitsy::write<HumanFlags, 70>)); //int32 - 1 
+	//Utype.set("JumpTakeOff", sol::property(itsy_bitsy::read<HumanFlags, 71>, itsy_bitsy::write<HumanFlags, 71>)); //int32 - 1 
+	//Utype.set("RotateInternalHeadingUpdated", sol::property(itsy_bitsy::read<HumanFlags, 72>, itsy_bitsy::write<HumanFlags, 72>)); //int32 - 1 
+	//Utype.set("CrouchCover", sol::property(itsy_bitsy::read<HumanFlags, 73>, itsy_bitsy::write<HumanFlags, 73>)); //int32 - 1 
+	//Utype.set("CoverCrouchHighOnly", sol::property(itsy_bitsy::read<HumanFlags, 74>, itsy_bitsy::write<HumanFlags, 74>)); //int32 - 1 
+	//Utype.set("CoverCrouchNoLean", sol::property(itsy_bitsy::read<HumanFlags, 75>, itsy_bitsy::write<HumanFlags, 75>)); //int32 - 1 
+	//Utype.set("SideFiring", sol::property(itsy_bitsy::read<HumanFlags, 76>, itsy_bitsy::write<HumanFlags, 76>)); //int32 - 1 
+	//Utype.set("SideFiringWalkBack", sol::property(itsy_bitsy::read<HumanFlags, 77>, itsy_bitsy::write<HumanFlags, 77>)); //int32 - 1 
+	//Utype.set("RagdollOnImpactAllCollisions", sol::property(itsy_bitsy::read<HumanFlags, 78>, itsy_bitsy::write<HumanFlags, 78>)); //int32 - 1 
+	//Utype.set("RagdollOnImpactUseRagdollPos", sol::property(itsy_bitsy::read<HumanFlags, 79>, itsy_bitsy::write<HumanFlags, 79>)); //int32 - 1 
+	//Utype.set("DiveCapsule", sol::property(itsy_bitsy::read<HumanFlags, 80>, itsy_bitsy::write<HumanFlags, 80>)); //int32 - 1 
+	//Utype.set("MaintainAmbientProps", sol::property(itsy_bitsy::read<HumanFlags, 81>, itsy_bitsy::write<HumanFlags, 81>)); //int32 - 1 
+	//Utype.set("LeaningDisabled", sol::property(itsy_bitsy::read<HumanFlags, 82>, itsy_bitsy::write<HumanFlags, 82>)); //int32 - 1 
+	//Utype.set("OverrideSterringHeadingOffset", sol::property(itsy_bitsy::read<HumanFlags, 83>, itsy_bitsy::write<HumanFlags, 83>)); //int32 - 1 
+	//Utype.set("PushesOtherHumans", sol::property(itsy_bitsy::read<HumanFlags, 84>, itsy_bitsy::write<HumanFlags, 84>)); //int32 - 1 
+	//Utype.set("PushesDebrisScripted", sol::property(itsy_bitsy::read<HumanFlags, 85>, itsy_bitsy::write<HumanFlags, 85>)); //int32 - 1 
+	//Utype.set("AllowSteepSlopes", sol::property(itsy_bitsy::read<HumanFlags, 86>, itsy_bitsy::write<HumanFlags, 86>)); //int32 - 1 
+	//Utype.set("ExternalForceApplied", sol::property(itsy_bitsy::read<HumanFlags, 87>, itsy_bitsy::write<HumanFlags, 87>)); //int32 - 1 
+	//Utype.set("RagdollShot", sol::property(itsy_bitsy::read<HumanFlags, 88>, itsy_bitsy::write<HumanFlags, 88>)); //int32 - 1 
+	//Utype.set("SavedPushesDebrisScripted", sol::property(itsy_bitsy::read<HumanFlags, 89>, itsy_bitsy::write<HumanFlags, 89>)); //int32 - 1 
+	//Utype.set("FilterHandleValid", sol::property(itsy_bitsy::read<HumanFlags, 90>, itsy_bitsy::write<HumanFlags, 90>)); //int32 - 1 
+	//Utype.set("JustGotUpFromRagdoll", sol::property(itsy_bitsy::read<HumanFlags, 91>, itsy_bitsy::write<HumanFlags, 91>)); //int32 - 1 
+	//Utype.set("DisablePathSmoothingForRequest", sol::property(itsy_bitsy::read<HumanFlags, 92>, itsy_bitsy::write<HumanFlags, 92>)); //int32 - 1 
+	//Utype.set("DisableAllPathSmoothing", sol::property(itsy_bitsy::read<HumanFlags, 93>, itsy_bitsy::write<HumanFlags, 93>)); //int32 - 1 
+	//Utype.set("InFetalPosition", sol::property(itsy_bitsy::read<HumanFlags, 94>, itsy_bitsy::write<HumanFlags, 94>)); //int32 - 1 
+	//Utype.set("DisallowVehicleExit", sol::property(itsy_bitsy::read<HumanFlags, 95>, itsy_bitsy::write<HumanFlags, 95>)); //int32 - 1 
+	//Utype.set("LimitedVehicleExit", sol::property(itsy_bitsy::read<HumanFlags, 96>, itsy_bitsy::write<HumanFlags, 96>)); //int32 - 1 
+	//Utype.set("DriverlessExitOnly", sol::property(itsy_bitsy::read<HumanFlags, 97>, itsy_bitsy::write<HumanFlags, 97>)); //int32 - 1 
+	//Utype.set("StuckInVehicle", sol::property(itsy_bitsy::read<HumanFlags, 98>, itsy_bitsy::write<HumanFlags, 98>)); //int32 - 1 
+	//Utype.set("ConvoyVehicleExit", sol::property(itsy_bitsy::read<HumanFlags, 99>, itsy_bitsy::write<HumanFlags, 99>)); //int32 - 1 
+	//Utype.set("DisallowVehicleEntry", sol::property(itsy_bitsy::read<HumanFlags, 100>, itsy_bitsy::write<HumanFlags, 100>)); //int32 - 1 
+	//Utype.set("DisallowVehicleDrive", sol::property(itsy_bitsy::read<HumanFlags, 101>, itsy_bitsy::write<HumanFlags, 101>)); //int32 - 1 
+	//Utype.set("AmbientEDF", sol::property(itsy_bitsy::read<HumanFlags, 102>, itsy_bitsy::write<HumanFlags, 102>)); //int32 - 1 
+	//Utype.set("BashedCharacterController", sol::property(itsy_bitsy::read<HumanFlags, 103>, itsy_bitsy::write<HumanFlags, 103>)); //int32 - 1 
+	//Utype.set("HeadLoaded", sol::property(itsy_bitsy::read<HumanFlags, 104>, itsy_bitsy::write<HumanFlags, 104>)); //int32 - 1 
+	//Utype.set("LodHeadLoaded", sol::property(itsy_bitsy::read<HumanFlags, 105>, itsy_bitsy::write<HumanFlags, 105>)); //int32 - 1 
+	//Utype.set("InVehicleInvisible", sol::property(itsy_bitsy::read<HumanFlags, 106>, itsy_bitsy::write<HumanFlags, 106>)); //int32 - 1 
+	//Utype.set("HighPriorityTarget", sol::property(itsy_bitsy::read<HumanFlags, 107>, itsy_bitsy::write<HumanFlags, 107>)); //int32 - 1 
+	//Utype.set("HealthChangeWasNegative", sol::property(itsy_bitsy::read<HumanFlags, 108>, itsy_bitsy::write<HumanFlags, 108>)); //int32 - 1 
+	//Utype.set("VoiceLinePlay2D", sol::property(itsy_bitsy::read<HumanFlags, 109>, itsy_bitsy::write<HumanFlags, 109>)); //int32 - 1 
+	//Utype.set("VoiceLinePainOnly", sol::property(itsy_bitsy::read<HumanFlags, 110>, itsy_bitsy::write<HumanFlags, 110>)); //int32 - 1 
+	//Utype.set("KilledByKillzone", sol::property(itsy_bitsy::read<HumanFlags, 111>, itsy_bitsy::write<HumanFlags, 111>)); //int32 - 1 
+	//Utype.set("FirstTimeStreamed", sol::property(itsy_bitsy::read<HumanFlags, 112>, itsy_bitsy::write<HumanFlags, 112>)); //int32 - 1 
+	//Utype.set("Tired", sol::property(itsy_bitsy::read<HumanFlags, 113>, itsy_bitsy::write<HumanFlags, 113>)); //int32 - 1 
+	//Utype.set("UseBigsteps", sol::property(itsy_bitsy::read<HumanFlags, 114>, itsy_bitsy::write<HumanFlags, 114>)); //int32 - 1 
+	//Utype.set("Stuck", sol::property(itsy_bitsy::read<HumanFlags, 115>, itsy_bitsy::write<HumanFlags, 115>)); //int32 - 1 
+	//Utype.set("LastPfFailed", sol::property(itsy_bitsy::read<HumanFlags, 116>, itsy_bitsy::write<HumanFlags, 116>)); //int32 - 1 
+	//Utype.set("ExtendedStuck", sol::property(itsy_bitsy::read<HumanFlags, 117>, itsy_bitsy::write<HumanFlags, 117>)); //int32 - 1 
+	//Utype.set("XrayVisible", sol::property(itsy_bitsy::read<HumanFlags, 118>, itsy_bitsy::write<HumanFlags, 118>)); //int32 - 1 
+	//Utype.set("WasGibbed", sol::property(itsy_bitsy::read<HumanFlags, 119>, itsy_bitsy::write<HumanFlags, 119>)); //int32 - 1 
+	//Utype.set("PreventRagdollSfx", sol::property(itsy_bitsy::read<HumanFlags, 120>, itsy_bitsy::write<HumanFlags, 120>)); //int32 - 1 
+	//Utype.set("AlwaysShowOnMinimap", sol::property(itsy_bitsy::read<HumanFlags, 121>, itsy_bitsy::write<HumanFlags, 121>)); //int32 - 1 
+	//Utype.set("UsedDeathBuffer", sol::property(itsy_bitsy::read<HumanFlags, 122>, itsy_bitsy::write<HumanFlags, 122>)); //int32 - 1 
+	//Utype.set("DoNotConvertToGuerrilla", sol::property(itsy_bitsy::read<HumanFlags, 123>, itsy_bitsy::write<HumanFlags, 123>)); //int32 - 1 
+	//Utype.set("DoNotPlayAmbientOrGreetLines", sol::property(itsy_bitsy::read<HumanFlags, 124>, itsy_bitsy::write<HumanFlags, 124>)); //int32 - 1 
+	//Utype.set("DisallowFlinchesAndRagdolls", sol::property(itsy_bitsy::read<HumanFlags, 125>, itsy_bitsy::write<HumanFlags, 125>)); //int32 - 1 
+	//Utype.set("OnlyUseActionNodes", sol::property(itsy_bitsy::read<HumanFlags, 126>, itsy_bitsy::write<HumanFlags, 126>)); //int32 - 1 
+	//Utype.set("ComplainWhenShot", sol::property(itsy_bitsy::read<HumanFlags, 127>, itsy_bitsy::write<HumanFlags, 127>)); //int32 - 1 
+
+
+	/*RfgTable.new_usertype<HumanFlags>
 	(
 		"HumanFlags",
 		"new", sol::constructors<HumanFlags(), HumanFlags(const HumanFlags&)>(),

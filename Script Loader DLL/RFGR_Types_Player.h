@@ -2894,8 +2894,9 @@ public:
 };
 
 /* 5467 */
-struct /*__declspec(align(8))*/ Player : Human //5415 + 3961 = 9376 Bytes
+class /*__declspec(align(8))*/ Player : public Human //5415 + 3961 = 9376 Bytes
 {
+public:
 	float FrametimeMultiplier; //4
 	UsableObject action_object; //24
 	Timestamp action_object_timestamp; //4
