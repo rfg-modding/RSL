@@ -359,6 +359,8 @@ namespace sol {
 	struct usertype_traits;
 	template <typename T>
 	struct unique_usertype_traits;
+
+	struct state;
 } // namespace sol
 
 // end of sol/forward.hpp

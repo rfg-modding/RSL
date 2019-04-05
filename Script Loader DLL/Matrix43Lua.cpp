@@ -12,6 +12,7 @@ void Lua::BindMatrix43(sol::state& LuaState)
 	Utype.set("SetAll", &matrix43::SetAll);
 	Utype.set("Rotation", &matrix43::m_rotation);
 	Utype.set("Translation", &matrix43::m_translation);
+	LuaState.set_usertype("Matrix43", Utype);
 
 	/*RfgTable.new_usertype<matrix43>
 	(

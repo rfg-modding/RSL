@@ -13,6 +13,7 @@ void Lua::BindAttachInfoData(sol::state& LuaState)
 	Utype.set("UseRelativeTransform", sol::property(itsy_bitsy::read<AttachInfoData, 60>, itsy_bitsy::write<AttachInfoData, 60>)); //uint32 - 1
 	Utype.set("UpdatePhysics", sol::property(itsy_bitsy::read<AttachInfoData, 61>, itsy_bitsy::write<AttachInfoData, 61>)); //uint32 - 1 
 	Utype.set("Updated", sol::property(itsy_bitsy::read<AttachInfoData, 62>, itsy_bitsy::write<AttachInfoData, 62>)); //uint32 - 1
+	LuaState.set_usertype("AttachInfoData", Utype);
 
 	/*RfgTable.new_usertype<AttachInfoData> //Note: I have no idea if the last 3 vars are correct yet. Bit fields are odd with sol2.
 	(

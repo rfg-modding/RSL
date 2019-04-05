@@ -29,6 +29,7 @@ void Lua::BindObjectFlags(sol::state& LuaState)
 	Utype.set("DontUseMe", sol::property(itsy_bitsy::read<ObjectFlags, 23>, itsy_bitsy::write<ObjectFlags, 23>)); //int8 - 1
 	Utype.set("StreamingFixed", sol::property(itsy_bitsy::read<ObjectFlags, 24>, itsy_bitsy::write<ObjectFlags, 24>)); //int8 - 1
 	Utype.set("RenderFlags", sol::property(itsy_bitsy::read<ObjectFlags, 25, 4>, itsy_bitsy::write<ObjectFlags, 25, 4>)); //int8 - 4 
+	LuaState.set_usertype("ObjectFlags", Utype);
 
 	/*RfgTable.new_usertype<ObjectFlags>
 	(

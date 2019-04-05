@@ -16,6 +16,7 @@ void Lua::BindVector(sol::state& LuaState)
 	Utype.set("x", &vector::x);
 	Utype.set("y", &vector::y);
 	Utype.set("z", &vector::z);
+	LuaState.set_usertype("Vector", Utype);
 
 	/*RfgTable.new_usertype<vector>
 	(

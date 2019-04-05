@@ -209,6 +209,7 @@
     <ClCompile Include="HookManager.cpp" />
     <ClCompile Include="Hooks.cpp" />
     <ClCompile Include="HumanFlagsLua.cpp" />
+    <ClCompile Include="HumanInfoLua.cpp" />
     <ClCompile Include="HumanLua.cpp" />
     <ClCompile Include="HumanMPFlagsLua.cpp" />
     <ClCompile Include="imgui_impl_dx11.cpp" />
@@ -220,6 +221,7 @@
     <ClCompile Include="include\ImGui\imgui_widgets.cpp" />
     <ClCompile Include="include\kiero\kiero.cpp" />
     <ClCompile Include="IntrospectionGui.cpp" />
+    <ClCompile Include="InvItemInfoLua.cpp" />
     <ClCompile Include="Logger.cpp" />
     <ClCompile Include="LogWindow.cpp" />
     <ClCompile Include="LuaFunctions.cpp" />
@@ -229,6 +231,7 @@
     <ClCompile Include="ObjectContactInfoLua.cpp" />
     <ClCompile Include="ObjectFlagsLua.cpp" />
     <ClCompile Include="ObjectLua.cpp" />
+    <ClCompile Include="ObjectRenderDistanceLua.cpp" />
     <ClCompile Include="PhysicsGui.cpp" />
     <ClCompile Include="VectorLua.cpp" />
     <ClCompile Include="WelcomeGui.cpp" />
@@ -270,6 +273,7 @@
     <ClInclude Include="HookManager.h" />
     <ClInclude Include="Hooks.h" />
     <ClInclude Include="HumanFlagsLua.h" />
+    <ClInclude Include="HumanInfoLua.h" />
     <ClInclude Include="HumanLua.h" />
     <ClInclude Include="HumanMPFlagsLua.h" />
     <ClInclude Include="imgui_impl_dx11.h" />
@@ -290,6 +294,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </None>
+    <ClInclude Include="InvItemInfoLua.h" />
     <ClInclude Include="ItsyBitsy.h" />
     <ClInclude Include="Logger.h" />
     <ClInclude Include="LogWindow.h" />
@@ -299,6 +304,7 @@
     <ClInclude Include="ObjectContactInfoLua.h" />
     <ClInclude Include="ObjectFlagsLua.h" />
     <ClInclude Include="ObjectLua.h" />
+    <ClInclude Include="ObjectRenderDistanceLua.h" />
     <ClInclude Include="PhysicsGui.h" />
     <ClInclude Include="RFGR_Containers.h" />
     <ClInclude Include="RFGR_Types_Havok.h" />

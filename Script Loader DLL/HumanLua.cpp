@@ -1,7 +1,7 @@
 #include "HumanLua.h"
 #include "Functions.h"
 
-void Lua::BindHuman(sol::state & LuaState)
+void Lua::BindHuman(sol::state& LuaState)
 {
 	auto RfgTable = LuaState["rfg"].get_or_create<sol::table>();
 	auto Utype = RfgTable.create_simple_usertype<Human>();
@@ -194,7 +194,7 @@ void Lua::BindHuman(sol::state & LuaState)
 	Utype.set("AcknowledgedTime", &Human::AcknowledgedTime);
 	Utype.set("ReportedTimer", &Human::ReportedTimer);
 	Utype.set("Lifetime", &Human::Lifetime);
-
+	LuaState.set_usertype("Human", Utype);
 
 	/*RfgTable.new_usertype<Human>
 	(

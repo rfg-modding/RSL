@@ -9,6 +9,10 @@
 #include "HavokBPOLua.h"
 #include "HumanFlagsLua.h"
 #include "HumanMPFlagsLua.h"
+#include "InvItemInfoLua.h"
+#include "ObjectRenderDistanceLua.h"
+#include "HumanRaycastHitInfoLua.h"
+#include "HumanInfoLua.h"
 #include "ObjectLua.h"
 #include "HumanLua.h"
 
@@ -75,6 +79,8 @@ void ScriptManager::SetupLua()
 	LoggerTable["LogToFile"] = Logger::LogToFile;
 	LoggerTable["GetTimeString"] = Logger::GetTimeString;
 	
+	//Use separate files for these so that if one is edited they don't all need to be recompiled.
+	//Not necessarily at huge benefit at first, but it'll grow as more usertypes are added.
 	Lua::BindVector(LuaState);
 	Lua::BindMatrix(LuaState);
 	Lua::BindMatrix43(LuaState);
@@ -86,8 +92,16 @@ void ScriptManager::SetupLua()
 	Lua::BindHavokBPO(LuaState);
 	Lua::BindHumanFlags(LuaState); //Todo: Fix compile error
 	//Lua::BindHumanMPFlags(LuaState); //Todo: Fix compile error
+	Lua::BindHumanInfoFlags(LuaState);
+	Lua::BindHumanPropGeneralInfo(LuaState);
+	Lua::BindInvItemInfo(LuaState);
+	Lua::BindFootGroundEffects(LuaState);
+	Lua::BindCharDefHead(LuaState);
+	Lua::BindObjectRenderDistance(LuaState);
+	Lua::BindHumanRaycastHitInfo(LuaState);
+	Lua::BindHumanInfo(LuaState);
 	Lua::BindObject(LuaState);
-	Lua::BindHuman(LuaState); //Fix stupid RAM usage during compilation
+	Lua::BindHuman(LuaState);
 }
 
 void ScriptManager::ScanScriptsFolder()

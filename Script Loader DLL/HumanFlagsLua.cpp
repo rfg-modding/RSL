@@ -134,7 +134,7 @@ void Lua::BindHumanFlags(sol::state & LuaState)
 	//Utype.set("DisallowFlinchesAndRagdolls", sol::property(itsy_bitsy::read<HumanFlags, 125>, itsy_bitsy::write<HumanFlags, 125>)); //int32 - 1 
 	//Utype.set("OnlyUseActionNodes", sol::property(itsy_bitsy::read<HumanFlags, 126>, itsy_bitsy::write<HumanFlags, 126>)); //int32 - 1 
 	//Utype.set("ComplainWhenShot", sol::property(itsy_bitsy::read<HumanFlags, 127>, itsy_bitsy::write<HumanFlags, 127>)); //int32 - 1 
-
+	//LuaState.set_usertype("HumanFlags", Utype);
 
 	/*RfgTable.new_usertype<HumanFlags>
 	(

@@ -160,7 +160,6 @@ enum spinebend_interest
 	SI_FOLLOW_EYES = 0xB,
 };
 
-/* 574 */
 enum AnimationAction
 {
 	ANIMATION_ACTION_NONE = 0xFFFFFFFF,
@@ -829,7 +828,6 @@ enum AnimationAction
 	NUM_ANIM_ACTIONS = 0x295,
 };
 
-/* 607 */
 enum HumanMoveSubmodes
 {
 	HMSM_NONE = 0x0,
@@ -2166,14 +2164,12 @@ struct HumanResourceDependentData
 	int head_manager_idx;
 };
 
-/* 5110 */
 struct __declspec(align(4)) HumanResourceDependentDataContainer //5, align -> 8 Bytes
 {
 	HumanResourceDependentData m_data; //4
 	bool m_loaded; //1
 };
 
-/* 5192 */
 struct foot_ground_effects
 {
 	char name[20];
@@ -2185,14 +2181,12 @@ struct foot_ground_effects
 	unsigned int(**jump)[5][2];
 };
 
-/* 5164 */
 struct ObjectRenderDistance //8
 {
 	float apparent_distance; //4
 	int last_frame_processed; //4
 };
 
-/* 5213 */
 struct human_info_inventory_info //12
 {
 	inv_item_info *i_info; //4
@@ -2200,30 +2194,6 @@ struct human_info_inventory_info //12
 	int slot; //4
 };
 
-struct base_array_human_info_inventory_info_Vtbl;
-
-/* 5211 */
-struct base_array_human_info_inventory_info //16
-{
-  base_array_human_info_inventory_info_Vtbl* vfptr; //4
-  human_info_inventory_info *elt; //4
-  int array_size; //4
-  int num; //4
-};
-
-/* 5212 */
-struct base_array_human_info_inventory_info_Vtbl //4
-{
-	void* (__thiscall* __vecDelDtor)(base_array_human_info_inventory_info* This, unsigned int); //4
-};
-
-/* 5214 */
-struct farray_human_info_inventory_info_15 : base_array_human_info_inventory_info //180 + 16 = 196 Bytes
-{
-  human_info_inventory_info data[15]; //180
-};
-
-/* 5193 */
 struct char_def_head
 {
 	char *name;
@@ -2285,24 +2255,10 @@ struct human_info_flags //19
 	bool driverless_exit_only;
 };
 
-struct base_array_human_voice_persona_pointer_Vtbl;
-
-struct base_array_human_voice_persona_pointer //16
-{
-	base_array_human_voice_persona_pointer_Vtbl *vfptr; //4
-	void** elt;///human_voice_persona** elt; //4
-	int array_size; //4
-	int num; //4
-};
-
-struct base_array_human_voice_persona_pointer_Vtbl //4
-{
-	void *(__thiscall *__vecDelDtor)(base_array_human_voice_persona_pointer* This, unsigned int); //4
-};
-
 struct voice_persona_list //16
 {
-	base_array_human_voice_persona_pointer voice_list; //16
+	char voice_list[16];
+	 //rfg::base_array<human_voice_persona*> voice_list; //16
 };
 
 class HumanInfo //397
@@ -2331,7 +2287,7 @@ public:
   int num_heads; //4
   char_def_head* heads[4]; //16, This is a array of pointers, each 4 bytes since the game is 32bit
   voice_persona_list voice_personas; //16
-  farray_human_info_inventory_info_15 default_inventory; //196
+  rfg::farray<human_info_inventory_info, 15> default_inventory; //196
   int num_general_props; //4
   human_prop_general_info* general_props; //4
   int lower_spine_bone_index; //4

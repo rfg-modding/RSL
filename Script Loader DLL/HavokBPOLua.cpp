@@ -14,6 +14,7 @@ void Lua::BindHavokBPO(sol::state & LuaState)
 	Utype.set("Next", &HavokBPO::next);
 	Utype.set("Prev", &HavokBPO::prev);
 	//Utype.set("Userdata", &HavokBPO::user_data);
+	LuaState.set_usertype("HavokBPO", Utype);
 
 	/*RfgTable.new_usertype<HavokBPO>
 	(
