@@ -197,7 +197,9 @@
   <ItemGroup>
     <ClCompile Include="AttachInfoDataLua.cpp" />
     <ClCompile Include="BaseGui.cpp" />
+    <ClCompile Include="BaseTypeLua.cpp" />
     <ClCompile Include="CameraWrapper.cpp" />
+    <ClCompile Include="CharacterInstanceLua.cpp" />
     <ClCompile Include="ContactNodeLua.cpp" />
     <ClCompile Include="FreeCamGui.cpp" />
     <ClCompile Include="FunctionManager.cpp" />
@@ -212,6 +214,7 @@
     <ClCompile Include="HumanInfoLua.cpp" />
     <ClCompile Include="HumanLua.cpp" />
     <ClCompile Include="HumanMPFlagsLua.cpp" />
+    <ClCompile Include="HumanRaycastHitInfoLua.cpp" />
     <ClCompile Include="imgui_impl_dx11.cpp" />
     <ClCompile Include="imgui_impl_win32.cpp" />
     <ClCompile Include="imgui_stdlib.cpp" />
@@ -255,7 +258,9 @@
   <ItemGroup>
     <ClInclude Include="AttachInfoDataLua.h" />
     <ClInclude Include="BaseGui.h" />
+    <ClInclude Include="BaseTypeLua.h" />
     <ClInclude Include="CameraWrapper.h" />
+    <ClInclude Include="CharacterInstanceLua.h" />
     <ClInclude Include="ContactNodeLua.h" />
     <ClInclude Include="DeepCodeStorage.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
@@ -276,6 +281,7 @@
     <ClInclude Include="HumanInfoLua.h" />
     <ClInclude Include="HumanLua.h" />
     <ClInclude Include="HumanMPFlagsLua.h" />
+    <ClInclude Include="HumanRaycastHitInfoLua.h" />
     <ClInclude Include="imgui_impl_dx11.h" />
     <ClInclude Include="imgui_impl_win32.h" />
     <ClInclude Include="imgui_stdlib.h" />

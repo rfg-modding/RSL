@@ -186,11 +186,20 @@
     <ClCompile Include="HumanInfoLua.cpp">
       <Filter>Lua Binding</Filter>
     </ClCompile>
-    <ClCompile Include="InvItemInfoLua.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="ObjectRenderDistanceLua.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Lua Binding</Filter>
+    </ClCompile>
+    <ClCompile Include="InvItemInfoLua.cpp">
+      <Filter>Lua Binding</Filter>
+    </ClCompile>
+    <ClCompile Include="HumanRaycastHitInfoLua.cpp">
+      <Filter>Lua Binding</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseTypeLua.cpp">
+      <Filter>Lua Binding</Filter>
+    </ClCompile>
+    <ClCompile Include="CharacterInstanceLua.cpp">
+      <Filter>Lua Binding</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -378,10 +387,19 @@
       <Filter>Lua Binding</Filter>
     </ClInclude>
     <ClInclude Include="InvItemInfoLua.h">
-      <Filter>Header Files</Filter>
+      <Filter>Lua Binding</Filter>
     </ClInclude>
     <ClInclude Include="ObjectRenderDistanceLua.h">
-      <Filter>Header Files</Filter>
+      <Filter>Lua Binding</Filter>
+    </ClInclude>
+    <ClInclude Include="HumanRaycastHitInfoLua.h">
+      <Filter>Lua Binding</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseTypeLua.h">
+      <Filter>Lua Binding</Filter>
+    </ClInclude>
+    <ClInclude Include="CharacterInstanceLua.h">
+      <Filter>Lua Binding</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

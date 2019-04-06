@@ -1,11 +1,52 @@
 #include "HumanLua.h"
 #include "Functions.h"
 
+void Lua::BindIKJoint(sol::state& LuaState)
+{
+	auto RfgTable = LuaState["rfg"].get_or_create<sol::table>();
+	auto Utype = RfgTable.create_simple_usertype<IK_Joint>();
+	Utype.set("AnchorTag", &IK_Joint::anchor_tag);
+	Utype.set("JointTag", &IK_Joint::joint_tag);
+	Utype.set("IkTag", &IK_Joint::ik_tag);
+	Utype.set("IkStrength", &IK_Joint::ik_strength);
+	Utype.set("IkRateOfChange", &IK_Joint::ik_rate_of_change);
+	Utype.set("FreezeObjHandle", &IK_Joint::freeze_obj_handle);
+	Utype.set("FreezeOffsetPos", &IK_Joint::freeze_offset_pos);
+	Utype.set("Location", &IK_Joint::location);
+	LuaState.set_usertype("IKJoint", Utype);
+}
+
+void Lua::BindWeaponAnimationFlags(sol::state& LuaState)
+{
+	auto RfgTable = LuaState["rfg"].get_or_create<sol::table>();
+	auto Utype = RfgTable.create_simple_usertype<WeaponAnimationFlags>();
+	Utype.set("new", sol::no_constructor);
+	Utype.set("Prone", sol::property(itsy_bitsy::read<WeaponAnimationFlags, 0>, itsy_bitsy::write<WeaponAnimationFlags, 0>)); //uint32 - 1
+	Utype.set("Crouch", sol::property(itsy_bitsy::read<WeaponAnimationFlags, 1>, itsy_bitsy::write<WeaponAnimationFlags, 1>)); //uint32 - 1
+	Utype.set("DownReady", sol::property(itsy_bitsy::read<WeaponAnimationFlags, 2>, itsy_bitsy::write<WeaponAnimationFlags, 2>)); //uint32 - 1
+	Utype.set("Ready", sol::property(itsy_bitsy::read<WeaponAnimationFlags, 3>, itsy_bitsy::write<WeaponAnimationFlags, 3>)); //uint32 - 1
+	Utype.set("Aim", sol::property(itsy_bitsy::read<WeaponAnimationFlags, 4>, itsy_bitsy::write<WeaponAnimationFlags, 4>)); //uint32 - 1
+	Utype.set("FineAim", sol::property(itsy_bitsy::read<WeaponAnimationFlags, 5>, itsy_bitsy::write<WeaponAnimationFlags, 5>)); //uint32 - 1
+	Utype.set("NoAmmo", sol::property(itsy_bitsy::read<WeaponAnimationFlags, 6>, itsy_bitsy::write<WeaponAnimationFlags, 6>)); //uint32 - 1
+	Utype.set("Walk", sol::property(itsy_bitsy::read<WeaponAnimationFlags, 7>, itsy_bitsy::write<WeaponAnimationFlags, 7>)); //uint32 - 1
+	Utype.set("Run", sol::property(itsy_bitsy::read<WeaponAnimationFlags, 8>, itsy_bitsy::write<WeaponAnimationFlags, 8>)); //uint32 - 1
+	Utype.set("Left", sol::property(itsy_bitsy::read<WeaponAnimationFlags, 9>, itsy_bitsy::write<WeaponAnimationFlags, 9>)); //uint32 - 1
+	Utype.set("Right", sol::property(itsy_bitsy::read<WeaponAnimationFlags, 10>, itsy_bitsy::write<WeaponAnimationFlags, 10>)); //uint32 - 1
+	Utype.set("Back", sol::property(itsy_bitsy::read<WeaponAnimationFlags, 11>, itsy_bitsy::write<WeaponAnimationFlags, 11>)); //uint32 - 1
+	Utype.set("Backpedal", sol::property(itsy_bitsy::read<WeaponAnimationFlags, 12>, itsy_bitsy::write<WeaponAnimationFlags, 12>)); //uint32 - 1
+	Utype.set("Switching", sol::property(itsy_bitsy::read<WeaponAnimationFlags, 13>, itsy_bitsy::write<WeaponAnimationFlags, 13>)); //uint32 - 1
+	Utype.set("Drive", sol::property(itsy_bitsy::read<WeaponAnimationFlags, 14>, itsy_bitsy::write<WeaponAnimationFlags, 14>)); //uint32 - 1
+	Utype.set("Ride", sol::property(itsy_bitsy::read<WeaponAnimationFlags, 15>, itsy_bitsy::write<WeaponAnimationFlags, 15>)); //uint32 - 1
+	Utype.set("RideLeft", sol::property(itsy_bitsy::read<WeaponAnimationFlags, 16>, itsy_bitsy::write<WeaponAnimationFlags, 16>)); //uint32 - 1
+	LuaState.set_usertype("WeaponAnimationFlags", Utype);
+}
+
 void Lua::BindHuman(sol::state& LuaState)
 {
 	auto RfgTable = LuaState["rfg"].get_or_create<sol::table>();
 	auto Utype = RfgTable.create_simple_usertype<Human>();
 	Utype.set("new", sol::constructors<Human(), Human(const Human&)>());
+	Utype.set(sol::base_classes, sol::bases<Object>());
 	//Utype.set("ResourceDependentData", &Human::ResourceDependentData);
 	Utype.set("Flags", &Human::Flags);
 	//Utype.set("MPFlags", &Human::MPFlags);
@@ -18,7 +59,7 @@ void Lua::BindHuman(sol::state& LuaState)
 	Utype.set("ApproxLocalBmin", &Human::ApproxLocalBmin);
 	Utype.set("ApproxLocalBmax", &Human::ApproxLocalBmax);
 	Utype.set("LastPosition", &Human::LastPosition);
-	Utype.set("PathData", &Human::PathData);
+	//Utype.set("PathData", &Human::PathData);
 	Utype.set("TurnToTarget", &Human::TurnToTarget);
 	Utype.set("NavCellDetourRequestHandle", &Human::NavCellDetourRequestHandle);
 	Utype.set("RaycastHitInfo", &Human::RaycastHitInfo);
@@ -77,9 +118,9 @@ void Lua::BindHuman(sol::state& LuaState)
 	Utype.set("MaterialFXHandleForHeadSkin", &Human::MaterialFXHandleForHeadSkin);
 	//Utype.set("LastValidPositionBeforeRagdoll", &Human::LastValidPositionBeforeRagdoll); //16 element c-array of vectors
 	Utype.set("RagdollNumCollisionWithWalker", &Human::RagdollNumCollisionsWithWalker);
-	//Utype.set("IK_Joints", &Human::IK_Joints); //4 size array of IK_Joint
-	Utype.set("SpinebendData", &Human::SpinebendData);
-	Utype.set("HeadMorphs", &Human::HeadMorphs);
+	//Utype.set("Joints", &Human::IK_Joints); //4 size array of IK_Joint
+	//Utype.set("SpinebendData", &Human::SpinebendData);
+	//Utype.set("HeadMorphs", &Human::HeadMorphs);
 	Utype.set("InitialMaxHitPoints", &Human::InitialMaxHitPoints);
 	Utype.set("MaxHitPoints", &Human::MaxHitPoints);
 	Utype.set("HitPoints", &Human::HitPoints);
@@ -87,7 +128,7 @@ void Lua::BindHuman(sol::state& LuaState)
 	Utype.set("KnockdownHits", &Human::KnockdownHits);
 	Utype.set("KnockdownTimestamp", &Human::KnockdownTimestamp);
 	Utype.set("KnockdownTimeoutTimestamp", &Human::KnockdownTimeoutTimestamp);
-	Utype.set("Combat", &Human::Combat);
+	//Utype.set("Combat", &Human::Combat);
 	Utype.set("CollisionDamageTimer", &Human::CollisionDamageTimer);
 	Utype.set("CurrentCollisionDamage", &Human::CurrentCollisionDamage);
 	Utype.set("DoRagdollTimestamp", &Human::DoRagdollTimestamp);
@@ -162,7 +203,7 @@ void Lua::BindHuman(sol::state& LuaState)
 	Utype.set("ScriptedActionNodeHandle", &Human::ScriptedActionNodeHandle);
 	//Utype.set("NanoCBInfo", &Human::NanoCBInfo);
 	Utype.set("NanoIndex", &Human::NanoIndex);
-	Utype.set("ActionNodeData", &Human::ActionNodeData);
+	//Utype.set("ActionNodeData", &Human::ActionNodeData);
 	//Utype.set("LightEffects", &Human::LightEffects);
 	//Utype.set("LightTags", &Human::LightTags);
 	Utype.set("AvoidanceCheckTimer", &Human::AvoidanceCheckTimer);
@@ -180,14 +221,14 @@ void Lua::BindHuman(sol::state& LuaState)
 	Utype.set("CurrentTeam", &Human::CurrentTeam);
 	Utype.set("UndercoverTeam", &Human::UndercoverTeam);
 	Utype.set("DialogueFoleyInfo", &Human::DialogueFoleyInfo);
-	Utype.set("QueuedVoiceLine", &Human::QueuedVoiceLine);
-	Utype.set("SituationalVoiceLine", &Human::SituationalVoiceLine);
-	Utype.set("VoicePriority", &Human::VoicePriority);
-	Utype.set("VoiceCuePriority", &Human::VoiceCuePriority);
+	Utype.set("QueuedVoiceLine", &Human::QueuedVoiceLine); //enum
+	Utype.set("SituationalVoiceLine", &Human::SituationalVoiceLine); //enum
+	Utype.set("VoicePriority", &Human::VoicePriority); //enum
+	Utype.set("VoiceCuePriority", &Human::VoiceCuePriority); //enum
 	Utype.set("RadioInstance", &Human::RadioInstance);
 	Utype.set("VoiceInstance", &Human::VoiceInstance);
 	Utype.set("VoiceTimeSinceFinish", &Human::VoiceTimeSinceFinish);
-	Utype.set("LipsyncHandle", &Human::LipsyncHandle);
+	Utype.set("LipsyncHandle", &Human::LipsyncHandle); //enum
 	Utype.set("VoiceDelayTime", &Human::voice_delay_time);
 	//Utype.set("UnimVoiceDelayCBCallback", &Human::Unim_VoiceDelayCBCallback);
 	//Utype.set("VoiceDelayCBData", &Human::VoiceDelayCBData);

@@ -1,5 +1,5 @@
 return {
-    ["None"] = 4294967295,
+    ["None"] = 4294967295, --0xFFFFFFFF
     ["Guerrilla"] = 0,
     ["EDF"] = 1,
     ["Civilian"] = 2,

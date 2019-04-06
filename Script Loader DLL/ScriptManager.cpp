@@ -1,4 +1,5 @@
 #include "ScriptManager.h"
+#include "BaseTypeLua.h"
 #include "VectorLua.h"
 #include "MatrixLua.h"
 #include "Matrix43Lua.h"
@@ -12,6 +13,7 @@
 #include "InvItemInfoLua.h"
 #include "ObjectRenderDistanceLua.h"
 #include "HumanRaycastHitInfoLua.h"
+#include "CharacterInstanceLua.h"
 #include "HumanInfoLua.h"
 #include "ObjectLua.h"
 #include "HumanLua.h"
@@ -81,6 +83,7 @@ void ScriptManager::SetupLua()
 	
 	//Use separate files for these so that if one is edited they don't all need to be recompiled.
 	//Not necessarily at huge benefit at first, but it'll grow as more usertypes are added.
+	Lua::BindTimestamp(LuaState);
 	Lua::BindVector(LuaState);
 	Lua::BindMatrix(LuaState);
 	Lua::BindMatrix43(LuaState);
@@ -94,11 +97,17 @@ void ScriptManager::SetupLua()
 	//Lua::BindHumanMPFlags(LuaState); //Todo: Fix compile error
 	Lua::BindHumanInfoFlags(LuaState);
 	Lua::BindHumanPropGeneralInfo(LuaState);
+	Lua::BindInventoryItem(LuaState);
+	Lua::BindChecksumStri(LuaState);
 	Lua::BindInvItemInfo(LuaState);
 	Lua::BindFootGroundEffects(LuaState);
 	Lua::BindCharDefHead(LuaState);
 	Lua::BindObjectRenderDistance(LuaState);
 	Lua::BindHumanRaycastHitInfo(LuaState);
+	Lua::BindCharacterInstance(LuaState);
+	Lua::BindWeaponAnimationFlags(LuaState);
+	Lua::BindIKJoint(LuaState);
+	Lua::BindNanoCallbackInfo(LuaState);
 	Lua::BindHumanInfo(LuaState);
 	Lua::BindObject(LuaState);
 	Lua::BindHuman(LuaState);

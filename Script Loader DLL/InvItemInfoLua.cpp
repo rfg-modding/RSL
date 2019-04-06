@@ -1,14 +1,33 @@
 #include "InvItemInfoLua.h"
 #include "Functions.h"
 
+void Lua::BindInventoryItem(sol::state& LuaState)
+{
+	auto RfgTable = LuaState["rfg"].get_or_create<sol::table>();
+	auto Utype = RfgTable.create_simple_usertype<InventoryItem>();
+	Utype.set("new", sol::no_constructor);
+	Utype.set("Next", &InventoryItem::next);
+	Utype.set("Prev", &InventoryItem::prev);
+	Utype.set("Info", &InventoryItem::info);
+	Utype.set("Count", &InventoryItem::count);
+	Utype.set("SelectionSlot", &InventoryItem::selection_slot);
+	Utype.set("AttachmentProp", &InventoryItem::attachment_prop);
+	Utype.set("WeaponHandle", &InventoryItem::weapon_handle);
+	LuaState.set_usertype("InventoryItem", Utype);
+}
+
+void Lua::BindChecksumStri(sol::state& LuaState)
+{
+	auto RfgTable = LuaState["rfg"].get_or_create<sol::table>();
+	auto Utype = RfgTable.create_simple_usertype<checksum_stri>();
+	Utype.set("new", sol::no_constructor);
+	Utype.set("Checksum", &checksum_stri::checksum);
+	LuaState.set_usertype("ChecksumStri", Utype);
+}
+
 void Lua::BindInvItemInfo(sol::state& LuaState)
 {
 	auto RfgTable = LuaState["rfg"].get_or_create<sol::table>();
-	auto ChecksumStriUtype = RfgTable.create_simple_usertype<checksum_stri>();
-	ChecksumStriUtype.set("new", sol::no_constructor);
-	ChecksumStriUtype.set("Checksum", &checksum_stri::checksum);
-	LuaState.set_usertype("ChecksumStri", ChecksumStriUtype);
-
 	auto Utype = RfgTable.create_simple_usertype<inv_item_info>();
 	Utype.set("new", sol::no_constructor);
 	Utype.set("Name", &inv_item_info::name);
