@@ -17,6 +17,7 @@
 #include "HumanInfoLua.h"
 #include "ObjectLua.h"
 #include "HumanLua.h"
+#include "PlayerLua.h"
 
 ScriptManager::ScriptManager()
 {
@@ -111,6 +112,7 @@ void ScriptManager::SetupLua()
 	Lua::BindHumanInfo(LuaState);
 	Lua::BindObject(LuaState);
 	Lua::BindHuman(LuaState);
+	Lua::BindPlayer(LuaState);
 }
 
 void ScriptManager::ScanScriptsFolder()
