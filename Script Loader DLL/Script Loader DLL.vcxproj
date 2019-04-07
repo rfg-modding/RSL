@@ -236,6 +236,7 @@
     <ClCompile Include="ObjectLua.cpp" />
     <ClCompile Include="ObjectRenderDistanceLua.cpp" />
     <ClCompile Include="PhysicsGui.cpp" />
+    <ClCompile Include="PlayerLua.cpp" />
     <ClCompile Include="VectorLua.cpp" />
     <ClCompile Include="WelcomeGui.cpp" />
     <ClCompile Include="Includes.cpp">
@@ -312,6 +313,7 @@
     <ClInclude Include="ObjectLua.h" />
     <ClInclude Include="ObjectRenderDistanceLua.h" />
     <ClInclude Include="PhysicsGui.h" />
+    <ClInclude Include="PlayerLua.h" />
     <ClInclude Include="RFGR_Containers.h" />
     <ClInclude Include="RFGR_Types_Havok.h" />
     <ClInclude Include="RFGR_Types_StateManager.h" />

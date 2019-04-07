@@ -533,9 +533,55 @@ struct matrix44
 	//$EFBF005ED9B80EDE8789D61FAD0B4E5B ___u0;
 };
 
-struct vector2
+class vector2
 {
-	vector2() { }
+public:
+	vector2() 
+	{
+		x = 0.0f;
+		y = 0.0f;
+	}
+	vector2(const vector2& Copy)
+	{
+		x = Copy.x;
+		y = Copy.y;
+	}
+	vector2(float InitialValue) : x(InitialValue), y(InitialValue) { }
+	vector2(float x_, float y_) : x(x_), y(y_) { }
+	vector2 operator+(const vector2& B)
+	{
+		return vector2(x + B.x, y + B.y);
+	}
+	vector2 operator-(const vector2& B)
+	{
+		return vector2(x - B.x, y - B.y);
+	}
+	float operator*(const vector2& B)
+	{
+		return (x * B.x) + (y * B.y);
+	}
+	bool operator==(const vector2& B)
+	{
+		return (x == B.x && y == B.y);
+	}
+	bool operator!=(const vector2& B)
+	{
+		return !(*this == B);
+	}
+	void operator=(const vector2& B)
+	{
+		x = B.x;
+		y = B.y;
+	}
+	float Magnitude()
+	{
+		return sqrtf((x * x) + (y * y));
+	}
+	void SetAll(float Value)
+	{
+		x = Value;
+		y = Value;
+	}
 	float x;
 	float y;
 };
@@ -692,7 +738,7 @@ struct VehicleControls //12
 };
 
 /* 5468 */
-struct UsableObject //24 Bytes
+struct UseableObject //24 Bytes
 {
 	unsigned int handle; //4
 	GeneralActionTypes action_type; //4
@@ -1012,7 +1058,6 @@ struct UpgradeItem //7 Bytes
 	unsigned __int16 new_notified_bitfield; //2
 };
 
-/* 5501 */
 struct PlayerMetadata //928 Bytes
 {
 	void* PlayerMetadataVtbl;//player_meta_dataVtbl* vfptr; //4
@@ -1026,16 +1071,12 @@ struct PlayerMetadata //928 Bytes
 	int LastDeathTime; //4
 };
 
-/* 5504 */
 struct PlayerPositionalRecord //16 Bytes
 {
 	vector pos; //12
 	int period_ms; //4
 };
 
-
-
-/* 6289 */
 const struct CameraViewTableEntry //82 Bytes?
 {
 	char *Name; //8 bytes

@@ -2849,12 +2849,11 @@ public:
 	Timestamp Lifetime; //4
 };
 
-/* 5467 */
 class /*__declspec(align(8))*/ Player : public Human //5415 + 3961 = 9376 Bytes
 {
 public:
 	float FrametimeMultiplier; //4
-	UsableObject action_object; //24
+	UseableObject action_object; //24
 	Timestamp action_object_timestamp; //4
 	Timestamp last_fire_time; //4
 	unsigned int mp_action_object_handle; //4

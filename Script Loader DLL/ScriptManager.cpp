@@ -85,6 +85,7 @@ void ScriptManager::SetupLua()
 	//Use separate files for these so that if one is edited they don't all need to be recompiled.
 	//Not necessarily at huge benefit at first, but it'll grow as more usertypes are added.
 	Lua::BindTimestamp(LuaState);
+	Lua::BindTimestampPercent(LuaState);
 	Lua::BindVector(LuaState);
 	Lua::BindMatrix(LuaState);
 	Lua::BindMatrix43(LuaState);
@@ -110,6 +111,13 @@ void ScriptManager::SetupLua()
 	Lua::BindIKJoint(LuaState);
 	Lua::BindNanoCallbackInfo(LuaState);
 	Lua::BindHumanInfo(LuaState);
+	Lua::BindUsableObject(LuaState);
+	Lua::BindPlayerFlags(LuaState);
+	Lua::BindScriptSpecificData(LuaState);
+	Lua::BindVehicleEnterStruct(LuaState);
+	Lua::BindPathfindNavInfo(LuaState);
+	Lua::BindUpgradeItem(LuaState);
+	Lua::BindPlayerMetadata(LuaState);
 	Lua::BindObject(LuaState);
 	Lua::BindHuman(LuaState);
 	Lua::BindPlayer(LuaState);

@@ -19,3 +19,13 @@ void Lua::BindTimestamp(sol::state& LuaState)
 	Utype.set("Value", &Timestamp::value);
 	LuaState.set_usertype("Timestamp", Utype);
 }
+
+void Lua::BindTimestampPercent(sol::state& LuaState)
+{
+	auto RfgTable = LuaState["rfg"].get_or_create<sol::table>();
+	auto Utype = RfgTable.create_simple_usertype<TimestampPercent>();
+	Utype.set("new", sol::no_constructor);
+	Utype.set(sol::base_classes, sol::bases<Timestamp>());
+	Utype.set("SetMilliseconds", &TimestampPercent::set_milliseconds);
+	LuaState.set_usertype("TimestampPercent", Utype);
+}
