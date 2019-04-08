@@ -69,7 +69,12 @@ void ScriptManager::SetupLua()
 	auto RfgTable = LuaState["rfg"].get_or_create<sol::table>();
 	RfgTable["HideHud"] = HideHud;
 	RfgTable["HideFog"] = HideFog;
+	RfgTable["ToggleFog"] = ToggleFog;
+	RfgTable["ToggleHud"] = ToggleHud;
 	RfgTable["SetFarClipDistance"] = game_render_set_far_clip_distance;
+	RfgTable["GetPlayer"] = Lua::GetPlayer;
+	RfgTable["GetWorld"] = Lua::GetWorld;
+	RfgTable["GetPhysicsWorld"] = Lua::GetPhysicsWorld;
 
 	//LogType enums defined in lua
 	auto LoggerTable = LuaState["Logger"].get_or_create<sol::table>(); //Todo: Add to RSL table.

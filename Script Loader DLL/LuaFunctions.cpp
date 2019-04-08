@@ -4,13 +4,16 @@ namespace Lua
 {
 	Player* GetPlayer()
 	{
-		if (GlobalPlayerPtr)
-		{
-			return (Player*)GlobalPlayerPtr;
-		}
-		else
-		{
-			return nullptr;
-		}
+		return GlobalPlayerPtr;
+	}
+
+	World* GetWorld()
+	{
+		return GlobalRfgWorldPtr;
+	}
+
+	hkpWorld* GetPhysicsWorld()
+	{
+		return GlobalhkpWorldPtr;
 	}
 }

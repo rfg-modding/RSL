@@ -405,7 +405,7 @@
       <Filter>Lua Binding</Filter>
     </ClInclude>
     <ClInclude Include="PlayerLua.h">
-      <Filter>Header Files</Filter>
+      <Filter>Lua Binding</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
