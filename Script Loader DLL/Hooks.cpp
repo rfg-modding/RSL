@@ -237,12 +237,12 @@ HRESULT __stdcall D3D11PresentHook(IDXGISwapChain * pSwapChain, UINT SyncInterva
 
 		ImGuiIO& io = ImGui::GetIO();
 		float GlobalFontSize = 17.0f;
-		std::string DroidSansPath = std::string(GetEXEPath(false) + "RFGR Script Loader/Fonts/DroidSans.ttf");
-		bool DroidSansLoaded = false;
-		if (fs::exists(DroidSansPath))
+		std::string DefaultFontPath = std::string(GetEXEPath(false) + "RFGR Script Loader/Fonts/Roboto-Regular.ttf");
+		bool DefaultFontLoaded = false;
+		if (fs::exists(DefaultFontPath))
 		{	
-			io.Fonts->AddFontFromFileTTF(DroidSansPath.c_str(), GlobalFontSize);
-			DroidSansLoaded = true;
+			io.Fonts->AddFontFromFileTTF(DefaultFontPath.c_str(), GlobalFontSize);
+			DefaultFontLoaded = true;
 		}
 		else
 		{
@@ -261,26 +261,26 @@ HRESULT __stdcall D3D11PresentHook(IDXGISwapChain * pSwapChain, UINT SyncInterva
 		//Logger::Log("Done merging FontAwesome...", LogWarning);
 		
 		float GlobalBigFontSize = 24.0f;
-		if (DroidSansLoaded)
+		if (DefaultFontLoaded)
 		{
-			io.Fonts->AddFontFromFileTTF(DroidSansPath.c_str(), GlobalBigFontSize);
+			io.Fonts->AddFontFromFileTTF(DefaultFontPath.c_str(), GlobalBigFontSize);
 		}
 		FontBig = io.Fonts->AddFontFromFileTTF(FontAwesomeSolidPath.c_str(), GlobalBigFontSize, &IconsConfig, IconsRanges);
 
 		/*Start of FontLarge loading*/
 		float GlobalLargeFontSize = 35.0f;
-		if (DroidSansLoaded)
+		if (DefaultFontLoaded)
 		{
-			io.Fonts->AddFontFromFileTTF(DroidSansPath.c_str(), GlobalLargeFontSize);
+			io.Fonts->AddFontFromFileTTF(DefaultFontPath.c_str(), GlobalLargeFontSize);
 		}
 		FontLarge = io.Fonts->AddFontFromFileTTF(FontAwesomeSolidPath.c_str(), GlobalLargeFontSize, &IconsConfig, IconsRanges);
 		/*End of FontLarge loading*/
 
 		/*Start of FontHuge loading*/
 		float GlobalHugeFontSize = 70.0f;
-		if (DroidSansLoaded)
+		if (DefaultFontLoaded)
 		{
-			io.Fonts->AddFontFromFileTTF(DroidSansPath.c_str(), GlobalHugeFontSize);
+			io.Fonts->AddFontFromFileTTF(DefaultFontPath.c_str(), GlobalHugeFontSize);
 		}
 		FontHuge = io.Fonts->AddFontFromFileTTF(FontAwesomeSolidPath.c_str(), GlobalHugeFontSize, &IconsConfig, IconsRanges);
 		/*End of FontHuge loading*/
