@@ -2047,7 +2047,7 @@ struct save_load_info
 	matrix player_start_orient;
 };
 
-struct hammer_unlock_data
+/*struct hammer_unlock_data
 {
 	char raw_data[8];
 };
@@ -2055,12 +2055,12 @@ struct hammer_unlock_data
 struct backpack_unlock_data
 {
 	char raw_data[2];
-};
+};*/
 
 struct game_save_info_new_data
 {
-	hammer_unlock_data hammers_unlocked_large;
-	backpack_unlock_data backpacks_unlocked;
+	char hammers_unlocked_large[8];//hammer_unlock_data hammers_unlocked_large;
+	char backpacks_unlocked[2]; //backpack_unlock_data backpacks_unlocked;
 	char jetpack_unlock_level;
 };
 
@@ -2179,7 +2179,7 @@ struct t_district
 	const char *thumbnail;
 	const char *load_screen_images[5];
 	char num_load_screen_images;
-	farray__grid_info_21 list;
+	rfg::farray<grid_info, 21> list;
 	t_district *next;
 	t_district *prev;
 };
@@ -2232,59 +2232,6 @@ struct str_data_hash_table<unsigned char, 255, 64, unsigned char> : data_hash_ta
 	char str_data[255][64];
 };*/
 
-struct stream_grid_cell;
-struct stream_layer_masked_cell
-{
-	stream_grid_cell* gc;
-	HavokBPO* n_region[4];
-};
-
-struct base_array__stream_layer_masked_cell_Vtbl;
-struct base_array__stream_layer_masked_cell
-{
-	const stream_layer_masked_cell& operator [](int index) { return elt[index]; };
-	int size() { return num; }
-	int capacity() { return array_size; }
-
-	base_array__stream_layer_masked_cell_Vtbl* vfptr;
-	stream_layer_masked_cell* elt;
-	int array_size;
-	int num;
-};
-
-struct base_array__stream_layer_masked_cell_Vtbl
-{
-	void *(__thiscall *__vecDelDtor)(base_array__stream_layer_masked_cell* This, unsigned int);
-};
-
-struct farray__stream_layer_masked_cell_50 : base_array__stream_layer_masked_cell
-{
-	stream_layer_masked_cell data[50];
-};
-
-struct base_array__stream_grid_cell_ptr_Vtbl;
-struct base_array__stream_grid_cell_ptr
-{
-	const stream_grid_cell& operator [](int index) { return *elt[index]; };
-	int size() { return num; }
-	int capacity() { return array_size; }
-
-	base_array__stream_grid_cell_ptr_Vtbl* vfptr;
-	stream_grid_cell** elt;
-	int array_size;
-	int num;
-};
-
-struct base_array__stream_grid_cell_ptr_Vtbl
-{
-	void *(__thiscall *__vecDelDtor)(base_array__stream_grid_cell_ptr* This, unsigned int);
-};
-
-struct farray__stream_grid_cell_ptr_25 : base_array__stream_grid_cell_ptr
-{
-	stream_grid_cell* data[25];
-};
-
 struct stream_grid_cell
 {
 	unsigned int stream_mask;
@@ -2292,6 +2239,12 @@ struct stream_grid_cell
 	char grid_x;
 	char grid_z;
 	unsigned __int16 layer_index;
+};
+
+struct stream_layer_masked_cell
+{
+	stream_grid_cell* gc;
+	HavokBPO* n_region[4];
 };
 
 struct stream_layer
@@ -2306,8 +2259,8 @@ struct stream_layer
 	vector bmax;
 	vector stream_bmin;
 	vector stream_bmax;
-	farray__stream_grid_cell_ptr_25 active_cells;
-	farray__stream_layer_masked_cell_50 masked_cells; //farray<stream_layer::masked_cell, 50> masked_cells;
+	rfg::farray<stream_grid_cell*, 25> active_cells;
+	rfg::farray<stream_layer_masked_cell, 50> masked_cells;
 	vector cell_dim;
 };
 

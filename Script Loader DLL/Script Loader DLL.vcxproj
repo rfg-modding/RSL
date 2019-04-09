@@ -255,6 +255,7 @@
     <ClCompile Include="TextEditor.cpp" />
     <ClCompile Include="ThemeEditorGui.cpp" />
     <ClCompile Include="Utilities.cpp" />
+    <ClCompile Include="WorldLua.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AttachInfoDataLua.h" />
@@ -295,6 +296,7 @@
     <ClInclude Include="include\kiero\kiero.h" />
     <ClInclude Include="include\MinHook\MinHook.h" />
     <ClInclude Include="IntrospectionGui.h" />
+    <ClInclude Include="WorldLua.h" />
     <None Include="KeenNamespace2.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>

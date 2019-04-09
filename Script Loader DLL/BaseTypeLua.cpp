@@ -1,6 +1,28 @@
 #include "BaseTypeLua.h"
 #include "Functions.h"
 
+void Lua::BindTimestampRealtime(sol::state& LuaState)
+{
+	auto RfgTable = LuaState["rfg"].get_or_create<sol::table>();
+	auto Utype = RfgTable.create_simple_usertype<timestamp_realtime>();
+	Utype.set("new", sol::no_constructor);
+	Utype.set("Value", &timestamp_realtime::value);
+	LuaState.set_usertype("TimestampRealtime", Utype);
+}
+
+void Lua::BindColor(sol::state& LuaState)
+{
+	auto RfgTable = LuaState["rfg"].get_or_create<sol::table>();
+	auto Utype = RfgTable.create_simple_usertype<color>();
+	Utype.set("new", sol::constructors<color(), color(char), color(const color&), color(char, char, char, char)>());
+	Utype.set("SetAll", &color::SetAll);
+	Utype.set("Red", &color::red);
+	Utype.set("Green", &color::green);
+	Utype.set("Blue", &color::blue);
+	Utype.set("Alpha", &color::alpha);
+	LuaState.set_usertype("Color", Utype);
+}
+
 void Lua::BindNanoCallbackInfo(sol::state & LuaState)
 {
 	auto RfgTable = LuaState["rfg"].get_or_create<sol::table>();

@@ -42,5 +42,11 @@ public:
 	int RepairPosition = 0;
 
 	bool LockAlertLevel = false;
+	bool UnlimitedAmmo = false;
+
+	bool TempUseCustoms = false;
+	int CustomUnlimitedAmmo = 0;
+	float CustomStealthPercent = 0.0f;
+	float CustomRenderAlpha = 0.0f;
 };
 

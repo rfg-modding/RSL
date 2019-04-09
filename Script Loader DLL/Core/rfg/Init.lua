@@ -30,6 +30,10 @@ rfg.PlayerZoomState = require("rfg.PlayerZoomState")
 rfg.PlayerScriptModes = require("rfg.PlayerScriptModes")
 rfg.PlayerCoverTest = require("rfg.PlayerCoverTest")
 rfg.InterfaceModes = require("rfg.InterfaceModes")
+rfg.AlertLevels = require("rfg.AlertLevels")
+rfg.WorldDeserializeStates = require("rfg.WorldDeserializeStates")
+rfg.WorldZoneStates = require("rfg.WorldZoneStates")
+rfg.WorldStateModes = require("rfg.WorldStateModes")
 
 -- Takes the ObjectType integer value and returns it's string name or nil.
 function rfg.GetObjectTypeByValue(ObjectTypeValue)

@@ -452,6 +452,12 @@ void __fastcall PlayerDoFrameHook(Player* PlayerPtr)
 	{
 		gsm_set_alert_level(Gui.TweaksMenu->CustomAlertLevel);
 	}
+	/*if (Gui.TweaksMenu->TempUseCustoms)
+	{
+		PlayerPtr->PFlags.UnlimitedAmmo = Gui.TweaksMenu->CustomUnlimitedAmmo;
+		PlayerPtr->RenderAlpha = Gui.TweaksMenu->CustomRenderAlpha;
+		PlayerPtr->StealthPercent = Gui.TweaksMenu->CustomStealthPercent;
+	}*/
 
 	if (Gui.FreeCamSettings->Camera->IsFreeCameraActive() && Gui.FreeCamSettings->PlayerFollowCam)
 	{

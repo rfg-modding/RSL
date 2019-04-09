@@ -58,9 +58,33 @@ enum vconsole_mode
 	VCM_TEAMCHAT = 0x2,
 };
 
-/* 4032 */
-struct color
+class color
 {
+public:
+	color() : red(0), green(0), blue(0), alpha(0) {}
+	color(char InitialValue) : red(InitialValue), green(InitialValue), blue(InitialValue), alpha(InitialValue) {}
+	color(const color& Copy)
+	{
+		red = Copy.red;
+		green = Copy.green;
+		blue = Copy.blue;
+		alpha = Copy.alpha;
+	}
+	color(char _initred, char _initgreen, char _initblue, char _initalpha)
+	{
+		red = _initred;
+		green = _initgreen;
+		blue = _initblue;
+		alpha = _initalpha;
+	}
+	void SetAll(char NewValue)
+	{
+		red = NewValue;
+		green = NewValue;
+		blue = NewValue;
+		alpha = NewValue;
+	}
+	
 	char red;
 	char green;
 	char blue;

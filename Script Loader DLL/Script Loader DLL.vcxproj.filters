@@ -204,6 +204,9 @@
     <ClCompile Include="PlayerLua.cpp">
       <Filter>Lua Binding</Filter>
     </ClCompile>
+    <ClCompile Include="WorldLua.cpp">
+      <Filter>Lua Binding</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CameraWrapper.h">
@@ -405,6 +408,9 @@
       <Filter>Lua Binding</Filter>
     </ClInclude>
     <ClInclude Include="PlayerLua.h">
+      <Filter>Lua Binding</Filter>
+    </ClInclude>
+    <ClInclude Include="WorldLua.h">
       <Filter>Lua Binding</Filter>
     </ClInclude>
   </ItemGroup>

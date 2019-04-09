@@ -186,6 +186,45 @@ void GeneralTweaksGui::Draw()
 	{
 		PlayerPtr->Flags.invulnerable = false;
 	}
+	ImGui::InputInt("Salvage", &PlayerPtr->Metadata.Salvage);
+	ImGui::InputInt("Mining count", &PlayerPtr->Metadata.MiningCount);
+	ImGui::InputInt("Supply crate count", &PlayerPtr->Metadata.SupplyCrateCount);
+
+/*
+	ImGui::InputInt("Unlimited ammo", &CustomUnlimitedAmmo);
+	ImGui::InputFloat("Stealth percent", &CustomStealthPercent);
+	ImGui::InputFloat("Render alpha", &CustomRenderAlpha);
+	ImGui::Checkbox("Temp use customs", &TempUseCustoms);*/
+	/*if (ImGui::Checkbox("Unlimited ammo", &UnlimitedAmmo))
+	{
+		PlayerPtr->PFlags.UnlimitedAmmo = true;
+	}
+	else
+	{
+		PlayerPtr->PFlags.UnlimitedAmmo = false;
+	}*/
+
+	//ImGui::InputInt("District hash", (int*)&PlayerPtr->Metadata.DistrictHash);
+	//ImGui::InputInt("District time", &PlayerPtr->Metadata.DistrictTime);
+	//ImGui::InputInt("Upgrades array", &PlayerPtr->Metadata.upgrades);
+	//ImGui::InputInt("Play time", &PlayerPtr->Metadata.PlayTime);
+	//ImGui::InputInt("Last death time", &PlayerPtr->Metadata.LastDeathTime);
+/*
+	if (ImGui::CollapsingHeader("Upgrades array"))
+	{
+		for (int i = 0; i < 128; i++)
+		{
+			ImGui::Text(std::string("Index" + std::to_string(i)).c_str());
+			ImGui::PushItemWidth(300.0f);
+			ImGui::InputInt("Current level (0 to 255)", (int*)&PlayerPtr->Metadata.upgrades[i].current_level);
+			ImGui::PushItemWidth(300.0f);
+			ImGui::InputInt("Availability bitfield (0 to 65,535)", (int*)&PlayerPtr->Metadata.upgrades[i].availability_bitfield);
+			ImGui::PushItemWidth(300.0f);
+			ImGui::InputInt("Unlocked notified bitfield (0 to 65,535)", (int*)&PlayerPtr->Metadata.upgrades[i].unlocked_notified_bitfield);
+			ImGui::PushItemWidth(300.0f);
+			ImGui::InputInt("New notified bitfield (0 to 65,535)", (int*)&PlayerPtr->Metadata.upgrades[i].new_notified_bitfield);
+		}
+	}*/
 
 	//ImGui::Text("Code driven jump height:"); ImGui::SameLine();
 	//ImGui::TextColored(SecondaryTextColor, std::to_string(PlayerPtr->CodeDrivenJumpHeight).c_str());
