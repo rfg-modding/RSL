@@ -14,6 +14,7 @@ namespace Lua
 	void BindGameSaveInfo(sol::state& LuaState);
 	void BindSaveLoadInfo(sol::state& LuaState);
 	void BindWorldStateBuf(sol::state& LuaState);
+	void BindZoneHeader(sol::state& LuaState);
 	void BindWorldZone(sol::state& LuaState);
 	void BindWorld(sol::state& LuaState);
 }

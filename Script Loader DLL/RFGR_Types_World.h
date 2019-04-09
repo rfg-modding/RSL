@@ -2300,48 +2300,6 @@ struct farray__rl_terrain_occluder_ptr_40 : base_array__rl_terrain_occluder_ptr
 	rl_terrain_occluder* data[40]; //160
 };
 
-/*struct base_array__unsigned_short__Vtbl;
-struct base_array__unsigned_short
-{
-	const unsigned __int16& operator [](int index) { return elt[index]; };
-	int size() { return num; }
-	int capacity() { return array_size; }
-
-	base_array__unsigned_short__Vtbl* vfptr;
-	unsigned __int16* elt;
-	int array_size;
-	int num;
-};
-
-struct base_array__unsigned_short__Vtbl
-{
-	void *(__thiscall *__vecDelDtor)(base_array__unsigned_short* This, unsigned int);
-};
-
-struct base_array__object_ptr__Vtbl;
-struct base_array__object_ptr
-{
-	const Object& operator [](int index) 
-	{
-		if (index < num)
-		{
-			return *elt[index];
-		}		
-	};
-	int size() { return num; }
-	int capacity() { return array_size; }
-
-private:
-	base_array__object_ptr__Vtbl* vfptr;
-	Object** elt;
-	int array_size;
-	int num; 
-};
-
-struct base_array__object_ptr__Vtbl
-{
-	void *(__thiscall *__vecDelDtor)(base_array__object_ptr* This, unsigned int);
-};*/
 
 struct obj_zone : Object
 {
@@ -2391,7 +2349,7 @@ struct __declspec(align(8)) World //11108
 	float tech_level_max; //4
 	volatile unsigned int thread_id; //4
 	char object_handle_hash[64]; //dynamic_uint_hash_table<object *> object_handle_hash; //64
-	char hash_table[8198]; //hash_table<unsigned int, &hash_uint, 1024, unsigned short> destroyed_object_table; //8198
+	char destroyed_object_table[8198]; //hash_table<unsigned int, &hash_uint, 1024, unsigned short> destroyed_object_table; //8198
 	void* save_file; //cfile* save_file; //4
 	Object* flagged_objects; //4
 	Object* current_flagged_object; //4

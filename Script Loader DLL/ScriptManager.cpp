@@ -130,11 +130,19 @@ void ScriptManager::SetupLua()
 	Lua::BindHuman(LuaState);
 	Lua::BindPlayer(LuaState);
 
-	//World
+	//World & dependent types
+	Lua::BindStreamGridCell(LuaState);
+	Lua::BindStreamLayerMaskedCell(LuaState);
+	Lua::BindStreamLayer(LuaState);
+	Lua::BindDistrictFlags(LuaState);
+	Lua::BindTDistrict(LuaState);
+	Lua::BindTerritory(LuaState);
+	Lua::BindStreamGrid(LuaState);
 	Lua::BindGameSaveInfoNewData(LuaState);
 	Lua::BindGameSaveInfo(LuaState);
 	Lua::BindSaveLoadInfo(LuaState);
 	Lua::BindWorldStateBuf(LuaState);
+	Lua::BindZoneHeader(LuaState);
 	Lua::BindWorldZone(LuaState);
 	Lua::BindWorld(LuaState);
 
