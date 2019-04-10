@@ -32,7 +32,7 @@ return {
     ["GuardPoint"] = 351,
     ["StandCowerIncomingFront"] = 352,
     ["StandCowerIncomingLeft"] = 353,
-    ["StandCowerIncomingRight"] = 354,t
+    ["StandCowerIncomingRight"] = 354,
     ["CowerToStand"] = 355,
     ["StandToCower"] = 356,
     ["StandToProne"] = 357,
