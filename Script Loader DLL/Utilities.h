@@ -1,5 +1,5 @@
 #pragma once
-#include "Globals.h"
+#include "RenderInterfaceD3D11.h"
 
 namespace Utilities::Json
 {

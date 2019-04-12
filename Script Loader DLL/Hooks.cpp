@@ -291,6 +291,9 @@ HRESULT __stdcall D3D11PresentHook(IDXGISwapChain * pSwapChain, UINT SyncInterva
 		ImGuiInitialized = true;
 		UpdateD3D11Pointers = false;
 
+		//static RenderInterfaceD3D11 RenderInterface(D3D11Device, D3D11Context);
+		//dd::initialize(&RenderInterface);
+
 		Logger::Log("ImGui Initialized.", LogInfo);
 		return S_OK;
 	});
@@ -358,6 +361,16 @@ HRESULT __stdcall D3D11PresentHook(IDXGISwapChain * pSwapChain, UINT SyncInterva
 		D3D11Context->OMSetRenderTargets(1, &MainRenderTargetView, NULL);
 		ImGui::Render();
 		ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+
+		//if(GlobalPlayerPtr)
+		//{
+		//	const ddVec3 boxColor = { 0.0f, 0.8f, 0.8f };
+		//	const ddVec3 boxCenter = { GlobalPlayerPtr->Position.x, GlobalPlayerPtr->Position.y, GlobalPlayerPtr->Position.z };
+
+		//	dd::box(boxCenter, boxColor, 1.5f, 1.5f, 1.5f);
+		//	dd::cross(boxCenter, 1.0f);
+		//}
+		//dd::flush();
 	}
 
 	return D3D11PresentObject(pSwapChain, SyncInterval, Flags);

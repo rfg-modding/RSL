@@ -72,8 +72,8 @@
 #include <tchar.h>
 #include <thread>
 #include <mutex>
-
-#include <sapi.h>
+//#include <sapi.h> //Windows speech api
+#include <windef.h>
 
 //#pragma comment(lib, "lua51.lib")
 
@@ -83,6 +83,4 @@
 #define SOL_CHECK_ARGUMENTS 1
 #include <sol.hpp>
 
-#include <windef.h>
-
-//#include <loguru.hpp>
+#include "debug-draw/debug_draw.hpp"

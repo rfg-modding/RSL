@@ -413,6 +413,9 @@
     <ClInclude Include="WorldLua.h">
       <Filter>Lua Binding</Filter>
     </ClInclude>
+    <ClInclude Include="RenderInterfaceD3D11.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="RFGR Structs\rfg.h">

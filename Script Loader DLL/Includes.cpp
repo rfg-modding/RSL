@@ -1,2 +1,3 @@
 #include "Includes.h"
-//#include <Loguru.cpp>
+#define DEBUG_DRAW_IMPLEMENTATION
+#include "debug-draw/debug_draw.hpp"
