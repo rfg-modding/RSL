@@ -24,6 +24,7 @@ public:
 
 	bool ReclaimFocus = true;
 	bool Autoscroll = true;
+	bool SimpleOutput = false;
 
 private:
 	int BufferEnd = 0;

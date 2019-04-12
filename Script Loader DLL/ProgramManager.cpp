@@ -224,27 +224,30 @@ void ProgramManager::ProcessInput()
 	{
 		std::random_device RandomDevice; // obtain a random number from hardware
 		std::mt19937 Generator(RandomDevice()); // seed the generator
-		std::uniform_int_distribution<> Distribution(0, 5); // define the range
+		std::uniform_int_distribution<> Distribution(0, 6); // define the range
 		int RandError = Distribution(Generator);
 
 		switch (RandError)
 		{
 		case 0:
-			Logger::Log("Random Log Test", LogInfo);
+			Logger::Log("Random Log Test", LogNone);
 			break;
 		case 1:
-			Logger::Log("Random Log Test", LogWarning);
+			Logger::Log("Random Log Test", LogInfo);
 			break;
 		case 2:
-			Logger::Log("Random Log Test", LogError);
+			Logger::Log("Random Log Test", LogWarning);
 			break;
 		case 3:
-			Logger::Log("Random Log Test", LogFatalError);
+			Logger::Log("Random Log Test", LogError);
 			break;
 		case 4:
-			Logger::Log("Random Log Test", LogLua);
+			Logger::Log("Random Log Test", LogFatalError);
 			break;
 		case 5:
+			Logger::Log("Random Log Test", LogLua);
+			break;
+		case 6:
 			Logger::Log("Random Log Test", LogJson);
 			break;
 		default:

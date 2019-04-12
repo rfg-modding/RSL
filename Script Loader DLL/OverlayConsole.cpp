@@ -67,54 +67,61 @@ void OverlayConsole::Draw()
 	{
 		if (Logger::LogData[i].Flags & ConsoleLogType)
 		{
-			ImGui::TextUnformatted("[");
-			ImGui::SameLine();
-			if (Logger::LogData[i].Flags & LogInfo)
+			if (Logger::LogData[i].Flags & LogNone || SimpleOutput)
 			{
-				ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.945f, 0.945f, 0.945f, 1.0f));
-				ImGui::TextUnformatted("Info");
-				ImGui::PopStyleColor();
-			}
-			else if (Logger::LogData[i].Flags & LogWarning)
-			{
-				ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.756f, 0.611f, 0.000f, 1.0f));
-				ImGui::TextUnformatted("Warning");
-				ImGui::PopStyleColor();
-			}
-			else if (Logger::LogData[i].Flags & LogLua)
-			{
-				ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.231f, 0.470f, 1.000f, 1.0f));
-				ImGui::TextUnformatted("Lua");
-				ImGui::PopStyleColor();
-			}
-			else if (Logger::LogData[i].Flags & LogJson)
-			{
-				ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.000f, 0.415f, 0.000f, 1.0f));
-				ImGui::TextUnformatted("Json");
-				ImGui::PopStyleColor();
-			}
-			else if (Logger::LogData[i].Flags & LogError)
-			{
-				ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.772f, 0.058f, 0.121f, 1.0f));
-				ImGui::TextUnformatted("Error");
-				ImGui::PopStyleColor();
-			}
-			else if (Logger::LogData[i].Flags & LogFatalError)
-			{
-				ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.772f, 0.058f, 0.121f, 1.0f));
-				ImGui::TextUnformatted("Fatal Error");
-				ImGui::PopStyleColor();
+				ImGui::TextUnformatted(Logger::LogData[i].Message.c_str());
 			}
 			else
 			{
-				ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.000f, 0.000f, 0.000f, 1.0f));
-				ImGui::TextUnformatted("Undefined Message Type");
-				ImGui::PopStyleColor();
+				ImGui::TextUnformatted("[");
+				ImGui::SameLine();
+				if (Logger::LogData[i].Flags & LogInfo)
+				{
+					ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.945f, 0.945f, 0.945f, 1.0f));
+					ImGui::TextUnformatted("Info");
+					ImGui::PopStyleColor();
+				}
+				else if (Logger::LogData[i].Flags & LogWarning)
+				{
+					ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.756f, 0.611f, 0.000f, 1.0f));
+					ImGui::TextUnformatted("Warning");
+					ImGui::PopStyleColor();
+				}
+				else if (Logger::LogData[i].Flags & LogLua)
+				{
+					ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.231f, 0.470f, 1.000f, 1.0f));
+					ImGui::TextUnformatted("Lua");
+					ImGui::PopStyleColor();
+				}
+				else if (Logger::LogData[i].Flags & LogJson)
+				{
+					ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.000f, 0.415f, 0.000f, 1.0f));
+					ImGui::TextUnformatted("Json");
+					ImGui::PopStyleColor();
+				}
+				else if (Logger::LogData[i].Flags & LogError)
+				{
+					ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.772f, 0.058f, 0.121f, 1.0f));
+					ImGui::TextUnformatted("Error");
+					ImGui::PopStyleColor();
+				}
+				else if (Logger::LogData[i].Flags & LogFatalError)
+				{
+					ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.772f, 0.058f, 0.121f, 1.0f));
+					ImGui::TextUnformatted("Fatal Error");
+					ImGui::PopStyleColor();
+				}
+				else
+				{
+					ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.000f, 0.000f, 0.000f, 1.0f));
+					ImGui::TextUnformatted("Undefined Message Type");
+					ImGui::PopStyleColor();
+				}
+				ImGui::SameLine();
+				ImGui::TextUnformatted("] ");
+				ImGui::SameLine();
+				ImGui::TextUnformatted(Logger::LogData[i].Message.c_str());
 			}
-			ImGui::SameLine();
-			ImGui::TextUnformatted("] ");
-			ImGui::SameLine();
-			ImGui::TextUnformatted(Logger::LogData[i].Message.c_str());
 			BufferCount++;
 		}
 		i--;
@@ -166,15 +173,17 @@ void OverlayConsole::Draw()
 	}))
 	{
 		//This executes when the if statement returns true -> if the enter key is pressed.
-		Scripts->RunStringAsScript(InputBuffer, "lua console command");
 		CommandHistory.push_back(InputBuffer);
 		Logger::Log(std::string(InputBuffer), LogLua);
 		HistoryPosition = CommandHistory.size(); //Since pressing the up arrow key will subtract by one, the subtraction by one is not done here to insure the latest history entry isn't skipped.
 		InputBuffer.clear();
 		ReclaimFocus = true;
+		Scripts->RunStringAsScript(InputBuffer, "lua console command");
 	}
 	ImGui::SameLine();
 	ImGui::Checkbox("Auto scroll", &Autoscroll);
+	ImGui::SameLine();
+	ImGui::Checkbox("Simple output", &SimpleOutput);
 
 	// Auto-focus on window apparition
 	ImGui::SetItemDefaultFocus();
