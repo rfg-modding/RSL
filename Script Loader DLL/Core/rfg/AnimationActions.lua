@@ -662,5 +662,5 @@ return {
     ["FacialFire"] = 981,
     ["FacialBlindFire"] = 982,
     ["DontUse"] = 983,
-    !---["NumAnimsActions"] = 661,
+    --["NumAnimsActions"] = 661,
 }
