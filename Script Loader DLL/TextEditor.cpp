@@ -40,7 +40,6 @@ TextEditor::TextEditor(bool* _OpenState, std::string _Title)
 	, mTextChanged(false)
 	, mTextStart(20.0f)
 	, mLeftMargin(10)
-	, mCursorPositionChanged(false)
 	, mColorRangeMin(0)
 	, mColorRangeMax(0)
 	, mSelectionMode(SelectionMode::Normal)
@@ -278,7 +277,7 @@ TextEditor::Coordinates TextEditor::ScreenPosToCoordinates(const ImVec2& aPositi
 		{
 			cumulatedStringWidth[1] = cumulatedStringWidth[0];
 			cumulatedString += line[columnCoord].mChar;
-			cumulatedStringWidth[0] = ImGui::CalcTextSize(cumulatedString.c_str()).x;
+			cumulatedStringWidth[0] = ImGui::GetFont()->CalcTextSizeA(ImGui::GetFontSize(), FLT_MAX, -1.0f, cumulatedString.c_str(), nullptr, nullptr).x;
 			columnWidth = (cumulatedStringWidth[0] - cumulatedStringWidth[1]);
 			columnCoord++;
 		}
@@ -532,19 +531,18 @@ void TextEditor::HandleKeyboardInputs()
 			EnterCharacter('\t', shift);
 		else if (!IsReadOnly() && !ctrl && !alt)
 		{
-			/*for (int i = 0; i < io.InputQueueCharacters.Size; i++)
-			{
-				auto c = (unsigned char)io.InputQueueCharacters[i];
-				if (c != 0)
-				{
-					if (isprint(c) || isspace(c))
-					{
-						EnterCharacter((char)c, shift);
-					}
-				}
-			}
-			io.InputQueueCharacters.resize(0);*/
-
+			//for (int i = 0; i < io.InputQueueCharacters.Size; i++)
+			//{
+			//	auto c = (unsigned char)io.InputQueueCharacters[i];
+			//	if (c != 0)
+			//	{
+			//		if (isprint(c) || isspace(c))
+			//		{
+			//			EnterCharacter((char)c, shift);
+			//		}
+			//	}
+			//}
+			//io.InputQueueCharacters.resize(0);
 			for (int i = 0; i < IM_ARRAYSIZE(io.InputCharacters); i++)
 			{
 				auto c = (unsigned char)io.InputCharacters[i];
@@ -556,7 +554,6 @@ void TextEditor::HandleKeyboardInputs()
 					}
 				}
 			}
-			//io.InputQueueCharacters.resize(0);
 		}
 	}
 }
@@ -640,7 +637,7 @@ void TextEditor::HandleMouseInputs()
 void TextEditor::Render()
 {
 	/* Compute mCharAdvance regarding to scaled font size (Ctrl + mouse wheel)*/
-	const float fontSize = ImGui::CalcTextSize("#").x;
+	const float fontSize = ImGui::GetFont()->CalcTextSizeA(ImGui::GetFontSize(), FLT_MAX, -1.0f, "#", nullptr, nullptr).x;
 	mCharAdvance = ImVec2(fontSize, ImGui::GetTextLineHeightWithSpacing() * mLineSpacing);
 
 	/* Update palette with the current alpha from style */
@@ -675,12 +672,12 @@ void TextEditor::Render()
 	// Deduce mTextStart by evaluating mLines size (global lineMax) plus two spaces as text width
 	char buf[16];
 	snprintf(buf, 16, " %d ", globalLineMax);
-	mTextStart = ImGui::CalcTextSize(buf).x + mLeftMargin;
+	mTextStart = ImGui::GetFont()->CalcTextSizeA(ImGui::GetFontSize(), FLT_MAX, -1.0f, buf, nullptr, nullptr).x + mLeftMargin;
 
 	if (!mLines.empty())
 	{
 		auto fontScale = ImGui::GetFontSize() / ImGui::GetFont()->FontSize;
-		float spaceSize = ImGui::CalcTextSize(" ").x + 1.0f * fontScale;
+		float spaceSize = ImGui::GetFont()->CalcTextSizeA(ImGui::GetFontSize(), FLT_MAX, -1.0f, " ", nullptr, nullptr).x;
 
 		while (lineNo <= lineMax)
 		{
@@ -745,7 +742,7 @@ void TextEditor::Render()
 
 			// Draw line number (right aligned)
 			snprintf(buf, 16, "%d  ", lineNo + 1);
-			auto lineNoWidth = ImGui::CalcTextSize(buf).x;
+			auto lineNoWidth = ImGui::GetFont()->CalcTextSizeA(ImGui::GetFontSize(), FLT_MAX, -1.0f, buf, nullptr, nullptr).x;
 			drawList->AddText(ImVec2(lineStartScreenPos.x + mTextStart - lineNoWidth, lineStartScreenPos.y), mPalette[(int)PaletteIndex::LineNumber], buf);
 
 			// Highlight the current line (where the cursor is)
@@ -791,8 +788,8 @@ void TextEditor::Render()
 				{
 					const ImVec2 newOffset(textScreenPos.x + bufferOffset.x, textScreenPos.y + bufferOffset.y);
 					drawList->AddText(newOffset, prevColor, buffer.c_str());
-					auto textSize = ImGui::CalcTextSize(buffer.c_str());
-					bufferOffset.x += textSize.x + 1.0f * fontScale;
+					auto textSize = ImGui::GetFont()->CalcTextSizeA(ImGui::GetFontSize(), FLT_MAX, -1.0f, buffer.c_str(), nullptr, nullptr);
+					bufferOffset.x += textSize.x;
 					buffer.clear();
 				}
 				prevColor = color;
@@ -842,7 +839,7 @@ void TextEditor::Render()
 	}
 
 
-	ImGui::Dummy(ImVec2((longest + 2) - 0.3f, mLines.size() * mCharAdvance.y));
+	ImGui::Dummy(ImVec2((longest + 2), mLines.size() * mCharAdvance.y));
 
 	if (mScrollToCursor)
 	{
@@ -960,7 +957,7 @@ void TextEditor::Render(const char* aTitle, const ImVec2& aSize, bool aBorder)
 	if (ShowNewScriptPopup)
 	{
 		bool ScriptEmpty = true;
-		for (auto i = mLines.begin(); i != mLines.begin(); i++)
+		for (auto i = mLines.begin(); i != mLines.end(); i++)
 		{
 			if (i->size() > 0)
 			{
@@ -1453,6 +1450,9 @@ void TextEditor::EnterCharacter(Char aChar, bool aShift)
 				end.mColumn = (int)mLines[end.mLine].size();
 			}
 
+			if (end.mColumn >= (int)mLines[end.mLine].size())
+				end.mColumn = (int)mLines[end.mLine].size() - 1;
+
 			u.mRemovedStart = start;
 			u.mRemovedEnd = end;
 			u.mRemoved = GetText(start, end);
@@ -1496,6 +1496,9 @@ void TextEditor::EnterCharacter(Char aChar, bool aShift)
 
 			if (modified)
 			{
+				assert(mLines.size() > start.mLine && mLines[start.mLine].size() > start.mColumn);
+				assert(mLines.size() > end.mLine && mLines[end.mLine].size() > end.mColumn);
+
 				u.mAddedStart = start;
 				u.mAddedEnd = end;
 				u.mAdded = GetText(start, end);
@@ -1537,7 +1540,7 @@ void TextEditor::EnterCharacter(Char aChar, bool aShift)
 		const size_t whitespaceSize = newLine.size();
 		newLine.insert(newLine.end(), line.begin() + coord.mColumn, line.end());
 		line.erase(line.begin() + coord.mColumn, line.begin() + line.size());
-		SetCursorPosition(Coordinates(coord.mLine, (int)whitespaceSize)); //Note: Was previously coord.mLine + 1, changed to fix bug with improper cursor position.
+		SetCursorPosition(Coordinates(coord.mLine + 1, (int)whitespaceSize));
 	}
 	else
 	{
@@ -2466,7 +2469,6 @@ void TextEditor::ColorizeInternal()
 			}
 		}
 		mCheckComments = false;
-		return;
 	}
 
 	if (mColorRangeMin < mColorRangeMax)
@@ -2490,7 +2492,7 @@ float TextEditor::TextDistanceToLineStart(const Coordinates& aFrom) const
 	auto& line = mLines[aFrom.mLine];
 	float distance = 0.0f;
 	auto fontScale = ImGui::GetFontSize() / ImGui::GetFont()->FontSize;
-	float spaceSize = ImGui::CalcTextSize(" ").x + 1.0f * fontScale;
+	float spaceSize = ImGui::GetFont()->CalcTextSizeA(ImGui::GetFontSize(), FLT_MAX, -1.0f, " ", nullptr, nullptr).x;
 	for (size_t it = 0u; it < line.size() && it < (unsigned)aFrom.mColumn; ++it)
 	{
 		if (line[it].mChar == '\t')
@@ -2502,7 +2504,7 @@ float TextEditor::TextDistanceToLineStart(const Coordinates& aFrom) const
 			char tempCString[2];
 			tempCString[0] = line[it].mChar;
 			tempCString[1] = '\0';
-			distance += ImGui::CalcTextSize(tempCString).x + 1.0f * fontScale;
+			distance += ImGui::GetFont()->CalcTextSizeA(ImGui::GetFontSize(), FLT_MAX, -1.0f, tempCString, nullptr, nullptr).x;
 		}
 	}
 
