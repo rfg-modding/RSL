@@ -22,6 +22,7 @@ public:
 
 	void Initialize();
 	void SetScriptManager(ScriptManager* _Scripts);
+	ScriptManager* GetScriptManager();
 	//bool LoadTeleportLocations();
 	//bool LoadGUIConfig();
 	void Draw();

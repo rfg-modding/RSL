@@ -1,5 +1,6 @@
 #include "Hooks.h"
 #include "CameraWrapper.h"
+#include "ScriptManager.h"
 
 D3D11Present D3D11PresentObject;
 
@@ -170,16 +171,15 @@ HRESULT D3D11_DEVICE_CONTEXT_FROM_SWAPCHAIN(IDXGISwapChain * pSwapChain, ID3D11D
 	return Result;
 }
 
-HRESULT __stdcall D3D11PresentHook(IDXGISwapChain * pSwapChain, UINT SyncInterval, UINT Flags)
+HRESULT __stdcall D3D11PresentHook(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT Flags)
 {
 	std::call_once(HookD3D11PresentInitialCall, [&]()
 	{
 #if !PublicMode
 		Logger::ConsoleLog("First time in D3D11Present() hook.", LogInfo, false, true, true);
 #endif
-		HRESULT Result;
 
-		Result = D3D11_DEVICE_CONTEXT_FROM_SWAPCHAIN(pSwapChain, &D3D11Device, &D3D11Context);
+		 HRESULT Result = D3D11_DEVICE_CONTEXT_FROM_SWAPCHAIN(pSwapChain, &D3D11Device, &D3D11Context);
 		if (Result != S_OK)
 		{
 			Logger::Log(std::string("D3D11DeviceContextFromSwapchain() failed, return value: " + std::to_string(Result)), LogFatalError);
@@ -409,6 +409,11 @@ void __fastcall PlayerDoFrameHook(Player* PlayerPtr)
 
 			//Overlay.PlayerPtr = PlayerPtr;
 			Gui.SetPlayerPtr(PlayerPtr);
+			ScriptManager* Scripts = Gui.GetScriptManager();
+			if(Scripts)
+			{
+				Scripts->UpdateRfgPointers();
+			}
 
 #if !PublicMode
 			std::cout << "PlayerPtr: " << std::hex << std::uppercase << PlayerPtr << "\n";
@@ -422,6 +427,11 @@ void __fastcall PlayerDoFrameHook(Player* PlayerPtr)
 		GlobalPlayerPtr = PlayerPtr;
 		//Overlay.PlayerPtr = PlayerPtr;
 		Gui.SetPlayerPtr(PlayerPtr);
+		ScriptManager* Scripts = Gui.GetScriptManager();
+		if (Scripts)
+		{
+			Scripts->UpdateRfgPointers();
+		}
 
 #if !PublicMode
 		std::cout << "PlayerPtr: " << std::hex << std::uppercase << PlayerPtr << "\n";
@@ -741,42 +751,23 @@ void __fastcall world_do_frame_hook(World* This, void* edx, bool HardLoad) //.te
 	{
 		GlobalRfgWorldPtr = This;
 		Logger::Log("RFG::World hooked!", LogInfo);
-		/*std::cout << "\nPending Save Info:";
-		std::cout << "Number of missions completed:" << GlobalRfgWorldPtr->pending_game_save_slot->num_missions_completed << "\n";
-		std::cout << "Number of activites completed:" << GlobalRfgWorldPtr->pending_game_save_slot->num_activities_completed << "\n";
-		std::cout << "Districts liberated:" << GlobalRfgWorldPtr->pending_game_save_slot->districts_liberated << "\n";
-		std::cout << "Territory index:" << GlobalRfgWorldPtr->pending_game_save_slot->territory_index << "\n";
-		std::cout << "District index:" << GlobalRfgWorldPtr->pending_game_save_slot->district_index << "\n";
-		std::cout << "Day:" << GlobalRfgWorldPtr->pending_game_save_slot->day << "\n";
-		std::cout << "Month:" << GlobalRfgWorldPtr->pending_game_save_slot->month << "\n";
-		std::cout << "Year:" << GlobalRfgWorldPtr->pending_game_save_slot->year << "\n";
-		std::cout << "Hours:" << GlobalRfgWorldPtr->pending_game_save_slot->hours << "\n";
-		std::cout << "Minutes:" << GlobalRfgWorldPtr->pending_game_save_slot->minutes << "\n";
-		std::cout << "Seconds:" << GlobalRfgWorldPtr->pending_game_save_slot->seconds << "\n";
-		std::cout << "Auto save:" << GlobalRfgWorldPtr->pending_game_save_slot->auto_save << "\n";
-		std::cout << "Used slot:" << GlobalRfgWorldPtr->pending_game_save_slot->used_slot << "\n";
-		std::cout << "DLC ID:" << GlobalRfgWorldPtr->pending_game_save_slot->dlc_id << "\n";
-		std::cout << "Save slot index:" << GlobalRfgWorldPtr->pending_game_save_slot->save_slot_index << "\n";
-		std::cout << "Hammers unlocked:" << GlobalRfgWorldPtr->pending_game_save_slot->hammers_unlocked << "\n";
-		std::cout << "Golden hammer desired:" << GlobalRfgWorldPtr->pending_game_save_slot->golden_hammer_desired << "\n";
-		std::cout << "hammers_unlocked_large.raw_data[0]:" << GlobalRfgWorldPtr->pending_game_save_slot->new_data.hammers_unlocked_large.raw_data[0] << "\n";
-		std::cout << "hammers_unlocked_large.raw_data[1]:" << GlobalRfgWorldPtr->pending_game_save_slot->new_data.hammers_unlocked_large.raw_data[1] << "\n";
-		std::cout << "backpacks_unlocked.raw_data[0]:" << GlobalRfgWorldPtr->pending_game_save_slot->new_data.backpacks_unlocked.raw_data[0] << "\n";
-		std::cout << "backpacks_unlocked.raw_data[1]:" << GlobalRfgWorldPtr->pending_game_save_slot->new_data.backpacks_unlocked.raw_data[1] << "\n";
-		std::cout << "backpacks_unlocked.raw_data[2]:" << GlobalRfgWorldPtr->pending_game_save_slot->new_data.backpacks_unlocked.raw_data[2] << "\n";
-		std::cout << "backpacks_unlocked.raw_data[3]:" << GlobalRfgWorldPtr->pending_game_save_slot->new_data.backpacks_unlocked.raw_data[3] << "\n";
-		std::cout << "backpacks_unlocked.raw_data[4]:" << GlobalRfgWorldPtr->pending_game_save_slot->new_data.backpacks_unlocked.raw_data[4] << "\n";
-		std::cout << "backpacks_unlocked.raw_data[5]:" << GlobalRfgWorldPtr->pending_game_save_slot->new_data.backpacks_unlocked.raw_data[5] << "\n";
-		std::cout << "backpacks_unlocked.raw_data[6]:" << GlobalRfgWorldPtr->pending_game_save_slot->new_data.backpacks_unlocked.raw_data[6] << "\n";
-		std::cout << "backpacks_unlocked.raw_data[7]:" << GlobalRfgWorldPtr->pending_game_save_slot->new_data.backpacks_unlocked.raw_data[7] << "\n";
-		std::cout << "Jetpack unlock level:" << GlobalRfgWorldPtr->pending_game_save_slot->new_data.jetpack_unlock_level << "\n";
-		std::cout << "\n";*/
-
+		
 		GlobalTODLightPtr = game_render_get_TOD_light();
+		ScriptManager* Scripts = Gui.GetScriptManager();
+		if (Scripts)
+		{
+			Scripts->UpdateRfgPointers();
+		}
 	});
 	if (GlobalRfgWorldPtr != This)
 	{
-		//std::cout << "RFGWorldPtr Changed!\n";
+		Logger::Log("GlobalRfgWorldPtr changed!", LogWarning);
+		GlobalRfgWorldPtr = This;
+		ScriptManager* Scripts = Gui.GetScriptManager();
+		if (Scripts)
+		{
+			Scripts->UpdateRfgPointers();
+		}
 	}
 	if (!GlobalTODLightPtr)
 	{
@@ -851,6 +842,11 @@ void __fastcall hkpWorld_stepDeltaTime_hook(hkpWorld* This, void* edx, float Phy
 	std::call_once(HookhkpWorld_stepDeltaTime, [&]()
 	{
 		GlobalhkpWorldPtr = This;
+		ScriptManager* Scripts = Gui.GetScriptManager();
+		if (Scripts)
+		{
+			Scripts->UpdateRfgPointers();
+		}
 		if (Gui.PhysicsSettings)
 		{
 			Gui.PhysicsSettings->CurrentGravity = hkpWorldGetGravity(GlobalhkpWorldPtr, NULL);
@@ -870,6 +866,11 @@ void __fastcall hkpWorld_stepDeltaTime_hook(hkpWorld* This, void* edx, float Phy
 	{
 		Logger::Log("GlobalhkpWorldPtr address changed!", LogWarning);
 		GlobalhkpWorldPtr = This;
+		ScriptManager* Scripts = Gui.GetScriptManager();
+		if (Scripts)
+		{
+			Scripts->UpdateRfgPointers();
+		}
 	}
 
 	if (Gui.TweaksMenu)

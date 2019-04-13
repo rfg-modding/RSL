@@ -111,6 +111,7 @@ void ProgramManager::Initialize()
 	//Gui.Initialize() is gaurunteed to be called before here because it's called during ImGui initialization.
 	Gui.SetScriptManager(&Scripts);
 	Gui.FreeCamSettings->Camera = &Camera;
+	Scripts.UpdateRfgPointers();
 
 	Beep(600, 100);
 	Beep(700, 100);

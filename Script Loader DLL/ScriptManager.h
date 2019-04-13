@@ -23,11 +23,12 @@ public:
 
 	void Initialize();
 
+	void UpdateRfgPointers();
 	void ScanScriptsFolder();
 	void ScanScriptsSubFolders();
 
-	bool RunScript(std::string FullPath);
-	bool RunScript(size_t Index);
+	bool RunScript(const std::string& FullPath);
+	bool RunScript(const size_t Index);
 
 	bool RunStringAsScript(std::string Buffer, std::string Name);
 

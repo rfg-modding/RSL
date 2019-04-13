@@ -77,6 +77,10 @@ void ScriptManager::SetupLua()
 	RfgTable["GetWorld"] = Lua::GetWorld;
 	RfgTable["GetPhysicsWorld"] = Lua::GetPhysicsWorld;
 
+	RfgTable["Player"] = std::ref(*GlobalPlayerPtr);
+	RfgTable["World"] = std::ref(*GlobalRfgWorldPtr);
+	RfgTable["PhysicsWorld"] = std::ref(*GlobalhkpWorldPtr);
+
 	//LogType enums defined in lua
 	auto LoggerTable = LuaState["Logger"].get_or_create<sol::table>(); //Todo: Add to RSL table.
 	LoggerTable["OpenLogFile"] = Logger::OpenLogFile;
@@ -145,7 +149,18 @@ void ScriptManager::SetupLua()
 	Lua::BindZoneHeader(LuaState);
 	Lua::BindWorldZone(LuaState);
 	Lua::BindWorld(LuaState);
+}
 
+void ScriptManager::UpdateRfgPointers()
+{
+	auto RfgTable = LuaState["rfg"].get_or_create<sol::table>();
+
+	RfgTable["Player"] = GlobalPlayerPtr;
+	RfgTable["World"] = GlobalRfgWorldPtr;
+	RfgTable["PhysicsWorld"] = GlobalhkpWorldPtr;
+	//RfgTable["Player"] = std::ref(*GlobalPlayerPtr);
+	//RfgTable["World"] = std::ref(*GlobalRfgWorldPtr);
+	//RfgTable["PhysicsWorld"] = std::ref(*GlobalhkpWorldPtr);
 }
 
 void ScriptManager::ScanScriptsFolder()
@@ -195,7 +210,7 @@ void ScriptManager::ScanScriptsSubFolders()
 
 }
 
-bool ScriptManager::RunScript(std::string FullPath)
+bool ScriptManager::RunScript(const std::string& FullPath)
 {
 	if (IsValidScriptExtensionFromPath(FullPath))
 	{
@@ -226,7 +241,7 @@ bool ScriptManager::RunScript(std::string FullPath)
 	}
 }
 
-bool ScriptManager::RunScript(size_t Index)
+bool ScriptManager::RunScript(const size_t Index)
 {
 	std::string FullPath = Scripts[Index].FullPath;
 	try

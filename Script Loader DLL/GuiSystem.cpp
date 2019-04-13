@@ -57,6 +57,11 @@ void GuiSystem::SetScriptManager(ScriptManager* _Scripts)
 	}
 }
 
+ScriptManager* GuiSystem::GetScriptManager()
+{
+	return Scripts;
+}
+
 void GuiSystem::Draw()
 {
 	try
