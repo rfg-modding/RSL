@@ -114,11 +114,11 @@ void Lua::BindHuman(sol::state& LuaState)
 	Utype.set("RagdollOnImpactMinVelocity", &Human::RagdollOnImpactMinVelocity);
 	Utype.set("RagdollDamaged", &Human::RagdollDamaged);
 	Utype.set("RootBoneOffset", &Human::RootBoneOffset);
-	//Utype.set("NanoMaterialFX", &Human::NanoMaterialFX); //16 element c-array or uints
+	Utype.set("NanoMaterialFX", sol::property([](Human& Self) { return std::ref(Self.NanoMaterialFX); })); //16 element c-array or uints
 	Utype.set("MaterialFXHandleForHeadSkin", &Human::MaterialFXHandleForHeadSkin);
-	//Utype.set("LastValidPositionBeforeRagdoll", &Human::LastValidPositionBeforeRagdoll); //16 element c-array of vectors
+	///Utype.set("LastValidPositionBeforeRagdoll", sol::property([](Human& Self) { return std::ref(Self.LastValidPositionBeforeRagdoll); })); //vector[3]
 	Utype.set("RagdollNumCollisionWithWalker", &Human::RagdollNumCollisionsWithWalker);
-	//Utype.set("Joints", &Human::IK_Joints); //4 size array of IK_Joint
+	Utype.set("IK_Joints", sol::property([](Human& Self) { return std::ref(Self.IK_Joints); })); //4 size array of IK_Joint
 	//Utype.set("SpinebendData", &Human::SpinebendData);
 	//Utype.set("HeadMorphs", &Human::HeadMorphs);
 	Utype.set("InitialMaxHitPoints", &Human::InitialMaxHitPoints);
@@ -201,11 +201,11 @@ void Lua::BindHuman(sol::state& LuaState)
 	Utype.set("UpdateTimer", &Human::UpdateTimer);
 	Utype.set("ImportanceLevel", &Human::ImportanceLevel);
 	Utype.set("ScriptedActionNodeHandle", &Human::ScriptedActionNodeHandle);
-	//Utype.set("NanoCBInfo", &Human::NanoCBInfo);
+	Utype.set("NanoCBInfo", sol::property([](Human& Self) { return std::ref(Self.NanoCBInfo); })); //size 16 array of nano_callback_info[16]
 	Utype.set("NanoIndex", &Human::NanoIndex);
 	//Utype.set("ActionNodeData", &Human::ActionNodeData);
-	//Utype.set("LightEffects", &Human::LightEffects);
-	//Utype.set("LightTags", &Human::LightTags);
+	Utype.set("LightEffects", sol::property([](Human& Self) { return std::ref(Self.LightEffects); })); //uint[2]
+	Utype.set("LightTags", sol::property([](Human& Self) { return std::ref(Self.LightTags); })); //int[2]
 	Utype.set("AvoidanceCheckTimer", &Human::AvoidanceCheckTimer);
 	Utype.set("AvoidanceRequestTimer", &Human::AvoidanceRequestTimer);
 	Utype.set("AvoidanceRequestHuman", &Human::AvoidanceRequestHuman);
