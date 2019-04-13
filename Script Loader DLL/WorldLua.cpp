@@ -7,7 +7,7 @@ void Lua::BindStreamGridCell(sol::state& LuaState)
 	auto Utype = RfgTable.create_simple_usertype<stream_grid_cell>();
 	Utype.set("new", sol::no_constructor);
 	Utype.set("StreamMask", &stream_grid_cell::stream_mask);
-	//Utype.set("SRID", &stream_grid_cell::srid); //uint[4]
+	Utype.set("SRID", sol::property([](stream_grid_cell& Self) { return std::ref(Self.srid); })); //uint[4]
 	Utype.set("GridX", &stream_grid_cell::grid_x);
 	Utype.set("GridZ", &stream_grid_cell::grid_z);
 	Utype.set("LayerIndex", &stream_grid_cell::layer_index);
@@ -20,7 +20,7 @@ void Lua::BindStreamLayerMaskedCell(sol::state& LuaState)
 	auto Utype = RfgTable.create_simple_usertype<stream_layer_masked_cell>();
 	Utype.set("new", sol::no_constructor);
 	Utype.set("GridCell", &stream_layer_masked_cell::gc);
-	//Utype.set("NRegion", &stream_layer_masked_cell::n_region); //HavokBPO*[4]
+	Utype.set("NRegion", sol::property([](stream_layer_masked_cell& Self) { return std::ref(Self.n_region); })); //HavokBPO*[4]
 	LuaState.set_usertype("StreamLayerMaskedCell", Utype);
 }
 
@@ -82,7 +82,7 @@ void Lua::BindTDistrict(sol::state& LuaState)
 	Utype.set("DiscLayer", &t_district::disc_layer);
 	Utype.set("Index", &t_district::index);
 	Utype.set("Thumbnail", &t_district::thumbnail); //const char*
-	//Utype.set("LoadScreenImages", &t_district::load_screen_images); //const char*[5]
+	Utype.set("LoadScreenImages", sol::property([](t_district& Self) { return std::ref(Self.load_screen_images); }));
 	Utype.set("NumLoadScreenImages", &t_district::num_load_screen_images);
 	//Utype.set("GridList", &t_district::list); //rfg::farray<grid_info, 21>
 	Utype.set("Next", &t_district::next); //tdistrict*
@@ -129,8 +129,8 @@ void Lua::BindGameSaveInfoNewData(sol::state& LuaState)
 	auto RfgTable = LuaState["rfg"].get_or_create<sol::table>();
 	auto Utype = RfgTable.create_simple_usertype<game_save_info_new_data>();
 	Utype.set("new", sol::no_constructor);
-	//Utype.set("HammersUnlockedLarge", &game_save_info_new_data::hammers_unlocked_large); //char[8]
-	//Utype.set("BackpacksUnlocked", &game_save_info_new_data::backpacks_unlocked); //char[2]
+	Utype.set("HammersUnlockedLarge", sol::property([](game_save_info_new_data& Self) { return std::ref(Self.hammers_unlocked_large); })); //char[8]
+	Utype.set("BackpacksUnlocked", sol::property([](game_save_info_new_data& Self) { return std::ref(Self.backpacks_unlocked); })); //char[2]
 	Utype.set("JetpackUnlockLevel", &game_save_info_new_data::jetpack_unlock_level); //char
 	LuaState.set_usertype("GameSaveInfoNewData", Utype);
 }
@@ -244,8 +244,8 @@ void Lua::BindWorld(sol::state& LuaState)
 	Utype.set("MissionObjectCreationMode", &World::mission_object_creation_mode);
 	Utype.set("LevelAmbient", &World::level_ambient);
 	Utype.set("LevelBackAmbient", &World::level_back_ambient);
-	//Utype.set("LastLoadedTerritory", &World::last_loaded_territory); //Size 64 array of chars
-	Utype.set("MaxWorldObjects", &World::max_world_objects); //Size 64 array of chars
+	Utype.set("LastLoadedTerritory", sol::property([](World& Self) { return std::ref(Self.last_loaded_territory); })); //Size 64 array of chars
+	Utype.set("MaxWorldObjects", &World::max_world_objects);
 	///Utype.set("AllObjects", &World::all_objects); //rfg::base_array<Object*>
 	///Utype.set("TypeObjects", &World::type_objects); //rfg::base_array<ushort> array size 53
 	///Utype.set("SubTypeObjects", &World::subtype_objects); //rfg::base_array<ushort> array size 11
@@ -268,7 +268,7 @@ void Lua::BindWorld(sol::state& LuaState)
 	Utype.set("SaveLoadFlags", &World::sl_flags);
 	Utype.set("PendingGameSaveSlot", &World::pending_game_save_slot);
 	Utype.set("DlcBundleID", &World::dlc_bundle_id);
-	//Utype.set("PendingFilename", &World::pending_filename); //Size 64 char array
+	Utype.set("PendingFilename", sol::property([](World& Self) { return std::ref(Self.pending_filename); })); //Size 64 char array
 	Utype.set("PendingGameLoadWarpToPos", &World::pending_game_load_warp_to_pos);
 	Utype.set("PendingGameLoadWarpToOrient", &World::pending_game_load_warp_to_orient);
 	//Utype.set("LoadAborted", &World::load_aborted); //Volatile - unbound for now
@@ -278,7 +278,7 @@ void Lua::BindWorld(sol::state& LuaState)
 	//Utype.set("AllZones", &World::all_zones); //Double pointer
 	//Utype.set("GlobalZoneGrid", &World::global_zone_grid);
 	Utype.set("IsTerritory", &World::is_territory);
-	//Utype.set("TerritoryName", &World::territory_name); //Size 128 char array
+	Utype.set("TerritoryName", sol::property([](World& Self) { return std::ref(Self.territory_name); })); //Size 128 char array
 	Utype.set("NumStreamingObjects", &World::num_streaming_objects);
 	Utype.set("StubSerializationInProgress", &World::stub_serialization_in_progress);
 	LuaState.set_usertype("World", Utype);

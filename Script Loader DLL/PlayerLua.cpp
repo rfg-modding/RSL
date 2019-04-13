@@ -23,7 +23,7 @@ void Lua::BindPlayerMetadata(sol::state& LuaState)
 	Utype.set("SupplyCrateCount", &PlayerMetadata::SupplyCrateCount);
 	Utype.set("DistrictHash", &PlayerMetadata::DistrictHash);
 	Utype.set("DistrictTime", &PlayerMetadata::DistrictTime);
-	//Utype.set("Upgrades", &PlayerMetadata::upgrades); //Size 128 array of UpgradeItem
+	Utype.set("Upgrades", sol::property([](PlayerMetadata& Self) { return std::ref(Self.upgrades); })); //Size 128 array of UpgradeItem
 	Utype.set("PlayTime", &PlayerMetadata::PlayTime);
 	Utype.set("LastDeathTime", &PlayerMetadata::LastDeathTime);
 	LuaState.set_usertype("PlayerMetadata", Utype);
@@ -178,11 +178,11 @@ void Lua::BindPlayer(sol::state& LuaState)
 	//Utype.set("CustomVehicleFreeList", &Player::custom_vehicle_free_list);
 	//Utype.set("NumCustomVehicles", &Player::);
 	Utype.set("DeadTimestamp", &Player::dead_timestamp);
-	//Utype.set("MatFxHandle", &Player::mat_fx_handle); //Size 16 array of uint
+	Utype.set("MatFxHandle", sol::property([](Player& Self) { return std::ref(Self.mat_fx_handle); })); //Size 16 array of uint
 	Utype.set("CurrentMatFx", &Player::current_mat_fx);
 	Utype.set("ScriptMode", &Player::script_mode);
 	Utype.set("ScriptData", &Player::script_data);
-	//Utype.set("Backpack", &Player::Backpack); Type of MultiObjectBackpack
+	///Utype.set("Backpack", &Player::Backpack); Type of MultiObjectBackpack
 	/*Utype.set("MpRespawnBackpackType", &Player::mp_respawn_backpack_type);
 	Utype.set("MpCurrentCommand", &Player::mp_current_command);
 	Utype.set("MpCameraPos", &Player::);
@@ -247,6 +247,7 @@ void Lua::BindPlayer(sol::state& LuaState)
 	//Utype.set("BloodDecals", &Player::);
 	Utype.set("BloodDecalsFadeIndex", &Player::blood_decals_fade_index);
 	//Utype.set("ActivityInventorySaveFile", &Player::activity_inventory_save_file);
+	Utype.set("ActivityInventoryBuffer", sol::property([](Player& Self) { return std::ref(Self.activity_inventory_buffer); }));
 	//Utype.set("ActivityInventoryBuffer", &Player::activity_inventory_buffer); //Size 1024 array of char
 	Utype.set("ZoomCancelTimestamp", &Player::zoom_cancel_Timestamp);
 	Utype.set("NonInventoryItemHandle", &Player::non_inventory_item_handle);
@@ -263,7 +264,7 @@ void Lua::BindPlayer(sol::state& LuaState)
 	Utype.set("FadeBackpackTime", &Player::fade_backpack_time);
 	Utype.set("CommTowerCheckPeriod", &Player::comm_tower_check_period);
 	//Utype.set("NextRecord", &Player::NextRecord);
-	//Utype.set("PlayerPositionalRecords", &Player::PositionalRecords); //Size 8 array of PlayerPositionalRecord
+	Utype.set("PositionalRecords", sol::property([](Player& Self) { return std::ref(Self.PositionalRecords); })); //Size 8 array of PlayerPositionalRecord
 	Utype.set("TrackingPeriod", &Player::TrackingPeriod);
 	LuaState.set_usertype("Player", Utype);
 }

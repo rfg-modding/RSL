@@ -56,7 +56,7 @@ void Lua::BindCharDefHead(sol::state& LuaState)
 	Utype.set("HeadMorph", &char_def_head::head_morph);
 	Utype.set("BaseHeadMorph", &char_def_head::base_head_morph);
 	Utype.set("NumSkinShaderParams", &char_def_head::num_skin_shader_params);
-	//Utype.set("SkinShaderParams", &char_def_head::skin_shader_params); //3x5 float array
+	///Utype.set("SkinShaderParams", sol::property([](char_def_head& Self) { return std::ref(Self.skin_shader_params); })); //3x5 float array
 	LuaState.set_usertype("CharDefHead", Utype);
 }
 
@@ -65,7 +65,7 @@ void Lua::BindFootGroundEffects(sol::state& LuaState)
 	auto RfgTable = LuaState["rfg"].get_or_create<sol::table>();
 	auto Utype = RfgTable.create_simple_usertype<foot_ground_effects>();
 	Utype.set("new", sol::no_constructor);
-	//Utype.set("Name", &foot_ground_effects::name); char array, size 20
+	Utype.set("Name", sol::property([](foot_ground_effects& Self) { return std::ref(Self.name); })); //char[20]
 	Utype.set("WalkFoley", &foot_ground_effects::walk_foley);
 	Utype.set("RunFoley", &foot_ground_effects::run_foley);
 	Utype.set("JumpFoley", &foot_ground_effects::jump_foley);
@@ -101,9 +101,9 @@ void Lua::BindHumanInfo(sol::state& LuaState)
 	Utype.set("AimErrorPercent", &HumanInfo::aim_error_pct);
 	Utype.set("FootEffects", &HumanInfo::foot_effects);
 	Utype.set("NumHeads", &HumanInfo::num_heads);
-	//Utype.set("Heads", &HumanInfo::heads); //Size 4 array of char_def_head*
+	Utype.set("Name", sol::property([](HumanInfo& Self) { return std::ref(Self.heads); })); //heads[4]
 	//Utype.set("VoicePersonas", &HumanInfo::voice_personas);
-	//Utype.set("DefaultInventory", &HumanInfo::default_inventory);
+	///Utype.set("DefaultInventory", &HumanInfo::default_inventory); //farray<human_info_inventory_info, 15>
 	Utype.set("NumGeneralProps", &HumanInfo::num_general_props);
 	Utype.set("GeneralProps", &HumanInfo::general_props);
 	Utype.set("LowerSpineBoneIndex", &HumanInfo::lower_spine_bone_index);
@@ -119,7 +119,7 @@ void Lua::BindHumanInfo(sol::state& LuaState)
 	Utype.set("DropCashMin", &HumanInfo::drop_cash_min);
 	Utype.set("DropCashMax", &HumanInfo::drop_cash_max);
 	Utype.set("LightEffectHandle", &HumanInfo::light_effect_handle);
-	//Utype.set("LightTagNames", &HumanInfo::light_tag_names); //array, size 2, of char*
+	Utype.set("LightTagNames", sol::property([](HumanInfo& Self) { return std::ref(Self.light_tag_names); })); //char*[2]
 	Utype.set("Flags", &HumanInfo::flags);
 	LuaState.set_usertype("HumanInfo", Utype);
 }
