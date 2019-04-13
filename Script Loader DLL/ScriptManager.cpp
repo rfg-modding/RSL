@@ -77,9 +77,9 @@ void ScriptManager::SetupLua()
 	RfgTable["GetWorld"] = Lua::GetWorld;
 	RfgTable["GetPhysicsWorld"] = Lua::GetPhysicsWorld;
 
-	RfgTable["Player"] = std::ref(*GlobalPlayerPtr);
-	RfgTable["World"] = std::ref(*GlobalRfgWorldPtr);
-	RfgTable["PhysicsWorld"] = std::ref(*GlobalhkpWorldPtr);
+	RfgTable["Player"] = GlobalPlayerPtr;
+	RfgTable["World"] = GlobalRfgWorldPtr;
+	RfgTable["PhysicsWorld"] = GlobalhkpWorldPtr;
 
 	//LogType enums defined in lua
 	auto LoggerTable = LuaState["Logger"].get_or_create<sol::table>(); //Todo: Add to RSL table.
@@ -158,9 +158,6 @@ void ScriptManager::UpdateRfgPointers()
 	RfgTable["Player"] = GlobalPlayerPtr;
 	RfgTable["World"] = GlobalRfgWorldPtr;
 	RfgTable["PhysicsWorld"] = GlobalhkpWorldPtr;
-	//RfgTable["Player"] = std::ref(*GlobalPlayerPtr);
-	//RfgTable["World"] = std::ref(*GlobalRfgWorldPtr);
-	//RfgTable["PhysicsWorld"] = std::ref(*GlobalhkpWorldPtr);
 }
 
 void ScriptManager::ScanScriptsFolder()
