@@ -72,7 +72,7 @@ void ScriptManager::SetupLua()
 	RfgTable["HideFog"] = HideFog;
 	RfgTable["ToggleFog"] = ToggleFog;
 	RfgTable["ToggleHud"] = ToggleHud;
-	RfgTable["SetFarClipDistance"] = game_render_set_far_clip_distance;
+	RfgTable["SetFarClip"] = game_render_set_far_clip_distance;
 	RfgTable["GetPlayer"] = Lua::GetPlayer;
 	RfgTable["GetWorld"] = Lua::GetWorld;
 	RfgTable["GetPhysicsWorld"] = Lua::GetPhysicsWorld;
