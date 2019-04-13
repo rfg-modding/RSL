@@ -176,9 +176,9 @@ void OverlayConsole::Draw()
 		CommandHistory.push_back(InputBuffer);
 		Logger::Log(std::string(InputBuffer), LogLua);
 		HistoryPosition = CommandHistory.size(); //Since pressing the up arrow key will subtract by one, the subtraction by one is not done here to insure the latest history entry isn't skipped.
+		Scripts->RunStringAsScript(InputBuffer, "lua console command");
 		InputBuffer.clear();
 		ReclaimFocus = true;
-		Scripts->RunStringAsScript(InputBuffer, "lua console command");
 	}
 	ImGui::SameLine();
 	ImGui::Checkbox("Auto scroll", &Autoscroll);
