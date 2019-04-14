@@ -176,12 +176,6 @@ void GeneralTweaksGui::Draw()
 			}
 		}
 	}
-	if(ImGui::Checkbox("Ignored by AI", &AiIgnore))
-	{
-		//Have to manually set rather than sticking in checkbox call because bitfields addresses can't be captured.
-		PlayerPtr->Flags.ai_ignore = !PlayerPtr->Flags.ai_ignore;
-		AiIgnore = PlayerPtr->Flags.ai_ignore;
-	}
 	ImGui::Checkbox("Infinite jetpack", &InfiniteJetpack);
 	if (ImGui::Checkbox("Invulnerability", &Invulnerable))
 	{
@@ -190,6 +184,17 @@ void GeneralTweaksGui::Draw()
 	if (!Invulnerable)
 	{
 		PlayerPtr->Flags.invulnerable = false;
+	}
+	if (ImGui::Checkbox("Ignored by AI", &AiIgnore))
+	{
+		//Have to manually set rather than sticking in checkbox call because bitfields addresses can't be captured.
+		PlayerPtr->Flags.ai_ignore = !PlayerPtr->Flags.ai_ignore;
+		AiIgnore = PlayerPtr->Flags.ai_ignore;
+	}
+	if(ImGui::Checkbox("Disable player ragdoll", &DisablePlayerRagdoll))
+	{
+		PlayerPtr->Flags.disallow_flinches_and_ragdolls = !PlayerPtr->Flags.disallow_flinches_and_ragdolls;
+		DisablePlayerRagdoll = PlayerPtr->Flags.disallow_flinches_and_ragdolls;
 	}
 	ImGui::InputInt("Salvage", &PlayerPtr->Metadata.Salvage);
 	ImGui::InputInt("Mining count", &PlayerPtr->Metadata.MiningCount);

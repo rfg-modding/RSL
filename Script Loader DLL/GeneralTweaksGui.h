@@ -50,5 +50,6 @@ public:
 	float CustomRenderAlpha = 0.0f;
 
 	bool AiIgnore = false;
+	bool DisablePlayerRagdoll = false;
 };
 
