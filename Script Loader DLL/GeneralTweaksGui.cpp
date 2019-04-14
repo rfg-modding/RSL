@@ -176,7 +176,12 @@ void GeneralTweaksGui::Draw()
 			}
 		}
 	}
-
+	if(ImGui::Checkbox("Ignored by AI", &AiIgnore))
+	{
+		//Have to manually set rather than sticking in checkbox call because bitfields addresses can't be captured.
+		PlayerPtr->Flags.ai_ignore = !PlayerPtr->Flags.ai_ignore;
+		AiIgnore = PlayerPtr->Flags.ai_ignore;
+	}
 	ImGui::Checkbox("Infinite jetpack", &InfiniteJetpack);
 	if (ImGui::Checkbox("Invulnerability", &Invulnerable))
 	{

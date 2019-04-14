@@ -48,5 +48,7 @@ public:
 	int CustomUnlimitedAmmo = 0;
 	float CustomStealthPercent = 0.0f;
 	float CustomRenderAlpha = 0.0f;
+
+	bool AiIgnore = false;
 };
 
