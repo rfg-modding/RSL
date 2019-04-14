@@ -16,4 +16,9 @@ namespace Lua
 	{
 		return GlobalhkpWorldPtr;
 	}
+
+	void LogModuleBase()
+	{
+		Logger::Log(std::string("Module base: " + std::to_string((uintptr_t)GetModuleHandle(NULL))), LogInfo);
+	}
 }

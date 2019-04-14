@@ -7,4 +7,5 @@ namespace Lua
 	extern Player* GetPlayer();
 	extern World* GetWorld();
 	extern hkpWorld* GetPhysicsWorld();
+	extern void LogModuleBase();
 }

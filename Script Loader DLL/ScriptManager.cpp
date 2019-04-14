@@ -66,6 +66,7 @@ void ScriptManager::SetupLua()
 	//Todo: Make necessary vars read only with sol::readonly(&some_class::variable)
 	auto RslTable = LuaState["rsl"].get_or_create<sol::table>();
 	RslTable["GetScriptLoaderVersion"] = GetScriptLoaderVersion;
+	RslTable["LogModuleBase"] = Lua::LogModuleBase;
 
 	auto RfgTable = LuaState["rfg"].get_or_create<sol::table>();
 	RfgTable["HideHud"] = HideHud;
@@ -228,7 +229,7 @@ bool ScriptManager::RunScript(const std::string& FullPath)
 		}
 		catch (std::exception& Exception)
 		{
-			Logger::Log(std::string("Exception caught when running " + GetScriptNameFromPath(FullPath) + std::string(Exception.what())), LogLua | LogError);
+			Logger::Log(std::string("Exception caught when running " + GetScriptNameFromPath(FullPath) + ": " + std::string(Exception.what())), LogLua | LogError);
 			return false;
 		}
 	}
