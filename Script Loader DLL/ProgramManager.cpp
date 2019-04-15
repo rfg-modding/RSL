@@ -435,8 +435,8 @@ void ProgramManager::CreateGameHooks(bool EnableNow)
 {
 	Hooks.CreateHook("PlayerConstructor", GAMEHOOK,(DWORD*)(ModuleBase + 0x6DECA0), PlayerConstructorHook, (LPVOID*)&PlayerConstructor, EnableNow);
 	Hooks.CreateHook("PlayerDoFrame", GAMEHOOK, (DWORD*)(ModuleBase + 0x6D5A80), PlayerDoFrameHook, (LPVOID*)&PlayerDoFrame, EnableNow);
-	Hooks.CreateHook("ObjectUpdatePosAndOrient", GAMEHOOK, (DWORD*)(ModuleBase + 0x68C310), ObjectUpdatePosAndOrientHook, (LPVOID*)&ObjectUpdatePosAndOrient, EnableNow);
-	Hooks.CreateHook("HumanUpdatePosAndOrient", GAMEHOOK, (DWORD*)(ModuleBase + 0x69AF70), HumanUpdatePosAndOrientHook, (LPVOID*)&HumanUpdatePosAndOrient, EnableNow);
+	//Hooks.CreateHook("ObjectUpdatePosAndOrient", GAMEHOOK, (DWORD*)(ModuleBase + 0x68C310), ObjectUpdatePosAndOrientHook, (LPVOID*)&ObjectUpdatePosAndOrient, EnableNow);
+	//Hooks.CreateHook("HumanUpdatePosAndOrient", GAMEHOOK, (DWORD*)(ModuleBase + 0x69AF70), HumanUpdatePosAndOrientHook, (LPVOID*)&HumanUpdatePosAndOrient, EnableNow);
 	//Hooks.CreateHook("CharacterControllerSetPos", GAMEHOOK, (DWORD*)(ModuleBase + 0x4153D0), CharacterControllerSetPosHook, (LPVOID*)&CharacterControllerSetPos, EnableNow);
 	Hooks.CreateHook("ExplosionCreate", GAMEHOOK, (DWORD*)(ModuleBase + 0x2EC720), ExplosionCreateHook, (LPVOID*)&ExplosionCreate, EnableNow);
 	//Hooks.CreateHook("CameraViewDataSetView", GAMEHOOK, (DWORD*)(ModuleBase + 0x2D0290), CameraViewDataSetViewHook, (LPVOID*)&CameraViewDataSetView, EnableNow);
