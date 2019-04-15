@@ -595,56 +595,56 @@ void __fastcall ObjectUpdatePosAndOrientHook(Object* ObjectPtr, void* edx, vecto
 /*Note: Attempts to manually set the player pos here failed. Required it to be 
 repeatedly set else you'd return to where the game last had you. 
 Might've been fighting with havok.*/
-void __fastcall HumanUpdatePosAndOrientHook(Human* HumanPtr, void* edx, vector* UpdatedPosition, matrix* UpdatedOrientation, bool SetHavokData)
-{
-	std::call_once(HookHumanUpdatePosAndOrientInitialCall, [&]()
-	{
-#if !PublicMode
-		Logger::ConsoleLog("First time in HumanUpdatePosAndOrient() hook.\n", LogInfo, false, true);
-#endif
-	});
-	/*if (Gui.MainWindow.NeedPlayerPosSet)
-	{
-		if (GlobalPlayerPtrInitialized)
-		{
-			if (GlobalPlayerPtr == (DWORD*)HumanPtr)
-			{
-				//std::cout << "Player HumanPtr found!" << "\n";
-				//std::cout << "Proof, HumanPtr->Position.y: " << HumanPtr->Position.y << "\n";
-				Logger::Log("Manually setting Player.Object.Position in HumanUpdatePosAndOrient() hook.\n", LogWarning);
-				NewObjectPosition = *UpdatedPosition;
-
-				NewObjectPosition.x = Gui.MainWindow.PlayerPositionTargetArray[0];
-				NewObjectPosition.y = Gui.MainWindow.PlayerPositionTargetArray[1];
-				NewObjectPosition.z = Gui.MainWindow.PlayerPositionTargetArray[2];
-
-				Gui.MainWindow.NeedPlayerPosSet = false;
-
-				return HumanUpdatePosAndOrient(HumanPtr, edx, &NewObjectPosition, UpdatedOrientation, SetHavokData);
-			}
-		}
-	}
-	if (Gui.MainWindow.NeedPlayerVelocitySet)
-	{
-		if (GlobalPlayerPtrInitialized)
-		{
-			if (GlobalPlayerPtr == (DWORD*)HumanPtr)
-			{
-					HumanPtr->Velocity.x = Gui.MainWindow.PlayerVelocityTargetArray[0];
-					HumanPtr->Velocity.y = Gui.MainWindow.PlayerVelocityTargetArray[1];
-					HumanPtr->Velocity.z = Gui.MainWindow.PlayerVelocityTargetArray[2];
-			}
-		}
-	}*/
-
-	//HumanPtr->Flags.start_jump = 2147483647;
-	//HumanPtr->Flags.super_jump = 2147483647;
-
-	//std::cout << "HumanPtr->Flags.start_jump: " << HumanPtr->Flags.start_jump << "\n";
-	//std::cout << "HumanPtr->Flags.super_jump: " << HumanPtr->Flags.super_jump << "\n";
-
-	return HumanUpdatePosAndOrient(HumanPtr, edx, UpdatedPosition, UpdatedOrientation, SetHavokData);
-}
+//void __fastcall HumanUpdatePosAndOrientHook(Human* HumanPtr, void* edx, vector* UpdatedPosition, matrix* UpdatedOrientation, bool SetHavokData)
+//{
+//	std::call_once(HookHumanUpdatePosAndOrientInitialCall, [&]()
+//	{
+//#if !PublicMode
+//		Logger::ConsoleLog("First time in HumanUpdatePosAndOrient() hook.\n", LogInfo, false, true);
+//#endif
+//	});
+//	/*if (Gui.MainWindow.NeedPlayerPosSet)
+//	{
+//		if (GlobalPlayerPtrInitialized)
+//		{
+//			if (GlobalPlayerPtr == (DWORD*)HumanPtr)
+//			{
+//				//std::cout << "Player HumanPtr found!" << "\n";
+//				//std::cout << "Proof, HumanPtr->Position.y: " << HumanPtr->Position.y << "\n";
+//				Logger::Log("Manually setting Player.Object.Position in HumanUpdatePosAndOrient() hook.\n", LogWarning);
+//				NewObjectPosition = *UpdatedPosition;
+//
+//				NewObjectPosition.x = Gui.MainWindow.PlayerPositionTargetArray[0];
+//				NewObjectPosition.y = Gui.MainWindow.PlayerPositionTargetArray[1];
+//				NewObjectPosition.z = Gui.MainWindow.PlayerPositionTargetArray[2];
+//
+//				Gui.MainWindow.NeedPlayerPosSet = false;
+//
+//				return HumanUpdatePosAndOrient(HumanPtr, edx, &NewObjectPosition, UpdatedOrientation, SetHavokData);
+//			}
+//		}
+//	}
+//	if (Gui.MainWindow.NeedPlayerVelocitySet)
+//	{
+//		if (GlobalPlayerPtrInitialized)
+//		{
+//			if (GlobalPlayerPtr == (DWORD*)HumanPtr)
+//			{
+//					HumanPtr->Velocity.x = Gui.MainWindow.PlayerVelocityTargetArray[0];
+//					HumanPtr->Velocity.y = Gui.MainWindow.PlayerVelocityTargetArray[1];
+//					HumanPtr->Velocity.z = Gui.MainWindow.PlayerVelocityTargetArray[2];
+//			}
+//		}
+//	}*/
+//
+//	//HumanPtr->Flags.start_jump = 2147483647;
+//	//HumanPtr->Flags.super_jump = 2147483647;
+//
+//	//std::cout << "HumanPtr->Flags.start_jump: " << HumanPtr->Flags.start_jump << "\n";
+//	//std::cout << "HumanPtr->Flags.super_jump: " << HumanPtr->Flags.super_jump << "\n";
+//
+//	return HumanUpdatePosAndOrient(HumanPtr, edx, UpdatedPosition, UpdatedOrientation, SetHavokData);
+//}
 
 /*Disabled atm since I experience a crash with it, and it's not needed for the moment.*/
 void __cdecl CameraViewDataSetViewHook(CameraViewData* ViewData, CameraViewTableEntry* ViewTableEntry, bool SkipTransition)

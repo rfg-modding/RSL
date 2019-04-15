@@ -335,8 +335,6 @@ void ProgramManager::ProcessInput()
 		{
 			Logger::Log(std::string("Exception when using Ctrl+S save script shortcut. Message: " + std::string(Ex.what())), LogFatalError);
 		}
-
-
 		if (GetAsyncKeyState(VK_CONTROL) && GetAsyncKeyState(VK_SHIFT) && GetAsyncKeyState(0x53)) //Ctrl + Shift + S
 		{
 			Gui.ScriptEditor->ShowSaveAsScriptPopup = true;
@@ -349,11 +347,19 @@ void ProgramManager::ProcessInput()
 		{
 			Gui.ScriptEditor->ShowNewScriptPopup = true;
 		}
-		if (GetAsyncKeyState(VK_F5))
+		try
 		{
-			std::string ScriptString = Gui.ScriptEditor->GetCurrentScriptString();
-			Scripts.RunStringAsScript(ScriptString, "script editor run");
-			Sleep(175);
+			if (GetAsyncKeyState(VK_F5))
+			{
+
+				std::string ScriptString = Gui.ScriptEditor->GetCurrentScriptString();
+				Scripts.RunStringAsScript(ScriptString, "script editor run");
+				Sleep(175);
+			}
+		}
+		catch (const std::exception& Ex)
+		{
+			Logger::Log(std::string("Exception when using F5 run script shortcut. Message: " + std::string(Ex.what())), LogFatalError);
 		}
 	}
 }
