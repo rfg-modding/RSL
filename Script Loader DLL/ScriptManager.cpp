@@ -84,6 +84,10 @@ void ScriptManager::SetupLua()
 	RfgTable["ActiveWorld"] = GlobalRfgWorldPtr;
 	RfgTable["ActivePhysicsWorld"] = GlobalhkpWorldPtr;
 
+	RfgTable.set_function("TeleportPlayer", sol::overload(
+ [](vector Position, matrix Orientation) {HumanTeleportUnsafe(GlobalPlayerPtr, Position, Orientation); }, 
+		[](vector Position) {HumanTeleportUnsafe(GlobalPlayerPtr, Position, GlobalPlayerPtr->Orientation); }));
+
 	//LogType enums defined in lua
 	auto LoggerTable = LuaState["Logger"].get_or_create<sol::table>(); //Todo: Add to RSL table.
 	LoggerTable["OpenLogFile"] = Logger::OpenLogFile;
@@ -138,6 +142,13 @@ void ScriptManager::SetupLua()
 	Lua::BindObject(LuaState);
 	Lua::BindHuman(LuaState);
 	Lua::BindPlayer(LuaState);
+	//Setting these manually to ensure there's no accidently overwrites
+	LuaState["rfg"]["Object"]["AsObject"] = [](Object& Self)->Object* {return &Self; };
+	LuaState["rfg"]["Human"]["AsObject"] = [](Human& Self)->Object* {return (Object*)&Self; };
+	LuaState["rfg"]["Human"]["AsHuman"] = [](Human& Self)->Human* {return (Human*)&Self; };
+	LuaState["rfg"]["Player"]["AsObject"] = [](Player& Self)->Object* {return (Object*)&Self; };
+	LuaState["rfg"]["Player"]["AsHuman"] = [](Player& Self)->Human* {return (Human*)&Self; };
+	LuaState["rfg"]["Player"]["AsPlayer"] = [](Player& Self)->Player* {return &Self; };
 
 	//World & dependent types
 	Lua::BindStreamGridCell(LuaState);
