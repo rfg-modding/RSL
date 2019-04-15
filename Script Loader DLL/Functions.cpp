@@ -12,6 +12,94 @@ rl_scene_renderer* GlobalMainSceneRendererPtr = nullptr;
 rl_camera* GlobalMainSceneCameraPtr = nullptr;
 hkpWorld* GlobalhkpWorldPtr = nullptr;
 
+void DisableCameraCode(DWORD AddressY, DWORD AddressZ) //Takes addresses for instructions affecting y and z. Alternatively x and z may work, since one piece seems to be shared between two coords.
+{
+	SnippetManager::BackupSnippet("CameraWriteY", AddressY, 8, true);
+	SnippetManager::BackupSnippet("CameraWriteZ", AddressZ, 6, true);
+}
+
+void RestoreCameraCode()
+{
+	SnippetManager::RestoreSnippet("CameraWriteY", true);
+	SnippetManager::RestoreSnippet("CameraWriteZ", true);
+}
+
+void DisableCameraDirectionCode(DWORD Address1, DWORD Address2, DWORD Address3, DWORD Address4, DWORD Address5)
+{
+	SnippetManager::BackupSnippet("CameraRealOrient1", Address1, 8, true);
+	SnippetManager::BackupSnippet("CameraRealOrient2", Address2, 8, true);
+	SnippetManager::BackupSnippet("CameraRealOrient3", Address3, 8, true);
+	SnippetManager::BackupSnippet("CameraRealOrient4", Address4, 8, true);
+	SnippetManager::BackupSnippet("CameraRealOrient5", Address5, 6, true);
+}
+
+void RestoreCameraDirectionCode()
+{
+	SnippetManager::RestoreSnippet("CameraRealOrient1", true);
+	SnippetManager::RestoreSnippet("CameraRealOrient2", true);
+	SnippetManager::RestoreSnippet("CameraRealOrient3", true);
+	SnippetManager::RestoreSnippet("CameraRealOrient4", true);
+	SnippetManager::RestoreSnippet("CameraRealOrient5", true);
+}
+
+void HideHud(bool Hide)
+{
+	//HudVisible = !HudVisible; //This wasn't working for some odd reason so I just set them manually. Same for HideFog.
+	Hud_Hide(Hide);
+	if (Hide)
+	{
+		HudVisible = false;
+	}
+	else
+	{
+		HudVisible = true;
+	}
+}
+
+void HideFog(bool Hide)
+{
+	game_render_set_fog_enabled(!Hide);
+	//FogVisible = !Hide;
+	if (Hide)
+	{
+		FogVisible = false;
+	}
+	else
+	{
+		FogVisible = true;
+	}
+}
+
+void ToggleHud()
+{
+	if (HudVisible)
+	{
+		HideHud(true);
+		HudVisible = false;
+	}
+	else
+	{
+		HideHud(false);
+		HudVisible = true;
+	}
+	//HudVisible = !HudVisible; //This wasn't working for some odd reason so I just set them manually.
+}
+
+void ToggleFog()
+{
+	if (FogVisible)
+	{
+		HideFog(true);
+		FogVisible = false;
+	}
+	else
+	{
+		HideFog(false);
+		FogVisible = true;
+	}
+	//FogVisible = !FogVisible; //This wasn't working for some odd reason so I just set them manually.
+}
+
 F_Camera_Start_Slew_Mode Camera_Start_Slew_Mode;
 F_Camera_Stop_Slew_Mode Camera_Stop_Slew_Mode;
 F_Interface_Debug_Mode_Activate Interface_Debug_Mode_Activate;
@@ -106,8 +194,6 @@ F_rl_draw_string rl_draw_string;
 F_is_game_paused IsGamePaused;
 F_world_do_frame world_do_frame;
 F_world_get_object_name world_get_object_name;
-
-
 
 F_world_get_object_zone_by_index world_get_object_zone_by_index;
 F_world_get_object_zone_by_grid_id world_get_object_zone_by_grid_id;

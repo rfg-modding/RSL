@@ -17,37 +17,15 @@ extern rl_scene_renderer* GlobalMainSceneRendererPtr;
 extern rl_camera* GlobalMainSceneCameraPtr;
 extern hkpWorld* GlobalhkpWorldPtr;
 
-static void DisableCameraCode(DWORD AddressY, DWORD AddressZ) //Takes addresses for instructions affecting y and z. Alternatively x and z may work, since one piece seems to be shared between two coords.
-{
-	SnippetManager::BackupSnippet("CameraWriteY", AddressY, 8, true);
-	SnippetManager::BackupSnippet("CameraWriteZ", AddressZ, 6, true);
-	//PlaceNOP((BYTE*)AddressY, 8);
-	//PlaceNOP((BYTE*)AddressZ, 6);
-}
+extern void DisableCameraCode(DWORD AddressY, DWORD AddressZ); //Takes addresses for instructions affecting y and z. Alternatively x and z may work, since one piece seems to be shared between two coords.
+extern void RestoreCameraCode();
+extern void DisableCameraDirectionCode(DWORD Address1, DWORD Address2, DWORD Address3, DWORD Address4, DWORD Address5);
+extern void RestoreCameraDirectionCode();
 
-static void RestoreCameraCode()
-{
-	SnippetManager::RestoreSnippet("CameraWriteY", true);
-	SnippetManager::RestoreSnippet("CameraWriteZ", true);
-}
-
-static void DisableCameraDirectionCode(DWORD Address1, DWORD Address2, DWORD Address3, DWORD Address4, DWORD Address5)
-{
-	SnippetManager::BackupSnippet("CameraRealOrient1", Address1, 8, true);
-	SnippetManager::BackupSnippet("CameraRealOrient2", Address2, 8, true);
-	SnippetManager::BackupSnippet("CameraRealOrient3", Address3, 8, true);
-	SnippetManager::BackupSnippet("CameraRealOrient4", Address4, 8, true);
-	SnippetManager::BackupSnippet("CameraRealOrient5", Address5, 6, true);
-}
-
-static void RestoreCameraDirectionCode()
-{
-	SnippetManager::RestoreSnippet("CameraRealOrient1", true);
-	SnippetManager::RestoreSnippet("CameraRealOrient2", true);
-	SnippetManager::RestoreSnippet("CameraRealOrient3", true);
-	SnippetManager::RestoreSnippet("CameraRealOrient4", true);
-	SnippetManager::RestoreSnippet("CameraRealOrient5", true);
-}
+extern void HideHud(bool Hide);
+extern void HideFog(bool Hide);
+extern void ToggleHud();
+extern void ToggleFog();
 
 using F_Camera_Start_Slew_Mode = void(__cdecl*)();
 extern F_Camera_Start_Slew_Mode Camera_Start_Slew_Mode;
@@ -189,64 +167,6 @@ extern F_Hud_Hide Hud_Hide;
 
 using F_game_render_set_fog_enabled = void(__cdecl*)(bool Enabled);
 extern F_game_render_set_fog_enabled game_render_set_fog_enabled;
-
-static void HideHud(bool Hide)
-{
-	//HudVisible = !HudVisible; //This wasn't working for some odd reason so I just set them manually. Same for HideFog.
-	Hud_Hide(Hide);
-	if (Hide)
-	{
-		HudVisible = false;
-	}
-	else
-	{
-		HudVisible = true;
-	}
-}
-
-static void HideFog(bool Hide)
-{
-	game_render_set_fog_enabled(!Hide);
-	//FogVisible = !Hide;
-	if (Hide)
-	{
-		FogVisible = false;
-	}
-	else
-	{
-		FogVisible = true;
-	}
-}
-
-static void ToggleHud()
-{
-	if (HudVisible)
-	{
-		HideHud(true);
-		HudVisible = false;
-	}
-	else
-	{
-		HideHud(false);
-		HudVisible = true;
-	}
-	//HudVisible = !HudVisible; //This wasn't working for some odd reason so I just set them manually.
-}
-
-static void ToggleFog()
-{
-	if (FogVisible)
-	{
-		HideFog(true);
-		FogVisible = false;
-	}
-	else
-	{
-		HideFog(false);
-		FogVisible = true;
-	}
-	//FogVisible = !FogVisible; //This wasn't working for some odd reason so I just set them manually.
-}
 
 //typedef void (__cdecl* explosion_create)(explosion_info* ExplosionInfo, object* Source, object* Owner, vector* Position, matrix* Orientation, vector* Directiom, weapon_info* WeaponInfo, bool FromServer)
 using F_explosion_create = void(__cdecl*)(explosion_info* ExplosionInfo, void* Source, void* Owner, vector* Position,
