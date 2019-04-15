@@ -7,6 +7,7 @@ void Lua::BindObject(sol::state & LuaState)
 	auto Utype = RfgTable.create_simple_usertype<Object>();
 	Utype.set("new", sol::constructors<Object(), Object(const Object&)>());
 	Utype.set("Position", &Object::Position);
+	Utype.set("Orientation", &Object::Orientation);
 	Utype.set("ChildPtr", &Object::ChildPtr);
 	Utype.set("ChildNext", &Object::ChildNext);
 	Utype.set("ChildPrevious", &Object::ChildPrevious);
