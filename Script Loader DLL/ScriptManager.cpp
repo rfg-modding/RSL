@@ -74,13 +74,15 @@ void ScriptManager::SetupLua()
 	RfgTable["ToggleFog"] = ToggleFog;
 	RfgTable["ToggleHud"] = ToggleHud;
 	RfgTable["SetFarClip"] = game_render_set_far_clip_distance;
+	RfgTable["GetFarClip"] = game_render_get_far_clip_distance;
+	RfgTable["TeleportHuman"] = HumanTeleportUnsafe;
 	RfgTable["GetPlayer"] = Lua::GetPlayer;
 	RfgTable["GetWorld"] = Lua::GetWorld;
 	RfgTable["GetPhysicsWorld"] = Lua::GetPhysicsWorld;
 
-	RfgTable["Player"] = GlobalPlayerPtr;
-	RfgTable["World"] = GlobalRfgWorldPtr;
-	RfgTable["PhysicsWorld"] = GlobalhkpWorldPtr;
+	RfgTable["ActivePlayer"] = GlobalPlayerPtr;
+	RfgTable["ActiveWorld"] = GlobalRfgWorldPtr;
+	RfgTable["ActivePhysicsWorld"] = GlobalhkpWorldPtr;
 
 	//LogType enums defined in lua
 	auto LoggerTable = LuaState["Logger"].get_or_create<sol::table>(); //Todo: Add to RSL table.
@@ -95,6 +97,8 @@ void ScriptManager::SetupLua()
 	
 	//Use separate files for these so that if one is edited they don't all need to be recompiled.
 	//Not necessarily at huge benefit at first, but it'll grow as more usertypes are added.
+	Lua::BindRfgBaseArray(LuaState);
+	Lua::BindRfgFArray(LuaState);
 	Lua::BindTimestamp(LuaState);
 	Lua::BindTimestampPercent(LuaState);
 	Lua::BindTimestampRealtime(LuaState);
@@ -156,9 +160,9 @@ void ScriptManager::UpdateRfgPointers()
 {
 	auto RfgTable = LuaState["rfg"].get_or_create<sol::table>();
 
-	RfgTable["Player"] = GlobalPlayerPtr;
-	RfgTable["World"] = GlobalRfgWorldPtr;
-	RfgTable["PhysicsWorld"] = GlobalhkpWorldPtr;
+	RfgTable["ActivePlayer"] = GlobalPlayerPtr;
+	RfgTable["ActiveWorld"] = GlobalRfgWorldPtr;
+	RfgTable["ActivePhysicsWorld"] = GlobalhkpWorldPtr;
 }
 
 void ScriptManager::ScanScriptsFolder()
