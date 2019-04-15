@@ -10,7 +10,7 @@ void Lua::BindContactNode(sol::state& LuaState)
 	Utype.set("NumberOfContacts", &ContactNode::m_num_contacts);
 	Utype.set("Previous", &ContactNode::prev);
 	Utype.set("Next", &ContactNode::next);
-	LuaState.set_usertype("ContactNode", Utype);
+	RfgTable.set_usertype("ContactNode", Utype);
 
 	/*RfgTable.new_usertype<ContactNode>
 	(

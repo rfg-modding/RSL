@@ -20,5 +20,5 @@ void Lua::BindCharacterInstance(sol::state& LuaState)
 	Utype.set("VariantIndex", &CharacterInstance::variant_index);
 	Utype.set("BboxMaxDimension", &CharacterInstance::bbox_max_dimension);
 	//Utype.set("Rdd", &CharacterInstance::rdd);
-	LuaState.set_usertype("CharacterInstance", Utype);
+	RfgTable.set_usertype("CharacterInstance", Utype);
 }

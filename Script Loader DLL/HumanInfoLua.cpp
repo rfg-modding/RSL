@@ -25,7 +25,7 @@ void Lua::BindHumanInfoFlags(sol::state & LuaState)
 	Utype.set("Dan", sol::property(itsy_bitsy::read<human_info_flags, 16>, itsy_bitsy::write<human_info_flags, 16>)); //int8 - 1
 	Utype.set("Jenkins", sol::property(itsy_bitsy::read<human_info_flags, 17>, itsy_bitsy::write<human_info_flags, 17>)); //int8 - 1*/
 	Utype.set("DriverlessExit", &human_info_flags::driverless_exit_only); //bool*/
-	LuaState.set_usertype("HumanInfoFlags", Utype);
+	RfgTable.set_usertype("HumanInfoFlags", Utype);
 }
 
 void Lua::BindHumanPropGeneralInfo(sol::state& LuaState)
@@ -38,7 +38,7 @@ void Lua::BindHumanPropGeneralInfo(sol::state& LuaState)
 	Utype.set("PropType", &human_prop_general_info::m_prop_type);
 	Utype.set("NumProps",& human_prop_general_info::num_props);
 	Utype.set("Props", &human_prop_general_info::props);
-	LuaState.set_usertype("HumanPropGeneralInfo", Utype); 
+	RfgTable.set_usertype("HumanPropGeneralInfo", Utype);
 }
 
 void Lua::BindCharDefHead(sol::state& LuaState)
@@ -57,7 +57,7 @@ void Lua::BindCharDefHead(sol::state& LuaState)
 	Utype.set("BaseHeadMorph", &char_def_head::base_head_morph);
 	Utype.set("NumSkinShaderParams", &char_def_head::num_skin_shader_params);
 	///Utype.set("SkinShaderParams", sol::property([](char_def_head& Self) { return std::ref(Self.skin_shader_params); })); //3x5 float array
-	LuaState.set_usertype("CharDefHead", Utype);
+	RfgTable.set_usertype("CharDefHead", Utype);
 }
 
 void Lua::BindFootGroundEffects(sol::state& LuaState)
@@ -72,7 +72,7 @@ void Lua::BindFootGroundEffects(sol::state& LuaState)
 	Utype.set("LandFoley", &foot_ground_effects::land_foley);
 	//Utype.set("Footstep", );
 	//Utype.set("Jump", );
-	LuaState.set_usertype("FootGroundEffects", Utype);
+	RfgTable.set_usertype("FootGroundEffects", Utype);
 }
 
 void Lua::BindHumanInfo(sol::state& LuaState)
@@ -121,5 +121,5 @@ void Lua::BindHumanInfo(sol::state& LuaState)
 	Utype.set("LightEffectHandle", &HumanInfo::light_effect_handle);
 	Utype.set("LightTagNames", sol::property([](HumanInfo& Self) { return std::ref(Self.light_tag_names); })); //char*[2]
 	Utype.set("Flags", &HumanInfo::flags);
-	LuaState.set_usertype("HumanInfo", Utype);
+	RfgTable.set_usertype("HumanInfo", Utype);
 }

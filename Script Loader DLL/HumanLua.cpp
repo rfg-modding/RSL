@@ -13,7 +13,7 @@ void Lua::BindIKJoint(sol::state& LuaState)
 	Utype.set("FreezeObjHandle", &IK_Joint::freeze_obj_handle);
 	Utype.set("FreezeOffsetPos", &IK_Joint::freeze_offset_pos);
 	Utype.set("Location", &IK_Joint::location);
-	LuaState.set_usertype("IKJoint", Utype);
+	RfgTable.set_usertype("IKJoint", Utype);
 }
 
 void Lua::BindWeaponAnimationFlags(sol::state& LuaState)
@@ -38,7 +38,7 @@ void Lua::BindWeaponAnimationFlags(sol::state& LuaState)
 	Utype.set("Drive", sol::property(itsy_bitsy::read<WeaponAnimationFlags, 14>, itsy_bitsy::write<WeaponAnimationFlags, 14>)); //uint32 - 1
 	Utype.set("Ride", sol::property(itsy_bitsy::read<WeaponAnimationFlags, 15>, itsy_bitsy::write<WeaponAnimationFlags, 15>)); //uint32 - 1
 	Utype.set("RideLeft", sol::property(itsy_bitsy::read<WeaponAnimationFlags, 16>, itsy_bitsy::write<WeaponAnimationFlags, 16>)); //uint32 - 1
-	LuaState.set_usertype("WeaponAnimationFlags", Utype);
+	RfgTable.set_usertype("WeaponAnimationFlags", Utype);
 }
 
 void Lua::BindHuman(sol::state& LuaState)
@@ -235,7 +235,7 @@ void Lua::BindHuman(sol::state& LuaState)
 	Utype.set("AcknowledgedTime", &Human::AcknowledgedTime);
 	Utype.set("ReportedTimer", &Human::ReportedTimer);
 	Utype.set("Lifetime", &Human::Lifetime);
-	LuaState.set_usertype("Human", Utype);
+	RfgTable.set_usertype("Human", Utype);
 
 	/*RfgTable.new_usertype<Human>
 	(

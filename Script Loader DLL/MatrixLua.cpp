@@ -13,7 +13,7 @@ void Lua::BindMatrix(sol::state& LuaState)
 	Utype.set("rvec", &matrix::rvec);
 	Utype.set("uvec", &matrix::uvec);
 	Utype.set("fvec", &matrix::fvec);
-	LuaState.set_usertype("Matrix", Utype);
+	RfgTable.set_usertype("Matrix", Utype);
 
 	/*RfgTable.new_usertype<matrix>
 	(

@@ -14,7 +14,16 @@ void Lua::BindVector2(sol::state& LuaState)
 	Utype.set("SetAll", &vector2::SetAll);
 	Utype.set("x", &vector2::x);
 	Utype.set("y", &vector2::y);
-	LuaState.set_usertype("Vector2", Utype);
+	Utype.set("Print", [](vector2& Self) { Logger::Log(std::string("x: " + std::to_string(Self.x) + ", y: " + std::to_string(Self.y)), LogNone); });
+	Utype.set("GetDataString", [](vector& Self)
+	{
+		std::string String = "x: ";
+		String += std::to_string(Self.x);
+		String += ", y: ";
+		String += std::to_string(Self.y);
+		return String;
+	});
+	RfgTable.set_usertype("Vector2", Utype);
 }
 
 void Lua::BindVector(sol::state& LuaState)
@@ -32,7 +41,18 @@ void Lua::BindVector(sol::state& LuaState)
 	Utype.set("x", &vector::x);
 	Utype.set("y", &vector::y);
 	Utype.set("z", &vector::z);
-	LuaState.set_usertype("Vector", Utype);
+	Utype.set("Print", [](vector& Self) { Logger::Log(std::string("x: " + std::to_string(Self.x) + ", y: " + std::to_string(Self.y) + ", z: " + std::to_string(Self.z)), LogNone); });
+	Utype.set("GetDataString", [](vector& Self)
+	{
+		std::string String = "x: ";
+		String += std::to_string(Self.x);
+		String += ", y: ";
+		String += std::to_string(Self.y);
+		String += ", z: ";
+		String += std::to_string(Self.z);
+		return String;
+	});
+	RfgTable.set_usertype("Vector", Utype);
 
 	/*RfgTable.new_usertype<vector>
 	(

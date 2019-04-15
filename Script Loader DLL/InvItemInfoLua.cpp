@@ -13,7 +13,7 @@ void Lua::BindInventoryItem(sol::state& LuaState)
 	Utype.set("SelectionSlot", &InventoryItem::selection_slot);
 	Utype.set("AttachmentProp", &InventoryItem::attachment_prop);
 	Utype.set("WeaponHandle", &InventoryItem::weapon_handle);
-	LuaState.set_usertype("InventoryItem", Utype);
+	RfgTable.set_usertype("InventoryItem", Utype);
 }
 
 void Lua::BindChecksumStri(sol::state& LuaState)
@@ -22,7 +22,7 @@ void Lua::BindChecksumStri(sol::state& LuaState)
 	auto Utype = RfgTable.create_simple_usertype<checksum_stri>();
 	Utype.set("new", sol::no_constructor);
 	Utype.set("Checksum", &checksum_stri::checksum);
-	LuaState.set_usertype("ChecksumStri", Utype);
+	RfgTable.set_usertype("ChecksumStri", Utype);
 }
 
 void Lua::BindInvItemInfo(sol::state& LuaState)
@@ -40,5 +40,5 @@ void Lua::BindInvItemInfo(sol::state& LuaState)
 	//Utype.set("WeaponInfo", &inv_item_info::w_info);
 	Utype.set("ItemOrder", &inv_item_info::item_order);
 	//Utype.set("UseFunc", &inv_item_info::use);
-	LuaState.set_usertype("InvItemInfo", Utype);
+	RfgTable.set_usertype("InvItemInfo", Utype);
 }

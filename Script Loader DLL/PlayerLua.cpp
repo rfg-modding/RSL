@@ -10,7 +10,7 @@ void Lua::BindUpgradeItem(sol::state& LuaState)
 	Utype.set("AvailabilityBitfield", &UpgradeItem::availability_bitfield);
 	Utype.set("UnlockedNotifiedBitfield", &UpgradeItem::unlocked_notified_bitfield);
 	Utype.set("NewNotifiedBitfield", &UpgradeItem::new_notified_bitfield);
-	LuaState.set_usertype("PlayerMetadata", Utype);
+	RfgTable.set_usertype("PlayerMetadata", Utype);
 }
 
 void Lua::BindPlayerMetadata(sol::state& LuaState)
@@ -26,7 +26,7 @@ void Lua::BindPlayerMetadata(sol::state& LuaState)
 	Utype.set("Upgrades", sol::property([](PlayerMetadata& Self) { return std::ref(Self.upgrades); })); //Size 128 array of UpgradeItem
 	Utype.set("PlayTime", &PlayerMetadata::PlayTime);
 	Utype.set("LastDeathTime", &PlayerMetadata::LastDeathTime);
-	LuaState.set_usertype("PlayerMetadata", Utype);
+	RfgTable.set_usertype("PlayerMetadata", Utype);
 }
 
 void Lua::BindPathfindNavInfo(sol::state& LuaState)
@@ -36,7 +36,7 @@ void Lua::BindPathfindNavInfo(sol::state& LuaState)
 	Utype.set("new", sol::no_constructor);
 	Utype.set("LastVisitedVehicleNavCellHandle", &PathfindNavInfo::LastVisitedVehicleNavCellHandle);
 	Utype.set("LastVisitedVehicleNavCellUpdateTimer", &PathfindNavInfo::LastVisitedVehicleNavCellUpdateTimer);
-	LuaState.set_usertype("PathfindNavInfo", Utype);
+	RfgTable.set_usertype("PathfindNavInfo", Utype);
 }
 
 void Lua::BindVehicleEnterStruct(sol::state& LuaState)
@@ -46,7 +46,7 @@ void Lua::BindVehicleEnterStruct(sol::state& LuaState)
 	Utype.set("new", sol::no_constructor);
 	Utype.set("VehicleHandle", &VehicleEnterStruct::VehicleHandle);
 	Utype.set("Run", &VehicleEnterStruct::Run);
-	LuaState.set_usertype("VehicleEnterStruct", Utype);
+	RfgTable.set_usertype("VehicleEnterStruct", Utype);
 }
 
 void Lua::BindScriptSpecificData(sol::state& LuaState)
@@ -55,7 +55,7 @@ void Lua::BindScriptSpecificData(sol::state& LuaState)
 	auto Utype = RfgTable.create_simple_usertype<ScriptSpecificData>();
 	Utype.set("new", sol::no_constructor);
 	Utype.set("VehicleEnterData", &ScriptSpecificData::VehicleEnterData);
-	LuaState.set_usertype("ScriptSpecificData", Utype);
+	RfgTable.set_usertype("ScriptSpecificData", Utype);
 }
 
 void Lua::BindPlayerFlags(sol::state& LuaState)
@@ -107,7 +107,7 @@ void Lua::BindPlayerFlags(sol::state& LuaState)
 	//Utype.set("MpHasReloaded", sol::property(itsy_bitsy::read<PlayerFlags, 41>, itsy_bitsy::write<PlayerFlags, 41>)); //uint32 - 1 
 	//Utype.set("MpRemovingPlayer", sol::property(itsy_bitsy::read<PlayerFlags, 42>, itsy_bitsy::write<PlayerFlags, 42>)); //uint32 - 1 
 	Utype.set("WaitingForLockerExit", sol::property(itsy_bitsy::read<PlayerFlags, 43>, itsy_bitsy::write<PlayerFlags, 43>)); //uint32 - 1 
-	LuaState.set_usertype("PlayerFlags", Utype);
+	RfgTable.set_usertype("PlayerFlags", Utype);
 }
 
 void Lua::BindUsableObject(sol::state & LuaState)
@@ -121,7 +121,7 @@ void Lua::BindUsableObject(sol::state & LuaState)
 	Utype.set("DotProduct", &UseableObject::dot_prod);
 	Utype.set("DistanceSquared", &UseableObject::dist_squared);
 	//Utype.set("ActionCallback", &UseableObject::action_callback); //Function ptr
-	LuaState.set_usertype("UseableObject", Utype);
+	RfgTable.set_usertype("UseableObject", Utype);
 }
 
 void Lua::BindPlayer(sol::state& LuaState)
@@ -266,5 +266,5 @@ void Lua::BindPlayer(sol::state& LuaState)
 	//Utype.set("NextRecord", &Player::NextRecord);
 	Utype.set("PositionalRecords", sol::property([](Player& Self) { return std::ref(Self.PositionalRecords); })); //Size 8 array of PlayerPositionalRecord
 	Utype.set("TrackingPeriod", &Player::TrackingPeriod);
-	LuaState.set_usertype("Player", Utype);
+	RfgTable.set_usertype("Player", Utype);
 }

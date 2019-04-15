@@ -8,5 +8,5 @@ void Lua::BindObjectRenderDistance(sol::state & LuaState)
 	Utype.set("new", sol::no_constructor);
 	Utype.set("ApparentDistance", &ObjectRenderDistance::apparent_distance);
 	Utype.set("LastFrameProcessed", &ObjectRenderDistance::last_frame_processed);
-	LuaState.set_usertype("ObjectRenderDistance", Utype);
+	RfgTable.set_usertype("ObjectRenderDistance", Utype);
 }

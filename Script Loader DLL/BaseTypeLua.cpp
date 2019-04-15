@@ -1,13 +1,33 @@
 #include "BaseTypeLua.h"
 #include "Functions.h"
 
+void Lua::BindRfgBaseArray(sol::state& LuaState)
+{
+	auto RfgTable = LuaState["rfg"].get_or_create<sol::table>();
+	auto Utype = RfgTable.create_simple_usertype<rfg::base_array<Object*>>();
+	Utype.set("new", sol::no_constructor);
+	Utype.set("Size", &rfg::base_array<Object*>::Size);
+	Utype.set("Capacity", &rfg::base_array<Object*>::Capacity);
+	Utype.set(sol::meta_function::index, &rfg::base_array<Object*>::operator[]);
+	RfgTable.set_usertype("RfgBaseArray", Utype);
+}
+
+void Lua::BindRfgFArray(sol::state& LuaState)
+{
+	//auto RfgTable = LuaState["rfg"].get_or_create<sol::table>();
+	//auto Utype = RfgTable.create_simple_usertype<rfg::farray>();
+	//Utype.set("new", sol::no_constructor);
+	//Utype.set("", &rfg::farray::);
+	//LuaState.set_usertype("RfgFArray", Utype);
+}
+
 void Lua::BindTimestampRealtime(sol::state& LuaState)
 {
 	auto RfgTable = LuaState["rfg"].get_or_create<sol::table>();
 	auto Utype = RfgTable.create_simple_usertype<timestamp_realtime>();
 	Utype.set("new", sol::no_constructor);
 	Utype.set("Value", &timestamp_realtime::value);
-	LuaState.set_usertype("TimestampRealtime", Utype);
+	RfgTable.set_usertype("TimestampRealtime", Utype);
 }
 
 void Lua::BindColor(sol::state& LuaState)
@@ -20,7 +40,7 @@ void Lua::BindColor(sol::state& LuaState)
 	Utype.set("Green", &color::green);
 	Utype.set("Blue", &color::blue);
 	Utype.set("Alpha", &color::alpha);
-	LuaState.set_usertype("Color", Utype);
+	RfgTable.set_usertype("Color", Utype);
 }
 
 void Lua::BindNanoCallbackInfo(sol::state & LuaState)
@@ -30,7 +50,7 @@ void Lua::BindNanoCallbackInfo(sol::state & LuaState)
 	Utype.set("TargetHandle", &nano_callback_info::target_handle);
 	Utype.set("KilledByNano", &nano_callback_info::killed_by_nano);
 	Utype.set("HumanNanoIndex", &nano_callback_info::human_nano_index);
-	LuaState.set_usertype("NanoCallbackInfo", Utype);
+	RfgTable.set_usertype("NanoCallbackInfo", Utype);
 }
 
 void Lua::BindTimestamp(sol::state& LuaState)
@@ -39,7 +59,7 @@ void Lua::BindTimestamp(sol::state& LuaState)
 	auto Utype = RfgTable.create_simple_usertype<Timestamp>();
 	Utype.set("new", sol::no_constructor);
 	Utype.set("Value", &Timestamp::value);
-	LuaState.set_usertype("Timestamp", Utype);
+	RfgTable.set_usertype("Timestamp", Utype);
 }
 
 void Lua::BindTimestampPercent(sol::state& LuaState)
@@ -49,5 +69,5 @@ void Lua::BindTimestampPercent(sol::state& LuaState)
 	Utype.set("new", sol::no_constructor);
 	Utype.set(sol::base_classes, sol::bases<Timestamp>());
 	Utype.set("SetMilliseconds", &TimestampPercent::set_milliseconds);
-	LuaState.set_usertype("TimestampPercent", Utype);
+	RfgTable.set_usertype("TimestampPercent", Utype);
 }

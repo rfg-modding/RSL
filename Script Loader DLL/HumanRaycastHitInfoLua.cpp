@@ -11,5 +11,5 @@ void Lua::BindHumanRaycastHitInfo(sol::state& LuaState)
 	Utype.set("HitPoint", &HumanRaycastHitInfo::HitPoint);
 	Utype.set("HitLocation", &HumanRaycastHitInfo::hit_location);
 	Utype.set("HitBone", &HumanRaycastHitInfo::hit_bone);
-	LuaState.set_usertype("HumanRaycastHitInfo", Utype);
+	RfgTable.set_usertype("HumanRaycastHitInfo", Utype);
 }

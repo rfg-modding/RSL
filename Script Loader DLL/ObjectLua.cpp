@@ -31,7 +31,7 @@ void Lua::BindObject(sol::state & LuaState)
 	Utype.set("LastKnownBMin", &Object::LastKnownBMin);
 	Utype.set("LastKnownBMax", &Object::LastKnownBMax);
 	Utype.set("SRID", &Object::SRID);
-	LuaState.set_usertype("Object", Utype);
+	RfgTable.set_usertype("Object", Utype);
 
 	/*RfgTable.new_usertype<Object>
 	(

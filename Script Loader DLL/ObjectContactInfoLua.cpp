@@ -7,7 +7,7 @@ void Lua::BindObjectContactInfo(sol::state& LuaState)
 	auto Utype = RfgTable.create_simple_usertype<ObjectContactInfo>();
 	Utype.set("new", sol::constructors<ObjectContactInfo(), ObjectContactInfo(const ObjectContactInfo&)>());
 	Utype.set("ContactList", &ObjectContactInfo::m_contact_list);
-	LuaState.set_usertype("ObjectContactInfo", Utype);
+	RfgTable.set_usertype("ObjectContactInfo", Utype);
 
 	/*RfgTable.new_usertype<ObjectContactInfo>
 	(

@@ -11,7 +11,7 @@ void Lua::BindStreamGridCell(sol::state& LuaState)
 	Utype.set("GridX", &stream_grid_cell::grid_x);
 	Utype.set("GridZ", &stream_grid_cell::grid_z);
 	Utype.set("LayerIndex", &stream_grid_cell::layer_index);
-	LuaState.set_usertype("StreamGridCell", Utype);
+	RfgTable.set_usertype("StreamGridCell", Utype);
 }
 
 void Lua::BindStreamLayerMaskedCell(sol::state& LuaState)
@@ -21,7 +21,7 @@ void Lua::BindStreamLayerMaskedCell(sol::state& LuaState)
 	Utype.set("new", sol::no_constructor);
 	Utype.set("GridCell", &stream_layer_masked_cell::gc);
 	Utype.set("NRegion", sol::property([](stream_layer_masked_cell& Self) { return std::ref(Self.n_region); })); //HavokBPO*[4]
-	LuaState.set_usertype("StreamLayerMaskedCell", Utype);
+	RfgTable.set_usertype("StreamLayerMaskedCell", Utype);
 }
 
 void Lua::BindStreamLayer(sol::state& LuaState)
@@ -42,7 +42,7 @@ void Lua::BindStreamLayer(sol::state& LuaState)
 	//Utype.set("ActiveCells", &stream_layer::active_cells); //rfg::farray
 	//Utype.set("MaskedCells", &stream_layer::masked_cells); //rfg::farray
 	Utype.set("CellDim", &stream_layer::cell_dim);
-	LuaState.set_usertype("StreamLayer", Utype);
+	RfgTable.set_usertype("StreamLayer", Utype);
 }
 
 void Lua::BindDistrictFlags(sol::state& LuaState)
@@ -55,7 +55,7 @@ void Lua::BindDistrictFlags(sol::state& LuaState)
 	Utype.set("PlayCapstoneUnlockedLines", sol::property(itsy_bitsy::read<district_flags, 2>, itsy_bitsy::write<district_flags, 2>)); //int8 - 1
 	Utype.set("DisableMoraleChange", sol::property(itsy_bitsy::read<district_flags, 3>, itsy_bitsy::write<district_flags, 3>)); //int8 - 1
 	Utype.set("DisableControlChange", sol::property(itsy_bitsy::read<district_flags, 4>, itsy_bitsy::write<district_flags, 4>)); //int8 - 1
-	LuaState.set_usertype("DistrictFlags", Utype);
+	RfgTable.set_usertype("DistrictFlags", Utype);
 }
 
 void Lua::BindTDistrict(sol::state& LuaState)
@@ -87,7 +87,7 @@ void Lua::BindTDistrict(sol::state& LuaState)
 	//Utype.set("GridList", &t_district::list); //rfg::farray<grid_info, 21>
 	Utype.set("Next", &t_district::next); //tdistrict*
 	Utype.set("Prev", &t_district::prev); //tdistrict*
-	LuaState.set_usertype("TDistrict", Utype);
+	RfgTable.set_usertype("TDistrict", Utype);
 }
 
 void Lua::BindTerritory(sol::state& LuaState)
@@ -104,7 +104,7 @@ void Lua::BindTerritory(sol::state& LuaState)
 	Utype.set("NumVMaskZones", &territory::num_v_mask_zones);
 	Utype.set("HorizMaskZones", &territory::horiz_mask_zones);
 	Utype.set("NumHMaskZones", &territory::num_h_mask_zones);
-	LuaState.set_usertype("Territory", Utype);
+	RfgTable.set_usertype("Territory", Utype);
 }
 
 void Lua::BindStreamGrid(sol::state& LuaState)
@@ -121,7 +121,7 @@ void Lua::BindStreamGrid(sol::state& LuaState)
 	Utype.set("CompactTS", &stream_grid::compact_ts);
 	Utype.set("CompactWaitTS", &stream_grid::compact_wait_ts);
 	//Utype.set("TempTable", &stream_grid::m_tmp_table); //str_data_hash_table<unsigned char, 255, 64, unsigned char>*
-	LuaState.set_usertype("StreamGrid", Utype);
+	RfgTable.set_usertype("StreamGrid", Utype);
 }
 
 void Lua::BindGameSaveInfoNewData(sol::state& LuaState)
@@ -132,7 +132,7 @@ void Lua::BindGameSaveInfoNewData(sol::state& LuaState)
 	Utype.set("HammersUnlockedLarge", sol::property([](game_save_info_new_data& Self) { return std::ref(Self.hammers_unlocked_large); })); //char[8]
 	Utype.set("BackpacksUnlocked", sol::property([](game_save_info_new_data& Self) { return std::ref(Self.backpacks_unlocked); })); //char[2]
 	Utype.set("JetpackUnlockLevel", &game_save_info_new_data::jetpack_unlock_level); //char
-	LuaState.set_usertype("GameSaveInfoNewData", Utype);
+	RfgTable.set_usertype("GameSaveInfoNewData", Utype);
 }
 
 void Lua::BindGameSaveInfo(sol::state& LuaState)
@@ -159,7 +159,7 @@ void Lua::BindGameSaveInfo(sol::state& LuaState)
 	Utype.set("GoldenHammerDesired", &game_save_info::golden_hammer_desired);
 	Utype.set("NewData", &game_save_info::new_data);
 	//Utype.set("Padding", &game_save_info::padding); //Size 117 char array
-	LuaState.set_usertype("GameSaveInfo", Utype);
+	RfgTable.set_usertype("GameSaveInfo", Utype);
 }
 
 void Lua::BindSaveLoadInfo(sol::state& LuaState)
@@ -183,7 +183,7 @@ void Lua::BindSaveLoadInfo(sol::state& LuaState)
 	Utype.set("PlayerStartAtSafehouse", sol::property(itsy_bitsy::read<save_load_info, 13>, itsy_bitsy::write<save_load_info, 13>)); //int8 - 1
 	Utype.set("PlayerStartPos", &save_load_info::player_start_pos);
 	Utype.set("PlayerStartOrient", &save_load_info::player_start_orient);
-	LuaState.set_usertype("SaveLoadInfo", Utype);
+	RfgTable.set_usertype("SaveLoadInfo", Utype);
 }
 
 void Lua::BindWorldStateBuf(sol::state& LuaState)
@@ -198,7 +198,7 @@ void Lua::BindWorldStateBuf(sol::state& LuaState)
 	Utype.set("Buffer", &world_state_buf::buf); //char*
 	Utype.set("CurrentSize", &world_state_buf::cur_size);
 	Utype.set("MaxSize", &world_state_buf::max_size);
-	LuaState.set_usertype("WorldStateBuf", Utype);
+	RfgTable.set_usertype("WorldStateBuf", Utype);
 }
 
 void Lua::BindZoneHeader(sol::state& LuaState)
@@ -212,7 +212,7 @@ void Lua::BindZoneHeader(sol::state& LuaState)
 	Utype.set("NumberOfHandles", &zone_header::num_handles);
 	Utype.set("DistrictHash", &zone_header::district_hash);
 	Utype.set("Flags", &zone_header::flags);
-	LuaState.set_usertype("ZoneHeader", Utype);
+	RfgTable.set_usertype("ZoneHeader", Utype);
 }
 
 void Lua::BindWorldZone(sol::state& LuaState)
@@ -233,7 +233,7 @@ void Lua::BindWorldZone(sol::state& LuaState)
 	Utype.set("IsBorderZone", &world_zone::is_border_zone);
 	//Utype.set("ObjectHandleManager", &world_zone::obj_handle_mgr);
 	Utype.set("GID", &world_zone::gid);
-	LuaState.set_usertype("WorldZone", Utype);
+	RfgTable.set_usertype("WorldZone", Utype);
 }
 
 void Lua::BindWorld(sol::state& LuaState)
@@ -246,7 +246,7 @@ void Lua::BindWorld(sol::state& LuaState)
 	Utype.set("LevelBackAmbient", &World::level_back_ambient);
 	Utype.set("LastLoadedTerritory", sol::property([](World& Self) { return std::ref(Self.last_loaded_territory); })); //Size 64 array of chars
 	Utype.set("MaxWorldObjects", &World::max_world_objects);
-	///Utype.set("AllObjects", &World::all_objects); //rfg::base_array<Object*>
+	Utype.set("AllObjects", &World::all_objects); //rfg::base_array<Object*>
 	///Utype.set("TypeObjects", &World::type_objects); //rfg::base_array<ushort> array size 53
 	///Utype.set("SubTypeObjects", &World::subtype_objects); //rfg::base_array<ushort> array size 11
 	Utype.set("TechLevel", &World::tech_level);
@@ -276,10 +276,10 @@ void Lua::BindWorld(sol::state& LuaState)
 	Utype.set("StreamPos", &World::stream_pos);
 	Utype.set("NumTerritoryZones", &World::num_territory_zones);
 	//Utype.set("AllZones", &World::all_zones); //Double pointer
-	//Utype.set("GlobalZoneGrid", &World::global_zone_grid);
+	Utype.set("GlobalZoneGrid", sol::property([](World& Self) { return std::ref(Self.global_zone_grid); })); //world_zone*[257]
 	Utype.set("IsTerritory", &World::is_territory);
 	Utype.set("TerritoryName", sol::property([](World& Self) { return std::ref(Self.territory_name); })); //Size 128 char array
 	Utype.set("NumStreamingObjects", &World::num_streaming_objects);
 	Utype.set("StubSerializationInProgress", &World::stub_serialization_in_progress);
-	LuaState.set_usertype("World", Utype);
+	RfgTable.set_usertype("World", Utype);
 }

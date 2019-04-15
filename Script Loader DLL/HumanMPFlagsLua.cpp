@@ -5,7 +5,7 @@ void Lua::BindHumanMPFlags(sol::state & LuaState)
 {
 	auto RfgTable = LuaState["rfg"].get_or_create<sol::table>();
 
-	//LuaState.set_usertype("HumanMPFlags", Utype);
+	//RfgTable.set_usertype("HumanMPFlags", Utype);
 
 	/*RfgTable.new_usertype<HumanMPFlags>
 	(

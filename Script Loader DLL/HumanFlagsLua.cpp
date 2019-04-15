@@ -134,7 +134,7 @@ void Lua::BindHumanFlags(sol::state & LuaState)
 	Utype.set("DisallowFlinchesAndRagdolls", sol::property([](HumanFlags& Self) -> const bool& {return Self.disallow_flinches_and_ragdolls; }, [](HumanFlags& Self, bool Value) {Self.disallow_flinches_and_ragdolls = Value; })); //bool - 1 
 	Utype.set("OnlyUseActionNodes", sol::property([](HumanFlags& Self) -> const bool& {return Self.only_use_action_nodes; }, [](HumanFlags& Self, bool Value) {Self.only_use_action_nodes = Value; })); //bool - 1 
 	Utype.set("ComplainWhenShot", sol::property([](HumanFlags& Self) -> const bool& {return Self.complain_when_shot; }, [](HumanFlags& Self, bool Value) {Self.complain_when_shot = Value; })); //bool - 1 
-	LuaState.set_usertype("HumanFlags", Utype);
+	RfgTable.set_usertype("HumanFlags", Utype);
 
 	/*RfgTable.new_usertype<HumanFlags>
 	(
