@@ -75,6 +75,8 @@ void ScriptManager::SetupLua()
 	RfgTable["ToggleHud"] = ToggleHud;
 	RfgTable["SetFarClip"] = game_render_set_far_clip_distance;
 	RfgTable["GetFarClip"] = game_render_get_far_clip_distance;
+	RfgTable["SetAlertLevel"] = gsm_set_alert_level;
+	RfgTable["GetAlertLevel"] = gsm_get_alert_level;
 	RfgTable["TeleportHuman"] = HumanTeleportUnsafe;
 	RfgTable["GetPlayer"] = Lua::GetPlayer;
 	RfgTable["GetWorld"] = Lua::GetWorld;
