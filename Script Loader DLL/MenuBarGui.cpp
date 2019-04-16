@@ -35,7 +35,7 @@ void MenuBarGui::Draw()
 		if (ImGui::BeginMenu("File"))
 		{
 			ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.952f, 0.545f, 0.462f, 1.0f));
-			if (ImGui::MenuItem(std::string(std::string(ICON_FA_POWER_OFF) + u8" Deactivate script loader").c_str(), "Hold ctrl+alt for 5s")) 
+			if (ImGui::MenuItem(std::string(std::string(ICON_FA_POWER_OFF) + u8" Deactivate script loader").c_str(), "Hold F3")) 
 			{
 				ShowDeactivationConfirmationPopup = true;
 			}

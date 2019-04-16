@@ -1,11 +1,13 @@
 #include "Hooks.h"
-#include "CameraWrapper.h"
-#include "ScriptManager.h"
+#include "ProgramManager.h"
 
 D3D11Present D3D11PresentObject;
 
 //MainOverlay Overlay;
 GuiSystem Gui;
+
+std::chrono::steady_clock::time_point ExplosionTimerBegin;
+std::chrono::steady_clock::time_point ExplosionTimerEnd;
 
 std::once_flag HookD3D11PresentInitialCall;
 std::once_flag HookExplosionCreateInitialCall;
@@ -36,125 +38,232 @@ std::once_flag HookApplicationUpdateTime;
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 LRESULT __stdcall WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
+	ProcessInput(hWnd, msg, wParam, lParam);
 	if (OverlayActive || Gui.IsLuaConsoleActive())
 	{
-		//This check doesn't work currently :/
-		//Am just deleting the whole Console InputBuffer each time the console
-		//is toggled for now.
-		/*if (BlockNextTildeInput)
+		ImGui_ImplWin32_WndProcHandler(hWnd, msg, wParam, lParam);
+		if (msg == WM_SIZE)
 		{
-			if(msg == WM_KEYDOWN)//if (msg == WM_CHAR)
-			{
-				if (wParam == VK_OEM_3)
-				{
-					return true; //Block tilde input if console is being opened or closed.
-								 //This way, input is conserved and
-				}
-			}
-		}*/
-		if (ImGui_ImplWin32_WndProcHandler(hWnd, msg, wParam, lParam))
-			return true;
+			Logger::Log("WM_SIZE Received in custom WndProc. Invalidating ImGui DX11 device object. Releasing MainRenderTargetView.", LogWarning);
+			ImGui_ImplDX11_InvalidateDeviceObjects();
+			UpdateD3D11Pointers = true;
+			D3D11Context->OMSetRenderTargets(0, 0, 0);
+			MainRenderTargetView->Release();
+			return CallWindowProc(OriginalWndProc, hwnd, msg, wParam, lParam);
+		}
 		return true;
 	}
 
-
-	//LRESULT ImGuiWndProcResult = ImGui_ImplWin32_WndProcHandler(hWnd, msg, wParam, lParam);
-	//std::cout << "ImGuiWndProcResult: " << ImGuiWndProcResult << "\n\n";
-
-	/*Logger::ConsoleLog("WndProc: Window resized", LogWarning, false, true, true);
-	std::cout << "WndProc D3D11Device: " << std::hex << std::uppercase << D3D11Device << "\n";
-	std::cout << "WndProc D3D11Context: " << std::hex << std::uppercase << D3D11Context << "\n";
-	UpdateD3D11Pointers = true;
-	if (D3D11SwapchainPtr != nullptr)
-	{
-		Logger::ConsoleLog("WndProc: D3D11SwapchainPtr is not a nullptr", LogInfo, false, true, true);
-	}
-	if (D3D11Device != nullptr)
-	{
-		Logger::ConsoleLog("WndProc: D3D11Device is not a nullptr", LogInfo, false, true, true);
-	}
-	if (D3D11Context != nullptr)
-	{
-		Logger::ConsoleLog("WndProc: D3D11Context is not a nullptr", LogInfo, false, true, true);
-	}
-	if (D3D11Device == nullptr && wParam != SIZE_MINIMIZED)//g_pd3dDevice != NULL && wParam != SIZE_MINIMIZED)
-	{
-		Logger::ConsoleLog("Window resize test 1 passed, setting UpdateD3D11Pointers to true", LogWarning, false, true, true);
-		//UpdateD3D11Pointers = true;
-		//CleanupRenderTarget();
-		//g_pSwapChain->ResizeBuffers(0, (UINT)LOWORD(lParam), (UINT)HIWORD(lParam), DXGI_FORMAT_UNKNOWN, 0);
-		//CreateRenderTarget();
-	}*/
-
-	//Logger::ConsoleLog("You better see this #1", LogInfo, false, true, true);
-	
 	switch (msg)
 	{
-	case WM_SIZE:
-		Logger::Log("WM_SIZE Received in custom WndProc. Invalidating ImGui DX11 device object. Releasing MainRenderTargetView.", LogWarning);
-		ImGui_ImplDX11_InvalidateDeviceObjects();
-		UpdateD3D11Pointers = true;
-		D3D11Context->OMSetRenderTargets(0, 0, 0);
-		MainRenderTargetView->Release();
-		break;
-	/*case WM_SIZE:
-		/*if (D3D11SwapchainPtr)
-		{
-			DXGI_SWAP_CHAIN_DESC SwapchainDescription;
-			D3D11SwapchainPtr->GetDesc(&SwapchainDescription);
-
+		case WM_SIZE:
+			Logger::Log("WM_SIZE Received in custom WndProc. Invalidating ImGui DX11 device object. Releasing MainRenderTargetView.", LogWarning);
 			ImGui_ImplDX11_InvalidateDeviceObjects();
-
+			UpdateD3D11Pointers = true;
 			D3D11Context->OMSetRenderTargets(0, 0, 0);
 			MainRenderTargetView->Release();
-
-			HRESULT Result = D3D11SwapchainPtr->ResizeBuffers(SwapchainDescription.BufferCount, 0, 0, SwapchainDescription.BufferDesc.Format, SwapchainDescription.Flags);
-			//HRESULT Result = D3D11SwapchainPtr->ResizeBuffers(0, 0, 0, DXGI_FORMAT_UNKNOWN, 0);
-			if (Result != S_OK)
-			{
-				Logger::ConsoleLog(std::string("ResizeBuffers() failed, return value: " + std::to_string(Result)).c_str(), LogFatalError, false, true, true);
-			}
-
-			ID3D11Texture2D* BackBuffer;
-			Result = D3D11SwapchainPtr->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)&BackBuffer);
-			if (Result != S_OK)
-			{
-				Logger::ConsoleLog(std::string("GetBuffer() failed, return value: " + std::to_string(Result)).c_str(), LogFatalError, false, true, true);
-			}
-
-			Result = D3D11Device->CreateRenderTargetView(BackBuffer, NULL, &MainRenderTargetView);
-			if (Result != S_OK)
-			{
-				Logger::ConsoleLog(std::string("CreateRenderTargetView() failed, return value: " + std::to_string(Result)).c_str(), LogFatalError, false, true, true);
-			}
-
-			BackBuffer->Release();
-			D3D11Context->OMSetRenderTargets(1, &MainRenderTargetView, NULL);
-
-			// Set up the viewport.
-			D3D11_VIEWPORT Viewport;
-			Viewport.Width = LOWORD(lParam);
-			Viewport.Height = HIWORD(lParam);
-			Viewport.MinDepth = 0.0f;
-			Viewport.MaxDepth = 1.0f;
-			Viewport.TopLeftX = 0;
-			Viewport.TopLeftY = 0;
-			D3D11Context->RSSetViewports(1, &Viewport);
-
-			ImGui_ImplDX11_CreateDeviceObjects();
-		}*/
-		//return true;*/
-	case WM_SYSCOMMAND:
-		if ((wParam & 0xfff0) == SC_KEYMENU) // Disable ALT application menu
+			break;
+		case WM_SYSCOMMAND:
+			if ((wParam & 0xfff0) == SC_KEYMENU) // Disable ALT application menu
+				return 0;
+			break;
+		case WM_DESTROY:
+			PostQuitMessage(0);
 			return 0;
-		break;
-	case WM_DESTROY:
-		PostQuitMessage(0);
-		return 0;
 	}
 
 	return CallWindowProc(OriginalWndProc, hwnd, msg, wParam, lParam);
 	//return DefWindowProc(hWnd, msg, wParam, lParam);
+}
+
+LRESULT ProcessInput(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
+{
+	static bool MiddleMouseDown = false;
+	if(!Gui.Ready())
+	{
+		return 0;
+	}
+	switch(msg)
+	{
+	case WM_KEYDOWN:
+		if(GlobalCamera->IsFreeCameraActive())
+		{
+			switch(wParam)
+			{
+			case 0x51: //q
+				GlobalCamera->AdjustCameraSpeed(-0.02f);
+				break;
+			case 0x45: //e
+				GlobalCamera->AdjustCameraSpeed(0.02f);
+				break;
+			case 0x5A: //z
+				GlobalCamera->MoveFreeCamera(DOWN);
+				break;
+			case 0x58: //x
+				GlobalCamera->MoveFreeCamera(UP);	
+				break;
+			case VK_UP: //Up arrow key
+				GlobalCamera->MoveFreeCamera(FORWARD);
+				break;
+			case VK_DOWN: //Down arrow key
+				GlobalCamera->MoveFreeCamera(BACKWARD);
+				break;
+			case VK_RIGHT: //Right arrow key
+				GlobalCamera->MoveFreeCamera(RIGHT);
+				break;
+			case VK_LEFT: //Left arrow key
+				GlobalCamera->MoveFreeCamera(LEFT);
+				break;
+			default:
+				break;
+			}
+		}
+		switch(wParam)
+		{
+		case VK_F1:
+			OverlayActive = !OverlayActive;
+			///Logger::Log(std::string("Overlay active value: " + std::to_string(OverlayActive)), LogInfo);
+			if (OverlayActive)
+			{
+				if (!Gui.IsLuaConsoleActive())
+				{
+					SnippetManager::BackupSnippet("MouseGenericPollMouseVisible", MouseGenericPollMouseVisible, 12, true);
+					SnippetManager::BackupSnippet("CenterMouseCursorCall", CenterMouseCursorCall, 5, true);
+				}
+			}
+			else
+			{
+				Gui.DeactivateLuaConsole();
+				SnippetManager::RestoreSnippet("MouseGenericPollMouseVisible", true);
+				SnippetManager::RestoreSnippet("CenterMouseCursorCall", true);
+			}
+			//Sleep(150);
+			break;
+		case VK_F2:
+			Gui.ShowAppScriptEditor = !Gui.ShowAppScriptEditor;
+			break;
+		case VK_NUMPAD1:
+			ToggleHud();
+			break;
+		case VK_NUMPAD2:
+			ToggleFog();
+			break;
+		case VK_NUMPAD3:
+			GlobalCamera->ToggleFreeCamera();
+			break;
+		case VK_OEM_3: //Tilde
+			Gui.ToggleLuaConsole();
+			if (Gui.IsLuaConsoleActive())
+			{
+				Gui.Console->InputBuffer.clear();
+				Gui.Console->ReclaimFocus = true; //Tell console to set focus to it's text input.
+				if (!OverlayActive)
+				{
+					SnippetManager::BackupSnippet("MouseGenericPollMouseVisible", MouseGenericPollMouseVisible, 12, true);
+					SnippetManager::BackupSnippet("CenterMouseCursorCall", CenterMouseCursorCall, 5, true);
+				}
+			}
+			else
+			{
+				Gui.Console->InputBuffer.clear();
+				if (!OverlayActive)
+				{
+					SnippetManager::RestoreSnippet("MouseGenericPollMouseVisible", true);
+					SnippetManager::RestoreSnippet("CenterMouseCursorCall", true);
+				}
+			}
+			break;
+		case VK_F3:
+			GlobalProgram->ExitKeysPressCount++;
+			break;
+		default:
+			break;
+		}
+		break;
+	case WM_MBUTTONDOWN:
+		MiddleMouseDown = true;
+		break;
+	case WM_MBUTTONUP:
+		MiddleMouseDown = false;
+		break;
+	default:
+		break;
+	}
+
+	if (MiddleMouseDown && Gui.TweaksMenu->MiddleMouseBoomActive)
+	{
+		ExplosionTimerEnd = std::chrono::steady_clock::now();
+		std::cout << "Time since last explosion spawn: " << std::chrono::duration_cast<std::chrono::milliseconds>(ExplosionTimerEnd - ExplosionTimerBegin).count() << "\n";
+		if (std::chrono::duration_cast<std::chrono::milliseconds>(ExplosionTimerEnd - ExplosionTimerBegin).count() > 1000 / Gui.TweaksMenu->MiddleMouseExplosionsPerSecond)
+		{
+			ExplosionCreate(&Gui.TweaksMenu->CustomExplosionInfo, Gui.TweaksMenu->PlayerPtr, Gui.TweaksMenu->PlayerPtr,
+				&Gui.TweaksMenu->PlayerPtr->aim_pos, &Gui.TweaksMenu->PlayerPtr->mp_camera_orient, &Gui.TweaksMenu->PlayerPtr->aim_pos, NULL, false);
+			ExplosionTimerBegin = std::chrono::steady_clock::now();
+		}
+	}
+	//For whatever reason this causes a crash. Might need to call at a specific time to not piss off havok or something.
+	/*if (Gui.TweaksMenu.MiddleMouseRepairSphereActive)
+	{
+		if (Gui.TweaksMenu.PlayerPtr)
+		{
+			if (Gui.TweaksMenu.RepairPosition == 0)
+			{
+				const float Radius = Gui.TweaksMenu.RepairRadius;
+				const int Duration = Gui.TweaksMenu.RepairDuration;
+				rfg_dyn_repair_sphere(&Gui.TweaksMenu.PlayerPtr->Position, Radius, Duration, Gui.TweaksMenu.PlayerPtr);
+			}
+			else if (Gui.TweaksMenu.RepairPosition == 1)
+			{
+				const float Radius = Gui.TweaksMenu.RepairRadius;
+				const int Duration = Gui.TweaksMenu.RepairDuration;
+				rfg_dyn_repair_sphere(&Gui.TweaksMenu.PlayerPtr->aim_pos, Radius, Duration, Gui.TweaksMenu.PlayerPtr);
+			}
+		}
+	}*/
+
+	if (Gui.ShowAppScriptEditor)
+	{
+		try
+		{
+			if (GetAsyncKeyState(VK_LCONTROL) && GetAsyncKeyState(0x53)) //Ctrl + S
+			{
+				Gui.ScriptEditor->SaveScript();
+			}
+		}
+		catch (const std::exception& Ex)
+		{
+			Logger::Log(std::string("Exception when using Ctrl+S save script shortcut. Message: " + std::string(Ex.what())), LogFatalError);
+		}
+		if (GetAsyncKeyState(VK_CONTROL) && GetAsyncKeyState(VK_SHIFT) && GetAsyncKeyState(0x53)) //Ctrl + Shift + S
+		{
+			Gui.ScriptEditor->ShowSaveAsScriptPopup = true;
+		}
+		if (GetAsyncKeyState(VK_LCONTROL) && GetAsyncKeyState(0x4F)) //Ctrl + O
+		{
+			Gui.ScriptEditor->ShowOpenScriptPopup = true;
+		}
+		if (GetAsyncKeyState(VK_LCONTROL) && GetAsyncKeyState(0x4E)) //Ctrl + N
+		{
+			Gui.ScriptEditor->ShowNewScriptPopup = true;
+		}
+		try
+		{
+			if (GetAsyncKeyState(VK_F5))
+			{
+				if(Gui.HasValidScriptManager())
+				{
+					std::string ScriptString = Gui.ScriptEditor->GetCurrentScriptString();
+					Gui.GetScriptManager()->RunStringAsScript(ScriptString, "script editor run");
+					Sleep(175);
+				}
+			}
+		}
+		catch (const std::exception& Ex)
+		{
+			Logger::Log(std::string("Exception when using F5 run script shortcut. Message: " + std::string(Ex.what())), LogFatalError);
+		}
+	}
+	return 0;
 }
 
 HRESULT D3D11_DEVICE_CONTEXT_FROM_SWAPCHAIN(IDXGISwapChain * pSwapChain, ID3D11Device ** ppDevice, ID3D11DeviceContext ** ppContext)
@@ -178,8 +287,8 @@ HRESULT __stdcall D3D11PresentHook(IDXGISwapChain* pSwapChain, UINT SyncInterval
 #if !PublicMode
 		Logger::ConsoleLog("First time in D3D11Present() hook.", LogInfo, false, true, true);
 #endif
-
-		 HRESULT Result = D3D11_DEVICE_CONTEXT_FROM_SWAPCHAIN(pSwapChain, &D3D11Device, &D3D11Context);
+		ExplosionTimerBegin = std::chrono::steady_clock::now();
+		HRESULT Result = D3D11_DEVICE_CONTEXT_FROM_SWAPCHAIN(pSwapChain, &D3D11Device, &D3D11Context);
 		if (Result != S_OK)
 		{
 			Logger::Log(std::string("D3D11DeviceContextFromSwapchain() failed, return value: " + std::to_string(Result)), LogFatalError);

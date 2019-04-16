@@ -45,6 +45,12 @@ void GuiSystem::Initialize()
 	{
 		i->Gui = this;
 	}
+	Initialized = true;
+}
+
+bool GuiSystem::Ready()
+{
+	return Initialized;
 }
 
 /*Should only be doing this once.*/
@@ -60,6 +66,11 @@ void GuiSystem::SetScriptManager(ScriptManager* _Scripts)
 ScriptManager* GuiSystem::GetScriptManager()
 {
 	return Scripts;
+}
+
+bool GuiSystem::HasValidScriptManager()
+{
+	return (Scripts != nullptr);
 }
 
 void GuiSystem::Draw()

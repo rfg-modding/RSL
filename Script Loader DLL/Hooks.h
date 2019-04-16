@@ -9,6 +9,9 @@
 extern GuiSystem Gui;
 //extern MainOverlay Overlay;
 
+extern std::chrono::steady_clock::time_point ExplosionTimerBegin;
+extern std::chrono::steady_clock::time_point ExplosionTimerEnd;
+
 extern std::once_flag HookD3D11PresentInitialCall;
 extern std::once_flag HookExplosionCreateInitialCall;
 extern explosion_info NewExplosionInfo;
@@ -19,6 +22,7 @@ extern CameraViewTableEntry NewCameraViewTableEntry;
 extern bool NewSkipTransition;
 
 LRESULT __stdcall WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+extern LRESULT ProcessInput(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 typedef HRESULT(__stdcall* D3D11Present)(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT Flags);
 extern D3D11Present D3D11PresentObject;

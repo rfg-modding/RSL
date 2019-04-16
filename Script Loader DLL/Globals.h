@@ -9,6 +9,18 @@
 //using json = nlohmann::json;
 namespace fs = std::filesystem;
 
+class ProgramManager;
+extern ProgramManager* GlobalProgram;
+class GuiSystem;
+extern GuiSystem* GlobalGui;
+class ScriptManager;
+extern ScriptManager* GlobalScripts;
+class CameraWrapper;
+extern CameraWrapper* GlobalCamera;
+
+extern DWORD MouseGenericPollMouseVisible;
+extern DWORD CenterMouseCursorCall;
+
 static const ImVec4 ColorTransparent = ImVec4(0.0f, 0.0f, 0.0f, 0.0f);
 static const ImVec4 ColorRed = ImVec4(1.0f, 0.0f, 0.0f, 1.0f);
 static const ImVec4 ColorGreen = ImVec4(0.0f, 1.0f, 0.0f, 1.0f);

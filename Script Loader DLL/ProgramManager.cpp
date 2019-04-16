@@ -33,6 +33,10 @@ ProgramManager::~ProgramManager()
 
 void ProgramManager::Initialize()
 {
+	GlobalProgram = this;
+	GlobalGui = &Gui;
+	GlobalScripts = &this->Scripts;
+	GlobalCamera = &this->Camera;
 	Camera.Initialize(DefaultFreeCameraSpeed, 5.0);
 	Functions.Initialize();
 	Scripts.Initialize();
@@ -122,246 +126,246 @@ void ProgramManager::Initialize()
 
 void ProgramManager::ProcessInput()
 {
-	if ((GetAsyncKeyState(VK_OEM_3))) //126 = virtual key code for tilde
-	{
-		///Logger::Log("Tilde pressed", LogInfo);
-		Gui.ToggleLuaConsole();
-		if (Gui.IsLuaConsoleActive())
-		{
-			Gui.Console->InputBuffer.clear();
-			Gui.Console->ReclaimFocus = true; //Tell console to set focus to it's text input.
-			if (!OverlayActive)
-			{
-				SnippetManager::BackupSnippet("MouseGenericPollMouseVisible", MouseGenericPollMouseVisible, 12, true);
-				SnippetManager::BackupSnippet("CenterMouseCursorCall", CenterMouseCursorCall, 5, true);
-			}
-		}
-		else
-		{
-			Gui.Console->InputBuffer.clear();
-			if (!OverlayActive)
-			{
-				SnippetManager::RestoreSnippet("MouseGenericPollMouseVisible", true);
-				SnippetManager::RestoreSnippet("CenterMouseCursorCall", true);
-			}
-		}
-		Sleep(200);
-	}
-	if ((GetAsyncKeyState(VK_LCONTROL) & 0x8000) && (GetAsyncKeyState(VK_MENU) & 0x8000))
-	{
-		ExitKeysPressCount++;
-		Sleep(100);
-	}
-	if (GetAsyncKeyState(VK_NUMPAD1) & 0x8000)
-	{
-		ToggleHud();
-		Sleep(175);
-	}
-	if (GetAsyncKeyState(VK_NUMPAD2))
-	{
-		ToggleFog();
-		Sleep(175);
-	}
-	if (GetAsyncKeyState(VK_NUMPAD3))
-	{
-		Camera.ToggleFreeCamera();
-		Sleep(175);
-	}
-	if (Camera.IsFreeCameraActive())
-	{
-		static int MovementSleepTime = 4;
-		if (GetAsyncKeyState(0x51) & 0x8000) //q
-		{
-			Camera.AdjustCameraSpeed(-0.02f);
-			Sleep(50);
-		}
-		if (GetAsyncKeyState(0x45) & 0x8000) //e
-		{
-			Camera.AdjustCameraSpeed(0.02f);
-			Sleep(50);
-		}
-		/*if (GetAsyncKeyState(0x54) & 0x8000) //t
-		{
-			Camera.AdjustCameraRotationSpeed(-0.02f);
-			Sleep(50);
-		}
-		if (GetAsyncKeyState(0x59) & 0x8000) //y
-		{
-			Camera.AdjustCameraRotationSpeed(0.02f);
-			Sleep(50);
-		}*/
-		if (GetKeyState(0x5A) & 0x8000) //z
-		{
-			Camera.MoveFreeCamera(DOWN);
-			Sleep(MovementSleepTime);
-		}
-		if (GetAsyncKeyState(0x58) & 0x8000) //x
-		{
-			Camera.MoveFreeCamera(UP);
-			Sleep(MovementSleepTime);
-		}
-		if (GetAsyncKeyState(VK_UP) & 0x8000) //Up arrow key
-		{
-			Camera.MoveFreeCamera(FORWARD);
-			Sleep(MovementSleepTime);
-		}
-		if (GetAsyncKeyState(VK_DOWN) & 0x8000) //Down arrow key
-		{
-			Camera.MoveFreeCamera(BACKWARD);
-			Sleep(MovementSleepTime);
-		}
-		if (GetAsyncKeyState(VK_RIGHT) & 0x8000) //Right arrow key
-		{
-			Camera.MoveFreeCamera(RIGHT);
-			Sleep(MovementSleepTime);
-		}
-		if (GetAsyncKeyState(VK_LEFT) & 0x8000) //Left arrow key
-		{
-			Camera.MoveFreeCamera(LEFT);
-			Sleep(MovementSleepTime);
-		}
-	}
-	if (GetAsyncKeyState(VK_NUMPAD4))
-	{
-		std::random_device RandomDevice; // obtain a random number from hardware
-		std::mt19937 Generator(RandomDevice()); // seed the generator
-		std::uniform_int_distribution<> Distribution(0, 6); // define the range
-		int RandError = Distribution(Generator);
+	//if ((GetAsyncKeyState(VK_OEM_3))) //126 = virtual key code for tilde
+	//{
+	//	///Logger::Log("Tilde pressed", LogInfo);
+	//	Gui.ToggleLuaConsole();
+	//	if (Gui.IsLuaConsoleActive())
+	//	{
+	//		Gui.Console->InputBuffer.clear();
+	//		Gui.Console->ReclaimFocus = true; //Tell console to set focus to it's text input.
+	//		if (!OverlayActive)
+	//		{
+	//			SnippetManager::BackupSnippet("MouseGenericPollMouseVisible", MouseGenericPollMouseVisible, 12, true);
+	//			SnippetManager::BackupSnippet("CenterMouseCursorCall", CenterMouseCursorCall, 5, true);
+	//		}
+	//	}
+	//	else
+	//	{
+	//		Gui.Console->InputBuffer.clear();
+	//		if (!OverlayActive)
+	//		{
+	//			SnippetManager::RestoreSnippet("MouseGenericPollMouseVisible", true);
+	//			SnippetManager::RestoreSnippet("CenterMouseCursorCall", true);
+	//		}
+	//	}
+	//	Sleep(200);
+	//}
+	//if ((GetAsyncKeyState(VK_LCONTROL) & 0x8000) && (GetAsyncKeyState(VK_MENU) & 0x8000))
+	//{
+	//	ExitKeysPressCount++;
+	//	Sleep(100);
+	//}
+	//if (GetAsyncKeyState(VK_NUMPAD1) & 0x8000)
+	//{
+	//	ToggleHud();
+	//	Sleep(175);
+	//}
+	//if (GetAsyncKeyState(VK_NUMPAD2))
+	//{
+	//	ToggleFog();
+	//	Sleep(175);
+	//}
+	//if (GetAsyncKeyState(VK_NUMPAD3))
+	//{
+	//	Camera.ToggleFreeCamera();
+	//	Sleep(175);
+	//}
+	//if (Camera.IsFreeCameraActive())
+	//{
+	//	static int MovementSleepTime = 4;
+	//	if (GetAsyncKeyState(0x51) & 0x8000) //q
+	//	{
+	//		Camera.AdjustCameraSpeed(-0.02f);
+	//		Sleep(50);
+	//	}
+	//	if (GetAsyncKeyState(0x45) & 0x8000) //e
+	//	{
+	//		Camera.AdjustCameraSpeed(0.02f);
+	//		Sleep(50);
+	//	}
+	//	/*if (GetAsyncKeyState(0x54) & 0x8000) //t
+	//	{
+	//		Camera.AdjustCameraRotationSpeed(-0.02f);
+	//		Sleep(50);
+	//	}
+	//	if (GetAsyncKeyState(0x59) & 0x8000) //y
+	//	{
+	//		Camera.AdjustCameraRotationSpeed(0.02f);
+	//		Sleep(50);
+	//	}*/
+	//	if (GetKeyState(0x5A) & 0x8000) //z
+	//	{
+	//		Camera.MoveFreeCamera(DOWN);
+	//		Sleep(MovementSleepTime);
+	//	}
+	//	if (GetAsyncKeyState(0x58) & 0x8000) //x
+	//	{
+	//		Camera.MoveFreeCamera(UP);
+	//		Sleep(MovementSleepTime);
+	//	}
+	//	if (GetAsyncKeyState(VK_UP) & 0x8000) //Up arrow key
+	//	{
+	//		Camera.MoveFreeCamera(FORWARD);
+	//		Sleep(MovementSleepTime);
+	//	}
+	//	if (GetAsyncKeyState(VK_DOWN) & 0x8000) //Down arrow key
+	//	{
+	//		Camera.MoveFreeCamera(BACKWARD);
+	//		Sleep(MovementSleepTime);
+	//	}
+	//	if (GetAsyncKeyState(VK_RIGHT) & 0x8000) //Right arrow key
+	//	{
+	//		Camera.MoveFreeCamera(RIGHT);
+	//		Sleep(MovementSleepTime);
+	//	}
+	//	if (GetAsyncKeyState(VK_LEFT) & 0x8000) //Left arrow key
+	//	{
+	//		Camera.MoveFreeCamera(LEFT);
+	//		Sleep(MovementSleepTime);
+	//	}
+	//}
+	//if (GetAsyncKeyState(VK_NUMPAD4))
+	//{
+	//	std::random_device RandomDevice; // obtain a random number from hardware
+	//	std::mt19937 Generator(RandomDevice()); // seed the generator
+	//	std::uniform_int_distribution<> Distribution(0, 6); // define the range
+	//	int RandError = Distribution(Generator);
 
-		switch (RandError)
-		{
-		case 0:
-			Logger::Log("Random Log Test", LogNone);
-			break;
-		case 1:
-			Logger::Log("Random Log Test", LogInfo);
-			break;
-		case 2:
-			Logger::Log("Random Log Test", LogWarning);
-			break;
-		case 3:
-			Logger::Log("Random Log Test", LogError);
-			break;
-		case 4:
-			Logger::Log("Random Log Test", LogFatalError);
-			break;
-		case 5:
-			Logger::Log("Random Log Test", LogLua);
-			break;
-		case 6:
-			Logger::Log("Random Log Test", LogJson);
-			break;
-		default:
-			Logger::Log("Random Log Test", LogNone);
-			break;
-		}
-		Sleep(5);
-	}
-	if (GetAsyncKeyState(VK_MBUTTON))
-	{
-		if (Gui.TweaksMenu->MiddleMouseBoomActive)
-		{
-			ExplosionCreate(&Gui.TweaksMenu->CustomExplosionInfo, Gui.TweaksMenu->PlayerPtr, Gui.TweaksMenu->PlayerPtr,
-				&Gui.TweaksMenu->PlayerPtr->aim_pos, &Gui.TweaksMenu->PlayerPtr->mp_camera_orient, &Gui.TweaksMenu->PlayerPtr->aim_pos, NULL, false);
-		}
-		//For whatever reason this causes a crash. Might need to call at a specific time to not piss off havok or something.
-		/*if (Gui.TweaksMenu.MiddleMouseRepairSphereActive)
-		{
-			if (Gui.TweaksMenu.PlayerPtr)
-			{
-				if (Gui.TweaksMenu.RepairPosition == 0)
-				{
-					const float Radius = Gui.TweaksMenu.RepairRadius;
-					const int Duration = Gui.TweaksMenu.RepairDuration;
-					rfg_dyn_repair_sphere(&Gui.TweaksMenu.PlayerPtr->Position, Radius, Duration, Gui.TweaksMenu.PlayerPtr);
-				}
-				else if (Gui.TweaksMenu.RepairPosition == 1)
-				{
-					const float Radius = Gui.TweaksMenu.RepairRadius;
-					const int Duration = Gui.TweaksMenu.RepairDuration;
-					rfg_dyn_repair_sphere(&Gui.TweaksMenu.PlayerPtr->aim_pos, Radius, Duration, Gui.TweaksMenu.PlayerPtr);
-				}
-			}
-		}*/
-		if (Gui.TweaksMenu->MiddleMouseExplosionsPerSecond >= 1)
-		{
-			Sleep(1000 / Gui.TweaksMenu->MiddleMouseExplosionsPerSecond);
-		}
-		else
-		{
-			Sleep(1000);
-		}
-	}
-	if (GetAsyncKeyState(VK_F1))
-	{
-		OverlayActive = !OverlayActive;
-		///Logger::Log(std::string("Overlay active value: " + std::to_string(OverlayActive)), LogInfo);
-		if (OverlayActive)
-		{
-			if (!Gui.IsLuaConsoleActive())
-			{
-				SnippetManager::BackupSnippet("MouseGenericPollMouseVisible", MouseGenericPollMouseVisible, 12, true);
-				SnippetManager::BackupSnippet("CenterMouseCursorCall", CenterMouseCursorCall, 5, true);
-			}
-		}
-		else
-		{
-			Gui.DeactivateLuaConsole();
-			SnippetManager::RestoreSnippet("MouseGenericPollMouseVisible", true);
-			SnippetManager::RestoreSnippet("CenterMouseCursorCall", true);
-		}
-		Sleep(150);
-	}
-	if (GetAsyncKeyState(VK_F2))
-	{
-		Gui.ShowAppScriptEditor = !Gui.ShowAppScriptEditor;
-	}
-	/*if (GetAsyncKeyState(VK_F2))
-	{
-		FirstPersonModeActive = !FirstPersonModeActive;
-		Logger::Log(std::string("FPS Mode active value: " + std::to_string(FirstPersonModeActive)), LogInfo);
-		Sleep(150);
-	}*/
-	if (Gui.ShowAppScriptEditor)
-	{
-		try
-		{
-			if (GetAsyncKeyState(VK_LCONTROL) && GetAsyncKeyState(0x53)) //Ctrl + S
-			{
-				Gui.ScriptEditor->SaveScript();
-			}
-		}
-		catch (const std::exception& Ex)
-		{
-			Logger::Log(std::string("Exception when using Ctrl+S save script shortcut. Message: " + std::string(Ex.what())), LogFatalError);
-		}
-		if (GetAsyncKeyState(VK_CONTROL) && GetAsyncKeyState(VK_SHIFT) && GetAsyncKeyState(0x53)) //Ctrl + Shift + S
-		{
-			Gui.ScriptEditor->ShowSaveAsScriptPopup = true;
-		}
-		if (GetAsyncKeyState(VK_LCONTROL) && GetAsyncKeyState(0x4F)) //Ctrl + O
-		{
-			Gui.ScriptEditor->ShowOpenScriptPopup = true;
-		}
-		if (GetAsyncKeyState(VK_LCONTROL) && GetAsyncKeyState(0x4E)) //Ctrl + N
-		{
-			Gui.ScriptEditor->ShowNewScriptPopup = true;
-		}
-		try
-		{
-			if (GetAsyncKeyState(VK_F5))
-			{
+	//	switch (RandError)
+	//	{
+	//	case 0:
+	//		Logger::Log("Random Log Test", LogNone);
+	//		break;
+	//	case 1:
+	//		Logger::Log("Random Log Test", LogInfo);
+	//		break;
+	//	case 2:
+	//		Logger::Log("Random Log Test", LogWarning);
+	//		break;
+	//	case 3:
+	//		Logger::Log("Random Log Test", LogError);
+	//		break;
+	//	case 4:
+	//		Logger::Log("Random Log Test", LogFatalError);
+	//		break;
+	//	case 5:
+	//		Logger::Log("Random Log Test", LogLua);
+	//		break;
+	//	case 6:
+	//		Logger::Log("Random Log Test", LogJson);
+	//		break;
+	//	default:
+	//		Logger::Log("Random Log Test", LogNone);
+	//		break;
+	//	}
+	//	Sleep(5);
+	//}
+	//if (GetAsyncKeyState(VK_MBUTTON))
+	//{
+	//	if (Gui.TweaksMenu->MiddleMouseBoomActive)
+	//	{
+	//		ExplosionCreate(&Gui.TweaksMenu->CustomExplosionInfo, Gui.TweaksMenu->PlayerPtr, Gui.TweaksMenu->PlayerPtr,
+	//			&Gui.TweaksMenu->PlayerPtr->aim_pos, &Gui.TweaksMenu->PlayerPtr->mp_camera_orient, &Gui.TweaksMenu->PlayerPtr->aim_pos, NULL, false);
+	//	}
+	//	//For whatever reason this causes a crash. Might need to call at a specific time to not piss off havok or something.
+	//	/*if (Gui.TweaksMenu.MiddleMouseRepairSphereActive)
+	//	{
+	//		if (Gui.TweaksMenu.PlayerPtr)
+	//		{
+	//			if (Gui.TweaksMenu.RepairPosition == 0)
+	//			{
+	//				const float Radius = Gui.TweaksMenu.RepairRadius;
+	//				const int Duration = Gui.TweaksMenu.RepairDuration;
+	//				rfg_dyn_repair_sphere(&Gui.TweaksMenu.PlayerPtr->Position, Radius, Duration, Gui.TweaksMenu.PlayerPtr);
+	//			}
+	//			else if (Gui.TweaksMenu.RepairPosition == 1)
+	//			{
+	//				const float Radius = Gui.TweaksMenu.RepairRadius;
+	//				const int Duration = Gui.TweaksMenu.RepairDuration;
+	//				rfg_dyn_repair_sphere(&Gui.TweaksMenu.PlayerPtr->aim_pos, Radius, Duration, Gui.TweaksMenu.PlayerPtr);
+	//			}
+	//		}
+	//	}*/
+	//	if (Gui.TweaksMenu->MiddleMouseExplosionsPerSecond >= 1)
+	//	{
+	//		Sleep(1000 / Gui.TweaksMenu->MiddleMouseExplosionsPerSecond);
+	//	}
+	//	else
+	//	{
+	//		Sleep(1000);
+	//	}
+	//}
+	//if (GetAsyncKeyState(VK_F1))
+	//{
+	//	OverlayActive = !OverlayActive;
+	//	///Logger::Log(std::string("Overlay active value: " + std::to_string(OverlayActive)), LogInfo);
+	//	if (OverlayActive)
+	//	{
+	//		if (!Gui.IsLuaConsoleActive())
+	//		{
+	//			SnippetManager::BackupSnippet("MouseGenericPollMouseVisible", MouseGenericPollMouseVisible, 12, true);
+	//			SnippetManager::BackupSnippet("CenterMouseCursorCall", CenterMouseCursorCall, 5, true);
+	//		}
+	//	}
+	//	else
+	//	{
+	//		Gui.DeactivateLuaConsole();
+	//		SnippetManager::RestoreSnippet("MouseGenericPollMouseVisible", true);
+	//		SnippetManager::RestoreSnippet("CenterMouseCursorCall", true);
+	//	}
+	//	Sleep(150);
+	//}
+	//if (GetAsyncKeyState(VK_F2))
+	//{
+	//	Gui.ShowAppScriptEditor = !Gui.ShowAppScriptEditor;
+	//}
+	///*if (GetAsyncKeyState(VK_F2))
+	//{
+	//	FirstPersonModeActive = !FirstPersonModeActive;
+	//	Logger::Log(std::string("FPS Mode active value: " + std::to_string(FirstPersonModeActive)), LogInfo);
+	//	Sleep(150);
+	//}*/
+	//if (Gui.ShowAppScriptEditor)
+	//{
+	//	try
+	//	{
+	//		if (GetAsyncKeyState(VK_LCONTROL) && GetAsyncKeyState(0x53)) //Ctrl + S
+	//		{
+	//			Gui.ScriptEditor->SaveScript();
+	//		}
+	//	}
+	//	catch (const std::exception& Ex)
+	//	{
+	//		Logger::Log(std::string("Exception when using Ctrl+S save script shortcut. Message: " + std::string(Ex.what())), LogFatalError);
+	//	}
+	//	if (GetAsyncKeyState(VK_CONTROL) && GetAsyncKeyState(VK_SHIFT) && GetAsyncKeyState(0x53)) //Ctrl + Shift + S
+	//	{
+	//		Gui.ScriptEditor->ShowSaveAsScriptPopup = true;
+	//	}
+	//	if (GetAsyncKeyState(VK_LCONTROL) && GetAsyncKeyState(0x4F)) //Ctrl + O
+	//	{
+	//		Gui.ScriptEditor->ShowOpenScriptPopup = true;
+	//	}
+	//	if (GetAsyncKeyState(VK_LCONTROL) && GetAsyncKeyState(0x4E)) //Ctrl + N
+	//	{
+	//		Gui.ScriptEditor->ShowNewScriptPopup = true;
+	//	}
+	//	try
+	//	{
+	//		if (GetAsyncKeyState(VK_F5))
+	//		{
 
-				std::string ScriptString = Gui.ScriptEditor->GetCurrentScriptString();
-				Scripts.RunStringAsScript(ScriptString, "script editor run");
-				Sleep(175);
-			}
-		}
-		catch (const std::exception& Ex)
-		{
-			Logger::Log(std::string("Exception when using F5 run script shortcut. Message: " + std::string(Ex.what())), LogFatalError);
-		}
-	}
+	//			std::string ScriptString = Gui.ScriptEditor->GetCurrentScriptString();
+	//			Scripts.RunStringAsScript(ScriptString, "script editor run");
+	//			Sleep(175);
+	//		}
+	//	}
+	//	catch (const std::exception& Ex)
+	//	{
+	//		Logger::Log(std::string("Exception when using F5 run script shortcut. Message: " + std::string(Ex.what())), LogFatalError);
+	//	}
+	//}
 }
 
 void ProgramManager::Exit()

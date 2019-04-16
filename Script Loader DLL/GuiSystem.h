@@ -21,8 +21,10 @@ public:
 	~GuiSystem();
 
 	void Initialize();
+	bool Ready();
 	void SetScriptManager(ScriptManager* _Scripts);
 	ScriptManager* GetScriptManager();
+	bool HasValidScriptManager();
 	//bool LoadTeleportLocations();
 	//bool LoadGUIConfig();
 	void Draw();
@@ -84,5 +86,6 @@ private:
 	/*Private to insure that every instance of PlayerPtr is properly set,
 	instead of mistakenly just setting this one.*/
 	Player* PlayerPtr = nullptr;
+	bool Initialized = false;
 };
 

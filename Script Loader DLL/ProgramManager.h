@@ -37,9 +37,6 @@ public:
 	uintptr_t ModuleBase = 0;
 	unsigned int ExitKeysPressCount = 0;
 
-	DWORD MouseGenericPollMouseVisible;
-	DWORD CenterMouseCursorCall;
-
 	bool SuccessfulExit = false;
 };
 

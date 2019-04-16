@@ -108,6 +108,8 @@ the top menu bar above.");
 	ImGui::Text("\nUseful shortcuts:");
 	ImGui::Text("Toggle overlay: ");
 	ImGui::SameLine(); ImGui::TextColored(SecondaryTextColor, "F1");
+	ImGui::Text("Toggle script editor: ");
+	ImGui::SameLine(); ImGui::TextColored(SecondaryTextColor, "F2");
 	ImGui::Text("Toggle lua console: ");
 	ImGui::SameLine(); ImGui::TextColored(SecondaryTextColor, "Tilde (~)");
 	ImGui::Text("Toggle hud: ");

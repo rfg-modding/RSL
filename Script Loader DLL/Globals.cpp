@@ -1,11 +1,19 @@
 #include "Globals.h"
 
+ProgramManager* GlobalProgram = nullptr;
+GuiSystem* GlobalGui = nullptr;
+ScriptManager* GlobalScripts = nullptr;
+CameraWrapper* GlobalCamera = nullptr;
+
+DWORD MouseGenericPollMouseVisible = NULL;
+DWORD CenterMouseCursorCall = NULL;
+
 HMODULE MainModule = nullptr;
 
-ImFont* FontNormal;
-ImFont* FontBig;
-ImFont* FontLarge;
-ImFont* FontHuge;
+ImFont* FontNormal = nullptr;
+ImFont* FontBig = nullptr;
+ImFont* FontLarge = nullptr;
+ImFont* FontHuge = nullptr;
 
 bool OpenDebugConsole = false;
 nlohmann::json MainConfig;
@@ -16,8 +24,8 @@ IDXGISwapChain* D3D11SwapchainPtr = nullptr;
 ID3D11Device* D3D11Device = nullptr;
 ID3D11DeviceContext* D3D11Context = nullptr;
 ID3D11RenderTargetView* MainRenderTargetView = nullptr;
-HWND hwnd = NULL;
-RECT WindowRect = { 0 };
+HWND hwnd = nullptr;
+RECT WindowRect = { 0, 0, 0, 0 };
 //ImVec4* Colors = nullptr;
 
 //MainOverlay Overlay;
@@ -28,7 +36,7 @@ bool show_demo_window = true;
 bool ImGuiInitialized = false;
 ImGuiIO io;
 bool OverlayActive = false;
-WNDPROC OriginalWndProc = NULL;
+WNDPROC OriginalWndProc = nullptr;
 bool FirstPersonModeActive = false;
 
 float GlobalExplosionStrengthMultiplier = 2.0f;
@@ -41,7 +49,7 @@ bool InfiniteJetpack = false;
 
 //sol::state Lua;
 
-HANDLE ConsoleHandle = { 0 };
+HANDLE ConsoleHandle = nullptr;
 DWORD* InMultiplayer = nullptr;
 bool MultiplayerHookTriggered = false;
 
