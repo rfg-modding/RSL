@@ -36,7 +36,7 @@ void GuiSystem::Initialize()
 	ScriptList = (ScriptSelectGui*)GuiList.back();
 	GuiList.push_back(new LogWindow(&ShowAppLogWindow , "Logger"));
 	LogGui = (LogWindow*)GuiList.back();
-	GuiList.push_back(new FreeCamGui(&ShowAppFreeCamSettings, "Free cam settings"));
+	GuiList.push_back(new FreeCamGui(&ShowAppFreeCamSettings, "Camera settings"));
 	FreeCamSettings = (FreeCamGui*)GuiList.back();
 	GuiList.push_back(new PhysicsGui(&ShowAppPhysicsSettings, "Physics settings"));
 	PhysicsSettings = (PhysicsGui*)GuiList.back();
