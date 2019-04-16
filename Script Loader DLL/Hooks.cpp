@@ -459,6 +459,10 @@ void __fastcall PlayerDoFrameHook(Player* PlayerPtr)
 		PlayerPtr->HitPoints = 2147483647.0f;
 		//PlayerPtr->InitialMaxHitPoints = 2147483647;
 	}
+	if(Gui.FreeCamSettings->Camera->IsFreeCameraActive())
+	{
+		PlayerPtr->Flags.ai_ignore = true;
+	}
 	if (Gui.TweaksMenu->NeedCustomJumpHeightSet)
 	{
 		PlayerPtr->CodeDrivenJumpHeight = Gui.TweaksMenu->CustomJumpHeight;
