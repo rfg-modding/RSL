@@ -66,11 +66,14 @@ DWORD WINAPI MainThread(HMODULE hModule)
         Logger::Log(MessageBoxString, LogFatalError, true, true);
         MessageBoxA(FindTopWindow(GetProcessID("rfg.exe")), MessageBoxString.c_str(), "Logger failed to open default log files!", MB_OK);
     }
-
     Program.Scripts.ScanScriptsFolder();
 
+	std::chrono::steady_clock::time_point Begin = std::chrono::steady_clock::now();
+	std::chrono::steady_clock::time_point End;
+	const float UpdatesPerSecond = 1;
+	const unsigned int MillisecondsPerUpdate = (unsigned int)(1000.0f / UpdatesPerSecond);
     GameState RFGRState;
-    while (!Program.ShouldClose()) //Todo: Change to respond to PostQuitMessage(0) in WndProc;
+    while (!Program.ShouldClose()) //Todo: Change to respond to PostQuitMessage(0) in WndProc
     {
         /*The error messages in the next three if statements are BS. They really
         detect if the player has entered a multiplayer mode. I changed them to 
@@ -105,8 +108,11 @@ DWORD WINAPI MainThread(HMODULE hModule)
             FreeLibraryAndExitThread(hModule, 0);
             return 0;
         }
-        Program.ProcessInput();
+        //Program.ProcessInput();
         Program.Update();
+		End = std::chrono::steady_clock::now();
+		Sleep(MillisecondsPerUpdate - std::chrono::duration_cast<std::chrono::milliseconds>(End - Begin).count());
+		Begin = std::chrono::steady_clock::now();
     }
     Program.CloseConsole();
     Program.Exit();
