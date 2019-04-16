@@ -13,31 +13,26 @@ CameraWrapper::~CameraWrapper()
 void CameraWrapper::Initialize(float InitialCameraSpeed, float InitialCameraRotationSpeed)
 {
 	uintptr_t ModuleBase = (uintptr_t)GetModuleHandle(NULL);
-	RealX = (DWORD*)((*(DWORD*)(ModuleBase + 0x0023394C)) + 0x2C);
-	RealY = (DWORD*)((*(DWORD*)(ModuleBase + 0x0023394C)) + 0x30);
-	RealZ = (DWORD*)((*(DWORD*)(ModuleBase + 0x0023394C)) + 0x34);
+	RealX = (float*)((*(DWORD*)(ModuleBase + 0x0023394C)) + 0x2C);
+	RealY = (float*)((*(DWORD*)(ModuleBase + 0x0023394C)) + 0x30);
+	RealZ = (float*)((*(DWORD*)(ModuleBase + 0x0023394C)) + 0x34);
 
 	//matrix real_orient; //36 Bytes
 	//[50, 54, 58] Right
 	//[5C, 60, 64] Up
 	//[68, 6C, 70] Direction / Forward
-	RealRightX = (DWORD*)((*(DWORD*)(ModuleBase + 0x0023394C)) + 0x50);//
-	RealRightY = (DWORD*)((*(DWORD*)(ModuleBase + 0x0023394C)) + 0x54);
-	RealRightZ = (DWORD*)((*(DWORD*)(ModuleBase + 0x0023394C)) + 0x58);//
+	RealRightX = (float*)((*(DWORD*)(ModuleBase + 0x0023394C)) + 0x50);//
+	RealRightY = (float*)((*(DWORD*)(ModuleBase + 0x0023394C)) + 0x54);
+	RealRightZ = (float*)((*(DWORD*)(ModuleBase + 0x0023394C)) + 0x58);//
 	
-	RealUpX = (DWORD*)((*(DWORD*)(ModuleBase + 0x0023394C)) + 0x5C);
-	RealUpY = (DWORD*)((*(DWORD*)(ModuleBase + 0x0023394C)) + 0x60);//
-	RealUpZ = (DWORD*)((*(DWORD*)(ModuleBase + 0x0023394C)) + 0x64);
+	RealUpX = (float*)((*(DWORD*)(ModuleBase + 0x0023394C)) + 0x5C);
+	RealUpY = (float*)((*(DWORD*)(ModuleBase + 0x0023394C)) + 0x60);//
+	RealUpZ = (float*)((*(DWORD*)(ModuleBase + 0x0023394C)) + 0x64);
 	
-	RealDirectionX = (DWORD*)((*(DWORD*)(ModuleBase + 0x0023394C)) + 0x68);//
-	RealDirectionY = (DWORD*)((*(DWORD*)(ModuleBase + 0x0023394C)) + 0x6C);
-	RealDirectionZ = (DWORD*)((*(DWORD*)(ModuleBase + 0x0023394C)) + 0x70);//4
+	RealDirectionX = (float*)((*(DWORD*)(ModuleBase + 0x0023394C)) + 0x68);//
+	RealDirectionY = (float*)((*(DWORD*)(ModuleBase + 0x0023394C)) + 0x6C);
+	RealDirectionZ = (float*)((*(DWORD*)(ModuleBase + 0x0023394C)) + 0x70);//4
 	
-	RealFOV = (DWORD*)((*(DWORD*)(ModuleBase + 0x0023394C)) + 0xBC);
-	IdealFOV = (DWORD*)((*(DWORD*)(ModuleBase + 0x0023394C)) + 0xC0);
-
-	SetCameraSpeed(InitialCameraSpeed, false);
-	SetCameraRotationSpeed(InitialCameraRotationSpeed, false);
 
 	float x = *(float*)RealDirectionX;
 	float y = *(float*)RealDirectionY;
@@ -60,23 +55,22 @@ void CameraWrapper::Initialize(float InitialCameraSpeed, float InitialCameraRota
 
 void CameraWrapper::PrintCameraInfo()
 {
-#if !PublicMode
 	std::cout << "~~~ Camera data dump ~~~" << "\n";
-	std::cout << "CameraX = " << *(float*)RealX << "\n";
-	std::cout << "CameraY = " << *(float*)RealY << "\n";
-	std::cout << "CameraZ = " << *(float*)RealZ << "\n";
+	std::cout << "CameraX = " << *RealX << "\n";
+	std::cout << "CameraY = " << *RealY << "\n";
+	std::cout << "CameraZ = " << *RealZ << "\n";
 
-	std::cout << "CameraRightX = " << *(float*)RealRightX << "\n";
-	std::cout << "CameraRightY = " << *(float*)RealRightY << "\n";
-	std::cout << "CameraRightZ = " << *(float*)RealRightZ << "\n";
+	std::cout << "CameraRightX = " << *RealRightX << "\n";
+	std::cout << "CameraRightY = " << *RealRightY << "\n";
+	std::cout << "CameraRightZ = " << *RealRightZ << "\n";
 
-	std::cout << "CameraUpX = " << *(float*)RealUpX << "\n";
-	std::cout << "CameraUpY = " << *(float*)RealUpY << "\n";
-	std::cout << "CameraUpZ = " << *(float*)RealUpZ << "\n";
+	std::cout << "CameraUpX = " << *RealUpX << "\n";
+	std::cout << "CameraUpY = " << *RealUpY << "\n";
+	std::cout << "CameraUpZ = " << *RealUpZ << "\n";
 
-	std::cout << "CameraDirectionX = " << *(float*)RealDirectionX << "\n";
-	std::cout << "CameraDirectionY = " << *(float*)RealDirectionY << "\n";
-	std::cout << "CameraDirectionZ = " << *(float*)RealDirectionZ << "\n";
+	std::cout << "CameraDirectionX = " << *RealDirectionX << "\n";
+	std::cout << "CameraDirectionY = " << *RealDirectionY << "\n";
+	std::cout << "CameraDirectionZ = " << *RealDirectionZ << "\n";
 
 	std::cout << "CameraVelocity = " << CameraSpeed << "\n";
 
@@ -85,66 +79,46 @@ void CameraWrapper::PrintCameraInfo()
 	std::cout << "Roll = " << Roll << "\n";
 
 	std::cout << "\n";
-#endif
 }
 
 void CameraWrapper::MoveFreeCamera(CameraDirection Direction)
 {
 	if (Direction == FORWARD)
 	{
-		AdjustRealX(GetRealDirectionX() * CameraSpeed);
-		AdjustRealY(GetRealDirectionY() * CameraSpeed);
-		AdjustRealZ(GetRealDirectionZ() * CameraSpeed);
+		*RealX += (*RealDirectionX) * CameraSpeed;
+		*RealY += (*RealDirectionY) * CameraSpeed;
+		*RealZ += (*RealDirectionZ) * CameraSpeed;
 	}
 	else if (Direction == BACKWARD)
 	{
-		AdjustRealX(-1.0f * GetRealDirectionX() * CameraSpeed);
-		AdjustRealY(-1.0f * GetRealDirectionY() * CameraSpeed);
-		AdjustRealZ(-1.0f * GetRealDirectionZ() * CameraSpeed);
+		*RealX += -1.0f * (*RealDirectionX) * CameraSpeed;
+		*RealY += -1.0f * (*RealDirectionY) * CameraSpeed;
+		*RealZ += -1.0f * (*RealDirectionZ) * CameraSpeed;
 	}
 	else if (Direction == LEFT)
 	{
-		AdjustRealX(-1.0f * GetRealRightX() * CameraSpeed);
-		AdjustRealY(-1.0f * GetRealRightY() * CameraSpeed);
-		AdjustRealZ(-1.0f * GetRealRightZ() * CameraSpeed);
+		*RealX += -1.0f * (*RealDirectionX) * CameraSpeed;
+		*RealY += -1.0f * (*RealDirectionY) * CameraSpeed;
+		*RealZ += -1.0f * (*RealDirectionZ) * CameraSpeed;
 	}
 	else if (Direction == RIGHT)
 	{
-		AdjustRealX(GetRealRightX() * CameraSpeed);
-		AdjustRealY(GetRealRightY() * CameraSpeed);
-		AdjustRealZ(GetRealRightZ() * CameraSpeed);
+		*RealX += (*RealDirectionX) * CameraSpeed;
+		*RealY += (*RealDirectionY) * CameraSpeed;
+		*RealZ += (*RealDirectionZ) * CameraSpeed;
 	}
 	else if (Direction == UP)
 	{
-		AdjustRealY(CameraSpeed);
+		*RealZ += CameraSpeed;
 	}
 	else if (Direction == DOWN)
 	{
-		AdjustRealY(-1.0f * CameraSpeed);
+		*RealZ -= CameraSpeed;
 	}
 	else
 	{
 		Logger::Log("Invalid camera direction passed to MoveFreeCamera()", LogError);
 	}
-}
-
-void CameraWrapper::RecalculateOrientationMatrix()
-{
-	/*
-	See the second answer (xyz form) in the link below for the math used here. 
-	Switched pitch and yaw since the axes are different: https://stackoverflow.com/questions/1568568/how-to-convert-euler-angles-to-directional-vector
-	*/
-	*(float*)RealRightX = cosd(Yaw) * cosd(Roll);
-	*(float*)RealUpX = -1.0f * cosd(Yaw) * sind(Roll);
-	*(float*)RealDirectionX = sind(Yaw);
-			 
-	*(float*)RealRightY = cosd(Roll) * sind(Pitch) * sind(Yaw) + cosd(Pitch) * sind(Roll);
-	*(float*)RealUpY = cosd(Pitch) * cosd(Roll) - sind(Pitch) * sind(Yaw) * sind(Roll);
-	*(float*)RealDirectionY = -1.0f * cosd(Yaw) * sind(Pitch);
-			 
-	*(float*)RealRightZ = 1.0f * cosd(Roll) * sind(Yaw) + sind(Pitch) * sind(Roll);
-	*(float*)RealUpZ = cosd(Roll) * sind(Pitch) + 1.0f * sind(Yaw) * sind(Roll);
-	*(float*)RealDirectionZ = cosd(Pitch) * cosd(Yaw);
 }
 
 void CameraWrapper::ActivateFreeCamera()
@@ -160,28 +134,6 @@ void CameraWrapper::ActivateFreeCamera()
 	OriginalCameraPosition.x = *(float*)RealX + 2.171509;
 	OriginalCameraPosition.y = *(float*)RealY;
 	OriginalCameraPosition.z = *(float*)RealZ + 1.8545898;
-
-#if EnableSpectatorMode
-	if (*(bool*)InMultiplayer)
-	{
-		SlewModeExplicityActivated = true;
-		Camera_Start_Slew_Mode();
-	}
-#endif
-}
-
-void CameraWrapper::ActivateRotationControl()
-{
-	Logger::Log("Activating rotation control", LogInfo);
-	DisableCameraDirectionCode(CameraRealOrientWrite1, CameraRealOrientWrite2, CameraRealOrientWrite3, CameraRealOrientWrite4, CameraRealOrientWrite5);
-
-	//Roll = 0;
-	//GetCursorPos(&OriginalPosition);
-	//RollLocked = true;
-	InitialPitch = Pitch;
-	InitialYaw = Yaw;
-	InitialRoll = Roll;
-	RotationControlActive = true;
 }
 
 void CameraWrapper::DeactivateFreeCamera(bool Shutdown)
@@ -208,14 +160,6 @@ void CameraWrapper::DeactivateFreeCamera(bool Shutdown)
 	}
 }
 
-void CameraWrapper::DeactivateRotationControl()
-{
-	Logger::Log("Deactivating rotation control", LogInfo);
-	RestoreCameraDirectionCode();
-	RotationControlActive = false;
-	RollLocked = false;
-}
-
 void CameraWrapper::ToggleFreeCamera()
 {
 	if (FreeCameraActive)
@@ -228,557 +172,7 @@ void CameraWrapper::ToggleFreeCamera()
 	}
 }
 
-void CameraWrapper::ToggleRotationControls()
-{
-	if (RotationControlActive)
-	{
-		DeactivateRotationControl();
-	}
-	else
-	{
-		ActivateRotationControl();
-	}
-}
-
 bool CameraWrapper::IsFreeCameraActive()
 {
 	return FreeCameraActive;
 }
-
-bool CameraWrapper::IsRotationControlActive()
-{
-	return RotationControlActive;
-}
-
-void CameraWrapper::EnforcePitchLimits(float Minimum, float Maximum)
-{
-	if (Pitch < Minimum)
-	{
-		Pitch = Minimum;
-	}
-	if (Pitch > Maximum)
-	{
-		Pitch = Maximum;
-	}
-}
-
-bool CameraWrapper::IsPitchLocked()
-{
-	return PitchLocked;
-}
-
-bool CameraWrapper::IsYawLocked()
-{
-	return YawLocked;
-}
-
-bool CameraWrapper::IsRollLocked()
-{
-	return RollLocked;
-}
-
-void CameraWrapper::LockPitch()
-{
-	PitchLocked = true;
-	PreLockPitch = Pitch;
-}
-
-void CameraWrapper::LockYaw()
-{
-	YawLocked = true;
-	PreLockYaw = Yaw;
-}
-
-void CameraWrapper::LockRoll()
-{
-	RollLocked = true;
-	PreLockRoll = Roll;
-}
-
-void CameraWrapper::UnlockPitch()
-{
-	PitchLocked = false;
-	Pitch = PreLockPitch;
-}
-
-void CameraWrapper::UnlockYaw()
-{
-	YawLocked = false;
-	Yaw = PreLockYaw;
-}
-
-void CameraWrapper::UnlockRoll()
-{
-	RollLocked = false;
-	Roll = PreLockRoll;
-}
-
-bool CameraWrapper::TogglePitchLock()
-{
-	if (PitchLocked)
-	{
-		UnlockPitch();
-	}
-	else
-	{
-		LockPitch();
-	}
-	return PitchLocked;
-}
-
-bool CameraWrapper::ToggleYawLock()
-{
-	if (YawLocked)
-	{
-		UnlockYaw();
-	}
-	else
-	{
-		LockYaw();
-	}
-	return YawLocked;
-}
-
-bool CameraWrapper::ToggleRollLock()
-{
-	if (RollLocked)
-	{
-		UnlockRoll();
-	}
-	else
-	{
-		LockRoll();
-	}
-	return RollLocked;
-}
-
-
-/*Getters start here*/
-
-
-float CameraWrapper::GetRealX()
-{
-	return *(float*)RealX;
-}
-
-float CameraWrapper::GetRealY()
-{
-	return *(float*)RealY;
-}
-
-float CameraWrapper::GetRealZ()
-{
-	return *(float*)RealZ;
-}
-
-float CameraWrapper::GetRealRightX()
-{
-	return *(float*)RealRightX;
-}
-
-float CameraWrapper::GetRealRightY()
-{
-	return *(float*)RealRightY;
-}
-
-float CameraWrapper::GetRealRightZ()
-{
-	return *(float*)RealRightZ;
-}
-
-float CameraWrapper::GetRealUpX()
-{
-	return *(float*)RealUpX;
-}
-
-float CameraWrapper::GetRealUpY()
-{
-	return *(float*)RealUpY;
-}
-
-float CameraWrapper::GetRealUpZ()
-{
-	return *(float*)RealUpZ;
-}
-
-float CameraWrapper::GetRealDirectionX()
-{
-	return *(float*)RealDirectionX;
-}
-
-float CameraWrapper::GetRealDirectionY()
-{
-	return *(float*)RealDirectionY;
-}
-
-float CameraWrapper::GetRealDirectionZ()
-{
-	return *(float*)RealDirectionZ;
-}
-
-float CameraWrapper::GetRealFOV()
-{
-	return *(float*)RealFOV;
-}
-
-float CameraWrapper::GetIdealFOV()
-{
-	return *(float*)IdealFOV;
-}
-
-float CameraWrapper::GetCustomFOV()
-{
-	return CustomFOV;
-}
-
-float CameraWrapper::GetPitch()
-{
-	return Pitch;
-}
-
-float CameraWrapper::GetYaw()
-{
-	return Yaw;
-}
-
-float CameraWrapper::GetRoll()
-{
-	return Roll;
-}
-
-float CameraWrapper::GetCameraSpeed()
-{
-	return CameraSpeed;
-}
-
-float CameraWrapper::GetCameraRotationSpeed()
-{
-	return CameraRotationSpeed;
-}
-
-float CameraWrapper::GetInitialPitch()
-{
-	return InitialPitch;
-}
-
-float CameraWrapper::GetInitialYaw()
-{
-	return InitialYaw;
-}
-
-float CameraWrapper::GetInitialRoll()
-{
-	return InitialRoll;
-}
-
-float CameraWrapper::GetPreLockPitch()
-{
-	return PreLockPitch;
-}
-
-float CameraWrapper::GetPreLockYaw()
-{
-	return PreLockYaw;
-}
-
-float CameraWrapper::GetPreLockRoll()
-{
-	return PreLockRoll;
-}
-
-
-/*Setters start here*/
-
-
-void CameraWrapper::SetRealX(float Value)
-{
-	*(float*)RealX = Value;
-}
-
-void CameraWrapper::SetRealY(float Value)
-{
-	*(float*)RealY = Value;
-}
-
-void CameraWrapper::SetRealZ(float Value)
-{
-	*(float*)RealZ = Value;
-}
-
-void CameraWrapper::SetRealRightX(float Value)
-{
-	*(float*)RealRightX = Value;
-}
-
-void CameraWrapper::SetRealRightY(float Value)
-{
-	*(float*)RealRightY = Value;
-}
-
-void CameraWrapper::SetRealRightZ(float Value)
-{
-	*(float*)RealRightZ = Value;
-}
-
-void CameraWrapper::SetRealUpX(float Value)
-{
-	*(float*)RealUpX = Value;
-}
-
-void CameraWrapper::SetRealUpY(float Value)
-{
-	*(float*)RealUpY = Value;
-}
-
-void CameraWrapper::SetRealUpZ(float Value)
-{
-	*(float*)RealUpZ = Value;
-}
-
-void CameraWrapper::SetRealDirectionX(float Value)
-{
-	*(float*)RealDirectionX = Value;
-}
-
-void CameraWrapper::SetRealDirectionY(float Value)
-{
-	*(float*)RealDirectionY = Value;
-}
-
-void CameraWrapper::SetRealDirectionZ(float Value)
-{
-	*(float*)RealDirectionZ = Value;
-}
-
-void CameraWrapper::SetRealFOV(float Value)
-{
-	*(float*)RealFOV = Value;
-}
-
-void CameraWrapper::SetIdealFOV(float Value)
-{
-	*(float*)IdealFOV = Value;
-}
-
-void CameraWrapper::SetCustomFOV(float Value)
-{
-	CustomFOV = Value;
-}
-
-void CameraWrapper::SetPitch(float Value)
-{
-	Pitch = Value;
-}
-
-void CameraWrapper::SetYaw(float Value)
-{
-	Yaw = Value;
-}
-
-void CameraWrapper::SetRoll(float Value)
-{
-	Roll = Value;
-}
-
-void CameraWrapper::SetCameraSpeed(float Value, bool LogValue)
-{
-	CameraSpeed = Value;
-	if (LogValue)
-	{
-		Logger::Log(std::string("Camera Speed: " + std::to_string(CameraSpeed)), LogInfo);
-	}
-}
-
-void CameraWrapper::SetCameraRotationSpeed(float Value, bool LogValue)
-{	
-	CameraRotationSpeed = Value;
-	if (LogValue)
-	{
-		Logger::Log(std::string("Rotation Speed: " + std::to_string(CameraRotationSpeed)), LogInfo);
-	}
-}
-
-void CameraWrapper::SetInitialPitch(float Value)
-{
-	InitialPitch = Value;
-}
-
-void CameraWrapper::SetInitialYaw(float Value)
-{
-	InitialYaw = Value;
-}
-
-void CameraWrapper::SetInitialRoll(float Value)
-{
-	InitialRoll = Value;
-}
-
-void CameraWrapper::SetPreLockPitch(float Value)
-{
-	PreLockPitch = Value;
-}
-
-void CameraWrapper::SetPreLockYaw(float Value)
-{
-	PreLockYaw = Value;
-}
-
-void CameraWrapper::SetPreLockRoll(float Value)
-{
-	PreLockRoll = Value;
-}
-
-
-/*Adjusters start here*/
-
-
-void CameraWrapper::AdjustRealX(float Value)
-{
-	*(float*)RealX += Value;
-}
-
-void CameraWrapper::AdjustRealY(float Value)
-{
-	*(float*)RealY += Value;
-}
-
-void CameraWrapper::AdjustRealZ(float Value)
-{
-	*(float*)RealZ += Value;
-}
-
-void CameraWrapper::AdjustRealRightX(float Value)
-{
-	*(float*)RealRightX += Value;
-}
-
-void CameraWrapper::AdjustRealRightY(float Value)
-{
-	*(float*)RealRightY += Value;
-}
-
-void CameraWrapper::AdjustRealRightZ(float Value)
-{
-	*(float*)RealRightZ += Value;
-}
-
-void CameraWrapper::AdjustRealUpX(float Value)
-{
-	*(float*)RealUpX += Value;
-}
-
-void CameraWrapper::AdjustRealUpY(float Value)
-{
-	*(float*)RealUpY += Value;
-}
-
-void CameraWrapper::AdjustRealUpZ(float Value)
-{
-	*(float*)RealUpZ += Value;
-}
-
-void CameraWrapper::AdjustRealDirectionX(float Value)
-{
-	*(float*)RealDirectionX += Value;
-}
-
-void CameraWrapper::AdjustRealDirectionY(float Value)
-{
-	*(float*)RealDirectionY += Value;
-}
-
-void CameraWrapper::AdjustRealDirectionZ(float Value)
-{
-	*(float*)RealDirectionZ += Value;
-}
-
-void CameraWrapper::AdjustRealFOV(float Value)
-{
-	*(float*)RealFOV += Value;
-}
-
-void CameraWrapper::AdjustIdealFOV(float Value)
-{
-	*(float*)IdealFOV += Value;
-}
-
-void CameraWrapper::AdjustCustomFOV(float Value)
-{
-	CustomFOV += Value;
-}
-
-void CameraWrapper::AdjustPitch(float Value)
-{
-	if (!PitchLocked)
-	{
-		Pitch += Value;
-		Logger::Log(std::string("Pitch: " + std::to_string(Pitch)), LogInfo);
-	}
-}
-
-void CameraWrapper::AdjustYaw(float Value)
-{
-	if (!YawLocked)
-	{
-		Yaw += Value;
-		Logger::Log(std::string("Yaw: " + std::to_string(Yaw)), LogInfo);
-		//RecalculateOrientationMatrix();
-	}
-}
-
-void CameraWrapper::AdjustRoll(float Value)
-{
-	if (!RollLocked)
-	{
-		Roll += Value;
-		Logger::Log(std::string("Roll: " + std::to_string(Roll)), LogInfo);
-		//RecalculateOrientationMatrix();
-	}
-}
-
-void CameraWrapper::AdjustCameraSpeed(float Value)
-{
-	Logger::Log(std::string("Camera Speed: " + std::to_string(CameraSpeed)), LogInfo);
-	CameraSpeed += Value;
-	if (CameraSpeed < 0.0f)
-	{
-		CameraSpeed = 0.0f;
-	}
-}
-
-void CameraWrapper::AdjustCameraRotationSpeed(float Value)
-{
-	Logger::Log(std::string("Rotation Speed: " + std::to_string(CameraRotationSpeed)), LogInfo);
-	CameraRotationSpeed += Value;
-}
-
-void CameraWrapper::AdjustInitialPitch(float Value)
-{
-	InitialPitch += Value;
-}
-
-void CameraWrapper::AdjustInitialYaw(float Value)
-{
-	InitialYaw += Value;
-}
-
-void CameraWrapper::AdjustInitialRoll(float Value)
-{
-	InitialRoll += Value;
-}
-
-void CameraWrapper::AdjustPreLockPitch(float Value)
-{
-	PreLockPitch += Value;
-}
-
-void CameraWrapper::AdjustPreLockYaw(float Value)
-{
-	PreLockYaw += Value;
-}
-
-void CameraWrapper::AdjustPreLockRoll(float Value)
-{
-	PreLockRoll += Value;
-}
-
