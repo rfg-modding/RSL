@@ -130,17 +130,9 @@ void CameraWrapper::ToggleFreeCamera()
 
 void CameraWrapper::ActivateFirstPersonCamera()
 {
-	Logger::Log("Activating free camera", LogInfo);
-	FreeCameraActive = true;
+	Logger::Log("Activating first person camera", LogInfo);
+	FirstPersonCameraActive = true;
 	DisableCameraCode(CameraYWriteAddress, CameraZWriteAddress);
-
-	uintptr_t ModuleBase = (uintptr_t)GetModuleHandle(NULL);
-	InMultiplayer = (DWORD*)(*(DWORD*)(ModuleBase + 0x002CA210)); //Todo: Fix this. For some reason this needs to be set again here even though it was already set in MainThread().
-
-	//Slight adjustments so the player ends up roughly in their original position.
-	OriginalCameraPosition.x = *RealX + 2.171509;
-	OriginalCameraPosition.y = *RealY;
-	OriginalCameraPosition.z = *RealZ + 1.8545898;
 }
 
 void CameraWrapper::DeactivateFirstPersonCamera()
@@ -168,6 +160,52 @@ void CameraWrapper::ToggleFirstPersonCamera()
 			Logger::Log("Failed to activate first person camera. Free cam already active.", LogError);
 		}
 	}
+}
+
+void CameraWrapper::UpdateFirstPersonView()
+{
+	GameData->real_pos = GlobalPlayerPtr->Position + FirstPersonCameraOffset;
+	//if(UpdateByAxis)
+	//{
+	//	if(UpdateX)
+	//	{
+	//		GlobalPlayerPtr->Orientation.rvec.x = GameData->real_orient.rvec.x;
+	//		GlobalPlayerPtr->Orientation.uvec.x = GameData->real_orient.uvec.x;
+	//		GlobalPlayerPtr->Orientation.fvec.x = GameData->real_orient.fvec.x;
+	//	}	
+	//	if(UpdateY)
+	//	{
+	//		GlobalPlayerPtr->Orientation.rvec.y = GameData->real_orient.rvec.y;
+	//		GlobalPlayerPtr->Orientation.uvec.y = GameData->real_orient.uvec.y;
+	//		GlobalPlayerPtr->Orientation.fvec.y = GameData->real_orient.fvec.y;
+	//	}	
+	//	if(UpdateZ)
+	//	{
+	//		GlobalPlayerPtr->Orientation.rvec.z = GameData->real_orient.rvec.z;
+	//		GlobalPlayerPtr->Orientation.uvec.z = GameData->real_orient.uvec.z;
+	//		GlobalPlayerPtr->Orientation.fvec.z = GameData->real_orient.fvec.z;
+	//	}
+	//}
+	//else
+	//{
+	//	if (UpdatePlayerRvec)
+	//	{
+	//		GlobalPlayerPtr->Orientation.rvec = GameData->real_orient.rvec;
+	//	}
+	//	if (UpdatePlayerUvec)
+	//	{
+	//		GlobalPlayerPtr->Orientation.uvec = GameData->real_orient.uvec;
+	//	}
+	//	if (UpdatePlayerFvec)
+	//	{
+	//		GlobalPlayerPtr->Orientation.fvec = GameData->real_orient.fvec;
+	//	}
+	//}
+
+	//GlobalPlayerPtr->Orientation = GameData->real_orient;
+	//*RealX = GlobalPlayerPtr->Position.x + FirstPersonCameraOffset.x;
+	//*RealY = GlobalPlayerPtr->Position.y + FirstPersonCameraOffset.y;
+	//*RealZ = GlobalPlayerPtr->Position.z + FirstPersonCameraOffset.z;
 }
 
 bool CameraWrapper::IsFreeCameraActive() const

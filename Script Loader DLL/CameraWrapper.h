@@ -32,6 +32,7 @@ public:
 	void ActivateFirstPersonCamera();
 	void DeactivateFirstPersonCamera();
 	void ToggleFirstPersonCamera();
+	void UpdateFirstPersonView();
 	vector FirstPersonCameraOffset;
 
 	bool IsFreeCameraActive() const;
@@ -63,6 +64,15 @@ public:
 	float* RealDirectionX = nullptr;
 	float* RealDirectionY = nullptr;
 	float* RealDirectionZ = nullptr;
+
+	bool UpdatePlayerRvec = true;
+	bool UpdatePlayerUvec = true;
+	bool UpdatePlayerFvec = true;
+
+	bool UpdateByAxis = true;
+	bool UpdateX = true;
+	bool UpdateY = true;
+	bool UpdateZ = true;
 
 private:
 	bool FreeCameraActive = false;

@@ -386,11 +386,12 @@ public:
 	{
 		return !(*this == B);
 	}
-	void operator=(const vector& B)
+	vector& operator=(const vector& B)
 	{
 		x = B.x;
 		y = B.y;
 		z = B.z;
+		return *this;
 	}
 	vector Cross(const vector& B)
 	{
@@ -488,6 +489,13 @@ public:
 	bool operator!=(const matrix& B)
 	{
 		return !(*this == B);
+	}
+	matrix operator=(const matrix& B)
+	{
+		rvec = B.rvec;
+		uvec = B.uvec;
+		fvec = B.fvec;
+		return *this;
 	}
 	void SetAll(float Value)
 	{

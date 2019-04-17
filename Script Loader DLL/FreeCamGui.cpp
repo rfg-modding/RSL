@@ -54,17 +54,87 @@ void FreeCamGui::Draw()
 	//ImGui::InputFloat("Real FOV", (float*)Camera->RealFOV, 0.1, 5.0, 3);
 	//ImGui::InputFloat("Ideal FOV", (float*)Camera->IdealFOV, 0.1, 5.0, 3);
 
-	ImGui::Text("Far clip distance: ");
-	ImGui::SameLine();
-	ImGui::TextColored(SecondaryTextColor, std::to_string(game_render_get_far_clip_distance()).c_str());
+	//ImGui::Text("Far clip distance: ");
+	//ImGui::SameLine();
+	//ImGui::TextColored(SecondaryTextColor, std::to_string(game_render_get_far_clip_distance()).c_str());
+
+	//ImGui::PushItemWidth(230.0f);
+	//ImGui::InputFloat("Custom far clip distance", &CustomFarClipDistance, 1.0f, 5.0f, 3);
+	//ImGui::SameLine();
+	//if (ImGui::Button("Set"))
+	//{
+	//	game_render_set_far_clip_distance(CustomFarClipDistance);
+	//}
 
 	ImGui::PushItemWidth(230.0f);
-	ImGui::InputFloat("Custom far clip distance", &CustomFarClipDistance, 1.0f, 5.0f, 3);
-	ImGui::SameLine();
-	if (ImGui::Button("Set"))
+	ImGui::InputFloat("Far clip distance", &Camera->GameData->m_far_clip_dist, 3);
+	ImGui::PushItemWidth(230.0f);
+	ImGui::InputFloat("High LOD far clip distance", &Camera->GameData->m_high_lod_far_clip_dist, 3);
+
+	ImGui::Separator();
+	ImGui::PushFont(FontBig);
+	ImGui::Text("First person camera settings [Experimental]:");
+	ImGui::PopFont();
+	ImGui::Separator();
+
+	if(ImGui::Button("Toggle first person camera"))
 	{
-		game_render_set_far_clip_distance(CustomFarClipDistance);
+		Camera->ToggleFirstPersonCamera();
 	}
+	ImGui::PushItemWidth(230.0f);
+	ImGui::InputFloat3("Camera offset", (float*)&Camera->FirstPersonCameraOffset, 3);
+
+	//ImGui::Checkbox("Update by axis", &Camera->UpdateByAxis);
+	//if(Camera->UpdateByAxis)
+	//{
+	//	ImGui::Checkbox("Update player orient x", &Camera->UpdateX);
+	//	ImGui::Checkbox("Update player orient y", &Camera->UpdateY);
+	//	ImGui::Checkbox("Update player orient z", &Camera->UpdateZ);
+	//}
+	//else
+	//{
+	//	ImGui::Checkbox("Update player orient rvec", &Camera->UpdatePlayerRvec);
+	//	ImGui::Checkbox("Update player orient uvec", &Camera->UpdatePlayerUvec);
+	//	ImGui::Checkbox("Update player orient fvec", &Camera->UpdatePlayerFvec);
+	//}
+
+
+	//static bool FirstPersonSmooth = false;
+	//ImGui::Checkbox("First person smooth", &FirstPersonSmooth);
+	//if(ImGui::Button("Start first person"))
+	//{
+	//	camera_start_first_person(FirstPersonSmooth);
+	//}
+	//if(ImGui::Button("Start slew"))
+	//{
+	//	Camera_Start_Slew_Mode();
+	//}	
+	//if(ImGui::Button("Start third person"))
+	//{
+	//	Camera_Start_Third_Person();
+	//}
+
+	//ImGui::InputFloat("Real FOV", &Camera->GameData->real_fov);
+	//ImGui::InputFloat("Ideal FOV", &Camera->GameData->ideal_fov);
+	//ImGui::InputFloat("Last FOV", &Camera->GameData->last_fov);
+	////ImGui::InputFloat("Real FOV", &Camera->GameData->)
+	////ImGui::InputFloat("Real FOV", &Camera->GameData->)
+	////ImGui::InputFloat("Real FOV", &Camera->GameData->)
+	////ImGui::InputFloat("Real FOV", &Camera->GameData->)
+	////ImGui::InputFloat("Real FOV", &Camera->GameData->)
+	////ImGui::InputFloat("Real FOV", &Camera->GameData->)
+	////ImGui::InputFloat("Real FOV", &Camera->GameData->)
+	////ImGui::InputFloat("Real FOV", &Camera->GameData->)
+	////ImGui::InputFloat("Real FOV", &Camera->GameData->)
+	////ImGui::InputFloat("Real FOV", &Camera->GameData->)
+	////ImGui::InputFloat("Real FOV", &Camera->GameData->)
+	//ImGui::Checkbox("DOF Enabled", &Camera->GameData->m_dof_enable);
+
+	//ImGui::InputFloat("Focus start A", &Camera->GameData->m_focus_start_A);
+	//ImGui::InputFloat("Focus start B", &Camera->GameData->m_focus_start_B);
+	//ImGui::InputFloat("Focus end A", &Camera->GameData->m_focus_end_A);
+	//ImGui::InputFloat("Focus end B", &Camera->GameData->m_focus_end_B);
+	//ImGui::InputFloat("Near clip dist", &Camera->GameData->m_near_clip_dist);
 
 	/*ImGui::Separator();
 	ImGui::PushFont(FontBig);

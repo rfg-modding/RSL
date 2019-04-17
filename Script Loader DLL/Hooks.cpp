@@ -610,6 +610,14 @@ void __fastcall PlayerDoFrameHook(Player* PlayerPtr)
 		Gui.FreeCamSettings->Camera->NeedPostDeactivationCleanup = false;
 	}
 
+	if(GlobalCamera)
+	{
+		if(GlobalCamera->IsFirstPersonCameraActive())
+		{
+			GlobalCamera->UpdateFirstPersonView();
+		}
+	}
+
 	return PlayerDoFrame(PlayerPtr);
 }
 
