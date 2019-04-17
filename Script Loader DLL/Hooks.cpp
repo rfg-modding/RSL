@@ -91,10 +91,10 @@ LRESULT ProcessInput(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			switch(wParam)
 			{
 			case 0x51: //q
-				GlobalCamera->CameraSpeed -= 0.02f;
+				GlobalCamera->MaxSpeed -= 0.02f;
 				break;
 			case 0x45: //e
-				GlobalCamera->CameraSpeed += 0.02f;
+				GlobalCamera->MaxSpeed += 0.02f;
 				break;
 			case 0x5A: //z
 				GlobalCamera->MoveFreeCamera(DOWN);
@@ -598,6 +598,7 @@ void __fastcall PlayerDoFrameHook(Player* PlayerPtr)
 	if (Gui.FreeCamSettings->Camera->IsFreeCameraActive() && Gui.FreeCamSettings->PlayerFollowCam)
 	{
 		CameraWrapper* Cam = Gui.FreeCamSettings->Camera;
+		Cam->UpdateFreeView();
 		vector CameraPos(*Cam->RealX, *Cam->RealY + 1.5f, *Cam->RealZ);
 		HumanTeleportUnsafe(PlayerPtr, CameraPos, PlayerPtr->Orientation);
 	}

@@ -424,12 +424,14 @@ public:
 
 		}
 		String += std::to_string(x);
+		String += ", ";
 		if (Labels)
 		{
 			String += "y: ";
 
 		}
 		String += std::to_string(y);
+		String += ", ";
 		if(Labels)
 		{
 			String += "z: ";
@@ -633,6 +635,7 @@ public:
 
 		}
 		String += std::to_string(x);
+		String += ", ";
 		if (Labels)
 		{
 			String += "y: ";

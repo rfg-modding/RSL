@@ -45,42 +45,91 @@ void CameraWrapper::MoveFreeCamera(CameraDirection Direction)
 {
 	if(FreeCameraActive)
 	{
-		if (Direction == FORWARD)
+		if(SmoothCamera)
 		{
-			*RealX += (*RealDirectionX) * CameraSpeed;
-			*RealY += (*RealDirectionY) * CameraSpeed;
-			*RealZ += (*RealDirectionZ) * CameraSpeed;
-		}
-		else if (Direction == BACKWARD)
-		{
-			*RealX += -1.0f * (*RealDirectionX) * CameraSpeed;
-			*RealY += -1.0f * (*RealDirectionY) * CameraSpeed;
-			*RealZ += -1.0f * (*RealDirectionZ) * CameraSpeed;
-		}
-		else if (Direction == LEFT)
-		{
-			*RealX += -1.0f * (*RealDirectionX) * CameraSpeed;
-			*RealY += -1.0f * (*RealDirectionY) * CameraSpeed;
-			*RealZ += -1.0f * (*RealDirectionZ) * CameraSpeed;
-		}
-		else if (Direction == RIGHT)
-		{
-			*RealX += (*RealDirectionX) * CameraSpeed;
-			*RealY += (*RealDirectionY) * CameraSpeed;
-			*RealZ += (*RealDirectionZ) * CameraSpeed;
-		}
-		else if (Direction == UP)
-		{
-			*RealY += CameraSpeed;
-		}
-		else if (Direction == DOWN)
-		{
-			*RealY -= CameraSpeed;
+			//CurrentSpeed = Velocity.Magnitude();
+			//if(CurrentSpeed >= MaxSpeed)
+			//{
+			//	return;
+			//}
+			if (Direction == FORWARD)
+			{
+				Velocity.x += (*RealDirectionX) * AccelerationRate;
+				Velocity.y += (*RealDirectionY) * AccelerationRate;
+				Velocity.z += (*RealDirectionZ) * AccelerationRate;
+			}
+			else if (Direction == BACKWARD)
+			{
+				Velocity.x += -1.0f * (*RealDirectionX) * AccelerationRate;
+				Velocity.y += -1.0f * (*RealDirectionY) * AccelerationRate;
+				Velocity.z += -1.0f * (*RealDirectionZ) * AccelerationRate;
+			}
+			else if (Direction == LEFT)
+			{
+				Velocity.x += -1.0f * (*RealRightX) * AccelerationRate;
+				Velocity.y += -1.0f * (*RealRightY) * AccelerationRate;
+				Velocity.z += -1.0f * (*RealRightZ) * AccelerationRate;
+			}
+			else if (Direction == RIGHT)
+			{
+				Velocity.x += (*RealRightX) * AccelerationRate;
+				Velocity.y += (*RealRightY) * AccelerationRate;
+				Velocity.z += (*RealRightZ) * AccelerationRate;
+			}
+			else if (Direction == UP)
+			{
+				Velocity.y += AccelerationRate;
+			}
+			else if (Direction == DOWN)
+			{
+				Velocity.y -= AccelerationRate;
+			}
+			else
+			{
+				Logger::Log("Invalid camera direction passed to MoveFreeCamera()", LogError);
+			}
+			ButtonPressedAfterUpdate = true;
 		}
 		else
 		{
-			Logger::Log("Invalid camera direction passed to MoveFreeCamera()", LogError);
+			if (Direction == FORWARD)
+			{
+				*RealX += (*RealDirectionX) * MaxSpeed;
+				*RealY += (*RealDirectionY) * MaxSpeed;
+				*RealZ += (*RealDirectionZ) * MaxSpeed;
+			}
+			else if (Direction == BACKWARD)
+			{
+				*RealX += -1.0f * (*RealDirectionX) * MaxSpeed;
+				*RealY += -1.0f * (*RealDirectionY) * MaxSpeed;
+				*RealZ += -1.0f * (*RealDirectionZ) * MaxSpeed;
+			}
+			else if (Direction == LEFT)
+			{
+				*RealX += -1.0f * (*RealRightX) * MaxSpeed;
+				*RealY += -1.0f * (*RealRightY) *MaxSpeed;
+				*RealZ += -1.0f * (*RealRightZ) *MaxSpeed;
+			}
+			else if (Direction == RIGHT)
+			{
+				*RealX += (*RealRightX) * MaxSpeed;
+				*RealY += (*RealRightY) * MaxSpeed;
+				*RealZ += (*RealRightZ) * MaxSpeed;
+			}
+			else if (Direction == UP)
+			{
+				*RealY += MaxSpeed;
+			}
+			else if (Direction == DOWN)
+			{
+				*RealY -= MaxSpeed;
+			}
+			else
+			{
+				Logger::Log("Invalid camera direction passed to MoveFreeCamera()", LogError);
+			}
 		}
+
 	}
 }
 
@@ -128,6 +177,91 @@ void CameraWrapper::ToggleFreeCamera()
 	}
 }
 
+void CameraWrapper::UpdateFreeView()
+{
+	if(SmoothCamera)
+	{
+		*RealX += Velocity.x;
+		*RealY += Velocity.y;
+		*RealZ += Velocity.z;
+		if (!ButtonPressedAfterUpdate)
+		{
+			if (abs(Velocity.x) > 0.0f)
+			{
+				if (Velocity.x < 0.0f)
+				{
+					Velocity.x += DecelerationRate;
+					if (Velocity.x > 0.0f)
+					{
+						Velocity.x = 0.0f;
+					}
+				}
+				else if (Velocity.x > 0.0f)
+				{
+					Velocity.x -= DecelerationRate;
+					if (Velocity.x < 0.0f)
+					{
+						Velocity.x = 0.0f;
+					}
+				}
+			}
+			if (abs(Velocity.y) > 0.0f)
+			{
+				if (Velocity.y < 0.0f)
+				{
+					Velocity.y += DecelerationRate;
+					if (Velocity.y > 0.0f)
+					{
+						Velocity.y = 0.0f;
+					}
+				}
+				else if (Velocity.y > 0.0f)
+				{
+					Velocity.y -= DecelerationRate;
+					if (Velocity.y < 0.0f)
+					{
+						Velocity.y = 0.0f;
+					}
+				}
+			}
+			if (abs(Velocity.z) > 0.0f)
+			{
+				if (Velocity.z < 0.0f)
+				{
+					Velocity.z += DecelerationRate;
+					if (Velocity.z > 0.0f)
+					{
+						Velocity.z = 0.0f;
+					}
+				}
+				else if (Velocity.z > 0.0f)
+				{
+					Velocity.z -= DecelerationRate;
+					if (Velocity.z < 0.0f)
+					{
+						Velocity.z = 0.0f;
+					}
+				}
+			}
+		}
+		//if(Velocity.x > MaxSpeed)
+		//{
+		//	Velocity.x = MaxSpeed;
+		//}	
+		//if(Velocity.y > MaxSpeed)
+		//{
+		//	Velocity.y = MaxSpeed;
+		//}	
+		//if(Velocity.z > MaxSpeed)
+		//{
+		//	Velocity.z = MaxSpeed;
+		//}
+
+		CurrentSpeed = Velocity.Magnitude();
+		ButtonPressedAfterUpdate = false;
+	}
+}
+
 void CameraWrapper::ActivateFirstPersonCamera()
 {
 	Logger::Log("Activating first person camera", LogInfo);
@@ -165,6 +299,7 @@ void CameraWrapper::ToggleFirstPersonCamera()
 void CameraWrapper::UpdateFirstPersonView()
 {
 	GameData->real_pos = GlobalPlayerPtr->Position + FirstPersonCameraOffset;
+	CurrentSpeed = GlobalPlayerPtr->Velocity.Magnitude();
 	//if(UpdateByAxis)
 	//{
 	//	if(UpdateX)
@@ -216,4 +351,9 @@ bool CameraWrapper::IsFreeCameraActive() const
 bool CameraWrapper::IsFirstPersonCameraActive() const
 {
 	return FirstPersonCameraActive;
+}
+
+float CameraWrapper::GetCurrentSpeed()
+{
+	return CurrentSpeed;
 }

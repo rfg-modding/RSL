@@ -28,20 +28,28 @@ public:
 	void ActivateFreeCamera();
 	void DeactivateFreeCamera(bool Shutdown);
 	void ToggleFreeCamera();
+	void UpdateFreeView();
 
 	void ActivateFirstPersonCamera();
 	void DeactivateFirstPersonCamera();
 	void ToggleFirstPersonCamera();
 	void UpdateFirstPersonView();
-	vector FirstPersonCameraOffset;
 
 	bool IsFreeCameraActive() const;
 	bool IsFirstPersonCameraActive() const;
 
-	float CameraSpeed = 2.0f;
-
+	float GetCurrentSpeed();
+	
+	float AccelerationRate = 0.7f;
+	float DecelerationRate = 0.5f;
+	float MaxSpeed = 2.0f;
+	vector Velocity;
 	vector OriginalCameraPosition;
 	bool NeedPostDeactivationCleanup = false;
+	bool ButtonPressedAfterUpdate = false;
+	bool SmoothCamera = false;
+
+	vector FirstPersonCameraOffset;
 
 	rfg_camera* GameData = nullptr;
 
@@ -77,6 +85,8 @@ public:
 private:
 	bool FreeCameraActive = false;
 	bool FirstPersonCameraActive = false;
+
+	float CurrentSpeed = 2.0f;
 
 	DWORD CameraYWriteAddress;
 	DWORD CameraZWriteAddress;
