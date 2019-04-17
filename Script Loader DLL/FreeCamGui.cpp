@@ -58,7 +58,7 @@ void FreeCamGui::Draw()
 	ImGui::SameLine();
 	ImGui::TextColored(SecondaryTextColor, std::to_string(game_render_get_far_clip_distance()).c_str());
 
-	//ImGui::PushItemWidth(300.0f);
+	ImGui::PushItemWidth(230.0f);
 	ImGui::InputFloat("Custom far clip distance", &CustomFarClipDistance, 1.0f, 5.0f, 3);
 	ImGui::SameLine();
 	if (ImGui::Button("Set"))

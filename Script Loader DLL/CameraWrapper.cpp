@@ -13,35 +13,23 @@ CameraWrapper::~CameraWrapper()
 void CameraWrapper::Initialize(float InitialCameraSpeed, float InitialCameraRotationSpeed)
 {
 	uintptr_t ModuleBase = (uintptr_t)GetModuleHandle(NULL);
-	RealX = (float*)((*(DWORD*)(ModuleBase + 0x0023394C)) + 0x2C);
-	RealY = (float*)((*(DWORD*)(ModuleBase + 0x0023394C)) + 0x30);
-	RealZ = (float*)((*(DWORD*)(ModuleBase + 0x0023394C)) + 0x34);
+	GameData = (rfg_camera*)*(DWORD*)(ModuleBase + 0x0023394C);
 
-	//matrix real_orient; //36 Bytes
-	//[50, 54, 58] Right
-	//[5C, 60, 64] Up
-	//[68, 6C, 70] Direction / Forward
-	RealRightX = (float*)((*(DWORD*)(ModuleBase + 0x0023394C)) + 0x50);//
-	RealRightY = (float*)((*(DWORD*)(ModuleBase + 0x0023394C)) + 0x54);
-	RealRightZ = (float*)((*(DWORD*)(ModuleBase + 0x0023394C)) + 0x58);//
-	
-	RealUpX = (float*)((*(DWORD*)(ModuleBase + 0x0023394C)) + 0x5C);
-	RealUpY = (float*)((*(DWORD*)(ModuleBase + 0x0023394C)) + 0x60);//
-	RealUpZ = (float*)((*(DWORD*)(ModuleBase + 0x0023394C)) + 0x64);
-	
-	RealDirectionX = (float*)((*(DWORD*)(ModuleBase + 0x0023394C)) + 0x68);//
-	RealDirectionY = (float*)((*(DWORD*)(ModuleBase + 0x0023394C)) + 0x6C);
-	RealDirectionZ = (float*)((*(DWORD*)(ModuleBase + 0x0023394C)) + 0x70);//4
-	
+	RealX = &GameData->real_pos.x;
+	RealY = &GameData->real_pos.y;
+	RealZ = &GameData->real_pos.z;
 
-	float x = *(float*)RealDirectionX;
-	float y = *(float*)RealDirectionY;
-	Yaw = x / (-1.0f * y); //atan(*(float*)CameraDirectionX / (-1.0 * (*(float*)CameraDirectionY)));
-	float x2 = pow(x, 2);
-	float y2 = pow(y, 2);
-	float z = *(float*)RealDirectionZ;
-	Pitch = sqrt(x2 + y2) / z; //atan(sqrt(pow(*(float*)CameraDirectionX, 2) + pow(*(float*)CameraDirectionY, 2)) / (*(float*)CameraDirectionZ));
-	Roll = 0;
+	RealRightX = &GameData->real_orient.rvec.x;
+	RealRightY = &GameData->real_orient.rvec.y;
+	RealRightZ = &GameData->real_orient.rvec.z;
+
+	RealUpX = &GameData->real_orient.uvec.x;
+	RealUpY = &GameData->real_orient.uvec.y;
+	RealUpZ = &GameData->real_orient.uvec.z;
+
+	RealDirectionX = &GameData->real_orient.fvec.x;
+	RealDirectionY = &GameData->real_orient.fvec.y;
+	RealDirectionZ = &GameData->real_orient.fvec.z;
 
 	CameraYWriteAddress = FindPattern((char*)"rfg.exe", (char*)"\x66\x00\x00\x00\x00\x00\x00\x00\xF3\x00\x00\x00\x00\x00\x00\x00\x66\x00\x00\x00\x00\x00\x00\x00\xF3\x00\x00\x00\x00\x00\x00\x00\x66\x00\x00\x00\x00\x00\x00\x00\xF3\x00\x00\x00\x00\x00\x00\x00\x66\x00\x00\x00\x00\x00\x00\x00\xF3\x00\x00\x00\x00\x00\x00\x00\x89\x00\x00\x00\x00\x00\x66\x00\x00\x00\x00\x00\x00\x00\x89\x00\x00\x00\x00\x00\xF3\x00\x00\x00\x00\x00\x00\x00\xF3\x00\x00\x00\x00\x00\x00\x00\xE8\x00\x00\x00\x00\x85\xF6\x74\x52\xF3\x0F\x7E\x46\x04", (char*)"x???????x???????x???????x???????x???????x???????x???????x???????x?????x???????x?????x???????x???????x????xxxxxxxxx");
 	CameraZWriteAddress = FindPattern((char*)"rfg.exe", (char*)"\x89\x00\x00\x00\x00\x00\x66\x00\x00\x00\x00\x00\x00\x00\x89\x00\x00\x00\x00\x00\xF3\x00\x00\x00\x00\x00\x00\x00\xF3\x00\x00\x00\x00\x00\x00\x00\xE8\x00\x00\x00\x00\x85\xF6\x74\x52\xF3\x0F\x7E\x46\x04\x66\x00\x00\x00\x00\x00\x00\x00\x8B\x46\x0C\xA3", (char*)"x?????x???????x?????x???????x???????x????xxxxxxxxxx???????xxxx");
@@ -51,34 +39,6 @@ void CameraWrapper::Initialize(float InitialCameraSpeed, float InitialCameraRota
 	CameraRealOrientWrite3 = FindPattern((char*)"rfg.exe", (char*)"\x66\x00\x00\x00\x00\x00\x00\x00\xF3\x00\x00\x00\x00\x00\x00\x00\x89\x00\x00\x00\x00\x00\x66\x00\x00\x00\x00\x00\x00\x00\x89\x00\x00\x00\x00\x00\xF3\x00\x00\x00\x00\x00\x00\x00\xF3\x00\x00\x00\x00\x00\x00\x00\xE8", (char*)"x???????x???????x?????x???????x?????x???????x???????x");
 	CameraRealOrientWrite4 = FindPattern((char*)"rfg.exe", (char*)"\x66\x00\x00\x00\x00\x00\x00\x00\x89\x00\x00\x00\x00\x00\xF3\x00\x00\x00\x00\x00\x00\x00\xF3\x00\x00\x00\x00\x00\x00\x00\xE8\x00\x00\x00\x00\x85\xF6", (char*)"x???????x?????x???????x???????x????xx");
 	CameraRealOrientWrite5 = FindPattern((char*)"rfg.exe", (char*)"\x89\x00\x00\x00\x00\x00\xF3\x00\x00\x00\x00\x00\x00\x00\xF3\x00\x00\x00\x00\x00\x00\x00\xE8\x00\x00\x00\x00\x85\xF6\x74\x52", (char*)"x?????x???????x???????x????xxxx");
-}
-
-void CameraWrapper::PrintCameraInfo()
-{
-	std::cout << "~~~ Camera data dump ~~~" << "\n";
-	std::cout << "CameraX = " << *RealX << "\n";
-	std::cout << "CameraY = " << *RealY << "\n";
-	std::cout << "CameraZ = " << *RealZ << "\n";
-
-	std::cout << "CameraRightX = " << *RealRightX << "\n";
-	std::cout << "CameraRightY = " << *RealRightY << "\n";
-	std::cout << "CameraRightZ = " << *RealRightZ << "\n";
-
-	std::cout << "CameraUpX = " << *RealUpX << "\n";
-	std::cout << "CameraUpY = " << *RealUpY << "\n";
-	std::cout << "CameraUpZ = " << *RealUpZ << "\n";
-
-	std::cout << "CameraDirectionX = " << *RealDirectionX << "\n";
-	std::cout << "CameraDirectionY = " << *RealDirectionY << "\n";
-	std::cout << "CameraDirectionZ = " << *RealDirectionZ << "\n";
-
-	std::cout << "CameraVelocity = " << CameraSpeed << "\n";
-
-	std::cout << "Pitch = " << Pitch << "\n";
-	std::cout << "Yaw = " << Yaw << "\n";
-	std::cout << "Roll = " << Roll << "\n";
-
-	std::cout << "\n";
 }
 
 void CameraWrapper::MoveFreeCamera(CameraDirection Direction)
@@ -109,11 +69,11 @@ void CameraWrapper::MoveFreeCamera(CameraDirection Direction)
 	}
 	else if (Direction == UP)
 	{
-		*RealZ += CameraSpeed;
+		*RealY += CameraSpeed;
 	}
 	else if (Direction == DOWN)
 	{
-		*RealZ -= CameraSpeed;
+		*RealY -= CameraSpeed;
 	}
 	else
 	{
@@ -131,9 +91,9 @@ void CameraWrapper::ActivateFreeCamera()
 	InMultiplayer = (DWORD*)(*(DWORD*)(ModuleBase + 0x002CA210)); //Todo: Fix this. For some reason this needs to be set again here even though it was already set in MainThread().
 	
 	//Slight adjustments so the player ends up roughly in their original position.
-	OriginalCameraPosition.x = *(float*)RealX + 2.171509;
-	OriginalCameraPosition.y = *(float*)RealY;
-	OriginalCameraPosition.z = *(float*)RealZ + 1.8545898;
+	OriginalCameraPosition.x = *RealX + 2.171509;
+	OriginalCameraPosition.y = *RealY;
+	OriginalCameraPosition.z = *RealZ + 1.8545898;
 }
 
 void CameraWrapper::DeactivateFreeCamera(bool Shutdown)
