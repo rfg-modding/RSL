@@ -29,7 +29,13 @@ public:
 	void DeactivateFreeCamera(bool Shutdown);
 	void ToggleFreeCamera();
 
-	bool IsFreeCameraActive();
+	void ActivateFirstPersonCamera();
+	void DeactivateFirstPersonCamera();
+	void ToggleFirstPersonCamera();
+	vector FirstPersonCameraOffset;
+
+	bool IsFreeCameraActive() const;
+	bool IsFirstPersonCameraActive() const;
 
 	float CameraSpeed = 2.0f;
 
@@ -60,6 +66,7 @@ public:
 
 private:
 	bool FreeCameraActive = false;
+	bool FirstPersonCameraActive = false;
 
 	DWORD CameraYWriteAddress;
 	DWORD CameraZWriteAddress;

@@ -43,41 +43,44 @@ void CameraWrapper::Initialize(float InitialCameraSpeed, float InitialCameraRota
 
 void CameraWrapper::MoveFreeCamera(CameraDirection Direction)
 {
-	if (Direction == FORWARD)
+	if(FreeCameraActive)
 	{
-		*RealX += (*RealDirectionX) * CameraSpeed;
-		*RealY += (*RealDirectionY) * CameraSpeed;
-		*RealZ += (*RealDirectionZ) * CameraSpeed;
-	}
-	else if (Direction == BACKWARD)
-	{
-		*RealX += -1.0f * (*RealDirectionX) * CameraSpeed;
-		*RealY += -1.0f * (*RealDirectionY) * CameraSpeed;
-		*RealZ += -1.0f * (*RealDirectionZ) * CameraSpeed;
-	}
-	else if (Direction == LEFT)
-	{
-		*RealX += -1.0f * (*RealDirectionX) * CameraSpeed;
-		*RealY += -1.0f * (*RealDirectionY) * CameraSpeed;
-		*RealZ += -1.0f * (*RealDirectionZ) * CameraSpeed;
-	}
-	else if (Direction == RIGHT)
-	{
-		*RealX += (*RealDirectionX) * CameraSpeed;
-		*RealY += (*RealDirectionY) * CameraSpeed;
-		*RealZ += (*RealDirectionZ) * CameraSpeed;
-	}
-	else if (Direction == UP)
-	{
-		*RealY += CameraSpeed;
-	}
-	else if (Direction == DOWN)
-	{
-		*RealY -= CameraSpeed;
-	}
-	else
-	{
-		Logger::Log("Invalid camera direction passed to MoveFreeCamera()", LogError);
+		if (Direction == FORWARD)
+		{
+			*RealX += (*RealDirectionX) * CameraSpeed;
+			*RealY += (*RealDirectionY) * CameraSpeed;
+			*RealZ += (*RealDirectionZ) * CameraSpeed;
+		}
+		else if (Direction == BACKWARD)
+		{
+			*RealX += -1.0f * (*RealDirectionX) * CameraSpeed;
+			*RealY += -1.0f * (*RealDirectionY) * CameraSpeed;
+			*RealZ += -1.0f * (*RealDirectionZ) * CameraSpeed;
+		}
+		else if (Direction == LEFT)
+		{
+			*RealX += -1.0f * (*RealDirectionX) * CameraSpeed;
+			*RealY += -1.0f * (*RealDirectionY) * CameraSpeed;
+			*RealZ += -1.0f * (*RealDirectionZ) * CameraSpeed;
+		}
+		else if (Direction == RIGHT)
+		{
+			*RealX += (*RealDirectionX) * CameraSpeed;
+			*RealY += (*RealDirectionY) * CameraSpeed;
+			*RealZ += (*RealDirectionZ) * CameraSpeed;
+		}
+		else if (Direction == UP)
+		{
+			*RealY += CameraSpeed;
+		}
+		else if (Direction == DOWN)
+		{
+			*RealY -= CameraSpeed;
+		}
+		else
+		{
+			Logger::Log("Invalid camera direction passed to MoveFreeCamera()", LogError);
+		}
 	}
 }
 
@@ -101,13 +104,6 @@ void CameraWrapper::DeactivateFreeCamera(bool Shutdown)
 	Logger::Log("Deactivating free camera", LogInfo);
 	RestoreCameraCode();
 
-#if EnableSpectatorMode
-	if (SlewModeExplicityActivated)
-	{
-		SlewModeExplicityActivated = false;
-		Camera_Stop_Slew_Mode();
-	}
-#endif
 	FreeCameraActive = false;
 	if (!Shutdown) //Don't want the player thrown in the air when they deactivate the script loader.
 	{
@@ -132,7 +128,54 @@ void CameraWrapper::ToggleFreeCamera()
 	}
 }
 
-bool CameraWrapper::IsFreeCameraActive()
+void CameraWrapper::ActivateFirstPersonCamera()
+{
+	Logger::Log("Activating free camera", LogInfo);
+	FreeCameraActive = true;
+	DisableCameraCode(CameraYWriteAddress, CameraZWriteAddress);
+
+	uintptr_t ModuleBase = (uintptr_t)GetModuleHandle(NULL);
+	InMultiplayer = (DWORD*)(*(DWORD*)(ModuleBase + 0x002CA210)); //Todo: Fix this. For some reason this needs to be set again here even though it was already set in MainThread().
+
+	//Slight adjustments so the player ends up roughly in their original position.
+	OriginalCameraPosition.x = *RealX + 2.171509;
+	OriginalCameraPosition.y = *RealY;
+	OriginalCameraPosition.z = *RealZ + 1.8545898;
+}
+
+void CameraWrapper::DeactivateFirstPersonCamera()
+{
+	Logger::Log("Deactivating first person camera", LogInfo);
+	RestoreCameraCode();
+
+	FirstPersonCameraActive = false;
+}
+
+void CameraWrapper::ToggleFirstPersonCamera()
+{
+	if (FirstPersonCameraActive)
+	{
+		DeactivateFirstPersonCamera();
+	}
+	else
+	{
+		if(!FreeCameraActive)
+		{
+			ActivateFirstPersonCamera();
+		}
+		else
+		{
+			Logger::Log("Failed to activate first person camera. Free cam already active.", LogError);
+		}
+	}
+}
+
+bool CameraWrapper::IsFreeCameraActive() const
 {
 	return FreeCameraActive;
+}
+
+bool CameraWrapper::IsFirstPersonCameraActive() const
+{
+	return FirstPersonCameraActive;
 }
