@@ -102,6 +102,14 @@ void ToggleFog()
 
 F_Camera_Start_Slew_Mode Camera_Start_Slew_Mode;
 F_Camera_Stop_Slew_Mode Camera_Stop_Slew_Mode;
+F_Camera_Start_Third_Person Camera_Start_Third_Person;
+F_camera_start_first_person camera_start_first_person;
+F_camera_stop_first_person camera_stop_first_person;
+
+F_Camera_First_Person_Pre_Process Camera_First_Person_Pre_Process;
+F_camera_free_system_init camera_free_system_init;
+F_camera_free_mode_init camera_free_mode_init;
+
 F_Interface_Debug_Mode_Activate Interface_Debug_Mode_Activate;
 F_Keen_Debug_WriteToLogFile Keen_Debug_WriteToLogFile;
 F_Hud_Display_Distance Hud_Display_Distance;
@@ -116,11 +124,9 @@ F_Console_Printf Console_Printf;
 F_Console_Display_Help Console_Display_Help;
 F_Console_Command_Enable Console_Command_Enable;
 F_Console_Do_Command Console_Do_Command;
-F_Camera_First_Person_Pre_Process Camera_First_Person_Pre_Process;
-F_Camera_Start_Third_Person Camera_Start_Third_Person;
+
 F_Game_Print_Screen Game_Print_Screen;
-F_camera_free_system_init camera_free_system_init;
-F_camera_free_mode_init camera_free_mode_init;
+
 F_console_chat_printf console_chat_printf;
 F_unused_dcf_r_show_mem_usage unused_dcf_r_show_mem_usage;
 F_rfg_dyn_get_active_destruction_frame rfg_dyn_get_active_destruction_frame;
@@ -135,8 +141,7 @@ F_profile_dump_info profile_dump_info;
 F_vint_render_text vint_render_text;
 F_xray_effect_start xray_effect_start;
 F_xray_effect_stop xray_effect_stop;
-F_camera_start_first_person camera_start_first_person;
-F_camera_stop_first_person camera_stop_first_person;
+
 F_key_down key_down;
 F_game_render_set_bloom_exposure_factor game_render_set_bloom_exposure_factor;
 F_game_render_set_hdr_state game_render_set_hdr_state;

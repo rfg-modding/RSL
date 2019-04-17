@@ -17,6 +17,9 @@ void FunctionManager::Initialize()
 
 	Camera_Start_Slew_Mode = (F_Camera_Start_Slew_Mode)(ModuleBase + 0x2D09B0); //483B60
 	Camera_Stop_Slew_Mode = (F_Camera_Stop_Slew_Mode)(ModuleBase + 0x2D09C0);
+	Camera_Start_Third_Person = (F_Camera_Start_Third_Person)(ModuleBase + 0x2CF0C0);
+	camera_start_first_person = (F_camera_start_first_person)(ModuleBase + 0x2C9AC0);
+	camera_stop_first_person = (F_camera_stop_first_person)(ModuleBase + 0x2C9B60);
 
 	Hud_Hide = (F_Hud_Hide)(ModuleBase + 0x441A90);
 
