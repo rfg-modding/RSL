@@ -45,25 +45,29 @@ void IntrospectionGui::DrawPlayerIntrospectionGui(const char * Title)
 	ImGui::PopFont();
 	ImGui::Separator();
 
+	ImGui::PushStyleColor(ImGuiCol_Text, ColorRed);
+	ImGui::PushItemWidth(230.0f);
+	ImGui::Text("Note: This menu is some of the oldest code in the script loader, and as such hasn't been worked on in a while. I've left it in case it's useful to someone but won't likely make anything like this that's fully working until GUIs can be coded with lua. Will make it much quicker and easier.");
+	ImGui::PopStyleColor();
+	ImGui::Separator();
+		
 	if (PlayerPtr != nullptr)
 	{
 		if (ImGui::TreeNode("Useful info"))
 		{
-			ImGui::Text("Some select values that are important. Most of them can't be edited here since the game will fight you to keep the correct value. Need to force them every frame somtimes.");
-			float PlayerVelocityX = PlayerPtr->Velocity.x * PlayerPtr->Velocity.x;
-			float PlayerVelocityY = PlayerPtr->Velocity.y * PlayerPtr->Velocity.y;
-			float PlayerVelocityZ = PlayerPtr->Velocity.z * PlayerPtr->Velocity.z;
-			float PlayerVelocityMagnitude = sqrtf(PlayerVelocityX + PlayerVelocityY + PlayerVelocityZ);
-			ImGui::PushItemWidth(232.0f);
-			//ImGui::Text("Player velocity:"); ImGui::SameLine();
-			//ImGui::TextColored(SecondaryTextColor, std::to_string(PlayerVelocityMagnitude).c_str());
-			ImGui::InputFloat3("Player velocity: ", (float*)&PlayerPtr->Velocity); ImGui::SameLine();
+			ImGui::PushItemWidth(230.0f);
+			ImGui::TextWrapped("Some select values that are important. Most of them can't be edited here since the game will fight you to keep the correct value. Need to force them every frame sometimes.");
+			ImGui::PushItemWidth(230.0f);
+			ImGui::Text("Player velocity magnitude:"); ImGui::SameLine();
+			ImGui::TextColored(SecondaryTextColor, std::to_string(PlayerPtr->Velocity.Magnitude()).c_str());
+			ImGui::InputFloat3("Player velocity: ", (float*)&PlayerPtr->Velocity);
 
 			ImGui::InputFloat3("Player aim position", (float*)&PlayerPtr->aim_pos, 3);
 			ImGui::InputScalar("Player aim target", ImGuiDataType_U32, &PlayerPtr->aim_target);
 			ImGui::InputScalar("Player aim target duration", ImGuiDataType_U32, &PlayerPtr->aim_target_duration);
 			ImGui::InputFloat3("Player penetrating aim pos", (float*)&PlayerPtr->penetrating_aim_pos, 3);
 			ImGui::InputScalar("Player penetrating aim target", ImGuiDataType_U32, &PlayerPtr->penetrating_aim_target);
+			ImGui::TreePop();
 		}
 		if (ImGui::TreeNode("Object values"))
 		{
