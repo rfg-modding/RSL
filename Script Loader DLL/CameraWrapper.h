@@ -36,6 +36,8 @@ public:
 	vector OriginalCameraPosition;
 	bool NeedPostDeactivationCleanup = false;
 
+	rfg_camera* GameData = nullptr;
+
 	float* RealX = nullptr;
 	float* RealY = nullptr;
 	float* RealZ = nullptr;
@@ -57,7 +59,6 @@ public:
 	float* RealDirectionZ = nullptr;
 
 private:
-	rfg_camera* GameData = nullptr;
 	bool FreeCameraActive = false;
 
 	DWORD CameraYWriteAddress;
