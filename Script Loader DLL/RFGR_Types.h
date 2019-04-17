@@ -410,6 +410,36 @@ public:
 		y = Value;
 		z = Value;
 	}
+	std::string GetDataString(bool Parentheses, bool Labels)
+	{
+		std::string String;
+		if(Parentheses)
+		{
+			String += "(";
+		}
+		if (Labels)
+		{
+			String += "x: ";
+
+		}
+		String += std::to_string(x);
+		if (Labels)
+		{
+			String += "y: ";
+
+		}
+		String += std::to_string(y);
+		if(Labels)
+		{
+			String += "z: ";
+		}
+		String += std::to_string(z);
+		if (Parentheses)
+		{
+			String += ")";
+		}
+		return String;
+	}
 
 	float x = 0.0f;
 	float y = 0.0f;
@@ -582,6 +612,32 @@ public:
 		x = Value;
 		y = Value;
 	}
+	std::string GetDataString(bool Parentheses, bool Labels)
+	{
+		std::string String;
+		if (Parentheses)
+		{
+			String += "(";
+		}
+		if (Labels)
+		{
+			String += "x: ";
+
+		}
+		String += std::to_string(x);
+		if (Labels)
+		{
+			String += "y: ";
+
+		}
+		String += std::to_string(y);
+		if (Parentheses)
+		{
+			String += ")";
+		}
+		return String;
+	}
+
 	float x;
 	float y;
 };
