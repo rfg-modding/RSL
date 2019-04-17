@@ -14,6 +14,12 @@ struct rl_sampling_offsets
 	int m_num_samples;
 };
 
+template<class T, unsigned int UnkVar>
+class et_ptr_offset
+{
+	int m_offset;
+};
+
 namespace rfg
 {
 	template<class T>
