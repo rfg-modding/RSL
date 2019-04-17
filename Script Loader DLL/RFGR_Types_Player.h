@@ -1956,6 +1956,38 @@ struct spinebend_flags //72
 	unsigned __int32 pan_dir : 1;
 };
 
+struct anim_bone
+{
+	et_ptr_offset<char, 0> name;
+	vector inv_translation;
+	vector rel_bone_translation;
+	int parent_index;
+	int vid;
+};
+
+struct anim_tag
+{
+	et_ptr_offset<char, 0> name;
+	matrix43 transformation;
+	int parent_index;
+	int vid;
+};
+
+struct anim_rig
+{
+	char name[32];
+	unsigned int flags;
+	int num_bones;
+	int num_common_bones;
+	int num_virtual_bones;
+	int num_tags;
+	unsigned int* bone_name_chksums;
+	anim_bone *bones;
+	anim_tag *tags;
+	unsigned int data_size;
+	char *original_buffer;
+};
+
 /* 4205 */
 struct HumanSpinebendData //1108 Bytes
 {
@@ -2610,7 +2642,7 @@ struct char_def_head
 	void* BaseHeadInfo;///item_info* base_head_info;
 	void* BaseHead;	///character* base_head;
 	void* LODMesh;///character_mesh* lod_mesh;
-	void* AnimRig;///anim_rig* rig;
+	anim_rig* rig;
 	unsigned int morph_mat_srid;
 	int head_morph;
 	int base_head_morph;
