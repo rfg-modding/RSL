@@ -16,6 +16,7 @@ extern rl_scene* GlobalMainScenePtr;
 extern rl_scene_renderer* GlobalMainSceneRendererPtr;
 extern rl_camera* GlobalMainSceneCameraPtr;
 extern hkpWorld* GlobalhkpWorldPtr;
+extern lua_State* RfgVintLuaState;
 
 extern void DisableCameraCode(DWORD AddressY, DWORD AddressZ); //Takes addresses for instructions affecting y and z. Alternatively x and z may work, since one piece seems to be shared between two coords.
 extern void RestoreCameraCode();
@@ -592,3 +593,11 @@ using F_hkpWorldSetGravity = void(__fastcall* )(hkpWorld* This, void* edx, hkVec
 extern F_hkpWorldSetGravity hkpWorldSetGravity;
 
 //.text:014306A0 rfg.exe:$3106A0 #30FAA0 <hkVector4f::set> //void __thiscall hkVector4f::set(hkVector4f *this, float a, float b, float c, float d)
+
+//.text:00C720F0 rfg.exe:$620F0 #614F0 <vint_lua_get_state> //lua_State *__cdecl vint_lua_get_state()
+using F_vint_lua_get_state = lua_State*(__cdecl*)();
+extern F_vint_lua_get_state VintGetLuaState;
+
+//.text:0143FD20 rfg.exe:$82FD20 #82F120 <lua_dobuffer> //int __cdecl lua_dobuffer(lua_State *L, const char *buff, unsigned int size, const char *name)
+using F_lua_dobuffer = int(__cdecl*)(lua_State *L, const char *buff, unsigned int size, const char *name);
+extern F_lua_dobuffer LuaDoBuffer;

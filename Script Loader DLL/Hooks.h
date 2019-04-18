@@ -73,3 +73,6 @@ extern std::once_flag HookhkpWorld_stepDeltaTime;
 
 void __fastcall ApplicationUpdateTimeHook(void* This, void* edx, float TimeStep); //0x9E1A70
 extern std::once_flag HookApplicationUpdateTime;
+
+int __cdecl LuaDoBufferHook(lua_State *L, const char *buff, unsigned int size, const char *name);
+extern std::once_flag HookLuaDoBuffer;

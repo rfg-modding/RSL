@@ -140,4 +140,7 @@ void FunctionManager::Initialize()
 
 	hkpWorldGetGravity = (F_hkpWorldGetGravity)(ModuleBase + 0x40D040);
 	hkpWorldSetGravity = (F_hkpWorldSetGravity)(ModuleBase + 0x9E0E20);
+
+	VintGetLuaState = (F_vint_lua_get_state)(ModuleBase + 0x620F0); //.text:00C720F0 rfg.exe:$620F0 #614F0 <vint_lua_get_state> //lua_State *__cdecl vint_lua_get_state()
+	LuaDoBuffer = (F_lua_dobuffer)(ModuleBase + 0x82FD20); //.text:0143FD20 rfg.exe:$82FD20 #82F120 <lua_dobuffer> //int __cdecl lua_dobuffer(lua_State *L, const char *buff, unsigned int size, const char *name)
 }

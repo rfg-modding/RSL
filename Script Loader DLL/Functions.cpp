@@ -11,6 +11,7 @@ rl_scene* GlobalMainScenePtr = nullptr;
 rl_scene_renderer* GlobalMainSceneRendererPtr = nullptr;
 rl_camera* GlobalMainSceneCameraPtr = nullptr;
 hkpWorld* GlobalhkpWorldPtr = nullptr;
+lua_State* RfgVintLuaState = nullptr;
 
 void DisableCameraCode(DWORD AddressY, DWORD AddressZ) //Takes addresses for instructions affecting y and z. Alternatively x and z may work, since one piece seems to be shared between two coords.
 {
@@ -261,3 +262,6 @@ F_ApplicationUpdateTime ApplicationUpdateTime;
 
 F_hkpWorldGetGravity hkpWorldGetGravity;
 F_hkpWorldSetGravity hkpWorldSetGravity;
+
+F_vint_lua_get_state VintGetLuaState;
+F_lua_dobuffer LuaDoBuffer;

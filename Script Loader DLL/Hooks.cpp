@@ -34,6 +34,7 @@ std::once_flag HookWorldDoFrameInitialCall;
 std::once_flag HookRlCameraRenderBegin;
 std::once_flag HookhkpWorld_stepDeltaTime;
 std::once_flag HookApplicationUpdateTime;
+std::once_flag HookLuaDoBuffer;
 
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 LRESULT __stdcall WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
@@ -193,7 +194,7 @@ LRESULT ProcessInput(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	if (MiddleMouseDown && Gui.TweaksMenu->MiddleMouseBoomActive)
 	{
 		ExplosionTimerEnd = std::chrono::steady_clock::now();
-		std::cout << "Time since last explosion spawn: " << std::chrono::duration_cast<std::chrono::milliseconds>(ExplosionTimerEnd - ExplosionTimerBegin).count() << "\n";
+		//std::cout << "Time since last explosion spawn: " << std::chrono::duration_cast<std::chrono::milliseconds>(ExplosionTimerEnd - ExplosionTimerBegin).count() << "\n";
 		if (std::chrono::duration_cast<std::chrono::milliseconds>(ExplosionTimerEnd - ExplosionTimerBegin).count() > 1000 / Gui.TweaksMenu->MiddleMouseExplosionsPerSecond)
 		{
 			ExplosionCreate(&Gui.TweaksMenu->CustomExplosionInfo, Gui.TweaksMenu->PlayerPtr, Gui.TweaksMenu->PlayerPtr,
@@ -615,6 +616,11 @@ void __fastcall PlayerDoFrameHook(Player* PlayerPtr)
 	{
 		if(GlobalCamera->IsFirstPersonCameraActive())
 		{
+			GlobalPlayerPtr->Flags.ai_ignore = true;
+			GlobalPlayerPtr->Flags.disallow_flinches_and_ragdolls = true;
+		}
+		if(GlobalCamera->IsFirstPersonCameraActive())
+		{
 			GlobalCamera->UpdateFirstPersonView();
 		}
 	}
@@ -1026,3 +1032,44 @@ void __fastcall ApplicationUpdateTimeHook(void* This, void* edx, float TimeStep)
 //.text:0117A880 rfg.exe:$5A880 #59C80 <keen::rfg::Application::updateTime> //void __thiscall fav::keen::rfg::Application::updateTime(keen::rfg::Application *this, float timeStep)
 //typedef void(__fastcall* F_ApplicationUpdateTime)(void* This, void* edx, float TimeStep); //2nd arg is edx, needed for __thiscall functions.
 //extern F_ApplicationUpdateTime ApplicationUpdateTime;
+
+int __cdecl LuaDoBufferHook(lua_State *L, const char *buff, unsigned int size, const char *name)
+{
+	std::call_once(HookLuaDoBuffer, [&]()
+	{
+		RfgVintLuaState = L;
+		//Logger::Log("LuaDoBuffer hooked!", LogWarning);
+	});
+	if(!L)
+	{
+		Logger::Log("RFG lua_state pointer null", LogWarning);
+		return LuaDoBuffer(L, buff, size, name);
+	}
+
+	//Dump current script file
+	std::string Buffer(buff);
+	std::string Name(name);
+	std::string RfgLuaPath = GetEXEPath(false);
+	RfgLuaPath += "RFGR Script Loader/RFG_Lua/";
+	fs::create_directory(RfgLuaPath);
+	std::string DumpFilePath = RfgLuaPath + "Lua_Dumps/";
+	fs::create_directory(DumpFilePath);
+	DumpFilePath += Name;
+	Logger::Log(std::string(std::string("Dumping ") + Name), LogInfo);
+	//std::cout << "\nBuffer: " << Buffer << "\n";
+	std::ofstream myfile;
+	myfile.open(DumpFilePath, std::ios_base::trunc);
+	myfile << Buffer;
+	myfile.close();
+
+	std::string OverrideFilePath = RfgLuaPath + "Overrides/" + Name;
+	//Load override if it exists and pass it on to lua.
+	if(fs::exists(OverrideFilePath))
+	{
+		std::ifstream OverrideStream(OverrideFilePath);
+		std::string OverrideBuffer((std::istreambuf_iterator<char>(OverrideStream)), std::istreambuf_iterator<char>());
+		Logger::Log(std::string(std::string("Overriding ") + Name), LogInfo);
+		return LuaDoBuffer(L, OverrideBuffer.c_str(), OverrideBuffer.length(), name);
+	}
+	return LuaDoBuffer(L, buff, size, name);
+}
