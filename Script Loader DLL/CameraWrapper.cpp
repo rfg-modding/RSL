@@ -162,6 +162,7 @@ void CameraWrapper::DeactivateFreeCamera(bool Shutdown)
 	{
 		GlobalPlayerPtr->HitPoints = GlobalPlayerPtr->MaxHitPoints;
 		GlobalPlayerPtr->Flags.ai_ignore = false;
+		GlobalPlayerPtr->Flags.disallow_flinches_and_ragdolls = false;
 	}
 }
 
