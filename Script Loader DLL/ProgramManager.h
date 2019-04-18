@@ -16,10 +16,8 @@ public:
 	void CreateD3D11Hooks(bool EnableNow);
 
 	bool ShouldClose();
-	void ProcessInput();
 	void Update();
-	///MSG msg;
-	
+
 	void CloseConsole();
 	void Exit();
 
