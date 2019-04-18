@@ -143,4 +143,8 @@ void FunctionManager::Initialize()
 
 	VintGetLuaState = (F_vint_lua_get_state)(ModuleBase + 0x620F0); //.text:00C720F0 rfg.exe:$620F0 #614F0 <vint_lua_get_state> //lua_State *__cdecl vint_lua_get_state()
 	LuaDoBuffer = (F_lua_dobuffer)(ModuleBase + 0x82FD20); //.text:0143FD20 rfg.exe:$82FD20 #82F120 <lua_dobuffer> //int __cdecl lua_dobuffer(lua_State *L, const char *buff, unsigned int size, const char *name)
+
+	HavokBodyGetPointer = (F_havok_body_get_pointer)(ModuleBase + 0x40E870); //.text:0125E870 rfg.exe:$40E870 #40DC70 <havok_body_get_pointer> //hkpRigidBody *__cdecl havok_body_get_pointer(unsigned int handle)
+	HavokBodyApplyLinearImpulseA = (F_havok_body_apply_linear_impulse_A)(ModuleBase + 0x4177A0); //.text:012677A0 rfg.exe:$4177A0 #416BA0 <havok_body_apply_linear_impulse> //void __cdecl havok_body_apply_linear_impulse(hkpRigidBody *rb, vector *linear_impulse)
+	HavokBodyApplyLinearImpulseB = (F_havok_body_apply_linear_impulse_B)(ModuleBase + 0x423C20); //.text:01273C20 rfg.exe:$423C20 #423020 <havok_body_apply_linear_impulse> //void __cdecl havok_body_apply_linear_impulse(unsigned int handle, vector *linear_impulse)
 }

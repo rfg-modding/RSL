@@ -12,6 +12,7 @@ rl_scene_renderer* GlobalMainSceneRendererPtr = nullptr;
 rl_camera* GlobalMainSceneCameraPtr = nullptr;
 hkpWorld* GlobalhkpWorldPtr = nullptr;
 lua_State* RfgVintLuaState = nullptr;
+hkpRigidBody* GlobalPlayerRigidBody = nullptr;
 
 void DisableCameraCode(DWORD AddressY, DWORD AddressZ) //Takes addresses for instructions affecting y and z. Alternatively x and z may work, since one piece seems to be shared between two coords.
 {
@@ -265,3 +266,7 @@ F_hkpWorldSetGravity hkpWorldSetGravity;
 
 F_vint_lua_get_state VintGetLuaState;
 F_lua_dobuffer LuaDoBuffer;
+
+F_havok_body_get_pointer HavokBodyGetPointer;
+F_havok_body_apply_linear_impulse_A HavokBodyApplyLinearImpulseA;
+F_havok_body_apply_linear_impulse_B HavokBodyApplyLinearImpulseB;

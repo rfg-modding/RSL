@@ -17,6 +17,7 @@ extern rl_scene_renderer* GlobalMainSceneRendererPtr;
 extern rl_camera* GlobalMainSceneCameraPtr;
 extern hkpWorld* GlobalhkpWorldPtr;
 extern lua_State* RfgVintLuaState;
+extern hkpRigidBody* GlobalPlayerRigidBody;
 
 extern void DisableCameraCode(DWORD AddressY, DWORD AddressZ); //Takes addresses for instructions affecting y and z. Alternatively x and z may work, since one piece seems to be shared between two coords.
 extern void RestoreCameraCode();
@@ -601,3 +602,15 @@ extern F_vint_lua_get_state VintGetLuaState;
 //.text:0143FD20 rfg.exe:$82FD20 #82F120 <lua_dobuffer> //int __cdecl lua_dobuffer(lua_State *L, const char *buff, unsigned int size, const char *name)
 using F_lua_dobuffer = int(__cdecl*)(lua_State *L, const char *buff, unsigned int size, const char *name);
 extern F_lua_dobuffer LuaDoBuffer;
+
+//.text:0125E870 rfg.exe:$40E870 #40DC70 <havok_body_get_pointer> //hkpRigidBody *__cdecl havok_body_get_pointer(unsigned int handle)
+using F_havok_body_get_pointer = hkpRigidBody*(__cdecl*)(unsigned int handle);
+extern F_havok_body_get_pointer HavokBodyGetPointer;
+
+//.text:012677A0 rfg.exe:$4177A0 #416BA0 <havok_body_apply_linear_impulse> //void __cdecl havok_body_apply_linear_impulse(hkpRigidBody *rb, vector *linear_impulse)
+using F_havok_body_apply_linear_impulse_A = void(__cdecl*)(hkpRigidBody* rb, vector* linear_impulse);
+extern F_havok_body_apply_linear_impulse_A HavokBodyApplyLinearImpulseA;
+
+//.text:01273C20 rfg.exe:$423C20 #423020 <havok_body_apply_linear_impulse> //void __cdecl havok_body_apply_linear_impulse(unsigned int handle, vector *linear_impulse)
+using F_havok_body_apply_linear_impulse_B = void(__cdecl*)(uint handle, vector* linear_impulse);
+extern F_havok_body_apply_linear_impulse_B HavokBodyApplyLinearImpulseB;

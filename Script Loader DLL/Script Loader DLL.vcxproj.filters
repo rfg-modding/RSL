@@ -207,6 +207,9 @@
     <ClCompile Include="WorldLua.cpp">
       <Filter>Lua Binding</Filter>
     </ClCompile>
+    <ClCompile Include="BindHkpRigidBody.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CameraWrapper.h">
@@ -414,6 +417,9 @@
       <Filter>Lua Binding</Filter>
     </ClInclude>
     <ClInclude Include="RenderInterfaceD3D11.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BindHkpRigidBody.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -51,5 +51,7 @@ public:
 
 	bool AiIgnore = false;
 	bool DisablePlayerRagdoll = false;
+
+	vector CustomPlayerImpulseApply;
 };
 

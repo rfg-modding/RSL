@@ -65,6 +65,7 @@ GeneralTweaksGui::GeneralTweaksGui(bool* _OpenState, std::string _Title)
 	CustomTimeOfDayLightColor.alpha = 0.0f;
 
 	CustomAlertLevel = ALERT_LEVEL_GREEN;
+	CustomPlayerImpulseApply.SetAll(0.0f);
 }
 
 GeneralTweaksGui::~GeneralTweaksGui()
@@ -199,6 +200,36 @@ void GeneralTweaksGui::Draw()
 	ImGui::InputInt("Salvage", &PlayerPtr->Metadata.Salvage);
 	ImGui::InputInt("Mining count", &PlayerPtr->Metadata.MiningCount);
 	ImGui::InputInt("Supply crate count", &PlayerPtr->Metadata.SupplyCrateCount);
+
+	//ImGui::Separator();
+	//ImGui::Text("Player rigid body");
+	//ImGui::Separator();
+	//ImGui::PushItemWidth(230.0f);
+	//ImGui::InputFloat3("Linear impulse to apply", (float*)&CustomPlayerImpulseApply, 3);
+	//if(GlobalPlayerRigidBody)
+	//{
+	//	ImGui::PushItemWidth(230.0f);
+	//	ImGui::InputFloat("Friction", &GlobalPlayerRigidBody->m_material.m_friction);
+	//	ImGui::PushItemWidth(230.0f);
+	//	ImGui::InputFloat("Restitution", &GlobalPlayerRigidBody->m_material.m_restitution);
+	//	if (ImGui::Button("Apply impulse by hkpRigidBody*"))
+	//	{
+	//		HavokBodyApplyLinearImpulseA(GlobalPlayerRigidBody, &CustomPlayerImpulseApply);
+	//	}
+	//}
+	//else
+	//{
+	//	ImGui::Text("Player rigid body pointer is null! Can't display gui section.");
+	//}
+	//if (ImGui::Button("Apply impulse by handle"))
+	//{
+	//	HavokBodyApplyLinearImpulseB(PlayerPtr->Handle, &CustomPlayerImpulseApply);
+	//}
+	//if (ImGui::Button("Apply impulse by havok handle"))
+	//{
+	//	HavokBodyApplyLinearImpulseB(PlayerPtr->HavokHandle, &CustomPlayerImpulseApply);
+	//}
+	//ImGui::Separator();
 
 /*
 	ImGui::InputInt("Unlimited ammo", &CustomUnlimitedAmmo);

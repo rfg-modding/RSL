@@ -8,6 +8,7 @@
 #include "ObjectContactInfoLua.h"
 #include "ObjectFlagsLua.h"
 #include "HavokBPOLua.h"
+#include "BindHkpRigidBody.h"
 #include "HumanFlagsLua.h"
 #include "HumanMPFlagsLua.h"
 #include "InvItemInfoLua.h"
@@ -85,6 +86,9 @@ void ScriptManager::SetupLua()
 	RfgTable["ActivePlayer"] = GlobalPlayerPtr;
 	RfgTable["ActiveWorld"] = GlobalRfgWorldPtr;
 	RfgTable["ActivePhysicsWorld"] = GlobalhkpWorldPtr;
+	
+	RfgTable["HavokBodyGetPointer"] = HavokBodyGetPointer;
+	RfgTable.set_function("ApplyLinearImpulse", sol::overload(HavokBodyApplyLinearImpulseA, HavokBodyApplyLinearImpulseB));
 
 	RfgTable.set_function("TeleportPlayer", sol::overload(
  [](vector Position, matrix Orientation) {HumanTeleportUnsafe(GlobalPlayerPtr, Position, Orientation); }, 
@@ -118,6 +122,9 @@ void ScriptManager::SetupLua()
 	Lua::BindObjectFlags(LuaState);
 	//Lua::BindRemoteObjectFlags(LuaState);
 	Lua::BindHavokBPO(LuaState);
+	Lua::BindHkpMaterial(LuaState);
+	Lua::BindHkpEntity(LuaState);
+	Lua::BindHkpRigidBody(LuaState);
 	Lua::BindHumanFlags(LuaState); //Todo: Fix compile error
 	//Lua::BindHumanMPFlags(LuaState); //Todo: Fix compile error
 	Lua::BindHumanInfoFlags(LuaState);
