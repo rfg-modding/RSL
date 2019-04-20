@@ -11,6 +11,7 @@ void Lua::BindVector2(sol::state& LuaState)
 	Utype.set(sol::meta_function::multiplication, &vector2::operator*);
 	Utype.set(sol::meta_function::equal_to, &vector2::operator==);
 	Utype.set("Magnitude", &vector2::Magnitude);
+	Utype.set("Scale", &vector2::Scale);
 	Utype.set("SetAll", &vector2::SetAll);
 	Utype.set("x", &vector2::x);
 	Utype.set("y", &vector2::y);
@@ -30,6 +31,7 @@ void Lua::BindVector(sol::state& LuaState)
 	Utype.set(sol::meta_function::equal_to, &vector::operator==);
 	Utype.set("Cross", &vector::Cross);
 	Utype.set("Magnitude", &vector::Magnitude);
+	Utype.set("Scale", &vector::Scale);
 	Utype.set("SetAll", &vector::SetAll);
 	Utype.set("x", &vector::x);
 	Utype.set("y", &vector::y);

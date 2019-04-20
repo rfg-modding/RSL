@@ -348,6 +348,90 @@ namespace keen
 	};
 };
 
+class vector2
+{
+public:
+	vector2()
+	{
+		x = 0.0f;
+		y = 0.0f;
+	}
+	vector2(const vector2& Copy)
+	{
+		x = Copy.x;
+		y = Copy.y;
+	}
+	vector2(float InitialValue) : x(InitialValue), y(InitialValue) { }
+	vector2(float x_, float y_) : x(x_), y(y_) { }
+	vector2 operator+(const vector2& B)
+	{
+		return vector2(x + B.x, y + B.y);
+	}
+	vector2 operator-(const vector2& B)
+	{
+		return vector2(x - B.x, y - B.y);
+	}
+	float operator*(const vector2& B)
+	{
+		return (x * B.x) + (y * B.y);
+	}
+	bool operator==(const vector2& B)
+	{
+		return (x == B.x && y == B.y);
+	}
+	bool operator!=(const vector2& B)
+	{
+		return !(*this == B);
+	}
+	void operator=(const vector2& B)
+	{
+		x = B.x;
+		y = B.y;
+	}
+	float Magnitude()
+	{
+		return sqrtf((x * x) + (y * y));
+	}
+	void Scale(const float& Multiplier)
+	{
+		x *= Multiplier;
+		y *= Multiplier;
+	}
+	void SetAll(float Value)
+	{
+		x = Value;
+		y = Value;
+	}
+	std::string GetDataString(bool Parentheses, bool Labels)
+	{
+		std::string String;
+		if (Parentheses)
+		{
+			String += "(";
+		}
+		if (Labels)
+		{
+			String += "x: ";
+
+		}
+		String += std::to_string(x);
+		String += ", ";
+		if (Labels)
+		{
+			String += "y: ";
+
+		}
+		String += std::to_string(y);
+		if (Parentheses)
+		{
+			String += ")";
+		}
+		return String;
+	}
+
+	float x;
+	float y;
+};
 
 class vector
 {
@@ -404,6 +488,12 @@ public:
 	float Magnitude()
 	{
 		return sqrtf((x * x) + (y * y) + (z * z));
+	}
+	void Scale(const float& Multiplier)
+	{
+		x *= Multiplier;
+		y *= Multiplier;
+		z *= Multiplier;
 	}
 	void SetAll(float Value)
 	{
@@ -571,86 +661,6 @@ struct matrix44
 	matrix44() {}
 	float elem[4][4];
 	//$EFBF005ED9B80EDE8789D61FAD0B4E5B ___u0;
-};
-
-class vector2
-{
-public:
-	vector2() 
-	{
-		x = 0.0f;
-		y = 0.0f;
-	}
-	vector2(const vector2& Copy)
-	{
-		x = Copy.x;
-		y = Copy.y;
-	}
-	vector2(float InitialValue) : x(InitialValue), y(InitialValue) { }
-	vector2(float x_, float y_) : x(x_), y(y_) { }
-	vector2 operator+(const vector2& B)
-	{
-		return vector2(x + B.x, y + B.y);
-	}
-	vector2 operator-(const vector2& B)
-	{
-		return vector2(x - B.x, y - B.y);
-	}
-	float operator*(const vector2& B)
-	{
-		return (x * B.x) + (y * B.y);
-	}
-	bool operator==(const vector2& B)
-	{
-		return (x == B.x && y == B.y);
-	}
-	bool operator!=(const vector2& B)
-	{
-		return !(*this == B);
-	}
-	void operator=(const vector2& B)
-	{
-		x = B.x;
-		y = B.y;
-	}
-	float Magnitude()
-	{
-		return sqrtf((x * x) + (y * y));
-	}
-	void SetAll(float Value)
-	{
-		x = Value;
-		y = Value;
-	}
-	std::string GetDataString(bool Parentheses, bool Labels)
-	{
-		std::string String;
-		if (Parentheses)
-		{
-			String += "(";
-		}
-		if (Labels)
-		{
-			String += "x: ";
-
-		}
-		String += std::to_string(x);
-		String += ", ";
-		if (Labels)
-		{
-			String += "y: ";
-
-		}
-		String += std::to_string(y);
-		if (Parentheses)
-		{
-			String += ")";
-		}
-		return String;
-	}
-
-	float x;
-	float y;
 };
 
 /* 3928 */
