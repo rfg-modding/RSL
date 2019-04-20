@@ -92,7 +92,8 @@ void FreeCamGui::Draw()
 	}
 	ImGui::PushItemWidth(230.0f);
 	ImGui::InputFloat3("Camera offset", (float*)&Camera->FirstPersonCameraOffset, 3);
-
+	ImGui::Checkbox("Use direction offset", &Camera->UseFirstPersonDirectionOffset);
+	ImGui::InputFloat("Direction offset multiplier", &Camera->FirstPersonDirectionOffsetMultiplier, 3);
 	//ImGui::Checkbox("Update by axis", &Camera->UpdateByAxis);
 	//if(Camera->UpdateByAxis)
 	//{

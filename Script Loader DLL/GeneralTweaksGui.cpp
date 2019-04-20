@@ -201,6 +201,7 @@ void GeneralTweaksGui::Draw()
 	ImGui::InputInt("Mining count", &PlayerPtr->Metadata.MiningCount);
 	ImGui::InputInt("Supply crate count", &PlayerPtr->Metadata.SupplyCrateCount);
 
+	//Doesn't work quite yet, couldn't properly grab the players rigid body.
 	//ImGui::Separator();
 	//ImGui::Text("Player rigid body");
 	//ImGui::Separator();

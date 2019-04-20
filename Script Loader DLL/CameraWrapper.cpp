@@ -2,7 +2,7 @@
 
 CameraWrapper::CameraWrapper()
 {
-
+	FirstPersonCameraOffset.y = 1.7f;
 }
 
 CameraWrapper::~CameraWrapper()
@@ -174,7 +174,14 @@ void CameraWrapper::ToggleFreeCamera()
 	}
 	else
 	{
-		ActivateFreeCamera();
+		if(!FirstPersonCameraActive)
+		{
+			ActivateFreeCamera();
+		}
+		else
+		{
+			Logger::Log("Failed to activate free camera. First cam already active.", LogError);
+		}
 	}
 }
 
@@ -276,6 +283,8 @@ void CameraWrapper::DeactivateFirstPersonCamera()
 	RestoreCameraCode();
 
 	FirstPersonCameraActive = false;
+	FreeCameraActive = false;
+	NeedPostDeactivationCleanup = false;
 }
 
 void CameraWrapper::ToggleFirstPersonCamera()
@@ -285,7 +294,7 @@ void CameraWrapper::ToggleFirstPersonCamera()
 		DeactivateFirstPersonCamera();
 	}
 	else
-	{
+	{ 
 		if(!FreeCameraActive)
 		{
 			ActivateFirstPersonCamera();
@@ -301,6 +310,11 @@ void CameraWrapper::UpdateFirstPersonView()
 {
 	GameData->real_pos = GlobalPlayerPtr->Position + FirstPersonCameraOffset;
 	CurrentSpeed = GlobalPlayerPtr->Velocity.Magnitude();
+	if(UseFirstPersonDirectionOffset)
+	{
+		vector TempVec = GlobalPlayerPtr->Orientation.fvec;
+		GameData->real_pos += TempVec.Scale(FirstPersonDirectionOffsetMultiplier);
+	}
 	//if(UpdateByAxis)
 	//{
 	//	if(UpdateX)

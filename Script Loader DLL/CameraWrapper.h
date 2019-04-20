@@ -50,6 +50,8 @@ public:
 	bool SmoothCamera = false;
 
 	vector FirstPersonCameraOffset;
+	float FirstPersonDirectionOffsetMultiplier = 0.3f;
+	bool UseFirstPersonDirectionOffset = false;
 
 	rfg_camera* GameData = nullptr;
 
