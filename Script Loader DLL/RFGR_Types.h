@@ -464,6 +464,13 @@ public:
 	{
 		return (x * B.x) + (y * B.y) + (z * B.z);
 	}
+	vector& operator+=(const vector& B)
+	{
+		x += B.x;
+		y += B.y;
+		z += B.z;
+		return *this;
+	}
 	bool operator==(const vector& B)
 	{
 		return (x == B.x && y == B.y && z == B.z);
