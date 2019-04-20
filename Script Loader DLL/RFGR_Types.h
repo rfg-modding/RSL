@@ -392,15 +392,17 @@ public:
 	{
 		return sqrtf((x * x) + (y * y));
 	}
-	void Scale(const float& Multiplier)
+	vector2 Scale(const float& Multiplier)
 	{
 		x *= Multiplier;
 		y *= Multiplier;
+		return *this;
 	}
-	void SetAll(float Value)
+	vector2 SetAll(float Value)
 	{
 		x = Value;
 		y = Value;
+		return *this;
 	}
 	std::string GetDataString(bool Parentheses, bool Labels)
 	{
@@ -489,17 +491,19 @@ public:
 	{
 		return sqrtf((x * x) + (y * y) + (z * z));
 	}
-	void Scale(const float& Multiplier)
+	vector Scale(const float& Multiplier)
 	{
 		x *= Multiplier;
 		y *= Multiplier;
 		z *= Multiplier;
+		return *this;
 	}
-	void SetAll(float Value)
+	vector SetAll(float Value)
 	{
 		x = Value;
 		y = Value;
 		z = Value;
+		return *this;
 	}
 	std::string GetDataString(bool Parentheses, bool Labels)
 	{
@@ -589,11 +593,12 @@ public:
 		fvec = B.fvec;
 		return *this;
 	}
-	void SetAll(float Value)
+	matrix SetAll(float Value)
 	{
 		rvec.SetAll(Value);
 		uvec.SetAll(Value);
 		fvec.SetAll(Value);
+		return *this;
 	}
 
 	vector rvec;
@@ -647,10 +652,11 @@ public:
 	{
 		return !(*this == B);
 	}
-	void SetAll(float Value)
+	matrix43 SetAll(float Value)
 	{
 		m_rotation.SetAll(Value);
 		m_translation.SetAll(Value);
+		return *this;
 	}
 	matrix m_rotation;
 	vector m_translation;
