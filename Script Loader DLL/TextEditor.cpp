@@ -1207,6 +1207,7 @@ void TextEditor::DrawNewScriptPopup()
 		ImGui::Text("Would you like to save your current script?");
 		if (ImGui::Button("Yes"))
 		{
+			FixScriptExtension(NewNameBuffer);
 			SaveScript();
 			ClearScript();
 			ImGui::CloseCurrentPopup();
