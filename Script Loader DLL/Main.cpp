@@ -75,25 +75,44 @@ DWORD WINAPI MainThread(HMODULE hModule)
     GameState RFGRState;
     while (!Program.ShouldClose()) //Todo: Change to respond to PostQuitMessage(0) in WndProc
     {
-        /*The error messages in the next three if statements are BS. They really
+        /*Note 1: The error messages in the next three if statements are BS. They really
         detect if the player has entered a multiplayer mode. I changed them to 
         hopefully thwart anyone trying to disable multiplayer checks with binary
         patches. It likely won't slow down people who know what they are doing, 
         but I figure it's worth a go.*/
+		/*Note 2: Using a switch statement instead of an if statement since it's slightly more convincing than a bunch of states stuck to an if statement in disasm.*/
         RFGRState = GameseqGetState();
-        if (RFGRState == GS_WRECKING_CREW_MAIN_MENU || 
-            RFGRState == GS_WRECKING_CREW_CHARACTER_SELECT || 
-            RFGRState == GS_WRECKING_CREW_SCOREBOARD || 
-            RFGRState == GS_MULTIPLAYER_LIVE || 
-            RFGRState == GS_WC_INIT || 
-            RFGRState == GS_WC_SHUTDOWN || 
-            RFGRState == GS_MULTIPLAYER_LIVE_FIND_SERVERS)
-        {
-            //MessageBoxA(FindTopWindow(GetProcessID("rfg.exe")), "MP usage detected, shutting down!", "Multiplayer mode detected", MB_OK);
-            Logger::Log("Error in UI hook, script loader crashing!", LogFatalError, true);
-            FreeLibraryAndExitThread(hModule, 0);
-            return 0;
-        }
+		switch(RFGRState)
+		{
+		case GS_WRECKING_CREW_MAIN_MENU:
+			Logger::Log("Failed to catch exception in UI hook. Script loader crashing!", LogFatalError, true);
+			FreeLibraryAndExitThread(hModule, 0);
+			break;
+		case GS_WRECKING_CREW_CHARACTER_SELECT:
+			Logger::Log("Null memory access attempted. Script loader crashing!", LogFatalError, true);
+			FreeLibraryAndExitThread(hModule, 0);
+			break;
+		case GS_WRECKING_CREW_SCOREBOARD:
+			Logger::Log("Rfg deleted something important, script loader crashing!", LogFatalError, true);
+			FreeLibraryAndExitThread(hModule, 0);
+			break;
+		case GS_MULTIPLAYER_LIVE:
+			Logger::Log("Failed to relocate rfg application struct after patch, script loader crashing!", LogFatalError, true);
+			FreeLibraryAndExitThread(hModule, 0);
+			break;
+		case GS_WC_INIT:
+			Logger::Log("Free cam init binary patched something it shouldn't have, script loader crashing!", LogFatalError, true);
+			FreeLibraryAndExitThread(hModule, 0);
+			break;
+		case GS_WC_SHUTDOWN:
+			Logger::Log("Dynamic allocator failure, script loader crashing!", LogFatalError, true);
+			FreeLibraryAndExitThread(hModule, 0);
+			break;
+		case GS_MULTIPLAYER_LIVE_FIND_SERVERS:
+			Logger::Log("Failed to refresh object hashmap, script loader crashing!", LogFatalError, true);
+			FreeLibraryAndExitThread(hModule, 0);
+			break;
+		}
         if (*(bool*)InMultiplayer)
         {
             //MessageBoxA(FindTopWindow(GetProcessID("rfg.exe")), "MP usage detected, shutting down!", "Multiplayer mode detected", MB_OK);
