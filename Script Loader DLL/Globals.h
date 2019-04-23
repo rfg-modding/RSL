@@ -9,6 +9,8 @@
 //using json = nlohmann::json;
 namespace fs = std::filesystem;
 using uint = unsigned int;
+using ulong = unsigned long;
+using ulonglong = unsigned long long;
 
 class ProgramManager;
 extern ProgramManager* GlobalProgram;
