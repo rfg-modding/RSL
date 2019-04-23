@@ -208,7 +208,7 @@
       <Filter>Lua Binding</Filter>
     </ClCompile>
     <ClCompile Include="BindHkpRigidBody.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Lua Binding</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -420,7 +420,7 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="BindHkpRigidBody.h">
-      <Filter>Header Files</Filter>
+      <Filter>Lua Binding</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

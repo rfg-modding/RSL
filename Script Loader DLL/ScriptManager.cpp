@@ -8,7 +8,7 @@
 #include "ObjectContactInfoLua.h"
 #include "ObjectFlagsLua.h"
 #include "HavokBPOLua.h"
-#include "BindHkpRigidBody.h"
+#include "HkpRigidBodyLua.h"
 #include "HumanFlagsLua.h"
 #include "HumanMPFlagsLua.h"
 #include "InvItemInfoLua.h"

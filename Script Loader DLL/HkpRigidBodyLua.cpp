@@ -1,4 +1,4 @@
-#include "BindHkpRigidBody.h"
+#include "HkpRigidBodyLua.h"
 #include "Functions.h"
 
 void Lua::BindHkpMaterial(sol::state& LuaState)
