@@ -67,12 +67,11 @@ DWORD WINAPI MainThread(HMODULE hModule)
         MessageBoxA(FindTopWindow(GetProcessID("rfg.exe")), MessageBoxString.c_str(), "Logger failed to open default log files!", MB_OK);
     }
     Program.Scripts.ScanScriptsFolder();
-
+	
 	std::chrono::steady_clock::time_point Begin = std::chrono::steady_clock::now();
 	std::chrono::steady_clock::time_point End;
-	const float UpdatesPerSecond = 1;
-	const unsigned int MillisecondsPerUpdate = (unsigned int)(1000.0f / UpdatesPerSecond);
-    GameState RFGRState;
+	const ulong UpdatesPerSecond = 1;
+	const ulong MillisecondsPerUpdate = 1000 / UpdatesPerSecond;
     while (!Program.ShouldClose()) //Todo: Change to respond to PostQuitMessage(0) in WndProc
     {
         /*Note 1: The error messages in the next three if statements are BS. They really
@@ -80,8 +79,8 @@ DWORD WINAPI MainThread(HMODULE hModule)
         hopefully thwart anyone trying to disable multiplayer checks with binary
         patches. It likely won't slow down people who know what they are doing, 
         but I figure it's worth a go.*/
-		/*Note 2: Using a switch statement instead of an if statement since it's slightly more convincing than a bunch of states stuck to an if statement in disasm.*/
-        RFGRState = GameseqGetState();
+		/*Note 2: Using a switch statement instead of an if statement since it's slightly more convincing than a bunch of states stuck to an if statement in disasm imo.*/
+		GameState RFGRState = GameseqGetState();
 		switch(RFGRState)
 		{
 		case GS_WRECKING_CREW_MAIN_MENU:
@@ -111,6 +110,8 @@ DWORD WINAPI MainThread(HMODULE hModule)
 		case GS_MULTIPLAYER_LIVE_FIND_SERVERS:
 			Logger::Log("Failed to refresh object hashmap, script loader crashing!", LogFatalError, true);
 			FreeLibraryAndExitThread(hModule, 0);
+			break;
+		default:
 			break;
 		}
         if (*(bool*)InMultiplayer)
@@ -149,7 +150,7 @@ BOOL WINAPI DllMain(HMODULE hModule, DWORD dwReason, LPVOID lpReserved)
     switch (dwReason)
     {
     case DLL_PROCESS_ATTACH:
-        CreateThread(0, 0, (LPTHREAD_START_ROUTINE)MainThread, hModule, 0, 0);
+        CreateThread(0, 0, reinterpret_cast<LPTHREAD_START_ROUTINE>(MainThread), hModule, 0, 0);
         break;
     default:
         break;
