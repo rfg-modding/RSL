@@ -207,7 +207,7 @@
     <ClCompile Include="WorldLua.cpp">
       <Filter>Lua Binding</Filter>
     </ClCompile>
-    <ClCompile Include="BindHkpRigidBody.cpp">
+    <ClCompile Include="HkpRigidBodyLua.cpp">
       <Filter>Lua Binding</Filter>
     </ClCompile>
   </ItemGroup>
@@ -419,7 +419,7 @@
     <ClInclude Include="RenderInterfaceD3D11.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="BindHkpRigidBody.h">
+    <ClInclude Include="HkpRigidBodyLua.h">
       <Filter>Lua Binding</Filter>
     </ClInclude>
   </ItemGroup>

@@ -198,7 +198,7 @@
     <ClCompile Include="AttachInfoDataLua.cpp" />
     <ClCompile Include="BaseGui.cpp" />
     <ClCompile Include="BaseTypeLua.cpp" />
-    <ClCompile Include="BindHkpRigidBody.cpp" />
+    <ClCompile Include="HkpRigidBodyLua.cpp" />
     <ClCompile Include="CameraWrapper.cpp" />
     <ClCompile Include="CharacterInstanceLua.cpp" />
     <ClCompile Include="ContactNodeLua.cpp" />
@@ -262,7 +262,7 @@
     <ClInclude Include="AttachInfoDataLua.h" />
     <ClInclude Include="BaseGui.h" />
     <ClInclude Include="BaseTypeLua.h" />
-    <ClInclude Include="BindHkpRigidBody.h" />
+    <ClInclude Include="HkpRigidBodyLua.h" />
     <ClInclude Include="CameraWrapper.h" />
     <ClInclude Include="CharacterInstanceLua.h" />
     <ClInclude Include="ContactNodeLua.h" />
