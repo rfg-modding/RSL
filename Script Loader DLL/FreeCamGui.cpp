@@ -94,6 +94,11 @@ void FreeCamGui::Draw()
 	ImGui::InputFloat3("Camera offset", (float*)&Camera->FirstPersonCameraOffset, 3);
 	ImGui::Checkbox("Use direction offset", &Camera->UseFirstPersonDirectionOffset);
 	ImGui::InputFloat("Direction offset multiplier", &Camera->FirstPersonDirectionOffsetMultiplier, 3);
+
+	//ImGui::Checkbox("Use auto player direction", &Camera->UseFirstPersonAutoPlayerDirection);
+	//ImGui::Checkbox("Use auto player direction angle offset", &Camera->UseFirstPersonAutoPlayerDirectionAngleOffset);
+	//ImGui::InputFloat("Auto player direction angle offset (Degrees)", &Camera->FirstPersonAutoPlayerDirectionAngleOffset);
+
 	//ImGui::Checkbox("Update by axis", &Camera->UpdateByAxis);
 	//if(Camera->UpdateByAxis)
 	//{

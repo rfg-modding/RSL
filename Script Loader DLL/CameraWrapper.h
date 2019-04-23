@@ -51,7 +51,10 @@ public:
 
 	vector FirstPersonCameraOffset;
 	float FirstPersonDirectionOffsetMultiplier = 0.3f;
-	bool UseFirstPersonDirectionOffset = false;
+	bool UseFirstPersonDirectionOffset = true;
+	bool UseFirstPersonAutoPlayerDirection = false;
+	bool UseFirstPersonAutoPlayerDirectionAngleOffset = false;
+	float FirstPersonAutoPlayerDirectionAngleOffset = 0.0f;
 
 	rfg_camera* GameData = nullptr;
 

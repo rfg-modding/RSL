@@ -315,6 +315,35 @@ void CameraWrapper::UpdateFirstPersonView()
 		vector TempVec = GlobalPlayerPtr->Orientation.fvec;
 		GameData->real_pos += TempVec.Scale(FirstPersonDirectionOffsetMultiplier);
 	}
+
+	//Unworking, more wierd player scale issues start to pop up...
+	//if (UseFirstPersonAutoPlayerDirection)
+	//{
+	//	if(UseFirstPersonAutoPlayerDirectionAngleOffset)
+	//	{
+	//		float XDirAngle = acosf(*RealDirectionX);
+	//		float ZDirAngle = asinf(*RealDirectionZ);
+	//		GlobalPlayerPtr->Orientation.fvec.x = cosf(XDirAngle + FloatConvertDegreesToRadians(FirstPersonAutoPlayerDirectionAngleOffset));
+	//		GlobalPlayerPtr->Orientation.fvec.y = 0.0f;
+	//		GlobalPlayerPtr->Orientation.fvec.z = sinf(ZDirAngle + FloatConvertDegreesToRadians(FirstPersonAutoPlayerDirectionAngleOffset));
+	//	}
+	//	else
+	//	{
+	//		GlobalPlayerPtr->Orientation.fvec.x = *RealDirectionX;
+	//		GlobalPlayerPtr->Orientation.fvec.y = 0.0f;
+	//		GlobalPlayerPtr->Orientation.fvec.z = *RealDirectionZ;
+	//	}
+
+	//	GlobalPlayerPtr->Orientation.uvec.x = 0.0f;
+	//	GlobalPlayerPtr->Orientation.uvec.y = 1.0f;
+	//	GlobalPlayerPtr->Orientation.uvec.z = 0.0f;
+
+	//	vector TempRightVec = GlobalPlayerPtr->Orientation.fvec.Cross(GlobalPlayerPtr->Orientation.uvec);
+	//	TempRightVec.y = 0.0f;
+	//	TempRightVec.Scale(-1.0f);
+	//	GlobalPlayerPtr->Orientation.rvec = TempRightVec;
+	//}
+
 	//if(UpdateByAxis)
 	//{
 	//	if(UpdateX)
