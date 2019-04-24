@@ -102,19 +102,12 @@ void ShowHelpMarker(const char* desc)
 	}
 }
 
-bool DirectoryExists(std::string Directory)
+bool DirectoryExists(const std::string& Directory)
 {
-	if (!fs::is_directory(Directory) || !fs::exists(Directory))
-	{
-		return false;
-	}
-	else
-	{
-		return true;
-	}
+	return !(!fs::is_directory(Directory) || !fs::exists(Directory));
 }
 
-void CreateDirectoryIfNull(std::string Directory)
+void CreateDirectoryIfNull(const std::string& Directory)
 {
 	try
 	{
@@ -196,7 +189,7 @@ HWND FindTopWindow(DWORD pid)
 	std::pair<HWND, DWORD> params = { 0, pid };
 
 	// Enumerate the windows using a lambda to process each window
-	BOOL bResult = EnumWindows([](HWND hwnd, LPARAM lParam) -> BOOL
+	const BOOL bResult = EnumWindows([](HWND hwnd, LPARAM lParam) -> BOOL
 	{
 		auto pParams = (std::pair<HWND, DWORD>*)(lParam);
 
@@ -221,10 +214,10 @@ HWND FindTopWindow(DWORD pid)
 	return 0;
 }
 
-DWORD GetProcessID(std::string ProcessName)
+DWORD GetProcessID(const std::string& ProcessName)
 {
 	PROCESSENTRY32 ProcessSnapshotStructure = { 0 };
-	HANDLE Snapshot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
+	const HANDLE Snapshot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
 
 	ProcessSnapshotStructure.dwSize = sizeof(PROCESSENTRY32);
 

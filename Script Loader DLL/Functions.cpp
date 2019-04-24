@@ -247,10 +247,10 @@ F_rfg_dyn_repair_sphere rfg_dyn_repair_sphere;
 
 
 
-Human* CastObjectToHuman(Object* ObjectPtr) { return (Human*)ObjectPtr; }
-Player* CastObjectToPlayer(Object* ObjectPtr) { return (Player*)ObjectPtr; }
-obj_zone* CastObjectToObjZone(Object* ObjectPtr) { return (obj_zone*)ObjectPtr; }
-district* CastObjectToDistrict(Object* ObjectPtr) { return (district*)ObjectPtr; }
+Human* CastObjectToHuman(Object* ObjectPtr) { return static_cast<Human*>(ObjectPtr); }
+Player* CastObjectToPlayer(Object* ObjectPtr) { return static_cast<Player*>(ObjectPtr); }
+obj_zone* CastObjectToObjZone(Object* ObjectPtr) { return static_cast<obj_zone*>(ObjectPtr); }
+district* CastObjectToDistrict(Object* ObjectPtr) { return static_cast<district*>(ObjectPtr); }
 
 F_rl_camera_render_begin rl_camera_render_begin;
 

@@ -5,7 +5,7 @@
 class CodeSnippet
 {
 public:
-	CodeSnippet() { } 
+	CodeSnippet() = default;
 	CodeSnippet(DWORD Address_, DWORD Length_) : Address(Address_), Length(Length_) { }
 
 	DWORD Address = 0;

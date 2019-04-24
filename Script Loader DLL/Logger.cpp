@@ -31,9 +31,9 @@ void Logger::OpenLogFile(std::string FileName, int LogFlags, std::ios_base::open
 		{
 			Path = CustomFilePath;
 		}
-		for (auto i = LogFileMap.begin(); i != LogFileMap.end(); i++)
+		for (auto& i : LogFileMap)
 		{
-			if (i->first == FileName)
+			if (i.first == FileName)
 			{
 				Log(std::string(FileName + " already exists. New log file not created."), LogError);
 				return;
@@ -91,7 +91,7 @@ void Logger::OpenLogFile(std::string FileName, int LogFlags, std::ios_base::open
 	}
 }
 
-void Logger::CloseLogFile(std::string FileName)
+void Logger::CloseLogFile(const const std::string& FileName)
 {
 	LogFileMap[FileName].File.close();
 	LogFileMap.erase(FileName);
@@ -99,9 +99,9 @@ void Logger::CloseLogFile(std::string FileName)
 
 void Logger::CloseAllLogFiles()
 {
-	for (auto i = LogFileMap.begin(); i != LogFileMap.end(); i++)
+	for (auto& i : LogFileMap)
 	{
-		i->second.File.close();
+		i.second.File.close();
 	}
 	LogFileMap.erase(LogFileMap.begin(), LogFileMap.end());
 }
@@ -155,31 +155,31 @@ void Logger::Log(std::string Message, int LogFlags, bool LogTime, bool NewLine)
 			MessageBoxA(FindTopWindow(GetProcessID("rfg.exe")), ExceptionInfo.c_str(), "Failed to log to external console!", MB_OK);
 		}
 	}
-	for (auto i = LogFileMap.begin(); i != LogFileMap.end(); i++)
+	for (auto& i : LogFileMap)
 	{
 		try
 		{
-			if (i->second.LogFlags & LogFlags)
+			if (i.second.LogFlags & LogFlags)
 			{
-				i->second.File << FlagString;
+				i.second.File << FlagString;
 				if (LogTime)
 				{
-					i->second.File << TimeString;
+					i.second.File << TimeString;
 				}
-				i->second.File << " ";
-				i->second.File << Message;
+				i.second.File << " ";
+				i.second.File << Message;
 				if (NewLine)
 				{
-					i->second.File << "\n";
+					i.second.File << "\n";
 				}
-				i->second.File << std::flush;
+				i.second.File << std::flush;
 			}
 		}
 		catch (std::ios_base::failure& Ex)
 		{
 			std::string ExceptionInfo = Ex.what();
 			ExceptionInfo += " \nstd::ios_base::failure exception caught while logging to ";
-			ExceptionInfo += i->second.FilePath;
+			ExceptionInfo += i.second.FilePath;
 			ExceptionInfo += ", Additional info: ";
 			ExceptionInfo += "Error code: ";
 			ExceptionInfo += Ex.code().message();
@@ -196,7 +196,7 @@ void Logger::Log(std::string Message, int LogFlags, bool LogTime, bool NewLine)
 		{
 			std::string ExceptionInfo = Ex.what();
 			ExceptionInfo += " \nstd::exception caught while logging to ";
-			ExceptionInfo += i->second.FilePath;
+			ExceptionInfo += i.second.FilePath;
 			ExceptionInfo += ", Additional info: ";
 			ExceptionInfo += "File: ";
 			ExceptionInfo += __FILE__;
@@ -210,7 +210,7 @@ void Logger::Log(std::string Message, int LogFlags, bool LogTime, bool NewLine)
 		catch (...)
 		{
 			std::string ExceptionInfo = "Default exception caught while logging to ";
-			ExceptionInfo += i->second.FilePath;
+			ExceptionInfo += i.second.FilePath;
 			ExceptionInfo += ", Additional info: ";
 			ExceptionInfo += "File: ";
 			ExceptionInfo += __FILE__;
@@ -246,76 +246,7 @@ void Logger::Log(std::string Message, int LogFlags, bool LogTime, bool NewLine)
 	//std::cout << "sizeof std::string vector with 10000 values: " << (sizeof(std::vector<std::string>) + (sizeof(std::string) * 10000)) / 1000 << "kB\n";
 }
 
-/*template <class... Args>
-void Logger::Log(int LogFlags, Args... args)
-{
-	std::string TimeString = GetTimeString(false);
-	std::string FlagString = GetFlagString(LogFlags);
-	std::tuple<Args...> ArgsTuple{ args... };
-
-	std::string MessageString = "";
-	for_each_in_tuple(ArgsTuple, [](const auto& value)
-	{
-		MessageString += std::to_string(value);
-	});
-	LogData.insert(LogData.begin(), LogEntry(FlagString, MessageString, LogFlags));
-	if (ConsoleLogFlags & LogFlags)
-	{
-		LogFlagWithColor(LogFlags);
-		std::cout << " ";
-		std::cout << MessageString;
-	}
-	for (auto i = LogFileMap.begin(); i != LogFileMap.end(); i++)
-	{
-		if (i->second.LogFlags & LogFlags)
-		{
-			i->second.File << FlagString;
-			i->second.File << " ";
-			i->second.File << MessageString;
-		}
-	}
-	if (LogData.size() > MaximumLogCount && MaximumLogCount > 0)
-	{
-		LogData.pop_back();
-	}
-}
-
-template <class... Args>
-void Logger::Log(Args... args)
-{
-	int DefaultLogFlags = LogInfo;
-	std::string TimeString = GetTimeString(false);
-	std::string FlagString = GetFlagString(DefaultLogFlags);
-	std::tuple<Args...> ArgsTuple{args...};
-	
-	std::string MessageString = "";
-	for_each_in_tuple(ArgsTuple, [&](const auto& value)
-	{
-		MessageString += value;
-	});
-	LogData.insert(LogData.begin(), LogEntry(FlagString, MessageString, DefaultLogFlags));
-	if (ConsoleLogFlags & DefaultLogFlags)
-	{
-		LogFlagWithColor(DefaultLogFlags);
-		std::cout << " ";
-		std::cout << MessageString;
-	}
-	for (auto i = LogFileMap.begin(); i != LogFileMap.end(); i++)
-	{
-		if (i->second.LogFlags & DefaultLogFlags)
-		{
-			i->second.File << FlagString;
-			i->second.File << " ";
-			i->second.File << MessageString;
-		}
-	}
-	if (LogData.size() > MaximumLogCount && MaximumLogCount > 0)
-	{
-		LogData.pop_back();
-	}
-}*/
-
-void Logger::LogFlagWithColor(int LogFlags)
+void Logger::LogFlagWithColor(const int LogFlags)
 {
 	if (LogFlags & LogInfo)
 	{
@@ -356,7 +287,7 @@ void Logger::LogFlagWithColor(int LogFlags)
 	SetConsoleTextAttribute(ConsoleHandle, ConsoleDefaultTextAttributes);
 }
 
-std::string Logger::GetFlagString(int LogFlags)
+std::string Logger::GetFlagString(const int LogFlags)
 {
 	if (LogFlags & LogInfo)
 	{
@@ -388,7 +319,7 @@ std::string Logger::GetFlagString(int LogFlags)
 	}
 }
 
-void Logger::LogToFile(std::string FileName, std::string Message, int LogFlags, bool LogTime, bool BypassFlagCheck)
+void Logger::LogToFile(const std::string& FileName, const std::string& Message, const int LogFlags, const bool LogTime, const bool BypassFlagCheck)
 {
 	if (!BypassFlagCheck) //Allows things such as using LogInfo for the first message in an error log.
 	{
@@ -406,16 +337,16 @@ void Logger::LogToFile(std::string FileName, std::string Message, int LogFlags, 
 	LogFileMap[FileName].File << Message << "\n";
 }
 
-std::string Logger::GetTimeString(bool MilitaryTime)
+std::string Logger::GetTimeString(const bool MilitaryTime)
 {
 	std::time_t t = std::time(0);
-	std::tm now;
+	std::tm now{};
 	localtime_s(&now, &t);
 
 	std::string DateTime;
-	std::string Year = std::to_string(now.tm_year + 1900);
-	std::string Month = std::to_string(now.tm_mon + 1);
-	std::string Day = std::to_string(now.tm_mday);
+	const std::string Year = std::to_string(now.tm_year + 1900);
+	const std::string Month = std::to_string(now.tm_mon + 1);
+	const std::string Day = std::to_string(now.tm_mday);
 	std::string Hour;
 	std::string Minutes = std::to_string(now.tm_min);
 
@@ -423,7 +354,6 @@ std::string Logger::GetTimeString(bool MilitaryTime)
 	{
 		Minutes.insert(0, 1, '0');
 	}
-
 	if (MilitaryTime)
 	{
 		Hour = std::to_string(now.tm_hour);
@@ -449,12 +379,6 @@ std::string Logger::GetTimeString(bool MilitaryTime)
 			}
 		}
 	}
-
 	DateTime += Month + "/" + Day + "/" + Year;
-
-	//std::cout << DateTime << "\n";
-
-	//std::cout << "Date & Time:" << now.tm_year + 1900 << "/" << now.tm_mon + 1 << "/" << now.tm_mday << " - " << now.tm_hour << ":" << now.tm_min << "\n";
-
 	return "[" + DateTime + "]";
 }

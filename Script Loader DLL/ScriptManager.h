@@ -6,9 +6,9 @@
 class Script
 {
 public:
-	Script() { };
-	Script(std::string _FullPath, std::string _FolderPath, std::string _Name) : FullPath(_FullPath), FolderPath(_FolderPath), Name(_Name) { };
-	~Script() { };
+	Script() = default;;
+	Script(std::string FullPath_, std::string FolderPath_, std::string Name_) : FullPath(FullPath_), FolderPath(FolderPath_), Name(Name_) { };
+	~Script() = default;;
 
 	std::string FullPath; //Full path with name.
 	std::string FolderPath; //Full path without name.
@@ -18,17 +18,16 @@ public:
 class ScriptManager
 {
 public:
-	ScriptManager();
-	~ScriptManager();
+	ScriptManager() = default;
+	~ScriptManager() = default;
 
 	void Initialize();
 
 	void UpdateRfgPointers();
 	void ScanScriptsFolder();
-	void ScanScriptsSubFolders();
 
 	bool RunScript(const std::string& FullPath);
-	bool RunScript(const size_t Index);
+	bool RunScript(size_t Index);
 
 	bool RunStringAsScript(std::string Buffer, std::string Name);
 
@@ -36,13 +35,11 @@ public:
 	std::vector <Script> Scripts;
 
 private:
-	std::string GetScriptNameFromPath(std::string FullPath);
-	std::string GetScriptFolderFromPath(std::string FullPath);
-	std::string GetScriptExtensionFromPath(std::string FullPath);
+	std::string GetScriptNameFromPath(std::string FullPath) const;
+	std::string GetScriptFolderFromPath(std::string FullPath) const;
+	std::string GetScriptExtensionFromPath(std::string FullPath) const;
 	bool IsValidScriptExtensionFromPath(std::string FullPath);
-	bool IsValidScriptExtension(std::string Extension);
+	bool IsValidScriptExtension(std::string Extension) const;
 
 	void SetupLua();
-	//void SetLuaFunctions();
-	//void SetLuaTypes();
 };

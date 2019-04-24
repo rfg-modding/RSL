@@ -1,15 +1,12 @@
 #pragma once
-///#include "Globals.h"
 #include "Functions.h"
 
 class FunctionManager
 {
 public:
-	FunctionManager();
-	~FunctionManager();
+	FunctionManager() = default;
+	~FunctionManager() = default;
 
 	void Initialize();
-
-	uintptr_t ModuleBase = 0;
 };
 

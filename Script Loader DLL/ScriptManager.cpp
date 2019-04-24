@@ -21,26 +21,11 @@
 #include "PlayerLua.h"
 #include "WorldLua.h"
 
-ScriptManager::ScriptManager()
-{
-
-}
-
-ScriptManager::~ScriptManager()
-{
-
-}
-
-const char* TestFunc()
-{
-	return "Test";
-}
-
 void ScriptManager::Initialize()
 {
 	//See here: https://sol2.readthedocs.io/en/stable/api/state.html#lib-enum
 	//and here: https://www.lua.org/manual/5.1/manual.html#5 (LuaJIT is 5.1)
-	//For now there is no Lua sand boxing in place to remove as many barriers for creativity that modders might have had otherwise.
+	//For now there is no Lua sandboxing in place to remove as many barriers for creativity that modders might have had otherwise.
 	LuaState.open_libraries
 	(
 		sol::lib::base,
@@ -153,10 +138,10 @@ void ScriptManager::SetupLua()
 	Lua::BindPlayer(LuaState);
 	//Setting these manually to ensure there's no accidently overwrites
 	LuaState["rfg"]["Object"]["AsObject"] = [](Object& Self)->Object* {return &Self; };
-	LuaState["rfg"]["Human"]["AsObject"] = [](Human& Self)->Object* {return (Object*)&Self; };
-	LuaState["rfg"]["Human"]["AsHuman"] = [](Human& Self)->Human* {return (Human*)&Self; };
-	LuaState["rfg"]["Player"]["AsObject"] = [](Player& Self)->Object* {return (Object*)&Self; };
-	LuaState["rfg"]["Player"]["AsHuman"] = [](Player& Self)->Human* {return (Human*)&Self; };
+	LuaState["rfg"]["Human"]["AsObject"] = [](Human& Self)->Object* {return static_cast<Object*>(&Self); };
+	LuaState["rfg"]["Human"]["AsHuman"] = [](Human& Self)->Human* {return static_cast<Human*>(&Self); };
+	LuaState["rfg"]["Player"]["AsObject"] = [](Player& Self)->Object* {return static_cast<Object*>(&Self); };
+	LuaState["rfg"]["Player"]["AsHuman"] = [](Player& Self)->Human* {return static_cast<Human*>(&Self); };
 	LuaState["rfg"]["Player"]["AsPlayer"] = [](Player& Self)->Player* {return &Self; };
 
 	//World & dependent types
@@ -190,19 +175,14 @@ void ScriptManager::ScanScriptsFolder()
 	try 
 	{
 		Scripts.clear();
-		std::string ScriptFolderPath(GetEXEPath(false) + "RFGR Script Loader/Scripts/");
-
-		std::string ThisScriptPath;
-		std::string ThisScriptFolderPath;
-		std::string ThisScriptName;
-
+		const std::string ScriptFolderPath(GetEXEPath(false) + "RFGR Script Loader/Scripts/");
 		for (auto& i : fs::directory_iterator(ScriptFolderPath))
 		{
 			if (IsValidScriptExtensionFromPath(i.path().string()))
 			{
-				ThisScriptPath = i.path().string();
-				ThisScriptFolderPath = GetScriptFolderFromPath(i.path().string());
-				ThisScriptName = GetScriptNameFromPath(i.path().string());
+				const std::string ThisScriptPath = i.path().string();
+				const std::string ThisScriptFolderPath = GetScriptFolderFromPath(i.path().string());
+				const std::string ThisScriptName = GetScriptNameFromPath(i.path().string());
 				Scripts.push_back(Script(ThisScriptPath, ThisScriptFolderPath, ThisScriptName));
 
 				//Logger::Log(i.path().string(), LogInfo);
@@ -222,14 +202,7 @@ void ScriptManager::ScanScriptsFolder()
 		ExceptionInfo += ", Line: ";
 		ExceptionInfo += __LINE__;
 		Logger::Log(ExceptionInfo, LogFatalError, true, true);
-		//strcpy(Ex.what, ExceptionInfo.c_str());
-		//throw(Ex);
 	}
-}
-
-void ScriptManager::ScanScriptsSubFolders()
-{
-
 }
 
 bool ScriptManager::RunScript(const std::string& FullPath)
@@ -265,7 +238,7 @@ bool ScriptManager::RunScript(const std::string& FullPath)
 
 bool ScriptManager::RunScript(const size_t Index)
 {
-	std::string FullPath = Scripts[Index].FullPath;
+	const std::string& FullPath = Scripts[Index].FullPath;
 	try
 	{
 		auto CodeResult = LuaState.script_file(FullPath, [](lua_State*, sol::protected_function_result pfr)
@@ -312,7 +285,7 @@ bool ScriptManager::RunStringAsScript(std::string Buffer, std::string Name)
 	}
 }
 
-std::string ScriptManager::GetScriptNameFromPath(std::string FullPath)
+std::string ScriptManager::GetScriptNameFromPath(std::string FullPath) const
 {
 	for (int i = FullPath.length() - 1; i > 0; i--)
 	{
@@ -327,7 +300,7 @@ std::string ScriptManager::GetScriptNameFromPath(std::string FullPath)
 	return std::string();
 }
 
-std::string ScriptManager::GetScriptFolderFromPath(std::string FullPath)
+std::string ScriptManager::GetScriptFolderFromPath(std::string FullPath) const
 {
 	for (int i = FullPath.length() - 1; i > 0; i--)
 	{
@@ -342,7 +315,7 @@ std::string ScriptManager::GetScriptFolderFromPath(std::string FullPath)
 	return std::string();
 }
 
-std::string ScriptManager::GetScriptExtensionFromPath(std::string FullPath)
+std::string ScriptManager::GetScriptExtensionFromPath(std::string FullPath) const
 {
 	for (int i = FullPath.length() - 1; i > 0; i--)
 	{
@@ -363,7 +336,7 @@ bool ScriptManager::IsValidScriptExtensionFromPath(std::string FullPath)
 	return false;
 }
 
-bool ScriptManager::IsValidScriptExtension(std::string Extension)
+bool ScriptManager::IsValidScriptExtension(std::string Extension) const
 {
 	std::transform(Extension.begin(), Extension.end(), Extension.begin(), ::tolower);
 	if (Extension == "lua")

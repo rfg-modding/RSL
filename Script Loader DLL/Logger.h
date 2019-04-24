@@ -20,25 +20,12 @@ enum LogType
 	LogJson = 1 << 5, //32
 	LogAll = 63
 };
-/*inline constexpr LogType operator | (LogType a, LogType b)
-{
-	return a = static_cast<LogType> (a | b);
-}
-
-inline constexpr LogType operator & (LogType a, LogType b)
-{
-	return a = static_cast<LogType> (a & b);
-}*/
 
 class LogFile
 {
 public:
 	LogFile() { }
 	LogFile(std::string Path, int Flags, std::ios_base::openmode Mode = std::ios_base::out) : LogFlags(Flags), OpenMode(Mode), FilePath(Path) {}
-	/*~LogFile() 
-	{
-		File.close();
-	}*/
 
 	std::ofstream File;
 	int LogFlags = LogAll;
@@ -63,18 +50,14 @@ public:
 	static void Init(int _ConsoleLogLevel, std::string _DefaultLogPath, unsigned int _MaximumLogCount);
 
 	static void OpenLogFile(std::string FileName, int LogFlags, std::ios_base::openmode Mode = std::ios_base::out, std::string CustomFilePath = "DEFAULT");
-	static void CloseLogFile(std::string FileName);
+	static void CloseLogFile(const std::string& FileName);
 	static void CloseAllLogFiles();
 	
 	static void Log(std::string Message, int LogFlags = LogInfo, bool LogTime = false, bool NewLine = true);
-	/*template <class... Args>
-	static void Log(int LogFlags, Args... args);
-	template <class... Args>
-	static void Log(Args... args);*/
 
 	static void LogFlagWithColor(int LogFlags);
 	static std::string GetFlagString(int LogFlags);
-	static void LogToFile(std::string FileName, std::string Message, int LogFlags, bool LogTime = false, bool BypassFlagCheck = false);
+	static void LogToFile(const std::string& FileName, const std::string& Message, int LogFlags, bool LogTime = false, bool BypassFlagCheck = false);
 
 	static std::string GetTimeString(bool MilitaryTime);
 
@@ -88,23 +71,6 @@ public:
 private:
 	Logger() { }
 };
-
-/*The following 2 templates are from this SO answer: https://stackoverflow.com/a/26902803 ... Used to make a variadic log function.*/
-template<class F, class...Ts, std::size_t...Is>
-void for_each_in_tuple(const std::tuple<Ts...> & tuple, F func, std::index_sequence<Is...>) 
-{
-	using expander = int[];
-	(void)expander 
-	{
-		0, ((void)func(std::get<Is>(tuple)), 0)...
-	};
-}
-
-template<class F, class...Ts>
-void for_each_in_tuple(const std::tuple<Ts...> & tuple, F func) 
-{
-	for_each_in_tuple(tuple, func, std::make_index_sequence<sizeof...(Ts)>());
-}
 
 /*This code is a modified version of this SO answer: https://codereview.stackexchange.com/a/71330 ... Very useful.*/
 template<typename Callable>

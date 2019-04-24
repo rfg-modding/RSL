@@ -4,7 +4,7 @@ std::map <std::string, CodeSnippet> SnippetManager::SnippetCache;
 
 void SnippetManager::BackupSnippet(std::string Name, DWORD Address, DWORD Length, bool NOP)
 {
-	BYTE* ByteAddress = (BYTE*)Address;
+	BYTE* ByteAddress = reinterpret_cast<BYTE*>(Address);
 	DWORD OriginalProtectionPermissions;
 	DWORD Backup;
 	SnippetCache[Name] = CodeSnippet(Address, Length);
@@ -18,12 +18,12 @@ void SnippetManager::BackupSnippet(std::string Name, DWORD Address, DWORD Length
 			*(ByteAddress + i) = 0x90;
 		}
 	}
-	VirtualProtect(ByteAddress, Length, OriginalProtectionPermissions, &Backup); //Todo: Try using NULL or nullptr instead of Backup, since it's not needed.
+	VirtualProtect(ByteAddress, Length, OriginalProtectionPermissions, &Backup);
 }
 
 void SnippetManager::RestoreSnippet(std::string Name, bool RemoveFromCache)
 {
-	BYTE* ByteAddress = (BYTE*)SnippetCache[Name].Address;
+	BYTE* ByteAddress = reinterpret_cast<BYTE*>(SnippetCache[Name].Address);
 	DWORD Length = SnippetCache[Name].Length;
 	DWORD OriginalProtectionPermissions;
 	DWORD Backup;
@@ -33,12 +33,12 @@ void SnippetManager::RestoreSnippet(std::string Name, bool RemoveFromCache)
 	{
 		*(ByteAddress + i) = SnippetCache[Name].Opcodes[i];
 	}
-	VirtualProtect(ByteAddress, Length, OriginalProtectionPermissions, &Backup); //Todo: Try using NULL or nullptr instead of Backup, since it's not needed.
+	VirtualProtect(ByteAddress, Length, OriginalProtectionPermissions, &Backup);
 }
 
 void SnippetManager::NOPSnippet(std::string Name)
 {
-	BYTE* ByteAddress = (BYTE*)SnippetCache[Name].Address;
+	BYTE* ByteAddress = reinterpret_cast<BYTE*>(SnippetCache[Name].Address);
 	DWORD Length = SnippetCache[Name].Length;
 	DWORD OriginalProtectionPermissions;
 	DWORD Backup;
@@ -48,5 +48,5 @@ void SnippetManager::NOPSnippet(std::string Name)
 	{
 		*(ByteAddress + i) = 0x90;
 	}
-	VirtualProtect(ByteAddress, Length, OriginalProtectionPermissions, &Backup); //Todo: Try using NULL or nullptr instead of Backup, since it's not needed.
+	VirtualProtect(ByteAddress, Length, OriginalProtectionPermissions, &Backup);
 }
