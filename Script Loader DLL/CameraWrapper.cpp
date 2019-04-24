@@ -1,19 +1,9 @@
 #include "CameraWrapper.h"
 
-CameraWrapper::CameraWrapper()
-{
-	FirstPersonCameraOffset.y = 1.7f;
-}
-
-CameraWrapper::~CameraWrapper()
-{
-
-}
-
 void CameraWrapper::Initialize(float InitialCameraSpeed, float InitialCameraRotationSpeed)
 {
-	uintptr_t ModuleBase = (uintptr_t)GetModuleHandle(NULL);
-	GameData = (rfg_camera*)*(DWORD*)(ModuleBase + 0x0023394C);
+	uintptr_t ModuleBase = reinterpret_cast<uintptr_t>(GetModuleHandle(nullptr));
+	GameData = reinterpret_cast<rfg_camera*>(*(DWORD*)(ModuleBase + 0x0023394C));
 
 	RealX = &GameData->real_pos.x;
 	RealY = &GameData->real_pos.y;
@@ -139,8 +129,8 @@ void CameraWrapper::ActivateFreeCamera()
 	FreeCameraActive = true;
 	DisableCameraCode(CameraYWriteAddress, CameraZWriteAddress);
 
-	uintptr_t ModuleBase = (uintptr_t)GetModuleHandle(NULL);
-	InMultiplayer = (DWORD*)(*(DWORD*)(ModuleBase + 0x002CA210)); //Todo: Fix this. For some reason this needs to be set again here even though it was already set in MainThread().
+	const uintptr_t ModuleBase = reinterpret_cast<uintptr_t>(GetModuleHandle(nullptr));
+	InMultiplayer = reinterpret_cast<bool*>(*(DWORD*)(ModuleBase + 0x002CA210)); //Todo: Fix this. For some reason this needs to be set again here even though it was already set in MainThread().
 	
 	//Slight adjustments so the player ends up roughly in their original position.
 	OriginalCameraPosition.x = *RealX + 2.171509;
@@ -316,7 +306,7 @@ void CameraWrapper::UpdateFirstPersonView()
 		GameData->real_pos += TempVec.Scale(FirstPersonDirectionOffsetMultiplier);
 	}
 
-	//Unworking, more wierd player scale issues start to pop up...
+	//Not working, more weird player scale issues start to pop up...
 	//if (UseFirstPersonAutoPlayerDirection)
 	//{
 	//	if(UseFirstPersonAutoPlayerDirectionAngleOffset)
@@ -397,7 +387,7 @@ bool CameraWrapper::IsFirstPersonCameraActive() const
 	return FirstPersonCameraActive;
 }
 
-float CameraWrapper::GetCurrentSpeed()
+float CameraWrapper::GetCurrentSpeed() const
 {
 	return CurrentSpeed;
 }

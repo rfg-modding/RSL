@@ -8,6 +8,21 @@ CameraWrapper* GlobalCamera = nullptr;
 DWORD MouseGenericPollMouseVisible = NULL;
 DWORD CenterMouseCursorCall = NULL;
 
+const ImVec4 ColorTransparent = ImVec4(0.0f, 0.0f, 0.0f, 0.0f);
+const ImVec4 ColorRed = ImVec4(1.0f, 0.0f, 0.0f, 1.0f);
+const ImVec4 ColorGreen = ImVec4(0.0f, 1.0f, 0.0f, 1.0f);
+const ImVec4 ColorBlue = ImVec4(0.0f, 0.0f, 1.0f, 1.0f);
+const ImVec4 ColorBlack = ImVec4(0.0f, 0.0f, 0.0f, 1.0f);
+const ImVec4 ColorWhite = ImVec4(1.0f, 1.0f, 1.0f, 1.0f);
+const ImVec4 ColorPurple = ImVec4(0.227f, 0.0f, 0.6588f, 1.0f);
+const ImVec4 ColorOrange = ImVec4(1.0f, 0.4157f, 0.0f, 1.0f);
+const ImVec4 ColorYellow = ImVec4(1.0f, 0.8902f, 0.0666f, 1.0f);
+
+const ImVec4 SecondaryTextColor(0.20f, 0.55f, 0.83f, 1.00f); //Light blue
+const ImVec4 ColorBlue2 = ImVec4(0.10f, 0.40f, 0.75f, 1.0f);
+
+const float pi = 3.14159265f;
+
 HMODULE MainModule = nullptr;
 
 ImFont* FontNormal = nullptr;
@@ -50,7 +65,7 @@ bool InfiniteJetpack = false;
 //sol::state Lua;
 
 HANDLE ConsoleHandle = nullptr;
-DWORD* InMultiplayer = nullptr;
+bool* InMultiplayer = nullptr;
 bool MultiplayerHookTriggered = false;
 
 const WORD ConsoleMessageLabelTextAttributes = 0 | FOREGROUND_BLUE | FOREGROUND_INTENSITY;

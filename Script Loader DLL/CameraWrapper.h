@@ -17,11 +17,10 @@ enum CameraDirection
 class CameraWrapper
 {
 public:
-	CameraWrapper();
-	~CameraWrapper();
+	CameraWrapper() = default;
+	~CameraWrapper() = default;
 	
 	void Initialize(float InitialCameraSpeed, float InitialCameraRotationSpeed);
-	void PrintCameraInfo();
 
 	void MoveFreeCamera(CameraDirection Direction);
 
@@ -38,18 +37,18 @@ public:
 	bool IsFreeCameraActive() const;
 	bool IsFirstPersonCameraActive() const;
 
-	float GetCurrentSpeed();
+	float GetCurrentSpeed() const;
 	
 	float AccelerationRate = 0.7f;
 	float DecelerationRate = 0.5f;
 	float MaxSpeed = 2.0f;
-	vector Velocity;
-	vector OriginalCameraPosition;
+	vector Velocity = {0.0f};
+	vector OriginalCameraPosition = {0.0f};
 	bool NeedPostDeactivationCleanup = false;
 	bool ButtonPressedAfterUpdate = false;
 	bool SmoothCamera = false;
 
-	vector FirstPersonCameraOffset;
+	vector FirstPersonCameraOffset = {0.0f, 1.7f, 0.0f};
 	float FirstPersonDirectionOffsetMultiplier = 0.3f;
 	bool UseFirstPersonDirectionOffset = true;
 	bool UseFirstPersonAutoPlayerDirection = false;
@@ -93,12 +92,12 @@ private:
 
 	float CurrentSpeed = 2.0f;
 
-	DWORD CameraYWriteAddress;
-	DWORD CameraZWriteAddress;
+	DWORD CameraYWriteAddress = 0;
+	DWORD CameraZWriteAddress = 0;
 								
-	DWORD CameraRealOrientWrite1;
-	DWORD CameraRealOrientWrite2;
-	DWORD CameraRealOrientWrite3;
-	DWORD CameraRealOrientWrite4;
-	DWORD CameraRealOrientWrite5;
+	DWORD CameraRealOrientWrite1 = 0;
+	DWORD CameraRealOrientWrite2 = 0;
+	DWORD CameraRealOrientWrite3 = 0;
+	DWORD CameraRealOrientWrite4 = 0;
+	DWORD CameraRealOrientWrite5 = 0;
 };

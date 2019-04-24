@@ -12,23 +12,17 @@ ProgramManager::ProgramManager(HMODULE hModule)
 
 ProgramManager::~ProgramManager()
 {
+	if (OverlayActive)
+	{
+		SetWindowLongPtr(GameWindowHandle, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(OriginalWndProc));
+		SnippetManager::RestoreSnippet("MouseGenericPollMouseVisible", true);
+		SnippetManager::RestoreSnippet("CenterMouseCursorCall", true);
+	}
+	Hooks.DisableAllHooks();
+
 	Beep(900, 100);
 	Beep(700, 100);
 	Beep(600, 200);
-
-	if (OverlayActive)
-	{
-		SetWindowLongPtr(GameWindowHandle, GWLP_WNDPROC, (LONG_PTR)OriginalWndProc);
-		SnippetManager::RestoreSnippet("MouseGenericPollMouseVisible", true); //Todo: Stop removing from cache and add check to see if exists to BackupSnippet().
-		SnippetManager::RestoreSnippet("CenterMouseCursorCall", true);
-	}
-	//Hooks.DisableAllHooksOfType(GAMEHOOK);
-	//Hooks.DisableAllHooksOfType(D3D11HOOK);
-	Hooks.DisableAllHooks();
-
-	//Beep(900, 100);
-	//Beep(700, 100);
-	//Beep(600, 200);
 }
 
 void ProgramManager::Initialize()
@@ -45,7 +39,7 @@ void ProgramManager::Initialize()
 	NewObjectPosition.y = 0.0f;
 	NewObjectPosition.z = 0.0f;
 
-	ModuleBase = (uintptr_t)GetModuleHandle(NULL);
+	ModuleBase = reinterpret_cast<uintptr_t>(GetModuleHandle(nullptr));
 
 	if (kiero::init(kiero::RenderType::D3D11) != kiero::Status::Success)
 	{
@@ -66,9 +60,9 @@ void ProgramManager::Initialize()
 #if !PublicMode
 	Logger::ConsoleLog("Finished hooking game functions.", LogInfo, false, true, true);
 #endif
-
-	MouseGenericPollMouseVisible = FindPattern((char*)"rfg.exe", (char*)"\x84\xD2\x74\x08\x38\x00\x00\x00\x00\x00\x75\x02", (char*)"xxxxx?????xx");
-	CenterMouseCursorCall = FindPattern((char*)"rfg.exe", (char*)"\xE8\x00\x00\x00\x00\x89\x46\x4C\x89\x56\x50", (char*)"x????xxxxxx");
+	
+	MouseGenericPollMouseVisible = FindPattern(const_cast<char*>("rfg.exe"), const_cast<char*>("\x84\xD2\x74\x08\x38\x00\x00\x00\x00\x00\x75\x02"), const_cast<char*>("xxxxx?????xx"));
+	CenterMouseCursorCall = FindPattern(const_cast<char*>("rfg.exe"), const_cast<char*>("\xE8\x00\x00\x00\x00\x89\x46\x4C\x89\x56\x50"), const_cast<char*>("x????xxxxxx"));
 
 	///Logger::Log("Now monitoring RFGR State", LogInfo);
 	GameState RFGRState = GameseqGetState();;
@@ -87,10 +81,9 @@ void ProgramManager::Initialize()
 		}
 		EndTime = std::chrono::steady_clock::now();
 	} 
-	while (RFGRState < 0 || RFGRState > 63); //Todo: Consider changing to hex values for consistency with enum definition. Alternatively change enum to decimal.
-	///Logger::Log(std::string("RFGR State > 0. Value: " + std::to_string(RFGRState)), LogInfo);
+	while (RFGRState < 0 || RFGRState > 63); 
 
-	OriginalWndProc = (WNDPROC)SetWindowLongPtr(GameWindowHandle, GWLP_WNDPROC, (__int3264)(LONG_PTR)WndProc);
+	OriginalWndProc = reinterpret_cast<WNDPROC>(SetWindowLongPtr(GameWindowHandle, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(WndProc)));
 	Logger::Log("Custom WndProc set.", LogInfo);
 	CreateD3D11Hooks(true);
 	Logger::Log("D3D11 hooks created and enabled.", LogInfo);
@@ -112,7 +105,7 @@ void ProgramManager::Initialize()
 		EndTime = StartTime;
 		StartTime = std::chrono::steady_clock::now();
 	}
-	//Gui.Initialize() is gaurunteed to be called before here because it's called during ImGui initialization.
+	//Gui.Initialize() is guaranteed to be called before here because it's called during ImGui initialization.
 	Gui.SetScriptManager(&Scripts);
 	Gui.FreeCamSettings->Camera = &Camera;
 	Scripts.UpdateRfgPointers();
@@ -126,27 +119,24 @@ void ProgramManager::Exit()
 {
 	if (OverlayActive || Gui.IsLuaConsoleActive())
 	{
-		SnippetManager::RestoreSnippet("MouseGenericPollMouseVisible", true); //Todo: Stop removing from cache and add check to see if exists to BackupSnippet().
+		SnippetManager::RestoreSnippet("MouseGenericPollMouseVisible", true);
 		SnippetManager::RestoreSnippet("CenterMouseCursorCall", true);
 	}
-	SetWindowLongPtr(GameWindowHandle, GWLP_WNDPROC, (LONG_PTR)OriginalWndProc);
+	SetWindowLongPtr(GameWindowHandle, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(OriginalWndProc));
 	Camera.DeactivateFreeCamera(true);
 
 	HideHud(false);
 	HideFog(false);
 
-	//Hooks.DisableAllHooksOfType(GAMEHOOK);
-	//Hooks.DisableAllHooksOfType(D3D11HOOK);
 	Hooks.DisableAllHooks();
 	
-	ImGui_ImplDX11_InvalidateDeviceObjects(); //Todo: Figure out if this is necessary.
+	ImGui_ImplDX11_InvalidateDeviceObjects();
 	ImGui_ImplDX11_Shutdown();
 	ImGui_ImplWin32_Shutdown();
 
 	if (GlobalPlayerPtr)
 	{
-		Player* TempPtr = (Player*)GlobalPlayerPtr;
-		TempPtr->Flags.invulnerable = false;
+		GlobalPlayerPtr->Flags.invulnerable = false;
 	}
 
 	Beep(900, 100);
@@ -180,9 +170,9 @@ void ProgramManager::OpenConsole()
 
 void ProgramManager::SetMemoryLocations()
 {
-	uintptr_t ModuleBase = (uintptr_t)GetModuleHandle(NULL);
-	InMultiplayer = (DWORD*)(*(DWORD*)(ModuleBase + 0x002CA210));
-	if (*(bool*)InMultiplayer)
+	const uintptr_t ModuleBase = reinterpret_cast<uintptr_t>(GetModuleHandle(nullptr));
+	InMultiplayer = reinterpret_cast<bool*>(*(DWORD*)(ModuleBase + 0x002CA210));
+	if (*InMultiplayer)
 	{
 		MessageBoxA(FindTopWindow(GetProcessID("rfg.exe")), "MP usage detected, shutting down!", "Multiplayer mode detected", MB_OK);
 		std::cout << "MP detected. Shutting down!\n";
@@ -191,49 +181,42 @@ void ProgramManager::SetMemoryLocations()
 
 void ProgramManager::CreateGameHooks(bool EnableNow)
 {
-	Hooks.CreateHook("PlayerConstructor", GAMEHOOK,(DWORD*)(ModuleBase + 0x6DECA0), PlayerConstructorHook, (LPVOID*)&PlayerConstructor, EnableNow);
-	Hooks.CreateHook("PlayerDoFrame", GAMEHOOK, (DWORD*)(ModuleBase + 0x6D5A80), PlayerDoFrameHook, (LPVOID*)&PlayerDoFrame, EnableNow);
+	Hooks.CreateHook("PlayerConstructor", GAMEHOOK,reinterpret_cast<DWORD*>(ModuleBase + 0x6DECA0), PlayerConstructorHook, reinterpret_cast<LPVOID*>(&PlayerConstructor), EnableNow);
+	Hooks.CreateHook("PlayerDoFrame", GAMEHOOK, reinterpret_cast<DWORD*>(ModuleBase + 0x6D5A80), PlayerDoFrameHook, reinterpret_cast<LPVOID*>(&PlayerDoFrame), EnableNow);
 	//Hooks.CreateHook("ObjectUpdatePosAndOrient", GAMEHOOK, (DWORD*)(ModuleBase + 0x68C310), ObjectUpdatePosAndOrientHook, (LPVOID*)&ObjectUpdatePosAndOrient, EnableNow);
 	//Hooks.CreateHook("HumanUpdatePosAndOrient", GAMEHOOK, (DWORD*)(ModuleBase + 0x69AF70), HumanUpdatePosAndOrientHook, (LPVOID*)&HumanUpdatePosAndOrient, EnableNow);
 	//Hooks.CreateHook("CharacterControllerSetPos", GAMEHOOK, (DWORD*)(ModuleBase + 0x4153D0), CharacterControllerSetPosHook, (LPVOID*)&CharacterControllerSetPos, EnableNow);
-	Hooks.CreateHook("ExplosionCreate", GAMEHOOK, (DWORD*)(ModuleBase + 0x2EC720), ExplosionCreateHook, (LPVOID*)&ExplosionCreate, EnableNow);
+	Hooks.CreateHook("ExplosionCreate", GAMEHOOK, reinterpret_cast<DWORD*>(ModuleBase + 0x2EC720), ExplosionCreateHook, reinterpret_cast<LPVOID*>(&ExplosionCreate), EnableNow);
 	//Hooks.CreateHook("CameraViewDataSetView", GAMEHOOK, (DWORD*)(ModuleBase + 0x2D0290), CameraViewDataSetViewHook, (LPVOID*)&CameraViewDataSetView, EnableNow);
 	//Hooks.CreateHook("KeenGraphicsResizeRenderSwapchain", GAMEHOOK, (DWORD*)(ModuleBase + 0x86AB20), KeenGraphicsResizeRenderSwapchainHook, (LPVOID*)&KeenGraphicsResizeRenderSwapchain, EnableNow);
 
 	/*Start of MP Detection Hooks*/
 	//Using phony names to make finding the MP hooks a bit more difficult.
-	Hooks.CreateHook("CameraViewNormalizeMatrix", GAMEHOOK, (DWORD*)(ModuleBase + 0x1D0DD0), IsValidGameLinkLobbyKaikoHook, (LPVOID*)&IsValidGameLinkLobbyKaiko, EnableNow);
-	Hooks.CreateHook("CameraZoomFixAlignment", GAMEHOOK, (DWORD*)(ModuleBase + 0x3CC750), GameMusicMultiplayerStartHook, (LPVOID*)&GameMusicMultiplayerStart, EnableNow);
-	Hooks.CreateHook("CameraViewDataFlipMatrix", GAMEHOOK, (DWORD*)(ModuleBase + 0x497740), InitMultiplayerDataItemRespawnHook, (LPVOID*)&InitMultiplayerDataItemRespawn, EnableNow);
-	Hooks.CreateHook("CameraViewDataQuaternionTranslate", GAMEHOOK, (DWORD*)(ModuleBase + 0x4F50B0), HudUiMultiplayerProcessHook, (LPVOID*)&HudUiMultiplayerProcess, EnableNow);
-	Hooks.CreateHook("CameraViewDataQuaternionRotate", GAMEHOOK, (DWORD*)(ModuleBase + 0x516D80), HudUiMultiplayerEnterHook, (LPVOID*)&HudUiMultiplayerEnter, EnableNow);
+	Hooks.CreateHook("CameraViewNormalizeMatrix", GAMEHOOK, reinterpret_cast<DWORD*>(ModuleBase + 0x1D0DD0), IsValidGameLinkLobbyKaikoHook, reinterpret_cast<LPVOID*>(&IsValidGameLinkLobbyKaiko), EnableNow);
+	Hooks.CreateHook("CameraZoomFixAlignment", GAMEHOOK, reinterpret_cast<DWORD*>(ModuleBase + 0x3CC750), GameMusicMultiplayerStartHook, reinterpret_cast<LPVOID*>(&GameMusicMultiplayerStart), EnableNow);
+	Hooks.CreateHook("CameraViewDataFlipMatrix", GAMEHOOK, reinterpret_cast<DWORD*>(ModuleBase + 0x497740), InitMultiplayerDataItemRespawnHook, reinterpret_cast<LPVOID*>(&InitMultiplayerDataItemRespawn), EnableNow);
+	Hooks.CreateHook("CameraViewDataQuaternionTranslate", GAMEHOOK, reinterpret_cast<DWORD*>(ModuleBase + 0x4F50B0), HudUiMultiplayerProcessHook, reinterpret_cast<LPVOID*>(&HudUiMultiplayerProcess), EnableNow);
+	Hooks.CreateHook("CameraViewDataQuaternionRotate", GAMEHOOK, reinterpret_cast<DWORD*>(ModuleBase + 0x516D80), HudUiMultiplayerEnterHook, reinterpret_cast<LPVOID*>(&HudUiMultiplayerEnter), EnableNow);
 	/*End of MP Detection Hooks*/
 
-	Hooks.CreateHook("rl_draw::tristrip_2d_begin", GAMEHOOK, (DWORD*)(ModuleBase + 0x10DDA0), rl_draw_tristrip_2d_begin_hook, (LPVOID*)&rl_draw_tristrip_2d_begin, EnableNow);
+	Hooks.CreateHook("rl_draw::tristrip_2d_begin", GAMEHOOK, reinterpret_cast<DWORD*>(ModuleBase + 0x10DDA0), rl_draw_tristrip_2d_begin_hook, reinterpret_cast<LPVOID*>(&rl_draw_tristrip_2d_begin), EnableNow);
 
-	Hooks.CreateHook("world::do_frame", GAMEHOOK, (DWORD*)(ModuleBase + 0x540AB0), world_do_frame_hook, (LPVOID*)&world_do_frame, EnableNow);
-	Hooks.CreateHook("rl_camera::render_begin", GAMEHOOK, (DWORD*)(ModuleBase + 0x137660), rl_camera_render_begin_hook, (LPVOID*)&rl_camera_render_begin, EnableNow);
-	Hooks.CreateHook("hkpWorld::stepDeltaTime", GAMEHOOK, (DWORD*)(ModuleBase + 0x9E1A70), hkpWorld_stepDeltaTime_hook, (LPVOID*)&hkpWorld_stepDeltaTime, EnableNow);
-	Hooks.CreateHook("Application::UpdateTime", GAMEHOOK, (DWORD*)(ModuleBase + 0x5A880), ApplicationUpdateTimeHook, (LPVOID*)&ApplicationUpdateTime, EnableNow);
+	Hooks.CreateHook("world::do_frame", GAMEHOOK, reinterpret_cast<DWORD*>(ModuleBase + 0x540AB0), world_do_frame_hook, reinterpret_cast<LPVOID*>(&world_do_frame), EnableNow);
+	Hooks.CreateHook("rl_camera::render_begin", GAMEHOOK, reinterpret_cast<DWORD*>(ModuleBase + 0x137660), rl_camera_render_begin_hook, reinterpret_cast<LPVOID*>(&rl_camera_render_begin), EnableNow);
+	Hooks.CreateHook("hkpWorld::stepDeltaTime", GAMEHOOK, reinterpret_cast<DWORD*>(ModuleBase + 0x9E1A70), hkpWorld_stepDeltaTime_hook, reinterpret_cast<LPVOID*>(&hkpWorld_stepDeltaTime), EnableNow);
+	Hooks.CreateHook("Application::UpdateTime", GAMEHOOK, reinterpret_cast<DWORD*>(ModuleBase + 0x5A880), ApplicationUpdateTimeHook, reinterpret_cast<LPVOID*>(&ApplicationUpdateTime), EnableNow);
 	
-	Hooks.CreateHook("LuaDoBuffer", GAMEHOOK, (DWORD*)(ModuleBase + 0x82FD20), LuaDoBufferHook, (LPVOID*)&LuaDoBuffer, EnableNow);
+	Hooks.CreateHook("LuaDoBuffer", GAMEHOOK, reinterpret_cast<DWORD*>(ModuleBase + 0x82FD20), LuaDoBufferHook, reinterpret_cast<LPVOID*>(&LuaDoBuffer), EnableNow);
 }
 
 void ProgramManager::CreateD3D11Hooks(bool EnableNow)
 {
-	Hooks.CreateHook("D3D11Present", D3D11HOOK, (LPVOID)kiero::getMethodsTable()[8], D3D11PresentHook, (LPVOID*)&D3D11PresentObject, EnableNow);
+	Hooks.CreateHook("D3D11Present", D3D11HOOK, reinterpret_cast<LPVOID>(kiero::getMethodsTable()[8]), D3D11PresentHook, reinterpret_cast<LPVOID*>(&D3D11PresentObject), EnableNow);
 }
 
-bool ProgramManager::ShouldClose()
+bool ProgramManager::ShouldClose() const
 {
-	if (ExitKeysPressCount > 5)
-	{
-		return true;
-	}
-	else
-	{
-		return false;
-	}
+	return ExitKeysPressCount > 5;
 }
 
 void ProgramManager::Update()
@@ -252,7 +235,7 @@ void ProgramManager::Update()
 	}*/
 }
 
-void ProgramManager::CloseConsole()
+void ProgramManager::CloseConsole() const
 {
 	if (PreExistingConsole)
 	{

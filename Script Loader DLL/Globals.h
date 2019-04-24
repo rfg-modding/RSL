@@ -24,20 +24,20 @@ extern CameraWrapper* GlobalCamera;
 extern DWORD MouseGenericPollMouseVisible;
 extern DWORD CenterMouseCursorCall;
 
-static const ImVec4 ColorTransparent = ImVec4(0.0f, 0.0f, 0.0f, 0.0f);
-static const ImVec4 ColorRed = ImVec4(1.0f, 0.0f, 0.0f, 1.0f);
-static const ImVec4 ColorGreen = ImVec4(0.0f, 1.0f, 0.0f, 1.0f);
-static const ImVec4 ColorBlue = ImVec4(0.0f, 0.0f, 1.0f, 1.0f);
-static const ImVec4 ColorBlack = ImVec4(0.0f, 0.0f, 0.0f, 1.0f);
-static const ImVec4 ColorWhite = ImVec4(1.0f, 1.0f, 1.0f, 1.0f);
-static const ImVec4 ColorPurple = ImVec4(0.227f, 0.0f, 0.6588f, 1.0f);
-static const ImVec4 ColorOrange = ImVec4(1.0f, 0.4157f, 0.0f, 1.0f);
-static const ImVec4 ColorYellow = ImVec4(1.0f, 0.8902f, 0.0666f, 1.0f);
- 
-static const ImVec4 SecondaryTextColor(0.20f, 0.55f, 0.83f, 1.00f); //Light blue
-static const ImVec4 ColorBlue2 = ImVec4(0.10f, 0.40f, 0.75f, 1.0f);
- 
-static const float pi = 3.14159265f;
+extern const ImVec4 ColorTransparent;
+extern const ImVec4 ColorRed; 
+extern const ImVec4 ColorGreen; 
+extern const ImVec4 ColorBlue;
+extern const ImVec4 ColorBlack; 
+extern const ImVec4 ColorWhite; 
+extern const ImVec4 ColorPurple;
+extern const ImVec4 ColorOrange;
+extern const ImVec4 ColorYellow;
+
+extern const ImVec4 SecondaryTextColor;
+extern const ImVec4 ColorBlue2;
+
+extern const float pi;
 
 extern HMODULE MainModule;
 
@@ -82,7 +82,7 @@ extern bool InfiniteJetpack;
 //extern sol::state LuaState;
 
 extern HANDLE ConsoleHandle;
-extern DWORD* InMultiplayer;
+extern bool* InMultiplayer;
 extern bool MultiplayerHookTriggered;
 
 extern const WORD ConsoleMessageLabelTextAttributes;

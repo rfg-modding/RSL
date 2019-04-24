@@ -15,10 +15,10 @@ public:
 	void CreateGameHooks(bool EnableNow);
 	void CreateD3D11Hooks(bool EnableNow);
 
-	bool ShouldClose();
+	bool ShouldClose() const;
 	void Update();
 
-	void CloseConsole();
+	void CloseConsole() const;
 	void Exit();
 
 	HMODULE ScriptLoaderModule;

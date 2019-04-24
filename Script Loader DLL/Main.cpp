@@ -68,19 +68,18 @@ DWORD WINAPI MainThread(HMODULE hModule)
     }
     Program.Scripts.ScanScriptsFolder();
 	
-	std::chrono::steady_clock::time_point Begin = std::chrono::steady_clock::now();
-	std::chrono::steady_clock::time_point End;
-	const ulong UpdatesPerSecond = 1;
+    const ulong UpdatesPerSecond = 1;
 	const ulong MillisecondsPerUpdate = 1000 / UpdatesPerSecond;
     while (!Program.ShouldClose()) //Todo: Change to respond to PostQuitMessage(0) in WndProc
     {
+		std::chrono::steady_clock::time_point Begin = std::chrono::steady_clock::now();
         /*Note 1: The error messages in the next three if statements are BS. They really
         detect if the player has entered a multiplayer mode. I changed them to 
         hopefully thwart anyone trying to disable multiplayer checks with binary
         patches. It likely won't slow down people who know what they are doing, 
         but I figure it's worth a go.*/
 		/*Note 2: Using a switch statement instead of an if statement since it's slightly more convincing than a bunch of states stuck to an if statement in disasm imo.*/
-		GameState RFGRState = GameseqGetState();
+        const GameState RFGRState = GameseqGetState();
 		switch(RFGRState)
 		{
 		case GS_WRECKING_CREW_MAIN_MENU:
@@ -114,7 +113,7 @@ DWORD WINAPI MainThread(HMODULE hModule)
 		default:
 			break;
 		}
-        if (*(bool*)InMultiplayer)
+        if (*InMultiplayer)
         {
             //MessageBoxA(FindTopWindow(GetProcessID("rfg.exe")), "MP usage detected, shutting down!", "Multiplayer mode detected", MB_OK);
             Logger::Log("Invalid graphics state in script loader overlay, crashing!", LogFatalError, true);
@@ -130,9 +129,8 @@ DWORD WINAPI MainThread(HMODULE hModule)
         }
         //Program.ProcessInput();
         Program.Update();
-		End = std::chrono::steady_clock::now();
+		std::chrono::steady_clock::time_point End = std::chrono::steady_clock::now();
 		Sleep(MillisecondsPerUpdate - std::chrono::duration_cast<std::chrono::milliseconds>(End - Begin).count());
-		Begin = std::chrono::steady_clock::now();
     }
     Program.CloseConsole();
     Program.Exit();
