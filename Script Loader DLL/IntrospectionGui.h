@@ -4,10 +4,10 @@
 class IntrospectionGui : public BaseGui
 {
 public:
-	IntrospectionGui(bool* _OpenState, std::string _Title);
-	~IntrospectionGui();
+	IntrospectionGui(bool* OpenState_, std::string Title_) { OpenState = OpenState_; Title = Title_; }
+	~IntrospectionGui() = default;
 
-	void Draw();
+	void Draw() override;
 	void DrawPlayerIntrospectionGui(const char* Title);
 
 	ImGuiWindowFlags WindowFlags = 0;

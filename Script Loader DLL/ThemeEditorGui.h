@@ -4,10 +4,10 @@
 class ThemeEditorGui : public BaseGui
 {
 public:
-	ThemeEditorGui(bool* _OpenState, std::string _Title);
-	~ThemeEditorGui();
+	ThemeEditorGui(bool* OpenState_, std::string Title_);
+	~ThemeEditorGui() = default;
 
-	void Draw();
+	void Draw() override;
 
 	bool ShowStyleSelector(const char* Label);
 	void ShowFontSelector(const char* Label);

@@ -4,10 +4,10 @@
 class GeneralTweaksGui : public BaseGui
 {
 public:
-	GeneralTweaksGui(bool* _OpenState, std::string _Title);
-	~GeneralTweaksGui();
+	GeneralTweaksGui(bool* OpenState_, std::string Title_);
+	~GeneralTweaksGui() = default;
 
-	void Draw();
+	void Draw() override;
 
 	bool Invulnerable = false;
 

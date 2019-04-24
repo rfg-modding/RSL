@@ -1,9 +1,9 @@
 #include "TeleportGui.h"
 
-TeleportGui::TeleportGui(bool* _OpenState, std::string _Title)
+TeleportGui::TeleportGui(bool* OpenState_, std::string Title_)
 {
-	OpenState = _OpenState;
-	Title = _Title;
+	OpenState = OpenState_;
+	Title = Title_;
 
 	LoadTeleportLocations();
 
@@ -34,11 +34,6 @@ TeleportGui::TeleportGui(bool* _OpenState, std::string _Title)
 	NewTeleportPosition.y = 0.0f;
 	NewTeleportPosition.z = 0.0f;
 	NewTeleportDescription = "";
-}
-
-TeleportGui::~TeleportGui()
-{
-
 }
 
 void TeleportGui::Draw()
@@ -329,7 +324,7 @@ bool TeleportGui::SaveTeleportLocations()
 	if (!JsonExceptionHandler([&]
 	{
 		Logger::Log("\"Teleport Locations.json\" not found. Creating from default values.", LogWarning);
-		std::string ExePath = GetEXEPath(false);
+		const std::string ExePath = GetEXEPath(false);
 		CreateDirectoryIfNull(ExePath + "RFGR Script Loader/Settings/");
 
 		std::ofstream ConfigOutput(ExePath + "RFGR Script Loader/Settings/Teleport Locations.json");
@@ -349,15 +344,15 @@ bool TeleportGui::SaveTeleportLocations()
 
 bool TeleportGui::SetTeleportLocation(std::string Name, float x, float y, float z, std::string Description)
 {
-	for (size_t i = 0; i < TeleportLocations.size(); i++)
+	for (auto& TeleportLocation : TeleportLocations)
 	{
-		if (TeleportLocations[i]["Name"] == Name)
+		if (TeleportLocation["Name"] == Name)
 		{
 			return false;
 			break;
 		}
 	}
-	size_t Index = TeleportLocations.size();
+	const size_t Index = TeleportLocations.size();
 	TeleportLocations[Index]["Name"] = Name;
 	TeleportLocations[Index]["Position"][0] = x;
 	TeleportLocations[Index]["Position"][1] = y;
@@ -387,27 +382,4 @@ bool TeleportGui::ChangeTeleportLocation(std::string CurrentName, std::string Ne
 	TeleportLocations[Index]["Position"][2] = NewZ;
 	TeleportLocations[Index]["TooltipDescription"] = NewDescription;
 	return true;
-}
-
-bool TeleportGui::HumanTeleportSafe(float x, float y, float z, int TimeToHover)
-{
-	if (GlobalPlayerPtr)
-	{
-		Sleep(1000);
-		int TimeHovered = 0;
-		Player* TempPlayerPtr = (Player*)GlobalPlayerPtr;
-		while (TimeHovered < TimeToHover)
-		{
-			HumanTeleportUnsafe(TempPlayerPtr, vector(x, y, z), TempPlayerPtr->Orientation);
-			Sleep(200);
-			TimeHovered += 200;
-		}
-		return true;
-	}
-	return false;
-}
-
-void TeleportGui::HumanTeleportSafe(vector NewPosition, int TimeToHover)
-{
-
 }

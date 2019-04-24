@@ -6,10 +6,10 @@ class ScriptManager;
 class OverlayConsole : public BaseGui
 {
 public:
-	OverlayConsole(bool* _OpenState, std::string _Title);
-	~OverlayConsole();
+	OverlayConsole(bool* OpenState_, std::string Title_);
+	~OverlayConsole() = default;
 
-	void Draw();
+	void Draw() override;
 
 	template <typename T> bool InputTextLambdaWrapper(const char* Label, std::string* Buffer, ImGuiInputTextFlags Flags = 0, T Callback = nullptr, void* UserData = nullptr);
 

@@ -1,18 +1,6 @@
 #include "FreeCamGui.h"
 #include "CameraWrapper.h"
 
-FreeCamGui::FreeCamGui(bool * _OpenState, std::string _Title)
-{
-	OpenState = _OpenState;
-	Title = _Title;
-
-}
-
-FreeCamGui::~FreeCamGui()
-{
-
-}
-
 void FreeCamGui::Draw()
 {
 	if (!*OpenState)

@@ -1,11 +1,6 @@
 #include "GuiSystem.h"
 #include "ScriptManager.h"
 
-GuiSystem::GuiSystem()
-{
-
-}
-
 GuiSystem::~GuiSystem()
 {
 	for (const auto& i : GuiList)
@@ -17,29 +12,29 @@ GuiSystem::~GuiSystem()
 void GuiSystem::Initialize()
 {
 	GuiList.push_back(new MenuBarGui(&ShowAppMainMenuBar, "Top Menu Bar"));
-	MainMenuBar = (MenuBarGui*)GuiList.back();
+	MainMenuBar = static_cast<MenuBarGui*>(GuiList.back());
 	GuiList.push_back(new WelcomeGui(&ShowAppWelcome, "Welcome"));
-	Welcome = (WelcomeGui*)GuiList.back();
+	Welcome = static_cast<WelcomeGui*>(GuiList.back());
 	GuiList.push_back(new OverlayConsole(&ShowAppConsole, "Lua console"));
-	Console = (OverlayConsole*)GuiList.back();
+	Console = static_cast<OverlayConsole*>(GuiList.back());
 	GuiList.push_back(new ThemeEditorGui(&ShowAppThemeEditor, "Theme editor"));
-	ThemeEditor = (ThemeEditorGui*)GuiList.back();
+	ThemeEditor = static_cast<ThemeEditorGui*>(GuiList.back());
 	GuiList.push_back(new TeleportGui(&ShowAppTeleportMenu, "Teleport"));
-	Teleport = (TeleportGui*)GuiList.back();
+	Teleport = static_cast<TeleportGui*>(GuiList.back());
 	GuiList.push_back(new IntrospectionGui(&ShowAppIntrospectionMenu, "Introspection"));
-	Introspection = (IntrospectionGui*)GuiList.back();
+	Introspection = static_cast<IntrospectionGui*>(GuiList.back());
 	GuiList.push_back(new GeneralTweaksGui(&ShowAppTweaksMenu, "General tweaks"));
-	TweaksMenu = (GeneralTweaksGui*)GuiList.back();
+	TweaksMenu = static_cast<GeneralTweaksGui*>(GuiList.back());
 	GuiList.push_back(new TextEditor(&ShowAppScriptEditor, "Script editor"));
-	ScriptEditor = (TextEditor*)GuiList.back();
+	ScriptEditor = static_cast<TextEditor*>(GuiList.back());
 	GuiList.push_back(new ScriptSelectGui(&ShowAppScriptsMenu, "Scripts"));
-	ScriptList = (ScriptSelectGui*)GuiList.back();
+	ScriptList = static_cast<ScriptSelectGui*>(GuiList.back());
 	GuiList.push_back(new LogWindow(&ShowAppLogWindow , "Logger"));
-	LogGui = (LogWindow*)GuiList.back();
+	LogGui = static_cast<LogWindow*>(GuiList.back());
 	GuiList.push_back(new FreeCamGui(&ShowAppFreeCamSettings, "Camera settings"));
-	FreeCamSettings = (FreeCamGui*)GuiList.back();
+	FreeCamSettings = static_cast<FreeCamGui*>(GuiList.back());
 	GuiList.push_back(new PhysicsGui(&ShowAppPhysicsSettings, "Physics settings"));
-	PhysicsSettings = (PhysicsGui*)GuiList.back();
+	PhysicsSettings = static_cast<PhysicsGui*>(GuiList.back());
 
 	for (const auto& i : GuiList)
 	{
@@ -48,27 +43,27 @@ void GuiSystem::Initialize()
 	Initialized = true;
 }
 
-bool GuiSystem::Ready()
+bool GuiSystem::Ready() const
 {
 	return Initialized;
 }
 
 /*Should only be doing this once.*/
-void GuiSystem::SetScriptManager(ScriptManager* _Scripts)
+void GuiSystem::SetScriptManager(ScriptManager* Scripts_)
 {
-	Scripts = _Scripts;
+	Scripts = Scripts_;
 	for (const auto& i : GuiList)
 	{
-		i->Scripts = _Scripts;
+		i->Scripts = Scripts_;
 	}
 }
 
-ScriptManager* GuiSystem::GetScriptManager()
+ScriptManager* GuiSystem::GetScriptManager() const
 {
 	return Scripts;
 }
 
-bool GuiSystem::HasValidScriptManager()
+bool GuiSystem::HasValidScriptManager() const
 {
 	return (Scripts != nullptr);
 }
@@ -207,7 +202,7 @@ void GuiSystem::SetPlayerPtr(Player* NewPlayerPtr)
 /*Sets PlayerPtr for all GUI classes which use it.*/
 void GuiSystem::SetPlayerPtr(void* NewPlayerPtr)
 {
-	SetPlayerPtr((Player*)NewPlayerPtr);
+	SetPlayerPtr(static_cast<Player*>(NewPlayerPtr));
 }
 
 void GuiSystem::ToggleLuaConsole()
@@ -216,7 +211,7 @@ void GuiSystem::ToggleLuaConsole()
 	ShowAppConsole = !ShowAppConsole;
 }
 
-bool GuiSystem::IsLuaConsoleActive()
+bool GuiSystem::IsLuaConsoleActive() const
 {
 	return LuaConsoleActive;
 }

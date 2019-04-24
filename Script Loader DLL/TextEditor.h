@@ -178,10 +178,10 @@ public:
 		static const LanguageDefinition& Lua();
 	};
 
-	TextEditor(bool* _OpenState, std::string _Title);
+	TextEditor(bool* OpenState_, std::string Title_);
 	~TextEditor();
 
-	void Draw();
+	void Draw() override;
 
 	void SetLanguageDefinition(const LanguageDefinition& aLanguageDef);
 	const LanguageDefinition& GetLanguageDefinition() const { return mLanguageDefinition; }

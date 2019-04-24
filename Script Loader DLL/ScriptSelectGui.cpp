@@ -2,28 +2,6 @@
 #include "TextEditor.h"
 #include "ScriptManager.h"
 
-ScriptSelectGui::ScriptSelectGui(bool* _OpenState, std::string _Title)
-{
-	OpenState = _OpenState;
-	Title = _Title;
-
-	WindowFlags = 0;
-	//WindowFlags |= ImGuiWindowFlags_NoTitleBar;
-	//WindowFlags |= ImGuiWindowFlags_NoScrollbar;
-	//WindowFlags |= ImGuiWindowFlags_MenuBar;
-	//WindowFlags |= ImGuiWindowFlags_NoMove;
-	//WindowFlags |= ImGuiWindowFlags_NoResize;
-	//WindowFlags |= ImGuiWindowFlags_NoCollapse;
-	//WindowFlags |= ImGuiWindowFlags_NoNav;
-	//WindowFlags |= ImGuiWindowFlags_NoBackground;
-	//WindowFlags |= ImGuiWindowFlags_NoBringToFrontOnFocus;
-}
-
-ScriptSelectGui::~ScriptSelectGui()
-{
-
-}
-
 void ScriptSelectGui::Draw()
 {
 	if (!*OpenState)

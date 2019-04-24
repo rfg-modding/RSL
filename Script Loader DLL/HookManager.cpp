@@ -1,16 +1,11 @@
 #include "HookManager.h"
 
-HookManager::HookManager()
-{
-
-}
-
 HookManager::~HookManager()
 {
 	DisableAllHooks();
 }
 
-bool HookManager::CreateHook(std::string HookName, HookType Type, LPVOID Target, LPVOID Detour, LPVOID* Original, bool EnableNow)
+bool HookManager::CreateHook(const std::string& HookName, const HookType Type, const LPVOID Target, LPVOID Detour, LPVOID* Original, const bool EnableNow)
 {
 	if (HookExists(HookName))
 	{
@@ -31,7 +26,7 @@ bool HookManager::CreateHook(std::string HookName, HookType Type, LPVOID Target,
 	return true;
 }
 
-bool HookManager::EnableHook(std::string HookName)
+bool HookManager::EnableHook(const std::string& HookName)
 {
 	if (!HookExists(HookName))
 	{
@@ -46,7 +41,7 @@ bool HookManager::EnableHook(std::string HookName)
 	return true;
 }
 
-bool HookManager::DisableHook(std::string HookName)
+bool HookManager::DisableHook(const std::string& HookName)
 {
 	if (!HookExists(HookName))
 	{
@@ -63,47 +58,47 @@ bool HookManager::DisableHook(std::string HookName)
 
 void HookManager::EnableAllHooks()
 {
-	for (auto i = HookMap.begin(); i != HookMap.end(); i++)
+	for (auto& i : HookMap)
 	{
-		EnableHook(i->first);
+		EnableHook(i.first);
 	}
 }
 
 void HookManager::DisableAllHooks()
 {
-	for (auto i = HookMap.begin(); i != HookMap.end(); i++)
+	for (auto& i : HookMap)
 	{
-		DisableHook(i->first);
+		DisableHook(i.first);
 	}
 }
 
-void HookManager::EnableAllHooksOfType(HookType Type)
+void HookManager::EnableAllHooksOfType(const HookType Type)
 {
-	for (auto i = HookMap.begin(); i != HookMap.end(); i++)
+	for (auto& i : HookMap)
 	{
-		if (i->second.Type == Type)
+		if (i.second.Type == Type)
 		{
-			EnableHook(i->first);
+			EnableHook(i.first);
 		}
 	}
 }
 
-void HookManager::DisableAllHooksOfType(HookType Type)
+void HookManager::DisableAllHooksOfType(const HookType Type)
 {
-	for (auto i = HookMap.begin(); i != HookMap.end(); i++)
+	for (auto& i : HookMap)
 	{
-		if (i->second.Type == Type)
+		if (i.second.Type == Type)
 		{
-			DisableHook(i->first);
+			DisableHook(i.first);
 		}
 	}
 }
 
-bool HookManager::HookExists(std::string HookName)
+bool HookManager::HookExists(const const std::string& HookName) const
 {
-	for (auto i = HookMap.begin(); i != HookMap.end(); i++)
+	for (const auto& i : HookMap)
 	{
-		if (i->first == HookName)
+		if (i.first == HookName)
 		{
 			return true;
 		}

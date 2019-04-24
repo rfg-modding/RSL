@@ -17,14 +17,14 @@ class ScriptManager;
 class GuiSystem
 {
 public:
-	GuiSystem();
+	GuiSystem() = default;
 	~GuiSystem();
 
 	void Initialize();
-	bool Ready();
-	void SetScriptManager(ScriptManager* _Scripts);
-	ScriptManager* GetScriptManager();
-	bool HasValidScriptManager();
+	bool Ready() const;
+	void SetScriptManager(ScriptManager* Scripts_);
+	ScriptManager* GetScriptManager() const;
+	bool HasValidScriptManager() const;
 	//bool LoadTeleportLocations();
 	//bool LoadGUIConfig();
 	void Draw();
@@ -33,7 +33,7 @@ public:
 	void SetPlayerPtr(void* NewPlayerPtr);
 
 	void ToggleLuaConsole();
-	bool IsLuaConsoleActive();
+	bool IsLuaConsoleActive() const;
 	void DeactivateLuaConsole();
 	void ActivateLuaConsole();
 

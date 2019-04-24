@@ -1,16 +1,11 @@
 #include "ThemeEditorGui.h"
 
-ThemeEditorGui::ThemeEditorGui(bool* _OpenState, std::string _Title)
+ThemeEditorGui::ThemeEditorGui(bool* OpenState_, std::string Title_)
 {
-	OpenState = _OpenState;
-	Title = _Title;
+	OpenState = OpenState_;
+	Title = Title_;
 
 	LoadGUIConfig();
-}
-
-ThemeEditorGui::~ThemeEditorGui()
-{
-
 }
 
 void ThemeEditorGui::Draw()

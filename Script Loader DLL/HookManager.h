@@ -3,6 +3,7 @@
 
 enum HookType
 {
+	NONE,
 	GAMEHOOK,
 	D3D11HOOK
 };
@@ -10,25 +11,25 @@ enum HookType
 class Hook
 {
 public:
-	Hook() { }
-	Hook(HookType _Type, LPVOID _Target, LPVOID _Detour, LPVOID* _Original) : Type(_Type), Target(_Target), Detour(_Detour), Original(_Original) { }
+	Hook() = default;
+	Hook(HookType Type_, LPVOID Target_, LPVOID Detour_, LPVOID* Original_) : Type(Type_), Target(Target_), Detour(Detour_), Original(Original_) { }
 
-	HookType Type;
-	LPVOID Target;
-	LPVOID Detour;
-	LPVOID* Original;
+	HookType Type = NONE;
+	LPVOID Target = nullptr;
+	LPVOID Detour = nullptr;
+	LPVOID* Original = nullptr;
 	bool Enabled = false;
 };
 
 class HookManager
 {
 public:
-	HookManager();
+	HookManager() = default;
 	~HookManager();
 
-	bool CreateHook(std::string HookName, HookType Type, LPVOID Target, LPVOID Detour, LPVOID* Original, bool EnableNow);
-	bool EnableHook(std::string HookName);
-	bool DisableHook(std::string HookName);
+	bool CreateHook(const std::string& HookName, HookType Type, LPVOID Target, LPVOID Detour, LPVOID* Original, bool EnableNow);
+	bool EnableHook(const std::string& HookName);
+	bool DisableHook(const std::string& HookName);
 
 	void EnableAllHooks();
 	void DisableAllHooks();
@@ -36,7 +37,7 @@ public:
 	void EnableAllHooksOfType(HookType Type);
 	void DisableAllHooksOfType(HookType Type);
 
-	bool HookExists(std::string HookName);
+	bool HookExists(const std::string& HookName) const;
 
 	std::map <std::string, Hook> HookMap;
 };

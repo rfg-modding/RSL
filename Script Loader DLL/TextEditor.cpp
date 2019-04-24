@@ -28,7 +28,7 @@ bool equals(InputIt1 first1, InputIt1 last1,
 	return first1 == last1 && first2 == last2;
 }
 
-TextEditor::TextEditor(bool* _OpenState, std::string _Title)
+TextEditor::TextEditor(bool* OpenState_, std::string Title_)
 	: mLineSpacing(1.0f)
 	, mUndoIndex(0)
 	, mTabSize(4)
@@ -46,8 +46,8 @@ TextEditor::TextEditor(bool* _OpenState, std::string _Title)
 	, mCheckComments(true)
 	, mLastClick(-1.0f)
 {
-	OpenState = _OpenState;
-	Title = _Title;
+	OpenState = OpenState_;
+	Title = Title_;
 
 	SetPalette(GetDarkPalette());
 	SetLanguageDefinition(LanguageDefinition::HLSL());

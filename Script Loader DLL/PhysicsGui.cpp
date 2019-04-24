@@ -1,17 +1,5 @@
 #include "PhysicsGui.h"
 
-
-PhysicsGui::PhysicsGui(bool* _OpenState, std::string _Title)
-{
-	OpenState = _OpenState;
-	Title = _Title;
-}
-
-PhysicsGui::~PhysicsGui()
-{
-
-}
-
 void PhysicsGui::Draw()
 {
 	if (!*OpenState)

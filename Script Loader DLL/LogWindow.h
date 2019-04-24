@@ -4,10 +4,10 @@
 class LogWindow : public BaseGui
 {
 public:
-	LogWindow(bool* _OpenState, std::string _Title);
-	~LogWindow();
+	LogWindow(bool* OpenState_, std::string Title_) { OpenState = OpenState_; Title = Title_; }
+	~LogWindow() = default;
 
-	void Draw();
+	void Draw() override;
 
 	ImGuiWindowFlags WindowFlags = 0;
 	int ConsoleLogType = LogAll;

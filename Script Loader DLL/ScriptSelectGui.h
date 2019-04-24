@@ -7,10 +7,10 @@ class ScriptManager;
 class ScriptSelectGui : public BaseGui
 {
 public:
-	ScriptSelectGui(bool* _OpenState, std::string _Title);
-	~ScriptSelectGui();
+	ScriptSelectGui(bool* OpenState_, std::string Title_) {OpenState = OpenState_; Title = Title_; }
+	~ScriptSelectGui() = default;
 
-	void Draw();
+	void Draw() override;
 
 	ImGuiWindowFlags WindowFlags = 0;
 };

@@ -1,33 +1,11 @@
 #include "IntrospectionGui.h"
 
-IntrospectionGui::IntrospectionGui(bool* _OpenState, std::string _Title)
-{
-	OpenState = _OpenState;
-	Title = _Title;
-
-	WindowFlags = 0;
-	//WindowFlags |= ImGuiWindowFlags_NoTitleBar;
-	//WindowFlags |= ImGuiWindowFlags_NoScrollbar;
-	//WindowFlags |= ImGuiWindowFlags_MenuBar;
-	//WindowFlags |= ImGuiWindowFlags_NoMove;
-	//WindowFlags |= ImGuiWindowFlags_NoResize;
-	//WindowFlags |= ImGuiWindowFlags_NoCollapse;
-	//WindowFlags |= ImGuiWindowFlags_NoNav;
-	//WindowFlags |= ImGuiWindowFlags_NoBackground;
-	//WindowFlags |= ImGuiWindowFlags_NoBringToFrontOnFocus;
-}
-
-IntrospectionGui::~IntrospectionGui()
-{
-
-}
-
 void IntrospectionGui::Draw()
 {
 	DrawPlayerIntrospectionGui(Title.c_str()); //DrawPlayerIntrospectionGui("Player Introspection Menu");
 }
 
-void IntrospectionGui::DrawPlayerIntrospectionGui(const char * Title)
+void IntrospectionGui::DrawPlayerIntrospectionGui(const char* Title)
 {
 	if (!*OpenState)
 	{

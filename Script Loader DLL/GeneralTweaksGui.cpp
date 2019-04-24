@@ -1,9 +1,9 @@
 #include "GeneralTweaksGui.h"
 
-GeneralTweaksGui::GeneralTweaksGui(bool* _OpenState, std::string _Title)
+GeneralTweaksGui::GeneralTweaksGui(bool* OpenState_, std::string Title_)
 {
-	OpenState = _OpenState;
-	Title = _Title;
+	OpenState = OpenState_;
+	Title = Title_;
 
 	strcpy_s(CustomExplosionInfo.m_name, "Custom Explosion");
 	CustomExplosionInfo.m_unique_id = 303; //A value of 255 caused explosions to cause no damage. Want to make sure it's actually unique to avoid issues.
@@ -66,11 +66,6 @@ GeneralTweaksGui::GeneralTweaksGui(bool* _OpenState, std::string _Title)
 
 	CustomAlertLevel = ALERT_LEVEL_GREEN;
 	CustomPlayerImpulseApply.SetAll(0.0f);
-}
-
-GeneralTweaksGui::~GeneralTweaksGui()
-{
-
 }
 
 void GeneralTweaksGui::Draw()

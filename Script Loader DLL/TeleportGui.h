@@ -4,10 +4,10 @@
 class TeleportGui : public BaseGui
 {
 public:
-	TeleportGui(bool* _OpenState, std::string _Title);
-	~TeleportGui();
+	TeleportGui(bool* OpenState_, std::string Title_);
+	~TeleportGui() = default;
 
-	void Draw();
+	void Draw() override;
 
 	bool LoadTeleportLocations();
 	bool SaveTeleportLocations();
@@ -15,8 +15,6 @@ public:
 	bool SetTeleportLocation(std::string Name, float x, float y, float z, std::string Description);
 	/*Changes an existing teleport location in the provided json object.*/
 	bool ChangeTeleportLocation(std::string CurrentName, std::string NewName, float NewX, float NewY, float NewZ, std::string NewDescription);
-	bool HumanTeleportSafe(float x, float y, float z, int TimeToHover = 5000);
-	void HumanTeleportSafe(vector NewPosition, int TimeToHover = 5000);
 
 	nlohmann::json TeleportLocations;
 

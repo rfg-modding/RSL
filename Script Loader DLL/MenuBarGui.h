@@ -4,12 +4,12 @@
 class MenuBarGui : public BaseGui
 {
 public:
-	MenuBarGui(bool* _OpenState, std::string _Title);
-	~MenuBarGui();
+	MenuBarGui(bool* OpenState_, std::string Title_);
+	~MenuBarGui() = default;
 
-	void Draw();
-	void ConfirmScriptLoaderDeactivation();
-	void ShowAboutWindow(bool* p_open);
+	void Draw() override;
+	void ConfirmScriptLoaderDeactivation() const;
+	void ShowAboutWindow(bool* p_open) const;
 
 	ImGuiWindowFlags WindowFlags = 0;
 };

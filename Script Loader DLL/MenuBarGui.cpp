@@ -1,10 +1,10 @@
 #include "MenuBarGui.h"
 #include "GuiSystem.h"
 
-MenuBarGui::MenuBarGui(bool* _OpenState, std::string _Title)
+MenuBarGui::MenuBarGui(bool* OpenState_, std::string Title_)
 {
-	OpenState = _OpenState;
-	Title = _Title;
+	OpenState = OpenState_;
+	Title = Title_;
 
 	WindowFlags = 0;
 	WindowFlags |= ImGuiWindowFlags_NoTitleBar;
@@ -16,11 +16,6 @@ MenuBarGui::MenuBarGui(bool* _OpenState, std::string _Title)
 	//WindowFlags |= ImGuiWindowFlags_NoNav;
 	//WindowFlags |= ImGuiWindowFlags_NoBackground;
 	//WindowFlags |= ImGuiWindowFlags_NoBringToFrontOnFocus;
-}
-
-MenuBarGui::~MenuBarGui()
-{
-
 }
 
 void MenuBarGui::Draw()
@@ -87,7 +82,7 @@ void MenuBarGui::Draw()
 	}
 }
 
-void MenuBarGui::ConfirmScriptLoaderDeactivation()
+void MenuBarGui::ConfirmScriptLoaderDeactivation() const
 {
 	if (ImGui::BeginPopupModal("Confirm Deactivation"))
 	{
@@ -108,7 +103,7 @@ void MenuBarGui::ConfirmScriptLoaderDeactivation()
 	}
 }
 
-void MenuBarGui::ShowAboutWindow(bool* p_open)
+void MenuBarGui::ShowAboutWindow(bool* p_open) const
 {
 	if (!ImGui::Begin("About RFGR Script Loader", p_open, ImGuiWindowFlags_AlwaysAutoResize))
 	{
@@ -140,7 +135,7 @@ void MenuBarGui::ShowAboutWindow(bool* p_open)
 		ImGuiIO& io = ImGui::GetIO();
 		ImGuiStyle& style = ImGui::GetStyle();
 
-		bool copy_to_clipboard = ImGui::Button("Copy to clipboard");
+		const bool copy_to_clipboard = ImGui::Button("Copy to clipboard");
 		ImGui::BeginChildFrame(ImGui::GetID("cfginfos"), ImVec2(0, ImGui::GetTextLineHeightWithSpacing() * 18), ImGuiWindowFlags_NoMove);
 		if (copy_to_clipboard)
 			ImGui::LogToClipboard();

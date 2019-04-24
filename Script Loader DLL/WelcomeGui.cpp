@@ -1,10 +1,10 @@
 #include "WelcomeGui.h"
 #include "GuiSystem.h"
 
-WelcomeGui::WelcomeGui(bool* _OpenState, std::string _Title)
+WelcomeGui::WelcomeGui(bool* OpenState_, std::string Title_)
 {
-	OpenState = _OpenState;
-	Title = _Title;
+	OpenState = OpenState_;
+	Title = Title_;
 
 	MainOverlayWindowFlags = 0;
 	//MainOverlayWindowFlags |= ImGuiWindowFlags_NoTitleBar;
@@ -17,11 +17,6 @@ WelcomeGui::WelcomeGui(bool* _OpenState, std::string _Title)
 	//MainOverlayWindowFlags |= ImGuiWindowFlags_NoNav;
 	//MainOverlayWindowFlags |= ImGuiWindowFlags_NoBackground;
 	//MainOverlayWindowFlags |= ImGuiWindowFlags_NoBringToFrontOnFocus;
-
-}
-
-WelcomeGui::~WelcomeGui()
-{
 
 }
 

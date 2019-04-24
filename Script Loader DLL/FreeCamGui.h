@@ -6,12 +6,12 @@ class CameraWrapper;
 class FreeCamGui : public BaseGui
 {
 public:
-	FreeCamGui(bool* _OpenState, std::string _Title);
-	~FreeCamGui();
+	FreeCamGui(bool* OpenState_, std::string Title_) { OpenState = OpenState_; Title = Title_; }
+	~FreeCamGui() = default;
 
-	void Draw();
+	void Draw() override;
 
-	CameraWrapper* Camera;
+	CameraWrapper* Camera = nullptr;
 
 	/*WARNING: If this option is disabled two bugs are introduced. 
 	1. The game will often crash if the player clicks when far from the character.
@@ -23,6 +23,6 @@ public:
 	float CustomTODValue = 100.0f;
 
 	bool ReturnPlayerToOriginalPosition = false;
-	vector OriginalPosition;
+	vector OriginalPosition{0.0f};
 };
 

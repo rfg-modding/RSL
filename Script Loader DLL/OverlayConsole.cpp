@@ -1,10 +1,10 @@
 #include "OverlayConsole.h"
 #include "ScriptManager.h"
 
-OverlayConsole::OverlayConsole(bool* _OpenState, std::string _Title)
+OverlayConsole::OverlayConsole(bool* OpenState_, std::string Title_)
 {
-	OpenState = _OpenState;
-	Title = _Title;
+	OpenState = OpenState_;
+	Title = Title_;
 
 	WindowFlags = 0;
 	WindowFlags |= ImGuiWindowFlags_NoTitleBar;
@@ -16,11 +16,6 @@ OverlayConsole::OverlayConsole(bool* _OpenState, std::string _Title)
 	//WindowFlags |= ImGuiWindowFlags_NoNav;
 	//WindowFlags |= ImGuiWindowFlags_NoBackground;
 	//WindowFlags |= ImGuiWindowFlags_NoBringToFrontOnFocus;
-}
-
-OverlayConsole::~OverlayConsole()
-{
-
 }
 
 void OverlayConsole::Draw()
