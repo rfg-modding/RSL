@@ -26,7 +26,7 @@ GeneralTweaksGui::GeneralTweaksGui(bool* _OpenState, std::string _Title)
 	CustomExplosionInfo.expanding_explosion_duration = 0;
 	CustomExplosionInfo.expanding_explosion_delay = 0;
 	CustomExplosionInfo.m_num_effects = 1;
-	CustomExplosionInfo.m_effects[0] = 1;
+	CustomExplosionInfo.m_effects[0] = 444;
 	CustomExplosionInfo.m_effects[1] = 0;
 	CustomExplosionInfo.m_effects[2] = 0;
 	CustomExplosionInfo.m_effects[3] = 0;
