@@ -2,6 +2,7 @@
 #include "CameraWrapper.h"
 #include "LuaFunctions.h"
 #include "HookManager.h"
+#include "FunctionManager.h"
 
 class Script
 {

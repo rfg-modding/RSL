@@ -1,19 +1,5 @@
 #include "Functions.h"
 
-Player* GlobalPlayerPtr;
-World* GlobalRfgWorldPtr = nullptr;
-rl_light* GlobalTODLightPtr = nullptr;
-rl_camera* GlobalRlCameraPtr = nullptr;
-rl_renderer* GlobalRlRendererPtr = nullptr;
-rl_render_lib* GlobalRlRenderLibPtr = nullptr;
-rl_state_manager* GlobalRlStateManagerPtr = nullptr;
-rl_scene* GlobalMainScenePtr = nullptr;
-rl_scene_renderer* GlobalMainSceneRendererPtr = nullptr;
-rl_camera* GlobalMainSceneCameraPtr = nullptr;
-hkpWorld* GlobalhkpWorldPtr = nullptr;
-lua_State* RfgVintLuaState = nullptr;
-hkpRigidBody* GlobalPlayerRigidBody = nullptr;
-
 void DisableCameraCode(DWORD AddressY, DWORD AddressZ) //Takes addresses for instructions affecting y and z. Alternatively x and z may work, since one piece seems to be shared between two coords.
 {
 	SnippetManager::BackupSnippet("CameraWriteY", AddressY, 8, true);

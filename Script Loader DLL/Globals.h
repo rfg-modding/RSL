@@ -3,6 +3,7 @@
 #define ColorLogMessages false
 #define EnableSpectatorMode false 
 #include "Includes.h"
+#include "RFGR_Types_Havok.h"
 
 /*RFGR Script Loader DLL*/
 
@@ -20,6 +21,20 @@ class ScriptManager;
 extern ScriptManager* GlobalScripts;
 class CameraWrapper;
 extern CameraWrapper* GlobalCamera;
+
+extern Player* GlobalPlayerPtr;
+extern World* GlobalRfgWorldPtr;
+extern rl_light* GlobalTODLightPtr;
+extern rl_camera* GlobalRlCameraPtr;
+extern rl_renderer* GlobalRlRendererPtr;
+extern rl_render_lib* GlobalRlRenderLibPtr;
+extern rl_state_manager* GlobalRlStateManagerPtr;
+extern rl_scene* GlobalMainScenePtr;
+extern rl_scene_renderer* GlobalMainSceneRendererPtr;
+extern rl_camera* GlobalMainSceneCameraPtr;
+extern hkpWorld* GlobalhkpWorldPtr;
+extern lua_State* RfgVintLuaState;
+extern hkpRigidBody* GlobalPlayerRigidBody;
 
 extern DWORD MouseGenericPollMouseVisible;
 extern DWORD CenterMouseCursorCall;

@@ -1,10 +1,14 @@
 #pragma once
 /*RFGR Script Loader DLL*/
 
+#define NOIME
+#define NOMINMAX
+#define WIN32_LEAN_AND_MEAN
+
 #include <sstream>
 #include <windows.h>
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
 #include <fstream>
 #include <string>
 #include <ctime>
@@ -15,27 +19,25 @@
 #include <utility>
 #include <tuple>
 
-#include <ctype.h>
-#include <math.h>
+#include <cctype>
+#include <cmath>
 #include <random>
 
 #include <chrono>
 #include <iostream>
-#include <Windows.h>
 #include <tlhelp32.h>
 #include <Psapi.h>
+
+#include <ShellScalingAPI.h>
+#include <wrl.h>
+#include <d3d11_1.h>
+#include <DirectXMath.h>
 
 #include <Shlwapi.h>
 #pragma comment(lib, "Shlwapi.lib")
 
 #include <filesystem>
-//#include <experimental/filesystem>
-
 #include <nlohmann/json.hpp>
-
-//#pragma comment(lib, "dinput8.lib")
-//#pragma comment(lib, "dxguid.lib")
-//#include <dinput.h>
 
 // Include GLM core features
 #include <glm/vec2.hpp>
@@ -46,10 +48,6 @@
 
 // Include GLM extension
 #include <glm/ext/matrix_transform.hpp>
-
-// Include Kiero, MinHook, and D3D11 for D3D11 hooking
-//#include <d3d11.h>
-//#pragma comment(lib, "d3d11.lib")
 
 #include <kiero/kiero.h>
 #include <MinHook/MinHook.h>
@@ -68,19 +66,16 @@
 
 #pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "d3dcompiler.lib")
+#pragma comment(lib, "Shcore")
+#pragma comment(lib, "dxguid")
 
 #include <tchar.h>
 #include <thread>
 #include <mutex>
-//#include <sapi.h> //Windows speech api
 #include <windef.h>
 
-//#pragma comment(lib, "lua51.lib")
-
-//#include <lua.h>
-//#include <lualib.h>
-//#include <lauxlib.h>
 #define SOL_CHECK_ARGUMENTS 1
 #include <sol.hpp>
 
 #include "debug-draw/debug_draw.hpp"
+#include "vectormath.h"

@@ -1,29 +1,7 @@
+#pragma once
 #include "Globals.h"
 
-
-#include <cstdlib>
-
-#define NOIME
-#define NOMINMAX
-#define WIN32_LEAN_AND_MEAN
-#include <ShellScalingAPI.h>
-#include <windows.h>
-#include <wrl.h>
-
-#include <dxgi.h>
-#include <d3d11.h>
-#include <d3d11_1.h>
-#include <d3dcompiler.h>
-#include <DirectXMath.h>
-#include "vectormath.h"
-
-#pragma comment(lib, "Shcore")
-#pragma comment(lib, "d3d11")
-#pragma comment(lib, "dxguid")
-#pragma comment(lib, "d3dcompiler")
-
 using Microsoft::WRL::ComPtr;
-
 
 static void panicF(const char * format, ...)
 {

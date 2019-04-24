@@ -5,6 +5,20 @@ GuiSystem* GlobalGui = nullptr;
 ScriptManager* GlobalScripts = nullptr;
 CameraWrapper* GlobalCamera = nullptr;
 
+Player* GlobalPlayerPtr;
+World* GlobalRfgWorldPtr = nullptr;
+rl_light* GlobalTODLightPtr = nullptr;
+rl_camera* GlobalRlCameraPtr = nullptr;
+rl_renderer* GlobalRlRendererPtr = nullptr;
+rl_render_lib* GlobalRlRenderLibPtr = nullptr;
+rl_state_manager* GlobalRlStateManagerPtr = nullptr;
+rl_scene* GlobalMainScenePtr = nullptr;
+rl_scene_renderer* GlobalMainSceneRendererPtr = nullptr;
+rl_camera* GlobalMainSceneCameraPtr = nullptr;
+hkpWorld* GlobalhkpWorldPtr = nullptr;
+lua_State* RfgVintLuaState = nullptr;
+hkpRigidBody* GlobalPlayerRigidBody = nullptr;
+
 DWORD MouseGenericPollMouseVisible = NULL;
 DWORD CenterMouseCursorCall = NULL;
 

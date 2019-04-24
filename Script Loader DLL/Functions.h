@@ -1,23 +1,6 @@
 #pragma once
-///#include "Globals.h"
-#include "SnippetManager.h"
-#include "RFGR_Types_Havok.h"
-//#include "RFGR Structs/KeenNamespace.h"
 #include "ItsyBitsy.h"
-
-extern Player* GlobalPlayerPtr;
-extern World* GlobalRfgWorldPtr;
-extern rl_light* GlobalTODLightPtr;
-extern rl_camera* GlobalRlCameraPtr;
-extern rl_renderer* GlobalRlRendererPtr;
-extern rl_render_lib* GlobalRlRenderLibPtr;
-extern rl_state_manager* GlobalRlStateManagerPtr;
-extern rl_scene* GlobalMainScenePtr;
-extern rl_scene_renderer* GlobalMainSceneRendererPtr;
-extern rl_camera* GlobalMainSceneCameraPtr;
-extern hkpWorld* GlobalhkpWorldPtr;
-extern lua_State* RfgVintLuaState;
-extern hkpRigidBody* GlobalPlayerRigidBody;
+//#include "RFGR Structs/KeenNamespace.h"
 
 extern void DisableCameraCode(DWORD AddressY, DWORD AddressZ); //Takes addresses for instructions affecting y and z. Alternatively x and z may work, since one piece seems to be shared between two coords.
 extern void RestoreCameraCode();
