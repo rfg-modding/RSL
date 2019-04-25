@@ -21,8 +21,8 @@ namespace Globals
 	lua_State* RfgVintLuaState = nullptr;
 	hkpRigidBody* PlayerRigidBody = nullptr;
 
-	DWORD MouseGenericPollMouseVisible = NULL;
-	DWORD CenterMouseCursorCall = NULL;
+	DWORD MouseGenericPollMouseVisible = 0;
+	DWORD CenterMouseCursorCall = 0;
 
 	const ImVec4 ColorTransparent = ImVec4(0.0f, 0.0f, 0.0f, 0.0f);
 	const ImVec4 ColorRed = ImVec4(1.0f, 0.0f, 0.0f, 1.0f);
@@ -271,7 +271,7 @@ namespace Globals
 		{
 			char szTest[10];
 			sprintf_s(szTest, "The final address is : %X", (unsigned int)Address);
-			MessageBoxA(NULL, szTest, NULL, NULL);
+			MessageBoxA(nullptr, szTest, nullptr, 0);
 		}
 
 		//VirtualProtect((LPVOID)adress, sizeof(value), PAGE_EXECUTE_READWRITE, &d);    
@@ -282,11 +282,11 @@ namespace Globals
 	std::string GetEXEPath(bool IncludeExeInPath)
 	{
 		char result[MAX_PATH];
-		std::string PathString = std::string(result, GetModuleFileName(NULL, result, MAX_PATH));
+		std::string PathString = std::string(result, GetModuleFileName(nullptr, result, MAX_PATH));
 		//DWORD FirstError = GetLastError();
 
 		//WCHAR PathWide[4096];// = { 0 };
-		//DWORD Return = GetModuleFileNameW(NULL, PathWide, 4096);
+		//DWORD Return = GetModuleFileNameW(nullptr, PathWide, 4096);
 		//std::cout << "EXE Path Wide: " << PathWide << ", PathString: " << PathString << ", PathString.length: " << PathString.length() << "\n";
 		//std::cout << "Return = " << Return << ", First Error = " << FirstError << "\n";
 
@@ -318,26 +318,19 @@ namespace Globals
 	{
 		DWORD OriginalProtectionPermissions;
 		DWORD Backup;
-		//DWORD RelativeAddress;
-		//std::cout << "1\n";
 		VirtualProtect(Address, Length, PAGE_EXECUTE_READWRITE, &OriginalProtectionPermissions);
-		//std::cout << "2\n";
 		for (DWORD i = 0x0; i < Length; i++)
 		{
 			*(Address + i) = 0x90; //NOP, 144 as int, using int when storing opcodes
 		}
-		//*(Address) = 0x90;
-		//memset(Address, 0x90, 1);
-		//std::cout << "3\n";
-		VirtualProtect(Address, Length, OriginalProtectionPermissions, &Backup); //Todo: Try using NULL or nullptr instead of Backup, since it's not needed.
-		//std::cout << "4\n";
+		VirtualProtect(Address, Length, OriginalProtectionPermissions, &Backup);
 	}
 
 	//Get all module related info, this will include the base DLL. 
 	//and the size of the module
 	MODULEINFO GetModuleInfo(char *szModule)
 	{
-		MODULEINFO modinfo = { 0 };
+		MODULEINFO modinfo = { nullptr };
 		HMODULE hModule = GetModuleHandle(szModule);
 		if (hModule == 0)
 			return modinfo;
@@ -376,9 +369,9 @@ namespace Globals
 				return base + i;
 			}
 		}
-		std::cout << "Error! FindPattern() returning NULL\n";
-		//ConsoleLog("FindPattern() returning NULL", LogError, false, true);
-		return NULL;
+		std::cout << "Error! FindPattern() returning 0\n";
+		//ConsoleLog("FindPattern() returning 0", LogError, false, true);
+		return 0;
 	}
 
 	//Source of the next three functions: https://stackoverflow.com/a/21767578
