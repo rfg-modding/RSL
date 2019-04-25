@@ -21,10 +21,18 @@ int main()
 		Sleep(3175);
 		return -1;
 	}
-
+	
 	std::string ProgramPath = fs::current_path().string();
 	SetConsoleAttributes(ConsoleMessageTextAttributes);
 	ResetConsoleAttributes();
+
+	//Testing code to see different windows console output colors.
+	//HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+	//for (int k = 1; k < 255; k++)
+	//{
+	//	SetConsoleTextAttribute(hConsole, k);
+	//	std::cout << k << " Output test" << std::endl;
+	//}
 
 	while (true)
 	{
