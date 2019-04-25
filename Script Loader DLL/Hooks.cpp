@@ -3,7 +3,6 @@
 
 D3D11Present D3D11PresentObject;
 
-//MainOverlay Overlay;
 GuiSystem Gui;
 
 std::chrono::steady_clock::time_point ExplosionTimerBegin;
@@ -411,9 +410,7 @@ HRESULT __stdcall D3D11PresentHook(IDXGISwapChain* pSwapChain, UINT SyncInterval
 	{
 		Logger::Log("UpdateD3D11Pointers = true. Reforming MainRenderTargetView and ImGui DX11 Devices.", LogWarning);
 
-		HRESULT Result;
-
-		Result = D3D11_DEVICE_CONTEXT_FROM_SWAPCHAIN(pSwapChain, &Globals::D3D11Device, &Globals::D3D11Context);
+		HRESULT Result = D3D11_DEVICE_CONTEXT_FROM_SWAPCHAIN(pSwapChain, &Globals::D3D11Device, &Globals::D3D11Context);
 		if (Result != S_OK)
 		{
 			Logger::Log(std::string("D3D11DeviceContextFromSwapchain() failed, return value: " + std::to_string(Result)), LogFatalError);

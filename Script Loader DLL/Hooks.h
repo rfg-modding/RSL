@@ -29,7 +29,6 @@ extern D3D11Present D3D11PresentObject;
 
 HRESULT __stdcall D3D11PresentHook(IDXGISwapChain * pSwapChain, UINT SyncInterval, UINT Flags);
 void __cdecl ExplosionCreateHook(explosion_info * ExplosionInfo, void * Source, void * Owner, vector * Position, matrix * Orientation, vector * Direction, void * WeaponInfo, bool FromServer);
-void __cdecl CameraViewDataSetViewHook(CameraViewData* ViewData, CameraViewTableEntry* ViewTableEntry, bool SkipTransition);
 
 void __fastcall PlayerConstructorHook(Player* PlayerPtr);
 void __fastcall PlayerDoFrameHook(Player* PlayerPtr);
@@ -37,10 +36,7 @@ extern Player NewPlayerObject;
 extern std::once_flag HookPlayerDoFrameInitialCall;
 extern bool GlobalPlayerPtrInitialized;
 
-void __fastcall CharacterControllerSetPosHook(CharacterController* CharController, vector* Position);
-
 void __fastcall ObjectUpdatePosAndOrientHook(Object* ObjectPtr, void* edx, vector* UpdatedPosition, matrix* UpdatedOrientation, bool SetHavokData);
-void __fastcall HumanUpdatePosAndOrientHook(Human* HumanPtr, void* edx, vector* UpdatedPosition, matrix* UpdatedOrientation, bool SetHavokData);
 extern std::once_flag HookObjectUpdatePosAndOrientInitialCall;
 extern std::once_flag HookHumanUpdatePosAndOrientInitialCall;
 extern vector NewObjectPosition;
