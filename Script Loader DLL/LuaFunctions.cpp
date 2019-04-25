@@ -4,17 +4,17 @@ namespace Lua
 {
 	Player* GetPlayer()
 	{
-		return GlobalPlayerPtr;
+		return Globals::PlayerPtr;
 	}
 
 	World* GetWorld()
 	{
-		return GlobalRfgWorldPtr;
+		return Globals::RfgWorldPtr;
 	}
 
 	hkpWorld* GetPhysicsWorld()
 	{
-		return GlobalhkpWorldPtr;
+		return Globals::hkpWorldPtr;
 	}
 
 	void LogModuleBase()

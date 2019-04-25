@@ -1066,7 +1066,7 @@ bool TextEditor::LoadScript(std::string FullPath, std::string NewScriptName)
 		ExceptionInfo += ", Line: ";
 		ExceptionInfo += __LINE__;
 		Logger::Log(ExceptionInfo, LogError, true, true);
-		MessageBoxA(FindTopWindow(GetProcessID("rfg.exe")), ExceptionInfo.c_str(), "Failed to load script!", MB_OK);
+		MessageBoxA(Globals::FindRfgTopWindow(), ExceptionInfo.c_str(), "Failed to load script!", MB_OK);
 	}
 	catch (std::exception& Ex)
 	{
@@ -1082,7 +1082,7 @@ bool TextEditor::LoadScript(std::string FullPath, std::string NewScriptName)
 		ExceptionInfo += ", Line: ";
 		ExceptionInfo += __LINE__;
 		Logger::Log(ExceptionInfo, LogError, true, true);
-		MessageBoxA(FindTopWindow(GetProcessID("rfg.exe")), ExceptionInfo.c_str(), "Failed to load script!", MB_OK);
+		MessageBoxA(Globals::FindRfgTopWindow(), ExceptionInfo.c_str(), "Failed to load script!", MB_OK);
 	}
 	catch (...)
 	{
@@ -1098,7 +1098,7 @@ bool TextEditor::LoadScript(std::string FullPath, std::string NewScriptName)
 		ExceptionInfo += ", Line: ";
 		ExceptionInfo += __LINE__;
 		Logger::Log(ExceptionInfo, LogError, true, true);
-		MessageBoxA(FindTopWindow(GetProcessID("rfg.exe")), ExceptionInfo.c_str(), "Failed to load script!", MB_OK);
+		MessageBoxA(Globals::FindRfgTopWindow(), ExceptionInfo.c_str(), "Failed to load script!", MB_OK);
 	}
 
 	return Successful;
@@ -1114,7 +1114,7 @@ bool TextEditor::SaveScript()
 		std::string FinalScriptName = FixScriptExtension(ScriptName);
 
 		//std::cout << "Writing script to path: " << GetEXEPath(false) + "RFGR Script Loader/Scripts/" + FinalScriptName << "\n";
-		FullPath = GetEXEPath(false) + "RFGR Script Loader/Scripts/" + ScriptName;
+		FullPath = Globals::GetEXEPath(false) + "RFGR Script Loader/Scripts/" + ScriptName;
 		std::ofstream ScriptStream;
 		ScriptStream.exceptions(std::ios::failbit | std::ios::badbit);
 		ScriptStream.open(FullPath, std::ios_base::trunc);
@@ -1139,7 +1139,7 @@ bool TextEditor::SaveScript()
 		ExceptionInfo += ", Line: ";
 		ExceptionInfo += __LINE__;
 		Logger::Log(ExceptionInfo, LogError, true, true);
-		MessageBoxA(FindTopWindow(GetProcessID("rfg.exe")), ExceptionInfo.c_str(), "Failed to save script!", MB_OK);
+		MessageBoxA(Globals::FindRfgTopWindow(), ExceptionInfo.c_str(), "Failed to save script!", MB_OK);
 	}
 	catch (std::exception& Ex)
 	{
@@ -1155,7 +1155,7 @@ bool TextEditor::SaveScript()
 		ExceptionInfo += ", Line: ";
 		ExceptionInfo += __LINE__;
 		Logger::Log(ExceptionInfo, LogError, true, true);
-		MessageBoxA(FindTopWindow(GetProcessID("rfg.exe")), ExceptionInfo.c_str(), "Failed to save script!", MB_OK);
+		MessageBoxA(Globals::FindRfgTopWindow(), ExceptionInfo.c_str(), "Failed to save script!", MB_OK);
 	}
 	catch (...)
 	{
@@ -1171,7 +1171,7 @@ bool TextEditor::SaveScript()
 		ExceptionInfo += ", Line: ";
 		ExceptionInfo += __LINE__;
 		Logger::Log(ExceptionInfo, LogError, true, true);
-		MessageBoxA(FindTopWindow(GetProcessID("rfg.exe")), ExceptionInfo.c_str(), "Failed to save script!", MB_OK);
+		MessageBoxA(Globals::FindRfgTopWindow(), ExceptionInfo.c_str(), "Failed to save script!", MB_OK);
 	}
 
 	return Successful;
@@ -1321,7 +1321,7 @@ void TextEditor::DrawSaveAsScriptPopup()
 		if (ImGui::Button("Save"))
 		{
 			std::string FinalScriptName = FixScriptExtension(NewNameBuffer);
-			if (fs::exists(GetEXEPath(false) + "RFGR Script Loader/Scripts/" + FinalScriptName))
+			if (fs::exists(Globals::GetEXEPath(false) + "RFGR Script Loader/Scripts/" + FinalScriptName))
 			{
 				ShouldOpenOverwritePopup = true;
 			}

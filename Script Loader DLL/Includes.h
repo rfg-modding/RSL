@@ -1,6 +1,8 @@
 #pragma once
 /*RFGR Script Loader DLL*/
 
+#define SCRIPT_LOADER_DLL //Used along with ifdef in injector files to make sure ./Injector/Globals.hpp is never accidentally included.
+
 #define NOIME
 #define NOMINMAX
 #define WIN32_LEAN_AND_MEAN

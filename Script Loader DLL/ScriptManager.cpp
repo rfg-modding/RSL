@@ -47,11 +47,11 @@ void ScriptManager::Initialize()
 
 void ScriptManager::SetupLua()
 {
-	RunScript(GetEXEPath(false) + "RFGR Script Loader/Core/CoreInit.lua");
+	RunScript(Globals::GetEXEPath(false) + "RFGR Script Loader/Core/CoreInit.lua");
 
 	//Todo: Make necessary vars read only with sol::readonly(&some_class::variable)
 	auto RslTable = LuaState["rsl"].get_or_create<sol::table>();
-	RslTable["GetScriptLoaderVersion"] = GetScriptLoaderVersion;
+	RslTable["GetScriptLoaderVersion"] = Globals::GetScriptLoaderVersion;
 	RslTable["LogModuleBase"] = Lua::LogModuleBase;
 
 	auto RfgTable = LuaState["rfg"].get_or_create<sol::table>();
@@ -68,16 +68,16 @@ void ScriptManager::SetupLua()
 	RfgTable["GetWorld"] = Lua::GetWorld;
 	RfgTable["GetPhysicsWorld"] = Lua::GetPhysicsWorld;
 
-	RfgTable["ActivePlayer"] = GlobalPlayerPtr;
-	RfgTable["ActiveWorld"] = GlobalRfgWorldPtr;
-	RfgTable["ActivePhysicsWorld"] = GlobalhkpWorldPtr;
+	RfgTable["ActivePlayer"] = Globals::PlayerPtr;
+	RfgTable["ActiveWorld"] = Globals::RfgWorldPtr;
+	RfgTable["ActivePhysicsWorld"] = Globals::hkpWorldPtr;
 	
 	RfgTable["HavokBodyGetPointer"] = HavokBodyGetPointer;
 	RfgTable.set_function("ApplyLinearImpulse", sol::overload(HavokBodyApplyLinearImpulseA, HavokBodyApplyLinearImpulseB));
 
 	RfgTable.set_function("TeleportPlayer", sol::overload(
- [](vector Position, matrix Orientation) {HumanTeleportUnsafe(GlobalPlayerPtr, Position, Orientation); }, 
-		[](vector Position) {HumanTeleportUnsafe(GlobalPlayerPtr, Position, GlobalPlayerPtr->Orientation); }));
+ [](vector Position, matrix Orientation) {HumanTeleportUnsafe(Globals::PlayerPtr, Position, Orientation); }, 
+		[](vector Position) {HumanTeleportUnsafe(Globals::PlayerPtr, Position, Globals::PlayerPtr->Orientation); }));
 
 	//LogType enums defined in lua
 	auto LoggerTable = LuaState["Logger"].get_or_create<sol::table>(); //Todo: Add to RSL table.
@@ -165,9 +165,9 @@ void ScriptManager::UpdateRfgPointers()
 {
 	auto RfgTable = LuaState["rfg"].get_or_create<sol::table>();
 
-	RfgTable["ActivePlayer"] = GlobalPlayerPtr;
-	RfgTable["ActiveWorld"] = GlobalRfgWorldPtr;
-	RfgTable["ActivePhysicsWorld"] = GlobalhkpWorldPtr;
+	RfgTable["ActivePlayer"] = Globals::PlayerPtr;
+	RfgTable["ActiveWorld"] = Globals::RfgWorldPtr;
+	RfgTable["ActivePhysicsWorld"] = Globals::hkpWorldPtr;
 }
 
 void ScriptManager::ScanScriptsFolder()
@@ -175,7 +175,7 @@ void ScriptManager::ScanScriptsFolder()
 	try 
 	{
 		Scripts.clear();
-		const std::string ScriptFolderPath(GetEXEPath(false) + "RFGR Script Loader/Scripts/");
+		const std::string ScriptFolderPath(Globals::GetEXEPath(false) + "RFGR Script Loader/Scripts/");
 		for (auto& i : fs::directory_iterator(ScriptFolderPath))
 		{
 			if (IsValidScriptExtensionFromPath(i.path().string()))

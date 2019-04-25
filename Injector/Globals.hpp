@@ -5,6 +5,10 @@
 
 /*RFGR Extended Camera Injector*/
 
+#ifdef SCRIPT_LOADER_DLL
+#error ./Injector/Globals.hpp was included by one of the Script Loader DLL project files! Find and remove that include. Failing to do so may result in some pesky and hard to find bugs.
+#endif
+
 using json = nlohmann::json;
 namespace fs = std::experimental::filesystem;
 
@@ -26,9 +30,9 @@ extern const WORD ConsoleDefaultTextAttributes;
 std::string GetEXEPath(bool IncludeExeInPath);
 void SetConsoleAttributes(WORD Attributes);
 void ResetConsoleAttributes();
-bool DirectoryExists(std::string Directory);
-void CreateDirectoryIfNull(std::string Directory);
-DWORD GetProcessID(std::string ProcessName);
+bool DirectoryExists(const std::string& Directory);
+void CreateDirectoryIfNull(const std::string& Directory);
+DWORD GetProcessID(const std::string& ProcessName);
 
 //Source of the next three functions: https://stackoverflow.com/a/21767578
 struct handle_data

@@ -72,7 +72,7 @@ void GuiSystem::Draw()
 {
 	try
 	{
-		if (!ImGuiInitialized)
+		if (!Globals::ImGuiInitialized)
 		{
 			if (DrawPassedOnce)
 			{
@@ -113,7 +113,7 @@ void GuiSystem::Draw()
 			}
 		});
 
-		if (OverlayActive)
+		if (Globals::OverlayActive)
 		{
 			for (const auto& i : GuiList)
 			{
@@ -139,7 +139,7 @@ void GuiSystem::Draw()
 				}
 			}
 		}
-		if (LuaConsoleActive && !OverlayActive)
+		if (LuaConsoleActive && !Globals::OverlayActive)
 		{
 			try
 			{

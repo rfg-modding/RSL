@@ -5,16 +5,16 @@ ProgramManager::ProgramManager(HMODULE hModule)
 	ScriptLoaderModule = hModule;
 
 	//The variables below are in Globals.h
-	show_demo_window = true;
-	ImGuiInitialized = false;
-	OverlayActive = false;
+	Globals::show_demo_window = true;
+	Globals::ImGuiInitialized = false;
+	Globals::OverlayActive = false;
 }
 
 ProgramManager::~ProgramManager()
 {
-	if (OverlayActive)
+	if (Globals::OverlayActive)
 	{
-		SetWindowLongPtr(GameWindowHandle, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(OriginalWndProc));
+		SetWindowLongPtr(GameWindowHandle, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(Globals::OriginalWndProc));
 		SnippetManager::RestoreSnippet("MouseGenericPollMouseVisible", true);
 		SnippetManager::RestoreSnippet("CenterMouseCursorCall", true);
 	}
@@ -27,11 +27,11 @@ ProgramManager::~ProgramManager()
 
 void ProgramManager::Initialize()
 {
-	GlobalProgram = this;
-	GlobalGui = &Gui;
-	GlobalScripts = &this->Scripts;
-	GlobalCamera = &this->Camera;
-	Camera.Initialize(DefaultFreeCameraSpeed, 5.0);
+	Globals::Program = this;
+	Globals::Gui = &Gui;
+	Globals::Scripts = &this->Scripts;
+	Globals::Camera = &this->Camera;
+	Camera.Initialize(Globals::DefaultFreeCameraSpeed, 5.0);
 	Functions.Initialize();
 	Scripts.Initialize();
 	
@@ -54,15 +54,15 @@ void ProgramManager::Initialize()
 		FreeLibraryAndExitThread(ScriptLoaderModule, 0);
 		return;
 	}
-	GameWindowHandle = find_main_window(GetProcessID("rfg.exe"));
+	GameWindowHandle = Globals::find_main_window(Globals::GetProcessID("rfg.exe"));
 
 	CreateGameHooks(true);
 #if !PublicMode
-	Logger::ConsoleLog("Finished hooking game functions.", LogInfo, false, true, true);
+	//Logger::Log("Finished hooking game functions.", LogInfo, false, true, true);
 #endif
-	
-	MouseGenericPollMouseVisible = FindPattern(const_cast<char*>("rfg.exe"), const_cast<char*>("\x84\xD2\x74\x08\x38\x00\x00\x00\x00\x00\x75\x02"), const_cast<char*>("xxxxx?????xx"));
-	CenterMouseCursorCall = FindPattern(const_cast<char*>("rfg.exe"), const_cast<char*>("\xE8\x00\x00\x00\x00\x89\x46\x4C\x89\x56\x50"), const_cast<char*>("x????xxxxxx"));
+
+	Globals::MouseGenericPollMouseVisible = Globals::FindPattern(const_cast<char*>("rfg.exe"), const_cast<char*>("\x84\xD2\x74\x08\x38\x00\x00\x00\x00\x00\x75\x02"), const_cast<char*>("xxxxx?????xx"));
+	Globals::CenterMouseCursorCall = Globals::FindPattern(const_cast<char*>("rfg.exe"), const_cast<char*>("\xE8\x00\x00\x00\x00\x89\x46\x4C\x89\x56\x50"), const_cast<char*>("x????xxxxxx"));
 
 	///Logger::Log("Now monitoring RFGR State", LogInfo);
 	GameState RFGRState = GameseqGetState();;
@@ -81,21 +81,21 @@ void ProgramManager::Initialize()
 		}
 		EndTime = std::chrono::steady_clock::now();
 	} 
-	while (RFGRState < 0 || RFGRState > 63); 
+	while (RFGRState < 0 || RFGRState > 63);
 
-	OriginalWndProc = reinterpret_cast<WNDPROC>(SetWindowLongPtr(GameWindowHandle, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(WndProc)));
+	Globals::OriginalWndProc = reinterpret_cast<WNDPROC>(SetWindowLongPtr(GameWindowHandle, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(WndProc)));
 	Logger::Log("Custom WndProc set.", LogInfo);
 	CreateD3D11Hooks(true);
 	Logger::Log("D3D11 hooks created and enabled.", LogInfo);
 #if !PublicMode
-	Logger::Log("Finished hooking D3D11 functions.", LogInfoS);
+	Logger::Log("Finished hooking D3D11 functions.", LogInfo);
 #endif
 
 	Sleep(5000);
 
 	StartTime = std::chrono::steady_clock::now();
 	EndTime = std::chrono::steady_clock::now();
-	while (!ImGuiInitialized) //ImGui Initialization done in D3DPresentHook in Hooks.cpp
+	while (!Globals::ImGuiInitialized) //ImGui Initialization done in D3DPresentHook in Hooks.cpp
 	{
 		long long TimeElapsed = std::chrono::duration_cast<std::chrono::milliseconds>(EndTime - StartTime).count();
 		if (TimeElapsed > 2000LL) 
@@ -117,12 +117,12 @@ void ProgramManager::Initialize()
 
 void ProgramManager::Exit()
 {
-	if (OverlayActive || Gui.IsLuaConsoleActive())
+	if (Globals::OverlayActive || Gui.IsLuaConsoleActive())
 	{
 		SnippetManager::RestoreSnippet("MouseGenericPollMouseVisible", true);
 		SnippetManager::RestoreSnippet("CenterMouseCursorCall", true);
 	}
-	SetWindowLongPtr(GameWindowHandle, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(OriginalWndProc));
+	SetWindowLongPtr(GameWindowHandle, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(Globals::OriginalWndProc));
 	Camera.DeactivateFreeCamera(true);
 
 	HideHud(false);
@@ -134,9 +134,9 @@ void ProgramManager::Exit()
 	ImGui_ImplDX11_Shutdown();
 	ImGui_ImplWin32_Shutdown();
 
-	if (GlobalPlayerPtr)
+	if (Globals::PlayerPtr)
 	{
-		GlobalPlayerPtr->Flags.invulnerable = false;
+		Globals::PlayerPtr->Flags.invulnerable = false;
 	}
 
 	Beep(900, 100);
@@ -147,7 +147,7 @@ void ProgramManager::Exit()
 
 void ProgramManager::OpenConsole()
 {
-	if (OpenDebugConsole)
+	if (Globals::OpenDebugConsole)
 	{
 		FILE *pFile = nullptr;
 		PID = GetCurrentProcessId();
@@ -163,18 +163,18 @@ void ProgramManager::OpenConsole()
 		}
 		freopen_s(&pFile, "CONOUT$", "r+", stdout);
 
-		ConsoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
-		SetConsoleAttributes(ConsoleDefaultTextAttributes);
+		Globals::ConsoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
+		Globals::SetConsoleAttributes(Globals::ConsoleDefaultTextAttributes);
 	}
 }
 
 void ProgramManager::SetMemoryLocations()
 {
 	const uintptr_t ModuleBase = reinterpret_cast<uintptr_t>(GetModuleHandle(nullptr));
-	InMultiplayer = reinterpret_cast<bool*>(*(DWORD*)(ModuleBase + 0x002CA210));
-	if (*InMultiplayer)
+	Globals::InMultiplayer = reinterpret_cast<bool*>(*(DWORD*)(ModuleBase + 0x002CA210));
+	if (*Globals::InMultiplayer)
 	{
-		MessageBoxA(FindTopWindow(GetProcessID("rfg.exe")), "MP usage detected, shutting down!", "Multiplayer mode detected", MB_OK);
+		MessageBoxA(Globals::FindRfgTopWindow(), "MP usage detected, shutting down!", "Multiplayer mode detected", MB_OK);
 		std::cout << "MP detected. Shutting down!\n";
 	}
 }
@@ -192,14 +192,13 @@ void ProgramManager::CreateGameHooks(bool EnableNow)
 
 	/*Start of MP Detection Hooks*/
 	//Using phony names to make finding the MP hooks a bit more difficult.
-	Hooks.CreateHook("CameraViewNormalizeMatrix", GAMEHOOK, reinterpret_cast<DWORD*>(ModuleBase + 0x1D0DD0), IsValidGameLinkLobbyKaikoHook, reinterpret_cast<LPVOID*>(&IsValidGameLinkLobbyKaiko), EnableNow);
-	Hooks.CreateHook("CameraZoomFixAlignment", GAMEHOOK, reinterpret_cast<DWORD*>(ModuleBase + 0x3CC750), GameMusicMultiplayerStartHook, reinterpret_cast<LPVOID*>(&GameMusicMultiplayerStart), EnableNow);
-	Hooks.CreateHook("CameraViewDataFlipMatrix", GAMEHOOK, reinterpret_cast<DWORD*>(ModuleBase + 0x497740), InitMultiplayerDataItemRespawnHook, reinterpret_cast<LPVOID*>(&InitMultiplayerDataItemRespawn), EnableNow);
-	Hooks.CreateHook("CameraViewDataQuaternionTranslate", GAMEHOOK, reinterpret_cast<DWORD*>(ModuleBase + 0x4F50B0), HudUiMultiplayerProcessHook, reinterpret_cast<LPVOID*>(&HudUiMultiplayerProcess), EnableNow);
-	Hooks.CreateHook("CameraViewDataQuaternionRotate", GAMEHOOK, reinterpret_cast<DWORD*>(ModuleBase + 0x516D80), HudUiMultiplayerEnterHook, reinterpret_cast<LPVOID*>(&HudUiMultiplayerEnter), EnableNow);
-	/*End of MP Detection Hooks*/
+	Hooks.CreateHook("FreeSubmodeDoFrame", GAMEHOOK, reinterpret_cast<DWORD*>(ModuleBase + 0x516D80), HudUiMultiplayerEnterHook, reinterpret_cast<LPVOID*>(&HudUiMultiplayerEnter), EnableNow);
+	Hooks.CreateHook("FreeSubmodeInit", GAMEHOOK, reinterpret_cast<DWORD*>(ModuleBase + 0x3CC750), GameMusicMultiplayerStartHook, reinterpret_cast<LPVOID*>(&GameMusicMultiplayerStart), EnableNow);	
+	Hooks.CreateHook("SatelliteModeInit", GAMEHOOK, reinterpret_cast<DWORD*>(ModuleBase + 0x4F50B0), HudUiMultiplayerProcessHook, reinterpret_cast<LPVOID*>(&HudUiMultiplayerProcess), EnableNow);
+	Hooks.CreateHook("SatelliteModeDoFrame", GAMEHOOK, reinterpret_cast<DWORD*>(ModuleBase + 0x1D0DD0), IsValidGameLinkLobbyKaikoHook, reinterpret_cast<LPVOID*>(&IsValidGameLinkLobbyKaiko), EnableNow);
+	Hooks.CreateHook("ModeMismatchFixState", GAMEHOOK, reinterpret_cast<DWORD*>(ModuleBase + 0x497740), InitMultiplayerDataItemRespawnHook, reinterpret_cast<LPVOID*>(&InitMultiplayerDataItemRespawn), EnableNow);
 
-	Hooks.CreateHook("rl_draw::tristrip_2d_begin", GAMEHOOK, reinterpret_cast<DWORD*>(ModuleBase + 0x10DDA0), rl_draw_tristrip_2d_begin_hook, reinterpret_cast<LPVOID*>(&rl_draw_tristrip_2d_begin), EnableNow);
+	/*End of MP Detection Hooks*/
 
 	Hooks.CreateHook("world::do_frame", GAMEHOOK, reinterpret_cast<DWORD*>(ModuleBase + 0x540AB0), world_do_frame_hook, reinterpret_cast<LPVOID*>(&world_do_frame), EnableNow);
 	Hooks.CreateHook("rl_camera::render_begin", GAMEHOOK, reinterpret_cast<DWORD*>(ModuleBase + 0x137660), rl_camera_render_begin_hook, reinterpret_cast<LPVOID*>(&rl_camera_render_begin), EnableNow);
@@ -221,7 +220,7 @@ bool ProgramManager::ShouldClose() const
 
 void ProgramManager::Update()
 {
-	if (ScriptLoaderCloseRequested)
+	if (Globals::ScriptLoaderCloseRequested)
 	{
 		///std::cout << "Sleeping...\n";
 		Sleep(300);
@@ -245,7 +244,7 @@ void ProgramManager::CloseConsole() const
 
 bool ProgramManager::LoadDataFromConfig()
 {
-	std::string ExePath = GetEXEPath(false);
+	std::string ExePath = Globals::GetEXEPath(false);
 	Logger::Log("Started loading \"Settings.json\".", LogInfo);
 	
 	if (fs::exists(ExePath + "RFGR Script Loader/Settings/Settings.json"))
@@ -254,7 +253,7 @@ bool ProgramManager::LoadDataFromConfig()
 		{
 			Logger::Log("Parsing \"Settings.json\"", LogInfo);
 			std::ifstream Config(ExePath + "RFGR Script Loader/Settings/Settings.json");
-			Config >> MainConfig;
+			Config >> Globals::MainConfig;
 			Config.close();
 			return true;
 		}, "Settings.json", "parse", "parsing"))
@@ -267,13 +266,13 @@ bool ProgramManager::LoadDataFromConfig()
 	{
 		if (!JsonExceptionHandler([&]
 		{
-			CreateDirectoryIfNull(ExePath + "RFGR Script Loader/Settings/");
+			Globals::CreateDirectoryIfNull(ExePath + "RFGR Script Loader/Settings/");
 			Logger::Log("\"Settings.json\" not found. Creating from default values.", LogWarning);
 
-			MainConfig["Open debug console"] = false;
+			Globals::MainConfig["Open debug console"] = false;
 
 			std::ofstream ConfigOutput(ExePath + "RFGR Script Loader/Settings/Settings.json");
-			ConfigOutput << std::setw(4) << MainConfig << "\n";
+			ConfigOutput << std::setw(4) << Globals::MainConfig << "\n";
 			ConfigOutput.close();
 			return true;
 		}, "Settings.json", "write", "writing"))
@@ -285,7 +284,7 @@ bool ProgramManager::LoadDataFromConfig()
 
 	if (!JsonExceptionHandler([&]
 	{
-		OpenDebugConsole = MainConfig["Open debug console"].get<bool>();
+		Globals::OpenDebugConsole = Globals::MainConfig["Open debug console"].get<bool>();
 		return true;
 	}, "Settings.json", "read", "reading"))
 	{

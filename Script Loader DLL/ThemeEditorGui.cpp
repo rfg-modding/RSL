@@ -56,7 +56,7 @@ void ThemeEditorGui::Draw()
 	if (ImGui::Button("Revert Ref"))
 		style = *ref;
 	ImGui::SameLine();
-	ShowHelpMarker("Save/Revert in local non-persistent storage. Default Colors definition are not affected. Use \"Export Colors\" below to save them somewhere.");
+	Utilities::GUI::ShowHelpMarker("Save/Revert in local non-persistent storage. Default Colors definition are not affected. Use \"Export Colors\" below to save them somewhere.");
 	ImGui::SameLine();
 	if (ImGui::Button("Save to file"))
 	{
@@ -94,8 +94,10 @@ void ThemeEditorGui::Draw()
 			ImGui::SliderFloat("TabRounding", &style.TabRounding, 0.0f, 12.0f, "%.0f");
 			ImGui::Text("Alignment");
 			ImGui::SliderFloat2("WindowTitleAlign", (float*)&style.WindowTitleAlign, 0.0f, 1.0f, "%.2f");
-			ImGui::SliderFloat2("ButtonTextAlign", (float*)&style.ButtonTextAlign, 0.0f, 1.0f, "%.2f"); ImGui::SameLine(); ShowHelpMarker("Alignment applies when a button is larger than its text content.");
-			ImGui::Text("Safe Area Padding"); ImGui::SameLine(); ShowHelpMarker("Adjust if you cannot see the edges of your screen (e.g. on a TV where scaling has not been configured).");
+			ImGui::SliderFloat2("ButtonTextAlign", (float*)&style.ButtonTextAlign, 0.0f, 1.0f, "%.2f"); ImGui::SameLine();
+			Utilities::GUI::ShowHelpMarker("Alignment applies when a button is larger than its text content.");
+			ImGui::Text("Safe Area Padding"); ImGui::SameLine();
+			Utilities::GUI::ShowHelpMarker("Adjust if you cannot see the edges of your screen (e.g. on a TV where scaling has not been configured).");
 			ImGui::SliderFloat2("DisplaySafeAreaPadding", (float*)&style.DisplaySafeAreaPadding, 0.0f, 30.0f, "%.0f");
 			ImGui::EndTabItem();
 		}
@@ -130,7 +132,7 @@ void ThemeEditorGui::Draw()
 			ImGui::RadioButton("Opaque", &alpha_flags, 0); ImGui::SameLine();
 			ImGui::RadioButton("Alpha", &alpha_flags, ImGuiColorEditFlags_AlphaPreview); ImGui::SameLine();
 			ImGui::RadioButton("Both", &alpha_flags, ImGuiColorEditFlags_AlphaPreviewHalf); ImGui::SameLine();
-			ShowHelpMarker("In the color list:\nLeft-click on colored square to open color picker,\nRight-click to open edit options menu.");
+			Utilities::GUI::ShowHelpMarker("In the color list:\nLeft-click on colored square to open color picker,\nRight-click to open edit options menu.");
 
 			ImGui::BeginChild("##colors", ImVec2(0, 0), true, ImGuiWindowFlags_AlwaysVerticalScrollbar | ImGuiWindowFlags_AlwaysHorizontalScrollbar | ImGuiWindowFlags_NavFlattened);
 			ImGui::PushItemWidth(-160);
@@ -161,7 +163,7 @@ void ThemeEditorGui::Draw()
 		if (ImGui::BeginTabItem("Fonts"))
 		{
 			ImFontAtlas* atlas = ImGui::GetIO().Fonts;
-			ShowHelpMarker("Read FAQ and misc/fonts/README.txt for details on font loading.");
+			Utilities::GUI::ShowHelpMarker("Read FAQ and misc/fonts/README.txt for details on font loading.");
 			ImGui::PushItemWidth(120);
 			for (int i = 0; i < atlas->Fonts.Size; i++)
 			{
@@ -175,7 +177,8 @@ void ThemeEditorGui::Draw()
 					ImGui::Text("The quick brown fox jumps over the lazy dog");
 					ImGui::PopFont();
 					ImGui::DragFloat("Font scale", &font->Scale, 0.005f, 0.3f, 2.0f, "%.1f");   // Scale only this font
-					ImGui::SameLine(); ShowHelpMarker("Note than the default embedded font is NOT meant to be scaled.\n\nFont are currently rendered into bitmaps at a given size at the time of building the atlas. You may oversample them to get some flexibility with scaling. You can also render at multiple sizes and select which one to use at runtime.\n\n(Glimmer of hope: the atlas system should hopefully be rewritten in the future to make scaling more natural and automatic.)");
+					ImGui::SameLine();
+					Utilities::GUI::ShowHelpMarker("Note than the default embedded font is NOT meant to be scaled.\n\nFont are currently rendered into bitmaps at a given size at the time of building the atlas. You may oversample them to get some flexibility with scaling. You can also render at multiple sizes and select which one to use at runtime.\n\n(Glimmer of hope: the atlas system should hopefully be rewritten in the future to make scaling more natural and automatic.)");
 					ImGui::InputFloat("Font offset", &font->DisplayOffset.y, 1, 1, "%.0f");
 					ImGui::Text("Ascent: %f, Descent: %f, Height: %f", font->Ascent, font->Descent, font->Ascent - font->Descent);
 					ImGui::Text("Fallback character: '%c' (%d)", font->FallbackChar, font->FallbackChar);
@@ -243,7 +246,8 @@ void ThemeEditorGui::Draw()
 
 		if (ImGui::BeginTabItem("Rendering"))
 		{
-			ImGui::Checkbox("Anti-aliased lines", &style.AntiAliasedLines); ImGui::SameLine(); ShowHelpMarker("When disabling anti-aliasing lines, you'll probably want to disable borders in your style as well.");
+			ImGui::Checkbox("Anti-aliased lines", &style.AntiAliasedLines); ImGui::SameLine();
+			Utilities::GUI::ShowHelpMarker("When disabling anti-aliasing lines, you'll probably want to disable borders in your style as well.");
 			ImGui::Checkbox("Anti-aliased fill", &style.AntiAliasedFill);
 			ImGui::PushItemWidth(100);
 			ImGui::DragFloat("Curve Tessellation Tolerance", &style.CurveTessellationTol, 0.02f, 0.10f, FLT_MAX, "%.2f", 2.0f);
@@ -290,7 +294,7 @@ void ThemeEditorGui::ShowFontSelector(const char* label)
 		ImGui::EndCombo();
 	}
 	ImGui::SameLine();
-	ShowHelpMarker(
+	Utilities::GUI::ShowHelpMarker(
 		"- Load additional fonts with io.Fonts->AddFontFromFileTTF().\n"
 		"- The font atlas is built when calling io.Fonts->GetTexDataAsXXXX() or io.Fonts->Build().\n"
 		"- Read FAQ and documentation in misc/fonts/ for more details.\n"
@@ -299,7 +303,7 @@ void ThemeEditorGui::ShowFontSelector(const char* label)
 
 bool ThemeEditorGui::LoadGUIConfig()
 {
-	std::string ExePath = GetEXEPath(false);
+	std::string ExePath = Globals::GetEXEPath(false);
 	Logger::Log("Started loading \"GUI Config.json\".", LogInfo);
 
 	if (fs::exists(ExePath + "RFGR Script Loader/Settings/GUI Config.json"))
@@ -322,7 +326,7 @@ bool ThemeEditorGui::LoadGUIConfig()
 		if (!JsonExceptionHandler([&]
 		{
 			Logger::Log("\"GUI Settings.json\" not found. Creating from default values.", LogWarning);
-			CreateDirectoryIfNull(ExePath + "RFGR Script Loader/Settings/");
+			Globals::CreateDirectoryIfNull(ExePath + "RFGR Script Loader/Settings/");
 
 			GUIConfig["Theme Info"]["Theme name"] = std::string("Default Dark Theme");
 			GUIConfig["Theme Info"]["Description"] = std::string("The default dark theme for the script loader.");
@@ -580,8 +584,8 @@ bool ThemeEditorGui::SaveGUIConfig(std::string ThemeName, std::string Descriptio
 	if (!JsonExceptionHandler([&]
 	{
 		Logger::Log("Started saving \"GUI Config.json\".", LogInfo);
-		std::string ExePath = GetEXEPath(false);
-		CreateDirectoryIfNull(ExePath + "RFGR Script Loader/Settings/");
+		std::string ExePath = Globals::GetEXEPath(false);
+		Globals::CreateDirectoryIfNull(ExePath + "RFGR Script Loader/Settings/");
 
 		GUIConfig["Theme Info"]["Theme name"] = ThemeName;
 		GUIConfig["Theme Info"]["Description"] = Description;

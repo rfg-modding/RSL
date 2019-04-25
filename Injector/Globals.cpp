@@ -51,19 +51,12 @@ void ResetConsoleAttributes()
 	SetConsoleTextAttribute(ConsoleHandle, ConsoleDefaultTextAttributes);
 }
 
-bool DirectoryExists(std::string Directory)
+bool DirectoryExists(const std::string& Directory)
 {
-	if (!fs::is_directory(Directory) || !fs::exists(Directory))
-	{
-		return false;
-	}
-	else
-	{
-		return true;
-	}
+	return !(!fs::is_directory(Directory) || !fs::exists(Directory));
 }
 
-void CreateDirectoryIfNull(std::string Directory)
+void CreateDirectoryIfNull(const std::string& Directory)
 {
 	if (!DirectoryExists(Directory))
 	{
@@ -71,7 +64,7 @@ void CreateDirectoryIfNull(std::string Directory)
 	}
 }
 
-DWORD GetProcessID(std::string ProcessName)
+DWORD GetProcessID(const std::string& ProcessName)
 {
 	PROCESSENTRY32 ProcessSnapshotStructure = { 0 };
 	HANDLE Snapshot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);

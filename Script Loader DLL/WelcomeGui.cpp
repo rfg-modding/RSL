@@ -36,14 +36,14 @@ void WelcomeGui::Draw()
 	ImGui::PushStyleColor(ImGuiCol_Button, ImVec4());
 	//ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4());
 	//ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4());
-	ImGui::PushFont(FontLarge);
+	ImGui::PushFont(Globals::FontLarge);
 	ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.556f, 0.823f, 0.541f, 1.0f));
 	if (ImGui::Button(std::string(u8"Scripts " + std::string(ICON_FA_CODE) + u8"##ScriptSelectIcon").c_str()))
 	{
 		Gui->ShowAppScriptsMenu = !Gui->ShowAppScriptsMenu;
 	}
 	ImGui::PopStyleColor();
-	Utilities::GUI::TooltipOnPrevious("This menu displays all the scripts detected in the scripts folder and lets you run, edit, and stop them on command. If the script isn't using event hooks then stopping it does nothing, since it stops after running once.", FontNormal);
+	Utilities::GUI::TooltipOnPrevious("This menu displays all the scripts detected in the scripts folder and lets you run, edit, and stop them on command. If the script isn't using event hooks then stopping it does nothing, since it stops after running once.", Globals::FontNormal);
 	
 	//ImGui::SameLine();
 	ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.357f, 0.659f, 0.863f, 1.0f));
@@ -52,7 +52,7 @@ void WelcomeGui::Draw()
 		Gui->ToggleLuaConsole();
 	}
 	ImGui::PopStyleColor();
-	Utilities::GUI::TooltipOnPrevious("The console is useful for quickly setting values or calling functions without writing a script. Anything that scripts have access to, the console does too. The console is just running your input into it as a script.", FontNormal);
+	Utilities::GUI::TooltipOnPrevious("The console is useful for quickly setting values or calling functions without writing a script. Anything that scripts have access to, the console does too. The console is just running your input into it as a script.", Globals::FontNormal);
 	
 	//ImGui::SameLine();
 	ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 0.808f, 0.267f, 1.0f));
@@ -61,7 +61,7 @@ void WelcomeGui::Draw()
 		Gui->ShowAppScriptEditor = !Gui->ShowAppScriptEditor;
 	}
 	ImGui::PopStyleColor();
-	Utilities::GUI::TooltipOnPrevious("The script editor allows you to save, load, edit, and run lua scripts in game, and provides basic lua syntax highlighting.", FontNormal);
+	Utilities::GUI::TooltipOnPrevious("The script editor allows you to save, load, edit, and run lua scripts in game, and provides basic lua syntax highlighting.", Globals::FontNormal);
 	
 	//ImGui::SameLine();
 	ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.404f, 0.416f, 0.435f, 1.0f));
@@ -70,7 +70,7 @@ void WelcomeGui::Draw()
 		Gui->ShowAppTweaksMenu = !Gui->ShowAppTweaksMenu;
 	}
 	ImGui::PopStyleColor();
-	Utilities::GUI::TooltipOnPrevious("This menu has settings for invulnerability, infinite jetpack, player move speed, player jump height, xray vision, and more.", FontNormal);
+	Utilities::GUI::TooltipOnPrevious("This menu has settings for invulnerability, infinite jetpack, player move speed, player jump height, xray vision, and more.", Globals::FontNormal);
 	
 	//ImGui::SameLine();
 	ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.961f, 0.753f, 0.698f, 1.0f));
@@ -79,7 +79,7 @@ void WelcomeGui::Draw()
 		Gui->ShowAppTeleportMenu = !Gui->ShowAppTeleportMenu;
 	}
 	ImGui::PopStyleColor();
-	Utilities::GUI::TooltipOnPrevious("This menu allows you to teleport around the map. There are many preset locations, and you may create your own. Any of your custom locations are saved in TeleportLocations.json. You don't need to edit it by hand as you can do all the editing you need in the gui.", FontNormal);
+	Utilities::GUI::TooltipOnPrevious("This menu allows you to teleport around the map. There are many preset locations, and you may create your own. Any of your custom locations are saved in TeleportLocations.json. You don't need to edit it by hand as you can do all the editing you need in the gui.", Globals::FontNormal);
 	
 	//ImGui::SameLine();
 	ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.361f, 0.129f, 1.0f, 1.0f));
@@ -88,7 +88,7 @@ void WelcomeGui::Draw()
 		Gui->ShowAppThemeEditor = !Gui->ShowAppThemeEditor;
 	}
 	ImGui::PopStyleColor();
-	Utilities::GUI::TooltipOnPrevious("You can use the theme editor to change the color scheme and style of the overlay gui. It allows you to save your settings to GUIConfig.json and share that with others so they can use it. This release only supports a having a single theme, but a later release will have a themes folder so you can easily switch between them.", FontNormal);
+	Utilities::GUI::TooltipOnPrevious("You can use the theme editor to change the color scheme and style of the overlay gui. It allows you to save your settings to GUIConfig.json and share that with others so they can use it. This release only supports a having a single theme, but a later release will have a themes folder so you can easily switch between them.", Globals::FontNormal);
 	ImGui::PopFont();
 	ImGui::PopStyleColor();
 	//ImGui::PopStyleColor(3);
@@ -102,17 +102,17 @@ the top menu bar above.");
 	//ImGui::Text("");
 	ImGui::Text("\nUseful shortcuts:");
 	ImGui::Text("Toggle overlay: ");
-	ImGui::SameLine(); ImGui::TextColored(SecondaryTextColor, "F1");
+	ImGui::SameLine(); ImGui::TextColored(Globals::SecondaryTextColor, "F1");
 	ImGui::Text("Toggle script editor: ");
-	ImGui::SameLine(); ImGui::TextColored(SecondaryTextColor, "F2");
+	ImGui::SameLine(); ImGui::TextColored(Globals::SecondaryTextColor, "F2");
 	ImGui::Text("Toggle lua console: ");
-	ImGui::SameLine(); ImGui::TextColored(SecondaryTextColor, "Tilde (~)");
+	ImGui::SameLine(); ImGui::TextColored(Globals::SecondaryTextColor, "Tilde (~)");
 	ImGui::Text("Toggle hud: ");
-	ImGui::SameLine(); ImGui::TextColored(SecondaryTextColor, "Numpad 1");
+	ImGui::SameLine(); ImGui::TextColored(Globals::SecondaryTextColor, "Numpad 1");
 	ImGui::Text("Toggle fog: ");
-	ImGui::SameLine(); ImGui::TextColored(SecondaryTextColor, "Numpad 2");
+	ImGui::SameLine(); ImGui::TextColored(Globals::SecondaryTextColor, "Numpad 2");
 	ImGui::Text("Toggle free cam: ");
-	ImGui::SameLine(); ImGui::TextColored(SecondaryTextColor, "Numpad 3");
+	ImGui::SameLine(); ImGui::TextColored(Globals::SecondaryTextColor, "Numpad 3");
 
 	/*if (ImGui::CollapsingHeader("Notes:"))
 	{

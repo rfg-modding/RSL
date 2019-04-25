@@ -15,7 +15,7 @@ void Logger::Init(int _ConsoleLogFlags, std::string _DefaultLogPath, unsigned in
 	DefaultLogPath = _DefaultLogPath;
 	MaximumLogCount = _MaximumLogCount;
 
-	CreateDirectoryIfNull(DefaultLogPath);
+	Globals::CreateDirectoryIfNull(DefaultLogPath);
 }
 
 void Logger::OpenLogFile(std::string FileName, int LogFlags, std::ios_base::openmode Mode, std::string CustomFilePath)
@@ -139,7 +139,7 @@ void Logger::Log(std::string Message, int LogFlags, bool LogTime, bool NewLine)
 			ExceptionInfo += ", Line: ";
 			ExceptionInfo += __LINE__;
 			Logger::Log(ExceptionInfo, LogError, true, true);
-			MessageBoxA(FindTopWindow(GetProcessID("rfg.exe")), ExceptionInfo.c_str(), "Failed to log to external console!", MB_OK);
+			MessageBoxA(Globals::FindRfgTopWindow(), ExceptionInfo.c_str(), "Failed to log to external console!", MB_OK);
 		}
 		catch (...)
 		{
@@ -152,7 +152,7 @@ void Logger::Log(std::string Message, int LogFlags, bool LogTime, bool NewLine)
 			ExceptionInfo += ", Line: ";
 			ExceptionInfo += __LINE__;
 			Logger::Log(ExceptionInfo, LogError, true, true);
-			MessageBoxA(FindTopWindow(GetProcessID("rfg.exe")), ExceptionInfo.c_str(), "Failed to log to external console!", MB_OK);
+			MessageBoxA(Globals::FindRfgTopWindow(), ExceptionInfo.c_str(), "Failed to log to external console!", MB_OK);
 		}
 	}
 	for (auto& i : LogFileMap)
@@ -190,7 +190,7 @@ void Logger::Log(std::string Message, int LogFlags, bool LogTime, bool NewLine)
 			ExceptionInfo += ", Line: ";
 			ExceptionInfo += __LINE__;
 			Logger::Log(ExceptionInfo, LogError, true, true);
-			MessageBoxA(FindTopWindow(GetProcessID("rfg.exe")), ExceptionInfo.c_str(), "Failed to log to file!", MB_OK);
+			MessageBoxA(Globals::FindRfgTopWindow(), ExceptionInfo.c_str(), "Failed to log to file!", MB_OK);
 		}	
 		catch (std::exception& Ex)
 		{
@@ -205,7 +205,7 @@ void Logger::Log(std::string Message, int LogFlags, bool LogTime, bool NewLine)
 			ExceptionInfo += ", Line: ";
 			ExceptionInfo += __LINE__;
 			Logger::Log(ExceptionInfo, LogError, true, true);
-			MessageBoxA(FindTopWindow(GetProcessID("rfg.exe")), ExceptionInfo.c_str(), "Failed to log to file!", MB_OK);
+			MessageBoxA(Globals::FindRfgTopWindow(), ExceptionInfo.c_str(), "Failed to log to file!", MB_OK);
 		}
 		catch (...)
 		{
@@ -219,7 +219,7 @@ void Logger::Log(std::string Message, int LogFlags, bool LogTime, bool NewLine)
 			ExceptionInfo += ", Line: ";
 			ExceptionInfo += __LINE__;
 			Logger::Log(ExceptionInfo, LogError, true, true);
-			MessageBoxA(FindTopWindow(GetProcessID("rfg.exe")), ExceptionInfo.c_str(), "Failed to log to file!", MB_OK);
+			MessageBoxA(Globals::FindRfgTopWindow(), ExceptionInfo.c_str(), "Failed to log to file!", MB_OK);
 		}
 	}
 	if (LogData.size() > MaximumLogCount && MaximumLogCount > 0)
@@ -251,40 +251,40 @@ void Logger::LogFlagWithColor(const int LogFlags)
 	if (LogFlags & LogInfo)
 	{
 		std::cout << "[";
-		SetConsoleAttributes(ConsoleMessageLabelTextAttributes);
+		Globals::SetConsoleAttributes(Globals::ConsoleMessageLabelTextAttributes);
 		std::cout << "Info";
-		ResetConsoleAttributes();
+		Globals::ResetConsoleAttributes();
 		std::cout << "]";
 	}
 	else if (LogFlags & LogWarning)
 	{
 		std::cout << "[";
-		SetConsoleAttributes(ConsoleWarningTextAttributes);
+		Globals::SetConsoleAttributes(Globals::ConsoleWarningTextAttributes);
 		std::cout << "Warning";
-		ResetConsoleAttributes();
+		Globals::ResetConsoleAttributes();
 		std::cout << "]";
 	}
 	else if (LogFlags & LogError)
 	{
 		std::cout << "[";
-		SetConsoleAttributes(ConsoleErrorTextAttributes);
+		Globals::SetConsoleAttributes(Globals::ConsoleErrorTextAttributes);
 		std::cout << "Error";
-		ResetConsoleAttributes();
+		Globals::ResetConsoleAttributes();
 		std::cout << "]";
 	}
 	else if (LogFlags & LogFatalError)
 	{
 		std::cout << "[";
-		SetConsoleAttributes(ConsoleFatalErrorTextAttributes);
+		Globals::SetConsoleAttributes(Globals::ConsoleFatalErrorTextAttributes);
 		std::cout << "Fatal Error";
-		ResetConsoleAttributes();
+		Globals::ResetConsoleAttributes();
 		std::cout << "]";
 	}
 	else
 	{
 		//Does nothing if it's LogNone or an undefined value.
 	}
-	SetConsoleTextAttribute(ConsoleHandle, ConsoleDefaultTextAttributes);
+	SetConsoleTextAttribute(Globals::ConsoleHandle, Globals::ConsoleDefaultTextAttributes);
 }
 
 std::string Logger::GetFlagString(const int LogFlags)

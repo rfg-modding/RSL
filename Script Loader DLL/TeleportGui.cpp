@@ -63,7 +63,7 @@ void TeleportGui::Draw()
 	static bool NameAlreadyUsedWarning = false;
 
 	//ImGui::Separator();
-	ImGui::PushFont(FontBig);
+	ImGui::PushFont(Globals::FontBig);
 	ImGui::Text("Manual:");
 	ImGui::PopFont();
 	ImGui::Separator();
@@ -72,7 +72,7 @@ void TeleportGui::Draw()
 	ImGui::Text("Current player position: ");
 	ImGui::SameLine();
 	std::string PlayerPositionString("(" + std::to_string(PlayerPtr->Position.x) + ", " + std::to_string(PlayerPtr->Position.y) + ", " + std::to_string(PlayerPtr->Position.z) + ")");
-	ImGui::TextColored(SecondaryTextColor, PlayerPositionString.c_str());
+	ImGui::TextColored(Globals::SecondaryTextColor, PlayerPositionString.c_str());
 
 	ImGui::Text("New player position:"); ImGui::SameLine();
 	ImGui::PushItemWidth(232.0f);
@@ -107,7 +107,7 @@ void TeleportGui::Draw()
 		if (NameAlreadyUsedWarning)
 		{
 			ImGui::SameLine();
-			ImGui::TextColored(ColorRed, "Name already used!");
+			ImGui::TextColored(Globals::ColorRed, "Name already used!");
 		}
 		ImGui::Text("Position:");
 		ImGui::PushItemWidth(232.0f);
@@ -153,7 +153,7 @@ void TeleportGui::Draw()
 	*/
 
 	ImGui::Separator();
-	ImGui::PushFont(FontBig);
+	ImGui::PushFont(Globals::FontBig);
 	ImGui::Text("Saved locations:");
 	ImGui::PopFont();
 	ImGui::Separator();
@@ -167,9 +167,9 @@ void TeleportGui::Draw()
 				HumanTeleportUnsafe(PlayerPtr, vector(i["Position"][0].get<float>(), i["Position"][1].get<float>(), i["Position"][2].get<float>()), PlayerPtr->Orientation);
 			}
 			Utilities::GUI::TooltipOnPrevious(std::string(i["TooltipDescription"].get<std::string>() 
-				+ std::string(" Position: (") + to_string_precise(i["Position"][0].get<float>())
-				+ std::string(", ") + to_string_precise(i["Position"][1].get<float>())
-				+ std::string(", ") + to_string_precise(i["Position"][2].get<float>()) + std::string(")")).c_str());
+				+ std::string(" Position: (") + Globals::to_string_precise(i["Position"][0].get<float>())
+				+ std::string(", ") + Globals::to_string_precise(i["Position"][1].get<float>())
+				+ std::string(", ") + Globals::to_string_precise(i["Position"][2].get<float>()) + std::string(")")).c_str());
 			ImGui::SameLine();
 			if (ImGui::Button(std::string("Edit##" + i["Name"].get<std::string>()).c_str()))
 			{
@@ -227,7 +227,7 @@ void TeleportGui::Draw()
 
 bool TeleportGui::LoadTeleportLocations()
 {
-	std::string ExePath = GetEXEPath(false);
+	std::string ExePath = Globals::GetEXEPath(false);
 	Logger::Log("Started loading \"Teleport Locations.json\".", LogInfo);
 
 	if (fs::exists(ExePath + "RFGR Script Loader/Settings/Teleport Locations.json"))
@@ -250,7 +250,7 @@ bool TeleportGui::LoadTeleportLocations()
 		if (!JsonExceptionHandler([&]
 		{
 			Logger::Log("\"Teleport Locations.json\" not found. Creating from default values.", LogWarning);
-			CreateDirectoryIfNull(ExePath + "RFGR Script Loader/Settings/");
+			Globals::CreateDirectoryIfNull(ExePath + "RFGR Script Loader/Settings/");
 
 			SetTeleportLocation("Parker - Tutorial Area", -2328.29f, 30.0f, -2317.9f, "Tutorial area at the start of the game.");
 			SetTeleportLocation("Parker - Safehouse", -1877.77f, 23.0f, -1452.0f, "Game starting safehouse. Near ore processing plant.");
@@ -324,8 +324,8 @@ bool TeleportGui::SaveTeleportLocations()
 	if (!JsonExceptionHandler([&]
 	{
 		Logger::Log("\"Teleport Locations.json\" not found. Creating from default values.", LogWarning);
-		const std::string ExePath = GetEXEPath(false);
-		CreateDirectoryIfNull(ExePath + "RFGR Script Loader/Settings/");
+		const std::string ExePath = Globals::GetEXEPath(false);
+		Globals::CreateDirectoryIfNull(ExePath + "RFGR Script Loader/Settings/");
 
 		std::ofstream ConfigOutput(ExePath + "RFGR Script Loader/Settings/Teleport Locations.json");
 		ConfigOutput << std::setw(4) << TeleportLocations << "\n";

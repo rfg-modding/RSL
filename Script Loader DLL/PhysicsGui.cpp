@@ -13,13 +13,13 @@ void PhysicsGui::Draw()
 		return;
 	}
 
-	if (GlobalhkpWorldPtr)
+	if (Globals::hkpWorldPtr)
 	{
-		ImGui::PushFont(FontBig);
+		ImGui::PushFont(Globals::FontBig);
 		ImGui::Text("Physics settings:");
 		ImGui::PopFont();
 		ImGui::Separator();
-		ImGui::PushStyleColor(ImGuiCol_Text, ColorRed);
+		ImGui::PushStyleColor(ImGuiCol_Text, Globals::ColorRed);
 		ImGui::PushItemWidth(400.0f);
 		ImGui::TextWrapped("Warning: Be very careful with this menu if you want your game to be stable. Changing these values can make things go wacky quick.");
 		ImGui::PopStyleColor();
@@ -35,7 +35,7 @@ void PhysicsGui::Draw()
 
 		if (!CurrentGravity)
 		{
-			CurrentGravity = hkpWorldGetGravity(GlobalhkpWorldPtr, NULL);
+			CurrentGravity = hkpWorldGetGravity(Globals::hkpWorldPtr, NULL);
 
 			if (CurrentGravity)
 			{
@@ -54,7 +54,7 @@ void PhysicsGui::Draw()
 		{
 			ImGui::Text("Current gravity vector: ");
 			ImGui::SameLine();
-			ImGui::TextColored(SecondaryTextColor, std::string(std::string("(") + std::to_string(CurrentGravity->m_quad.m128_f32[0]) + std::string(", ")
+			ImGui::TextColored(Globals::SecondaryTextColor, std::string(std::string("(") + std::to_string(CurrentGravity->m_quad.m128_f32[0]) + std::string(", ")
 				+ std::to_string(CurrentGravity->m_quad.m128_f32[1]) + std::string(", ")
 				+ std::to_string(CurrentGravity->m_quad.m128_f32[2]) + std::string(", ")
 				+ std::to_string(CurrentGravity->m_quad.m128_f32[3]) + std::string(")")).c_str());
@@ -66,7 +66,7 @@ void PhysicsGui::Draw()
 
 		ImGui::Text("Default gravity vector: ");
 		ImGui::SameLine();
-		ImGui::TextColored(SecondaryTextColor, std::string(std::string("(") + std::to_string(DefaultGravityVector.m_quad.m128_f32[0]) + std::string(", ")
+		ImGui::TextColored(Globals::SecondaryTextColor, std::string(std::string("(") + std::to_string(DefaultGravityVector.m_quad.m128_f32[0]) + std::string(", ")
 			+ std::to_string(DefaultGravityVector.m_quad.m128_f32[1]) + std::string(", ")
 			+ std::to_string(DefaultGravityVector.m_quad.m128_f32[2]) + std::string(", ")
 			+ std::to_string(DefaultGravityVector.m_quad.m128_f32[3]) + std::string(")")).c_str());
@@ -74,20 +74,20 @@ void PhysicsGui::Draw()
 		ImGui::SameLine();
 		if (ImGui::Button("Set##GravitySetButton"))
 		{
-			hkpWorldSetGravity(GlobalhkpWorldPtr, NULL, &CustomGravityVector);
+			hkpWorldSetGravity(Globals::hkpWorldPtr, NULL, &CustomGravityVector);
 		}
 		ImGui::SameLine();
 		if (ImGui::Button("Reset##GravityResetButton"))
 		{
-			hkpWorldSetGravity(GlobalhkpWorldPtr, NULL, &DefaultGravityVector);
+			hkpWorldSetGravity(Globals::hkpWorldPtr, NULL, &DefaultGravityVector);
 		}
 
 		ImGui::Separator();
-		ImGui::PushFont(FontBig);
+		ImGui::PushFont(Globals::FontBig);
 		ImGui::Text("Solver settings:");
 		ImGui::PopFont();
 		ImGui::Separator();
-		hkpSolverInfo* SolverPtr = &GlobalhkpWorldPtr->m_dynamicsStepInfo.m_solverInfo;
+		hkpSolverInfo* SolverPtr = &Globals::hkpWorldPtr->m_dynamicsStepInfo.m_solverInfo;
 		if (ImGui::Button("Reset all"))
 		{
 			SolverPtr->m_tau = 0.600f;
@@ -164,7 +164,7 @@ void PhysicsGui::Draw()
 			///hkpSolverInfo_DeactivationInfo m_deactivationInfo[6];
 			ImGui::Text("Delta time: ");
 			ImGui::SameLine();
-			ImGui::TextColored(SecondaryTextColor, std::to_string(SolverPtr->m_deltaTime).c_str());
+			ImGui::TextColored(Globals::SecondaryTextColor, std::to_string(SolverPtr->m_deltaTime).c_str());
 			//ImGui::InputFloat("Delta time", &, 0.01, 0.1, 3);
 			//ImGui::InputFloat("Inverse delta time", &SolverPtr->m_invDeltaTime, 0.01, 0.1, 3);
 			ImGui::InputInt("Num steps", &SolverPtr->m_numSteps);
@@ -194,33 +194,33 @@ void PhysicsGui::Draw()
 		}
 
 		ImGui::Separator();
-		ImGui::PushFont(FontBig);
+		ImGui::PushFont(Globals::FontBig);
 		ImGui::Text("Physics info:");
 		ImGui::PopFont();
 		ImGui::Separator();
 
 		ImGui::Text("Simulation type: ");
 		ImGui::SameLine();
-		int SimType = GlobalhkpWorldPtr->m_simulationType.m_storage;
+		int SimType = Globals::hkpWorldPtr->m_simulationType.m_storage;
 		if (SimType == SIMULATION_TYPE_INVALID)
 		{
-			ImGui::TextColored(SecondaryTextColor, "Invalid");
+			ImGui::TextColored(Globals::SecondaryTextColor, "Invalid");
 		}
 		else if (SimType == SIMULATION_TYPE_DISCRETE)
 		{
-			ImGui::TextColored(SecondaryTextColor, "Discrete");
+			ImGui::TextColored(Globals::SecondaryTextColor, "Discrete");
 		}
 		else if (SimType == SIMULATION_TYPE_CONTINUOUS)
 		{
-			ImGui::TextColored(SecondaryTextColor, "Continuous");
+			ImGui::TextColored(Globals::SecondaryTextColor, "Continuous");
 		}
 		else if (SimType == SIMULATION_TYPE_MULTITHREADED)
 		{
-			ImGui::TextColored(SecondaryTextColor, "Multi-threaded");
+			ImGui::TextColored(Globals::SecondaryTextColor, "Multi-threaded");
 		}
 		else
 		{
-			ImGui::TextColored(SecondaryTextColor, "Unknown");
+			ImGui::TextColored(Globals::SecondaryTextColor, "Unknown");
 		}
 	}
 	else

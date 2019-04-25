@@ -81,7 +81,7 @@ void GeneralTweaksGui::Draw()
 		return;
 	}
 
-	ImGui::PushFont(FontBig);
+	ImGui::PushFont(Globals::FontBig);
 	ImGui::Text("General tweaks:");
 	ImGui::PopFont();
 	ImGui::Separator();
@@ -104,31 +104,31 @@ void GeneralTweaksGui::Draw()
 	gfm_alert_levels AlertCheck = gsm_get_alert_level();
 	if (AlertCheck == ALERT_LEVEL_GREEN)
 	{
-		ImGui::TextColored(ColorGreen, std::string(std::string(ICON_FA_SMILE_BEAM) + u8" Green").c_str());
+		ImGui::TextColored(Globals::ColorGreen, std::string(std::string(ICON_FA_SMILE_BEAM) + u8" Green").c_str());
 	}
 	else if (AlertCheck == ALERT_LEVEL_YELLOW)
 	{
-		ImGui::TextColored(ColorYellow, std::string(std::string(ICON_FA_MEH) + u8" Yellow").c_str());
+		ImGui::TextColored(Globals::ColorYellow, std::string(std::string(ICON_FA_MEH) + u8" Yellow").c_str());
 	}
 	else if (AlertCheck == ALERT_LEVEL_ORANGE)
 	{
-		ImGui::TextColored(ColorOrange, std::string(std::string(ICON_FA_FROWN) + u8" Orange").c_str());
+		ImGui::TextColored(Globals::ColorOrange, std::string(std::string(ICON_FA_FROWN) + u8" Orange").c_str());
 	}
 	else if (AlertCheck == ALERT_LEVEL_RED)
 	{
-		ImGui::TextColored(ColorRed, std::string(std::string(ICON_FA_DUMPSTER_FIRE) + u8" Red").c_str());
+		ImGui::TextColored(Globals::ColorRed, std::string(std::string(ICON_FA_DUMPSTER_FIRE) + u8" Red").c_str());
 	}
 	else
 	{
-		ImGui::TextColored(SecondaryTextColor, std::string(std::string(ICON_FA_QUESTION) + u8" Invalid").c_str());
+		ImGui::TextColored(Globals::SecondaryTextColor, std::string(std::string(ICON_FA_QUESTION) + u8" Invalid").c_str());
 	}
-	ImGui::RadioButton("Green", (int*)&CustomAlertLevel, ALERT_LEVEL_GREEN);
+	ImGui::RadioButton("Green", reinterpret_cast<int*>(&CustomAlertLevel), ALERT_LEVEL_GREEN);
 	ImGui::SameLine();
-	ImGui::RadioButton("Yellow", (int*)&CustomAlertLevel, ALERT_LEVEL_YELLOW);
+	ImGui::RadioButton("Yellow", reinterpret_cast<int*>(&CustomAlertLevel), ALERT_LEVEL_YELLOW);
 	ImGui::SameLine();
-	ImGui::RadioButton("Orange", (int*)&CustomAlertLevel, ALERT_LEVEL_ORANGE);
+	ImGui::RadioButton("Orange", reinterpret_cast<int*>(&CustomAlertLevel), ALERT_LEVEL_ORANGE);
 	ImGui::SameLine();
-	ImGui::RadioButton("Red", (int*)&CustomAlertLevel, ALERT_LEVEL_RED);
+	ImGui::RadioButton("Red", reinterpret_cast<int*>(&CustomAlertLevel), ALERT_LEVEL_RED);
 	ImGui::SameLine();
 	if (ImGui::Button("Set alert level"))
 	{
@@ -142,7 +142,7 @@ void GeneralTweaksGui::Draw()
 	ImGui::SameLine(); ImGui::RadioButton("Backpack", &XrayEffectMode, 0);
 	ImGui::SameLine(); ImGui::RadioButton("Rail Driver", &XrayEffectMode, 1);
 	ImGui::Text("Selected mode value: "); ImGui::SameLine();
-	ImGui::TextColored(SecondaryTextColor, std::to_string(XrayEffectMode).c_str());
+	ImGui::TextColored(Globals::SecondaryTextColor, std::to_string(XrayEffectMode).c_str());
 	if (ImGui::Button("Toggle Selected Xray Mode"))
 	{
 		if (XrayEffectMode == 0)
@@ -172,7 +172,7 @@ void GeneralTweaksGui::Draw()
 			}
 		}
 	}
-	ImGui::Checkbox("Infinite jetpack", &InfiniteJetpack);
+	ImGui::Checkbox("Infinite jetpack", &Globals::InfiniteJetpack);
 	if (ImGui::Checkbox("Invulnerability", &Invulnerable))
 	{
 		PlayerPtr->HitPoints = PlayerPtr->MaxHitPoints;
@@ -284,22 +284,22 @@ void GeneralTweaksGui::Draw()
 
 	if (!UseCustomLevelAmbientLight)
 	{
-		CustomLevelAmbientLight.x = GlobalRfgWorldPtr->level_ambient.x;
-		CustomLevelAmbientLight.y = GlobalRfgWorldPtr->level_ambient.y;
-		CustomLevelAmbientLight.z = GlobalRfgWorldPtr->level_ambient.z;
+		CustomLevelAmbientLight.x = Globals::RfgWorldPtr->level_ambient.x;
+		CustomLevelAmbientLight.y = Globals::RfgWorldPtr->level_ambient.y;
+		CustomLevelAmbientLight.z = Globals::RfgWorldPtr->level_ambient.z;
 	}
 	if (!UseCustomLevelBackgroundAmbientLight)
 	{
-		CustomLevelBackgroundAmbientLight.x = GlobalRfgWorldPtr->level_back_ambient.x;
-		CustomLevelBackgroundAmbientLight.y = GlobalRfgWorldPtr->level_back_ambient.y;
-		CustomLevelBackgroundAmbientLight.z = GlobalRfgWorldPtr->level_back_ambient.z;
+		CustomLevelBackgroundAmbientLight.x = Globals::RfgWorldPtr->level_back_ambient.x;
+		CustomLevelBackgroundAmbientLight.y = Globals::RfgWorldPtr->level_back_ambient.y;
+		CustomLevelBackgroundAmbientLight.z = Globals::RfgWorldPtr->level_back_ambient.z;
 	}
 	if (!UseCustomTimeOfDayLight)
 	{
-		CustomTimeOfDayLightColor.red = GlobalTODLightPtr->m_color.red;
-		CustomTimeOfDayLightColor.green = GlobalTODLightPtr->m_color.green;
-		CustomTimeOfDayLightColor.blue = GlobalTODLightPtr->m_color.blue;
-		CustomTimeOfDayLightColor.alpha = GlobalTODLightPtr->m_color.alpha;
+		CustomTimeOfDayLightColor.red = Globals::TODLightPtr->m_color.red;
+		CustomTimeOfDayLightColor.green = Globals::TODLightPtr->m_color.green;
+		CustomTimeOfDayLightColor.blue = Globals::TODLightPtr->m_color.blue;
+		CustomTimeOfDayLightColor.alpha = Globals::TODLightPtr->m_color.alpha;
 	}
 
 	ImGui::InputFloat3("Level ambient light", (float*)&CustomLevelAmbientLight, 3);
@@ -315,7 +315,7 @@ void GeneralTweaksGui::Draw()
 	if (ImGui::CollapsingHeader("Custom explosion spawn settings"))
 	{
 		ImGui::Separator();
-		ImGui::PushFont(FontBig);
+		ImGui::PushFont(Globals::FontBig);
 		ImGui::Text("Explosion info:");
 		ImGui::PopFont();
 		ImGui::Separator();
@@ -410,7 +410,7 @@ void GeneralTweaksGui::Draw()
 	ImGui::Separator();*/
 
 	ImGui::Separator();
-	ImGui::PushFont(FontBig);
+	ImGui::PushFont(Globals::FontBig);
 	ImGui::Text("Experimental settings:");
 	ImGui::PopFont();
 	ImGui::Separator();
@@ -428,13 +428,13 @@ void GeneralTweaksGui::Draw()
 		ImGui::InputFloat("Custom max wind speed", &CustomMaxWindSpeed);
 		if (ImGui::Button("Set all zone wind speeds"))
 		{
-			if (GlobalRfgWorldPtr)
+			if (Globals::RfgWorldPtr)
 			{
 				int ValidWorldZoneCount = 0;
 				int ValidObjectZoneCount = 0;
 				for (int i = 0; i < ZoneScanRange; i++)
 				{
-					world_zone* CurrentWorldZone = get_world_zone_by_index(GlobalRfgWorldPtr, NULL, i);
+					world_zone* CurrentWorldZone = get_world_zone_by_index(Globals::RfgWorldPtr, NULL, i);
 					if (CurrentWorldZone)
 					{
 						ValidWorldZoneCount++;
@@ -447,8 +447,8 @@ void GeneralTweaksGui::Draw()
 					}
 				}
 				Logger::Log("Done setting zone wind speeds", LogInfo);
-				Logger::Log(std::string("# of valid world zones: " + std::to_string(ValidWorldZoneCount)).c_str(), LogInfo);
-				Logger::Log(std::string("# of valid object zones: " + std::to_string(ValidObjectZoneCount)).c_str(), LogInfo);
+				Logger::Log(std::string("# of valid world zones: " + std::to_string(ValidWorldZoneCount)), LogInfo);
+				Logger::Log(std::string("# of valid object zones: " + std::to_string(ValidObjectZoneCount)), LogInfo);
 			}
 		}
 		ImGui::SameLine();
@@ -456,16 +456,16 @@ void GeneralTweaksGui::Draw()
 
 		if (ImGui::Button("Dump zone info"))
 		{
-			if (GlobalRfgWorldPtr)
+			if (Globals::RfgWorldPtr)
 			{
 				int NumberOfWorldZonesFound = 0;
 				int NumberOfObjectZonesFound = 0;
-				std::ofstream ZoneDump(GetEXEPath(false) + "RFGR Script Loader/ZoneInfoDump.txt", std::ios_base::trunc);
+				std::ofstream ZoneDump(Globals::GetEXEPath(false) + "RFGR Script Loader/ZoneInfoDump.txt", std::ios_base::trunc);
 				ZoneDump << "\nPrinting all world zone names...\n";
 				Logger::Log("\nPrinting all world zone names...\n", LogInfo);
 				for (int i = 0; i < ZoneScanRange; i++)
 				{
-					world_zone* CurrentWorldZone = get_world_zone_by_index(GlobalRfgWorldPtr, NULL, i);
+					world_zone* CurrentWorldZone = get_world_zone_by_index(Globals::RfgWorldPtr, NULL, i);
 					if (CurrentWorldZone)
 					{
 						NumberOfWorldZonesFound++;
@@ -510,16 +510,16 @@ void GeneralTweaksGui::Draw()
 		if (ImGui::Button("Print misc world values"))
 		{
 			std::cout << "\nPrinting all misc world values...\n";
-			std::ofstream WorldDump(GetEXEPath(false) + "RFGR Script Loader/WorldInfoDump.txt", std::ios_base::trunc);
-			if (GlobalRfgWorldPtr)
+			std::ofstream WorldDump(Globals::GetEXEPath(false) + "RFGR Script Loader/WorldInfoDump.txt", std::ios_base::trunc);
+			if (Globals::RfgWorldPtr)
 			{
-				WorldDump << "Max world objects: " << GlobalRfgWorldPtr->max_world_objects << "\n";
-				WorldDump << "Tech level: " << GlobalRfgWorldPtr->tech_level << "\n";
-				WorldDump << "Tech level max: " << GlobalRfgWorldPtr->tech_level_max << "\n";
-				WorldDump << "Pending filename: " << GlobalRfgWorldPtr->pending_filename << "\n";
-				WorldDump << "Object list capacity: " << GlobalRfgWorldPtr->all_objects.Capacity() << "\n";
-				WorldDump << "Object list size: " << GlobalRfgWorldPtr->all_objects.Size() << "\n";
-				WorldDump << "Num territory zones: " << GlobalRfgWorldPtr->num_territory_zones << "\n";
+				WorldDump << "Max world objects: " << Globals::RfgWorldPtr->max_world_objects << "\n";
+				WorldDump << "Tech level: " << Globals::RfgWorldPtr->tech_level << "\n";
+				WorldDump << "Tech level max: " << Globals::RfgWorldPtr->tech_level_max << "\n";
+				WorldDump << "Pending filename: " << Globals::RfgWorldPtr->pending_filename << "\n";
+				WorldDump << "Object list capacity: " << Globals::RfgWorldPtr->all_objects.Capacity() << "\n";
+				WorldDump << "Object list size: " << Globals::RfgWorldPtr->all_objects.Size() << "\n";
+				WorldDump << "Num territory zones: " << Globals::RfgWorldPtr->num_territory_zones << "\n";
 			}
 			else
 			{
@@ -532,10 +532,10 @@ void GeneralTweaksGui::Draw()
 		Utilities::GUI::ShowHelpMarker("Prints info about the rfg world to WorldInfoDump.txt. Much shorter than the other info dumps.");
 		if (ImGui::Button("Dump all object info"))
 		{
-			if (GlobalRfgWorldPtr)
+			if (Globals::RfgWorldPtr)
 			{
-				CreateDirectoryIfNull(GetEXEPath(false) + "RFGR Script Loader/Info dumps/");
-				CreateDirectoryIfNull(GetEXEPath(false) + "RFGR Script Loader/Info dumps/Object info dumps/");
+				Globals::CreateDirectoryIfNull(Globals::GetEXEPath(false) + "RFGR Script Loader/Info dumps/");
+				Globals::CreateDirectoryIfNull(Globals::GetEXEPath(false) + "RFGR Script Loader/Info dumps/Object info dumps/");
 				/*std::string DumpFileName = Logger::GetTimeString(false);
 				DumpFileName = DumpFileName.substr(1, DumpFileName.size() - 2);
 				DumpFileName += ".txt";
@@ -554,28 +554,28 @@ void GeneralTweaksGui::Draw()
 				DumpFileName += std::to_string(time(NULL));
 				DumpFileName += ".txt";
 				std::cout << "Dump file name: " << DumpFileName << "\n";
-				std::cout << "Dump file path: " << GetEXEPath(false) + "RFGR Script Loader/Info dumps/Object info dumps/" + DumpFileName << "\n";
+				std::cout << "Dump file path: " << Globals::GetEXEPath(false) + "RFGR Script Loader/Info dumps/Object info dumps/" + DumpFileName << "\n";
 				Logger::Log(std::string("\nDumping all object info to /RFGR Script Loader/Info dumps/Object info dumps/") + std::string(DumpFileName) + std::string(".\n"), LogInfo);
-				std::ofstream PositionsDump(GetEXEPath(false) + "RFGR Script Loader/Info dumps/Object info dumps/" + DumpFileName.c_str(), std::ios_base::trunc);
+				std::ofstream PositionsDump(Globals::GetEXEPath(false) + "RFGR Script Loader/Info dumps/Object info dumps/" + DumpFileName.c_str(), std::ios_base::trunc);
 				PositionsDump << "Start of object info dump...\n";
-				PositionsDump << "Objects array capacity: " << GlobalRfgWorldPtr->all_objects.Capacity() << "\n";
-				PositionsDump << "Objects array objects contained: " << GlobalRfgWorldPtr->all_objects.Size() << "\n";
-				//PositionsDump << "Sector name: " << GlobalRfgWorldPtr->territory_name << "\n\n";
+				PositionsDump << "Objects array capacity: " << Globals::RfgWorldPtr->all_objects.Capacity() << "\n";
+				PositionsDump << "Objects array objects contained: " << Globals::RfgWorldPtr->all_objects.Size() << "\n";
+				//PositionsDump << "Sector name: " << Globals::RfgWorldPtr->territory_name << "\n\n";
 
-				for (int i = 0; i < GlobalRfgWorldPtr->all_objects.Size(); i++)
+				for (int i = 0; i < Globals::RfgWorldPtr->all_objects.Size(); i++)
 				{
-					if (GlobalRfgWorldPtr->all_objects[i])
+					if (Globals::RfgWorldPtr->all_objects[i])
 					{
 						PositionsDump << "Index: " << i << "\n";
-						PositionsDump << "Name: " << world_get_object_name(GlobalRfgWorldPtr, NULL, GlobalRfgWorldPtr->all_objects[i]) << "\n";
-						PositionsDump << "Type: " << (int)(*GlobalRfgWorldPtr->all_objects[i]).ObjectType << "\n";
-						PositionsDump << "Subtype: " << (int)(*GlobalRfgWorldPtr->all_objects[i]).SubType << "\n";
+						PositionsDump << "Name: " << world_get_object_name(Globals::RfgWorldPtr, NULL, Globals::RfgWorldPtr->all_objects[i]) << "\n";
+						PositionsDump << "Type: " << (int)(*Globals::RfgWorldPtr->all_objects[i]).ObjectType << "\n";
+						PositionsDump << "Subtype: " << (int)(*Globals::RfgWorldPtr->all_objects[i]).SubType << "\n";
 						PositionsDump << "Position:\n";
-						PositionsDump << "    x: " << (*GlobalRfgWorldPtr->all_objects[i]).Position.x << "\n";
-						PositionsDump << "    y: " << (*GlobalRfgWorldPtr->all_objects[i]).Position.y << "\n";
-						PositionsDump << "    z: " << (*GlobalRfgWorldPtr->all_objects[i]).Position.z << "\n";
+						PositionsDump << "    x: " << (*Globals::RfgWorldPtr->all_objects[i]).Position.x << "\n";
+						PositionsDump << "    y: " << (*Globals::RfgWorldPtr->all_objects[i]).Position.y << "\n";
+						PositionsDump << "    z: " << (*Globals::RfgWorldPtr->all_objects[i]).Position.z << "\n";
 
-						world_zone* ObjectWorldZone = get_world_zone_by_object_handle(GlobalRfgWorldPtr, NULL, (*GlobalRfgWorldPtr->all_objects[i]).Handle);
+						world_zone* ObjectWorldZone = get_world_zone_by_object_handle(Globals::RfgWorldPtr, NULL, (*Globals::RfgWorldPtr->all_objects[i]).Handle);
 						if (ObjectWorldZone)
 						{
 							PositionsDump << "Zone:\n";
@@ -606,16 +606,16 @@ void GeneralTweaksGui::Draw()
 
 	if (ImGui::CollapsingHeader("Time of day light")) //Todo: Add rl_scene_entity and rl_3d_entity info to this.
 	{
-		if (GlobalTODLightPtr)
+		if (Globals::TODLightPtr)
 		{
 			ImGui::Text("Light type:");
-			ImGui::RadioButton("Directional", (int*)&GlobalTODLightPtr->m_light_type, LIGHT_TYPE_DIRECTIONAL);
+			ImGui::RadioButton("Directional", (int*)&Globals::TODLightPtr->m_light_type, LIGHT_TYPE_DIRECTIONAL);
 			ImGui::SameLine();
-			ImGui::RadioButton("Point", (int*)&GlobalTODLightPtr->m_light_type, LIGHT_TYPE_POINT);
+			ImGui::RadioButton("Point", (int*)&Globals::TODLightPtr->m_light_type, LIGHT_TYPE_POINT);
 			ImGui::SameLine();
-			ImGui::RadioButton("Spot light", (int*)&GlobalTODLightPtr->m_light_type, LIGHT_TYPE_SPOT_LIGHT);
+			ImGui::RadioButton("Spot light", (int*)&Globals::TODLightPtr->m_light_type, LIGHT_TYPE_SPOT_LIGHT);
 			ImGui::SameLine();
-			ImGui::RadioButton("Force size of int", (int*)&GlobalTODLightPtr->m_light_type, LIGHT_TYPE_FORCE_SIZEOF_INT);
+			ImGui::RadioButton("Force size of int", (int*)&Globals::TODLightPtr->m_light_type, LIGHT_TYPE_FORCE_SIZEOF_INT);
 
 			ImGui::Text("Color:");
 			ImGui::Checkbox("Use custom color", &UseCustomTimeOfDayLight);
@@ -625,25 +625,25 @@ void GeneralTweaksGui::Draw()
 			ImGui::InputFloat("Blue", &CustomTimeOfDayLightColor.blue, 0.01, 0.1, 3);
 			ImGui::InputFloat("Alpha", &CustomTimeOfDayLightColor.alpha, 0.01, 0.1, 3);
 
-			ImGui::InputFloat("Attenuation start", &GlobalTODLightPtr->m_attenuation_start, 0.01, 0.1, 3);
-			ImGui::InputFloat("Attenuation end", &GlobalTODLightPtr->m_attenuation_end, 0.01, 0.1, 3);
-			ImGui::InputFloat("Hotspot falloff size", &GlobalTODLightPtr->m_hotspot_falloff_size, 0.01, 0.1, 3);
-			ImGui::InputFloat("Hotspot size", &GlobalTODLightPtr->m_hotspot_size, 0.01, 0.1, 3);
+			ImGui::InputFloat("Attenuation start", &Globals::TODLightPtr->m_attenuation_start, 0.01, 0.1, 3);
+			ImGui::InputFloat("Attenuation end", &Globals::TODLightPtr->m_attenuation_end, 0.01, 0.1, 3);
+			ImGui::InputFloat("Hotspot falloff size", &Globals::TODLightPtr->m_hotspot_falloff_size, 0.01, 0.1, 3);
+			ImGui::InputFloat("Hotspot size", &Globals::TODLightPtr->m_hotspot_size, 0.01, 0.1, 3);
 
 			ImGui::Text("Clip minimum:");
-			ImGui::InputFloat("x", &GlobalTODLightPtr->m_clip_min.x, 0.01, 0.1, 3);
-			ImGui::InputFloat("y", &GlobalTODLightPtr->m_clip_min.y, 0.01, 0.1, 3);
-			ImGui::InputFloat("z", &GlobalTODLightPtr->m_clip_min.z, 0.01, 0.1, 3);
+			ImGui::InputFloat("x", &Globals::TODLightPtr->m_clip_min.x, 0.01, 0.1, 3);
+			ImGui::InputFloat("y", &Globals::TODLightPtr->m_clip_min.y, 0.01, 0.1, 3);
+			ImGui::InputFloat("z", &Globals::TODLightPtr->m_clip_min.z, 0.01, 0.1, 3);
 
 			ImGui::Text("Clip maximum:");
-			ImGui::InputFloat("x", &GlobalTODLightPtr->m_clip_max.x, 0.01, 0.1, 3);
-			ImGui::InputFloat("y", &GlobalTODLightPtr->m_clip_max.y, 0.01, 0.1, 3);
-			ImGui::InputFloat("z", &GlobalTODLightPtr->m_clip_max.z, 0.01, 0.1, 3);
+			ImGui::InputFloat("x", &Globals::TODLightPtr->m_clip_max.x, 0.01, 0.1, 3);
+			ImGui::InputFloat("y", &Globals::TODLightPtr->m_clip_max.y, 0.01, 0.1, 3);
+			ImGui::InputFloat("z", &Globals::TODLightPtr->m_clip_max.z, 0.01, 0.1, 3);
 
 			ImGui::Text("Light direction:");
-			ImGui::InputFloat("x", &GlobalTODLightPtr->m_light_direction.x, 0.01, 0.1, 3);
-			ImGui::InputFloat("y", &GlobalTODLightPtr->m_light_direction.y, 0.01, 0.1, 3);
-			ImGui::InputFloat("z", &GlobalTODLightPtr->m_light_direction.z, 0.01, 0.1, 3);
+			ImGui::InputFloat("x", &Globals::TODLightPtr->m_light_direction.x, 0.01, 0.1, 3);
+			ImGui::InputFloat("y", &Globals::TODLightPtr->m_light_direction.y, 0.01, 0.1, 3);
+			ImGui::InputFloat("z", &Globals::TODLightPtr->m_light_direction.z, 0.01, 0.1, 3);
 
 			//Todo: Add the following vars:
 			//rl_renderable_instance *m_clip_mesh;
@@ -658,21 +658,21 @@ void GeneralTweaksGui::Draw()
 	else
 	{
 		ImGui::SameLine();
-		ImGui::TextColored(ColorRed, "[Experimental]");
+		ImGui::TextColored(Globals::ColorRed, "[Experimental]");
 	}
 
-	if (GlobalMainScenePtr)
+	if (Globals::MainScenePtr)
 	{
 		//Todo: Mess with main scene settings
-		if (GlobalMainSceneRendererPtr)
+		if (Globals::MainSceneRendererPtr)
 		{
 			//ImGui::PushFont(FontBig);
 			ImGui::Text("Main scene renderer settings:");
 			//ImGui::PopFont();
 			ImGui::Separator();
 
-			ImGui::InputInt("Shadow map width", &GlobalMainSceneRendererPtr->m_shadow_map_width);
-			ImGui::InputInt("Shadow map height", &GlobalMainSceneRendererPtr->m_shadow_map_height);
+			ImGui::InputInt("Shadow map width", &Globals::MainSceneRendererPtr->m_shadow_map_width);
+			ImGui::InputInt("Shadow map height", &Globals::MainSceneRendererPtr->m_shadow_map_height);
 
 			//None of the options in this are changeable.
 			/*if (GlobalMainSceneRendererPtr->m_part2_params.p_shadow_render_params)

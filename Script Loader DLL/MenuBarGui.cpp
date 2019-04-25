@@ -90,7 +90,7 @@ void MenuBarGui::ConfirmScriptLoaderDeactivation() const
 		ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.952f, 0.545f, 0.462f, 1.0f));
 		if (ImGui::Button("Exit"))
 		{
-			ScriptLoaderCloseRequested = true;
+			Globals::ScriptLoaderCloseRequested = true;
 			ImGui::CloseCurrentPopup();
 		}
 		ImGui::PopStyleColor();
@@ -110,7 +110,7 @@ void MenuBarGui::ShowAboutWindow(bool* p_open) const
 		ImGui::End();
 		return;
 	}
-	ImGui::Text("RFGR Script Loader %s", GetScriptLoaderVersion());
+	ImGui::Text("RFGR Script Loader %s", Globals::GetScriptLoaderVersion());
 	ImGui::Separator();
 	ImGui::PushItemWidth(100.0f);
 	ImGui::TextWrapped("By moneyl. See it's public wiki repo here:");

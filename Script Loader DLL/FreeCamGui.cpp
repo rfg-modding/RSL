@@ -21,7 +21,7 @@ void FreeCamGui::Draw()
 		return;
 	}
 	
-	ImGui::PushFont(FontBig);
+	ImGui::PushFont(Globals::FontBig);
 	ImGui::Text("Free cam settings:");
 	ImGui::PopFont();
 	ImGui::Separator();
@@ -41,7 +41,7 @@ void FreeCamGui::Draw()
 
 		ImGui::Text("Current velocity: ");
 		ImGui::SameLine();
-		ImGui::TextColored(SecondaryTextColor, Camera->Velocity.GetDataString(true, true).c_str());
+		ImGui::TextColored(Globals::SecondaryTextColor, Camera->Velocity.GetDataString(true, true).c_str());
 	}
 
 	//ImGui::Checkbox("Have player follow camera", &PlayerFollowCam);
@@ -69,7 +69,7 @@ void FreeCamGui::Draw()
 	ImGui::InputFloat("High LOD far clip distance", &Camera->GameData->m_high_lod_far_clip_dist, 3);
 
 	ImGui::Separator();
-	ImGui::PushFont(FontBig);
+	ImGui::PushFont(Globals::FontBig);
 	ImGui::Text("First person camera settings [Experimental]:");
 	ImGui::PopFont();
 	ImGui::Separator();

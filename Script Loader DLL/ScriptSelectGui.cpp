@@ -15,7 +15,7 @@ void ScriptSelectGui::Draw()
 		return;
 	}
 
-	ImGui::PushFont(FontBig);
+	ImGui::PushFont(Globals::FontBig);
 	ImGui::Text("Scripts folder:");
 	ImGui::PopFont();
 	ImGui::Separator();

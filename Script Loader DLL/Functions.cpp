@@ -36,11 +36,11 @@ void HideHud(bool Hide)
 	Hud_Hide(Hide);
 	if (Hide)
 	{
-		HudVisible = false;
+		Globals::HudVisible = false;
 	}
 	else
 	{
-		HudVisible = true;
+		Globals::HudVisible = true;
 	}
 }
 
@@ -50,40 +50,40 @@ void HideFog(bool Hide)
 	//FogVisible = !Hide;
 	if (Hide)
 	{
-		FogVisible = false;
+		Globals::FogVisible = false;
 	}
 	else
 	{
-		FogVisible = true;
+		Globals::FogVisible = true;
 	}
 }
 
 void ToggleHud()
 {
-	if (HudVisible)
+	if (Globals::HudVisible)
 	{
 		HideHud(true);
-		HudVisible = false;
+		Globals::HudVisible = false;
 	}
 	else
 	{
 		HideHud(false);
-		HudVisible = true;
+		Globals::HudVisible = true;
 	}
 	//HudVisible = !HudVisible; //This wasn't working for some odd reason so I just set them manually.
 }
 
 void ToggleFog()
 {
-	if (FogVisible)
+	if (Globals::FogVisible)
 	{
 		HideFog(true);
-		FogVisible = false;
+		Globals::FogVisible = false;
 	}
 	else
 	{
 		HideFog(false);
-		FogVisible = true;
+		Globals::FogVisible = true;
 	}
 	//FogVisible = !FogVisible; //This wasn't working for some odd reason so I just set them manually.
 }
