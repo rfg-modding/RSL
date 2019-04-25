@@ -196,7 +196,7 @@ LRESULT ProcessInput(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		if (std::chrono::duration_cast<std::chrono::milliseconds>(ExplosionTimerEnd - ExplosionTimerBegin).count() > 1000 / Gui.TweaksMenu->MiddleMouseExplosionsPerSecond)
 		{
 			ExplosionCreate(&Gui.TweaksMenu->CustomExplosionInfo, Gui.TweaksMenu->PlayerPtr, Gui.TweaksMenu->PlayerPtr,
-				&Gui.TweaksMenu->PlayerPtr->aim_pos, &Gui.TweaksMenu->PlayerPtr->mp_camera_orient, &Gui.TweaksMenu->PlayerPtr->aim_pos, NULL, false);
+				&Gui.TweaksMenu->PlayerPtr->aim_pos, &Gui.TweaksMenu->PlayerPtr->mp_camera_orient, &Gui.TweaksMenu->PlayerPtr->aim_pos, nullptr, false);
 			ExplosionTimerBegin = std::chrono::steady_clock::now();
 		}
 	}
@@ -426,7 +426,7 @@ HRESULT __stdcall D3D11PresentHook(IDXGISwapChain* pSwapChain, UINT SyncInterval
 			return E_FAIL;
 		}
 
-		Result = Globals::D3D11Device->CreateRenderTargetView(BackBuffer, NULL, &Globals::MainRenderTargetView);
+		Result = Globals::D3D11Device->CreateRenderTargetView(BackBuffer, nullptr, &Globals::MainRenderTargetView);
 		if (Result != S_OK)
 		{
 			Logger::Log(std::string("CreateRenderTargetView() failed, return value: " + std::to_string(Result)), LogFatalError);
@@ -464,7 +464,7 @@ HRESULT __stdcall D3D11PresentHook(IDXGISwapChain* pSwapChain, UINT SyncInterval
 		//}
 #endif
 		Gui.Draw();
-		Globals::D3D11Context->OMSetRenderTargets(1, &Globals::MainRenderTargetView, NULL);
+		Globals::D3D11Context->OMSetRenderTargets(1, &Globals::MainRenderTargetView, nullptr);
 		ImGui::Render();
 		ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 
@@ -816,7 +816,7 @@ void __fastcall hkpWorld_stepDeltaTime_hook(hkpWorld* This, void* edx, float Phy
 		}
 		if (Gui.PhysicsSettings)
 		{
-			Gui.PhysicsSettings->CurrentGravity = hkpWorldGetGravity(Globals::hkpWorldPtr, NULL);
+			Gui.PhysicsSettings->CurrentGravity = hkpWorldGetGravity(Globals::hkpWorldPtr, nullptr);
 
 			Gui.PhysicsSettings->CustomGravityVector.m_quad.m128_f32[0] = Gui.PhysicsSettings->CurrentGravity->m_quad.m128_f32[0];
 			Gui.PhysicsSettings->CustomGravityVector.m_quad.m128_f32[1] = Gui.PhysicsSettings->CurrentGravity->m_quad.m128_f32[1];

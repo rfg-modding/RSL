@@ -227,7 +227,7 @@ void ProgramManager::Update()
 		///std::cout << "Done sleeping.\n";
 		ExitKeysPressCount = 10;
 	}
-	/*if (PeekMessage(&msg, NULL, 0U, 0U, PM_REMOVE)) //Todo: Figure out if I really need this for the overlay to work.
+	/*if (PeekMessage(&msg, nullptr, 0U, 0U, PM_REMOVE)) //Todo: Figure out if I really need this for the overlay to work.
 	{
 		TranslateMessage(&msg);
 		DispatchMessage(&msg);
