@@ -388,3 +388,8 @@ float CameraWrapper::GetCurrentSpeed() const
 {
 	return CurrentSpeed;
 }
+
+vector CameraWrapper::GetRealPosition() const
+{
+	return vector(*RealX, *RealY, *RealZ);
+}
