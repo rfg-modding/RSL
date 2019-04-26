@@ -6,7 +6,7 @@
 /*RFGR Extended Camera Injector*/
 
 #ifdef SCRIPT_LOADER_DLL
-#error ./Injector/Globals.hpp was included by one of the Script Loader DLL project files! Find and remove that include. Failing to do so may result in some pesky and hard to find bugs.
+#error ./Injector/Globals.hpp was included by one of the Script Loader DLL project files! Find and remove that include. Failing to do so may result in some pesky and hard to find bugs. DO NOT REMOVE THIS ERROR TO MAKE IT COMPILE!
 #endif
 
 using json = nlohmann::json;
