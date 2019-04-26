@@ -38,8 +38,8 @@ DWORD WINAPI MainThread(HMODULE hModule)
             return 0;
         }
         Program.OpenConsole();
+		Program.Initialize();
         Program.SetMemoryLocations();
-        Program.Initialize();
     }
     catch(std::exception& Ex)
     {

@@ -17,6 +17,8 @@ ProgramManager::~ProgramManager()
 
 void ProgramManager::Initialize()
 {
+	Globals::ModuleBase = reinterpret_cast<uintptr_t>(GetModuleHandle(nullptr));
+
 	Globals::Program = this;
 	Globals::Gui = &this->Gui;
 	Globals::Scripts = &this->Scripts;
@@ -24,8 +26,6 @@ void ProgramManager::Initialize()
 	Camera.Initialize(Globals::DefaultFreeCameraSpeed, 5.0);
 	Functions.Initialize();
 	Scripts.Initialize();
-	
-	Globals::ModuleBase = reinterpret_cast<uintptr_t>(GetModuleHandle(nullptr));
 
 	if (kiero::init(kiero::RenderType::D3D11) != kiero::Status::Success)
 	{
@@ -40,7 +40,7 @@ void ProgramManager::Initialize()
 		FreeLibraryAndExitThread(Globals::ScriptLoaderModule, 0);
 		return;
 	}
-	GameWindowHandle = Globals::find_main_window(Globals::GetProcessID("rfg.exe"));
+	GameWindowHandle = Globals::FindRfgTopWindow();
 
 	CreateGameHooks(true);
 #if !PublicMode
@@ -99,6 +99,8 @@ void ProgramManager::Initialize()
 	Beep(600, 100);
 	Beep(700, 100);
 	Beep(900, 200);
+
+	Initialized = true;
 }
 
 void ProgramManager::Exit()

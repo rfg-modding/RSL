@@ -89,7 +89,7 @@ auto JsonExceptionHandler(Callable&& Function, std::string FileName, std::string
 		ExceptionMessage += "Message: ";
 		ExceptionMessage += Exception.what();
 
-		MessageBoxA(Globals::find_main_window(Globals::GetProcessID("rfg.exe")), ExceptionMessage.c_str(), "Json parse exception caught", MB_OK);
+		MessageBoxA(Globals::FindRfgTopWindow(), ExceptionMessage.c_str(), "Json parse exception caught", MB_OK);
 		Logger::Log("Failed to " + Action + " \"" + FileName + "\", exiting.", LogFatalError);
 		return false;
 	}
@@ -102,7 +102,7 @@ auto JsonExceptionHandler(Callable&& Function, std::string FileName, std::string
 		ExceptionMessage += "Message: ";
 		ExceptionMessage += Exception.what();
 
-		MessageBoxA(Globals::find_main_window(Globals::GetProcessID("rfg.exe")), ExceptionMessage.c_str(), "Json invalid iterator exception caught", MB_OK);
+		MessageBoxA(Globals::FindRfgTopWindow(), ExceptionMessage.c_str(), "Json invalid iterator exception caught", MB_OK);
 		Logger::Log("Failed to " + Action + " \"" + FileName + "\", exiting.", LogFatalError);
 		return false;
 	}
@@ -115,7 +115,7 @@ auto JsonExceptionHandler(Callable&& Function, std::string FileName, std::string
 		ExceptionMessage += "Message: ";
 		ExceptionMessage += Exception.what();
 
-		MessageBoxA(Globals::find_main_window(Globals::GetProcessID("rfg.exe")), ExceptionMessage.c_str(), "Json type error exception caught", MB_OK);
+		MessageBoxA(Globals::FindRfgTopWindow(), ExceptionMessage.c_str(), "Json type error exception caught", MB_OK);
 		Logger::Log("Failed to " + Action + " \"" + FileName + "\", exiting.", LogFatalError);
 		return false;
 	}
@@ -128,7 +128,7 @@ auto JsonExceptionHandler(Callable&& Function, std::string FileName, std::string
 		ExceptionMessage += "Message: ";
 		ExceptionMessage += Exception.what();
 
-		MessageBoxA(Globals::find_main_window(Globals::GetProcessID("rfg.exe")), ExceptionMessage.c_str(), "Json out of range exception caught", MB_OK);
+		MessageBoxA(Globals::FindRfgTopWindow(), ExceptionMessage.c_str(), "Json out of range exception caught", MB_OK);
 		Logger::Log("Failed to " + Action + " \"" + FileName + "\", exiting.", LogFatalError);
 		return false;
 	}
@@ -141,7 +141,7 @@ auto JsonExceptionHandler(Callable&& Function, std::string FileName, std::string
 		ExceptionMessage += "Message: ";
 		ExceptionMessage += Exception.what();
 
-		MessageBoxA(Globals::find_main_window(Globals::GetProcessID("rfg.exe")), ExceptionMessage.c_str(), "Json other error exception caught", MB_OK);
+		MessageBoxA(Globals::FindRfgTopWindow(), ExceptionMessage.c_str(), "Json other error exception caught", MB_OK);
 		Logger::Log("Failed to " + Action + " \"" + FileName + "\", exiting.", LogFatalError);
 		return false;
 	}
@@ -154,7 +154,7 @@ auto JsonExceptionHandler(Callable&& Function, std::string FileName, std::string
 		ExceptionMessage += "Message: ";
 		ExceptionMessage += Exception.what();
 
-		MessageBoxA(Globals::find_main_window(Globals::GetProcessID("rfg.exe")), ExceptionMessage.c_str(), "Json general exception caught", MB_OK);
+		MessageBoxA(Globals::FindRfgTopWindow(), ExceptionMessage.c_str(), "Json general exception caught", MB_OK);
 		Logger::Log("Failed to " + Action + " \"" + FileName + "\", exiting.", LogFatalError);
 		return false;
 	}
@@ -163,7 +163,7 @@ auto JsonExceptionHandler(Callable&& Function, std::string FileName, std::string
 		Logger::Log("Default exception caught while " + ActionConjugated + " \"" + FileName + "\"!", LogFatalError);
 
 		std::string ExceptionMessage("Default exception caught while " + ActionConjugated + " \"" + FileName + "\"! See logs. ");
-		MessageBoxA(Globals::find_main_window(Globals::GetProcessID("rfg.exe")), ExceptionMessage.c_str(), "Json default exception caught", MB_OK);
+		MessageBoxA(Globals::FindRfgTopWindow(), ExceptionMessage.c_str(), "Json default exception caught", MB_OK);
 		Logger::Log("Failed to " + Action + " \"" + FileName + "\", exiting.", LogFatalError);
 		return false;
 	}

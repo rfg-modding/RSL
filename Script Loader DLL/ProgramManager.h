@@ -39,5 +39,8 @@ public:
 	unsigned int ExitKeysPressCount = 0;
 
 	bool SuccessfulExit = false;
+
+private:
+	bool Initialized = false;
 };
 

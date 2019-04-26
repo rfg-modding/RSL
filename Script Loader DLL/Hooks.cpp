@@ -327,7 +327,7 @@ HRESULT __stdcall D3D11PresentHook(IDXGISwapChain* pSwapChain, UINT SyncInterval
 		ImGui::StyleColorsDark();
 
 		ImGui_ImplDX11_Init(Globals::D3D11Device, Globals::D3D11Context);
-		Globals::hwnd = Globals::find_main_window(Globals::GetProcessID("rfg.exe"));
+		Globals::hwnd = Globals::FindRfgTopWindow();
 		bool RectResult = GetWindowRect(Globals::hwnd, &Globals::WindowRect);
 		if (!RectResult)
 		{

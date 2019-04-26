@@ -139,10 +139,6 @@ namespace Globals
 	void PlaceNOP(BYTE* Address, DWORD Length = 1);
 	MODULEINFO GetModuleInfo(char *szModule);
 	DWORD FindPattern(char *module, char *pattern, char *mask);
-	//Source of the next three functions: https://stackoverflow.com/a/21767578
-	HWND find_main_window(unsigned long process_id);
-	BOOL CALLBACK enum_windows_callback(HWND handle, LPARAM lParam);
-	BOOL is_main_window(HWND handle);
 
 	template <typename T>
 	std::string to_string_precise(const T Value, const int Precision = 1)
