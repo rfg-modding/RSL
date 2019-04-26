@@ -73,7 +73,7 @@ namespace Globals
 	extern ID3D11Device* D3D11Device;
 	extern ID3D11DeviceContext* D3D11Context;
 	extern ID3D11RenderTargetView* MainRenderTargetView;
-	extern HWND hwnd;
+	extern HWND GameWindowHandle;
 	extern RECT WindowRect;
 	//extern ImVec4* Colors;
 

@@ -40,7 +40,7 @@ void ProgramManager::Initialize()
 		FreeLibraryAndExitThread(Globals::ScriptLoaderModule, 0);
 		return;
 	}
-	GameWindowHandle = Globals::FindRfgTopWindow();
+	Globals::GameWindowHandle = Globals::FindRfgTopWindow();
 
 	CreateGameHooks(true);
 
@@ -66,7 +66,7 @@ void ProgramManager::Initialize()
 	} 
 	while (RFGRState < 0 || RFGRState > 63);
 
-	Globals::OriginalWndProc = reinterpret_cast<WNDPROC>(SetWindowLongPtr(GameWindowHandle, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(WndProc)));
+	Globals::OriginalWndProc = reinterpret_cast<WNDPROC>(SetWindowLongPtr(Globals::GameWindowHandle, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(WndProc)));
 	Logger::Log("Custom WndProc set.", LogInfo);
 	CreateD3D11Hooks(true);
 	Logger::Log("D3D11 hooks created and enabled.", LogInfo);

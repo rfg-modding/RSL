@@ -45,7 +45,7 @@ LRESULT __stdcall WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			UpdateD3D11Pointers = true;
 			Globals::D3D11Context->OMSetRenderTargets(0, 0, 0);
 			Globals::MainRenderTargetView->Release();
-			return CallWindowProc(Globals::OriginalWndProc, Globals::hwnd, msg, wParam, lParam);
+			return CallWindowProc(Globals::OriginalWndProc, Globals::GameWindowHandle, msg, wParam, lParam);
 		}
 		return true;
 	}
@@ -68,7 +68,7 @@ LRESULT __stdcall WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			return 0;
 	}
 
-	return CallWindowProc(Globals::OriginalWndProc, Globals::hwnd, msg, wParam, lParam);
+	return CallWindowProc(Globals::OriginalWndProc, Globals::GameWindowHandle, msg, wParam, lParam);
 	//return DefWindowProc(hWnd, msg, wParam, lParam);
 }
 
@@ -324,18 +324,12 @@ HRESULT __stdcall D3D11PresentHook(IDXGISwapChain* pSwapChain, UINT SyncInterval
 		ImGui::StyleColorsDark();
 
 		ImGui_ImplDX11_Init(Globals::D3D11Device, Globals::D3D11Context);
-		Globals::hwnd = Globals::FindRfgTopWindow();
-		bool RectResult = GetWindowRect(Globals::hwnd, &Globals::WindowRect);
+		const bool RectResult = GetWindowRect(Globals::GameWindowHandle, &Globals::WindowRect);
 		if (!RectResult)
 		{
-			std::cout << "GetWindowRect Failed! Result: " << GetLastError() << "\n";
-			//Sleep(10000);
+			Logger::Log("GetWindowRect() failed during script loader init!", LogError);
 		}
-		else
-		{
-			//Logger::Log("GetWindowRect() Succeeded", LogWarning);
-		}
-		ImGui_ImplWin32_Init(Globals::hwnd);
+		ImGui_ImplWin32_Init(Globals::GameWindowHandle);
 
 		ImGuiIO& io = ImGui::GetIO();
 		float GlobalFontSize = 17.0f;
