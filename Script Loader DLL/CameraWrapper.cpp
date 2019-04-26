@@ -2,8 +2,7 @@
 
 void CameraWrapper::Initialize(float InitialCameraSpeed, float InitialCameraRotationSpeed)
 {
-	uintptr_t ModuleBase = reinterpret_cast<uintptr_t>(GetModuleHandle(nullptr));
-	GameData = reinterpret_cast<rfg_camera*>(*(DWORD*)(ModuleBase + 0x0023394C));
+	GameData = reinterpret_cast<rfg_camera*>(*(DWORD*)(Globals::ModuleBase + 0x0023394C));
 
 	RealX = &GameData->real_pos.x;
 	RealY = &GameData->real_pos.y;

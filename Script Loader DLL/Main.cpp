@@ -12,7 +12,7 @@
 
 DWORD WINAPI MainThread(HMODULE hModule)
 {
-	Globals::MainModule = hModule;
+	Globals::ScriptLoaderModule = hModule;
 
     try
     {
@@ -29,7 +29,7 @@ DWORD WINAPI MainThread(HMODULE hModule)
         Logger::CloseAllLogFiles();
     }
 
-    ProgramManager Program(hModule);
+    ProgramManager Program;
     try
     {
         if (!Program.LoadDataFromConfig())

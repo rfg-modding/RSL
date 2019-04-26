@@ -1,6 +1,7 @@
 #include "ScriptSelectGui.h"
 #include "TextEditor.h"
 #include "ScriptManager.h"
+#include "GuiSystem.h"
 
 void ScriptSelectGui::Draw()
 {
@@ -24,7 +25,7 @@ void ScriptSelectGui::Draw()
 	{
 		Scripts->ScanScriptsFolder();
 	}
-	for (auto i : Scripts->Scripts)
+	for (const auto& i : Scripts->Scripts)
 	{
 		ImGui::Columns(2);
 		ImGui::Text(i.Name.c_str()); ImGui::SameLine();

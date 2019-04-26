@@ -39,7 +39,8 @@ namespace Globals
 
 	const float pi = 3.14159265f;
 
-	HMODULE MainModule = nullptr;
+	HMODULE ScriptLoaderModule = nullptr;
+	uintptr_t ModuleBase = 0;
 
 	ImFont* FontNormal = nullptr;
 	ImFont* FontBig = nullptr;
@@ -61,7 +62,7 @@ namespace Globals
 	bool ShowMainOverlay = true;
 
 	float OverlayFontSize = 16.0f;
-	bool show_demo_window = true;
+	bool show_demo_window = false;
 	bool ImGuiInitialized = false;
 	ImGuiIO io;
 	bool OverlayActive = false;

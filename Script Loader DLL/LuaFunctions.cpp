@@ -19,6 +19,6 @@ namespace Lua
 
 	void LogModuleBase()
 	{
-		Logger::Log(std::string("Module base: " + std::to_string(reinterpret_cast<uintptr_t>(GetModuleHandle(nullptr)))), LogInfo);
+		Logger::Log(std::string("Module base: " + std::to_string(Globals::ModuleBase)), LogInfo);
 	}
 }

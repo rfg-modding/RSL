@@ -57,7 +57,8 @@ namespace Globals
 
 	extern const float pi;
 
-	extern HMODULE MainModule;
+	extern HMODULE ScriptLoaderModule;
+	extern uintptr_t ModuleBase;
 
 	extern ImFont* FontNormal;
 	extern ImFont* FontBig;
@@ -118,7 +119,6 @@ namespace Globals
 	extern bool FogVisible;
 
 	extern const std::string ScriptLoaderVersion;
-
 
 	const char* GetScriptLoaderVersion();
 	bool DirectoryExists(const std::string& Directory);

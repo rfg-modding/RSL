@@ -31,7 +31,6 @@ extern bool GlobalPlayerPtrInitialized;
 void __fastcall ObjectUpdatePosAndOrientHook(Object* ObjectPtr, void* edx, vector* UpdatedPosition, matrix* UpdatedOrientation, bool SetHavokData);
 extern std::once_flag HookObjectUpdatePosAndOrientInitialCall;
 extern std::once_flag HookHumanUpdatePosAndOrientInitialCall;
-extern vector NewObjectPosition;
 
 /*Start of MP Detection Hooks*/
 bool __fastcall IsValidGameLinkLobbyKaikoHook(void* This); 

@@ -21,7 +21,6 @@ bool NewSkipTransition;
 
 std::once_flag HookObjectUpdatePosAndOrientInitialCall;
 std::once_flag HookHumanUpdatePosAndOrientInitialCall;
-vector NewObjectPosition;
 
 bool UpdateD3D11Pointers = true;
 

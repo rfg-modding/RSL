@@ -1,15 +1,5 @@
 #include "ProgramManager.h"
 
-ProgramManager::ProgramManager(HMODULE hModule)
-{
-	ScriptLoaderModule = hModule;
-
-	//The variables below are in Globals.h
-	Globals::show_demo_window = true;
-	Globals::ImGuiInitialized = false;
-	Globals::OverlayActive = false;
-}
-
 ProgramManager::~ProgramManager()
 {
 	if (Globals::OverlayActive)
@@ -35,23 +25,19 @@ void ProgramManager::Initialize()
 	Functions.Initialize();
 	Scripts.Initialize();
 	
-	NewObjectPosition.x = 0.0f;
-	NewObjectPosition.y = 0.0f;
-	NewObjectPosition.z = 0.0f;
-	
-	ModuleBase = reinterpret_cast<uintptr_t>(GetModuleHandle(nullptr));
+	Globals::ModuleBase = reinterpret_cast<uintptr_t>(GetModuleHandle(nullptr));
 
 	if (kiero::init(kiero::RenderType::D3D11) != kiero::Status::Success)
 	{
 		Logger::Log(std::string("Kiero error: " + std::to_string(kiero::init(kiero::RenderType::D3D11))), LogFatalError, true);
 		Logger::Log("Failed to initialize kiero for D3D11. RFGR Script loader deactivating.", LogFatalError, true);
-		FreeLibraryAndExitThread(ScriptLoaderModule, 0);
+		FreeLibraryAndExitThread(Globals::ScriptLoaderModule, 0);
 		return;
 	}
 	if (MH_Initialize() != MH_OK)
 	{
 		Logger::Log("Failed to initialize MinHook. RFGR Script loader deactivating.", LogFatalError, true);
-		FreeLibraryAndExitThread(ScriptLoaderModule, 0);
+		FreeLibraryAndExitThread(Globals::ScriptLoaderModule, 0);
 		return;
 	}
 	GameWindowHandle = Globals::find_main_window(Globals::GetProcessID("rfg.exe"));
@@ -170,8 +156,7 @@ void ProgramManager::OpenConsole()
 
 void ProgramManager::SetMemoryLocations()
 {
-	const uintptr_t ModuleBase = reinterpret_cast<uintptr_t>(GetModuleHandle(nullptr));
-	Globals::InMultiplayer = reinterpret_cast<bool*>(*(DWORD*)(ModuleBase + 0x002CA210));
+	Globals::InMultiplayer = reinterpret_cast<bool*>(*(DWORD*)(Globals::ModuleBase + 0x002CA210));
 	if (*Globals::InMultiplayer)
 	{
 		MessageBoxA(Globals::FindRfgTopWindow(), "MP usage detected, shutting down!", "Multiplayer mode detected", MB_OK);
@@ -181,31 +166,31 @@ void ProgramManager::SetMemoryLocations()
 
 void ProgramManager::CreateGameHooks(bool EnableNow)
 {
-	Hooks.CreateHook("PlayerConstructor", GAMEHOOK,reinterpret_cast<DWORD*>(ModuleBase + 0x6DECA0), PlayerConstructorHook, reinterpret_cast<LPVOID*>(&PlayerConstructor), EnableNow);
-	Hooks.CreateHook("PlayerDoFrame", GAMEHOOK, reinterpret_cast<DWORD*>(ModuleBase + 0x6D5A80), PlayerDoFrameHook, reinterpret_cast<LPVOID*>(&PlayerDoFrame), EnableNow);
+	Hooks.CreateHook("PlayerConstructor", GAMEHOOK,reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x6DECA0), PlayerConstructorHook, reinterpret_cast<LPVOID*>(&PlayerConstructor), EnableNow);
+	Hooks.CreateHook("PlayerDoFrame", GAMEHOOK, reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x6D5A80), PlayerDoFrameHook, reinterpret_cast<LPVOID*>(&PlayerDoFrame), EnableNow);
 	//Hooks.CreateHook("ObjectUpdatePosAndOrient", GAMEHOOK, (DWORD*)(ModuleBase + 0x68C310), ObjectUpdatePosAndOrientHook, (LPVOID*)&ObjectUpdatePosAndOrient, EnableNow);
 	//Hooks.CreateHook("HumanUpdatePosAndOrient", GAMEHOOK, (DWORD*)(ModuleBase + 0x69AF70), HumanUpdatePosAndOrientHook, (LPVOID*)&HumanUpdatePosAndOrient, EnableNow);
 	//Hooks.CreateHook("CharacterControllerSetPos", GAMEHOOK, (DWORD*)(ModuleBase + 0x4153D0), CharacterControllerSetPosHook, (LPVOID*)&CharacterControllerSetPos, EnableNow);
-	Hooks.CreateHook("ExplosionCreate", GAMEHOOK, reinterpret_cast<DWORD*>(ModuleBase + 0x2EC720), ExplosionCreateHook, reinterpret_cast<LPVOID*>(&ExplosionCreate), EnableNow);
+	Hooks.CreateHook("ExplosionCreate", GAMEHOOK, reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x2EC720), ExplosionCreateHook, reinterpret_cast<LPVOID*>(&ExplosionCreate), EnableNow);
 	//Hooks.CreateHook("CameraViewDataSetView", GAMEHOOK, (DWORD*)(ModuleBase + 0x2D0290), CameraViewDataSetViewHook, (LPVOID*)&CameraViewDataSetView, EnableNow);
 	//Hooks.CreateHook("KeenGraphicsResizeRenderSwapchain", GAMEHOOK, (DWORD*)(ModuleBase + 0x86AB20), KeenGraphicsResizeRenderSwapchainHook, (LPVOID*)&KeenGraphicsResizeRenderSwapchain, EnableNow);
 
 	/*Start of MP Detection Hooks*/
 	//Using phony names to make finding the MP hooks a bit more difficult.
-	Hooks.CreateHook("FreeSubmodeDoFrame", GAMEHOOK, reinterpret_cast<DWORD*>(ModuleBase + 0x516D80), HudUiMultiplayerEnterHook, reinterpret_cast<LPVOID*>(&HudUiMultiplayerEnter), EnableNow);
-	Hooks.CreateHook("FreeSubmodeInit", GAMEHOOK, reinterpret_cast<DWORD*>(ModuleBase + 0x3CC750), GameMusicMultiplayerStartHook, reinterpret_cast<LPVOID*>(&GameMusicMultiplayerStart), EnableNow);	
-	Hooks.CreateHook("SatelliteModeInit", GAMEHOOK, reinterpret_cast<DWORD*>(ModuleBase + 0x4F50B0), HudUiMultiplayerProcessHook, reinterpret_cast<LPVOID*>(&HudUiMultiplayerProcess), EnableNow);
-	Hooks.CreateHook("SatelliteModeDoFrame", GAMEHOOK, reinterpret_cast<DWORD*>(ModuleBase + 0x1D0DD0), IsValidGameLinkLobbyKaikoHook, reinterpret_cast<LPVOID*>(&IsValidGameLinkLobbyKaiko), EnableNow);
-	Hooks.CreateHook("ModeMismatchFixState", GAMEHOOK, reinterpret_cast<DWORD*>(ModuleBase + 0x497740), InitMultiplayerDataItemRespawnHook, reinterpret_cast<LPVOID*>(&InitMultiplayerDataItemRespawn), EnableNow);
+	Hooks.CreateHook("FreeSubmodeDoFrame", GAMEHOOK, reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x516D80), HudUiMultiplayerEnterHook, reinterpret_cast<LPVOID*>(&HudUiMultiplayerEnter), EnableNow);
+	Hooks.CreateHook("FreeSubmodeInit", GAMEHOOK, reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x3CC750), GameMusicMultiplayerStartHook, reinterpret_cast<LPVOID*>(&GameMusicMultiplayerStart), EnableNow);	
+	Hooks.CreateHook("SatelliteModeInit", GAMEHOOK, reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x4F50B0), HudUiMultiplayerProcessHook, reinterpret_cast<LPVOID*>(&HudUiMultiplayerProcess), EnableNow);
+	Hooks.CreateHook("SatelliteModeDoFrame", GAMEHOOK, reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x1D0DD0), IsValidGameLinkLobbyKaikoHook, reinterpret_cast<LPVOID*>(&IsValidGameLinkLobbyKaiko), EnableNow);
+	Hooks.CreateHook("ModeMismatchFixState", GAMEHOOK, reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x497740), InitMultiplayerDataItemRespawnHook, reinterpret_cast<LPVOID*>(&InitMultiplayerDataItemRespawn), EnableNow);
 
 	/*End of MP Detection Hooks*/
 
-	Hooks.CreateHook("world::do_frame", GAMEHOOK, reinterpret_cast<DWORD*>(ModuleBase + 0x540AB0), world_do_frame_hook, reinterpret_cast<LPVOID*>(&world_do_frame), EnableNow);
-	Hooks.CreateHook("rl_camera::render_begin", GAMEHOOK, reinterpret_cast<DWORD*>(ModuleBase + 0x137660), rl_camera_render_begin_hook, reinterpret_cast<LPVOID*>(&rl_camera_render_begin), EnableNow);
-	Hooks.CreateHook("hkpWorld::stepDeltaTime", GAMEHOOK, reinterpret_cast<DWORD*>(ModuleBase + 0x9E1A70), hkpWorld_stepDeltaTime_hook, reinterpret_cast<LPVOID*>(&hkpWorld_stepDeltaTime), EnableNow);
-	Hooks.CreateHook("Application::UpdateTime", GAMEHOOK, reinterpret_cast<DWORD*>(ModuleBase + 0x5A880), ApplicationUpdateTimeHook, reinterpret_cast<LPVOID*>(&ApplicationUpdateTime), EnableNow);
+	Hooks.CreateHook("world::do_frame", GAMEHOOK, reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x540AB0), world_do_frame_hook, reinterpret_cast<LPVOID*>(&world_do_frame), EnableNow);
+	Hooks.CreateHook("rl_camera::render_begin", GAMEHOOK, reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x137660), rl_camera_render_begin_hook, reinterpret_cast<LPVOID*>(&rl_camera_render_begin), EnableNow);
+	Hooks.CreateHook("hkpWorld::stepDeltaTime", GAMEHOOK, reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x9E1A70), hkpWorld_stepDeltaTime_hook, reinterpret_cast<LPVOID*>(&hkpWorld_stepDeltaTime), EnableNow);
+	Hooks.CreateHook("Application::UpdateTime", GAMEHOOK, reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x5A880), ApplicationUpdateTimeHook, reinterpret_cast<LPVOID*>(&ApplicationUpdateTime), EnableNow);
 	
-	Hooks.CreateHook("LuaDoBuffer", GAMEHOOK, reinterpret_cast<DWORD*>(ModuleBase + 0x82FD20), LuaDoBufferHook, reinterpret_cast<LPVOID*>(&LuaDoBuffer), EnableNow);
+	Hooks.CreateHook("LuaDoBuffer", GAMEHOOK, reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x82FD20), LuaDoBufferHook, reinterpret_cast<LPVOID*>(&LuaDoBuffer), EnableNow);
 }
 
 void ProgramManager::CreateD3D11Hooks(bool EnableNow)

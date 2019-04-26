@@ -1,10 +1,14 @@
 #pragma once
 #include "ScriptManager.h"
+#include "CameraWrapper.h"
+#include "HookManager.h"
+#include "FunctionManager.h"
+#include "GuiSystem.h"
 
 class ProgramManager
 {
 public:
-	ProgramManager(HMODULE hModule);
+	ProgramManager() = default;
 	~ProgramManager();
 
 	void Initialize();
@@ -21,7 +25,6 @@ public:
 	void CloseConsole() const;
 	void Exit();
 
-	HMODULE ScriptLoaderModule;
 	HWND GameWindowHandle = nullptr;
 
 	CameraWrapper Camera;
@@ -33,7 +36,6 @@ public:
 	bool LoadFailed = false;
 	bool PreExistingConsole = true;
 	DWORD PID = 0;
-	uintptr_t ModuleBase = 0;
 	unsigned int ExitKeysPressCount = 0;
 
 	bool SuccessfulExit = false;

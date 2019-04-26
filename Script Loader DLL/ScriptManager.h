@@ -1,9 +1,5 @@
 #pragma once
-#include "CameraWrapper.h"
 #include "LuaFunctions.h"
-#include "HookManager.h"
-#include "FunctionManager.h"
-#include "GuiSystem.h"
 
 class Script
 {
