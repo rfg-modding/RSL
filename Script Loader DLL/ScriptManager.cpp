@@ -92,7 +92,7 @@ void ScriptManager::SetupLua()
 
 	//This warning appears hundreds of times in a row during binding unless disabled. Is harmless due to some lambdas used to grab usertype variables.
 	#pragma warning(push)
-	#pragma warning(disable : 4172)
+	#pragma warning(disable : C4172)
 	//Use separate files for these so that if one is edited they don't all need to be recompiled.
 	//Not necessarily at huge benefit at first, but it'll grow as more usertypes are added.
 	Lua::BindRfgBaseArray(LuaState);
