@@ -156,9 +156,6 @@ void Logger::ConsoleLog(const char* Message, LogType Type, bool PrintTimeLabel, 
 			printf(GetTimeString(false).c_str());
 			printf("] ");
 		}
-#if ColorLogMessages
-		SetConsoleTextAttribute(ConsoleHandle, ConsoleMessageTextAttributes);
-#endif
 		printf(Message);
 		if (NewLine)
 		{
@@ -188,9 +185,6 @@ void Logger::ConsoleLog(const char* Message, LogType Type, bool PrintTimeLabel, 
 			printf(GetTimeString(false).c_str());
 			printf("] ");
 		}
-#if ColorLogMessages
-		SetConsoleTextAttribute(ConsoleHandle, ConsoleWarningTextAttributes);
-#endif
 		printf(Message);
 		if (NewLine)
 		{
@@ -220,9 +214,6 @@ void Logger::ConsoleLog(const char* Message, LogType Type, bool PrintTimeLabel, 
 			printf(GetTimeString(false).c_str());
 			printf("] ");
 		}
-#if ColorLogMessages
-		SetConsoleTextAttribute(ConsoleHandle, ConsoleErrorTextAttributes);
-#endif
 		printf(Message);
 		if (NewLine)
 		{
@@ -252,9 +243,6 @@ void Logger::ConsoleLog(const char* Message, LogType Type, bool PrintTimeLabel, 
 			printf(GetTimeString(false).c_str());
 			printf("] ");
 		}
-#if ColorLogMessages
-		SetConsoleTextAttribute(ConsoleHandle, ConsoleFatalErrorTextAttributes);
-#endif
 		printf(Message);
 		if (NewLine)
 		{
@@ -284,9 +272,6 @@ void Logger::ConsoleLog(const char* Message, LogType Type, bool PrintTimeLabel, 
 			printf(GetTimeString(false).c_str());
 			printf("] ");
 		}
-#if ColorLogMessages
-		SetConsoleTextAttribute(ConsoleHandle, ConsoleSuccessTextAttributes);
-#endif
 		printf(Message);
 		if (NewLine)
 		{
@@ -302,7 +287,6 @@ void Logger::ConsoleLog(const char* Message, LogType Type, bool PrintTimeLabel, 
 
 std::string Logger::GetTimeString(bool MilitaryTime)
 {
-#if EnableLogging
 	std::time_t t = std::time(0);
 	std::tm now;
 	localtime_s(&now, &t);
@@ -352,5 +336,4 @@ std::string Logger::GetTimeString(bool MilitaryTime)
 	//std::cout << "Date & Time:" << now.tm_year + 1900 << "/" << now.tm_mon + 1 << "/" << now.tm_mday << " - " << now.tm_hour << ":" << now.tm_min << std::endl;
 
 	return DateTime;
-#endif
 }

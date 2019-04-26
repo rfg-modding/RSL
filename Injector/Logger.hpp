@@ -1,7 +1,5 @@
 #pragma once
 #include "Globals.hpp"
-//#include "PCH.hpp"
-#define EnableLogging true
 
 #ifdef SCRIPT_LOADER_DLL
 #error ./Injector/Logger.hpp was included by one of the Script Loader DLL project files! Find and remove that include. Failing to do so may result in some pesky and hard to find bugs. DO NOT REMOVE THIS ERROR TO MAKE IT COMPILE!

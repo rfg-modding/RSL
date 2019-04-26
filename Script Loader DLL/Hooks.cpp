@@ -280,9 +280,6 @@ HRESULT __stdcall D3D11PresentHook(IDXGISwapChain* pSwapChain, UINT SyncInterval
 {
 	std::call_once(HookD3D11PresentInitialCall, [&]()
 	{
-#if !PublicMode
-		//Logger::ConsoleLog("First time in D3D11Present() hook.", LogInfo, false, true, true);
-#endif
 		ExplosionTimerBegin = std::chrono::steady_clock::now();
 		HRESULT Result = D3D11_DEVICE_CONTEXT_FROM_SWAPCHAIN(pSwapChain, &Globals::D3D11Device, &Globals::D3D11Context);
 		if (Result != S_OK)
@@ -448,15 +445,7 @@ HRESULT __stdcall D3D11PresentHook(IDXGISwapChain* pSwapChain, UINT SyncInterval
 		ImGui_ImplDX11_NewFrame();
 		ImGui_ImplWin32_NewFrame();
 		ImGui::NewFrame();
-#if !PublicMode
-		//if (OverlayActive)
-		//{
-		//	if (show_demo_window)
-		//	{
-		//		ImGui::ShowDemoWindow(&show_demo_window);
-		//	}
-		//}
-#endif
+
 		Globals::Gui->Draw();
 		Globals::D3D11Context->OMSetRenderTargets(1, &Globals::MainRenderTargetView, nullptr);
 		ImGui::Render();
@@ -514,12 +503,6 @@ void __fastcall PlayerDoFrameHook(Player* PlayerPtr)
 			{
 				Globals::Scripts->UpdateRfgPointers();
 			}
-
-#if !PublicMode
-			std::cout << "PlayerPtr: " << std::hex << std::uppercase << PlayerPtr << "\n";
-			std::cout << "PlayerPtr->Position.x: " << std::hex << std::uppercase << &PlayerPtr->Position.x << "\n";
-			std::cout << "PlayerPtr->FrametimeMultiplier: " << std::hex << std::uppercase << &PlayerPtr->FrametimeMultiplier << "\n";
-#endif
 		}
 	});
 	if (Globals::PlayerPtr != PlayerPtr)
@@ -531,18 +514,11 @@ void __fastcall PlayerDoFrameHook(Player* PlayerPtr)
 		{
 			Globals::Scripts->UpdateRfgPointers();
 		}
-
-#if !PublicMode
-		std::cout << "PlayerPtr: " << std::hex << std::uppercase << PlayerPtr << "\n";
-		std::cout << "PlayerPtr->Position.x: " << std::hex << std::uppercase << &PlayerPtr->Position.x << "\n";
-		std::cout << "PlayerPtr->FrametimeMultiplier: " << std::hex << std::uppercase << &PlayerPtr->FrametimeMultiplier << "\n";
-#endif
 	}
 	if (!Globals::Gui->TweaksMenu || !Globals::Gui->FreeCamSettings || !Globals::Gui->FreeCamSettings->Camera)
 	{
 		return PlayerDoFrame(PlayerPtr);
 	}
-	//NewPlayerObject = *PlayerPtr;
 
 	if (Globals::InfiniteJetpack)
 	{
@@ -551,12 +527,7 @@ void __fastcall PlayerDoFrameHook(Player* PlayerPtr)
 	if (Globals::Gui->TweaksMenu->Invulnerable || (Globals::Camera->IsFreeCameraActive() && Globals::Gui->FreeCamSettings->PlayerFollowCam))
 	{
 		PlayerPtr->Flags.invulnerable = true;
-		//PlayerPtr->Flags.super_jump = true;
-		//PlayerPtr->Flags.use_bigsteps = true;
-		//PlayerPtr->PFlags.UnlimitedAmmo = true;
-		//PlayerPtr->MaxHitPoints = 2147483647;
 		PlayerPtr->HitPoints = 2147483647.0f;
-		//PlayerPtr->InitialMaxHitPoints = 2147483647;
 	}
 	if(Globals::Camera->IsFreeCameraActive())
 	{
@@ -578,12 +549,6 @@ void __fastcall PlayerDoFrameHook(Player* PlayerPtr)
 	{
 		gsm_set_alert_level(Globals::Gui->TweaksMenu->CustomAlertLevel);
 	}
-	/*if (Gui.TweaksMenu->TempUseCustoms)
-	{
-		PlayerPtr->PFlags.UnlimitedAmmo = Gui.TweaksMenu->CustomUnlimitedAmmo;
-		PlayerPtr->RenderAlpha = Gui.TweaksMenu->CustomRenderAlpha;
-		PlayerPtr->StealthPercent = Gui.TweaksMenu->CustomStealthPercent;
-	}*/
 
 	if (Globals::Camera->IsFreeCameraActive() && Globals::Gui->FreeCamSettings->PlayerFollowCam)
 	{
@@ -620,9 +585,7 @@ void __cdecl ExplosionCreateHook(explosion_info * ExplosionInfo, void * Source, 
 {
 	std::call_once(HookExplosionCreateInitialCall, [&]()
 	{
-#if !PublicMode
-		//Logger::ConsoleLog("First time in ExplosionCreate() hook.\n", LogInfo, false, true);
-#endif
+
 	});
 
 	NewExplosionInfo = *ExplosionInfo;

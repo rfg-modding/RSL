@@ -43,9 +43,6 @@ void ProgramManager::Initialize()
 	GameWindowHandle = Globals::FindRfgTopWindow();
 
 	CreateGameHooks(true);
-#if !PublicMode
-	//Logger::Log("Finished hooking game functions.", LogInfo, false, true, true);
-#endif
 
 	Globals::MouseGenericPollMouseVisible = Globals::FindPattern("rfg.exe", "\x84\xD2\x74\x08\x38\x00\x00\x00\x00\x00\x75\x02", "xxxxx?????xx");
 	Globals::CenterMouseCursorCall = Globals::FindPattern("rfg.exe", "\xE8\x00\x00\x00\x00\x89\x46\x4C\x89\x56\x50", "x????xxxxxx");
@@ -73,9 +70,7 @@ void ProgramManager::Initialize()
 	Logger::Log("Custom WndProc set.", LogInfo);
 	CreateD3D11Hooks(true);
 	Logger::Log("D3D11 hooks created and enabled.", LogInfo);
-#if !PublicMode
-	Logger::Log("Finished hooking D3D11 functions.", LogInfo);
-#endif
+	//Logger::Log("Finished hooking D3D11 functions.", LogInfo);
 
 	Sleep(5000);
 

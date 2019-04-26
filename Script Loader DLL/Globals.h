@@ -1,7 +1,4 @@
 #pragma once
-#define PublicMode true
-#define ColorLogMessages false
-#define EnableSpectatorMode false 
 #include "Includes.h"
 #include "RFGR_Types_Havok.h"
 

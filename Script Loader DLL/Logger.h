@@ -1,7 +1,5 @@
 #pragma once
-//#include "Globals.h"
 #include "Utilities.h"
-#define EnableLogging true
 
 /*Uses bitflags to allow for multiple log types. For example,
 LogSuccess | LogLua would be a lua success message, while
