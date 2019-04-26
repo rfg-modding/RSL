@@ -1,13 +1,5 @@
 #pragma once
-///#include "Functions.h"
-///#include "Globals.h"
-//#include "MainOverlay.h"
-#include "GuiSystem.h"
-
-//class MainOverlay;
-
-extern GuiSystem Gui;
-//extern MainOverlay Overlay;
+#include "Functions.h"
 
 extern std::chrono::steady_clock::time_point ExplosionTimerBegin;
 extern std::chrono::steady_clock::time_point ExplosionTimerEnd;

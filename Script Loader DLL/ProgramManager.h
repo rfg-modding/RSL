@@ -28,6 +28,7 @@ public:
 	FunctionManager Functions;
 	ScriptManager Scripts;
 	HookManager Hooks;
+	GuiSystem Gui;
 
 	bool LoadFailed = false;
 	bool PreExistingConsole = true;

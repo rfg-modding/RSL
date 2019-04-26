@@ -3,8 +3,6 @@
 
 D3D11Present D3D11PresentObject;
 
-GuiSystem Gui;
-
 std::chrono::steady_clock::time_point ExplosionTimerBegin;
 std::chrono::steady_clock::time_point ExplosionTimerEnd;
 
@@ -38,7 +36,7 @@ extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam
 LRESULT __stdcall WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	ProcessInput(hWnd, msg, wParam, lParam);
-	if (Globals::OverlayActive || Gui.IsLuaConsoleActive())
+	if (Globals::OverlayActive || Globals::Gui->IsLuaConsoleActive())
 	{
 		ImGui_ImplWin32_WndProcHandler(hWnd, msg, wParam, lParam);
 		if (msg == WM_SIZE)
@@ -78,7 +76,7 @@ LRESULT __stdcall WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 LRESULT ProcessInput(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	static bool MiddleMouseDown = false;
-	if(!Gui.Ready())
+	if(!Globals::Gui->Ready())
 	{
 		return 0;
 	}
@@ -124,7 +122,7 @@ LRESULT ProcessInput(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			///Logger::Log(std::string("Overlay active value: " + std::to_string(OverlayActive)), LogInfo);
 			if (Globals::OverlayActive)
 			{
-				if (!Gui.IsLuaConsoleActive())
+				if (!Globals::Gui->IsLuaConsoleActive())
 				{
 					SnippetManager::BackupSnippet("MouseGenericPollMouseVisible", Globals::MouseGenericPollMouseVisible, 12, true);
 					SnippetManager::BackupSnippet("CenterMouseCursorCall", Globals::CenterMouseCursorCall, 5, true);
@@ -132,14 +130,14 @@ LRESULT ProcessInput(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			}
 			else
 			{
-				Gui.DeactivateLuaConsole();
+				Globals::Gui->DeactivateLuaConsole();
 				SnippetManager::RestoreSnippet("MouseGenericPollMouseVisible", true);
 				SnippetManager::RestoreSnippet("CenterMouseCursorCall", true);
 			}
 			//Sleep(150);
 			break;
 		case VK_F2:
-			Gui.ShowAppScriptEditor = !Gui.ShowAppScriptEditor;
+			Globals::Gui->ShowAppScriptEditor = !Globals::Gui->ShowAppScriptEditor;
 			break;
 		case VK_NUMPAD1:
 			ToggleHud();
@@ -151,11 +149,11 @@ LRESULT ProcessInput(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			Globals::Camera->ToggleFreeCamera();
 			break;
 		case VK_OEM_3: //Tilde
-			Gui.ToggleLuaConsole();
-			if (Gui.IsLuaConsoleActive())
+			Globals::Gui->ToggleLuaConsole();
+			if (Globals::Gui->IsLuaConsoleActive())
 			{
-				Gui.Console->InputBuffer.clear();
-				Gui.Console->ReclaimFocus = true; //Tell console to set focus to it's text input.
+				Globals::Gui->Console->InputBuffer.clear();
+				Globals::Gui->Console->ReclaimFocus = true; //Tell console to set focus to it's text input.
 				if (!Globals::OverlayActive)
 				{
 					SnippetManager::BackupSnippet("MouseGenericPollMouseVisible", Globals::MouseGenericPollMouseVisible, 12, true);
@@ -164,7 +162,7 @@ LRESULT ProcessInput(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			}
 			else
 			{
-				Gui.Console->InputBuffer.clear();
+				Globals::Gui->Console->InputBuffer.clear();
 				if (!Globals::OverlayActive)
 				{
 					SnippetManager::RestoreSnippet("MouseGenericPollMouseVisible", true);
@@ -189,14 +187,14 @@ LRESULT ProcessInput(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		break;
 	}
 
-	if (MiddleMouseDown && Gui.TweaksMenu->MiddleMouseBoomActive)
+	if (MiddleMouseDown && Globals::Gui->TweaksMenu->MiddleMouseBoomActive)
 	{
 		ExplosionTimerEnd = std::chrono::steady_clock::now();
 		//std::cout << "Time since last explosion spawn: " << std::chrono::duration_cast<std::chrono::milliseconds>(ExplosionTimerEnd - ExplosionTimerBegin).count() << "\n";
-		if (std::chrono::duration_cast<std::chrono::milliseconds>(ExplosionTimerEnd - ExplosionTimerBegin).count() > 1000 / Gui.TweaksMenu->MiddleMouseExplosionsPerSecond)
+		if (std::chrono::duration_cast<std::chrono::milliseconds>(ExplosionTimerEnd - ExplosionTimerBegin).count() > 1000 / Globals::Gui->TweaksMenu->MiddleMouseExplosionsPerSecond)
 		{
-			ExplosionCreate(&Gui.TweaksMenu->CustomExplosionInfo, Gui.TweaksMenu->PlayerPtr, Gui.TweaksMenu->PlayerPtr,
-				&Gui.TweaksMenu->PlayerPtr->aim_pos, &Gui.TweaksMenu->PlayerPtr->mp_camera_orient, &Gui.TweaksMenu->PlayerPtr->aim_pos, nullptr, false);
+			ExplosionCreate(&Globals::Gui->TweaksMenu->CustomExplosionInfo, Globals::PlayerPtr, Globals::PlayerPtr,
+				&Globals::PlayerPtr->aim_pos, &Globals::PlayerPtr->mp_camera_orient, &Globals::PlayerPtr->aim_pos, nullptr, false);
 			ExplosionTimerBegin = std::chrono::steady_clock::now();
 		}
 	}
@@ -220,13 +218,13 @@ LRESULT ProcessInput(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		}
 	}*/
 
-	if (Gui.ShowAppScriptEditor)
+	if (Globals::Gui->ShowAppScriptEditor)
 	{
 		try
 		{
 			if (GetAsyncKeyState(VK_LCONTROL) && GetAsyncKeyState(0x53)) //Ctrl + S
 			{
-				Gui.ScriptEditor->SaveScript();
+				Globals::Gui->ScriptEditor->SaveScript();
 			}
 		}
 		catch (const std::exception& Ex)
@@ -235,24 +233,24 @@ LRESULT ProcessInput(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		}
 		if (GetAsyncKeyState(VK_CONTROL) && GetAsyncKeyState(VK_SHIFT) && GetAsyncKeyState(0x53)) //Ctrl + Shift + S
 		{
-			Gui.ScriptEditor->ShowSaveAsScriptPopup = true;
+			Globals::Gui->ScriptEditor->ShowSaveAsScriptPopup = true;
 		}
 		if (GetAsyncKeyState(VK_LCONTROL) && GetAsyncKeyState(0x4F)) //Ctrl + O
 		{
-			Gui.ScriptEditor->ShowOpenScriptPopup = true;
+			Globals::Gui->ScriptEditor->ShowOpenScriptPopup = true;
 		}
 		if (GetAsyncKeyState(VK_LCONTROL) && GetAsyncKeyState(0x4E)) //Ctrl + N
 		{
-			Gui.ScriptEditor->ShowNewScriptPopup = true;
+			Globals::Gui->ScriptEditor->ShowNewScriptPopup = true;
 		}
 		try
 		{
 			if (GetAsyncKeyState(VK_F5))
 			{
-				if(Gui.HasValidScriptManager())
+				if(Globals::Gui->HasValidScriptManager())
 				{
-					std::string ScriptString = Gui.ScriptEditor->GetCurrentScriptString();
-					Gui.GetScriptManager()->RunStringAsScript(ScriptString, "script editor run");
+					std::string ScriptString = Globals::Gui->ScriptEditor->GetCurrentScriptString();
+					Globals::Gui->GetScriptManager()->RunStringAsScript(ScriptString, "script editor run");
 					Sleep(175);
 				}
 			}
@@ -393,9 +391,6 @@ HRESULT __stdcall D3D11PresentHook(IDXGISwapChain* pSwapChain, UINT SyncInterval
 		Globals::FontHuge = io.Fonts->AddFontFromFileTTF(FontAwesomeSolidPath.c_str(), GlobalHugeFontSize, &IconsConfig, IconsRanges);
 		/*End of FontHuge loading*/
 
-		
-		//Overlay.Initialize();
-		Gui.Initialize();
 		Globals::ImGuiInitialized = true;
 		UpdateD3D11Pointers = false;
 
@@ -463,7 +458,7 @@ HRESULT __stdcall D3D11PresentHook(IDXGISwapChain* pSwapChain, UINT SyncInterval
 		//	}
 		//}
 #endif
-		Gui.Draw();
+		Globals::Gui->Draw();
 		Globals::D3D11Context->OMSetRenderTargets(1, &Globals::MainRenderTargetView, nullptr);
 		ImGui::Render();
 		ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
@@ -495,7 +490,7 @@ void __fastcall PlayerConstructorHook(Player* PlayerPtr)
 {
 	Globals::PlayerPtr = PlayerPtr;
 	//Overlay.PlayerPtr = PlayerPtr;
-	Gui.SetPlayerPtr(PlayerPtr);
+	Globals::Gui->SetPlayerPtr(PlayerPtr);
 	if (!GlobalPlayerPtrInitialized)
 	{
 		GlobalPlayerPtrInitialized = true;
@@ -515,11 +510,10 @@ void __fastcall PlayerDoFrameHook(Player* PlayerPtr)
 			Globals::PlayerRigidBody = HavokBodyGetPointer(PlayerPtr->HavokHandle);
 
 			//Overlay.PlayerPtr = PlayerPtr;
-			Gui.SetPlayerPtr(PlayerPtr);
-			ScriptManager* Scripts = Gui.GetScriptManager();
-			if(Scripts)
+			Globals::Gui->SetPlayerPtr(PlayerPtr);
+			if(Globals::Scripts)
 			{
-				Scripts->UpdateRfgPointers();
+				Globals::Scripts->UpdateRfgPointers();
 			}
 
 #if !PublicMode
@@ -533,11 +527,10 @@ void __fastcall PlayerDoFrameHook(Player* PlayerPtr)
 	{
 		Globals::PlayerPtr = PlayerPtr;
 		Globals::PlayerRigidBody = HavokBodyGetPointer(PlayerPtr->HavokHandle);
-		Gui.SetPlayerPtr(PlayerPtr);
-		ScriptManager* Scripts = Gui.GetScriptManager();
-		if (Scripts)
+		Globals::Gui->SetPlayerPtr(PlayerPtr);
+		if (Globals::Scripts)
 		{
-			Scripts->UpdateRfgPointers();
+			Globals::Scripts->UpdateRfgPointers();
 		}
 
 #if !PublicMode
@@ -546,7 +539,7 @@ void __fastcall PlayerDoFrameHook(Player* PlayerPtr)
 		std::cout << "PlayerPtr->FrametimeMultiplier: " << std::hex << std::uppercase << &PlayerPtr->FrametimeMultiplier << "\n";
 #endif
 	}
-	if (!Gui.TweaksMenu || !Gui.FreeCamSettings || !Gui.FreeCamSettings->Camera)
+	if (!Globals::Gui->TweaksMenu || !Globals::Gui->FreeCamSettings || !Globals::Gui->FreeCamSettings->Camera)
 	{
 		return PlayerDoFrame(PlayerPtr);
 	}
@@ -556,7 +549,7 @@ void __fastcall PlayerDoFrameHook(Player* PlayerPtr)
 	{
 		PlayerPtr->JetpackFuelPercent = 1.0f;
 	}
-	if (Gui.TweaksMenu->Invulnerable || (Gui.FreeCamSettings->Camera->IsFreeCameraActive() && Gui.FreeCamSettings->PlayerFollowCam))
+	if (Globals::Gui->TweaksMenu->Invulnerable || (Globals::Camera->IsFreeCameraActive() && Globals::Gui->FreeCamSettings->PlayerFollowCam))
 	{
 		PlayerPtr->Flags.invulnerable = true;
 		//PlayerPtr->Flags.super_jump = true;
@@ -566,25 +559,25 @@ void __fastcall PlayerDoFrameHook(Player* PlayerPtr)
 		PlayerPtr->HitPoints = 2147483647.0f;
 		//PlayerPtr->InitialMaxHitPoints = 2147483647;
 	}
-	if(Gui.FreeCamSettings->Camera->IsFreeCameraActive())
+	if(Globals::Camera->IsFreeCameraActive())
 	{
 		PlayerPtr->Flags.ai_ignore = true;
 	}
-	if (Gui.TweaksMenu->NeedCustomJumpHeightSet)
+	if (Globals::Gui->TweaksMenu->NeedCustomJumpHeightSet)
 	{
-		PlayerPtr->CodeDrivenJumpHeight = Gui.TweaksMenu->CustomJumpHeight;
+		PlayerPtr->CodeDrivenJumpHeight = Globals::Gui->TweaksMenu->CustomJumpHeight;
 	}
-	if (Gui.TweaksMenu->NeedCustomMoveSpeedSet)
+	if (Globals::Gui->TweaksMenu->NeedCustomMoveSpeedSet)
 	{
-		PlayerPtr->MoveSpeed = Gui.TweaksMenu->CustomPlayerMoveSpeed;
+		PlayerPtr->MoveSpeed = Globals::Gui->TweaksMenu->CustomPlayerMoveSpeed;
 	}
-	if (Gui.TweaksMenu->NeedCustomMaxMoveSpeedSet)
+	if (Globals::Gui->TweaksMenu->NeedCustomMaxMoveSpeedSet)
 	{
-		PlayerPtr->MaxSpeed = Gui.TweaksMenu->CustomPlayerMaxSpeed;
+		PlayerPtr->MaxSpeed = Globals::Gui->TweaksMenu->CustomPlayerMaxSpeed;
 	}
-	if (Gui.TweaksMenu->LockAlertLevel)
+	if (Globals::Gui->TweaksMenu->LockAlertLevel)
 	{
-		gsm_set_alert_level(Gui.TweaksMenu->CustomAlertLevel);
+		gsm_set_alert_level(Globals::Gui->TweaksMenu->CustomAlertLevel);
 	}
 	/*if (Gui.TweaksMenu->TempUseCustoms)
 	{
@@ -593,20 +586,19 @@ void __fastcall PlayerDoFrameHook(Player* PlayerPtr)
 		PlayerPtr->StealthPercent = Gui.TweaksMenu->CustomStealthPercent;
 	}*/
 
-	if (Gui.FreeCamSettings->Camera->IsFreeCameraActive() && Gui.FreeCamSettings->PlayerFollowCam)
+	if (Globals::Camera->IsFreeCameraActive() && Globals::Gui->FreeCamSettings->PlayerFollowCam)
 	{
-		CameraWrapper* Cam = Gui.FreeCamSettings->Camera;
-		Cam->UpdateFreeView();
-		vector CameraPos(*Cam->RealX, *Cam->RealY + 1.5f, *Cam->RealZ);
+		Globals::Camera->UpdateFreeView();
+		vector CameraPos(*Globals::Camera->RealX, *Globals::Camera->RealY + 1.5f, *Globals::Camera->RealZ);
 		HumanTeleportUnsafe(PlayerPtr, CameraPos, PlayerPtr->Orientation);
 	}
-	if (!Gui.FreeCamSettings->Camera->IsFreeCameraActive() && Gui.FreeCamSettings->Camera->NeedPostDeactivationCleanup)
+	if (!Globals::Camera->IsFreeCameraActive() && Globals::Camera->NeedPostDeactivationCleanup)
 	{
-		if (Gui.FreeCamSettings->ReturnPlayerToOriginalPosition)
+		if (Globals::Gui->FreeCamSettings->ReturnPlayerToOriginalPosition)
 		{
-			HumanTeleportUnsafe(PlayerPtr, Gui.FreeCamSettings->Camera->OriginalCameraPosition, PlayerPtr->Orientation);
+			HumanTeleportUnsafe(PlayerPtr, Globals::Camera->OriginalCameraPosition, PlayerPtr->Orientation);
 		}
-		Gui.FreeCamSettings->Camera->NeedPostDeactivationCleanup = false;
+		Globals::Camera->NeedPostDeactivationCleanup = false;
 	}
 
 	if(Globals::Camera)
@@ -720,49 +712,47 @@ void __fastcall world_do_frame_hook(World* This, void* edx, bool HardLoad) //.te
 		Logger::Log("RFG::World hooked!", LogInfo);
 		
 		Globals::TODLightPtr = game_render_get_TOD_light();
-		ScriptManager* Scripts = Gui.GetScriptManager();
-		if (Scripts)
+		if (Globals::Scripts)
 		{
-			Scripts->UpdateRfgPointers();
+			Globals::Scripts->UpdateRfgPointers();
 		}
 	});
 	if (Globals::RfgWorldPtr != This)
 	{
 		Logger::Log("GlobalRfgWorldPtr changed!", LogWarning);
 		Globals::RfgWorldPtr = This;
-		ScriptManager* Scripts = Gui.GetScriptManager();
-		if (Scripts)
+		if (Globals::Scripts)
 		{
-			Scripts->UpdateRfgPointers();
+			Globals::Scripts->UpdateRfgPointers();
 		}
 	}
 	if (!Globals::TODLightPtr)
 	{
 		Globals::TODLightPtr = game_render_get_TOD_light();
 	}
-	if (!Gui.TweaksMenu)
+	if (!Globals::Gui->TweaksMenu)
 	{
 		return world_do_frame(This, edx, HardLoad);
 	}
 
-	if (Gui.TweaksMenu->UseCustomLevelAmbientLight)
+	if (Globals::Gui->TweaksMenu->UseCustomLevelAmbientLight)
 	{
-		Globals::RfgWorldPtr->level_ambient.x = Gui.TweaksMenu->CustomLevelAmbientLight.x;
-		Globals::RfgWorldPtr->level_ambient.y = Gui.TweaksMenu->CustomLevelAmbientLight.y;
-		Globals::RfgWorldPtr->level_ambient.z = Gui.TweaksMenu->CustomLevelAmbientLight.z;
+		Globals::RfgWorldPtr->level_ambient.x = Globals::Gui->TweaksMenu->CustomLevelAmbientLight.x;
+		Globals::RfgWorldPtr->level_ambient.y = Globals::Gui->TweaksMenu->CustomLevelAmbientLight.y;
+		Globals::RfgWorldPtr->level_ambient.z = Globals::Gui->TweaksMenu->CustomLevelAmbientLight.z;
 	}
-	if (Gui.TweaksMenu->UseCustomLevelBackgroundAmbientLight)
+	if (Globals::Gui->TweaksMenu->UseCustomLevelBackgroundAmbientLight)
 	{
-		Globals::RfgWorldPtr->level_back_ambient.x = Gui.TweaksMenu->CustomLevelBackgroundAmbientLight.x;
-		Globals::RfgWorldPtr->level_back_ambient.y = Gui.TweaksMenu->CustomLevelBackgroundAmbientLight.y;
-		Globals::RfgWorldPtr->level_back_ambient.z = Gui.TweaksMenu->CustomLevelBackgroundAmbientLight.z;
+		Globals::RfgWorldPtr->level_back_ambient.x = Globals::Gui->TweaksMenu->CustomLevelBackgroundAmbientLight.x;
+		Globals::RfgWorldPtr->level_back_ambient.y = Globals::Gui->TweaksMenu->CustomLevelBackgroundAmbientLight.y;
+		Globals::RfgWorldPtr->level_back_ambient.z = Globals::Gui->TweaksMenu->CustomLevelBackgroundAmbientLight.z;
 	}
-	if (Gui.TweaksMenu->UseCustomTimeOfDayLight)
+	if (Globals::Gui->TweaksMenu->UseCustomTimeOfDayLight)
 	{
-		Globals::TODLightPtr->m_color.red = Gui.TweaksMenu->CustomTimeOfDayLightColor.red;
-		Globals::TODLightPtr->m_color.green = Gui.TweaksMenu->CustomTimeOfDayLightColor.green;
-		Globals::TODLightPtr->m_color.blue = Gui.TweaksMenu->CustomTimeOfDayLightColor.blue;
-		Globals::TODLightPtr->m_color.alpha = Gui.TweaksMenu->CustomTimeOfDayLightColor.alpha;
+		Globals::TODLightPtr->m_color.red = Globals::Gui->TweaksMenu->CustomTimeOfDayLightColor.red;
+		Globals::TODLightPtr->m_color.green = Globals::Gui->TweaksMenu->CustomTimeOfDayLightColor.green;
+		Globals::TODLightPtr->m_color.blue = Globals::Gui->TweaksMenu->CustomTimeOfDayLightColor.blue;
+		Globals::TODLightPtr->m_color.alpha = Globals::Gui->TweaksMenu->CustomTimeOfDayLightColor.alpha;
 	}																   
 
 	return world_do_frame(This, edx, HardLoad);
@@ -809,42 +799,40 @@ void __fastcall hkpWorld_stepDeltaTime_hook(hkpWorld* This, void* edx, float Phy
 	std::call_once(HookhkpWorld_stepDeltaTime, [&]()
 	{
 		Globals::hkpWorldPtr = This;
-		ScriptManager* Scripts = Gui.GetScriptManager();
-		if (Scripts)
+		if (Globals::Scripts)
 		{
-			Scripts->UpdateRfgPointers();
+			Globals::Scripts->UpdateRfgPointers();
 		}
-		if (Gui.PhysicsSettings)
+		if (Globals::Gui->PhysicsSettings)
 		{
-			Gui.PhysicsSettings->CurrentGravity = hkpWorldGetGravity(Globals::hkpWorldPtr, nullptr);
+			Globals::Gui->PhysicsSettings->CurrentGravity = hkpWorldGetGravity(Globals::hkpWorldPtr, nullptr);
 
-			Gui.PhysicsSettings->CustomGravityVector.m_quad.m128_f32[0] = Gui.PhysicsSettings->CurrentGravity->m_quad.m128_f32[0];
-			Gui.PhysicsSettings->CustomGravityVector.m_quad.m128_f32[1] = Gui.PhysicsSettings->CurrentGravity->m_quad.m128_f32[1];
-			Gui.PhysicsSettings->CustomGravityVector.m_quad.m128_f32[2] = Gui.PhysicsSettings->CurrentGravity->m_quad.m128_f32[2];
-			Gui.PhysicsSettings->CustomGravityVector.m_quad.m128_f32[3] = Gui.PhysicsSettings->CurrentGravity->m_quad.m128_f32[3];
+			Globals::Gui->PhysicsSettings->CustomGravityVector.m_quad.m128_f32[0] = Globals::Gui->PhysicsSettings->CurrentGravity->m_quad.m128_f32[0];
+			Globals::Gui->PhysicsSettings->CustomGravityVector.m_quad.m128_f32[1] = Globals::Gui->PhysicsSettings->CurrentGravity->m_quad.m128_f32[1];
+			Globals::Gui->PhysicsSettings->CustomGravityVector.m_quad.m128_f32[2] = Globals::Gui->PhysicsSettings->CurrentGravity->m_quad.m128_f32[2];
+			Globals::Gui->PhysicsSettings->CustomGravityVector.m_quad.m128_f32[3] = Globals::Gui->PhysicsSettings->CurrentGravity->m_quad.m128_f32[3];
 				
-			Gui.PhysicsSettings->DefaultGravityVector.m_quad.m128_f32[0] = Gui.PhysicsSettings->CurrentGravity->m_quad.m128_f32[0];
-			Gui.PhysicsSettings->DefaultGravityVector.m_quad.m128_f32[1] = Gui.PhysicsSettings->CurrentGravity->m_quad.m128_f32[1];
-			Gui.PhysicsSettings->DefaultGravityVector.m_quad.m128_f32[2] = Gui.PhysicsSettings->CurrentGravity->m_quad.m128_f32[2];
-			Gui.PhysicsSettings->DefaultGravityVector.m_quad.m128_f32[3] = Gui.PhysicsSettings->CurrentGravity->m_quad.m128_f32[3];
+			Globals::Gui->PhysicsSettings->DefaultGravityVector.m_quad.m128_f32[0] = Globals::Gui->PhysicsSettings->CurrentGravity->m_quad.m128_f32[0];
+			Globals::Gui->PhysicsSettings->DefaultGravityVector.m_quad.m128_f32[1] = Globals::Gui->PhysicsSettings->CurrentGravity->m_quad.m128_f32[1];
+			Globals::Gui->PhysicsSettings->DefaultGravityVector.m_quad.m128_f32[2] = Globals::Gui->PhysicsSettings->CurrentGravity->m_quad.m128_f32[2];
+			Globals::Gui->PhysicsSettings->DefaultGravityVector.m_quad.m128_f32[3] = Globals::Gui->PhysicsSettings->CurrentGravity->m_quad.m128_f32[3];
 		}
 	});
 	if (This != Globals::hkpWorldPtr)
 	{
 		Logger::Log("GlobalhkpWorldPtr address changed!", LogWarning);
 		Globals::hkpWorldPtr = This;
-		ScriptManager* Scripts = Gui.GetScriptManager();
-		if (Scripts)
+		if (Globals::Scripts)
 		{
-			Scripts->UpdateRfgPointers();
+			Globals::Scripts->UpdateRfgPointers();
 		}
 	}
 
-	if (Gui.TweaksMenu)
+	if (Globals::Gui->PhysicsSettings)
 	{
-		if (Gui.PhysicsSettings->UseCustomPhysicsTimestepMultiplier)
+		if (Globals::Gui->PhysicsSettings->UseCustomPhysicsTimestepMultiplier)
 		{
-			PhysicsDeltaTime *= Gui.PhysicsSettings->CustomPhysicsTimeStepMultiplier;
+			PhysicsDeltaTime *= Globals::Gui->PhysicsSettings->CustomPhysicsTimeStepMultiplier;
 		}
 	}
 

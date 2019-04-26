@@ -28,7 +28,7 @@ ProgramManager::~ProgramManager()
 void ProgramManager::Initialize()
 {
 	Globals::Program = this;
-	Globals::Gui = &Gui;
+	Globals::Gui = &this->Gui;
 	Globals::Scripts = &this->Scripts;
 	Globals::Camera = &this->Camera;
 	Camera.Initialize(Globals::DefaultFreeCameraSpeed, 5.0);
@@ -38,7 +38,7 @@ void ProgramManager::Initialize()
 	NewObjectPosition.x = 0.0f;
 	NewObjectPosition.y = 0.0f;
 	NewObjectPosition.z = 0.0f;
-
+	
 	ModuleBase = reinterpret_cast<uintptr_t>(GetModuleHandle(nullptr));
 
 	if (kiero::init(kiero::RenderType::D3D11) != kiero::Status::Success)
@@ -105,7 +105,7 @@ void ProgramManager::Initialize()
 		EndTime = StartTime;
 		StartTime = std::chrono::steady_clock::now();
 	}
-	//Gui.Initialize() is guaranteed to be called before here because it's called during ImGui initialization.
+	Gui.Initialize();
 	Gui.SetScriptManager(&Scripts);
 	Gui.FreeCamSettings->Camera = &Camera;
 	Scripts.UpdateRfgPointers();
