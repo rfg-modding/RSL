@@ -47,8 +47,8 @@ void ProgramManager::Initialize()
 	//Logger::Log("Finished hooking game functions.", LogInfo, false, true, true);
 #endif
 
-	Globals::MouseGenericPollMouseVisible = Globals::FindPattern(const_cast<char*>("rfg.exe"), const_cast<char*>("\x84\xD2\x74\x08\x38\x00\x00\x00\x00\x00\x75\x02"), const_cast<char*>("xxxxx?????xx"));
-	Globals::CenterMouseCursorCall = Globals::FindPattern(const_cast<char*>("rfg.exe"), const_cast<char*>("\xE8\x00\x00\x00\x00\x89\x46\x4C\x89\x56\x50"), const_cast<char*>("x????xxxxxx"));
+	Globals::MouseGenericPollMouseVisible = Globals::FindPattern("rfg.exe", "\x84\xD2\x74\x08\x38\x00\x00\x00\x00\x00\x75\x02", "xxxxx?????xx");
+	Globals::CenterMouseCursorCall = Globals::FindPattern("rfg.exe", "\xE8\x00\x00\x00\x00\x89\x46\x4C\x89\x56\x50", "x????xxxxxx");
 
 	///Logger::Log("Now monitoring RFGR State", LogInfo);
 	GameState RFGRState = GameseqGetState();;

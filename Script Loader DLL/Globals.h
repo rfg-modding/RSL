@@ -137,8 +137,8 @@ namespace Globals
 	void ChangeMemoryFloat(DWORD BaseAddress, float Value, DWORD Offset1, DWORD Offset2, bool PrintMessage);
 	std::string GetEXEPath(bool IncludeExeInPath);
 	void PlaceNOP(BYTE* Address, DWORD Length = 1);
-	MODULEINFO GetModuleInfo(char *szModule);
-	DWORD FindPattern(char *module, char *pattern, char *mask);
+	MODULEINFO GetModuleInfo(const char* ModuleName);
+	DWORD FindPattern(const char* ModuleName, const char* PatternString, const char* MaskString);
 
 	template <typename T>
 	std::string to_string_precise(const T Value, const int Precision = 1)

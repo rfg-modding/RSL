@@ -328,51 +328,44 @@ namespace Globals
 		VirtualProtect(Address, Length, OriginalProtectionPermissions, &Backup);
 	}
 
-	//Get all module related info, this will include the base DLL. 
-	//and the size of the module
-	MODULEINFO GetModuleInfo(char *szModule)
+	//Get all module related info, this will include the base DLL and the size of the module
+	MODULEINFO GetModuleInfo(const char* ModuleName)
 	{
-		MODULEINFO modinfo = { nullptr };
-		HMODULE hModule = GetModuleHandle(szModule);
-		if (hModule == 0)
-			return modinfo;
-		GetModuleInformation(GetCurrentProcess(), hModule, &modinfo, sizeof(MODULEINFO));
-		return modinfo;
+		MODULEINFO ModuleInfo = { nullptr };
+		const HMODULE hModule = GetModuleHandle(ModuleName);
+		if (hModule == nullptr)
+		{
+			return ModuleInfo;
+		}
+		GetModuleInformation(GetCurrentProcess(), hModule, &ModuleInfo, sizeof(MODULEINFO));
+		return ModuleInfo;
 	}
 
-	DWORD FindPattern(char *module, char *pattern, char *mask)
+	DWORD FindPattern(const char* ModuleName, const char* PatternString, const char* MaskString)
 	{
-		//Get all module related information
-		MODULEINFO mInfo = GetModuleInfo(module);
+		MODULEINFO mInfo = GetModuleInfo(ModuleName);
 
-		//Assign our base and module size
-		//Having the values right is ESSENTIAL, this makes sure
-		//that we don't scan unwanted memory and leading our game to crash
-		DWORD base = (DWORD)mInfo.lpBaseOfDll;
-		DWORD size = (DWORD)mInfo.SizeOfImage;
+		const DWORD Base = reinterpret_cast<DWORD>(mInfo.lpBaseOfDll);
+		const DWORD Size = static_cast<DWORD>(mInfo.SizeOfImage);
+		const DWORD PatternLength = static_cast<DWORD>(strlen(MaskString));
 
-		//Get length for our mask, this will allow us to loop through our array
-		DWORD patternLength = (DWORD)strlen(mask);
-
-		for (DWORD i = 0; i < size - patternLength; i++)
+		for (DWORD i = 0; i < Size - PatternLength; i++)
 		{
-			bool found = true;
-			for (DWORD j = 0; j < patternLength; j++)
+			bool Found = true;
+			for (DWORD j = 0; j < PatternLength; j++)
 			{
-				//if we have a ? in our mask then we have true by default, 
+				//if we have a ? in our MaskString then we have true by default, 
 				//or if the bytes match then we keep searching until finding it or not
-				found &= mask[j] == '?' || pattern[j] == *(char*)(base + i + j);
+				Found &= MaskString[j] == '?' || PatternString[j] == *reinterpret_cast<char*>(Base + i + j);
 			}
 
-			//found = true, our entire pattern was found
-			//return the memory addy so we can write to it
-			if (found)
+			//if Found = true, the entire pattern was found
+			if (Found)
 			{
-				return base + i;
+				return Base + i;
 			}
 		}
-		std::cout << "Error! FindPattern() returning 0\n";
-		//ConsoleLog("FindPattern() returning 0", LogError, false, true);
+		std::cout << "Error! Failed to find asm Pattern!\n";
 		return 0;
 	}
 }
