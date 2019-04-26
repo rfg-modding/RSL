@@ -57,7 +57,7 @@ namespace Globals
 	ID3D11Device* D3D11Device = nullptr;
 	ID3D11DeviceContext* D3D11Context = nullptr;
 	ID3D11RenderTargetView* MainRenderTargetView = nullptr;
-	HWND hwnd = nullptr;
+	HWND GameWindowHandle = nullptr;
 	RECT WindowRect = { 0, 0, 0, 0 };
 
 	bool ShowMainOverlay = true;
@@ -187,12 +187,12 @@ namespace Globals
 
 	HWND FindTopWindow(DWORD pid)
 	{
-		std::pair<HWND, DWORD> params = { 0, pid };
+		std::pair<HWND, DWORD> params = { nullptr, pid };
 
 		// Enumerate the windows using a lambda to process each window
-		const BOOL bResult = EnumWindows([](HWND hwnd, LPARAM lParam) -> BOOL
-			{
-				auto pParams = (std::pair<HWND, DWORD>*)(lParam);
+		const BOOL bResult = EnumWindows([](const HWND hwnd, LPARAM lParam) -> BOOL
+		{
+				const auto pParams = reinterpret_cast<std::pair<HWND, DWORD>*>(lParam);
 
 				DWORD processId;
 				if (GetWindowThreadProcessId(hwnd, &processId) && processId == pParams->second)
@@ -205,14 +205,14 @@ namespace Globals
 
 				// Continue enumerating
 				return TRUE;
-			}, (LPARAM)&params);
+		}, reinterpret_cast<LPARAM>(&params));
 
 		if (!bResult && GetLastError() == -1 && params.first)
 		{
 			return params.first;
 		}
 
-		return 0;
+		return nullptr;
 	}
 
 	HWND FindRfgTopWindow()
@@ -266,8 +266,7 @@ namespace Globals
 
 	void ChangeMemoryFloat(DWORD BaseAddress, float Value, DWORD Offset1, DWORD Offset2, bool PrintMessage)
 	{
-		//DWORD d, ds;
-		DWORD* Address = (DWORD*)((*(DWORD*)(BaseAddress + Offset1)) + Offset2);
+		DWORD* Address = reinterpret_cast<DWORD*>((*reinterpret_cast<DWORD*>(BaseAddress + Offset1)) + Offset2);
 
 		if (PrintMessage)
 		{
@@ -276,7 +275,7 @@ namespace Globals
 			MessageBoxA(nullptr, szTest, nullptr, 0);
 		}
 
-		//VirtualProtect((LPVOID)adress, sizeof(value), PAGE_EXECUTE_READWRITE, &d);    
+		//VirtualProtect((LPVOID)Address, sizeof(Value), PAGE_EXECUTE_READWRITE, &d);    
 		*(float*)Address = Value;
 		//VirtualProtect((LPVOID)adress ,sizeof(value),d,&ds);
 	}
@@ -285,35 +284,23 @@ namespace Globals
 	{
 		char result[MAX_PATH];
 		std::string PathString = std::string(result, GetModuleFileName(nullptr, result, MAX_PATH));
-		//DWORD FirstError = GetLastError();
-
-		//WCHAR PathWide[4096];// = { 0 };
-		//DWORD Return = GetModuleFileNameW(nullptr, PathWide, 4096);
-		//std::cout << "EXE Path Wide: " << PathWide << ", PathString: " << PathString << ", PathString.length: " << PathString.length() << "\n";
-		//std::cout << "Return = " << Return << ", First Error = " << FirstError << "\n";
 
 		if (IncludeExeInPath)
 		{
 			return PathString;
 		}
-		else
+		unsigned int ExeNameStart = PathString.length();
+		for (unsigned int i = PathString.length(); i > 0; i--)
 		{
-			unsigned int ExeNameStart = PathString.length();
-			for (unsigned int i = PathString.length(); i > 0; i--)
+			if (PathString.compare(i, 1, "\\") == 0 || PathString.compare(i, 1, "/") == 0)
 			{
-				//std::cout << "PathString[" << i << "] = " << PathString[i] << "\n";
-				if (PathString.compare(i, 1, "\\") == 0 || PathString.compare(i, 1, "/") == 0)
-				{
-					//std::cout << "\\ or / found at " << i << ", PathString[i] = " << PathString[i] << "\n";
-					ExeNameStart = i;
-					break;
-				}
+				ExeNameStart = i;
+				break;
 			}
-			//std::cout << "EXENameStart = " << ExeNameStart << "\n";
-			PathString = PathString.substr(0, ExeNameStart + 1);
-			//std::cout << "Final EXE Path: " << PathString << "\n";
-			return PathString;
 		}
+		PathString = PathString.substr(0, ExeNameStart + 1);
+
+		return PathString;
 	}
 
 	void PlaceNOP(BYTE* Address, DWORD Length)
