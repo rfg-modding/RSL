@@ -38,6 +38,7 @@ public:
 	bool IsFirstPersonCameraActive() const;
 
 	float GetCurrentSpeed() const;
+	vector GetRealPosition() const;
 	
 	float AccelerationRate = 0.7f;
 	float DecelerationRate = 0.5f;
