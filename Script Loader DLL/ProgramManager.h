@@ -25,8 +25,6 @@ public:
 	void CloseConsole() const;
 	void Exit();
 
-	HWND GameWindowHandle = nullptr;
-
 	CameraWrapper Camera;
 	FunctionManager Functions;
 	ScriptManager Scripts;

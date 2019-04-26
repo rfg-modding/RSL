@@ -4,7 +4,7 @@ ProgramManager::~ProgramManager()
 {
 	if (Globals::OverlayActive)
 	{
-		SetWindowLongPtr(GameWindowHandle, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(Globals::OriginalWndProc));
+		SetWindowLongPtr(Globals::GameWindowHandle, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(Globals::OriginalWndProc));
 		SnippetManager::RestoreSnippet("MouseGenericPollMouseVisible", true);
 		SnippetManager::RestoreSnippet("CenterMouseCursorCall", true);
 	}
@@ -105,7 +105,7 @@ void ProgramManager::Exit()
 		SnippetManager::RestoreSnippet("MouseGenericPollMouseVisible", true);
 		SnippetManager::RestoreSnippet("CenterMouseCursorCall", true);
 	}
-	SetWindowLongPtr(GameWindowHandle, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(Globals::OriginalWndProc));
+	SetWindowLongPtr(Globals::GameWindowHandle, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(Globals::OriginalWndProc));
 	Camera.DeactivateFreeCamera(true);
 
 	HideHud(false);
