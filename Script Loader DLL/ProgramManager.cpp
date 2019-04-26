@@ -136,9 +136,9 @@ void ProgramManager::OpenConsole()
 	if (Globals::OpenDebugConsole)
 	{
 		FILE *pFile = nullptr;
-		PID = GetCurrentProcessId();
+		Globals::PID = GetCurrentProcessId();
 
-		if (AttachConsole(PID) == 0)
+		if (AttachConsole(Globals::PID) == 0)
 		{
 			PreExistingConsole = false;
 			AllocConsole();

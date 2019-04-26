@@ -41,6 +41,7 @@ namespace Globals
 
 	HMODULE ScriptLoaderModule = nullptr;
 	uintptr_t ModuleBase = 0;
+	DWORD PID = 0;
 
 	ImFont* FontNormal = nullptr;
 	ImFont* FontBig = nullptr;

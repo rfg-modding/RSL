@@ -35,7 +35,7 @@ public:
 
 	bool LoadFailed = false;
 	bool PreExistingConsole = true;
-	DWORD PID = 0;
+	
 	unsigned int ExitKeysPressCount = 0;
 
 	bool SuccessfulExit = false;

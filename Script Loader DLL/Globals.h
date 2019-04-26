@@ -59,6 +59,7 @@ namespace Globals
 
 	extern HMODULE ScriptLoaderModule;
 	extern uintptr_t ModuleBase;
+	extern DWORD PID;
 
 	extern ImFont* FontNormal;
 	extern ImFont* FontBig;
