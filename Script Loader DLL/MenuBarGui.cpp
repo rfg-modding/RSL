@@ -43,7 +43,7 @@ void MenuBarGui::Draw()
 			if (ImGui::MenuItem(std::string(std::string(ICON_FA_SLIDERS_H) + u8" General Tweaks").c_str(), NULL, &Gui->ShowAppTweaksMenu)) {}
 			if (ImGui::MenuItem(std::string(std::string(ICON_FA_MAP_MARKED) + u8" Teleport").c_str(), NULL, &Gui->ShowAppTeleportMenu)) {}
 			if (ImGui::MenuItem(std::string(std::string(ICON_FA_LIST) + u8" Logger").c_str(), NULL, &Gui->ShowAppLogWindow)) {}
-			if (ImGui::MenuItem(std::string(std::string(ICON_FA_SEARCH) + u8" Player view").c_str(), NULL, &Gui->ShowAppIntrospectionMenu)) {}
+			//if (ImGui::MenuItem(std::string(std::string(ICON_FA_SEARCH) + u8" Player view").c_str(), NULL, &Gui->ShowAppIntrospectionMenu)) {}
 			if (ImGui::MenuItem(std::string(std::string(ICON_FA_PALETTE) + u8" Theme editor").c_str(), NULL, &Gui->ShowAppThemeEditor)) {}
 			if (ImGui::MenuItem(std::string(std::string(ICON_FA_CAMERA) + u8" Camera settings").c_str(), NULL, &Gui->ShowAppFreeCamSettings)) {}
 			if (ImGui::MenuItem(std::string(std::string(ICON_FA_VIAL) + u8" Physics settings").c_str(), NULL, &Gui->ShowAppPhysicsSettings)) {}
@@ -53,14 +53,14 @@ void MenuBarGui::Draw()
 		{
 			if (ImGui::MenuItem(std::string(std::string(ICON_FA_CODE) + u8" Scripts").c_str(), NULL, &Gui->ShowAppScriptsMenu)) {}
 			if (ImGui::MenuItem(std::string(std::string(ICON_FA_TERMINAL) + u8" Lua console").c_str(), "~ (Tilde)", &Gui->ShowAppConsole)) {}
-			if (ImGui::MenuItem(std::string(std::string(ICON_FA_EDIT) + u8" Script editor").c_str(), NULL, &Gui->ShowAppScriptEditor)) {}
+			if (ImGui::MenuItem(std::string(std::string(ICON_FA_EDIT) + u8" Script editor").c_str(), "F2", &Gui->ShowAppScriptEditor)) {}
 			ImGui::EndMenu();
 		}
 		if (ImGui::BeginMenu("Help"))
 		{
 			if (ImGui::MenuItem(std::string(std::string(ICON_FA_HOME) + u8" Welcome").c_str(), NULL, &Gui->ShowAppWelcome)) {}
 			if (ImGui::MenuItem(std::string(std::string(ICON_FA_INFO) + u8" Metrics").c_str(), NULL, &Gui->ShowAppMetrics)) {}
-			if (ImGui::MenuItem(std::string(std::string(ICON_FA_INFO) + u8" About").c_str(), NULL, &Gui->ShowAppAbout)) {}
+			if (ImGui::MenuItem(std::string(std::string(ICON_FA_QUESTION) + u8" About").c_str(), NULL, &Gui->ShowAppAbout)) {}
 			ImGui::EndMenu();
 		}
 		ImGui::EndMainMenuBar();
@@ -117,7 +117,7 @@ void MenuBarGui::ShowAboutWindow(bool* p_open) const
 	ImGui::PushItemWidth(100.0f);
 	ImGui::TextWrapped("https://github.com/Moneyl/RFGR-Script-Loader-Wiki");
 	ImGui::PushItemWidth(100.0f);
-	ImGui::TextWrapped("If you have any bugs or questions either check the github issues section or contact me on the official RFG discord (https://discord.gg/RDsQKU8), @moneyl. I'd appreciate if you made a github issue and described the steps to reproduce any bug you find.");
+	ImGui::TextWrapped("If you have any bugs or questions you can contact me on the official Red Faction discord (https://discord.gg/redfaction), @moneyl. If we can't solve the issue I'd appreciate if you made a github issue and described the steps to reproduce any bug you find.");
 
 	ImGui::Separator();
 	ImGui::Text("About libraries used:");
