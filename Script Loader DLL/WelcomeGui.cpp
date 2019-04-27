@@ -32,67 +32,66 @@ void WelcomeGui::Draw()
 		return;
 	}
 
-	//ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 0.0f);
 	ImGui::PushStyleColor(ImGuiCol_Button, ImVec4());
-	//ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4());
-	//ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4());
 	ImGui::PushFont(Globals::FontLarge);
 	ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.556f, 0.823f, 0.541f, 1.0f));
-	if (ImGui::Button(std::string(u8"Scripts " + std::string(ICON_FA_CODE) + u8"##ScriptSelectIcon").c_str()))
+	if (ImGui::Button(std::string(std::string(ICON_FA_CODE) + u8" Scripts " + u8"##ScriptSelectIcon").c_str()))
 	{
 		Gui->ShowAppScriptsMenu = !Gui->ShowAppScriptsMenu;
 	}
 	ImGui::PopStyleColor();
 	Utilities::GUI::TooltipOnPrevious("This menu displays all the scripts detected in the scripts folder and lets you run, edit, and stop them on command. If the script isn't using event hooks then stopping it does nothing, since it stops after running once.", Globals::FontNormal);
 	
-	//ImGui::SameLine();
 	ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.357f, 0.659f, 0.863f, 1.0f));
-	if (ImGui::Button(std::string(u8"Lua console " + std::string(ICON_FA_TERMINAL) + u8"##LuaConsoleIcon").c_str()))
+	if (ImGui::Button(std::string(std::string(ICON_FA_TERMINAL) + u8" Lua console " + u8"##LuaConsoleIcon").c_str()))
 	{
 		Gui->ToggleLuaConsole();
 	}
 	ImGui::PopStyleColor();
 	Utilities::GUI::TooltipOnPrevious("The console is useful for quickly setting values or calling functions without writing a script. Anything that scripts have access to, the console does too. The console is just running your input into it as a script.", Globals::FontNormal);
 	
-	//ImGui::SameLine();
 	ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 0.808f, 0.267f, 1.0f));
-	if (ImGui::Button(std::string(u8"Script editor " + std::string(ICON_FA_EDIT) + u8"##ScriptEditorIcon").c_str()))
+	if (ImGui::Button(std::string(std::string(ICON_FA_EDIT) + u8" Script editor " + u8"##ScriptEditorIcon").c_str()))
 	{
 		Gui->ShowAppScriptEditor = !Gui->ShowAppScriptEditor;
 	}
 	ImGui::PopStyleColor();
 	Utilities::GUI::TooltipOnPrevious("The script editor allows you to save, load, edit, and run lua scripts in game, and provides basic lua syntax highlighting.", Globals::FontNormal);
 	
-	//ImGui::SameLine();
 	ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.404f, 0.416f, 0.435f, 1.0f));
-	if (ImGui::Button(std::string(u8"Tweaks menu " + std::string(ICON_FA_SLIDERS_H) + u8"##TweaksIcon").c_str()))
+	if (ImGui::Button(std::string(std::string(ICON_FA_SLIDERS_H) + u8" Tweaks menu " + u8"##TweaksIcon").c_str()))
 	{
 		Gui->ShowAppTweaksMenu = !Gui->ShowAppTweaksMenu;
 	}
 	ImGui::PopStyleColor();
 	Utilities::GUI::TooltipOnPrevious("This menu has settings for invulnerability, infinite jetpack, player move speed, player jump height, xray vision, and more.", Globals::FontNormal);
 	
-	//ImGui::SameLine();
 	ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.961f, 0.753f, 0.698f, 1.0f));
-	if (ImGui::Button(std::string(u8"Teleport menu " + std::string(ICON_FA_MAP_MARKED) + u8"##TeleportIcon").c_str()))
+	if (ImGui::Button(std::string(std::string(ICON_FA_MAP_MARKED) + u8" Teleport menu " + u8"##TeleportIcon").c_str()))
 	{
 		Gui->ShowAppTeleportMenu = !Gui->ShowAppTeleportMenu;
 	}
 	ImGui::PopStyleColor();
 	Utilities::GUI::TooltipOnPrevious("This menu allows you to teleport around the map. There are many preset locations, and you may create your own. Any of your custom locations are saved in TeleportLocations.json. You don't need to edit it by hand as you can do all the editing you need in the gui.", Globals::FontNormal);
-	
-	//ImGui::SameLine();
+
 	ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.361f, 0.129f, 1.0f, 1.0f));
-	if (ImGui::Button(std::string(u8"Theme editor " + std::string(ICON_FA_PALETTE) + u8"##ThemeEditorIcon").c_str()))
+	if (ImGui::Button(std::string(std::string(ICON_FA_CAMERA) + u8" Camera menu " + u8"##CameraIcon").c_str()))
 	{
-		Gui->ShowAppThemeEditor = !Gui->ShowAppThemeEditor;
+		Gui->ShowAppFreeCamSettings = !Gui->ShowAppFreeCamSettings;
 	}
 	ImGui::PopStyleColor();
-	Utilities::GUI::TooltipOnPrevious("You can use the theme editor to change the color scheme and style of the overlay gui. It allows you to save your settings to GUIConfig.json and share that with others so they can use it. This release only supports a having a single theme, but a later release will have a themes folder so you can easily switch between them.", Globals::FontNormal);
-	ImGui::PopFont();
+	Utilities::GUI::TooltipOnPrevious("Contains several settings for the free camera and and experimental first person camera. Includes settings for clip distance which determines how far away you can see terrain and some shadows from.", Globals::FontNormal);
+
+	//ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.361f, 0.129f, 1.0f, 1.0f));
+	//if (ImGui::Button(std::string(std::string(ICON_FA_PALETTE) + u8" Theme editor " + u8"##ThemeEditorIcon").c_str()))
+	//{
+	//	Gui->ShowAppThemeEditor = !Gui->ShowAppThemeEditor;
+	//}
+	//ImGui::PopStyleColor();
+	//Utilities::GUI::TooltipOnPrevious("You can use the theme editor to change the color scheme and style of the overlay gui. It allows you to save your settings to GUIConfig.json and share that with others so they can use it. This release only supports a having a single theme, but a later release will have a themes folder so you can easily switch between them.", Globals::FontNormal);
+	
 	ImGui::PopStyleColor();
-	//ImGui::PopStyleColor(3);
-	//ImGui::PopStyleVar();
+	ImGui::PopFont();
 
 	ImGui::PushItemWidth(225.0f);
 	ImGui::TextWrapped("Welcome to the RFGR Script Loader overlay. Above are \
