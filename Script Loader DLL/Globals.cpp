@@ -96,7 +96,7 @@ namespace Globals
 	bool HudVisible = true;
 	bool FogVisible = true;
 
-	const std::string ScriptLoaderVersion("0.2.0-Alpha");
+	const std::string ScriptLoaderVersion("0.4.0-Alpha");
 
 	const char* GetScriptLoaderVersion()
 	{
