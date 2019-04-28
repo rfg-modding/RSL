@@ -120,6 +120,7 @@ void ProgramManager::Exit()
 	if (Globals::PlayerPtr)
 	{
 		Globals::PlayerPtr->Flags.invulnerable = false;
+		Globals::PlayerPtr->HitPoints = 120.0f;
 	}
 
 	Beep(900, 100);
