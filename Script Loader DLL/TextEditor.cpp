@@ -52,6 +52,7 @@ TextEditor::TextEditor(bool* OpenState_, std::string Title_)
 	SetPalette(GetDarkPalette());
 	SetLanguageDefinition(LanguageDefinition::HLSL());
 	mLines.push_back(Line());
+	ClearScript();
 }
 
 TextEditor::~TextEditor()
@@ -957,9 +958,9 @@ void TextEditor::Render(const char* aTitle, const ImVec2& aSize, bool aBorder)
 	if (ShowNewScriptPopup)
 	{
 		bool ScriptEmpty = true;
-		for (auto i = mLines.begin(); i != mLines.end(); i++)
+		for (auto& i : mLines)
 		{
-			if (i->size() > 0)
+			if (i.size() > 0)
 			{
 				ScriptEmpty = false;
 				break;
@@ -1023,13 +1024,13 @@ void TextEditor::Render(const char* aTitle, const ImVec2& aSize, bool aBorder)
 	//ImGui::PopStyleColor(3);
 }
 
-std::string TextEditor::GetCurrentScriptString()
+std::string TextEditor::GetCurrentScriptString() const
 {
 	std::string ScriptString = "";
 	std::vector <std::string> LineBuffer = GetTextLines();
-	for (auto i = LineBuffer.begin(); i != LineBuffer.end(); i++)
+	for (auto& i : LineBuffer)
 	{
-		ScriptString.append(i->c_str());
+		ScriptString.append(i.c_str());
 		ScriptString.append("\n");
 	}
 	return ScriptString;
@@ -1196,21 +1197,35 @@ std::string TextEditor::FixScriptExtension(std::string CurrentScriptName)
 void TextEditor::ClearScript()
 {
 	mLines.clear();
-	ScriptName = "NewScript.lua";
 	mLines.push_back(Line());
+	ScriptName = "NewScript.lua";
+	while(fs::exists(Globals::GetEXEPath(false) + "RFGR Script Loader/Scripts/" + ScriptName))
+	{
+		ScriptName = "NewScript" + std::to_string(time(nullptr)) + ".lua";
+	}
 }
 
 void TextEditor::DrawNewScriptPopup()
 {
+	static bool ShouldOpenOverwriteConfirmationDialog = false;
+	static bool ShouldCancelNewScript = false;
 	if (ImGui::BeginPopup("New script"))
 	{
 		ImGui::Text("Would you like to save your current script?");
 		if (ImGui::Button("Yes"))
 		{
-			FixScriptExtension(NewNameBuffer);
-			SaveScript();
-			ClearScript();
-			ImGui::CloseCurrentPopup();
+			const std::string FinalScriptName = FixScriptExtension(ScriptName);
+			if(fs::exists(Globals::GetEXEPath(false) + "RFGR Script Loader/Scripts/" + FinalScriptName))
+			{
+				ShouldOpenOverwriteConfirmationDialog = true;
+			}
+			else
+			{
+				ScriptName = FinalScriptName;
+				SaveScript();
+				ClearScript();
+				ImGui::CloseCurrentPopup();
+			}
 		}
 		ImGui::SameLine();
 		if (ImGui::Button("No"))
@@ -1221,6 +1236,40 @@ void TextEditor::DrawNewScriptPopup()
 		ImGui::SameLine();
 		if (ImGui::Button("Cancel"))
 		{
+			ImGui::CloseCurrentPopup();
+		}
+		if(ShouldOpenOverwriteConfirmationDialog)
+		{
+			ImGui::OpenPopup("NewScriptOverwriteConfirmation");
+			ShouldOpenOverwriteConfirmationDialog = false;
+		}
+		if(ImGui::BeginPopup("NewScriptOverwriteConfirmation"))
+		{
+			ImGui::PushItemWidth(400.0f);
+			ImGui::TextWrapped(std::string(FixScriptExtension(ScriptName) + " already exists. Are you sure you would like to overwrite it?").c_str());
+			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.952f, 0.545f, 0.462f, 1.0f));
+			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.972f, 0.545f, 0.462f, 1.0f));
+			ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(1.000f, 0.545f, 0.462f, 1.0f));
+			if (ImGui::Button("Overwrite##NewScriptOverwriteConfirmPopup"))
+			{
+				ScriptName = FixScriptExtension(ScriptName);
+				SaveScript();
+				ClearScript();
+				ShouldCancelNewScript = true;
+				ImGui::CloseCurrentPopup();
+			}
+			ImGui::PopStyleColor(3);
+			ImGui::SameLine();
+			if (ImGui::Button("Cancel##NewScriptOverwriteConfirmPopup"))
+			{
+				ShouldCancelNewScript = true;
+				ImGui::CloseCurrentPopup();
+			}
+			ImGui::EndPopup();
+		}
+		if(ShouldCancelNewScript)
+		{
+			ShouldCancelNewScript = false;
 			ImGui::CloseCurrentPopup();
 		}
 		ImGui::EndPopup();
@@ -1314,6 +1363,7 @@ void TextEditor::DrawSaveAsScriptPopup()
 		ImGui::TextWrapped("Please enter the new script file name. The .lua extension will be automatically added if you forget it.");
 		if (ImGui::InputText("File name", &NewNameBuffer, ImGuiInputTextFlags_EnterReturnsTrue))
 		{
+			ScriptName = FixScriptExtension(NewNameBuffer);
 			SaveScript();
 			ImGui::CloseCurrentPopup();
 		}

@@ -244,7 +244,7 @@ public:
 	static const Palette& GetLightPalette();
 	static const Palette& GetRetroBluePalette();
 
-	std::string GetCurrentScriptString();
+	std::string GetCurrentScriptString() const;
 
 	bool LoadScript(std::string FullPath, std::string NewScriptName);
 	bool SaveScript();
