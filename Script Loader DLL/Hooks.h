@@ -10,6 +10,8 @@ extern std::once_flag HookExplosionCreateInitialCall;
 LRESULT __stdcall WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 extern LRESULT ProcessInput(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
+extern void UpdateDebugDrawRenderInterfaceValues();
+
 typedef HRESULT(__stdcall* D3D11Present)(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT Flags);
 extern D3D11Present D3D11PresentObject;
 

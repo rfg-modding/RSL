@@ -112,7 +112,9 @@ void ProgramManager::Exit()
 	HideFog(false);
 
 	Hooks.DisableAllHooks();
-	
+
+    //dd::shutdown();
+
 	ImGui_ImplDX11_InvalidateDeviceObjects();
 	ImGui_ImplDX11_Shutdown();
 	ImGui_ImplWin32_Shutdown();

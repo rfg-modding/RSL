@@ -58,6 +58,8 @@ LRESULT __stdcall WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		case WM_DESTROY:
 			PostQuitMessage(0);
 			return 0;
+		default:
+			break;
 	}
 
 	return CallWindowProc(Globals::OriginalWndProc, Globals::GameWindowHandle, msg, wParam, lParam);
@@ -252,9 +254,56 @@ LRESULT ProcessInput(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	return 0;
 }
 
-HRESULT D3D11_DEVICE_CONTEXT_FROM_SWAPCHAIN(IDXGISwapChain * pSwapChain, ID3D11Device ** ppDevice, ID3D11DeviceContext ** ppContext)
+void UpdateDebugDrawRenderInterfaceValues()
 {
-	HRESULT Result = pSwapChain->GetDevice(__uuidof(ID3D11Device), reinterpret_cast<PVOID*>(ppDevice));
+    if(Globals::RlCameraPtr)
+    {
+        //matrix44& ViewMatrix = Globals::RlCameraPtr->m_view_transform;
+        //matrix44& ProjectionMatrix = Globals::RlCameraPtr->m_projection_transform;
+        //matrix44 ViewProjectionMatrix = ProjectionMatrix * ViewMatrix;
+        //matrix44 TransposedViewProjectionMatrix = ViewProjectionMatrix.GetTransposed();
+        //Globals::DebugDrawRenderInterface->setMvpMatrixPtr(reinterpret_cast<float*>(&TransposedViewProjectionMatrix));
+
+        matrix44 ModelMatrix; 
+        ModelMatrix.SetToIdentity();
+        rfg_camera& GameData = *Globals::Camera->GameData;
+        matrix44 ViewMatrix(GameData.real_orient.rvec, GameData.real_orient.uvec, GameData.real_orient.fvec, GameData.real_pos);
+
+        float f = tanf((Globals::pi / 2.0f) - (0.5f - GameData.real_fov));
+        float RangeInv = (1.0f / (GameData.m_near_clip_dist - GameData.m_far_clip_dist));
+        float Aspect = (Globals::WindowRect.right - Globals::WindowRect.left) / (Globals::WindowRect.bottom - Globals::WindowRect.top);
+        vector4 Col1((f / Aspect), 0.0f, 0.0f, 0.0f);
+        vector4 Col2(0.0f, f, 0.0f, 0.0f);
+        vector4 Col3(0.0f, 0.0f, ((GameData.m_near_clip_dist + GameData.m_far_clip_dist) * RangeInv), -1.0f);
+        vector4 Col4(0.0f, 0.0f, (((GameData.m_near_clip_dist - GameData.m_far_clip_dist) * RangeInv) * 2.0f), 0.0f);
+        matrix44 ProjectionMatrix(Col1, Col2, Col3, Col4);
+        Globals::vpMatrix = ProjectionMatrix * ViewMatrix;
+        matrix44 MvpMatrix = ProjectionMatrix * ViewMatrix * ModelMatrix;
+        Globals::DebugDrawRenderInterface->setMvpMatrixPtr(reinterpret_cast<float*>(&MvpMatrix));
+        //matrix44 TransposedvpMatrix = Globals::vpMatrix.GetTransposed();
+        //Globals::DebugDrawRenderInterface->setMvpMatrixPtr(reinterpret_cast<float*>(&TransposedvpMatrix));
+    }
+
+    if(Globals::Camera)
+    {
+        if(Globals::Camera->GameData)
+        {
+            vector& RealUpVec = Globals::Camera->GameData->real_orient.uvec;
+            Vector3 CameraUpVector(RealUpVec.x, RealUpVec.y, RealUpVec.z);
+
+            vector& RealRightVec = Globals::Camera->GameData->real_orient.rvec;
+            Vector3 CameraRightVector(RealRightVec.x, RealRightVec.y, RealRightVec.z);
+
+            vector& RealForwardVec = Globals::Camera->GameData->real_orient.fvec;
+            Vector3 CameraForwardVector(RealForwardVec.x, RealForwardVec.y, RealForwardVec.z);
+            Globals::DebugDrawRenderInterface->setCameraFrame(CameraUpVector, CameraRightVector, CameraForwardVector);
+        }
+    }
+}
+
+HRESULT D3D11_DEVICE_CONTEXT_FROM_SWAPCHAIN(IDXGISwapChain* pSwapChain, ID3D11Device** ppDevice, ID3D11DeviceContext** ppContext)
+{
+	const HRESULT Result = pSwapChain->GetDevice(__uuidof(ID3D11Device), reinterpret_cast<PVOID*>(ppDevice));
 
 	if(Result != S_OK)
 	{
@@ -266,11 +315,11 @@ HRESULT D3D11_DEVICE_CONTEXT_FROM_SWAPCHAIN(IDXGISwapChain * pSwapChain, ID3D11D
 	return Result;
 }
 
+
 HRESULT __stdcall D3D11PresentHook(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT Flags)
 {
 	std::call_once(HookD3D11PresentInitialCall, [&]()
 	{
-		ExplosionTimerBegin = std::chrono::steady_clock::now();
 		HRESULT Result = D3D11_DEVICE_CONTEXT_FROM_SWAPCHAIN(pSwapChain, &Globals::D3D11Device, &Globals::D3D11Context);
 		if (Result != S_OK)
 		{
@@ -289,7 +338,7 @@ HRESULT __stdcall D3D11PresentHook(IDXGISwapChain* pSwapChain, UINT SyncInterval
 
 		D3D11_RENDER_TARGET_VIEW_DESC desc = {};
 		memset(&desc, 0, sizeof(desc));
-		desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM; // most important change!
+		desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM; //Required to avoid rendering bug with overlay. Without this the proper rgb values will not be displayed.
 		desc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
 		Result = Globals::D3D11Device->CreateRenderTargetView(BackBuffer, &desc, &Globals::MainRenderTargetView);
 		if (Result != S_OK)
@@ -365,8 +414,15 @@ HRESULT __stdcall D3D11PresentHook(IDXGISwapChain* pSwapChain, UINT SyncInterval
 		Globals::ImGuiInitialized = true;
 		UpdateD3D11Pointers = false;
 
-		//static RenderInterfaceD3D11 RenderInterface(D3D11Device, D3D11Context);
-		//dd::initialize(&RenderInterface);
+		//try
+		//{
+		//	Globals::DebugDrawRenderInterface = new RenderInterfaceD3D11(Globals::D3D11Device, Globals::D3D11Context);
+		//	dd::initialize(Globals::DebugDrawRenderInterface);
+		//}
+		//catch (std::exception& Ex)
+		//{
+		//	Logger::Log(std::string("Exception caught while initializing debug draw! Message: ") + std::string(Ex.what()), LogError);
+		//}
 
 		Logger::Log("ImGui Initialized.", LogInfo);
 		return S_OK;
@@ -411,6 +467,36 @@ HRESULT __stdcall D3D11PresentHook(IDXGISwapChain* pSwapChain, UINT SyncInterval
 
 	if (!Globals::ScriptLoaderCloseRequested)
 	{
+        //try
+        //{
+        //    if (Globals::DebugDrawRenderInterface)
+        //    {
+        //        UpdateDebugDrawRenderInterfaceValues();
+        //        if (Globals::PlayerPtr)
+        //        {
+
+        //            const ddVec3 boxColor = { 0.0f, 0.8f, 0.8f };
+        //            const ddVec3 boxCenter = { Globals::PlayerPtr->Position.x, Globals::PlayerPtr->Position.y, Globals::PlayerPtr->Position.z };
+        //            const ddVec3 UpVector = { 0.0f, 1.0f, 0.0f };
+
+        //            dd::circle(boxCenter, UpVector, boxColor, 500.0f, 2000, 5000);
+        //            dd::box(boxCenter, boxColor, 15.0f, 15.0f, 15.0f);
+        //            dd::cross(boxCenter, 1.0f);
+
+        //            const ddVec3 DebugTextPosition = { 0.2f, 0.2f, 0.0f };
+        //            const ddVec3 DebugTextColor = { 1.0f, 0.0f, 0.0f };
+        //            dd::screenText("hOi!!!!! I'm tEMMIE!!", DebugTextPosition, DebugTextColor, 2.0f, 5000);
+
+        //            //dd::projectedText("Space asshole", boxCenter, DebugTextColor, Globals::vpMatrix, 300, 300, 300, 300, 1.0f);
+        //        }
+        //        dd::flush();
+        //    }
+        //}
+        //catch (std::exception& Ex)
+        //{
+        //    Logger::Log(std::string("Exception caught while testing debug draw cube! Message: ") + std::string(Ex.what()), LogError);
+        //}
+
 		ImGui_ImplDX11_NewFrame();
 		ImGui_ImplWin32_NewFrame();
 		ImGui::NewFrame();
@@ -419,18 +505,7 @@ HRESULT __stdcall D3D11PresentHook(IDXGISwapChain* pSwapChain, UINT SyncInterval
 		Globals::D3D11Context->OMSetRenderTargets(1, &Globals::MainRenderTargetView, nullptr);
 		ImGui::Render();
 		ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
-
-		//if(GlobalPlayerPtr)
-		//{
-		//	const ddVec3 boxColor = { 0.0f, 0.8f, 0.8f };
-		//	const ddVec3 boxCenter = { GlobalPlayerPtr->Position.x, GlobalPlayerPtr->Position.y, GlobalPlayerPtr->Position.z };
-
-		//	dd::box(boxCenter, boxColor, 1.5f, 1.5f, 1.5f);
-		//	dd::cross(boxCenter, 1.0f);
-		//}
-		//dd::flush();
 	}
-
 	return D3D11PresentObject(pSwapChain, SyncInterval, Flags);
 }
 

@@ -60,6 +60,9 @@ namespace Globals
 	HWND GameWindowHandle = nullptr;
 	RECT WindowRect = { 0, 0, 0, 0 };
 
+	RenderInterfaceD3D11* DebugDrawRenderInterface = nullptr;
+    matrix44 vpMatrix;
+
 	bool ShowMainOverlay = true;
 
 	float OverlayFontSize = 16.0f;

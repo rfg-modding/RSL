@@ -79,5 +79,6 @@
 #define SOL_CHECK_ARGUMENTS 1
 #include <sol.hpp>
 
+#define DEBUG_DRAW_CXX11_SUPPORTED true
 #include "debug-draw/debug_draw.hpp"
 #include "vectormath.h"

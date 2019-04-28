@@ -550,6 +550,29 @@ public:
 	float z = 0.0f;
 };
 
+struct vector4 //16
+{
+    vector4(float InitialValue)
+    {
+        x = InitialValue;
+        y = InitialValue;
+        z = InitialValue;
+        w = InitialValue;
+    }
+    vector4(float x_, float y_, float z_, float w_)
+    {
+        x = x_;
+        y = y_;
+        z = z_;
+        w = w_;
+    }
+    float x;
+    float y;
+    float z;
+    float w;
+};
+
+
 class matrix //3x3
 {
 public:
@@ -622,7 +645,6 @@ struct matrix23
 class matrix43
 {
 public:
-public:
 	matrix43()
 	{
 		m_rotation.SetAll(0.0f);
@@ -672,7 +694,112 @@ public:
 struct matrix44
 {
 	matrix44() {}
-	float elem[4][4];
+	matrix44(float InitialValue)
+	{
+        SetAll(InitialValue);
+	}
+    matrix44(const vector& Right, const vector& Up, const vector& Forward, const vector& Position)
+	{
+        elem[0][0] = Right.x;
+        elem[1][0] = Right.y;
+        elem[2][0] = Right.z;
+        elem[3][0] = 0.0f;      
+	    
+	    elem[0][1] = Up.x;
+        elem[1][1] = Up.y;
+        elem[2][1] = Up.z;
+        elem[3][1] = 0.0f;       
+	    
+	    elem[0][2] = Forward.x;
+        elem[1][2] = Forward.y;
+        elem[2][2] = Forward.z;
+        elem[3][2] = 0.0f;       
+	    
+	    elem[0][3] = Position.x;
+        elem[1][3] = Position.y;
+        elem[2][3] = Position.z;
+        elem[3][3] = 0.0f;
+	}
+    matrix44(const vector4& Col1, const vector4& Col2, const vector4& Col3, const vector4& Col4)
+    {
+        elem[0][0] = Col1.x;
+        elem[1][0] = Col1.y;
+        elem[2][0] = Col1.z;
+        elem[3][0] = Col1.w;
+
+        elem[0][1] = Col2.x;
+        elem[1][1] = Col2.y;
+        elem[2][1] = Col2.z;
+        elem[3][1] = Col2.w;
+
+        elem[0][2] = Col3.x;
+        elem[1][2] = Col3.y;
+        elem[2][2] = Col3.z;
+        elem[3][2] = Col3.w;
+
+        elem[0][3] = Col4.x;
+        elem[1][3] = Col4.y;
+        elem[2][3] = Col4.z;
+        elem[3][3] = Col4.w;
+    }
+    matrix44 operator*(const matrix44& B) const
+    {
+        matrix44 C;
+        for(int i = 0; i < 4; i++)
+        {
+            for(int j = 0; j < 4; j++)
+            {
+                float num = 0;
+                for(int k = 0; k < 4; k++)
+                {
+                    num += elem[i][k] * B.elem[k][j];
+                }
+                C.elem[i][j] = num;
+            }
+        }
+        return C;
+	}
+    matrix44 GetTransposed()
+	{
+        matrix44 Transposed;
+        for(int i = 0; i < 4; i++)
+        {
+            for(int j = 0; j < 4; j++)
+            {
+                Transposed.elem[j][i] = elem[i][j];
+            }
+        }
+        return Transposed;
+	}
+    void SetAll(float NewValue)
+	{
+        for (int i = 0; i < 4; i++)
+        {
+            for (int j = 0; j < 4; j++)
+            {
+                elem[i][j] = NewValue;
+            }
+        }
+	}
+    void SetToIdentity()
+	{
+        SetAll(0.0f);
+        elem[0][0] = 1.0f;
+        elem[1][1] = 1.0f;
+        elem[2][2] = 1.0f;
+        elem[3][3] = 1.0f;
+	}
+    matrix44 GetIdentityMatrix()
+	{
+        matrix44 C(0.0f);
+        C.elem[0][0] = 1.0f;
+        C.elem[1][1] = 1.0f;
+        C.elem[2][2] = 1.0f;
+        C.elem[3][3] = 1.0f;
+        return C;
+	}
+
+	float elem[4][4] = {};
 	//$EFBF005ED9B80EDE8789D61FAD0B4E5B ___u0;
 };
 
@@ -1294,16 +1421,7 @@ struct KeenGraphicsSystem : GraphicsSystemBase //Todo: Make Keen namespace event
 	unsigned int windowModeHeight;
 };*/
 
-struct vector4 //16
-{
-	float x;
-	float y;
-	float z;
-	float w;
-};
-
-/* 5181 */
-const struct __declspec(align(4)) explosion_info //340 Bytes
+struct __declspec(align(4)) explosion_info //340 Bytes
 {
 	char m_name[32]; //32
 	int m_unique_id; //4

@@ -14,6 +14,7 @@ class ProgramManager;
 class GuiSystem;
 class ScriptManager;
 class CameraWrapper;
+class RenderInterfaceD3D11;
 
 namespace Globals
 {
@@ -21,7 +22,7 @@ namespace Globals
 	extern GuiSystem* Gui;
 	extern ScriptManager* Scripts;
 	extern CameraWrapper* Camera;
-
+    
 	extern Player* PlayerPtr;
 	extern World* RfgWorldPtr;
 	extern rl_light* TODLightPtr;
@@ -67,7 +68,6 @@ namespace Globals
 	extern nlohmann::json MainConfig;
 	extern float DefaultFreeCameraSpeed;
 	extern float DefaultRotationSpeed;
-	//static bool UseConsole = false;
 
 	extern IDXGISwapChain* D3D11SwapchainPtr;
 	extern ID3D11Device* D3D11Device;
@@ -75,9 +75,10 @@ namespace Globals
 	extern ID3D11RenderTargetView* MainRenderTargetView;
 	extern HWND GameWindowHandle;
 	extern RECT WindowRect;
-	//extern ImVec4* Colors;
+    
+	extern RenderInterfaceD3D11* DebugDrawRenderInterface;
+    extern matrix44 vpMatrix;
 
-	//extern MainOverlay Overlay;
 	extern bool ShowMainOverlay;
 
 	extern float OverlayFontSize;
@@ -95,8 +96,6 @@ namespace Globals
 	extern float MaximumExplosionRadius;
 
 	extern bool InfiniteJetpack;
-
-	//extern sol::state LuaState;
 
 	extern HANDLE ConsoleHandle;
 	extern bool* InMultiplayer;
