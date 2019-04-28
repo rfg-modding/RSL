@@ -6,12 +6,6 @@ extern std::chrono::steady_clock::time_point ExplosionTimerEnd;
 
 extern std::once_flag HookD3D11PresentInitialCall;
 extern std::once_flag HookExplosionCreateInitialCall;
-extern explosion_info NewExplosionInfo;
-
-//camera_view_data::set_view()
-extern CameraViewData NewCameraViewData;
-extern CameraViewTableEntry NewCameraViewTableEntry;
-extern bool NewSkipTransition;
 
 LRESULT __stdcall WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 extern LRESULT ProcessInput(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
@@ -22,11 +16,8 @@ extern D3D11Present D3D11PresentObject;
 HRESULT __stdcall D3D11PresentHook(IDXGISwapChain * pSwapChain, UINT SyncInterval, UINT Flags);
 void __cdecl ExplosionCreateHook(explosion_info * ExplosionInfo, void * Source, void * Owner, vector * Position, matrix * Orientation, vector * Direction, void * WeaponInfo, bool FromServer);
 
-void __fastcall PlayerConstructorHook(Player* PlayerPtr);
 void __fastcall PlayerDoFrameHook(Player* PlayerPtr);
-extern Player NewPlayerObject;
 extern std::once_flag HookPlayerDoFrameInitialCall;
-extern bool GlobalPlayerPtrInitialized;
 
 void __fastcall ObjectUpdatePosAndOrientHook(Object* ObjectPtr, void* edx, vector* UpdatedPosition, matrix* UpdatedOrientation, bool SetHavokData);
 extern std::once_flag HookObjectUpdatePosAndOrientInitialCall;

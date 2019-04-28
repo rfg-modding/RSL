@@ -51,11 +51,11 @@ void ProgramManager::Initialize()
 	GameState RFGRState = GameseqGetState();;
 	auto StartTime = std::chrono::steady_clock::now();
 	auto EndTime = std::chrono::steady_clock::now();
-	long long TimeElapsed = 0LL;
+	long long TimeElapsed = 0;
 	do
 	{
 		TimeElapsed = std::chrono::duration_cast<std::chrono::milliseconds>(EndTime - StartTime).count();
-		if (TimeElapsed > 1000LL) //Todo: Figure out if casting 1000 as a long long is necessary in this case or ever.
+		if (TimeElapsed > 1000)
 		{
 			RFGRState = GameseqGetState();
 			StartTime = EndTime;
@@ -153,7 +153,7 @@ void ProgramManager::OpenConsole()
 
 void ProgramManager::SetMemoryLocations()
 {
-	Globals::InMultiplayer = reinterpret_cast<bool*>(*(DWORD*)(Globals::ModuleBase + 0x002CA210));
+	Globals::InMultiplayer = reinterpret_cast<bool*>(*reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x002CA210));
 	if (*Globals::InMultiplayer)
 	{
 		MessageBoxA(Globals::FindRfgTopWindow(), "MP usage detected, shutting down!", "Multiplayer mode detected", MB_OK);
@@ -163,7 +163,7 @@ void ProgramManager::SetMemoryLocations()
 
 void ProgramManager::CreateGameHooks(bool EnableNow)
 {
-	Hooks.CreateHook("PlayerConstructor", GAMEHOOK,reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x6DECA0), PlayerConstructorHook, reinterpret_cast<LPVOID*>(&PlayerConstructor), EnableNow);
+	//Hooks.CreateHook("PlayerConstructor", GAMEHOOK,reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x6DECA0), PlayerConstructorHook, reinterpret_cast<LPVOID*>(&PlayerConstructor), EnableNow);
 	Hooks.CreateHook("PlayerDoFrame", GAMEHOOK, reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x6D5A80), PlayerDoFrameHook, reinterpret_cast<LPVOID*>(&PlayerDoFrame), EnableNow);
 	//Hooks.CreateHook("ObjectUpdatePosAndOrient", GAMEHOOK, (DWORD*)(ModuleBase + 0x68C310), ObjectUpdatePosAndOrientHook, (LPVOID*)&ObjectUpdatePosAndOrient, EnableNow);
 	//Hooks.CreateHook("HumanUpdatePosAndOrient", GAMEHOOK, (DWORD*)(ModuleBase + 0x69AF70), HumanUpdatePosAndOrientHook, (LPVOID*)&HumanUpdatePosAndOrient, EnableNow);

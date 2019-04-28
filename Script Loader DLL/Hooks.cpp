@@ -8,16 +8,8 @@ std::chrono::steady_clock::time_point ExplosionTimerEnd;
 
 std::once_flag HookD3D11PresentInitialCall;
 std::once_flag HookExplosionCreateInitialCall;
-explosion_info NewExplosionInfo;
 
-Player NewPlayerObject;
 std::once_flag HookPlayerDoFrameInitialCall;
-bool GlobalPlayerPtrInitialized = false;
-
-//camera_view_data::set_view()
-CameraViewData NewCameraViewData;
-CameraViewTableEntry NewCameraViewTableEntry;
-bool NewSkipTransition;
 
 std::once_flag HookObjectUpdatePosAndOrientInitialCall;
 std::once_flag HookHumanUpdatePosAndOrientInitialCall;
@@ -69,7 +61,6 @@ LRESULT __stdcall WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	}
 
 	return CallWindowProc(Globals::OriginalWndProc, Globals::GameWindowHandle, msg, wParam, lParam);
-	//return DefWindowProc(hWnd, msg, wParam, lParam);
 }
 
 LRESULT ProcessInput(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
@@ -118,7 +109,6 @@ LRESULT ProcessInput(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		{
 		case VK_F1:
 			Globals::OverlayActive = !Globals::OverlayActive;
-			///Logger::Log(std::string("Overlay active value: " + std::to_string(OverlayActive)), LogInfo);
 			if (Globals::OverlayActive)
 			{
 				if (!Globals::Gui->IsLuaConsoleActive())
@@ -264,7 +254,7 @@ LRESULT ProcessInput(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 HRESULT D3D11_DEVICE_CONTEXT_FROM_SWAPCHAIN(IDXGISwapChain * pSwapChain, ID3D11Device ** ppDevice, ID3D11DeviceContext ** ppContext)
 {
-	HRESULT Result = pSwapChain->GetDevice(__uuidof(ID3D11Device), (PVOID*)ppDevice);
+	HRESULT Result = pSwapChain->GetDevice(__uuidof(ID3D11Device), reinterpret_cast<PVOID*>(ppDevice));
 
 	if(Result != S_OK)
 	{
@@ -290,10 +280,10 @@ HRESULT __stdcall D3D11PresentHook(IDXGISwapChain* pSwapChain, UINT SyncInterval
 		Globals::D3D11SwapchainPtr = pSwapChain;
 		//
 		ID3D11Texture2D* BackBuffer;
-		Result = pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&BackBuffer);
+		Result = pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<LPVOID*>(&BackBuffer));
 		if (Result != S_OK)
 		{
-			Logger::Log(std::string("GetBuffer() failed, return value: " + std::to_string(Result)).c_str(), LogFatalError);
+			Logger::Log(std::string("GetBuffer() failed, return value: " + std::to_string(Result)), LogFatalError);
 			return E_FAIL;
 		}
 
@@ -308,12 +298,6 @@ HRESULT __stdcall D3D11PresentHook(IDXGISwapChain* pSwapChain, UINT SyncInterval
 			return E_FAIL;
 		}
 		BackBuffer->Release();
-
-		/*DXGI_SWAP_CHAIN_DESC SwapChainDescription;
-		pSwapChain->GetDesc(&SwapChainDescription);
-		Logger::ConsoleLog(std::string("Initial buffer count: " + std::to_string(SwapChainDescription.BufferCount)).c_str(), LogWarning, false, true, true);
-		Logger::ConsoleLog(std::string("Initial flags: " + std::to_string(SwapChainDescription.Flags)).c_str(), LogWarning, false, true, true);
-		Logger::ConsoleLog(std::string("Initial format: " + std::to_string(SwapChainDescription.BufferDesc.Format)).c_str(), LogWarning, false, true, true);*/
 
 		Logger::Log("Initializing ImGui.", LogInfo);
 
@@ -332,7 +316,7 @@ HRESULT __stdcall D3D11PresentHook(IDXGISwapChain* pSwapChain, UINT SyncInterval
 		ImGui_ImplWin32_Init(Globals::GameWindowHandle);
 
 		ImGuiIO& io = ImGui::GetIO();
-		float GlobalFontSize = 17.0f;
+		const float GlobalFontSize = 17.0f;
 		std::string DefaultFontPath = std::string(Globals::GetEXEPath(false) + "RFGR Script Loader/Fonts/Roboto-Regular.ttf");
 		bool DefaultFontLoaded = false;
 		if (fs::exists(DefaultFontPath))
@@ -342,11 +326,9 @@ HRESULT __stdcall D3D11PresentHook(IDXGISwapChain* pSwapChain, UINT SyncInterval
 		}
 		else
 		{
-			//Logger::Log("DroidSans.ttf not found. Using default font.", LogInfo);
 			io.Fonts->AddFontDefault();
 		}
 
-		//Logger::Log("Merging FontAwesome...", LogWarning);
 		static const ImWchar IconsRanges[] = { ICON_MIN_FA, ICON_MAX_FA, 0 };
 		ImFontConfig IconsConfig;
 		IconsConfig.MergeMode = true;
@@ -354,9 +336,8 @@ HRESULT __stdcall D3D11PresentHook(IDXGISwapChain* pSwapChain, UINT SyncInterval
 		std::string FontAwesomeSolidPath(Globals::GetEXEPath(false) + "RFGR Script Loader/Fonts/fa-solid-900.ttf");
 		Logger::Log(FontAwesomeSolidPath, LogWarning);
 		Globals::FontNormal = io.Fonts->AddFontFromFileTTF(FontAwesomeSolidPath.c_str(), GlobalFontSize, &IconsConfig, IconsRanges);
-		//Logger::Log("Done merging FontAwesome...", LogWarning);
-		
-		float GlobalBigFontSize = 24.0f;
+
+		const float GlobalBigFontSize = 24.0f;
 		if (DefaultFontLoaded)
 		{
 			io.Fonts->AddFontFromFileTTF(DefaultFontPath.c_str(), GlobalBigFontSize);
@@ -404,7 +385,7 @@ HRESULT __stdcall D3D11PresentHook(IDXGISwapChain* pSwapChain, UINT SyncInterval
 		Globals::D3D11SwapchainPtr = pSwapChain;
 		//
 		ID3D11Texture2D* BackBuffer;
-		Result = pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&BackBuffer);
+		Result = pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<LPVOID*>(&BackBuffer));
 		if (Result != S_OK)
 		{
 			Logger::Log(std::string("GetBuffer() failed, return value: " + std::to_string(Result)), LogFatalError);
@@ -417,10 +398,8 @@ HRESULT __stdcall D3D11PresentHook(IDXGISwapChain* pSwapChain, UINT SyncInterval
 			Logger::Log(std::string("CreateRenderTargetView() failed, return value: " + std::to_string(Result)), LogFatalError);
 			return E_FAIL;
 		}
-
 		BackBuffer->Release();
 
-		//ImGui_ImplDX11_Init(D3D11Device, D3D11Context);
 		ImGui_ImplDX11_CreateDeviceObjects();
 		Logger::Log("Finished reforming after resize.", LogInfo);
 		UpdateD3D11Pointers = false;
@@ -429,10 +408,6 @@ HRESULT __stdcall D3D11PresentHook(IDXGISwapChain* pSwapChain, UINT SyncInterval
 	{
 		return D3D11PresentObject(pSwapChain, SyncInterval, Flags);
 	}
-	/*if (!OverlayActive)
-	{
-		return D3D11PresentObject(pSwapChain, SyncInterval, Flags);
-	}*/
 
 	if (!Globals::ScriptLoaderCloseRequested)
 	{
@@ -461,37 +436,19 @@ HRESULT __stdcall D3D11PresentHook(IDXGISwapChain* pSwapChain, UINT SyncInterval
 
 bool __cdecl KeenGraphicsResizeRenderSwapchainHook(void* KeenSwapchain, unsigned int NewWidth, unsigned int NewHeight)
 {
-	//Logger::Log("In KeenGraphicsResizeSwapchainHook()", LogFatalError);
-	//std::cout << "NewWidth: " << NewWidth << ", NewHeight: " << NewHeight << "\n";
 	UpdateD3D11Pointers = true;
 
 	return KeenGraphicsResizeRenderSwapchain(KeenSwapchain, NewWidth, NewHeight);
-}
-
-void __fastcall PlayerConstructorHook(Player* PlayerPtr)
-{
-	Globals::PlayerPtr = PlayerPtr;
-	//Overlay.PlayerPtr = PlayerPtr;
-	Globals::Gui->SetPlayerPtr(PlayerPtr);
-	if (!GlobalPlayerPtrInitialized)
-	{
-		GlobalPlayerPtrInitialized = true;
-	}
-
-	return PlayerConstructor(PlayerPtr);
 }
 
 void __fastcall PlayerDoFrameHook(Player* PlayerPtr)
 {
 	std::call_once(HookPlayerDoFrameInitialCall, [&]()
 	{
-		if (!GlobalPlayerPtrInitialized)
+		if (!Globals::PlayerPtr)
 		{
 			Globals::PlayerPtr = PlayerPtr;
-			GlobalPlayerPtrInitialized = true;
 			Globals::PlayerRigidBody = HavokBodyGetPointer(PlayerPtr->HavokHandle);
-
-			//Overlay.PlayerPtr = PlayerPtr;
 			Globals::Gui->SetPlayerPtr(PlayerPtr);
 			if(Globals::Scripts)
 			{
@@ -582,40 +539,7 @@ void __cdecl ExplosionCreateHook(explosion_info * ExplosionInfo, void * Source, 
 
 	});
 
-	NewExplosionInfo = *ExplosionInfo;
-	if (Globals::MinimumExplosionRadius < 0.000000f)
-	{
-		Globals::MinimumExplosionRadius = 0.000000f;
-	}
-
-	if (Globals::UseGlobalExplosionStrengthMultiplier)
-	{
-		/*std::cout << "Address of ExplosionInfo: " << ExplosionInfo << ", Hex: " << std::hex << std::uppercase << ExplosionInfo << "\n";
-		Logger::Log(std::string("ExplosionInfo->m_name: " + std::string(NewExplosionInfo.m_name)), LogInfo);
-		Logger::Log(std::string("ExplosionInfo->m_unique_id: " + std::to_string(NewExplosionInfo.m_unique_id)), LogInfo);
-		Logger::Log(std::string("Before, Explosion radius: " + std::to_string(NewExplosionInfo.m_radius)), LogInfo);
-		Logger::Log(std::string("Increasing explosion values by a factor of " + std::to_string(GlobalExplosionStrengthMultiplier)), LogInfo);*/
-
-		NewExplosionInfo.m_radius *= Globals::GlobalExplosionStrengthMultiplier;
-		NewExplosionInfo.m_impulse_magnitude *= Globals::GlobalExplosionStrengthMultiplier;
-		NewExplosionInfo.m_knockdown_radius *= Globals::GlobalExplosionStrengthMultiplier;
-		NewExplosionInfo.m_secondary_radius *= Globals::GlobalExplosionStrengthMultiplier;
-		NewExplosionInfo.m_structural_damage = (int)(Globals::GlobalExplosionStrengthMultiplier * (float)(NewExplosionInfo.m_structural_damage)); //Did this instead of *= to avoid a compiler error. Probably unecessary.
-
-		//Logger::Log(std::string("After, Explosion radius: " + std::to_string(NewExplosionInfo.m_radius)), LogInfo);
-		//std::cout << "\n";
-
-		*ExplosionInfo = NewExplosionInfo;
-	}
-
-	if (Globals::UseExplosionRadiusLimits)
-	{
-		Globals::EnforceFloatRange(NewExplosionInfo.m_radius, Globals::MinimumExplosionRadius, Globals::MaximumExplosionRadius);
-		Globals::EnforceFloatRange(NewExplosionInfo.m_knockdown_radius, Globals::MinimumExplosionRadius, Globals::MaximumExplosionRadius);
-		Globals::EnforceFloatRange(NewExplosionInfo.m_secondary_radius, Globals::MinimumExplosionRadius, Globals::MaximumExplosionRadius);
-	}
-
-	return ExplosionCreate(&NewExplosionInfo, Source, Owner, Position, Orientation, Direction, WeaponInfo, FromServer);
+	return ExplosionCreate(ExplosionInfo, Source, Owner, Position, Orientation, Direction, WeaponInfo, FromServer);
 }
 
 void __fastcall ObjectUpdatePosAndOrientHook(Object* ObjectPtr, void* edx, vector* UpdatedPosition, matrix* UpdatedOrientation, bool SetHavokData)
@@ -660,7 +584,7 @@ void __cdecl HudUiMultiplayerEnterHook()
 }
 /*End of MP Detection Hooks*/
 
-void __fastcall world_do_frame_hook(World* This, void* edx, bool HardLoad) //.text:01740AB0 rfg.exe:$540AB0 #53FEB0 <world::do_frame>
+void __fastcall world_do_frame_hook(World* This, void* edx, bool HardLoad)
 {
 	std::call_once(HookWorldDoFrameInitialCall, [&]()
 	{
@@ -736,14 +660,10 @@ void __fastcall rl_camera_render_begin_hook(rl_camera* This, void* edx, rl_rende
 				Globals::MainSceneRendererPtr = Globals::MainScenePtr->m_default_scene_renderer_p;
 			}
 			Globals::MainSceneCameraPtr = Globals::MainSceneRendererPtr->m_part2_params.p_camera;
-
-			std::cout << "Shadow map width: " << Globals::MainSceneRendererPtr->m_shadow_map_width << "\n";
-			std::cout << "Shadow map height: " << Globals::MainSceneRendererPtr->m_shadow_map_height << "\n";
 		}
 	});
 	if (This != Globals::RlCameraPtr)
 	{
-		//Logger::Log("GlobalRlCameraPtr address changed!", LogWarning);
 		Globals::RlCameraPtr = This;
 	}
 
@@ -812,16 +732,12 @@ void __fastcall ApplicationUpdateTimeHook(void* This, void* edx, float TimeStep)
 
 	return ApplicationUpdateTime(This, edx, TimeStep);
 }
-//.text:0117A880 rfg.exe:$5A880 #59C80 <keen::rfg::Application::updateTime> //void __thiscall fav::keen::rfg::Application::updateTime(keen::rfg::Application *this, float timeStep)
-//typedef void(__fastcall* F_ApplicationUpdateTime)(void* This, void* edx, float TimeStep); //2nd arg is edx, needed for __thiscall functions.
-//extern F_ApplicationUpdateTime ApplicationUpdateTime;
 
 int __cdecl LuaDoBufferHook(lua_State *L, const char *buff, unsigned int size, const char *name)
 {
 	std::call_once(HookLuaDoBuffer, [&]()
 	{
 		Globals::RfgVintLuaState = L;
-		//Logger::Log("LuaDoBuffer hooked!", LogWarning);
 	});
 	if(!L)
 	{
