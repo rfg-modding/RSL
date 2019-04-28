@@ -145,7 +145,7 @@ struct rl_render_lib_multisample_desc
 	unsigned __int32 m_enabled : 1;
 };
 
-struct  rl_render_lib : rl_base_object, rl_singleton__rl_render_lib
+struct rl_render_lib : rl_base_object, rl_singleton__rl_render_lib
 {
 	rl_dev_blend_state m_prim_blend_states[22][8];
 	rl_dev_sampler_state m_prim_sampler_states[2];
@@ -212,3 +212,119 @@ struct rl_renderer
 	unsigned int m_override_shader;
 	rl_material_state_store m_state_store;
 };
+
+namespace keen
+{
+    struct RenderSwapChain;
+    struct SkinningD3D11;
+
+    struct SkinnedGeometryInstance
+    {
+        ID3D11Buffer* pVertexBuffer;
+        char* pMappedData;
+        unsigned int skinBufferOffset;
+    };
+
+    struct SkinningBatch
+    {
+        keen::SkinningD3D11* pSkinningBuffer;
+        char* pMappedBufferData;
+    };
+
+    struct DataBuffer
+    {
+        char* m_pCurrentPosition;
+        char* m_pEnd;
+        char* m_pBufferStart;
+    };
+
+    struct SkinningD3D11
+    {
+        ID3D11Buffer* m_pSkinningBuffer;
+        keen::SkinningBatch m_skinningBatch;
+        keen::SizedArray<keen::SkinnedGeometryInstance> m_instances[2];
+        unsigned int m_currentFrameIndex;
+        unsigned int m_currentBufferPosition;
+        unsigned int m_size;
+        unsigned int m_bufferSize;
+        void* m_pSkinningJointMatrices; //keen::SoftwareSkinningJointMatrixData* m_pSkinningJointMatrices;
+        unsigned int m_currentJointMatricesPosition;
+        void* m_pTaskQueue; //keen::TaskQueue* m_pTaskQueue;
+        keen::DataBuffer m_morphBuffer;
+        unsigned int m_morphBufferSize;
+        void *m_pMorphBufferData;
+    };
+
+    struct StockObjects
+    {
+        keen::ShaderPipeline m_shaderPipelines[3];
+        keen::VertexShader* m_pStockVertexShaders[2];
+        keen::FragmentShader* m_pStockFragmentShaders[3];
+        keen::VertexFormat* m_pFormats[3];
+        keen::TextureData m_textures[1];
+    };
+
+    struct CombinedGraphicsStateObjectPool
+    {
+        keen::GraphicsStateObjectPool<keen::BlendState> m_blendStatePool;
+        keen::GraphicsStateObjectPool<keen::RasterizerState> m_rasterizerStatePool;
+        keen::GraphicsStateObjectPool<keen::SamplerState> m_samplerStatePool;
+        keen::GraphicsStateObjectPool<keen::DepthStencilState> m_depthStencilStatePool;
+        keen::GraphicsStateObjectPool<keen::VertexFormat> m_vertexFormatPool;
+        keen::GraphicsStateObjectPool<keen::VertexInputBinding> m_vertexInputBindingPool;
+    };
+
+    struct GraphicsSystemBase
+    {
+        void* pShaderFactory; //keen::ShaderFactory* pShaderFactory;
+        void* pSystemAllocator; //keen::MemoryAllocator* pSystemAllocator;
+        keen::CombinedGraphicsStateObjectPool stateObjectPool;
+        keen::StockObjects stockObjects;
+    };
+
+    struct GraphicsSystem : keen::GraphicsSystemBase
+    {
+        ID3D11Device* pDevice;
+        ID3D11DeviceContext* pImmediateContext;
+        float screenAspectRatio;
+        HWND__* createdWindowHandle;
+        bool isWindowDestroyed;
+        keen::SkinningD3D11 skinningBuffer;
+        unsigned int ownerThreadId;
+        unsigned int frontThreadId;
+        keen::GraphicsCommandBuffer immediateCommandBuffer;
+        keen::GraphicsCommandBuffer deferredCommandBuffer;
+        keen::FragmentShader emptyFragmentShader;
+        keen::RenderSwapChain* pDefaultSwapChain;
+        keen::RenderSwapChain* pCurrentSwapChain;
+        unsigned int currentFrameNumber;
+        void* pScreenCapture; //keen::ScreenCapture* pScreenCapture;
+        keen::graphics::WindowMode previousFullscreenMode;
+        keen::graphics::WindowMode fullscreenMode;
+        unsigned int exclusiveModeWidth;
+        unsigned int exclusiveModeHeight;
+        unsigned int exclusiveModeRefreshRateNumerator;
+        unsigned int exclusiveModeRefreshRateDenominator;
+        unsigned int windowModeWidth;
+        unsigned int windowModeHeight;
+    };
+
+    struct RenderSwapChain
+    {
+        keen::GraphicsSystem* pGraphicsSystem;
+        keen::PixelFormat depthBufferFormat;
+        HWND__* windowHandle;
+        keen::TextureData backBufferColorData;
+        keen::TextureData backBufferDepthData;
+        keen::RenderTarget backBufferRenderTarget;
+        keen::RenderTarget noGammaBackBufferRenderTarget;
+        IDXGISwapChain* pSwapChain;
+        DXGI_SWAP_CHAIN_DESC swapChainDescription;
+        ID3D11RenderTargetView* pBackBufferRenderTargetView;
+        ID3D11RenderTargetView* pNoGammaBackBufferRenderTargetView;
+        ID3D11DepthStencilView* pBackBufferDepthView;
+        unsigned int windowWidth;
+        unsigned int windowHeight;
+        unsigned int presentationInterval;
+    };
+}

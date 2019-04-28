@@ -597,3 +597,7 @@ extern F_havok_body_apply_linear_impulse_A HavokBodyApplyLinearImpulseA;
 //.text:01273C20 rfg.exe:$423C20 #423020 <havok_body_apply_linear_impulse> //void __cdecl havok_body_apply_linear_impulse(unsigned int handle, vector *linear_impulse)
 using F_havok_body_apply_linear_impulse_B = void(__cdecl*)(uint handle, vector* linear_impulse);
 extern F_havok_body_apply_linear_impulse_B HavokBodyApplyLinearImpulseB;
+
+//.text:0181DD00 rfg.exe:$86DD00 #86D100 <keen::graphics::beginFrame> //keen::GraphicsCommandBuffer *__cdecl keen::graphics::beginFrame(keen::GraphicsSystem *pGraphicsSystem, keen::RenderSwapChain *pSwapChain)
+using F_keen_graphics_beginFrame = keen::GraphicsCommandBuffer*(__cdecl*)(keen::GraphicsSystem* pGraphicsSystem, keen::RenderSwapChain* pSwapChain);
+extern F_keen_graphics_beginFrame KeenGraphicsBeginFrame;

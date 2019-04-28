@@ -945,12 +945,6 @@ namespace keen
 		keen::SizedArray__unsigned_int m_data;
 	};
 
-	struct MemoryBlock
-	{
-		char* pStart;
-		unsigned int size;
-	};
-
 	struct ZoneAllocator
 	{
 		keen::MemoryBlock m_memory;

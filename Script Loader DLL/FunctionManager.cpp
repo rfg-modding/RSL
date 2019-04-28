@@ -134,4 +134,6 @@ void FunctionManager::Initialize()
 	HavokBodyGetPointer = reinterpret_cast<F_havok_body_get_pointer>(Globals::ModuleBase + 0x40E870); //.text:0125E870 rfg.exe:$40E870 #40DC70 <havok_body_get_pointer> //hkpRigidBody *__cdecl havok_body_get_pointer(unsigned int handle)
 	HavokBodyApplyLinearImpulseA = reinterpret_cast<F_havok_body_apply_linear_impulse_A>(Globals::ModuleBase + 0x4177A0); //.text:012677A0 rfg.exe:$4177A0 #416BA0 <havok_body_apply_linear_impulse> //void __cdecl havok_body_apply_linear_impulse(hkpRigidBody *rb, vector *linear_impulse)
 	HavokBodyApplyLinearImpulseB = reinterpret_cast<F_havok_body_apply_linear_impulse_B>(Globals::ModuleBase + 0x423C20); //.text:01273C20 rfg.exe:$423C20 #423020 <havok_body_apply_linear_impulse> //void __cdecl havok_body_apply_linear_impulse(unsigned int handle, vector *linear_impulse)
+ 
+    KeenGraphicsBeginFrame = reinterpret_cast<F_keen_graphics_beginFrame>(Globals::ModuleBase + 0x86DD00); //.text:0181DD00 rfg.exe:$86DD00 #86D100 <keen::graphics::beginFrame> //keen::GraphicsCommandBuffer *__cdecl keen::graphics::beginFrame(keen::GraphicsSystem *pGraphicsSystem, keen::RenderSwapChain *pSwapChain)
 }

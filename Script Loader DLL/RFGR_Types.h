@@ -968,50 +968,94 @@ struct UseableObject //24 Bytes
 /* 5470 */
 struct PlayerFlags //176 Bytes
 {
-	unsigned __int32 ActionNodeAnimStarted : 1; //4
-	unsigned __int32 CustomMesh : 1; //4
-	unsigned __int32 IsLoaded : 1; //4
-	unsigned __int32 ScriptControlled : 1; //4
-	unsigned __int32 NeverDie : 1; //4
-	unsigned __int32 MissionNeverDie : 1; //4
-	unsigned __int32 DoSprint : 1; //4
-	unsigned __int32 DisableControls : 1; //4
-	unsigned __int32 JetpackStarted : 1; //4
-	unsigned __int32 JetpackReady : 1; //4
-	unsigned __int32 MovingToAStop : 1; //4
-	unsigned __int32 QuickTurn : 1; //4
-	unsigned __int32 CrouchingState : 1; //4
-	unsigned __int32 WeaponHidden : 1; //4
-	unsigned __int32 IsStuck : 1; //4
-	unsigned __int32 CoverFiring : 1; //4
-	unsigned __int32 CoverLeanup : 1; //4
-	unsigned __int32 UseCover : 1; //4
-	unsigned __int32 NoReticule : 1; //4
-	unsigned __int32 NoFineaim : 1; //4
-	unsigned __int32 CoverSearchForEdge : 1; //4
-	unsigned __int32 CoverAgainstVehicle : 1; //4
-	unsigned __int32 InCommTowerRange : 1; //4
-	unsigned __int32 CommRangeChecked : 1; //4
-	unsigned __int32 PassengerBrake : 1; //4
-	unsigned __int32 LocalPlayerHitSomeoneThisFrame : 1; //4
-	unsigned __int32 WeaponSwapLock : 1; //4
-	unsigned __int32 UnlimitedAmmo : 1; //4
-	unsigned __int32 InRadiation : 1; //4
-	unsigned __int32 RagdollOnNextExplosion : 1; //4
-	unsigned __int32 LeavingSquadMemberBehind : 1; //4
-	unsigned __int32 IsWaitingForHostageVehicleExit : 1; //4
-	unsigned __int32 BackpackFadeOut : 1; //4
-	unsigned __int32 BackpackFadeIn : 1; //4
-	unsigned __int32 MP_DisplayRespawnMsg : 1; //4
-	unsigned __int32 MP_RemotePlayerFiredThisFrame : 1; //4
-	unsigned __int32 MP_IgnorePlayerForRespawnCollisions : 1; //4
-	unsigned __int32 MP_LostHP : 1; //4
-	unsigned __int32 MP_HitSomeoneThisNetworkFrame : 1; //4
-	unsigned __int32 MP_RemotePlayerChargedThisFrame : 1; //4
-	unsigned __int32 MP_LocalPlayerCanSeeMe : 1; //4
-	unsigned __int32 MP_HasReloaded : 1; //4
-	unsigned __int32 MP_RemovingPlayer : 1; //4
-	unsigned __int32 WaitingForLockerExit : 1; //4
+    bool ActionNodeAnimStarted : 1;
+    bool CustomMesh : 1;
+    bool IsLoaded : 1;
+    bool ScriptControlled : 1;
+    bool NeverDie : 1;
+    bool MissionNeverDie : 1;
+    bool DoSprint : 1;
+    bool DisableControls : 1;
+    bool JetpackStarted : 1;
+    bool JetpackReady : 1;
+    bool MovingToAStop : 1;
+    bool QuickTurn : 1;
+    bool CrouchingState : 1;
+    bool WeaponHidden : 1;
+    bool IsStuck : 1;
+    bool CoverFiring : 1;
+    bool CoverLeanup : 1;
+    bool UseCover : 1;
+    bool NoReticule : 1;
+    bool NoFineaim : 1;
+    bool CoverSearchForEdge : 1;
+    bool CoverAgainstVehicle : 1;
+    bool InCommTowerRange : 1;
+    bool CommRangeChecked : 1;
+    bool PassengerBrake : 1;
+    bool LocalPlayerHitSomeoneThisFrame : 1;
+    bool WeaponSwapLock : 1;
+    bool UnlimitedAmmo : 1;
+    bool InRadiation : 1;
+    bool RagdollOnNextExplosion : 1;
+    bool LeavingSquadMemberBehind : 1;
+    bool IsWaitingForHostageVehicleExit : 1;
+    bool BackpackFadeOut : 1;
+    bool BackpackFadeIn : 1;
+    bool MP_DisplayRespawnMsg : 1;
+    bool MP_RemotePlayerFiredThisFrame : 1;
+    bool MP_IgnorePlayerForRespawnCollisions : 1;
+    bool MP_LostHP : 1;
+    bool MP_HitSomeoneThisNetworkFrame : 1;
+    bool MP_RemotePlayerChargedThisFrame : 1;
+    bool MP_LocalPlayerCanSeeMe : 1;
+    bool MP_HasReloaded : 1;
+    bool MP_RemovingPlayer : 1;
+    bool WaitingForLockerExit : 1;
+	//unsigned __int32 ActionNodeAnimStarted : 1;
+	//unsigned __int32 CustomMesh : 1;
+	//unsigned __int32 IsLoaded : 1;
+	//unsigned __int32 ScriptControlled : 1;
+	//unsigned __int32 NeverDie : 1;
+	//unsigned __int32 MissionNeverDie : 1;
+	//unsigned __int32 DoSprint : 1; 
+	//unsigned __int32 DisableControls : 1; 
+	//unsigned __int32 JetpackStarted : 1; 
+	//unsigned __int32 JetpackReady : 1; 
+	//unsigned __int32 MovingToAStop : 1; 
+	//unsigned __int32 QuickTurn : 1; 
+	//unsigned __int32 CrouchingState : 1; 
+	//unsigned __int32 WeaponHidden : 1; 
+	//unsigned __int32 IsStuck : 1; 
+	//unsigned __int32 CoverFiring : 1; 
+	//unsigned __int32 CoverLeanup : 1; 
+	//unsigned __int32 UseCover : 1; 
+	//unsigned __int32 NoReticule : 1; 
+	//unsigned __int32 NoFineaim : 1; 
+	//unsigned __int32 CoverSearchForEdge : 1; 
+	//unsigned __int32 CoverAgainstVehicle : 1; 
+	//unsigned __int32 InCommTowerRange : 1; 
+	//unsigned __int32 CommRangeChecked : 1; 
+	//unsigned __int32 PassengerBrake : 1; 
+	//unsigned __int32 LocalPlayerHitSomeoneThisFrame : 1; 
+	//unsigned __int32 WeaponSwapLock : 1; 
+	//unsigned __int32 UnlimitedAmmo : 1; 
+	//unsigned __int32 InRadiation : 1; 
+	//unsigned __int32 RagdollOnNextExplosion : 1; 
+	//unsigned __int32 LeavingSquadMemberBehind : 1; 
+	//unsigned __int32 IsWaitingForHostageVehicleExit : 1; 
+	//unsigned __int32 BackpackFadeOut : 1; 
+	//unsigned __int32 BackpackFadeIn : 1; 
+	//unsigned __int32 MP_DisplayRespawnMsg : 1; 
+	//unsigned __int32 MP_RemotePlayerFiredThisFrame : 1; 
+	//unsigned __int32 MP_IgnorePlayerForRespawnCollisions : 1; 
+	//unsigned __int32 MP_LostHP : 1; 
+	//unsigned __int32 MP_HitSomeoneThisNetworkFrame : 1; 
+	//unsigned __int32 MP_RemotePlayerChargedThisFrame : 1; 
+	//unsigned __int32 MP_LocalPlayerCanSeeMe : 1; 
+	//unsigned __int32 MP_HasReloaded : 1; 
+	//unsigned __int32 MP_RemovingPlayer : 1; 
+	//unsigned __int32 WaitingForLockerExit : 1; 
 };
 
 /* 5412 */

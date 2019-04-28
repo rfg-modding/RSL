@@ -7,6 +7,8 @@ std::chrono::steady_clock::time_point ExplosionTimerBegin;
 std::chrono::steady_clock::time_point ExplosionTimerEnd;
 
 std::once_flag HookD3D11PresentInitialCall;
+std::once_flag KeenGraphicsBeginFrameHookInitialCall;
+
 std::once_flag HookExplosionCreateInitialCall;
 
 std::once_flag HookPlayerDoFrameInitialCall;
@@ -509,11 +511,21 @@ HRESULT __stdcall D3D11PresentHook(IDXGISwapChain* pSwapChain, UINT SyncInterval
 	return D3D11PresentObject(pSwapChain, SyncInterval, Flags);
 }
 
-bool __cdecl KeenGraphicsResizeRenderSwapchainHook(void* KeenSwapchain, unsigned int NewWidth, unsigned int NewHeight)
+bool __cdecl KeenGraphicsResizeRenderSwapchainHook(keen::RenderSwapChain* KeenSwapchain, unsigned int NewWidth, unsigned int NewHeight)
 {
-	UpdateD3D11Pointers = true;
+	//UpdateD3D11Pointers = true;
 
 	return KeenGraphicsResizeRenderSwapchain(KeenSwapchain, NewWidth, NewHeight);
+}
+
+keen::GraphicsCommandBuffer* KeenGraphicsBeginFrameHook(keen::GraphicsSystem* pGraphicsSystem, keen::RenderSwapChain* pSwapChain)
+{
+    std::call_once(KeenGraphicsBeginFrameHookInitialCall, [&]()
+    {
+        Globals::KeenGraphicsSystemPtr = pGraphicsSystem;
+    });
+
+    return KeenGraphicsBeginFrame(pGraphicsSystem, pSwapChain);
 }
 
 void __fastcall PlayerDoFrameHook(Player* PlayerPtr)

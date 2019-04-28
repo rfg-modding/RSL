@@ -36,6 +36,7 @@ namespace Globals
 	extern hkpWorld* hkpWorldPtr;
 	extern lua_State* RfgVintLuaState;
 	extern hkpRigidBody* PlayerRigidBody;
+    extern keen::GraphicsSystem* KeenGraphicsSystemPtr;
 
 	extern DWORD MouseGenericPollMouseVisible;
 	extern DWORD CenterMouseCursorCall;

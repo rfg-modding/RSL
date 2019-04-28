@@ -17,6 +17,11 @@ extern D3D11Present D3D11PresentObject;
 
 HRESULT __stdcall D3D11PresentHook(IDXGISwapChain * pSwapChain, UINT SyncInterval, UINT Flags);
 
+bool __cdecl KeenGraphicsResizeRenderSwapchainHook(keen::RenderSwapChain* KeenSwapchain, unsigned int NewWidth, unsigned int NewHeight);
+
+keen::GraphicsCommandBuffer* __cdecl KeenGraphicsBeginFrameHook(keen::GraphicsSystem* pGraphicsSystem, keen::RenderSwapChain* pSwapChain);
+extern std::once_flag KeenGraphicsBeginFrameHookInitialCall;
+
 void __fastcall PlayerDoFrameHook(Player* PlayerPtr);
 extern std::once_flag HookPlayerDoFrameInitialCall;
 
@@ -26,7 +31,6 @@ void __cdecl ExplosionCreateHook(explosion_info * ExplosionInfo, void * Source, 
 
 extern bool UpdateD3D11Pointers;
 
-bool __cdecl KeenGraphicsResizeRenderSwapchainHook(void* KeenSwapchain, unsigned int NewWidth, unsigned int NewHeight);
 
 void __fastcall hkpWorld_stepDeltaTime_hook(hkpWorld* This, void* edx, float PhysicsDeltaTime); //0x9E1A70
 extern std::once_flag HookhkpWorld_stepDeltaTime;

@@ -172,8 +172,9 @@ void ProgramManager::CreateGameHooks(bool EnableNow)
 	//Hooks.CreateHook("HumanUpdatePosAndOrient", GAMEHOOK, (DWORD*)(ModuleBase + 0x69AF70), HumanUpdatePosAndOrientHook, (LPVOID*)&HumanUpdatePosAndOrient, EnableNow);
 	//Hooks.CreateHook("CharacterControllerSetPos", GAMEHOOK, (DWORD*)(ModuleBase + 0x4153D0), CharacterControllerSetPosHook, (LPVOID*)&CharacterControllerSetPos, EnableNow);
 	Hooks.CreateHook("ExplosionCreate", GAMEHOOK, reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x2EC720), ExplosionCreateHook, reinterpret_cast<LPVOID*>(&ExplosionCreate), EnableNow);
+	Hooks.CreateHook("KeenGraphicsBeginFrame", GAMEHOOK, reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x86DD00), KeenGraphicsBeginFrameHook, reinterpret_cast<LPVOID*>(&KeenGraphicsBeginFrame), EnableNow);
 	//Hooks.CreateHook("CameraViewDataSetView", GAMEHOOK, (DWORD*)(ModuleBase + 0x2D0290), CameraViewDataSetViewHook, (LPVOID*)&CameraViewDataSetView, EnableNow);
-	//Hooks.CreateHook("KeenGraphicsResizeRenderSwapchain", GAMEHOOK, (DWORD*)(ModuleBase + 0x86AB20), KeenGraphicsResizeRenderSwapchainHook, (LPVOID*)&KeenGraphicsResizeRenderSwapchain, EnableNow);
+	Hooks.CreateHook("KeenGraphicsResizeRenderSwapchain", GAMEHOOK, reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x86AB20), KeenGraphicsResizeRenderSwapchainHook, reinterpret_cast<LPVOID*>(&KeenGraphicsResizeRenderSwapchain), EnableNow);
 
 	/*Start of MP Detection Hooks*/
 	//Using phony names to make finding the MP hooks a bit more difficult.

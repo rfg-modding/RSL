@@ -256,3 +256,5 @@ F_lua_dobuffer LuaDoBuffer;
 F_havok_body_get_pointer HavokBodyGetPointer;
 F_havok_body_apply_linear_impulse_A HavokBodyApplyLinearImpulseA;
 F_havok_body_apply_linear_impulse_B HavokBodyApplyLinearImpulseB;
+
+F_keen_graphics_beginFrame KeenGraphicsBeginFrame;

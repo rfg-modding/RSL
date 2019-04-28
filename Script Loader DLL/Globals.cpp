@@ -20,6 +20,7 @@ namespace Globals
 	hkpWorld* hkpWorldPtr = nullptr;
 	lua_State* RfgVintLuaState = nullptr;
 	hkpRigidBody* PlayerRigidBody = nullptr;
+    keen::GraphicsSystem* KeenGraphicsSystemPtr = nullptr;
 
 	DWORD MouseGenericPollMouseVisible = 0;
 	DWORD CenterMouseCursorCall = 0;

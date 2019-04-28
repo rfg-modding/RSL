@@ -74,3 +74,52 @@ namespace rfg
 		rl_sampling_vector Values[T];
 	};
 }
+
+namespace keen
+{
+    template <class T>
+    class SizedArray
+    {
+        T* Data;
+        unsigned int Size;
+        unsigned int Capacity;
+    };
+
+    struct MemoryBlock
+    {
+        char* pStart;
+        unsigned int size;
+    };
+
+    struct BasePoolAllocator //24 bytes
+    {
+        keen::MemoryBlock m_memoryBlock;
+        unsigned int m_capacity;
+        unsigned int m_size;
+        unsigned int m_elementSize;
+        unsigned int m_firstFreeIndex;
+    };
+
+    template <class T>
+    class PoolAllocator //24 bytes
+    {
+        keen::BasePoolAllocator m_pool;
+    };
+
+    struct GraphicsStateObjectCache
+    {
+        char m_stateObjects[45];
+        //keen::HashMap<unsigned int, keen::GraphicsStateObject *, keen::DefaultHashmapTraits<unsigned int, keen::GraphicsStateObject *> > m_stateObjects;
+    };
+
+    template <class T>
+    class GraphicsStateObjectPool
+    {
+        keen::PoolAllocator<char> m_allocator;
+        //keen::PoolAllocator<keen::VertexInputBinding> m_allocator;
+        keen::GraphicsStateObjectCache m_cache;
+        unsigned int m_peakSize;
+        unsigned int m_cacheHits;
+        unsigned int m_cacheRequests;
+    };
+}
