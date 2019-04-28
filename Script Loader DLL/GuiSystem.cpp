@@ -13,28 +13,28 @@ void GuiSystem::Initialize()
 {
 	GuiList.push_back(new MenuBarGui(&ShowAppMainMenuBar, "Top Menu Bar"));
 	MainMenuBar = static_cast<MenuBarGui*>(GuiList.back());
-	GuiList.push_back(new WelcomeGui(&ShowAppWelcome, "Welcome"));
-	Welcome = static_cast<WelcomeGui*>(GuiList.back());
+    GuiList.push_back(new GeneralTweaksGui(&ShowAppTweaksMenu, "General tweaks"));
+    TweaksMenu = static_cast<GeneralTweaksGui*>(GuiList.back());
 	GuiList.push_back(new OverlayConsole(&ShowAppConsole, "Lua console"));
 	Console = static_cast<OverlayConsole*>(GuiList.back());
-	GuiList.push_back(new ThemeEditorGui(&ShowAppThemeEditor, "Theme editor"));
-	ThemeEditor = static_cast<ThemeEditorGui*>(GuiList.back());
-	GuiList.push_back(new TeleportGui(&ShowAppTeleportMenu, "Teleport"));
-	Teleport = static_cast<TeleportGui*>(GuiList.back());
-	GuiList.push_back(new IntrospectionGui(&ShowAppIntrospectionMenu, "Introspection"));
-	Introspection = static_cast<IntrospectionGui*>(GuiList.back());
-	GuiList.push_back(new GeneralTweaksGui(&ShowAppTweaksMenu, "General tweaks"));
-	TweaksMenu = static_cast<GeneralTweaksGui*>(GuiList.back());
+    GuiList.push_back(new ScriptSelectGui(&ShowAppScriptsMenu, "Scripts"));
+    ScriptList = static_cast<ScriptSelectGui*>(GuiList.back());
+    GuiList.push_back(new FreeCamGui(&ShowAppFreeCamSettings, "Camera settings"));
+    FreeCamSettings = static_cast<FreeCamGui*>(GuiList.back());
 	GuiList.push_back(new TextEditor(&ShowAppScriptEditor, "Script editor"));
 	ScriptEditor = static_cast<TextEditor*>(GuiList.back());
-	GuiList.push_back(new ScriptSelectGui(&ShowAppScriptsMenu, "Scripts"));
-	ScriptList = static_cast<ScriptSelectGui*>(GuiList.back());
 	GuiList.push_back(new LogWindow(&ShowAppLogWindow , "Logger"));
 	LogGui = static_cast<LogWindow*>(GuiList.back());
-	GuiList.push_back(new FreeCamGui(&ShowAppFreeCamSettings, "Camera settings"));
-	FreeCamSettings = static_cast<FreeCamGui*>(GuiList.back());
+    GuiList.push_back(new WelcomeGui(&ShowAppWelcome, "Welcome"));
+    Welcome = static_cast<WelcomeGui*>(GuiList.back());
+    GuiList.push_back(new ThemeEditorGui(&ShowAppThemeEditor, "Theme editor"));
+    ThemeEditor = static_cast<ThemeEditorGui*>(GuiList.back());
 	GuiList.push_back(new PhysicsGui(&ShowAppPhysicsSettings, "Physics settings"));
 	PhysicsSettings = static_cast<PhysicsGui*>(GuiList.back());
+    GuiList.push_back(new TeleportGui(&ShowAppTeleportMenu, "Teleport"));
+    Teleport = static_cast<TeleportGui*>(GuiList.back());
+    GuiList.push_back(new IntrospectionGui(&ShowAppIntrospectionMenu, "Introspection"));
+    Introspection = static_cast<IntrospectionGui*>(GuiList.back());
 
 	for (const auto& i : GuiList)
 	{
@@ -72,19 +72,19 @@ void GuiSystem::Draw()
 {
 	try
 	{
+        if (!PlayerPtr)
+        {
+            if (DrawPassedOnce)
+            {
+                throw std::exception("Player pointer is null! Failed to draw overlay gui!");
+            }
+            return;
+        }
 		if (!Globals::ImGuiInitialized)
 		{
 			if (DrawPassedOnce)
 			{
 				throw std::exception("ImGui not initialized! Failed to draw overlay gui!");
-			}
-			return;
-		}
-		if (!PlayerPtr)
-		{
-			if (DrawPassedOnce)
-			{
-				throw std::exception("Player pointer is null! Failed to draw overlay gui!");
 			}
 			return;
 		}

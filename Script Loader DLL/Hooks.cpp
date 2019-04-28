@@ -609,108 +609,57 @@ void __fastcall PlayerDoFrameHook(Player* PlayerPtr)
 
 void __cdecl ExplosionCreateHook(explosion_info * ExplosionInfo, void * Source, void * Owner, vector * Position, matrix * Orientation, vector * Direction, void * WeaponInfo, bool FromServer)
 {
-	std::call_once(HookExplosionCreateInitialCall, [&]()
-	{
+    std::call_once(HookExplosionCreateInitialCall, [&]()
+        {
 
-	});
+        });
 
-	return ExplosionCreate(ExplosionInfo, Source, Owner, Position, Orientation, Direction, WeaponInfo, FromServer);
+    return ExplosionCreate(ExplosionInfo, Source, Owner, Position, Orientation, Direction, WeaponInfo, FromServer);
 }
 
-void __fastcall ObjectUpdatePosAndOrientHook(Object* ObjectPtr, void* edx, vector* UpdatedPosition, matrix* UpdatedOrientation, bool SetHavokData)
+void __fastcall hkpWorld_stepDeltaTime_hook(hkpWorld* This, void* edx, float PhysicsDeltaTime) //0x9E1A70
 {
-	std::call_once(HookObjectUpdatePosAndOrientInitialCall, [&]()
-	{
+    std::call_once(HookhkpWorld_stepDeltaTime, [&]()
+        {
+            Globals::hkpWorldPtr = This;
+            if (Globals::Scripts)
+            {
+                Globals::Scripts->UpdateRfgPointers();
+            }
+            if (Globals::Gui->PhysicsSettings)
+            {
+                Globals::Gui->PhysicsSettings->CurrentGravity = hkpWorldGetGravity(Globals::hkpWorldPtr, nullptr);
 
-	});
+                Globals::Gui->PhysicsSettings->CustomGravityVector.m_quad.m128_f32[0] = Globals::Gui->PhysicsSettings->CurrentGravity->m_quad.m128_f32[0];
+                Globals::Gui->PhysicsSettings->CustomGravityVector.m_quad.m128_f32[1] = Globals::Gui->PhysicsSettings->CurrentGravity->m_quad.m128_f32[1];
+                Globals::Gui->PhysicsSettings->CustomGravityVector.m_quad.m128_f32[2] = Globals::Gui->PhysicsSettings->CurrentGravity->m_quad.m128_f32[2];
+                Globals::Gui->PhysicsSettings->CustomGravityVector.m_quad.m128_f32[3] = Globals::Gui->PhysicsSettings->CurrentGravity->m_quad.m128_f32[3];
 
-	return ObjectUpdatePosAndOrient(ObjectPtr, edx, UpdatedPosition, UpdatedOrientation, SetHavokData);
-}
+                Globals::Gui->PhysicsSettings->DefaultGravityVector.m_quad.m128_f32[0] = Globals::Gui->PhysicsSettings->CurrentGravity->m_quad.m128_f32[0];
+                Globals::Gui->PhysicsSettings->DefaultGravityVector.m_quad.m128_f32[1] = Globals::Gui->PhysicsSettings->CurrentGravity->m_quad.m128_f32[1];
+                Globals::Gui->PhysicsSettings->DefaultGravityVector.m_quad.m128_f32[2] = Globals::Gui->PhysicsSettings->CurrentGravity->m_quad.m128_f32[2];
+                Globals::Gui->PhysicsSettings->DefaultGravityVector.m_quad.m128_f32[3] = Globals::Gui->PhysicsSettings->CurrentGravity->m_quad.m128_f32[3];
+            }
+        });
+    if (This != Globals::hkpWorldPtr)
+    {
+        Logger::Log("GlobalhkpWorldPtr address changed!", LogWarning);
+        Globals::hkpWorldPtr = This;
+        if (Globals::Scripts)
+        {
+            Globals::Scripts->UpdateRfgPointers();
+        }
+    }
 
-/*Start of MP Detection Hooks*/
-bool __fastcall IsValidGameLinkLobbyKaikoHook(void* This)
-{
-	Globals::MultiplayerHookTriggered = true;
-	return IsValidGameLinkLobbyKaiko(This);
-}
+    if (Globals::Gui->PhysicsSettings)
+    {
+        if (Globals::Gui->PhysicsSettings->UseCustomPhysicsTimestepMultiplier)
+        {
+            PhysicsDeltaTime *= Globals::Gui->PhysicsSettings->CustomPhysicsTimeStepMultiplier;
+        }
+    }
 
-void __cdecl GameMusicMultiplayerStartHook()
-{
-	Globals::MultiplayerHookTriggered = true;
-	return GameMusicMultiplayerStart();
-}
-
-void __cdecl InitMultiplayerDataItemRespawnHook(void* Item)
-{
-	Globals::MultiplayerHookTriggered = true;
-	return InitMultiplayerDataItemRespawn(Item);
-}
-
-void __cdecl HudUiMultiplayerProcessHook(float DeltaTime)
-{
-	Globals::MultiplayerHookTriggered = true;
-	return HudUiMultiplayerProcess(DeltaTime);
-}
-
-void __cdecl HudUiMultiplayerEnterHook()
-{
-	Globals::MultiplayerHookTriggered = true;
-	return HudUiMultiplayerEnter();
-}
-/*End of MP Detection Hooks*/
-
-void __fastcall world_do_frame_hook(World* This, void* edx, bool HardLoad)
-{
-	std::call_once(HookWorldDoFrameInitialCall, [&]()
-	{
-		Globals::RfgWorldPtr = This;
-		Logger::Log("RFG::World hooked!", LogInfo);
-		
-		Globals::TODLightPtr = game_render_get_TOD_light();
-		if (Globals::Scripts)
-		{
-			Globals::Scripts->UpdateRfgPointers();
-		}
-	});
-	if (Globals::RfgWorldPtr != This)
-	{
-		Logger::Log("GlobalRfgWorldPtr changed!", LogWarning);
-		Globals::RfgWorldPtr = This;
-		if (Globals::Scripts)
-		{
-			Globals::Scripts->UpdateRfgPointers();
-		}
-	}
-	if (!Globals::TODLightPtr)
-	{
-		Globals::TODLightPtr = game_render_get_TOD_light();
-	}
-	if (!Globals::Gui->TweaksMenu)
-	{
-		return world_do_frame(This, edx, HardLoad);
-	}
-
-	if (Globals::Gui->TweaksMenu->UseCustomLevelAmbientLight)
-	{
-		Globals::RfgWorldPtr->level_ambient.x = Globals::Gui->TweaksMenu->CustomLevelAmbientLight.x;
-		Globals::RfgWorldPtr->level_ambient.y = Globals::Gui->TweaksMenu->CustomLevelAmbientLight.y;
-		Globals::RfgWorldPtr->level_ambient.z = Globals::Gui->TweaksMenu->CustomLevelAmbientLight.z;
-	}
-	if (Globals::Gui->TweaksMenu->UseCustomLevelBackgroundAmbientLight)
-	{
-		Globals::RfgWorldPtr->level_back_ambient.x = Globals::Gui->TweaksMenu->CustomLevelBackgroundAmbientLight.x;
-		Globals::RfgWorldPtr->level_back_ambient.y = Globals::Gui->TweaksMenu->CustomLevelBackgroundAmbientLight.y;
-		Globals::RfgWorldPtr->level_back_ambient.z = Globals::Gui->TweaksMenu->CustomLevelBackgroundAmbientLight.z;
-	}
-	if (Globals::Gui->TweaksMenu->UseCustomTimeOfDayLight)
-	{
-		Globals::TODLightPtr->m_color.red = Globals::Gui->TweaksMenu->CustomTimeOfDayLightColor.red;
-		Globals::TODLightPtr->m_color.green = Globals::Gui->TweaksMenu->CustomTimeOfDayLightColor.green;
-		Globals::TODLightPtr->m_color.blue = Globals::Gui->TweaksMenu->CustomTimeOfDayLightColor.blue;
-		Globals::TODLightPtr->m_color.alpha = Globals::Gui->TweaksMenu->CustomTimeOfDayLightColor.alpha;
-	}																   
-
-	return world_do_frame(This, edx, HardLoad);
+    return hkpWorld_stepDeltaTime(This, edx, PhysicsDeltaTime);
 }
 
 void __fastcall rl_camera_render_begin_hook(rl_camera* This, void* edx, rl_renderer* Renderer) //.text:01027660 rfg.exe:$137660 #136A60 <rl_camera::render_begin>
@@ -745,51 +694,6 @@ void __fastcall rl_camera_render_begin_hook(rl_camera* This, void* edx, rl_rende
 	return rl_camera_render_begin(This, edx, Renderer);
 }
 
-void __fastcall hkpWorld_stepDeltaTime_hook(hkpWorld* This, void* edx, float PhysicsDeltaTime) //0x9E1A70
-{
-	std::call_once(HookhkpWorld_stepDeltaTime, [&]()
-	{
-		Globals::hkpWorldPtr = This;
-		if (Globals::Scripts)
-		{
-			Globals::Scripts->UpdateRfgPointers();
-		}
-		if (Globals::Gui->PhysicsSettings)
-		{
-			Globals::Gui->PhysicsSettings->CurrentGravity = hkpWorldGetGravity(Globals::hkpWorldPtr, nullptr);
-
-			Globals::Gui->PhysicsSettings->CustomGravityVector.m_quad.m128_f32[0] = Globals::Gui->PhysicsSettings->CurrentGravity->m_quad.m128_f32[0];
-			Globals::Gui->PhysicsSettings->CustomGravityVector.m_quad.m128_f32[1] = Globals::Gui->PhysicsSettings->CurrentGravity->m_quad.m128_f32[1];
-			Globals::Gui->PhysicsSettings->CustomGravityVector.m_quad.m128_f32[2] = Globals::Gui->PhysicsSettings->CurrentGravity->m_quad.m128_f32[2];
-			Globals::Gui->PhysicsSettings->CustomGravityVector.m_quad.m128_f32[3] = Globals::Gui->PhysicsSettings->CurrentGravity->m_quad.m128_f32[3];
-				
-			Globals::Gui->PhysicsSettings->DefaultGravityVector.m_quad.m128_f32[0] = Globals::Gui->PhysicsSettings->CurrentGravity->m_quad.m128_f32[0];
-			Globals::Gui->PhysicsSettings->DefaultGravityVector.m_quad.m128_f32[1] = Globals::Gui->PhysicsSettings->CurrentGravity->m_quad.m128_f32[1];
-			Globals::Gui->PhysicsSettings->DefaultGravityVector.m_quad.m128_f32[2] = Globals::Gui->PhysicsSettings->CurrentGravity->m_quad.m128_f32[2];
-			Globals::Gui->PhysicsSettings->DefaultGravityVector.m_quad.m128_f32[3] = Globals::Gui->PhysicsSettings->CurrentGravity->m_quad.m128_f32[3];
-		}
-	});
-	if (This != Globals::hkpWorldPtr)
-	{
-		Logger::Log("GlobalhkpWorldPtr address changed!", LogWarning);
-		Globals::hkpWorldPtr = This;
-		if (Globals::Scripts)
-		{
-			Globals::Scripts->UpdateRfgPointers();
-		}
-	}
-
-	if (Globals::Gui->PhysicsSettings)
-	{
-		if (Globals::Gui->PhysicsSettings->UseCustomPhysicsTimestepMultiplier)
-		{
-			PhysicsDeltaTime *= Globals::Gui->PhysicsSettings->CustomPhysicsTimeStepMultiplier;
-		}
-	}
-
-	return hkpWorld_stepDeltaTime(This, edx, PhysicsDeltaTime);
-}
-
 void __fastcall ApplicationUpdateTimeHook(void* This, void* edx, float TimeStep)
 {
 	std::call_once(HookApplicationUpdateTime, [&]()
@@ -806,6 +710,60 @@ void __fastcall ApplicationUpdateTimeHook(void* This, void* edx, float TimeStep)
 	}*/
 
 	return ApplicationUpdateTime(This, edx, TimeStep);
+}
+
+void __fastcall world_do_frame_hook(World* This, void* edx, bool HardLoad)
+{
+    std::call_once(HookWorldDoFrameInitialCall, [&]()
+        {
+            Globals::RfgWorldPtr = This;
+            Logger::Log("RFG::World hooked!", LogInfo);
+
+            Globals::TODLightPtr = game_render_get_TOD_light();
+            if (Globals::Scripts)
+            {
+                Globals::Scripts->UpdateRfgPointers();
+            }
+        });
+    if (Globals::RfgWorldPtr != This)
+    {
+        Logger::Log("GlobalRfgWorldPtr changed!", LogWarning);
+        Globals::RfgWorldPtr = This;
+        if (Globals::Scripts)
+        {
+            Globals::Scripts->UpdateRfgPointers();
+        }
+    }
+    if (!Globals::TODLightPtr)
+    {
+        Globals::TODLightPtr = game_render_get_TOD_light();
+    }
+    if (!Globals::Gui->TweaksMenu)
+    {
+        return world_do_frame(This, edx, HardLoad);
+    }
+
+    if (Globals::Gui->TweaksMenu->UseCustomLevelAmbientLight)
+    {
+        Globals::RfgWorldPtr->level_ambient.x = Globals::Gui->TweaksMenu->CustomLevelAmbientLight.x;
+        Globals::RfgWorldPtr->level_ambient.y = Globals::Gui->TweaksMenu->CustomLevelAmbientLight.y;
+        Globals::RfgWorldPtr->level_ambient.z = Globals::Gui->TweaksMenu->CustomLevelAmbientLight.z;
+    }
+    if (Globals::Gui->TweaksMenu->UseCustomLevelBackgroundAmbientLight)
+    {
+        Globals::RfgWorldPtr->level_back_ambient.x = Globals::Gui->TweaksMenu->CustomLevelBackgroundAmbientLight.x;
+        Globals::RfgWorldPtr->level_back_ambient.y = Globals::Gui->TweaksMenu->CustomLevelBackgroundAmbientLight.y;
+        Globals::RfgWorldPtr->level_back_ambient.z = Globals::Gui->TweaksMenu->CustomLevelBackgroundAmbientLight.z;
+    }
+    if (Globals::Gui->TweaksMenu->UseCustomTimeOfDayLight)
+    {
+        Globals::TODLightPtr->m_color.red = Globals::Gui->TweaksMenu->CustomTimeOfDayLightColor.red;
+        Globals::TODLightPtr->m_color.green = Globals::Gui->TweaksMenu->CustomTimeOfDayLightColor.green;
+        Globals::TODLightPtr->m_color.blue = Globals::Gui->TweaksMenu->CustomTimeOfDayLightColor.blue;
+        Globals::TODLightPtr->m_color.alpha = Globals::Gui->TweaksMenu->CustomTimeOfDayLightColor.alpha;
+    }
+
+    return world_do_frame(This, edx, HardLoad);
 }
 
 int __cdecl LuaDoBufferHook(lua_State *L, const char *buff, unsigned int size, const char *name)
@@ -847,3 +805,45 @@ int __cdecl LuaDoBufferHook(lua_State *L, const char *buff, unsigned int size, c
 	}
 	return LuaDoBuffer(L, buff, size, name);
 }
+
+void __fastcall ObjectUpdatePosAndOrientHook(Object* ObjectPtr, void* edx, vector* UpdatedPosition, matrix* UpdatedOrientation, bool SetHavokData)
+{
+    std::call_once(HookObjectUpdatePosAndOrientInitialCall, [&]()
+        {
+
+        });
+
+    return ObjectUpdatePosAndOrient(ObjectPtr, edx, UpdatedPosition, UpdatedOrientation, SetHavokData);
+}
+
+/*Start of MP Detection Hooks*/
+bool __fastcall IsValidGameLinkLobbyKaikoHook(void* This)
+{
+    Globals::MultiplayerHookTriggered = true;
+    return IsValidGameLinkLobbyKaiko(This);
+}
+
+void __cdecl GameMusicMultiplayerStartHook()
+{
+    Globals::MultiplayerHookTriggered = true;
+    return GameMusicMultiplayerStart();
+}
+
+void __cdecl InitMultiplayerDataItemRespawnHook(void* Item)
+{
+    Globals::MultiplayerHookTriggered = true;
+    return InitMultiplayerDataItemRespawn(Item);
+}
+
+void __cdecl HudUiMultiplayerProcessHook(float DeltaTime)
+{
+    Globals::MultiplayerHookTriggered = true;
+    return HudUiMultiplayerProcess(DeltaTime);
+}
+
+void __cdecl HudUiMultiplayerEnterHook()
+{
+    Globals::MultiplayerHookTriggered = true;
+    return HudUiMultiplayerEnter();
+}
+/*End of MP Detection Hooks*/

@@ -44,40 +44,37 @@ public:
 
 	//These pointers are used by any other class which wants quick access to a gui's state
 	//Avoids the cost of a search for each access.
-	MenuBarGui* MainMenuBar = nullptr;
+    LogWindow* LogGui = nullptr;
+    ScriptSelectGui* ScriptList = nullptr;
+    PhysicsGui* PhysicsSettings = nullptr;
+    ThemeEditorGui* ThemeEditor = nullptr;
 	WelcomeGui* Welcome = nullptr;
-	OverlayConsole* Console = nullptr;
-	ThemeEditorGui* ThemeEditor = nullptr;
-	TeleportGui* Teleport = nullptr;
+    TeleportGui* Teleport = nullptr;
 	IntrospectionGui* Introspection = nullptr;
 	GeneralTweaksGui* TweaksMenu = nullptr;
 	TextEditor* ScriptEditor = nullptr;
-	ScriptSelectGui* ScriptList = nullptr;
-	LogWindow* LogGui = nullptr;
 	FreeCamGui* FreeCamSettings = nullptr;
-	PhysicsGui* PhysicsSettings = nullptr;
+    OverlayConsole* Console = nullptr;
+    MenuBarGui* MainMenuBar = nullptr;
+
 
 	bool ShowAppWelcome = true;
-
 	bool ShowAppConsole = false;
-	bool ShowAppMetrics = false;
+    bool ShowAppIntrospectionMenu = false;
 	bool ShowAppThemeEditor = false;
 	bool ShowAppAbout = false;
 	bool ShowAppGameInfoOverlay = false;
-
 	bool ShowAppMainMenuBar = true;
+    bool ShowAppMetrics = false;
 	bool ShowAppSimpleOverlay = false;
-
-	bool ShowAppTeleportMenu = false;
 	bool ShowAppHelpWindow = false;
-	bool ShowAppIntrospectionMenu = false;
+    bool ShowAppPhysicsSettings = false;
 	bool ShowAppTweaksMenu = false;
 	bool ShowAppScriptsMenu = false;
+    bool ShowAppTeleportMenu = false;
 	bool ShowAppScriptEditor = false;
-
+    bool ShowAppFreeCamSettings = false;
 	bool ShowAppLogWindow = false;
-	bool ShowAppFreeCamSettings = false;
-	bool ShowAppPhysicsSettings = false;
 
 private:
 	bool LuaConsoleActive = false;
