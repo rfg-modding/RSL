@@ -1,6 +1,8 @@
 #pragma once
 #include "Functions.h"
 
+#define DebugDrawTestEnabled false
+
 extern std::chrono::steady_clock::time_point ExplosionTimerBegin;
 extern std::chrono::steady_clock::time_point ExplosionTimerEnd;
 

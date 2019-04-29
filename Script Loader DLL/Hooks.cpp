@@ -327,35 +327,37 @@ HRESULT __stdcall D3D11PresentHook(IDXGISwapChain* pSwapChain, UINT SyncInterval
 
 	if (!Globals::ScriptLoaderCloseRequested)
 	{
-        //try
-        //{
-        //    if (Globals::DebugDrawRenderInterface)
-        //    {
-        //        UpdateDebugDrawRenderInterfaceValues();
-        //        if (Globals::PlayerPtr)
-        //        {
+#if DebugDrawTestEnabled
+        try
+        {
+            if (Globals::DebugDrawRenderInterface)
+            {
+                UpdateDebugDrawRenderInterfaceValues();
+                if (Globals::PlayerPtr)
+                {
 
-        //            const ddVec3 boxColor = { 0.0f, 0.8f, 0.8f };
-        //            const ddVec3 boxCenter = { Globals::PlayerPtr->Position.x, Globals::PlayerPtr->Position.y, Globals::PlayerPtr->Position.z };
-        //            const ddVec3 UpVector = { 0.0f, 1.0f, 0.0f };
+                    const ddVec3 boxColor = { 0.0f, 0.8f, 0.8f };
+                    const ddVec3 boxCenter = { Globals::PlayerPtr->Position.x, Globals::PlayerPtr->Position.y, Globals::PlayerPtr->Position.z };
+                    const ddVec3 UpVector = { 0.0f, 1.0f, 0.0f };
 
-        //            dd::circle(boxCenter, UpVector, boxColor, 500.0f, 2000, 5000);
-        //            dd::box(boxCenter, boxColor, 15.0f, 15.0f, 15.0f);
-        //            dd::cross(boxCenter, 1.0f);
+                    dd::circle(boxCenter, UpVector, boxColor, 500.0f, 2000, 5000);
+                    dd::box(boxCenter, boxColor, 15.0f, 15.0f, 15.0f);
+                    dd::cross(boxCenter, 1.0f);
 
-        //            const ddVec3 DebugTextPosition = { 0.2f, 0.2f, 0.0f };
-        //            const ddVec3 DebugTextColor = { 1.0f, 0.0f, 0.0f };
-        //            dd::screenText("hOi!!!!! I'm tEMMIE!!", DebugTextPosition, DebugTextColor, 2.0f, 5000);
+                    const ddVec3 DebugTextPosition = { 0.2f, 0.2f, 0.0f };
+                    const ddVec3 DebugTextColor = { 1.0f, 0.0f, 0.0f };
+                    dd::screenText("hOi!!!!! I'm tEMMIE!!", DebugTextPosition, DebugTextColor, 2.0f, 5000);
 
-        //            //dd::projectedText("Space asshole", boxCenter, DebugTextColor, Globals::vpMatrix, 300, 300, 300, 300, 1.0f);
-        //        }
-        //        dd::flush();
-        //    }
-        //}
-        //catch (std::exception& Ex)
-        //{
-        //    Logger::Log(std::string("Exception caught while testing debug draw cube! Message: ") + std::string(Ex.what()), LogError);
-        //}
+                    //dd::projectedText("Space asshole", boxCenter, DebugTextColor, Globals::vpMatrix, 300, 300, 300, 300, 1.0f);
+                }
+                dd::flush();
+            }
+        }
+        catch (std::exception& Ex)
+        {
+            Logger::Log(std::string("Exception caught while testing debug draw cube! Message: ") + std::string(Ex.what()), LogError);
+        }
+#endif
 
 		ImGui_ImplDX11_NewFrame();
 		ImGui_ImplWin32_NewFrame();
@@ -488,16 +490,17 @@ keen::GraphicsCommandBuffer* KeenGraphicsBeginFrameHook(keen::GraphicsSystem* pG
 
                             Logger::Log("ImGui Initialized.", LogInfo);
 
-
-                            //try
-                            //{
-                            //	Globals::DebugDrawRenderInterface = new RenderInterfaceD3D11(Globals::D3D11Device, Globals::D3D11Context);
-                            //	dd::initialize(Globals::DebugDrawRenderInterface);
-                            //}
-                            //catch (std::exception& Ex)
-                            //{
-                            //	Logger::Log(std::string("Exception caught while initializing debug draw! Message: ") + std::string(Ex.what()), LogError);
-                            //}
+#if DebugDrawTestEnabled
+                            try
+                            {
+                            	Globals::DebugDrawRenderInterface = new RenderInterfaceD3D11(Globals::D3D11Device, Globals::D3D11Context);
+                            	dd::initialize(Globals::DebugDrawRenderInterface);
+                            }
+                            catch (std::exception& Ex)
+                            {
+                            	Logger::Log(std::string("Exception caught while initializing debug draw! Message: ") + std::string(Ex.what()), LogError);
+                            }
+#endif
                         }  
                     }
                 }
