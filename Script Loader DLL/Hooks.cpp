@@ -524,6 +524,11 @@ keen::GraphicsCommandBuffer* KeenGraphicsBeginFrameHook(keen::GraphicsSystem* pG
     {
         Globals::KeenGraphicsSystemPtr = pGraphicsSystem;
     });
+    if(Globals::KeenGraphicsSystemPtr != pGraphicsSystem)
+    {
+        Logger::Log("Globals::KeenGraphicsSystemPtr changed!", LogWarning);
+        Globals::KeenGraphicsSystemPtr = pGraphicsSystem;
+    }
 
     return KeenGraphicsBeginFrame(pGraphicsSystem, pSwapChain);
 }
