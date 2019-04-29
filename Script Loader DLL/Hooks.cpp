@@ -320,148 +320,6 @@ HRESULT D3D11_DEVICE_CONTEXT_FROM_SWAPCHAIN(IDXGISwapChain* pSwapChain, ID3D11De
 
 HRESULT __stdcall D3D11PresentHook(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT Flags)
 {
-	std::call_once(HookD3D11PresentInitialCall, [&]()
-	{
-		HRESULT Result = D3D11_DEVICE_CONTEXT_FROM_SWAPCHAIN(pSwapChain, &Globals::D3D11Device, &Globals::D3D11Context);
-		if (Result != S_OK)
-		{
-			Logger::Log(std::string("D3D11DeviceContextFromSwapchain() failed, return value: " + std::to_string(Result)), LogFatalError);
-			return E_FAIL;
-		}
-		Globals::D3D11SwapchainPtr = pSwapChain;
-		//
-		ID3D11Texture2D* BackBuffer;
-		Result = pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<LPVOID*>(&BackBuffer));
-		if (Result != S_OK)
-		{
-			Logger::Log(std::string("GetBuffer() failed, return value: " + std::to_string(Result)), LogFatalError);
-			return E_FAIL;
-		}
-
-		D3D11_RENDER_TARGET_VIEW_DESC desc = {};
-		memset(&desc, 0, sizeof(desc));
-		desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM; //Required to avoid rendering bug with overlay. Without this the proper rgb values will not be displayed.
-		desc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
-		Result = Globals::D3D11Device->CreateRenderTargetView(BackBuffer, &desc, &Globals::MainRenderTargetView);
-		if (Result != S_OK)
-		{
-			Logger::Log(std::string("CreateRenderTargetView() failed, return value: " + std::to_string(Result)), LogFatalError);
-			return E_FAIL;
-		}
-		BackBuffer->Release();
-
-		Logger::Log("Initializing ImGui.", LogInfo);
-
-		IMGUI_CHECKVERSION();
-		ImGui::CreateContext();
-		Globals::io = ImGui::GetIO();
-		Globals::io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
-		ImGui::StyleColorsDark();
-
-		ImGui_ImplDX11_Init(Globals::D3D11Device, Globals::D3D11Context);
-		const bool RectResult = GetWindowRect(Globals::GameWindowHandle, &Globals::WindowRect);
-		if (!RectResult)
-		{
-			Logger::Log("GetWindowRect() failed during script loader init!", LogError);
-		}
-		ImGui_ImplWin32_Init(Globals::GameWindowHandle);
-
-		ImGuiIO& io = ImGui::GetIO();
-		const float GlobalFontSize = 17.0f;
-		std::string DefaultFontPath = std::string(Globals::GetEXEPath(false) + "RFGR Script Loader/Fonts/Roboto-Regular.ttf");
-		bool DefaultFontLoaded = false;
-		if (fs::exists(DefaultFontPath))
-		{	
-			io.Fonts->AddFontFromFileTTF(DefaultFontPath.c_str(), GlobalFontSize);
-			DefaultFontLoaded = true;
-		}
-		else
-		{
-			io.Fonts->AddFontDefault();
-		}
-
-		static const ImWchar IconsRanges[] = { ICON_MIN_FA, ICON_MAX_FA, 0 };
-		ImFontConfig IconsConfig;
-		IconsConfig.MergeMode = true;
-		IconsConfig.PixelSnapH = true;
-		std::string FontAwesomeSolidPath(Globals::GetEXEPath(false) + "RFGR Script Loader/Fonts/fa-solid-900.ttf");
-		Logger::Log(FontAwesomeSolidPath, LogWarning);
-		Globals::FontNormal = io.Fonts->AddFontFromFileTTF(FontAwesomeSolidPath.c_str(), GlobalFontSize, &IconsConfig, IconsRanges);
-
-		const float GlobalBigFontSize = 24.0f;
-		if (DefaultFontLoaded)
-		{
-			io.Fonts->AddFontFromFileTTF(DefaultFontPath.c_str(), GlobalBigFontSize);
-		}
-		Globals::FontBig = io.Fonts->AddFontFromFileTTF(FontAwesomeSolidPath.c_str(), GlobalBigFontSize, &IconsConfig, IconsRanges);
-
-		/*Start of FontLarge loading*/
-		float GlobalLargeFontSize = 35.0f;
-		if (DefaultFontLoaded)
-		{
-			io.Fonts->AddFontFromFileTTF(DefaultFontPath.c_str(), GlobalLargeFontSize);
-		}
-		Globals::FontLarge = io.Fonts->AddFontFromFileTTF(FontAwesomeSolidPath.c_str(), GlobalLargeFontSize, &IconsConfig, IconsRanges);
-		/*End of FontLarge loading*/
-
-		/*Start of FontHuge loading*/
-		float GlobalHugeFontSize = 70.0f;
-		if (DefaultFontLoaded)
-		{
-			io.Fonts->AddFontFromFileTTF(DefaultFontPath.c_str(), GlobalHugeFontSize);
-		}
-		Globals::FontHuge = io.Fonts->AddFontFromFileTTF(FontAwesomeSolidPath.c_str(), GlobalHugeFontSize, &IconsConfig, IconsRanges);
-		/*End of FontHuge loading*/
-
-		Globals::ImGuiInitialized = true;
-		UpdateD3D11Pointers = false;
-
-		//try
-		//{
-		//	Globals::DebugDrawRenderInterface = new RenderInterfaceD3D11(Globals::D3D11Device, Globals::D3D11Context);
-		//	dd::initialize(Globals::DebugDrawRenderInterface);
-		//}
-		//catch (std::exception& Ex)
-		//{
-		//	Logger::Log(std::string("Exception caught while initializing debug draw! Message: ") + std::string(Ex.what()), LogError);
-		//}
-
-		Logger::Log("ImGui Initialized.", LogInfo);
-		return S_OK;
-	});
-
-	if (UpdateD3D11Pointers)
-	{
-		Logger::Log("UpdateD3D11Pointers = true. Reforming MainRenderTargetView and ImGui DX11 Devices.", LogWarning);
-
-		HRESULT Result = D3D11_DEVICE_CONTEXT_FROM_SWAPCHAIN(pSwapChain, &Globals::D3D11Device, &Globals::D3D11Context);
-		if (Result != S_OK)
-		{
-			Logger::Log(std::string("D3D11DeviceContextFromSwapchain() failed, return value: " + std::to_string(Result)), LogFatalError);
-			return E_FAIL;
-		}
-		Globals::D3D11SwapchainPtr = pSwapChain;
-		//
-		ID3D11Texture2D* BackBuffer;
-		Result = pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<LPVOID*>(&BackBuffer));
-		if (Result != S_OK)
-		{
-			Logger::Log(std::string("GetBuffer() failed, return value: " + std::to_string(Result)), LogFatalError);
-			return E_FAIL;
-		}
-
-		Result = Globals::D3D11Device->CreateRenderTargetView(BackBuffer, nullptr, &Globals::MainRenderTargetView);
-		if (Result != S_OK)
-		{
-			Logger::Log(std::string("CreateRenderTargetView() failed, return value: " + std::to_string(Result)), LogFatalError);
-			return E_FAIL;
-		}
-		BackBuffer->Release();
-
-		ImGui_ImplDX11_CreateDeviceObjects();
-		Logger::Log("Finished reforming after resize.", LogInfo);
-		UpdateD3D11Pointers = false;
-	}
 	if (!Globals::ImGuiInitialized)
 	{
 		return D3D11PresentObject(pSwapChain, SyncInterval, Flags);
@@ -528,6 +386,123 @@ keen::GraphicsCommandBuffer* KeenGraphicsBeginFrameHook(keen::GraphicsSystem* pG
     {
         Logger::Log("Globals::KeenGraphicsSystemPtr changed!", LogWarning);
         Globals::KeenGraphicsSystemPtr = pGraphicsSystem;
+    }
+    //Grab required D3D11 pointers for rendering and set up imgui.
+    if (!Globals::ImGuiInitialized)
+    {
+        if(pGraphicsSystem->pDevice)
+        {
+            Globals::D3D11Device = pGraphicsSystem->pDevice;
+            if(pGraphicsSystem->pImmediateContext)
+            {
+                Globals::D3D11Context = pGraphicsSystem->pImmediateContext;
+                if(pGraphicsSystem->pDefaultSwapChain)
+                {
+                    if(pGraphicsSystem->pDefaultSwapChain->pSwapChain)
+                    {
+                        Globals::D3D11SwapchainPtr = pGraphicsSystem->pDefaultSwapChain->pSwapChain;
+                        if(pGraphicsSystem->pDefaultSwapChain->pBackBufferRenderTargetView)
+                        {
+                            //ImGui init
+                            ID3D11Texture2D* BackBuffer;
+                            HRESULT Result = Globals::D3D11SwapchainPtr->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<LPVOID*>(&BackBuffer));
+                            if (Result != S_OK)
+                            {
+                                Logger::Log(std::string("GetBuffer() failed, return value: " + std::to_string(Result)), LogFatalError);
+                            }
+
+                            D3D11_RENDER_TARGET_VIEW_DESC desc = {};
+                            memset(&desc, 0, sizeof(desc));
+                            desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM; //Required to avoid rendering issue with overlay. Without this the proper rgb values will not be displayed.
+                            desc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
+                            Result = Globals::D3D11Device->CreateRenderTargetView(BackBuffer, &desc, &Globals::MainRenderTargetView);
+                            if (Result != S_OK)
+                            {
+                                Logger::Log(std::string("CreateRenderTargetView() failed, return value: " + std::to_string(Result)), LogFatalError);
+                            }
+                            BackBuffer->Release();
+
+                            IMGUI_CHECKVERSION();
+                            ImGui::CreateContext();
+                            Globals::io = ImGui::GetIO();
+                            Globals::io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+                            ImGui::StyleColorsDark();
+
+                            ImGui_ImplDX11_Init(Globals::D3D11Device, Globals::D3D11Context);
+                            const bool RectResult = GetWindowRect(Globals::GameWindowHandle, &Globals::WindowRect);
+                            if (!RectResult)
+                            {
+                                Logger::Log("GetWindowRect() failed during script loader init!", LogError);
+                            }
+                            ImGui_ImplWin32_Init(Globals::GameWindowHandle);
+
+                            ImGuiIO& io = ImGui::GetIO();
+                            const float GlobalFontSize = 17.0f;
+                            std::string DefaultFontPath = std::string(Globals::GetEXEPath(false) + "RFGR Script Loader/Fonts/Roboto-Regular.ttf");
+                            bool DefaultFontLoaded = false;
+                            if (fs::exists(DefaultFontPath))
+                            {
+                                io.Fonts->AddFontFromFileTTF(DefaultFontPath.c_str(), GlobalFontSize);
+                                DefaultFontLoaded = true;
+                            }
+                            else
+                            {
+                                io.Fonts->AddFontDefault();
+                            }
+
+                            static const ImWchar IconsRanges[] = { ICON_MIN_FA, ICON_MAX_FA, 0 };
+                            ImFontConfig IconsConfig;
+                            IconsConfig.MergeMode = true;
+                            IconsConfig.PixelSnapH = true;
+                            std::string FontAwesomeSolidPath(Globals::GetEXEPath(false) + "RFGR Script Loader/Fonts/fa-solid-900.ttf");
+                            Logger::Log(FontAwesomeSolidPath, LogWarning);
+                            Globals::FontNormal = io.Fonts->AddFontFromFileTTF(FontAwesomeSolidPath.c_str(), GlobalFontSize, &IconsConfig, IconsRanges);
+
+                            const float GlobalBigFontSize = 24.0f;
+                            if (DefaultFontLoaded)
+                            {
+                                io.Fonts->AddFontFromFileTTF(DefaultFontPath.c_str(), GlobalBigFontSize);
+                            }
+                            Globals::FontBig = io.Fonts->AddFontFromFileTTF(FontAwesomeSolidPath.c_str(), GlobalBigFontSize, &IconsConfig, IconsRanges);
+
+                            /*Start of FontLarge loading*/
+                            float GlobalLargeFontSize = 35.0f;
+                            if (DefaultFontLoaded)
+                            {
+                                io.Fonts->AddFontFromFileTTF(DefaultFontPath.c_str(), GlobalLargeFontSize);
+                            }
+                            Globals::FontLarge = io.Fonts->AddFontFromFileTTF(FontAwesomeSolidPath.c_str(), GlobalLargeFontSize, &IconsConfig, IconsRanges);
+                            /*End of FontLarge loading*/
+
+                            /*Start of FontHuge loading*/
+                            float GlobalHugeFontSize = 70.0f;
+                            if (DefaultFontLoaded)
+                            {
+                                io.Fonts->AddFontFromFileTTF(DefaultFontPath.c_str(), GlobalHugeFontSize);
+                            }
+                            Globals::FontHuge = io.Fonts->AddFontFromFileTTF(FontAwesomeSolidPath.c_str(), GlobalHugeFontSize, &IconsConfig, IconsRanges);
+                            /*End of FontHuge loading*/
+
+                            Globals::ImGuiInitialized = true;
+                            UpdateD3D11Pointers = false;
+
+                            Logger::Log("ImGui Initialized.", LogInfo);
+
+
+                            //try
+                            //{
+                            //	Globals::DebugDrawRenderInterface = new RenderInterfaceD3D11(Globals::D3D11Device, Globals::D3D11Context);
+                            //	dd::initialize(Globals::DebugDrawRenderInterface);
+                            //}
+                            //catch (std::exception& Ex)
+                            //{
+                            //	Logger::Log(std::string("Exception caught while initializing debug draw! Message: ") + std::string(Ex.what()), LogError);
+                            //}
+                        }  
+                    }
+                }
+            }
+        }
     }
 
     return KeenGraphicsBeginFrame(pGraphicsSystem, pSwapChain);
