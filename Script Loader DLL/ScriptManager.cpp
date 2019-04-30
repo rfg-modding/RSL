@@ -84,7 +84,13 @@ void ScriptManager::SetupLua()
 	LoggerTable["OpenLogFile"] = Logger::OpenLogFile;
 	LoggerTable["CloseLogFile"] = Logger::CloseLogFile;
 	LoggerTable["CloseAllLogFiles"] = Logger::CloseAllLogFiles;
-	LoggerTable["Log"] = Logger::Log;
+	//LoggerTable["Log"] = Logger::Log;
+	LoggerTable.set_function("Log", sol::overload(
+        [](std::string Message) {Logger::Log(Message, LogInfo, false, true); },
+        [](std::string Message, LogType Type) {Logger::Log(Message, Type, false, true); },
+        [](std::string Message, LogType Type, bool LogTime) {Logger::Log(Message, Type, LogTime, true); },
+        [](std::string Message, LogType Type, bool LogTime, bool Newline) {Logger::Log(Message, Type, LogTime, Newline); }
+    ));
 	LoggerTable["LogFlagWithColor"] = Logger::LogFlagWithColor;
 	LoggerTable["GetFlagString"] = Logger::GetFlagString;
 	LoggerTable["LogToFile"] = Logger::LogToFile;
