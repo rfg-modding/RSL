@@ -763,6 +763,7 @@ void __fastcall world_do_frame_hook(World* This, void* edx, bool HardLoad)
 
 int __cdecl LuaDoBufferHook(lua_State *L, const char *buff, unsigned int size, const char *name)
 {
+    static std::string TempBuffer;
 	std::call_once(HookLuaDoBuffer, [&]()
 	{
 		Globals::RfgVintLuaState = L;
@@ -774,7 +775,7 @@ int __cdecl LuaDoBufferHook(lua_State *L, const char *buff, unsigned int size, c
 	}
 
 	//Dump current script file
-	std::string Buffer(buff);
+	std::string Buffer(buff, size);
 	std::string Name(name);
 	std::string RfgLuaPath = Globals::GetEXEPath(false);
 	RfgLuaPath += "RFGR Script Loader/RFG_Lua/";
@@ -783,7 +784,6 @@ int __cdecl LuaDoBufferHook(lua_State *L, const char *buff, unsigned int size, c
 	fs::create_directory(DumpFilePath);
 	DumpFilePath += Name;
 	Logger::Log(std::string(std::string("Dumping ") + Name), LogInfo);
-	//std::cout << "\nBuffer: " << Buffer << "\n";
 	std::ofstream myfile;
 	myfile.open(DumpFilePath, std::ios_base::trunc);
 	myfile << Buffer;
@@ -796,7 +796,10 @@ int __cdecl LuaDoBufferHook(lua_State *L, const char *buff, unsigned int size, c
 		std::ifstream OverrideStream(OverrideFilePath);
 		std::string OverrideBuffer((std::istreambuf_iterator<char>(OverrideStream)), std::istreambuf_iterator<char>());
 		Logger::Log(std::string(std::string("Overriding ") + Name), LogInfo);
-		return LuaDoBuffer(L, OverrideBuffer.c_str(), OverrideBuffer.length(), name);
+
+        TempBuffer.clear();
+        TempBuffer = OverrideBuffer;
+		return LuaDoBuffer(L, TempBuffer.c_str(), TempBuffer.length(), name);
 	}
 	return LuaDoBuffer(L, buff, size, name);
 }
