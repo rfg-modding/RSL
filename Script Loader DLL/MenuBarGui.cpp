@@ -37,7 +37,7 @@ void MenuBarGui::Draw()
 			}
 			ImGui::PopStyleColor(); //Pop deactivation button color
             ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.0f, 0.4784f, 0.8f, 1.0f)); //Push light blue color for the reset button
-            if(ImGui::MenuItem(std::string(std::string(ICON_FA_SYNC) + u8" Reset lua state").c_str()))
+            if(ImGui::MenuItem(std::string(std::string(ICON_FA_SYNC) + u8" Reset core lua state").c_str()))
             {
                 Scripts->Reset();
             }
