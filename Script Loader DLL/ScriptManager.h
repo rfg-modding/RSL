@@ -17,11 +17,12 @@ class ScriptManager
 {
 public:
 	ScriptManager() = default;
-	~ScriptManager() = default;
+    ~ScriptManager();
 
 	void Initialize();
-
 	void UpdateRfgPointers();
+    void Reset();
+
 	void ScanScriptsFolder();
 
 	bool RunScript(const std::string& FullPath);
@@ -29,7 +30,7 @@ public:
 
 	bool RunStringAsScript(std::string Buffer, std::string Name);
 
-	sol::state LuaState;
+	sol::state* LuaState = nullptr; //Use a pointer for easy LuaState resets.
 	std::vector <Script> Scripts;
 
 private:

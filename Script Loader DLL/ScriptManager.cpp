@@ -21,12 +21,25 @@
 #include "PlayerLua.h"
 #include "WorldLua.h"
 
+ScriptManager::~ScriptManager()
+{
+    delete LuaState;
+}
+
+void ScriptManager::Reset()
+{
+    delete LuaState;
+    Initialize();
+    UpdateRfgPointers();
+}
+
 void ScriptManager::Initialize()
 {
 	//See here: https://sol2.readthedocs.io/en/stable/api/state.html#lib-enum
 	//and here: https://www.lua.org/manual/5.1/manual.html#5 (LuaJIT is 5.1)
 	//For now there is no Lua sandboxing in place to remove as many barriers for creativity that modders might have had otherwise.
-	LuaState.open_libraries
+    LuaState = new sol::state();
+	LuaState->open_libraries
 	(
 		sol::lib::base,
 		sol::lib::package,
@@ -42,19 +55,21 @@ void ScriptManager::Initialize()
 		sol::lib::jit
 	);
 	SetupLua();
-	//RunMainLua();
 }
 
 void ScriptManager::SetupLua()
 {
 	RunScript(Globals::GetEXEPath(false) + "RFGR Script Loader/Core/CoreInit.lua");
+    sol::state& LuaStateRef = *LuaState; //Used for easier access instead of doing weird ass pointer syntax.
 
+    LuaStateRef["OldPrint"] = LuaStateRef["print"];
+    
 	//Todo: Make necessary vars read only with sol::readonly(&some_class::variable)
-	auto RslTable = LuaState["rsl"].get_or_create<sol::table>();
+	auto RslTable = LuaStateRef["rsl"].get_or_create<sol::table>();
 	RslTable["GetScriptLoaderVersion"] = Globals::GetScriptLoaderVersion;
 	RslTable["LogModuleBase"] = Lua::LogModuleBase;
 
-	auto RfgTable = LuaState["rfg"].get_or_create<sol::table>();
+	auto RfgTable = LuaStateRef["rfg"].get_or_create<sol::table>();
 	RfgTable["HideHud"] = HideHud;
 	RfgTable["HideFog"] = HideFog;
 	RfgTable["ToggleFog"] = ToggleFog;
@@ -80,11 +95,10 @@ void ScriptManager::SetupLua()
 		[](vector Position) {HumanTeleportUnsafe(Globals::PlayerPtr, Position, Globals::PlayerPtr->Orientation); }));
 
 	//LogType enums defined in lua
-	auto LoggerTable = LuaState["Logger"].get_or_create<sol::table>(); //Todo: Add to RSL table.
+	auto LoggerTable = LuaStateRef["Logger"].get_or_create<sol::table>(); //Todo: Add to RSL table.
 	LoggerTable["OpenLogFile"] = Logger::OpenLogFile;
 	LoggerTable["CloseLogFile"] = Logger::CloseLogFile;
 	LoggerTable["CloseAllLogFiles"] = Logger::CloseAllLogFiles;
-	//LoggerTable["Log"] = Logger::Log;
 	LoggerTable.set_function("Log", sol::overload(
         [](std::string Message) {Logger::Log(Message, LogInfo, false, true); },
         [](std::string Message, LogType Type) {Logger::Log(Message, Type, false, true); },
@@ -101,79 +115,80 @@ void ScriptManager::SetupLua()
 	#pragma warning(disable : C4172)
 	//Use separate files for these so that if one is edited they don't all need to be recompiled.
 	//Not necessarily at huge benefit at first, but it'll grow as more usertypes are added.
-	Lua::BindRfgBaseArray(LuaState);
-	Lua::BindRfgFArray(LuaState);
-	Lua::BindTimestamp(LuaState);
-	Lua::BindTimestampPercent(LuaState);
-	Lua::BindTimestampRealtime(LuaState);
-	Lua::BindColor(LuaState);
-	Lua::BindVector(LuaState);
-	Lua::BindMatrix(LuaState);
-	Lua::BindMatrix43(LuaState);
-	Lua::BindAttachInfoData(LuaState);
-	Lua::BindContactNode(LuaState);
-	Lua::BindObjectContactInfo(LuaState);
-	Lua::BindObjectFlags(LuaState);
-	//Lua::BindRemoteObjectFlags(LuaState);
-	Lua::BindHavokBPO(LuaState);
-	Lua::BindHkpMaterial(LuaState);
-	Lua::BindHkpEntity(LuaState);
-	Lua::BindHkpRigidBody(LuaState);
-	Lua::BindHumanFlags(LuaState); //Todo: Fix compile error
-	//Lua::BindHumanMPFlags(LuaState); //Todo: Fix compile error
-	Lua::BindHumanInfoFlags(LuaState);
-	Lua::BindHumanPropGeneralInfo(LuaState);
-	Lua::BindInventoryItem(LuaState);
-	Lua::BindChecksumStri(LuaState);
-	Lua::BindInvItemInfo(LuaState);
-	Lua::BindFootGroundEffects(LuaState);
-	Lua::BindCharDefHead(LuaState);
-	Lua::BindObjectRenderDistance(LuaState);
-	Lua::BindHumanRaycastHitInfo(LuaState);
-	Lua::BindCharacterInstance(LuaState);
-	Lua::BindWeaponAnimationFlags(LuaState);
-	Lua::BindIKJoint(LuaState);
-	Lua::BindNanoCallbackInfo(LuaState);
-	Lua::BindHumanInfo(LuaState);
-	Lua::BindUsableObject(LuaState);
-	Lua::BindPlayerFlags(LuaState);
-	Lua::BindScriptSpecificData(LuaState);
-	Lua::BindVehicleEnterStruct(LuaState);
-	Lua::BindPathfindNavInfo(LuaState);
-	Lua::BindUpgradeItem(LuaState);
-	Lua::BindPlayerMetadata(LuaState);
-	Lua::BindObject(LuaState);
-	Lua::BindHuman(LuaState);
-	Lua::BindPlayer(LuaState);
+	Lua::BindRfgBaseArray(LuaStateRef);
+	Lua::BindRfgFArray(LuaStateRef);
+	Lua::BindTimestamp(LuaStateRef);
+	Lua::BindTimestampPercent(LuaStateRef);
+	Lua::BindTimestampRealtime(LuaStateRef);
+	Lua::BindColor(LuaStateRef);
+	Lua::BindVector(LuaStateRef);
+	Lua::BindMatrix(LuaStateRef);
+	Lua::BindMatrix43(LuaStateRef);
+	Lua::BindAttachInfoData(LuaStateRef);
+	Lua::BindContactNode(LuaStateRef);
+	Lua::BindObjectContactInfo(LuaStateRef);
+	Lua::BindObjectFlags(LuaStateRef);
+	//Lua::BindRemoteObjectFlags(LuaStateRef);
+	Lua::BindHavokBPO(LuaStateRef);
+	Lua::BindHkpMaterial(LuaStateRef);
+	Lua::BindHkpEntity(LuaStateRef);
+	Lua::BindHkpRigidBody(LuaStateRef);
+	Lua::BindHumanFlags(LuaStateRef); //Todo: Fix compile error
+	//Lua::BindHumanMPFlags(LuaStateRef); //Todo: Fix compile error
+	Lua::BindHumanInfoFlags(LuaStateRef);
+	Lua::BindHumanPropGeneralInfo(LuaStateRef);
+	Lua::BindInventoryItem(LuaStateRef);
+	Lua::BindChecksumStri(LuaStateRef);
+	Lua::BindInvItemInfo(LuaStateRef);
+	Lua::BindFootGroundEffects(LuaStateRef);
+	Lua::BindCharDefHead(LuaStateRef);
+	Lua::BindObjectRenderDistance(LuaStateRef);
+	Lua::BindHumanRaycastHitInfo(LuaStateRef);
+	Lua::BindCharacterInstance(LuaStateRef);
+	Lua::BindWeaponAnimationFlags(LuaStateRef);
+	Lua::BindIKJoint(LuaStateRef);
+	Lua::BindNanoCallbackInfo(LuaStateRef);
+	Lua::BindHumanInfo(LuaStateRef);
+	Lua::BindUsableObject(LuaStateRef);
+	Lua::BindPlayerFlags(LuaStateRef);
+	Lua::BindScriptSpecificData(LuaStateRef);
+	Lua::BindVehicleEnterStruct(LuaStateRef);
+	Lua::BindPathfindNavInfo(LuaStateRef);
+	Lua::BindUpgradeItem(LuaStateRef);
+	Lua::BindPlayerMetadata(LuaStateRef);
+	Lua::BindObject(LuaStateRef);
+	Lua::BindHuman(LuaStateRef);
+	Lua::BindPlayer(LuaStateRef);
 	//Setting these manually to ensure there's no accidently overwrites
-	LuaState["rfg"]["Object"]["AsObject"] = [](Object& Self)->Object* {return &Self; };
-	LuaState["rfg"]["Human"]["AsObject"] = [](Human& Self)->Object* {return static_cast<Object*>(&Self); };
-	LuaState["rfg"]["Human"]["AsHuman"] = [](Human& Self)->Human* {return static_cast<Human*>(&Self); };
-	LuaState["rfg"]["Player"]["AsObject"] = [](Player& Self)->Object* {return static_cast<Object*>(&Self); };
-	LuaState["rfg"]["Player"]["AsHuman"] = [](Player& Self)->Human* {return static_cast<Human*>(&Self); };
-	LuaState["rfg"]["Player"]["AsPlayer"] = [](Player& Self)->Player* {return &Self; };
+	LuaStateRef["rfg"]["Object"]["AsObject"] = [](Object& Self)->Object* {return &Self; };
+	LuaStateRef["rfg"]["Human"]["AsObject"] = [](Human& Self)->Object* {return static_cast<Object*>(&Self); };
+	LuaStateRef["rfg"]["Human"]["AsHuman"] = [](Human& Self)->Human* {return static_cast<Human*>(&Self); };
+	LuaStateRef["rfg"]["Player"]["AsObject"] = [](Player& Self)->Object* {return static_cast<Object*>(&Self); };
+	LuaStateRef["rfg"]["Player"]["AsHuman"] = [](Player& Self)->Human* {return static_cast<Human*>(&Self); };
+	LuaStateRef["rfg"]["Player"]["AsPlayer"] = [](Player& Self)->Player* {return &Self; };
 
 	//World & dependent types
-	Lua::BindStreamGridCell(LuaState);
-	Lua::BindStreamLayerMaskedCell(LuaState);
-	Lua::BindStreamLayer(LuaState);
-	Lua::BindDistrictFlags(LuaState);
-	Lua::BindTDistrict(LuaState);
-	Lua::BindTerritory(LuaState);
-	Lua::BindStreamGrid(LuaState);
-	Lua::BindGameSaveInfoNewData(LuaState);
-	Lua::BindGameSaveInfo(LuaState);
-	Lua::BindSaveLoadInfo(LuaState);
-	Lua::BindWorldStateBuf(LuaState);
-	Lua::BindZoneHeader(LuaState);
-	Lua::BindWorldZone(LuaState);
-	Lua::BindWorld(LuaState);
+	Lua::BindStreamGridCell(LuaStateRef);
+	Lua::BindStreamLayerMaskedCell(LuaStateRef);
+	Lua::BindStreamLayer(LuaStateRef);
+	Lua::BindDistrictFlags(LuaStateRef);
+	Lua::BindTDistrict(LuaStateRef);
+	Lua::BindTerritory(LuaStateRef);
+	Lua::BindStreamGrid(LuaStateRef);
+	Lua::BindGameSaveInfoNewData(LuaStateRef);
+	Lua::BindGameSaveInfo(LuaStateRef);
+	Lua::BindSaveLoadInfo(LuaStateRef);
+	Lua::BindWorldStateBuf(LuaStateRef);
+	Lua::BindZoneHeader(LuaStateRef);
+	Lua::BindWorldZone(LuaStateRef);
+	Lua::BindWorld(LuaStateRef);
 	#pragma warning(pop) 
 }
 
 void ScriptManager::UpdateRfgPointers()
 {
-	auto RfgTable = LuaState["rfg"].get_or_create<sol::table>();
+    sol::state& LuaStateRef = *LuaState;
+	auto RfgTable = LuaStateRef["rfg"].get_or_create<sol::table>();
 
 	RfgTable["ActivePlayer"] = Globals::PlayerPtr;
 	RfgTable["ActiveWorld"] = Globals::RfgWorldPtr;
@@ -217,11 +232,12 @@ void ScriptManager::ScanScriptsFolder()
 
 bool ScriptManager::RunScript(const std::string& FullPath)
 {
+    sol::state& LuaStateRef = *LuaState;
 	if (IsValidScriptExtensionFromPath(FullPath))
 	{
 		try
 		{
-			auto CodeResult = LuaState.script_file(FullPath, [](lua_State*, sol::protected_function_result pfr)
+			auto CodeResult = LuaStateRef.script_file(FullPath, [](lua_State*, sol::protected_function_result pfr)
 			{
 				return pfr;
 			}, sol::load_mode::text);
@@ -248,10 +264,11 @@ bool ScriptManager::RunScript(const std::string& FullPath)
 
 bool ScriptManager::RunScript(const size_t Index)
 {
+    sol::state& LuaStateRef = *LuaState;
 	const std::string& FullPath = Scripts[Index].FullPath;
 	try
 	{
-		auto CodeResult = LuaState.script_file(FullPath, [](lua_State*, sol::protected_function_result pfr)
+		auto CodeResult = LuaStateRef.script_file(FullPath, [](lua_State*, sol::protected_function_result pfr)
 		{
 			return pfr;
 		}, sol::load_mode::text);
@@ -273,9 +290,10 @@ bool ScriptManager::RunScript(const size_t Index)
 
 bool ScriptManager::RunStringAsScript(std::string Buffer, std::string Name)
 {
+    sol::state& LuaStateRef = *LuaState;
 	try
 	{
-		auto CodeResult = LuaState.script(Buffer, [](lua_State*, sol::protected_function_result pfr)
+		auto CodeResult = LuaStateRef.script(Buffer, [](lua_State*, sol::protected_function_result pfr)
 		{
 			return pfr;
 		});
