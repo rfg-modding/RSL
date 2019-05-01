@@ -19,9 +19,9 @@ public:
 	ScriptManager() = default;
     ~ScriptManager();
 
+    void Reset();
 	void Initialize();
 	void UpdateRfgPointers();
-    void Reset();
 
 	void ScanScriptsFolder();
 

@@ -1,5 +1,6 @@
 #include "MenuBarGui.h"
 #include "GuiSystem.h"
+#include "ScriptManager.h"
 
 MenuBarGui::MenuBarGui(bool* OpenState_, std::string Title_)
 {
@@ -29,13 +30,18 @@ void MenuBarGui::Draw()
 	{
 		if (ImGui::BeginMenu("File"))
 		{
-			ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.952f, 0.545f, 0.462f, 1.0f));
+			ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.952f, 0.545f, 0.462f, 1.0f)); //Push red color for deactivation button
 			if (ImGui::MenuItem(std::string(std::string(ICON_FA_POWER_OFF) + u8" Deactivate script loader").c_str(), "Hold F3")) 
 			{
 				ShowDeactivationConfirmationPopup = true;
 			}
-			ImGui::PopStyleColor();
-			//ShowExampleMenuFile();
+			ImGui::PopStyleColor(); //Pop deactivation button color
+            ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.0f, 0.4784f, 0.8f, 1.0f)); //Push light blue color for the reset button
+            if(ImGui::MenuItem(std::string(std::string(ICON_FA_SYNC) + u8" Reset lua state").c_str()))
+            {
+                Scripts->Reset();
+            }
+            ImGui::PopStyleColor(); //Pop reset button color
 			ImGui::EndMenu();
 		}
 		if (ImGui::BeginMenu("Tweaks"))
