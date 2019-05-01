@@ -28,7 +28,7 @@ void MenuBarGui::Draw()
 	}
 	if (ImGui::BeginMainMenuBar())
 	{
-		if (ImGui::BeginMenu("File"))
+		if (ImGui::BeginMenu("System"))
 		{
 			ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.952f, 0.545f, 0.462f, 1.0f)); //Push red color for deactivation button
 			if (ImGui::MenuItem(std::string(std::string(ICON_FA_POWER_OFF) + u8" Deactivate script loader").c_str(), "Hold F3")) 
