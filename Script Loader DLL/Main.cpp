@@ -10,6 +10,8 @@
 #define __int64 long long
 */
 
+bool IsFolderPlacementError();
+
 DWORD WINAPI MainThread(HMODULE hModule)
 {
 	Globals::ScriptLoaderModule = hModule;
@@ -27,6 +29,11 @@ DWORD WINAPI MainThread(HMODULE hModule)
         MessageBoxString += Ex.what();
         MessageBoxA(Globals::FindRfgTopWindow(), MessageBoxString.c_str(), "Logger failed to initialize!", MB_OK);
         Logger::CloseAllLogFiles();
+    }
+
+    if(IsFolderPlacementError())
+    {
+        FreeLibraryAndExitThread(hModule, 0);
     }
 
     ProgramManager Program;
@@ -154,4 +161,52 @@ BOOL WINAPI DllMain(HMODULE hModule, DWORD dwReason, LPVOID lpReserved)
         break;
     }
     return TRUE;
+}
+
+/*Tries to find common installation mistakes such as placing it in the rfg root directory rather than it's own 
+ *folder. Returns true if errors were found. Returns false if errors were not found.*/
+bool IsFolderPlacementError()
+{
+    std::string ExePath = Globals::GetEXEPath(false);
+    if(!fs::exists(ExePath + "RFGR Script Loader/Core/")) //Detect if the core lua lib folder is missing.
+    {
+        if (fs::exists(ExePath + "Core/")) //Detect if the user put it in the rfg folder on accident rather than the script loader folder.
+        {
+            std::string ErrorString = R"(Script Loader Core folder is in the wrong directory! Make sure that it's at 
+            "\Red Faction Guerrilla Re-MARS-tered\RFGR Script Loader\Core". It should not be in the same folder as 
+            rfg.exe! Shutting down script loader.)";
+            Logger::Log(ErrorString, LogFatalError, true, true);
+            MessageBoxA(Globals::FindRfgTopWindow(), ErrorString.c_str(), "Error! Core folder in wrong root directory!", MB_OK);
+        }
+        else
+        {
+            std::string ErrorString = R"(Script Loader Core folder not detected! Make sure that it's at "\Red Faction
+            Guerrilla Re-MARS-tered\RFGR Script Loader\Core". Double check the installation guide for an image of how it 
+            should look when installed properly. Shutting down script loader.)";
+            Logger::Log(ErrorString, LogFatalError, true, true);
+            MessageBoxA(Globals::FindRfgTopWindow(), ErrorString.c_str(), "Error! Core folder not found!", MB_OK);
+        }
+        return true;
+    } 
+    if (!fs::exists(ExePath + "RFGR Script Loader/Fonts/")) //Detect if the fonts folder is missing.
+    {
+        if (fs::exists(ExePath + "Fonts/")) //Detect if the user put it in the rfg folder on accident rather than the script loader folder.
+        {
+            std::string ErrorString = R"(Script Loader Fonts folder is in the wrong directory! Make sure that it's at 
+            "\Red Faction Guerrilla Re-MARS-tered\RFGR Script Loader\Fonts". It should not be in the same folder as rfg.exe! 
+            Shutting down script loader.)";
+            Logger::Log(ErrorString, LogFatalError, true, true);
+            MessageBoxA(Globals::FindRfgTopWindow(), ErrorString.c_str(), "Error! Fonts folder in wrong root directory!", MB_OK);
+        }
+        else
+        {
+            std::string ErrorString = R"(Script Loader Fonts folder not detected! Make sure that it's at "\Red Faction
+            Guerrilla Re-MARS-tered\RFGR Script Loader\Fonts". Double check the installation guide for an 
+            image of how it should look when installed properly. Shutting down script loader.)";
+            Logger::Log(ErrorString, LogFatalError, true, true);
+            MessageBoxA(Globals::FindRfgTopWindow(), ErrorString.c_str(), "Error! Fonts folder not found.", MB_OK);
+        }
+        return true;
+    }
+    return false;
 }
