@@ -63,7 +63,7 @@ void ScriptManager::SetupLua()
 	RunScript(Globals::GetEXEPath(false) + "RFGR Script Loader/Core/CoreInit.lua");
     sol::state& LuaStateRef = *LuaState; //Used for easier access instead of doing weird ass pointer syntax.
 
-    LuaStateRef["OldPrint"] = LuaStateRef["print"];
+    LuaStateRef["print"] = sol::nil;
     
 	//Todo: Make necessary vars read only with sol::readonly(&some_class::variable)
 	auto RslTable = LuaStateRef["rsl"].get_or_create<sol::table>();
