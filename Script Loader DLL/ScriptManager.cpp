@@ -98,20 +98,20 @@ void ScriptManager::SetupLua()
 		[](vector Position) {HumanTeleportUnsafe(Globals::PlayerPtr, Position, Globals::PlayerPtr->Orientation); }));
 
 	//LogType enums defined in lua
-	auto LoggerTable = LuaStateRef["Logger"].get_or_create<sol::table>(); //Todo: Add to RSL table.
-	LoggerTable["OpenLogFile"] = Logger::OpenLogFile;
-	LoggerTable["CloseLogFile"] = Logger::CloseLogFile;
-	LoggerTable["CloseAllLogFiles"] = Logger::CloseAllLogFiles;
-	LoggerTable.set_function("Log", sol::overload(
+	//auto LoggerTable = LuaStateRef["Logger"].get_or_create<sol::table>();
+	RslTable["OpenLogFile"] = Logger::OpenLogFile;
+	RslTable["CloseLogFile"] = Logger::CloseLogFile;
+	RslTable["CloseAllLogFiles"] = Logger::CloseAllLogFiles;
+	RslTable.set_function("Log", sol::overload(
         [](std::string Message) {Logger::Log(Message, LogInfo, false, true); },
         [](std::string Message, LogType Type) {Logger::Log(Message, Type, false, true); },
         [](std::string Message, LogType Type, bool LogTime) {Logger::Log(Message, Type, LogTime, true); },
         [](std::string Message, LogType Type, bool LogTime, bool Newline) {Logger::Log(Message, Type, LogTime, Newline); }
     ));
-	LoggerTable["LogFlagWithColor"] = Logger::LogFlagWithColor;
-	LoggerTable["GetFlagString"] = Logger::GetFlagString;
-	LoggerTable["LogToFile"] = Logger::LogToFile;
-	LoggerTable["GetTimeString"] = Logger::GetTimeString;
+	RslTable["LogFlagWithColor"] = Logger::LogFlagWithColor;
+	RslTable["GetFlagString"] = Logger::GetFlagString;
+	RslTable["LogToFile"] = Logger::LogToFile;
+	RslTable["GetTimeString"] = Logger::GetTimeString;
 
 	//This warning appears hundreds of times in a row during binding unless disabled. Is harmless due to some lambdas used to grab usertype variables.
 	#pragma warning(push)
