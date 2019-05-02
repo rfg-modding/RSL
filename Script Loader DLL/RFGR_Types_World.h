@@ -1478,7 +1478,7 @@ struct __declspec(align(8)) rl_scene : rl_base_object
 	rl_scene* prev;
 	rl_scene* next;
 	bool m_initialized;
-	pool_list__rl_occluder_ptr m_occluder_list;
+    rfg::pool_list<rl_occluder*> m_occluder_list;
 	unsigned int m_last_visibility_pass;
 	rl_fog_state m_fog_state;
 	rl_color_correct_state m_color_correct_state;
@@ -1755,7 +1755,7 @@ struct base_array__vehicle_info_const_ptr__Vtbl
 	void *(__thiscall *__vecDelDtor)(base_array__vehicle_info_const_ptr* This, unsigned int);
 };
 
-const struct vehicle_spawn_group_info
+struct vehicle_spawn_group_info
 {
 	const char *group_name;
 	base_array__vehicle_info_const_ptr v_info_list;
@@ -1768,7 +1768,7 @@ struct ambient_spawn_flags //$AAD2752B7E4D21C5B6F05C7F617B9C71
 	__int8 veh_spawn_enabled : 1;
 };
 
-const struct __declspec(align(4)) ambient_spawn_info
+struct __declspec(align(4)) ambient_spawn_info
 {
 	char *group_name;
 	human_spawn_group_info *h_spawn_group;
@@ -1787,64 +1787,18 @@ struct vehicle_reservation_info
 	int count;
 };
 
-struct base_array__vehicle_reservation_info__Vtbl;
-struct base_array__vehicle_reservation_info
-{
-	const vehicle_reservation_info& operator [](int index) { return elt[index]; };
-	int size() { return num; }
-	int capacity() { return array_size; }
-
-	base_array__vehicle_reservation_info__Vtbl* vfptr;
-	vehicle_reservation_info *elt;
-	int array_size;
-	int num;
-};
-
-struct base_array__vehicle_reservation_info__Vtbl
-{
-	void *(__thiscall *__vecDelDtor)(base_array__vehicle_reservation_info* This, unsigned int);
-};
-
-struct farray__vehicle_reservation_info_7 : base_array__vehicle_reservation_info
-{
-	vehicle_reservation_info data[7];
-};
-
 struct human_reservation_info
 {
 	human_spawn_group_info *spawn_group;
 	int count;
 };
 
-struct base_array__human_reservation_info__Vtbl;
-struct base_array__human_reservation_info
-{
-	const human_reservation_info& operator [](int index) { return elt[index]; };
-	int size() { return num; }
-	int capacity() { return array_size; }
-
-	base_array__human_reservation_info__Vtbl* vfptr;
-	human_reservation_info* elt;
-	int array_size;
-	int num;
-};
-
-struct base_array__human_reservation_info__Vtbl
-{
-	void *(__thiscall *__vecDelDtor)(base_array__human_reservation_info* This, unsigned int);
-};
-
-struct farray__human_reservation_info_16 : base_array__human_reservation_info
-{
-	human_reservation_info data[16];
-};
-
 struct __declspec(align(4)) spawn_resource_data
 {
 	const char *name;
 	int team_squad_counts[4];
-	farray__human_reservation_info_16 required_human_slots;
-	farray__vehicle_reservation_info_7 required_vehicle_slots;
+    rfg::farray<human_reservation_info, 16> required_human_slots;
+    rfg::farray<vehicle_reservation_info, 7> required_vehicle_slots;
 	bool dlc_resource;
 };
 
@@ -2045,29 +1999,6 @@ struct __declspec(align(2)) grid_info
 	grid_flags flags;
 };
 
-struct base_array__grid_info__Vtbl;
-struct base_array__grid_info
-{
-	const grid_info& operator [](int index) { return elt[index]; };
-	int size() { return num; }
-	int capacity() { return array_size; }
-
-	base_array__grid_info__Vtbl* vfptr;
-	grid_info* elt;
-	int array_size;
-	int num;
-};
-
-struct base_array__grid_info__Vtbl
-{
-	void *(__thiscall *__vecDelDtor)(base_array__grid_info* This, unsigned int);
-};
-
-struct farray__grid_info_21 : base_array__grid_info
-{
-	grid_info data[21];
-};
-
 struct district_flags
 {
 	__int8 allow_cough : 1;
@@ -2095,7 +2026,7 @@ struct __declspec(align(4)) district : Object
 	district_flags flags;
 	color col;
 	unsigned int localized_name_hash;
-	farray__grid_info_21 grid_ids;
+    rfg::farray<grid_info, 21> grid_ids;
 	char district_index;
 	rl_color_float m_vfx_tint;
 	const char *load_screen_images[5];
@@ -2223,30 +2154,6 @@ struct stream_grid
 	void* m_tmp_table; //str_data_hash_table<unsigned char, 255, 64, unsigned char> *m_tmp_table;
 };
 
-struct base_array__rl_terrain_occluder_ptr__Vtbl;
-struct base_array__rl_terrain_occluder_ptr
-{
-	const rl_terrain_occluder& operator [](int index) { return *elt[index]; };
-	int size() { return num; }
-	int capacity() { return array_size; }
-
-	struct base_array__rl_terrain_occluder_ptr__Vtbl *vfptr;
-	rl_terrain_occluder** elt;
-	int array_size;
-	int num;
-};
-
-struct base_array__rl_terrain_occluder_ptr__Vtbl
-{
-	void *(__thiscall *__vecDelDtor)(base_array__rl_terrain_occluder_ptr* This, unsigned int);
-};
-
-struct farray__rl_terrain_occluder_ptr_40 : base_array__rl_terrain_occluder_ptr
-{
-	rl_terrain_occluder* data[40]; //160
-};
-
-
 struct obj_zone : Object
 {
 	bb_pfg_zone zone_pfg;
@@ -2258,7 +2165,7 @@ struct obj_zone : Object
 	float wind_min_speed;
 	float wind_max_speed;
 	rfg_terrain* terrain;
-	farray__rl_terrain_occluder_ptr_40 m_occluders;
+    rfg::farray<rl_terrain_occluder*, 40> m_occluders;
 	vector local_bmin;
 	vector local_bmax;
 	int aabb_phantom_index;
