@@ -84,10 +84,12 @@ void ScriptManager::SetupLua()
 	RfgTable["GetWorld"] = Lua::GetWorld;
 	RfgTable["GetPhysicsWorld"] = Lua::GetPhysicsWorld;
 
-	RfgTable["ActivePlayer"] = Globals::PlayerPtr;
-	RfgTable["ActiveWorld"] = Globals::RfgWorldPtr;
-	RfgTable["ActivePhysicsWorld"] = Globals::hkpWorldPtr;
-	
+    RfgTable["GetGravity"] = Lua::GetGravity;
+    RfgTable.set_function("SetGravity", sol::overload(
+        [](vector& NewGravity) {Lua::SetGravity(NewGravity); },
+        [](float x, float y, float z) {Lua::SetGravity(x, y, z); }));
+    RfgTable["ResetGravity"] = Lua::ResetGravity;
+
 	RfgTable["HavokBodyGetPointer"] = HavokBodyGetPointer;
 	RfgTable.set_function("ApplyLinearImpulse", sol::overload(HavokBodyApplyLinearImpulseA, HavokBodyApplyLinearImpulseB));
 
