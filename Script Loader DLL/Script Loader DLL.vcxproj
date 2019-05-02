@@ -209,6 +209,7 @@
     <ClCompile Include="Globals.cpp" />
     <ClCompile Include="GuiSystem.cpp" />
     <ClCompile Include="HavokBPOLua.cpp" />
+    <ClCompile Include="HkpSolverInfoLua.cpp" />
     <ClCompile Include="HookManager.cpp" />
     <ClCompile Include="Hooks.cpp" />
     <ClCompile Include="HumanFlagsLua.cpp" />
@@ -279,6 +280,7 @@
     <ClInclude Include="Globals.h" />
     <ClInclude Include="GuiSystem.h" />
     <ClInclude Include="HavokBPOLua.h" />
+    <ClInclude Include="HkpSolverInfoLua.h" />
     <ClInclude Include="HookManager.h" />
     <ClInclude Include="Hooks.h" />
     <ClInclude Include="HumanFlagsLua.h" />

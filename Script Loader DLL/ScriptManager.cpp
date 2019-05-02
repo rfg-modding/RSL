@@ -9,6 +9,7 @@
 #include "ObjectFlagsLua.h"
 #include "HavokBPOLua.h"
 #include "HkpRigidBodyLua.h"
+#include "HkpSolverInfoLua.h"
 #include "HumanFlagsLua.h"
 #include "HumanMPFlagsLua.h"
 #include "InvItemInfoLua.h"
@@ -133,8 +134,9 @@ void ScriptManager::SetupLua()
 	Lua::BindHkpMaterial(LuaStateRef);
 	Lua::BindHkpEntity(LuaStateRef);
 	Lua::BindHkpRigidBody(LuaStateRef);
-	Lua::BindHumanFlags(LuaStateRef); //Todo: Fix compile error
-	//Lua::BindHumanMPFlags(LuaStateRef); //Todo: Fix compile error
+    Lua::BindHkpSolverInfo(LuaStateRef);
+	Lua::BindHumanFlags(LuaStateRef); 
+	//Lua::BindHumanMPFlags(LuaStateRef);
 	Lua::BindHumanInfoFlags(LuaStateRef);
 	Lua::BindHumanPropGeneralInfo(LuaStateRef);
 	Lua::BindInventoryItem(LuaStateRef);
@@ -183,6 +185,8 @@ void ScriptManager::SetupLua()
 	Lua::BindWorldZone(LuaStateRef);
 	Lua::BindWorld(LuaStateRef);
 	#pragma warning(pop) 
+
+    UpdateRfgPointers();
 }
 
 void ScriptManager::UpdateRfgPointers()
@@ -193,6 +197,7 @@ void ScriptManager::UpdateRfgPointers()
 	RfgTable["ActivePlayer"] = Globals::PlayerPtr;
 	RfgTable["ActiveWorld"] = Globals::RfgWorldPtr;
 	RfgTable["ActivePhysicsWorld"] = Globals::hkpWorldPtr;
+    RfgTable["PhysicsSolver"] = &Globals::hkpWorldPtr->m_dynamicsStepInfo.m_solverInfo;
 }
 
 void ScriptManager::ScanScriptsFolder()

@@ -210,6 +210,9 @@
     <ClCompile Include="HkpRigidBodyLua.cpp">
       <Filter>Lua Binding</Filter>
     </ClCompile>
+    <ClCompile Include="HkpSolverInfoLua.cpp">
+      <Filter>Lua Binding</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CameraWrapper.h">
@@ -420,6 +423,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="HkpRigidBodyLua.h">
+      <Filter>Lua Binding</Filter>
+    </ClInclude>
+    <ClInclude Include="HkpSolverInfoLua.h">
       <Filter>Lua Binding</Filter>
     </ClInclude>
   </ItemGroup>
