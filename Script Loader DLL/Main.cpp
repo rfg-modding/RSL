@@ -1,14 +1,4 @@
-﻿///#include "Globals.h"
-///#include "SnippetManager.h"
-#include "ProgramManager.h"
-///#include "CameraWrapper.h"
-
-/*Fix these in RFGR_Types.h and RFGR_Types_Player.h
-#define __int8 char
-#define __int16 short
-#define __int32 int
-#define __int64 long long
-*/
+﻿#include "ProgramManager.h"
 
 bool IsFolderPlacementError();
 
@@ -24,7 +14,6 @@ DWORD WINAPI MainThread(HMODULE hModule)
     }
     catch (std::exception& Ex)
     {
-        //MessageBoxA(FindTopWindow(GetProcessID("rfg.exe")), "Exception detected during Logger initialization. Will attempt to use secondary logging location...", "Logger failed to initialize!", MB_OK);
         std::string MessageBoxString = "Exception detected during Logger initialization! Please show this to the current script loader maintainer. It's much harder to fix any further problems which might occur without logs. \n";
         MessageBoxString += Ex.what();
         MessageBoxA(Globals::FindRfgTopWindow(), MessageBoxString.c_str(), "Logger failed to initialize!", MB_OK);
@@ -122,19 +111,16 @@ DWORD WINAPI MainThread(HMODULE hModule)
 		}
         if (*Globals::InMultiplayer)
         {
-            //MessageBoxA(FindTopWindow(GetProcessID("rfg.exe")), "MP usage detected, shutting down!", "Multiplayer mode detected", MB_OK);
             Logger::Log("Invalid graphics state in script loader overlay, crashing!", LogFatalError, true);
             FreeLibraryAndExitThread(hModule, 0);
             return 0;
         }
         if (Globals::MultiplayerHookTriggered)
         {
-            //MessageBoxA(FindTopWindow(GetProcessID("rfg.exe")), "MP usage detected, shutting down!", "Multiplayer mode detected", MB_OK);
             Logger::Log("Null pointer in script loader callback system, crashing!", LogFatalError, true);
             FreeLibraryAndExitThread(hModule, 0);
             return 0;
         }
-        //Program.ProcessInput();
         Program.Update();
 		std::chrono::steady_clock::time_point End = std::chrono::steady_clock::now();
 		Sleep(MillisecondsPerUpdate - std::chrono::duration_cast<std::chrono::milliseconds>(End - Begin).count());
