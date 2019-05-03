@@ -94,8 +94,6 @@ void ProgramManager::Initialize()
 	Beep(600, 100);
 	Beep(700, 100);
 	Beep(900, 200);
-
-	Initialized = true;
 }
 
 void ProgramManager::Exit()
@@ -128,7 +126,6 @@ void ProgramManager::Exit()
 	Beep(900, 100);
 	Beep(700, 100);
 	Beep(600, 200);
-	SuccessfulExit = true;
 }
 
 void ProgramManager::OpenConsole()

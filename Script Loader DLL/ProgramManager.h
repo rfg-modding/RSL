@@ -31,14 +31,7 @@ public:
 	HookManager Hooks;
 	GuiSystem Gui;
 
-	bool LoadFailed = false;
 	bool PreExistingConsole = true;
-	
 	unsigned int ExitKeysPressCount = 0;
-
-	bool SuccessfulExit = false;
-
-private:
-	bool Initialized = false;
 };
 
