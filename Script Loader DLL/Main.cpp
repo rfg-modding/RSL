@@ -1,7 +1,49 @@
 ﻿#include "ProgramManager.h"
 
+DWORD WINAPI MainThread(HMODULE hModule);
 bool IsFolderPlacementError();
 
+/* This function is the first thing called when the script loader DLL is loaded into rfgr.
+ * All it does is start a new thread which runs MainThread. You shouldn't do anything major
+ * in DllMain, especially not load other DLLs, as it can apparently cause unstable behavior
+ * and crashes due to the way windows handles DLL loading. You should instead place your code
+ * in MainThread or some function it calls.
+ */
+BOOL WINAPI DllMain(HMODULE hModule, DWORD dwReason, LPVOID lpReserved)
+{
+    //DisableThreadLibraryCalls(hModule);
+    switch (dwReason)
+    {
+    case DLL_PROCESS_ATTACH:
+        CreateThread(0, 0, reinterpret_cast<LPTHREAD_START_ROUTINE>(MainThread), hModule, 0, 0);
+        break;
+    default:
+        break;
+    }
+    return TRUE;
+}
+
+/* This function is the main thread of the script loader. It's started by DllMain 
+ * when the script loader DLL is loaded. This function performs all the necessary 
+ * initialization and error checking for the script loader and then waits for a 
+ * reason to close forever. Here's a quick overview of what the thread does:
+ * 1. Start logging and open initialization log
+ * 2. Check for installation mistakes such as installing the script loader files in the rfg
+ *    root folder with rfg.exe. Shuts down and reports detected problems to user if any found.
+ * 3. Initializes ProgramManager instance. This sets off all of the real activity of the 
+ *    script loader. This includes rfg function hooking, a few binary edits of rfg's code
+ *    (runtime only), and initialization of all other parts of the script loader like the 
+ *    ScriptManager (handles lua stuff), and the FunctionManager which sets the addresses
+ *    of all the function pointers used to call rfg functions.
+ * 4. Assuming no errors occured, the script loader now hits it's main loop. This loop simply
+ *    checks for requests to close or access to multiplayer at a predefined interval and 
+ *    otherwise sleeps most of the time to not be a performance hog. Note that most script loader
+ *    code after this point in inside function hooks and therefore is being run by rfgs own 
+ *    threads, since function hooks are simply extensions of the games own functions.
+ * 5. If the user requests the script loader deactivate, the script loader will try to close 
+ *    nicely and leave the game in an unaltered state (as best as possible). If it detects
+ *    multiplayer access it'll just shut down it's thread, leaving rfg to crash.
+ */
 DWORD WINAPI MainThread(HMODULE hModule)
 {
 	Globals::ScriptLoaderModule = hModule;
@@ -14,7 +56,8 @@ DWORD WINAPI MainThread(HMODULE hModule)
     }
     catch (std::exception& Ex)
     {
-        std::string MessageBoxString = "Exception detected during Logger initialization! Please show this to the current script loader maintainer. It's much harder to fix any further problems which might occur without logs. \n";
+        std::string MessageBoxString = R"(Exception detected during Logger initialization! Please show this to the 
+        current script loader maintainer. It's much harder to fix any further problems which might occur without logs.)";
         MessageBoxString += Ex.what();
         MessageBoxA(Globals::FindRfgTopWindow(), MessageBoxString.c_str(), "Logger failed to initialize!", MB_OK);
         Logger::CloseAllLogFiles();
@@ -39,7 +82,8 @@ DWORD WINAPI MainThread(HMODULE hModule)
     }
     catch(std::exception& Ex)
     {
-        std::string MessageBoxString = "Exception detected during script loader initialization! Please provide this and a zip file with your logs folder (./RFGR Script Loader/Logs/) to the maintainer. \n";
+        std::string MessageBoxString = R"(Exception detected during script loader initialization! Please provide 
+        this and a zip file with your logs folder (./RFGR Script Loader/Logs/) to the maintainer.)";
         MessageBoxString += Ex.what();
         Logger::Log(MessageBoxString, LogFatalError, true, true);
         MessageBoxA(Globals::FindRfgTopWindow(), MessageBoxString.c_str(), "Script loader failed to initialize!", MB_OK);
@@ -57,12 +101,18 @@ DWORD WINAPI MainThread(HMODULE hModule)
     }
     catch(std::exception& Ex)
     {
-        std::string MessageBoxString = "Exception detected when opening the default log files. Please show this to the current script loader maintainer. It's much harder to fix any further problems which might occur without logs. \n";
+        std::string MessageBoxString = R"(Exception detected when opening the default log files. Please show this
+        to the current script loader maintainer. It's much harder to fix any further problems which might occur without logs.)";
         MessageBoxString += Ex.what();
         Logger::Log(MessageBoxString, LogFatalError, true, true);
         MessageBoxA(Globals::FindRfgTopWindow(), MessageBoxString.c_str(), "Logger failed to open default log files!", MB_OK);
     }
     Program.Scripts.ScanScriptsFolder();
+    /* Initialization complete. After this point the script loader thread simply checks for 
+     * close requests or multiplayer access. It spends most of the time sleeping to avoid 
+     * performance issues. Any real behavior is in the function hooks and being run by the 
+     * game itself at this point.
+     */
 	
     const ulong UpdatesPerSecond = 1;
 	const ulong MillisecondsPerUpdate = 1000 / UpdatesPerSecond;
@@ -135,22 +185,9 @@ DWORD WINAPI MainThread(HMODULE hModule)
     return 0;
 }
 
-BOOL WINAPI DllMain(HMODULE hModule, DWORD dwReason, LPVOID lpReserved)
-{
-    //DisableThreadLibraryCalls(hModule);
-    switch (dwReason)
-    {
-    case DLL_PROCESS_ATTACH:
-        CreateThread(0, 0, reinterpret_cast<LPTHREAD_START_ROUTINE>(MainThread), hModule, 0, 0);
-        break;
-    default:
-        break;
-    }
-    return TRUE;
-}
-
-/*Tries to find common installation mistakes such as placing it in the rfg root directory rather than it's own 
- *folder. Returns true if errors were found. Returns false if errors were not found.*/
+/* Tries to find common installation mistakes such as placing it in the rfg root directory rather than it's own 
+ * folder. Returns true if errors were found. Returns false if errors were not found.
+ */
 bool IsFolderPlacementError()
 {
     std::string ExePath = Globals::GetEXEPath(false);
