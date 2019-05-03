@@ -27,6 +27,9 @@ ScriptManager::~ScriptManager()
     delete LuaState;
 }
 
+/* Resets the script loader lua state and reloads the core libraries.
+ * This includes the scripts in the Core folder.
+ */
 void ScriptManager::Reset()
 {
     delete LuaState;
@@ -34,12 +37,18 @@ void ScriptManager::Reset()
     UpdateRfgPointers();
 }
 
+/* Initializes the lua state and calls all necessary functions and scripts 
+ * needed to setup the scripting system. No inputs or outputs. Uses new
+ * to allocate a new sol::state at ScriptManager::LuaState
+ */
 void ScriptManager::Initialize()
 {
-	//See here: https://sol2.readthedocs.io/en/stable/api/state.html#lib-enum
-	//and here: https://www.lua.org/manual/5.1/manual.html#5 (LuaJIT is 5.1)
-	//For now there is no Lua sandboxing in place to remove as many barriers for creativity that modders might have had otherwise.
     LuaState = new sol::state();
+    /* Opens the listed lua core libraries
+	 * See here: https://sol2.readthedocs.io/en/stable/api/state.html#lib-enum
+	 * and here: https://www.lua.org/manual/5.1/manual.html#5 (LuaJIT is 5.1)
+	 * For now there is no Lua sandboxing in place to remove as many barriers for creativity that modders might have had otherwise.
+	 */
 	LuaState->open_libraries
 	(
 		sol::lib::base,
@@ -58,6 +67,12 @@ void ScriptManager::Initialize()
 	SetupLua();
 }
 
+/* Contains all of the binding code for rfg types and functions and any helper functions.
+ * Note that many pieces of binding code are in other files. For example, the binding code for Player
+ * is in PlayerLua.h/.cpp. This is intended to speed up compilation by splitting up the files 
+ * (not sure if that is really accomplished) and also to keep this function from becoming a several 
+ * thousand line behemoth.
+ */
 void ScriptManager::SetupLua()
 {
 	RunScript(Globals::GetEXEPath(false) + "RFGR Script Loader/Core/CoreInit.lua");
@@ -191,6 +206,13 @@ void ScriptManager::SetupLua()
     UpdateRfgPointers();
 }
 
+/* Used to ensure a few important game pointers are always up to date.
+ * Since these can sometimes change when doing things like loading a save
+ * it's necessary to update them in the lua state. This function is called
+ * by several hooks when they detect that one of these pointers has changed.
+ * If you're hooking something that changes often and needs global state, you
+ * should probably update it here as well when it changes.
+ */
 void ScriptManager::UpdateRfgPointers()
 {
     sol::state& LuaStateRef = *LuaState;
@@ -202,6 +224,9 @@ void ScriptManager::UpdateRfgPointers()
     RfgTable["PhysicsSolver"] = &Globals::hkpWorldPtr->m_dynamicsStepInfo.m_solverInfo;
 }
 
+/* Scans all files in the Scripts folder. Creates a new script object and adds it to
+ * the script vector (ScriptManager::Scripts) if a file is a valid script. 
+ */
 void ScriptManager::ScanScriptsFolder()
 {
 	try 
@@ -237,7 +262,12 @@ void ScriptManager::ScanScriptsFolder()
 	}
 }
 
-bool ScriptManager::RunScript(const std::string& FullPath)
+/* Tries to run the file at the given path as a lua script. Includes error 
+ * detection and handling code for convenience. If an exception occurs an the 
+ * script should be stopped and the exception should be safely contained and
+ * logged.
+ */
+bool ScriptManager::RunScript(const std::string& FullPath)                     
 {
     sol::state& LuaStateRef = *LuaState;
 	if (IsValidScriptExtensionFromPath(FullPath))
@@ -269,6 +299,11 @@ bool ScriptManager::RunScript(const std::string& FullPath)
 	}
 }
 
+/* Tries to an already loaded script at the given index of
+ * ScriptManager::Scripts. Includes error detection and handling code 
+ * for convenience. If an exception occurs an the script should be 
+ * stopped and the exception should be safely contained and logged.
+ */
 bool ScriptManager::RunScript(const size_t Index)
 {
     sol::state& LuaStateRef = *LuaState;
@@ -295,6 +330,11 @@ bool ScriptManager::RunScript(const size_t Index)
 	}
 }
 
+/* Tries to the provided string as a lua script. Uses the name for 
+ * error logging. Includes error detection and handling code
+ * for convenience. If an exception occurs an the script should be
+ * stopped and the exception should be safely contained and logged.
+ */
 bool ScriptManager::RunStringAsScript(std::string Buffer, std::string Name)
 {
     sol::state& LuaStateRef = *LuaState;
@@ -320,6 +360,10 @@ bool ScriptManager::RunStringAsScript(std::string Buffer, std::string Name)
 	}
 }
 
+/* Gets the name of a file given a path as an input. 
+ * Includes file extension in name. Returns an empty
+ * string if no forward or backslashes are found.
+ */
 std::string ScriptManager::GetScriptNameFromPath(std::string FullPath) const
 {
 	for (int i = FullPath.length() - 1; i > 0; i--)
@@ -335,6 +379,11 @@ std::string ScriptManager::GetScriptNameFromPath(std::string FullPath) const
 	return std::string();
 }
 
+/* Gets the path of the folder for a file. Takes the full path
+ * of a file as input. Basically just cuts the file name off 
+ * the end of it's path. Returns an empty string if no forward
+ * or backslashes are found.
+ */
 std::string ScriptManager::GetScriptFolderFromPath(std::string FullPath) const
 {
 	for (int i = FullPath.length() - 1; i > 0; i--)
@@ -350,6 +399,9 @@ std::string ScriptManager::GetScriptFolderFromPath(std::string FullPath) const
 	return std::string();
 }
 
+/* Gets the extension of a file given it's full path. Returns
+ * an empty string if no period is found in the name.
+ */
 std::string ScriptManager::GetScriptExtensionFromPath(std::string FullPath) const
 {
 	for (int i = FullPath.length() - 1; i > 0; i--)
@@ -362,6 +414,9 @@ std::string ScriptManager::GetScriptExtensionFromPath(std::string FullPath) cons
 	return std::string();
 }
 
+/* Checks if the file at the provided path has a valid script
+ * file extension. Returns true if so, and false if not.
+ */
 bool ScriptManager::IsValidScriptExtensionFromPath(std::string FullPath)
 {
 	if (IsValidScriptExtension(GetScriptExtensionFromPath(FullPath)))
@@ -371,8 +426,14 @@ bool ScriptManager::IsValidScriptExtensionFromPath(std::string FullPath)
 	return false;
 }
 
+/* Checks if the provided string is a valid script file extension.
+ * Returns true if so, and false if not. Currently "lua" is 
+ * considered valid. It converts the inputted string to lowercase
+ * before comparison, so case does not matter.
+ */
 bool ScriptManager::IsValidScriptExtension(std::string Extension) const
 {
+    //Transform extension to lowercase only for easy comparison.
 	std::transform(Extension.begin(), Extension.end(), Extension.begin(), ::tolower);
     return Extension == "lua";
 }
