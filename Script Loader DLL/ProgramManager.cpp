@@ -15,18 +15,27 @@ ProgramManager::~ProgramManager()
 	Beep(600, 200);
 }
 
+/* Initializes all script loader modules (CameraWrapper, GuiSystem, HookManager, etc), function
+ * hooks, and variables. Tries to detect and log any initialization errors.
+ */
 void ProgramManager::Initialize()
 {
+    //Set global values which are frequently used in hooks.
 	Globals::ModuleBase = reinterpret_cast<uintptr_t>(GetModuleHandle(nullptr));
-
+    Globals::GameWindowHandle = Globals::FindRfgTopWindow();
+    Globals::MouseGenericPollMouseVisible = Globals::FindPattern("rfg.exe", "\x84\xD2\x74\x08\x38\x00\x00\x00\x00\x00\x75\x02", "xxxxx?????xx");
+    Globals::CenterMouseCursorCall = Globals::FindPattern("rfg.exe", "\xE8\x00\x00\x00\x00\x89\x46\x4C\x89\x56\x50", "x????xxxxxx");
 	Globals::Program = this;
 	Globals::Gui = &this->Gui;
 	Globals::Scripts = &this->Scripts;
 	Globals::Camera = &this->Camera;
+
+    //Init script loader modules. 
 	Camera.Initialize(Globals::DefaultFreeCameraSpeed, 5.0);
 	Functions.Initialize();
 	Scripts.Initialize();
 
+    //Attempt to init kiero which is used for easy directx hooking. Shutdown if it fails.
 	if (kiero::init(kiero::RenderType::D3D11) != kiero::Status::Success)
 	{
 		Logger::Log(std::string("Kiero error: " + std::to_string(kiero::init(kiero::RenderType::D3D11))), LogFatalError, true);
@@ -40,27 +49,25 @@ void ProgramManager::Initialize()
 		FreeLibraryAndExitThread(Globals::ScriptLoaderModule, 0);
 		return;
 	}
-	Globals::GameWindowHandle = Globals::FindRfgTopWindow();
 
+    //Creates and enables all game function hooks. This does not include directx hooks.
 	CreateGameHooks(true);
 
-	Globals::MouseGenericPollMouseVisible = Globals::FindPattern("rfg.exe", "\x84\xD2\x74\x08\x38\x00\x00\x00\x00\x00\x75\x02", "xxxxx?????xx");
-	Globals::CenterMouseCursorCall = Globals::FindPattern("rfg.exe", "\xE8\x00\x00\x00\x00\x89\x46\x4C\x89\x56\x50", "x????xxxxxx");
-
-	///Logger::Log("Now monitoring RFGR State", LogInfo);
+	/* Waits for the game to properly start before continuing to DirectX hooking. Without this
+	 * the game will freeze if the script loader is injected at game start. It seems that fails 
+	 * because it tries hooking D3D11Present before it's been loaded by the game. This loop
+	 * simply checks for a valid game state each second until one is received, then init continues.
+	 */
 	GameState RFGRState = GameseqGetState();;
 	auto StartTime = std::chrono::steady_clock::now();
 	auto EndTime = std::chrono::steady_clock::now();
-	long long TimeElapsed = 0;
 	do
 	{
-		TimeElapsed = std::chrono::duration_cast<std::chrono::milliseconds>(EndTime - StartTime).count();
+        long long TimeElapsed = std::chrono::duration_cast<std::chrono::milliseconds>(EndTime - StartTime).count();
 		if (TimeElapsed > 1000)
 		{
 			RFGRState = GameseqGetState();
 			StartTime = EndTime;
-			///std::cout << "TimeElapsed: " << TimeElapsed << "\n";
-			///std::cout << "Current RFGR State: " << (UINT32)RFGRState << "\n";
 		}
 		EndTime = std::chrono::steady_clock::now();
 	} 
@@ -68,12 +75,13 @@ void ProgramManager::Initialize()
 
 	Globals::OriginalWndProc = reinterpret_cast<WNDPROC>(SetWindowLongPtr(Globals::GameWindowHandle, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(WndProc)));
 	Logger::Log("Custom WndProc set.", LogInfo);
+    //Creates and enables DirectX hooks. Note that this kicks off ImGui init as well.
 	CreateD3D11Hooks(true);
 	Logger::Log("D3D11 hooks created and enabled.", LogInfo);
-	//Logger::Log("Finished hooking D3D11 functions.", LogInfo);
 
 	Sleep(5000);
 
+    /*Waits for ImGui init to complete before continuing to GuiSystem (The overlay) init.*/
 	StartTime = std::chrono::steady_clock::now();
 	EndTime = std::chrono::steady_clock::now();
 	while (!Globals::ImGuiInitialized) //ImGui Initialization done in D3DPresentHook in Hooks.cpp
@@ -89,6 +97,7 @@ void ProgramManager::Initialize()
 	Gui.Initialize();
 	Gui.SetScriptManager(&Scripts);
 	Gui.FreeCamSettings->Camera = &Camera;
+    //Update global pointers after init just to be sure. Can't hurt.
 	Scripts.UpdateRfgPointers();
 
 	Beep(600, 100);
@@ -96,6 +105,9 @@ void ProgramManager::Initialize()
 	Beep(900, 200);
 }
 
+/* Cleans up any hooks and binary patches made by the script loader and tries to leave the 
+ * game in an unaltered state. Not guaranteed to do so due to all the changes it makes.
+ */
 void ProgramManager::Exit()
 {
 	if (Globals::OverlayActive || Gui.IsLuaConsoleActive())
@@ -117,6 +129,7 @@ void ProgramManager::Exit()
 	ImGui_ImplDX11_Shutdown();
 	ImGui_ImplWin32_Shutdown();
 
+    //Attempt to disable invulnerability and reset player health.
 	if (Globals::PlayerPtr)
 	{
 		Globals::PlayerPtr->Flags.invulnerable = false;
@@ -128,6 +141,7 @@ void ProgramManager::Exit()
 	Beep(600, 200);
 }
 
+/* Opens the external debug console. Mainly used for script loader development.*/
 void ProgramManager::OpenConsole()
 {
 	if (Globals::OpenDebugConsole)
@@ -151,6 +165,7 @@ void ProgramManager::OpenConsole()
 	}
 }
 
+/* Sets pointers to important rfg variables such as InMultiplayer.*/
 void ProgramManager::SetMemoryLocations()
 {
 	Globals::InMultiplayer = reinterpret_cast<bool*>(*reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x002CA210));
@@ -161,6 +176,7 @@ void ProgramManager::SetMemoryLocations()
 	}
 }
 
+/* Creates game hooks and enables them immediately if provided true as an argument.*/
 void ProgramManager::CreateGameHooks(bool EnableNow)
 {
 	//Hooks.CreateHook("PlayerConstructor", GAMEHOOK,reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x6DECA0), PlayerConstructorHook, reinterpret_cast<LPVOID*>(&PlayerConstructor), EnableNow);
@@ -191,23 +207,25 @@ void ProgramManager::CreateGameHooks(bool EnableNow)
 	Hooks.CreateHook("LuaDoBuffer", GAMEHOOK, reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x82FD20), LuaDoBufferHook, reinterpret_cast<LPVOID*>(&LuaDoBuffer), EnableNow);
 }
 
+/* Creates DirectX11/D3D11 hooks and enables them immediately if provided true as an argument.*/
 void ProgramManager::CreateD3D11Hooks(bool EnableNow)
 {
 	Hooks.CreateHook("D3D11Present", D3D11HOOK, reinterpret_cast<LPVOID>(kiero::getMethodsTable()[8]), D3D11PresentHook, reinterpret_cast<LPVOID*>(&D3D11PresentObject), EnableNow);
 }
 
+/* Returns true if the user has requested that the script loader shut down.*/
 bool ProgramManager::ShouldClose() const
 {
 	return ExitKeysPressCount > 5;
 }
 
+/* Handles any update logic that the script loader main thread needs in it's main loop. This
+ * used to contain the input detection logic but is now much simpler.
+ */
 void ProgramManager::Update()
 {
 	if (Globals::ScriptLoaderCloseRequested)
 	{
-		///std::cout << "Sleeping...\n";
-		Sleep(300);
-		///std::cout << "Done sleeping.\n";
 		ExitKeysPressCount = 10;
 	}
 	/*if (PeekMessage(&msg, nullptr, 0U, 0U, PM_REMOVE)) //Todo: Figure out if I really need this for the overlay to work.
@@ -217,6 +235,7 @@ void ProgramManager::Update()
 	}*/
 }
 
+/* Closes the external debug console if it's open.*/
 void ProgramManager::CloseConsole() const
 {
 	if (PreExistingConsole)
@@ -225,6 +244,12 @@ void ProgramManager::CloseConsole() const
 	}
 }
 
+/* Attempts to load Settings.json. If it cannot be found, it'll be generated with the default
+ * values. If there are any exceptions when loading the settings file they'll be caught and 
+ * logged. This function returns true if the settings file is successfully loaded, and false 
+ * if it fails to be loaded. Should fail loudly rather than just using default values and 
+ * hiding a possible problem.
+ */
 bool ProgramManager::LoadDataFromConfig()
 {
 	std::string ExePath = Globals::GetEXEPath(false);
@@ -278,4 +303,3 @@ bool ProgramManager::LoadDataFromConfig()
 	Logger::Log("Done loading \"Settings.json\".", LogInfo);
 	return true;
 }
-
