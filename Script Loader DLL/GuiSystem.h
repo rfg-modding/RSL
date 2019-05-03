@@ -14,6 +14,10 @@
 
 class ScriptManager;
 
+/* Keeps track of all menus/gui's used in the script loader overlay. Handles visibility, 
+ * updates common values they use, and manages access to the GUI's by other parts of the code.
+ * Keeps things cleaner and easier to maintain and add new guis.
+ */
 class GuiSystem
 {
 public:

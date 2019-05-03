@@ -9,6 +9,9 @@ GuiSystem::~GuiSystem()
 	}
 }
 
+/* Creates all GUI class instances and adds them to the GuiList. Sets pointers for each of 
+ * them for quick (no string comparisons) and easy access. 
+ */
 void GuiSystem::Initialize()
 {
 	GuiList.push_back(new MenuBarGui(&ShowAppMainMenuBar, "Top Menu Bar"));
@@ -43,12 +46,15 @@ void GuiSystem::Initialize()
 	Initialized = true;
 }
 
+/* Returns true if this GuiSystem instance has been initialized.*/
 bool GuiSystem::Ready() const
 {
 	return Initialized;
 }
 
-/*Should only be doing this once.*/
+/* Sets the ScriptManager pointer for all GUIs. This function is used instead of manually
+ * setting it to avoid accidentally missing one of the GUIs and to avoid code duplication.
+ */
 void GuiSystem::SetScriptManager(ScriptManager* Scripts_)
 {
 	Scripts = Scripts_;
@@ -58,16 +64,21 @@ void GuiSystem::SetScriptManager(ScriptManager* Scripts_)
 	}
 }
 
+/* Gets this instances ScriptManager pointer. */
 ScriptManager* GuiSystem::GetScriptManager() const
 {
 	return Scripts;
 }
 
+/* Returns true if ScriptManager pointer is not a nullptr, and false if it is.*/
 bool GuiSystem::HasValidScriptManager() const
 {
 	return (Scripts != nullptr);
 }
 
+/* Draws all GUIs in GuiList. Has exception checking so that if one gui fails it shouldn't 
+ * break all other GUIs.
+ */
 void GuiSystem::Draw()
 {
 	try
@@ -190,6 +201,7 @@ void GuiSystem::Draw()
 	}
 }
 
+/* Sets the Player pointer for all GUIs.*/
 void GuiSystem::SetPlayerPtr(Player* NewPlayerPtr)
 {
 	PlayerPtr = NewPlayerPtr;
@@ -199,28 +211,32 @@ void GuiSystem::SetPlayerPtr(Player* NewPlayerPtr)
 	}
 }
 
-/*Sets PlayerPtr for all GUI classes which use it.*/
+/* Sets the Player pointer for all GUIs.*/
 void GuiSystem::SetPlayerPtr(void* NewPlayerPtr)
 {
 	SetPlayerPtr(static_cast<Player*>(NewPlayerPtr));
 }
 
+/* Toggles visibility of the lua console*/
 void GuiSystem::ToggleLuaConsole()
 {
 	LuaConsoleActive = !LuaConsoleActive;
 	ShowAppConsole = !ShowAppConsole;
 }
 
+/* Returns true if the lua console is active/visible.*/
 bool GuiSystem::IsLuaConsoleActive() const
 {
 	return LuaConsoleActive;
 }
 
+/* Deactivates the lua console so it's no longer visible.*/
 void GuiSystem::DeactivateLuaConsole()
 {
 	LuaConsoleActive = false;
 }
 
+/* Activats the lua console so it's now visible.*/
 void GuiSystem::ActivateLuaConsole()
 {
 	LuaConsoleActive = true;

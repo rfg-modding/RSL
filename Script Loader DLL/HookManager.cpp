@@ -5,6 +5,10 @@ HookManager::~HookManager()
 	DisableAllHooks();
 }
 
+/* Creates a function hook using the given args. HookName is used for debugging and logging 
+ * purposes. If EnableNow is true, then the hook will be immediately enabled. Returns true if
+ * the hook was successfully created and false if it was not.
+ */
 bool HookManager::CreateHook(const std::string& HookName, const HookType Type, const LPVOID Target, LPVOID Detour, LPVOID* Original, const bool EnableNow)
 {
 	if (HookExists(HookName))
@@ -26,6 +30,9 @@ bool HookManager::CreateHook(const std::string& HookName, const HookType Type, c
 	return true;
 }
 
+/* Enables a hook of the provided name if it exists. Returns true if it was successfully
+ * enabled and false if it was not.
+ */
 bool HookManager::EnableHook(const std::string& HookName)
 {
 	if (!HookExists(HookName))
@@ -41,6 +48,9 @@ bool HookManager::EnableHook(const std::string& HookName)
 	return true;
 }
 
+/* Disables a hook of the provided name if it exists. Returns true if it was successfully
+ * disabled and false if it was not.
+ */
 bool HookManager::DisableHook(const std::string& HookName)
 {
 	if (!HookExists(HookName))
@@ -56,6 +66,7 @@ bool HookManager::DisableHook(const std::string& HookName)
 	return false;
 }
 
+/* Enables all hooks.*/
 void HookManager::EnableAllHooks()
 {
 	for (auto& i : HookMap)
@@ -64,6 +75,7 @@ void HookManager::EnableAllHooks()
 	}
 }
 
+/* Disabled all hooks.*/
 void HookManager::DisableAllHooks()
 {
 	for (auto& i : HookMap)
@@ -72,6 +84,7 @@ void HookManager::DisableAllHooks()
 	}
 }
 
+/* Enables all hooks of the given type.*/
 void HookManager::EnableAllHooksOfType(const HookType Type)
 {
 	for (auto& i : HookMap)
@@ -83,6 +96,7 @@ void HookManager::EnableAllHooksOfType(const HookType Type)
 	}
 }
 
+/* Disables all hooks of the given type.*/
 void HookManager::DisableAllHooksOfType(const HookType Type)
 {
 	for (auto& i : HookMap)
@@ -94,6 +108,7 @@ void HookManager::DisableAllHooksOfType(const HookType Type)
 	}
 }
 
+/* Takes a std::string as input. Returns a hook with that name exists, and false if it doesn't.*/
 bool HookManager::HookExists(const const std::string& HookName) const
 {
 	for (const auto& i : HookMap)

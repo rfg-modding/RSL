@@ -1,3 +1,11 @@
+
+/* Hooks.h/.cpp contain all the function hooks used by the script loader. These hooks are
+ * created and enabled by the HookManager class. Hooks are a very powerful tool. They are 
+ * basically some additional code stuck on front of a function. This lets you do things like
+ * intercept their arguments and use them later, change them, or have events that occur when 
+ * a specific function is called.
+ */
+
 #pragma once
 #include "Functions.h"
 

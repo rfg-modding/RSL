@@ -1,3 +1,10 @@
+
+/* Functions.h/.cpp contain function pointers for many of rfg's functions. They can be used
+ * to call rfg's functions for our own use, and also to hook these functions and expand their
+ * behavior. These function pointers are initialized in FunctionManager.cpp. The declarations
+ * here are only used to define the inputs, calling conventions, and returns of these functions.
+ */
+
 #pragma once
 #include "ItsyBitsy.h"
 //#include "RFGR Structs/KeenNamespace.h"

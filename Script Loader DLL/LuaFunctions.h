@@ -1,7 +1,9 @@
 #pragma once
 #include "Functions.h"
 
-//These functions are only for use in Lua.
+/* This namespace contains functions only used by Lua. It's mainly wrapper functions with 
+ * different arguments for convenience sake when calling them through lua.
+ */
 namespace Lua
 {
 	extern Player* GetPlayer();

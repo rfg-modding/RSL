@@ -1,5 +1,6 @@
 #include "FunctionManager.h"
 
+/* Initializes rfg function pointers. */
 void FunctionManager::Initialize()
 {
 	Camera_Start_Slew_Mode = reinterpret_cast<F_Camera_Start_Slew_Mode>(Globals::ModuleBase + 0x2D09B0); //483B60

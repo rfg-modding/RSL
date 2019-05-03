@@ -1,6 +1,9 @@
 #pragma once
 #include "Hooks.h"
 
+/* Used to filter hooks by type. In the case that one might want to only enable game hooks, 
+ * or only disable directx hooks.
+ */
 enum HookType
 {
 	NONE,
@@ -8,6 +11,7 @@ enum HookType
 	D3D11HOOK
 };
 
+/* POD class with basic info about a hook that minhook needs to create, enable, disable them.*/
 class Hook
 {
 public:
@@ -21,6 +25,9 @@ public:
 	bool Enabled = false;
 };
 
+/* Handles function hooking. This includes creating, enabling, and disabling hooks. 
+ * Makes it simpler, and avoids code duplication.
+ */
 class HookManager
 {
 public:
