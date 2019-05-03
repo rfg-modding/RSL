@@ -374,10 +374,6 @@ bool ScriptManager::IsValidScriptExtensionFromPath(std::string FullPath)
 bool ScriptManager::IsValidScriptExtension(std::string Extension) const
 {
 	std::transform(Extension.begin(), Extension.end(), Extension.begin(), ::tolower);
-	if (Extension == "lua")
-	{
-		return true;
-	}
-	return false;
+    return Extension == "lua";
 }
 
