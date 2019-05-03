@@ -30,7 +30,6 @@ void ProgramManager::Initialize()
 	Globals::Scripts = &this->Scripts;
 	Globals::Camera = &this->Camera;
 
-    //Init script loader modules. 
 	Camera.Initialize(Globals::DefaultFreeCameraSpeed, 5.0);
 	Functions.Initialize();
 	Scripts.Initialize();
@@ -53,46 +52,15 @@ void ProgramManager::Initialize()
     //Creates and enables all game function hooks. This does not include directx hooks.
 	CreateGameHooks(true);
 
-	/* Waits for the game to properly start before continuing to DirectX hooking. Without this
-	 * the game will freeze if the script loader is injected at game start. It seems that fails 
-	 * because it tries hooking D3D11Present before it's been loaded by the game. This loop
-	 * simply checks for a valid game state each second until one is received, then init continues.
-	 */
-	GameState RFGRState = GameseqGetState();;
-	auto StartTime = std::chrono::steady_clock::now();
-	auto EndTime = std::chrono::steady_clock::now();
-	do
-	{
-        long long TimeElapsed = std::chrono::duration_cast<std::chrono::milliseconds>(EndTime - StartTime).count();
-		if (TimeElapsed > 1000)
-		{
-			RFGRState = GameseqGetState();
-			StartTime = EndTime;
-		}
-		EndTime = std::chrono::steady_clock::now();
-	} 
-	while (RFGRState < 0 || RFGRState > 63);
-
 	Globals::OriginalWndProc = reinterpret_cast<WNDPROC>(SetWindowLongPtr(Globals::GameWindowHandle, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(WndProc)));
 	Logger::Log("Custom WndProc set.", LogInfo);
-    //Creates and enables DirectX hooks. Note that this kicks off ImGui init as well.
 	CreateD3D11Hooks(true);
 	Logger::Log("D3D11 hooks created and enabled.", LogInfo);
 
-	Sleep(5000);
-
     /*Waits for ImGui init to complete before continuing to GuiSystem (The overlay) init.*/
-	StartTime = std::chrono::steady_clock::now();
-	EndTime = std::chrono::steady_clock::now();
-	while (!Globals::ImGuiInitialized) //ImGui Initialization done in D3DPresentHook in Hooks.cpp
+	while (!Globals::ImGuiInitialized) //ImGui Initialization occurs in KeenGraphicsBeginFrameHook in Hooks.cpp
 	{
-		long long TimeElapsed = std::chrono::duration_cast<std::chrono::milliseconds>(EndTime - StartTime).count();
-		if (TimeElapsed > 2000LL) 
-		{
-			///Logger::Log("Waiting for ImGui to be initialized.", LogInfo);
-		}
-		EndTime = StartTime;
-		StartTime = std::chrono::steady_clock::now();
+        Sleep(100);
 	}
 	Gui.Initialize();
 	Gui.SetScriptManager(&Scripts);
@@ -196,7 +164,6 @@ void ProgramManager::CreateGameHooks(bool EnableNow)
 	Hooks.CreateHook("SatelliteModeInit", GAMEHOOK, reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x4F50B0), HudUiMultiplayerProcessHook, reinterpret_cast<LPVOID*>(&HudUiMultiplayerProcess), EnableNow);
 	Hooks.CreateHook("SatelliteModeDoFrame", GAMEHOOK, reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x1D0DD0), IsValidGameLinkLobbyKaikoHook, reinterpret_cast<LPVOID*>(&IsValidGameLinkLobbyKaiko), EnableNow);
 	Hooks.CreateHook("ModeMismatchFixState", GAMEHOOK, reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x497740), InitMultiplayerDataItemRespawnHook, reinterpret_cast<LPVOID*>(&InitMultiplayerDataItemRespawn), EnableNow);
-
 	/*End of MP Detection Hooks*/
 
 	Hooks.CreateHook("world::do_frame", GAMEHOOK, reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x540AB0), world_do_frame_hook, reinterpret_cast<LPVOID*>(&world_do_frame), EnableNow);
