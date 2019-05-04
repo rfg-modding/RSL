@@ -1,6 +1,151 @@
 #pragma once
 #include "RFGR_Type_UI.h"
 
+enum trigger_region_shape
+{
+    TRIGGER_REGION_SHAPE_BOX = 0x0,
+    TRIGGER_REGION_SHAPE_SPHERE = 0x1,
+    NUM_TRIGGER_REGION_SHAPES = 0x2,
+};
+
+enum trigger_region_type
+{
+    TRIGGER_REGION_TYPE_DEFAULT = 0x0,
+    TRIGGER_REGION_TYPE_KILL_HUMAN = 0x1,
+    NUM_TRIGGER_REGION_TYPES = 0x2,
+};
+
+enum trigger_region_kill_human_types
+{
+    TRKHT_INVALID = 0xFFFFFFFF,
+    TRKHT_CLIFF = 0x0,
+    TRKHT_MINE = 0x1,
+    NUM_TRIGGER_REGION_KILL_HUMAN_TYPES = 0x2,
+};
+
+enum vehicle_damage_area_type
+{
+    VDA_ENGINE = 0x0,
+    NUM_VEHICLE_DAMAGE_AREAS = 0x1,
+};
+
+enum squad_spawn_status
+{
+    SQUAD_SPAWN_NONE = 0xFFFFFFFF,
+    SQUAD_SPAWN_OK = 0x0,
+    SQUAD_SPAWN_PARTIAL_NPC_CREATE_FAILED = 0x1,
+    SQUAD_SPAWN_FAILED_NPC_MAX_QUANTITY = 0x2,
+    SQUAD_SPAWN_FAILED_NO_ORDERS = 0x3,
+    SQUAD_SPAWN_FAILED_OUT_OF_SPACE = 0x4,
+    SQUAD_SPAWN_FAILED_OBJECT_DOES_NOT_EXIST = 0x5,
+    SQUAD_SPAWN_FAILED_NO_OPEN_SPACE = 0x6,
+    SQUAD_SPAWN_GENERIC_FAILURE = 0x7,
+    SQUAD_SPAWN_FAILED_NPC_CREATE_FAILED = 0x8,
+    SQUAD_SPAWN_FAILED_NO_DEFINITION = 0x9,
+    NUM_SQUAD_SPAWN_STATUS = 0xA,
+};
+
+enum minimap_elements
+{
+    MAP_ELEMENT_INVALID = 0xFFFFFFFF,
+    MAP_ELEMENT_STAR_RED_ICON = 0x0,
+    MAP_ELEMENT_STAR_BLUE_ICON = 0x1,
+    MAP_ELEMENT_STAR_GREEN_ICON = 0x2,
+    MAP_ELEMENT_STAR_WHITE_ICON = 0x3,
+    MAP_ELEMENT_CIRCLE_BLUE_ICON = 0x4,
+    MAP_ELEMENT_CIRCLE_BLUE_1_ICON = 0x5,
+    MAP_ELEMENT_CIRCLE_BLUE_2_ICON = 0x6,
+    MAP_ELEMENT_CIRCLE_BLUE_3_ICON = 0x7,
+    MAP_ELEMENT_CIRCLE_BLUE_4_ICON = 0x8,
+    MAP_ELEMENT_CIRCLE_VIOLET_1_ICON = 0x9,
+    MAP_ELEMENT_CIRCLE_VIOLET_2_ICON = 0xA,
+    MAP_ELEMENT_CIRCLE_VIOLET_3_ICON = 0xB,
+    MAP_ELEMENT_CIRCLE_VIOLET_4_ICON = 0xC,
+    MAP_ELEMENT_AMMO_BOX = 0xD,
+    MAP_ELEMENT_CONVOY_ICON = 0xE,
+    MAP_ELEMENT_CONVOY_CAPTURE_ICON = 0xF,
+    MAP_ELEMENT_RIDING_SHOTGUN = 0x10,
+    MAP_ELEMENT_AREA_DEFENSE = 0x11,
+    MAP_ELEMENT_COURIER_ICON = 0x12,
+    MAP_ELEMENT_RAID_ICON = 0x13,
+    MAP_ELEMENT_RAID_ICON_ALWAYS_SHOW = 0x14,
+    MAP_ELEMENT_DEF_RAID_ICON = 0x15,
+    MAP_ELEMENT_BASE_ICON = 0x16,
+    MAP_ELEMENT_HOUSE_ICON = 0x17,
+    MAP_ELEMENT_HOUSE_ICON_ALWAYS_SHOW = 0x18,
+    MAP_ELEMENT_DEMOLITIONS_MASTER = 0x19,
+    MAP_ELEMENT_GUERRILLA_EXPRESS = 0x1A,
+    MAP_ELEMENT_GENERIC_ACTIVITY = 0x1B,
+    MAP_ELEMENT_ARROW_ICON = 0x1C,
+    MAP_ELEMENT_CIRCLE_FILLED_OUTLINE = 0x1D,
+    MAP_ELEMENT_CONVOY_END_POINT = 0x1E,
+    MAP_ELEMENT_GUERILLA_EXP_END_POINT = 0x1F,
+    MAP_ELEMENT_MISSION_START = 0x20,
+    MAP_ELEMENT_TARGET = 0x21,
+    MAP_ELEMENT_TARGET_PRIORITY_1 = 0x22,
+    MAP_ELEMENT_TARGET_PRIORITY_2 = 0x23,
+    MAP_ELEMENT_TARGET_PRIORITY_3 = 0x24,
+    MAP_ELEMENT_TARGET_PRIORITY_4 = 0x25,
+    MAP_ELEMENT_SAFE_HOUSE = 0x26,
+    MAP_ELEMENT_DIRECTIONAL_ARROW = 0x27,
+    MAP_ELEMENT_MISSION_OBJECTIVE = 0x28,
+    MAP_ELEMENT_MISSION_OBJECTIVE_UP = 0x29,
+    MAP_ELEMENT_MISSION_OBJECTIVE_DOWN = 0x2A,
+    MAP_ELEMENT_TANK_ICON = 0x2B,
+    MAP_ELEMENT_FLAG_ICON = 0x2C,
+    MAP_ELEMENT_KOTH_GUERRILLA = 0x2D,
+    MAP_ELEMENT_KOTH_EDF = 0x2E,
+    MAP_ELEMENT_KOTH_NEUTRAL = 0x2F,
+    MAP_ELEMENT_CARBOMB = 0x30,
+    MAP_ELEMENT_ICON_COUNT = 0x31,
+    MAP_ELEMENT_BLIP = 0x31,
+    MAP_ELEMENT_BLIP_HUMAN = 0x32,
+    MAP_ELEMENT_PLAYER = 0x33,
+    MAP_ELEMENT_STRUCTURE_EDF = 0x34,
+    MAP_ELEMENT_VEHICLE = 0x35,
+    MAP_ELEMENT_IMPORTANCE_MEDIUM = 0x36,
+    MAP_ELEMENT_IMPORTANCE_HIGH = 0x37,
+    MAP_ELEMENT_NORTH = 0x38,
+    MAP_ELEMENT_RING_ICON = 0x39,
+    MAP_ELEMENT_CAMERA_CONE = 0x3A,
+    NUM_MAP_ELEMENTS = 0x3B,
+};
+
+enum gfm_orders_types
+{
+    GFM_ORDERS_TYPE_INVALID = 0xFFFFFFFF,
+    GFM_ORDERS_TYPE_NONE = 0x0,
+    GFM_ORDERS_TYPE_DEFEND = 0x1,
+    GFM_ORDERS_TYPE_ATTACK = 0x2,
+    GFM_ORDERS_TYPE_PATROL = 0x3,
+    GFM_ORDERS_TYPE_SMASH = 0x4,
+    GFM_ORDERS_TYPE_CONVOY = 0x5,
+    GFM_ORDERS_TYPE_COURIER = 0x6,
+    GFM_ORDERS_TYPE_AMBIENT_ACTION = 0x7,
+    GFM_ORDERS_TYPE_AMBIENT_PED = 0x8,
+    GFM_ORDERS_TYPE_FODDER = 0x9,
+    GFM_ORDERS_TYPE_TERRORIZE = 0xA,
+    GFM_ORDERS_TYPE_WAIT = 0xB,
+    GFM_ORDERS_TYPE_ROADBLOCK = 0xC,
+    GFM_ORDERS_TYPE_TRAPPED = 0xD,
+    GFM_ORDERS_TYPE_TRAPPED_JAIL = 0xE,
+    GFM_ORDERS_TYPE_DRIVE_BY = 0xF,
+    GFM_ORDERS_TYPE_FLY_BY = 0x10,
+    GFM_ORDERS_VEHICLE_DROP_OFF = 0x11,
+    GFM_ORDERS_TIED_UP = 0x12,
+    NUM_GFM_ORDERS_TYPES = 0x13,
+};
+
+enum spawn_node_respawn_speed
+{
+    INVALID_RESPAWN_SPEED = 0xFFFFFFFF,
+    RESPAWN_SPEED_NONE = 0x0,
+    RESPAWN_SPEED_SLOW = 0x1,
+    RESPAWN_SPEED_MEDIUM = 0x2,
+    RESPAWN_SPEED_FAST = 0x3,
+    NUM_RESPAWN_SPEEDS = 0x4,
+};
+
 namespace keen
 {
 	enum PixelFormat
@@ -2230,4 +2375,365 @@ struct __declspec(align(8)) World //11108
 	char territory_name[128]; //128
 	int num_streaming_objects; //4
 	bool stub_serialization_in_progress; //1
+};
+
+
+
+
+
+struct vehicle_flags
+{
+    unsigned __int32 activity : 1;
+    unsigned __int32 old_activity : 1;
+    unsigned __int32 activity_destroyed : 1;
+    unsigned __int32 convoy_vehicle : 1;
+    unsigned __int32 ambient_spawn : 1;
+    unsigned __int32 death_reported : 1;
+    unsigned __int32 no_ragdoll : 1;
+    unsigned __int32 despawned_squad_vehicle : 1;
+    unsigned __int32 delete_mission_vehicle : 1;
+    unsigned __int32 do_not_destroy_with_squad : 1;
+    unsigned __int32 m_corpse : 1;
+    unsigned __int32 m_despawn_after_fade : 1;
+    unsigned __int32 m_door_collision_enabled : 1;
+    unsigned __int32 m_engine_running : 1;
+    unsigned __int32 m_engine_smoking : 1;
+    unsigned __int32 m_fading_in : 1;
+    unsigned __int32 m_fading_out : 1;
+    unsigned __int32 m_fading_from_nano : 1;
+    unsigned __int32 m_hidden : 1;
+    unsigned __int32 m_hijacked : 1;
+    unsigned __int32 m_scripted_bail : 1;
+    unsigned __int32 m_scripted_abandon : 1;
+    unsigned __int32 m_horn_down : 1;
+    unsigned __int32 m_invulnerable : 1;
+    unsigned __int32 m_mission_invulnerable : 1;
+    unsigned __int32 m_is_player_car : 1;
+    unsigned __int32 m_kill_by_vehicle : 1;
+    unsigned __int32 m_mp_honked_horn : 1;
+    unsigned __int32 m_needs_repair : 1;
+    unsigned __int32 m_occupied : 1;
+    unsigned __int32 m_on_fire : 1;
+    unsigned __int32 m_nano_sim_fire : 1;
+    unsigned __int32 m_nano_sim_smoke : 1;
+    unsigned __int32 m_grenade_inside : 1;
+    unsigned __int32 m_released_from_cutscene : 1;
+    unsigned __int32 m_resource_access_disabled : 1;
+    unsigned __int32 m_reverse_last_frame : 1;
+    unsigned __int32 m_series_of_honks : 1;
+    unsigned __int32 m_siren_dying : 1;
+    unsigned __int32 m_siren_audio_on : 1;
+    unsigned __int32 m_using_horn : 1;
+    unsigned __int32 pass_by_getting_closer : 1;
+    unsigned __int32 m_wheels_on_ground : 1;
+    unsigned __int32 m_all_wheels_on_ground : 1;
+    unsigned __int32 m_only_fire_damage : 1;
+    unsigned __int32 m_headlights_on : 1;
+    unsigned __int32 m_emergency_lights_on : 1;
+    unsigned __int32 high_priority_target : 1;
+    unsigned __int32 player_may_capture : 1;
+    unsigned __int32 disable_for_npc_drivers : 1;
+    unsigned __int32 disable_for_player : 1;
+    unsigned __int32 disable_accelerator : 1;
+    unsigned __int32 locked_in_place : 1;
+    unsigned __int32 fixed_motion : 1;
+    unsigned __int32 disable_turrets_for_npcs : 1;
+    unsigned __int32 immediate_spawn : 1;
+    unsigned __int32 no_player_use : 1;
+    unsigned __int32 invisible_driver : 1;
+};
+
+struct  squad_flags_struct
+{
+    unsigned __int32 simulation : 1;
+    unsigned __int32 inside_load_dist : 1;
+    unsigned __int32 outside_unload_dist : 1;
+    unsigned __int32 force_spawn : 1;
+    unsigned __int32 leader_has_died : 1;
+    unsigned __int32 activity : 1;
+    unsigned __int32 old_activity : 1;
+    unsigned __int32 ignore_road_spawn : 1;
+    unsigned __int32 disallow_reassignment : 1;
+    unsigned __int32 player_squad : 1;
+    unsigned __int32 stay_in_vehicle : 1;
+    unsigned __int32 high_priority_targets : 1;
+    unsigned __int32 vehicle_damage_update : 1;
+    unsigned __int32 flagged_for_despawn : 1;
+    unsigned __int32 squad_icon_is_sticky : 1;
+    unsigned __int32 squad_icon_is_closest : 1;
+    unsigned __int32 just_spawned : 1;
+    unsigned __int32 flier_squad : 1;
+    unsigned __int32 reinforcement_squad : 1;
+    unsigned __int32 vehicle_infinite_mass : 1;
+    unsigned __int32 managed_layer_creation : 1;
+    unsigned __int32 dynamic_creation : 1;
+    unsigned __int32 mission_created : 1;
+    unsigned __int32 hands_off_raid_squad : 1;
+    unsigned __int32 special_despawn_rules : 1;
+};
+
+struct  npc_flags_struct
+{
+    unsigned __int32 had_squad : 1;
+    unsigned __int32 always_show_on_minimap : 1;
+    unsigned __int32 deaf : 1;
+    unsigned __int32 force_targetable : 1;
+    unsigned __int32 in_cutscene : 1;
+    unsigned __int32 not_recruitable : 1;
+    unsigned __int32 recruitable_escort : 1;
+    unsigned __int32 turning_around : 1;
+    unsigned __int32 use_default_team : 1;
+    unsigned __int32 reequipping_weapon : 1;
+    unsigned __int32 going_left : 1;
+    unsigned __int32 going_left_last_time : 1;
+    unsigned __int32 passenger_wait : 1;
+    unsigned __int32 player_exit_wait : 1;
+    unsigned __int32 chase_teleport_disable : 1;
+    unsigned __int32 honked_at : 1;
+    unsigned __int32 honked_at_friendly : 1;
+    unsigned __int32 honked_at_hostile : 1;
+    unsigned __int32 activity_related : 1;
+    unsigned __int32 mission_related : 1;
+    unsigned __int32 ambush_related : 1;
+    unsigned __int32 convoy_squad : 1;
+    unsigned __int32 civilian_has_been_oppressed : 1;
+    unsigned __int32 entered_raid : 1;
+    unsigned __int32 raid_cheer : 1;
+    unsigned __int32 raid_watch : 1;
+    unsigned __int32 return_fire_aim_bonus : 1;
+    unsigned __int32 reduced_npc_damage : 1;
+    unsigned __int32 maneuver_required : 1;
+    unsigned __int32 activity_driver_vr : 1;
+    unsigned __int32 activity_pursuit_vr : 1;
+    unsigned __int32 activity_pursuit_ca : 1;
+    unsigned __int32 activity_ha : 1;
+    unsigned __int32 prevent_weapon_draw : 1;
+    unsigned __int32 tied_up : 1;
+    unsigned __int32 freed_from_bonds : 1;
+    unsigned __int32 run_to_safehouse : 1;
+    unsigned __int32 bureaucrat : 1;
+    unsigned __int32 ambient_spawn : 1;
+    unsigned __int32 ambient_flee : 1;
+    unsigned __int32 ambient_near_player : 1;
+    unsigned __int32 ambient_vehicle_spawn : 1;
+    unsigned __int32 ambient_edf_flyer : 1;
+    unsigned __int32 roadblock_guard : 1;
+    unsigned __int32 thanked_player : 1;
+    unsigned __int32 converted_guerrilla : 1;
+    unsigned __int32 attempted_spontaneous_conversion : 1;
+    unsigned __int32 dont_collide_with_humans : 1;
+    unsigned __int32 disable_grenades : 1;
+    unsigned __int32 no_turret_attacks : 1;
+    unsigned __int32 force_out_of_vehicle : 1;
+    unsigned __int32 scripted_move : 1;
+    unsigned __int32 scripted_drive : 1;
+    unsigned __int32 only_ride_with_player : 1;
+    unsigned __int32 played_added_message : 1;
+    unsigned __int32 has_reached_player : 1;
+    unsigned __int32 too_far_from_player : 1;
+    unsigned __int32 spawned_as_corpse : 1;
+    unsigned __int32 use_corpse_vehicle_exit : 1;
+    unsigned __int32 man_flyer : 1;
+    unsigned __int32 ignore_player : 1;
+    unsigned __int32 squad_leader_ignore_player : 1;
+    unsigned __int32 fire_on_vehicles : 1;
+    unsigned __int32 ignore_vehicles : 1;
+    unsigned __int32 orders_active : 1;
+    unsigned __int32 fodder_on_object : 1;
+    unsigned __int32 remove_icon_on_death : 1;
+    unsigned __int32 courier_run_to_destination : 1;
+    unsigned __int32 can_use_special_roads : 1;
+    unsigned __int32 bomb : 1;
+    unsigned __int32 drive_disabled : 1;
+    unsigned __int32 used_action_node : 1;
+    unsigned __int32 immediate_spawn : 1;
+    unsigned __int32 console_created : 1;
+    unsigned __int32 amb_watch_player : 1;
+    unsigned __int32 despawn_after_fade : 1;
+    unsigned __int32 allow_idle_despawn : 1;
+    unsigned __int32 disallow_idle_despawn : 1;
+    unsigned __int32 despawn_npc : 1;
+    unsigned __int32 disallow_despawn_engagement : 1;
+    unsigned __int32 high_priority_despawn : 1;
+    unsigned __int32 despawn_on_green_alert : 1;
+};
+
+struct vehicle_damage_area
+{
+    vehicle_damage_area_type m_type;
+    int m_max_hit_points;
+    int m_hit_points;
+    unsigned int m_effect_instances[2];
+};
+
+struct npc_script_info_flags//$39A5CD0A01CBACDCC8ACC9FFCAC3EB9B
+{
+    __int8 run : 1;
+    __int8 fire_at_target : 1;
+    __int8 use_vehicle : 1;
+    __int8 drive_directly : 1;
+};
+
+struct __declspec(align(4)) npc_script_info
+{
+    unsigned int location_object;
+    npc_script_info_flags flags;
+};
+
+struct patrol_node_handle_flags//$E3C9819FB7D46A058EA9E2A20532DA63
+{
+    __int8 reverse : 1;
+    __int8 last_node : 1;
+    __int8 node_checked : 1;
+    __int8 near_road : 1;
+};
+
+struct  __declspec(align(4)) patrol_node_handle
+{
+    unsigned int patrol_handle;
+    unsigned int nav_handle;
+    patrol_node_handle_flags node_flags;
+};
+
+struct squad_progression_set
+{
+    HumanInfo* h_info;
+    int member_load;
+    int spawn_weight;
+};
+
+struct squad_progression_level
+{
+    rfg::farray<squad_progression_set, 8> squad_progression_list;
+    int total_spawn_weight;
+    HumanInfo *priority_reservations[8];
+};
+
+struct squad_progress_info
+{
+    const char *name;
+    HumanTeams team;
+    squad_progression_level progression_list[8];
+    int last_member_used;
+};
+
+struct squad_definition
+{
+    const char* name;
+    HumanInfo* special_npc_info;
+    HumanTeams squad_team;
+    int total_npc_count;
+    squad_progress_info* primary_info;
+    squad_progress_info* secondary_info;
+    squad_progress_info* reinforcement_info;
+};
+
+struct object_squad : Object
+{
+    squad_spawn_status spawn_status;
+    rfg::farray<unsigned int, 10> member_array;
+    npc_flags_struct npc_flags;
+    HumanFlags hflags;
+    vehicle_flags vflags;
+    npc_script_info scripting_info;
+    vehicle_spawn_group_info *veh_spawn_group;
+    unsigned int squad_vehicle;
+    Timestamp last_member_removed;
+    patrol_node_handle current_node_handle;
+    int squad_map_objective;
+    minimap_elements squad_map_icon;
+    unsigned int spawn_node_handle;
+    squad_definition* definition;
+    unsigned int base_orders_handle;
+    unsigned int assigned_orders_handle;
+    squad_flags_struct squad_flags;
+    Timestamp squad_age;
+    vector simulated_velocity;
+    vehicle_damage_area stored_damage_areas[1];
+    void* dest_spline_node; //navmesh_lane_spline_node* dest_spline_node;
+    HumanTeams override_team;
+    float vehicle_hp_mult;
+    unsigned int squad_leader;
+};
+
+struct ambush_region_flags
+{
+    unsigned __int32 enabled : 1;
+    unsigned __int32 ambush_is_triggered : 1;
+    unsigned __int32 marauders_used : 1;
+    unsigned __int32 edf_used : 1;
+    unsigned __int32 guerrillas_used : 1;
+    unsigned __int32 teams_checked : 1;
+    unsigned __int32 skirmish_ambush : 1;
+    unsigned __int32 abort_ambush : 1;
+};
+
+struct marauder_ambush_region : Object
+{
+    bbox bb;
+    bbox local_bb;
+    float radius;
+    float night_ambush_prob;
+    float day_ambush_prob;
+    int min_squad_spawns;
+    int max_squad_spawns;
+    unsigned int edf_squad_spawn_node;
+    unsigned int marauder_squad_spawn_node;
+    unsigned int guerrilla_squad_spawn_node;
+    object_squad* edf_squad;
+    object_squad* marauder_squad;
+    object_squad* guerrilla_squad;
+    bool is_day;
+    vector last_pos;
+    Timestamp squad_update_timer;
+    ambush_region_flags flags;
+};
+
+struct squad_spawn_node_flags //object_squad_spawn_node::squad_spawn_node_flags
+{
+    unsigned __int32 disabled : 1;
+    unsigned __int32 mission_disabled : 1;
+    unsigned __int32 evaluated_spawn : 1;
+    unsigned __int32 spawn_next_frame : 1;
+    unsigned __int32 no_reassignment : 1;
+    unsigned __int32 raid_spawn : 1;
+    unsigned __int32 hands_off_raid_squad : 1;
+    unsigned __int32 miner_persona : 1;
+    unsigned __int32 safehouse_vip : 1;
+    unsigned __int32 ignore_tod_spawning : 1;
+    unsigned __int32 respawn : 1;
+    unsigned __int32 special_spawn_npc : 1;
+    unsigned __int32 special_spawn_vehicle : 1;
+    unsigned __int32 disable_during_alert : 1;
+    unsigned __int32 roadblock_spawn_node : 1;
+    unsigned __int32 radio_operator : 1;
+};
+
+struct object_squad_spawn_node : Object
+{
+    float spawn_prob;
+    float night_spawn_prob;
+    squad_definition *squad_def;
+    vehicle_spawn_group_info *veh_spawn_group;
+    bbox local_bbox;
+    spawn_node_respawn_speed respawn_speed;
+    gfm_orders_types default_orders_type;
+    unsigned int original_orders_handle;
+    unsigned int child_squad_handle;
+    unsigned int child_vehicle_handle;
+    Timestamp respawn_timer;
+    squad_spawn_node_flags node_flags; //object_squad_spawn_node::squad_spawn_node_flags
+};
+
+struct trigger_region : Object
+{
+    bbox bb;
+    bbox local_bb;
+    float radius;
+    trigger_region_shape tr_shape;
+    bool enabled;
+    trigger_region_type tr_type;
+    trigger_region_kill_human_types tr_kill_type;
+    int tr_flags;
+    vector last_pos;
 };

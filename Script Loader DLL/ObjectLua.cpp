@@ -45,7 +45,7 @@ void Lua::BindObject(sol::state & LuaState)
     //Utype.set("CastToPlayerStart", [](Object& Self) ->Human* {return static_cast<Human*>(&Self); });
     //Utype.set("CastToCoverNode", [](Object& Self) ->Human* {return static_cast<Human*>(&Self); });
     //Utype.set("CastToNavPoint", [](Object& Self) ->Human* {return static_cast<Human*>(&Self); });
-    //Utype.set("CastToSquad", [](Object& Self) ->Human* {return static_cast<Human*>(&Self); });
+    Utype.set("CastToSquad", [](Object& Self) ->object_squad* {return static_cast<object_squad*>(&Self); });
     //Utype.set("CastToConvoy", [](Object& Self) ->Human* {return static_cast<Human*>(&Self); });
     //Utype.set("CastToConvoyEnd", [](Object& Self) ->Human* {return static_cast<Human*>(&Self); });
     //Utype.set("CastToPatrol", [](Object& Self) ->Human* {return static_cast<Human*>(&Self); });
@@ -54,8 +54,8 @@ void Lua::BindObject(sol::state & LuaState)
     //Utype.set("CastToLadder", [](Object& Self) ->Human* {return static_cast<Human*>(&Self); });
     //Utype.set("CastToConstraint", [](Object& Self) ->Human* {return static_cast<Human*>(&Self); });
     Utype.set("CastToZone", [](Object& Self) ->obj_zone* {return static_cast<obj_zone*>(&Self); });
-    //Utype.set("CastToTriggerRegion", [](Object& Self) ->Human* {return static_cast<Human*>(&Self); });
-    //Utype.set("CastToMarauderAmbushRegion", [](Object& Self) ->Human* {return static_cast<Human*>(&Self); });
+    Utype.set("CastToTriggerRegion", [](Object& Self) ->trigger_region* {return static_cast<trigger_region*>(&Self); });
+    Utype.set("CastToMarauderAmbushRegion", [](Object& Self) ->marauder_ambush_region* {return static_cast<marauder_ambush_region*>(&Self); });
     //Utype.set("CastToRestrictedArea", [](Object& Self) ->Human* {return static_cast<Human*>(&Self); });
     //Utype.set("CastToSpawnRegion", [](Object& Self) ->Human* {return static_cast<Human*>(&Self); });
     //Utype.set("CastToAmbientSpawnRegion", [](Object& Self) ->Human* {return static_cast<Human*>(&Self); });
@@ -63,7 +63,7 @@ void Lua::BindObject(sol::state & LuaState)
     //Utype.set("CastToNpcSpawnNode", [](Object& Self) ->Human* {return static_cast<Human*>(&Self); });
     //Utype.set("CastToTurretSpawnNode", [](Object& Self) ->Human* {return static_cast<Human*>(&Self); });
     //Utype.set("CastToActionNode", [](Object& Self) ->Human* {return static_cast<Human*>(&Self); });
-    //Utype.set("CastToSquadSpawnNode", [](Object& Self) ->Human* {return static_cast<Human*>(&Self); });
+    Utype.set("CastToSquadSpawnNode", [](Object& Self) ->object_squad_spawn_node* {return static_cast<object_squad_spawn_node*>(&Self); });
     //Utype.set("CastToRoadblockNode", [](Object& Self) ->Human* {return static_cast<Human*>(&Self); });
     //Utype.set("CastToShapeCutter", [](Object& Self) ->Human* {return static_cast<Human*>(&Self); });
     Utype.set("CastToDistrict", [](Object& Self) ->district* {return static_cast<district*>(&Self); });
