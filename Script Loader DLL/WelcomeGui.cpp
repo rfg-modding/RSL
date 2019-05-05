@@ -82,68 +82,22 @@ void WelcomeGui::Draw()
 	ImGui::PopStyleColor();
 	Utilities::GUI::TooltipOnPrevious("Contains several settings for the free camera and and experimental first person camera. Includes settings for clip distance which determines how far away you can see terrain and some shadows from.", Globals::FontNormal);
 
-	//ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.361f, 0.129f, 1.0f, 1.0f));
-	//if (ImGui::Button(std::string(std::string(ICON_FA_PALETTE) + u8" Theme editor " + u8"##ThemeEditorIcon").c_str()))
-	//{
-	//	Gui->ShowAppThemeEditor = !Gui->ShowAppThemeEditor;
-	//}
-	//ImGui::PopStyleColor();
-	//Utilities::GUI::TooltipOnPrevious("You can use the theme editor to change the color scheme and style of the overlay gui. It allows you to save your settings to GUIConfig.json and share that with others so they can use it. This release only supports a having a single theme, but a later release will have a themes folder so you can easily switch between them.", Globals::FontNormal);
-	
 	ImGui::PopStyleColor();
 	ImGui::PopFont();
 
 	ImGui::PushItemWidth(225.0f);
-	ImGui::TextWrapped("Welcome to the RFGR Script Loader overlay. Above are \
-some buttons for menus which you might find useful. Tooltips with more info \
-appear if you hover over them. You can also access all of these menus with \
-the top menu bar above.");
-	//ImGui::Text("");
+	ImGui::TextWrapped(R"(Welcome to the RFGR Script Loader overlay. Above are some 
+                      buttons for menus which you might find useful. Tooltips with more info 
+                      appear if you hover over them. You can also access all of these menus 
+                      with the top menu bar above.)");
+
 	ImGui::Text("\nUseful shortcuts:");
-	ImGui::Text("Toggle overlay: ");
-	ImGui::SameLine(); ImGui::TextColored(Globals::SecondaryTextColor, "F1");
-	ImGui::Text("Toggle script editor: ");
-	ImGui::SameLine(); ImGui::TextColored(Globals::SecondaryTextColor, "F2");
-	ImGui::Text("Toggle lua console: ");
-	ImGui::SameLine(); ImGui::TextColored(Globals::SecondaryTextColor, "Tilde (~)");
-	ImGui::Text("Toggle hud: ");
-	ImGui::SameLine(); ImGui::TextColored(Globals::SecondaryTextColor, "Numpad 1");
-	ImGui::Text("Toggle fog: ");
-	ImGui::SameLine(); ImGui::TextColored(Globals::SecondaryTextColor, "Numpad 2");
-	ImGui::Text("Toggle free cam: ");
-	ImGui::SameLine(); ImGui::TextColored(Globals::SecondaryTextColor, "Numpad 3");
-
-	/*if (ImGui::CollapsingHeader("Notes:"))
-	{
-		ImGui::Text("Notes");
-		ImGui::PushItemWidth(300.0f);
-		ImGui::TextWrapped("- Please keep in mind that this is a very early version of this tool. Expect there to be bugs and incomplete features. If you encounter a bug that is not in the known bugs section, please let me know. I'd appreciate that. Some issues only pop up for certain people and I can only test on so many computers myself.");
-		ImGui::PushItemWidth(300.0f);
-		ImGui::TextWrapped("- The menu above has some example menus that came with the gui library I'm using. They will be customized for the game later on.");
-		ImGui::PushItemWidth(300.0f);
-		ImGui::TextWrapped("- I've not implemented scripts yet so that section is empty.");
-		ImGui::PushItemWidth(300.0f);
-		ImGui::TextWrapped("- Globals has a few values you can modify, later on you'll there will be more values and they will be accesible to scripts.");
-		ImGui::PushItemWidth(300.0f);
-		ImGui::TextWrapped("- Teleport has both manual and preset teleportation options. Try not to move for at least 5 seconds after teleporting to allow for assets to load in. Sometimes you'll fall through the world with TP. Either wait or repeatedly press the teleport button in this case. Usually if you wait the game will bring you back to the surface after a few seconds.");
-		ImGui::PushItemWidth(300.0f);
-		ImGui::TextWrapped("- Player variables is a list of some of the values in memory that define the player. I've only added a 1/4th to 1/3rd of the values so far and I haven't mapped some of them out yet, so it isn't very useful immediately. Once I have all values added to the gui and figure out which ones you can safely change I'll add the option to edit these values as well.");
-		ImGui::PushItemWidth(300.0f);
-		ImGui::TextWrapped("- Try hovering your mouse over different gui elements. Many of them, especially in the teleport section, have useful tooltips.");
-	}
-	ImGui::Separator();
-
-	if (ImGui::CollapsingHeader("Known bugs / issues"))
-	{
-		ImGui::PushItemWidth(300.0f);
-		ImGui::TextWrapped("- Having this tool activated causes opening weapons lockers not to work. Weapon crates still work. This is an odd bug since none of my code affects weapon lockers in a direct way. It's something unexpected which I will work on fixing soon.");
-		ImGui::PushItemWidth(300.0f);
-		ImGui::TextWrapped("- The game will crash if you try to switch either to or from plain windowed mode. Using the maximize button visible in windowed mode should not cause crashes. Switching between exclusive fullscreen and fullscreen windowed should not cause any crashes. I suggest using fullscreen windowed if you expect yourself to be alt-tabbing out of the game.");
-		ImGui::PushItemWidth(300.0f);
-		ImGui::TextWrapped("- I recommend using the tool with the debug console disabled. It's an exterior window and can sometimes cause issues with the tool loading. It is off by default, so if you haven't turned it on, don't worry about it. Eventually I'll replace it completely with the in game console in the examples menu. Which is a dummy console that came with this gui library for now.");
-		ImGui::PushItemWidth(300.0f);
-		ImGui::TextWrapped("- The \"Global explosion modifiers\" section is completely broken and will make explosions stupidly overpowered rapidly. Use at your own risk. You must restart the game to revert it's effects.");
-	}*/
+    Utilities::GUI::LabelAndValue("Toggle overlay: ", "F1");
+    Utilities::GUI::LabelAndValue("Toggle script editor: ", "F2");
+    Utilities::GUI::LabelAndValue("Toggle lua console: ", "Tilde (~)");
+    Utilities::GUI::LabelAndValue("Toggle hud: ", "Numpad 1");
+    Utilities::GUI::LabelAndValue("Toggle fog: ", "Numpad 2");
+    Utilities::GUI::LabelAndValue("Toggle free cam: ", "Numpad 3");
 
 	ImGui::End();
 }
