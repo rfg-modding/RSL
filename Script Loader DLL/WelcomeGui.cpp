@@ -86,10 +86,10 @@ void WelcomeGui::Draw()
 	ImGui::PopFont();
 
 	ImGui::PushItemWidth(225.0f);
-	ImGui::TextWrapped(R"(Welcome to the RFGR Script Loader overlay. Above are some 
-                      buttons for menus which you might find useful. Tooltips with more info 
-                      appear if you hover over them. You can also access all of these menus 
-                      with the top menu bar above.)");
+	ImGui::TextWrapped("Welcome to the RFGR Script Loader overlay. Above are some \
+buttons for menus which you might find useful. Tooltips with more info \
+appear if you hover over them. You can also access all of these menus \
+with the top menu bar above.");
 
 	ImGui::Text("\nUseful shortcuts:");
     Utilities::GUI::LabelAndValue("Toggle overlay: ", "F1");
