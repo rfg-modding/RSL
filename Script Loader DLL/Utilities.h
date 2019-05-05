@@ -14,4 +14,5 @@ namespace Utilities::GUI
 	void TooltipOnPrevious(std::string& Description, ImFont* Font = nullptr);
 	void TooltipOnPrevious(const char* Description, ImFont* Font = nullptr);
 	void ShowHelpMarker(const char* Description);
+    void LabelAndValue(std::string Label, std::string Value);
 }
