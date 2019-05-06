@@ -222,7 +222,7 @@ void Lua::BindWorldZone(sol::state& LuaState)
 	Utype.set("new", sol::no_constructor);
 	Utype.set("BMin", &world_zone::bmin);
 	Utype.set("BMax", &world_zone::bmax);
-	//Utype.set("Name", &world_zone::name); //char[64]
+	Utype.set("Name", sol::property([](world_zone& Self) { return std::ref(Self.name); })); //char[64]
 	Utype.set("State", &world_zone::state);
 	Utype.set("DeserializeHeader", &world_zone::deserialize_header);
 	//Utype.set("DeserializeHeaderF", &world_zone::deserialize_header_f); //cfile*
