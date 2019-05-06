@@ -16,7 +16,10 @@ void Lua::BindVector2(sol::state& LuaState)
 	Utype.set("x", &vector2::x);
 	Utype.set("y", &vector2::y);
 	Utype.set("Print", [](vector2& Self) { Logger::Log(std::string("x: " + std::to_string(Self.x) + ", y: " + std::to_string(Self.y)), LogNone); });
-	Utype.set("GetDataString", &vector2::GetDataString);
+    Utype.set("GetDataString", sol::overload(
+        [](vector2& Self) {return Self.GetDataString(false, true); },
+        [](vector2& Self, bool Parentheses) {return Self.GetDataString(Parentheses, true); },
+        [](vector2& Self, bool Parentheses, bool Labels) {return Self.GetDataString(Parentheses, Labels); }));
 	RfgTable.set_usertype("Vector2", Utype);
 }
 
@@ -37,8 +40,15 @@ void Lua::BindVector(sol::state& LuaState)
 	Utype.set("y", &vector::y);
 	Utype.set("z", &vector::z);
 	Utype.set("Print", [](vector& Self) { Logger::Log(std::string("x: " + std::to_string(Self.x) + ", y: " + std::to_string(Self.y) + ", z: " + std::to_string(Self.z)), LogNone); });
-	Utype.set("GetDataString", &vector::GetDataString);
+	Utype.set("GetDataString", sol::overload(
+        [](vector& Self) {return Self.GetDataString(false, true); },
+        [](vector& Self, bool Parentheses) {return Self.GetDataString(Parentheses, true); },
+        [](vector& Self, bool Parentheses, bool Labels) {return Self.GetDataString(Parentheses, Labels); }));
 	RfgTable.set_usertype("Vector", Utype);
+
+    RfgTable.set_function("TeleportPlayer", sol::overload(
+        [](vector Position, matrix Orientation) {HumanTeleportUnsafe(Globals::PlayerPtr, Position, Orientation); },
+        [](vector Position) {HumanTeleportUnsafe(Globals::PlayerPtr, Position, Globals::PlayerPtr->Orientation); }));
 
 	/*RfgTable.new_usertype<vector>
 	(
