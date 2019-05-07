@@ -82,7 +82,7 @@ void ScriptManager::SetupLua()
     
 	//Todo: Make necessary vars read only with sol::readonly(&some_class::variable)
 	auto RslTable = LuaStateRef["rsl"].get_or_create<sol::table>();
-	RslTable["GetScriptLoaderVersion"] = Globals::GetScriptLoaderVersion;
+	RslTable["GetVersion"] = Globals::GetScriptLoaderVersion;
 	RslTable["LogModuleBase"] = Lua::LogModuleBase;
 
 	auto RfgTable = LuaStateRef["rfg"].get_or_create<sol::table>();
