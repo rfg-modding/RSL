@@ -8,7 +8,7 @@ void Lua::BindObject(sol::state & LuaState)
 	Utype.set("new", sol::constructors<Object(), Object(const Object&)>());
 	Utype.set("Position", &Object::Position);
 	Utype.set("Orientation", &Object::Orientation);
-	Utype.set("ChildPtr", &Object::ChildPtr);
+	Utype.set("Child", &Object::ChildPtr);
 	Utype.set("ChildNext", &Object::ChildNext);
 	Utype.set("ChildPrevious", &Object::ChildPrevious);
 	Utype.set("AttachInfo", &Object::AttachInfo);
@@ -27,7 +27,7 @@ void Lua::BindObject(sol::state & LuaState)
 	Utype.set("AllIndex", &Object::AllIndex);
 	Utype.set("TypeIndex", &Object::TypeIndex);
 	Utype.set("SubtypeIndex", &Object::SubtypeIndex);
-	Utype.set("ObjectType", &Object::ObjectType);
+	Utype.set("Type", &Object::ObjectType);
 	Utype.set("SubType", &Object::SubType);
 	Utype.set("LastKnownBMin", &Object::LastKnownBMin);
 	Utype.set("LastKnownBMax", &Object::LastKnownBMax);
