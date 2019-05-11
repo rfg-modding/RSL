@@ -512,6 +512,13 @@ public:
 		z = Value;
 		return *this;
 	}
+    vector UnitVector()
+	{
+        vector UnitVec = *this;
+        float Magnitude = this->Magnitude();
+        UnitVec.Scale(1.0f / Magnitude);
+        return UnitVec;
+	}
 	std::string GetDataString(bool Parentheses, bool Labels)
 	{
 		std::string String;
