@@ -116,7 +116,7 @@ void Lua::BindHuman(sol::state& LuaState)
 	Utype.set("RootBoneOffset", &Human::RootBoneOffset);
 	Utype.set("NanoMaterialFX", sol::property([](Human& Self) { return std::ref(Self.NanoMaterialFX); })); //16 element c-array or uints
 	Utype.set("MaterialFXHandleForHeadSkin", &Human::MaterialFXHandleForHeadSkin);
-	///Utype.set("LastValidPositionBeforeRagdoll", sol::property([](Human& Self) { return std::ref(Self.LastValidPositionBeforeRagdoll); })); //vector[3]
+    //Utype.set("LastValidPositionBeforeRagdoll", sol::property([](Human& Self) { return std::ref(Self.LastValidPositionBeforeRagdoll); })); //vector[3]
 	Utype.set("RagdollNumCollisionWithWalker", &Human::RagdollNumCollisionsWithWalker);
 	Utype.set("IK_Joints", sol::property([](Human& Self) { return std::ref(Self.IK_Joints); })); //4 size array of IK_Joint
 	//Utype.set("SpinebendData", &Human::SpinebendData);
