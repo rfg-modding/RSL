@@ -39,6 +39,7 @@ void Lua::BindVector(sol::state& LuaState)
 	Utype.set("x", &vector::x);
 	Utype.set("y", &vector::y);
 	Utype.set("z", &vector::z);
+    Utype.set("UnitVector", &vector::UnitVector);
 	Utype.set("Print", [](vector& Self) { Logger::Log(std::string("x: " + std::to_string(Self.x) + ", y: " + std::to_string(Self.y) + ", z: " + std::to_string(Self.z)), LogNone); });
 	Utype.set("GetDataString", sol::overload(
         [](vector& Self) {return Self.GetDataString(false, true); },
