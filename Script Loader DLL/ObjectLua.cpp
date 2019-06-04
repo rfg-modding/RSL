@@ -1,7 +1,16 @@
 #include "ObjectLua.h"
 #include "Functions.h"
 
-void Lua::BindObject(sol::state & LuaState)
+void Lua::BindObjectContactInfo(sol::state & LuaState)
+{
+    auto RfgTable = LuaState["rfg"].get_or_create<sol::table>();
+    auto Utype = RfgTable.create_simple_usertype<ObjectContactInfo>();
+    Utype.set("new", sol::constructors<ObjectContactInfo(), ObjectContactInfo(const ObjectContactInfo&)>());
+    Utype.set("ContactList", &ObjectContactInfo::m_contact_list);
+    RfgTable.set_usertype("ObjectContactInfo", Utype);
+}
+
+void Lua::BindObject(sol::state& LuaState)
 {
 	auto RfgTable = LuaState["rfg"].get_or_create<sol::table>();
 	auto Utype = RfgTable.create_simple_usertype<Object>();

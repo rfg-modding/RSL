@@ -162,9 +162,6 @@
     <ClCompile Include="ContactNodeLua.cpp">
       <Filter>Lua Binding</Filter>
     </ClCompile>
-    <ClCompile Include="ObjectContactInfoLua.cpp">
-      <Filter>Lua Binding</Filter>
-    </ClCompile>
     <ClCompile Include="ObjectFlagsLua.cpp">
       <Filter>Lua Binding</Filter>
     </ClCompile>
@@ -369,9 +366,6 @@
       <Filter>Lua Binding</Filter>
     </ClInclude>
     <ClInclude Include="ContactNodeLua.h">
-      <Filter>Lua Binding</Filter>
-    </ClInclude>
-    <ClInclude Include="ObjectContactInfoLua.h">
       <Filter>Lua Binding</Filter>
     </ClInclude>
     <ClInclude Include="ObjectFlagsLua.h">

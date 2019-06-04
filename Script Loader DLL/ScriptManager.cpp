@@ -5,7 +5,6 @@
 #include "Matrix43Lua.h"
 #include "AttachInfoDataLua.h"
 #include "ContactNodeLua.h"
-#include "ObjectContactInfoLua.h"
 #include "ObjectFlagsLua.h"
 #include "HavokBPOLua.h"
 #include "HkpRigidBodyLua.h"

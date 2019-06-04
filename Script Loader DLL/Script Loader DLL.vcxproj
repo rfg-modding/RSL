@@ -233,7 +233,6 @@
     <ClCompile Include="Matrix43Lua.cpp" />
     <ClCompile Include="MatrixLua.cpp" />
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="ObjectContactInfoLua.cpp" />
     <ClCompile Include="ObjectFlagsLua.cpp" />
     <ClCompile Include="ObjectLua.cpp" />
     <ClCompile Include="ObjectRenderDistanceLua.cpp" />
@@ -315,7 +314,6 @@
     <ClInclude Include="LuaFunctions.h" />
     <ClInclude Include="Matrix43Lua.h" />
     <ClInclude Include="MatrixLua.h" />
-    <ClInclude Include="ObjectContactInfoLua.h" />
     <ClInclude Include="ObjectFlagsLua.h" />
     <ClInclude Include="ObjectLua.h" />
     <ClInclude Include="ObjectRenderDistanceLua.h" />
