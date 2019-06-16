@@ -9,7 +9,7 @@ HookManager::~HookManager()
  * purposes. If EnableNow is true, then the hook will be immediately enabled. Returns true if
  * the hook was successfully created and false if it was not.
  */
-bool HookManager::CreateHook(const std::string& HookName, const HookType Type, const LPVOID Target, LPVOID Detour, LPVOID* Original, const bool EnableNow)
+bool HookManager::CreateHook(const std::string& HookName, LPVOID Target, LPVOID Detour, LPVOID* Original)
 {
 	if (HookExists(HookName))
 	{
@@ -22,11 +22,9 @@ bool HookManager::CreateHook(const std::string& HookName, const HookType Type, c
 		return false;
 	}
 
-	HookMap[HookName] = Hook(Type, Target, Detour, Original);
-	if (EnableNow)
-	{
-		EnableHook(HookName);
-	}
+	HookMap[HookName] = Hook(Target, Detour, Original);
+	EnableHook(HookName);
+
 	return true;
 }
 
@@ -81,30 +79,6 @@ void HookManager::DisableAllHooks()
 	for (auto& i : HookMap)
 	{
 		DisableHook(i.first);
-	}
-}
-
-/* Enables all hooks of the given type.*/
-void HookManager::EnableAllHooksOfType(const HookType Type)
-{
-	for (auto& i : HookMap)
-	{
-		if (i.second.Type == Type)
-		{
-			EnableHook(i.first);
-		}
-	}
-}
-
-/* Disables all hooks of the given type.*/
-void HookManager::DisableAllHooksOfType(const HookType Type)
-{
-	for (auto& i : HookMap)
-	{
-		if (i.second.Type == Type)
-		{
-			DisableHook(i.first);
-		}
 	}
 }
 
