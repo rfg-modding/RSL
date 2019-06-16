@@ -48,9 +48,6 @@
     <ClCompile Include="SnippetManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ProgramManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="FunctionManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -210,6 +207,9 @@
     <ClCompile Include="HkpSolverInfoLua.cpp">
       <Filter>Lua Binding</Filter>
     </ClCompile>
+    <ClCompile Include="Application.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CameraWrapper.h">
@@ -259,9 +259,6 @@
     </ClInclude>
     <ClInclude Include="imgui_stdlib.h">
       <Filter>D3D11 Hook + ImGui\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ProgramManager.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ScriptManager.h">
       <Filter>Header Files</Filter>
@@ -421,6 +418,9 @@
     </ClInclude>
     <ClInclude Include="HkpSolverInfoLua.h">
       <Filter>Lua Binding</Filter>
+    </ClInclude>
+    <ClInclude Include="Application.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

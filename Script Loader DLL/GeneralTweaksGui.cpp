@@ -530,6 +530,9 @@ void GeneralTweaksGui::Draw()
 		}
 		ImGui::SameLine();
 		Utilities::GUI::ShowHelpMarker("Prints info about the rfg world to WorldInfoDump.txt. Much shorter than the other info dumps.");
+
+        static bool OnlyDumpNamedObjects = false;
+        ImGui::Checkbox("Only dump named objects", &OnlyDumpNamedObjects);
 		if (ImGui::Button("Dump all object info"))
 		{
 			if (Globals::RfgWorldPtr)
@@ -566,8 +569,17 @@ void GeneralTweaksGui::Draw()
 				{
 					if (Globals::RfgWorldPtr->all_objects[i])
 					{
+                        const char* TempName = world_get_object_name(Globals::RfgWorldPtr, NULL, Globals::RfgWorldPtr->all_objects[i]);
+                        std::string ObjectName(TempName);
+                        if(OnlyDumpNamedObjects)
+                        {
+                            if(ObjectName[0] == ' ' || TempName == nullptr || ObjectName.length() < 3)
+                            {
+                                break;
+                            }
+                        }
 						PositionsDump << "Index: " << i << "\n";
-						PositionsDump << "Name: " << world_get_object_name(Globals::RfgWorldPtr, NULL, Globals::RfgWorldPtr->all_objects[i]) << "\n";
+						PositionsDump << "Name: " << ObjectName << "\n";
 						PositionsDump << "Type: " << (int)(*Globals::RfgWorldPtr->all_objects[i]).ObjectType << "\n";
 						PositionsDump << "Subtype: " << (int)(*Globals::RfgWorldPtr->all_objects[i]).SubType << "\n";
 						PositionsDump << "Position:\n";

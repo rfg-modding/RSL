@@ -2,7 +2,7 @@
 
 namespace Globals
 {
-	ProgramManager* Program = nullptr;
+    Application* Program = nullptr;
 	GuiSystem* Gui = nullptr;
 	ScriptManager* Scripts = nullptr;
 	CameraWrapper* Camera = nullptr;

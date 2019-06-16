@@ -108,6 +108,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Application.cpp" />
     <ClCompile Include="AttachInfoDataLua.cpp" />
     <ClCompile Include="BaseGui.cpp" />
     <ClCompile Include="BaseTypeLua.cpp" />
@@ -159,7 +160,6 @@
     </ClCompile>
     <ClCompile Include="MenuBarGui.cpp" />
     <ClCompile Include="OverlayConsole.cpp" />
-    <ClCompile Include="ProgramManager.cpp" />
     <ClCompile Include="ScriptManager.cpp" />
     <ClCompile Include="ScriptSelectGui.cpp" />
     <ClCompile Include="SnippetManager.cpp" />
@@ -170,6 +170,7 @@
     <ClCompile Include="WorldLua.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Application.h" />
     <ClInclude Include="AttachInfoDataLua.h" />
     <ClInclude Include="BaseGui.h" />
     <ClInclude Include="BaseTypeLua.h" />
@@ -236,7 +237,6 @@
     <ClInclude Include="Includes.h" />
     <ClInclude Include="MenuBarGui.h" />
     <ClInclude Include="OverlayConsole.h" />
-    <ClInclude Include="ProgramManager.h" />
     <None Include="RFGR Structs\BasicTypes.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>

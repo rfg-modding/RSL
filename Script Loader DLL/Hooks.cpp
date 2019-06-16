@@ -1,5 +1,9 @@
 #include "Hooks.h"
-#include "ProgramManager.h"
+#include "Application.h"
+
+//Todo: Move each hook function into their own file, stick the in the Hooks namespace
+//Todo: See if the std::once_flag values can just be made into static vars in their hooks
+//Todo: Add uncaught exception handling to D3DPresent hook since a lot of gui and other stuff goes on in there
 
 D3D11Present D3D11PresentObject;
 

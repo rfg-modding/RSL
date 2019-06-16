@@ -10,7 +10,7 @@ using uint = unsigned int;
 using ulong = unsigned long;
 using ulonglong = unsigned long long;
 
-class ProgramManager;
+class Application;
 class GuiSystem;
 class ScriptManager;
 class CameraWrapper;
@@ -18,7 +18,7 @@ class RenderInterfaceD3D11;
 
 namespace Globals
 {
-	extern ProgramManager* Program;
+	extern Application* Program;
 	extern GuiSystem* Gui;
 	extern ScriptManager* Scripts;
 	extern CameraWrapper* Camera;
