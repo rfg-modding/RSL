@@ -1,21 +1,5 @@
 #include "Application.h"
 
-Application::~Application()
-{
-    //Todo: Should try to merge this and Exit() instead of having two of them and splitting exit behavior.
-    if (Globals::OverlayActive)
-    {
-        SetWindowLongPtr(Globals::GameWindowHandle, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(Globals::OriginalWndProc));
-        SnippetManager::RestoreSnippet("MouseGenericPollMouseVisible", true);
-        SnippetManager::RestoreSnippet("CenterMouseCursorCall", true);
-    }
-    Hooks.DisableAllHooks();
-
-    Beep(900, 100);
-    Beep(700, 100);
-    Beep(600, 200);
-}
-
 void Application::Run()
 {
     Init();
@@ -235,7 +219,9 @@ void Application::Exit()
 
     Hooks.DisableAllHooks();
 
-    //dd::shutdown();
+#if DebugDrawTestEnabled
+    dd::shutdown();
+#endif
 
     ImGui_ImplDX11_InvalidateDeviceObjects();
     ImGui_ImplDX11_Shutdown();

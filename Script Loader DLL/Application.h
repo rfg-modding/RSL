@@ -9,7 +9,7 @@ class Application
 {
 public:
     Application() = default;
-    ~Application();
+    ~Application() = default;
 
     void Run();
 
