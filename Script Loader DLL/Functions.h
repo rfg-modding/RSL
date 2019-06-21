@@ -608,3 +608,7 @@ extern F_havok_body_apply_linear_impulse_B HavokBodyApplyLinearImpulseB;
 //.text:0181DD00 rfg.exe:$86DD00 #86D100 <keen::graphics::beginFrame> //keen::GraphicsCommandBuffer *__cdecl keen::graphics::beginFrame(keen::GraphicsSystem *pGraphicsSystem, keen::RenderSwapChain *pSwapChain)
 using F_keen_graphics_beginFrame = keen::GraphicsCommandBuffer*(__cdecl*)(keen::GraphicsSystem* pGraphicsSystem, keen::RenderSwapChain* pSwapChain);
 extern F_keen_graphics_beginFrame KeenGraphicsBeginFrame;
+
+//.text:00C38740 rfg.exe:$58740 #57B40 <keen::getBuildVersionString>
+using F_keen_get_build_version_string = const char* (__cdecl*)();
+extern F_keen_get_build_version_string KeenGetBuildVersionString;

@@ -78,11 +78,44 @@ void ScriptManager::SetupLua()
     sol::state& LuaStateRef = *LuaState; //Used for easier access instead of doing weird ass pointer syntax.
 
     LuaStateRef["print"] = sol::nil;
-    
+    LuaStateRef.set_function("tostring", sol::overload(
+        [](int Value) {return std::to_string(Value); },
+        [](long Value) {return std::to_string(Value); },
+        [](long long Value) {return std::to_string(Value); },
+        [](unsigned int Value) {return std::to_string(Value); },
+        [](unsigned long Value) {return std::to_string(Value); },
+        [](unsigned long long Value) {return std::to_string(Value); },
+        [](float Value) {return std::to_string(Value); },
+        [](double Value) {return std::to_string(Value); },
+        [](long double Value) {return std::to_string(Value); },
+        [](char Value) {return std::to_string(Value); },
+        [](const char* Value) {return std::string(Value); },
+        [](std::string Value) {return Value; }
+    ));
+
 	//Todo: Make necessary vars read only with sol::readonly(&some_class::variable)
 	auto RslTable = LuaStateRef["rsl"].get_or_create<sol::table>();
 	RslTable["GetVersion"] = Globals::GetScriptLoaderVersion;
 	RslTable["LogModuleBase"] = Lua::LogModuleBase;
+
+    //LogType enums defined in lua
+    //auto LoggerTable = LuaStateRef["Logger"].get_or_create<sol::table>();
+    RslTable["OpenLogFile"] = Logger::OpenLogFile;
+    RslTable["CloseLogFile"] = Logger::CloseLogFile;
+    RslTable["CloseAllLogFiles"] = Logger::CloseAllLogFiles;
+    RslTable.set_function("Log", sol::overload(
+        [](std::string Message) {Logger::Log(Message, LogInfo, false, true); },
+        [](std::string Message, LogType Type) {Logger::Log(Message, Type, false, true); },
+        [](std::string Message, LogType Type, bool LogTime) {Logger::Log(Message, Type, LogTime, true); },
+        [](std::string Message, LogType Type, bool LogTime, bool Newline) {Logger::Log(Message, Type, LogTime, Newline); }
+    ));
+    RslTable["LogFlagWithColor"] = Logger::LogFlagWithColor;
+    RslTable["GetFlagString"] = Logger::GetFlagString;
+    RslTable["LogToFile"] = Logger::LogToFile;
+    RslTable["GetTimeString"] = Logger::GetTimeString;
+
+    //RslTable["Beep"] = [](DWORD Frequency, DWORD Duration) {std::async((std::launch::async), [&] {Beep(Frequency, Duration); }); };
+    RslTable["Beep"] = Utilities::General::ThreadedBeep;
 
 	auto RfgTable = LuaStateRef["rfg"].get_or_create<sol::table>();
 	RfgTable["HideHud"] = HideHud;
@@ -115,21 +148,7 @@ void ScriptManager::SetupLua()
  [](vector Position, matrix Orientation) {HumanTeleportUnsafe(Globals::PlayerPtr, Position, Orientation); }, 
 		[](vector Position) {HumanTeleportUnsafe(Globals::PlayerPtr, Position, Globals::PlayerPtr->Orientation); }));
 
-	//LogType enums defined in lua
-	//auto LoggerTable = LuaStateRef["Logger"].get_or_create<sol::table>();
-	RslTable["OpenLogFile"] = Logger::OpenLogFile;
-	RslTable["CloseLogFile"] = Logger::CloseLogFile;
-	RslTable["CloseAllLogFiles"] = Logger::CloseAllLogFiles;
-	RslTable.set_function("Log", sol::overload(
-        [](std::string Message) {Logger::Log(Message, LogInfo, false, true); },
-        [](std::string Message, LogType Type) {Logger::Log(Message, Type, false, true); },
-        [](std::string Message, LogType Type, bool LogTime) {Logger::Log(Message, Type, LogTime, true); },
-        [](std::string Message, LogType Type, bool LogTime, bool Newline) {Logger::Log(Message, Type, LogTime, Newline); }
-    ));
-	RslTable["LogFlagWithColor"] = Logger::LogFlagWithColor;
-	RslTable["GetFlagString"] = Logger::GetFlagString;
-	RslTable["LogToFile"] = Logger::LogToFile;
-	RslTable["GetTimeString"] = Logger::GetTimeString;
+    RfgTable["GetVersion"] = KeenGetBuildVersionString;
 
 	//This warning appears hundreds of times in a row during binding unless disabled. Is harmless due to some lambdas used to grab usertype variables.
 	#pragma warning(push)
@@ -181,13 +200,6 @@ void ScriptManager::SetupLua()
 	Lua::BindObject(LuaStateRef);
 	Lua::BindHuman(LuaStateRef);
 	Lua::BindPlayer(LuaStateRef);
-	//Setting these manually to ensure there's no accidently overwrites
-	LuaStateRef["rfg"]["Object"]["AsObject"] = [](Object& Self)->Object* {return &Self; };
-	LuaStateRef["rfg"]["Human"]["AsObject"] = [](Human& Self)->Object* {return static_cast<Object*>(&Self); };
-	LuaStateRef["rfg"]["Human"]["AsHuman"] = [](Human& Self)->Human* {return static_cast<Human*>(&Self); };
-	LuaStateRef["rfg"]["Player"]["AsObject"] = [](Player& Self)->Object* {return static_cast<Object*>(&Self); };
-	LuaStateRef["rfg"]["Player"]["AsHuman"] = [](Player& Self)->Human* {return static_cast<Human*>(&Self); };
-	LuaStateRef["rfg"]["Player"]["AsPlayer"] = [](Player& Self)->Player* {return &Self; };
 
 	//World & dependent types
 	Lua::BindStreamGridCell(LuaStateRef);
@@ -207,6 +219,7 @@ void ScriptManager::SetupLua()
 	#pragma warning(pop) 
 
     UpdateRfgPointers();
+    //Todo: Add binding func for rfg lua state and see if I can't add other functions to it to use in rfg scripts. Might be complicated by the fact that it uses a different lua version
 }
 
 /* Used to ensure a few important game pointers are always up to date.

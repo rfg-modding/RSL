@@ -137,4 +137,6 @@ void FunctionManager::Initialize()
 	HavokBodyApplyLinearImpulseB = reinterpret_cast<F_havok_body_apply_linear_impulse_B>(Globals::ModuleBase + 0x423C20); //.text:01273C20 rfg.exe:$423C20 #423020 <havok_body_apply_linear_impulse> //void __cdecl havok_body_apply_linear_impulse(unsigned int handle, vector *linear_impulse)
  
     KeenGraphicsBeginFrame = reinterpret_cast<F_keen_graphics_beginFrame>(Globals::ModuleBase + 0x86DD00); //.text:0181DD00 rfg.exe:$86DD00 #86D100 <keen::graphics::beginFrame> //keen::GraphicsCommandBuffer *__cdecl keen::graphics::beginFrame(keen::GraphicsSystem *pGraphicsSystem, keen::RenderSwapChain *pSwapChain)
+
+    KeenGetBuildVersionString = reinterpret_cast<F_keen_get_build_version_string>(Globals::ModuleBase + 0x58740); //.text:00C38740 rfg.exe:$58740 #57B40 <keen::getBuildVersionString>
 }
