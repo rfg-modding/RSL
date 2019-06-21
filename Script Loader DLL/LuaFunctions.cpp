@@ -64,4 +64,35 @@ namespace Lua
             Gravity->m_quad.m128_f32[2] = 0.0f;
         }
     }
+
+    Object* GetObjectByName(std::string Name)
+    {
+        for(int i = 0; i < Globals::RfgWorldPtr->all_objects.Size(); i++)
+        {
+            if(Globals::RfgWorldPtr)
+            {
+                std::string IndexName(world_get_object_name(Globals::RfgWorldPtr, NULL, Globals::RfgWorldPtr->all_objects[i]));
+                if (IndexName == Name)
+                {
+                    return Globals::RfgWorldPtr->all_objects[i];
+                }
+            }
+        }
+        return nullptr;
+    }
+
+    Object* GetObjectByHandle(uint Handle)
+    {
+        for (int i = 0; i < Globals::RfgWorldPtr->all_objects.Size(); i++)
+        {
+            if (Globals::RfgWorldPtr)
+            {
+                if(Globals::RfgWorldPtr->all_objects[i]->Handle == Handle)
+                {
+                    return Globals::RfgWorldPtr->all_objects[i];
+                }
+            }
+        }
+        return nullptr;
+    }
 }

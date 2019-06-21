@@ -14,4 +14,6 @@ namespace Lua
     extern void SetGravity(vector& NewGravity);
     extern void SetGravity(float x, float y, float z);
     extern void ResetGravity();
+    extern Object* GetObjectByName(std::string Name);
+    extern Object* GetObjectByHandle(uint Handle);
 }

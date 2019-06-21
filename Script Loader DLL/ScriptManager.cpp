@@ -97,6 +97,10 @@ void ScriptManager::SetupLua()
 	RfgTable["GetPlayer"] = Lua::GetPlayer;
 	RfgTable["GetWorld"] = Lua::GetWorld;
 	RfgTable["GetPhysicsWorld"] = Lua::GetPhysicsWorld;
+    RfgTable.set_function("GetObject", sol::overload(
+        Lua::GetObjectByName,
+        Lua::GetObjectByHandle
+    ));
 
     RfgTable["GetGravity"] = Lua::GetGravity;
     RfgTable.set_function("SetGravity", sol::overload(
