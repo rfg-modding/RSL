@@ -50,7 +50,7 @@ public:
 	bool SmoothCamera = false;
 
 	vector FirstPersonCameraOffset = {0.0f, 1.7f, 0.0f};
-	float FirstPersonDirectionOffsetMultiplier = 0.3f;
+	float FirstPersonDirectionOffsetMultiplier = 0.4f;
 	bool UseFirstPersonDirectionOffset = true;
 	bool UseFirstPersonAutoPlayerDirection = false;
 	bool UseFirstPersonAutoPlayerDirectionAngleOffset = false;
