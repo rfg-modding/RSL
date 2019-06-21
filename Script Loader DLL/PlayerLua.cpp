@@ -248,7 +248,7 @@ void Lua::BindPlayer(sol::state& LuaState)
 	Utype.set("BloodDecalsFadeIndex", &Player::blood_decals_fade_index);
 	//Utype.set("ActivityInventorySaveFile", &Player::activity_inventory_save_file);
 	Utype.set("ActivityInventoryBuffer", sol::property([](Player& Self) { return std::ref(Self.activity_inventory_buffer); }));
-	//Utype.set("ActivityInventoryBuffer", &Player::activity_inventory_buffer); //Size 1024 array of char
+	//Utype.set("ActivityInventoryBuffer", &Player::activity_inventory_buffer); //Size 1024 array of char. Frankly not sure if this is supposed to be a string or an array of numbers. Gotta check in the debugger
 	Utype.set("ZoomCancelTimestamp", &Player::zoom_cancel_Timestamp);
 	Utype.set("NonInventoryItemHandle", &Player::non_inventory_item_handle);
 	Utype.set("LastVehicleDriven", &Player::last_vehicle_driven);
