@@ -56,7 +56,7 @@ void Lua::BindCharDefHead(sol::state& LuaState)
 	Utype.set("HeadMorph", &char_def_head::head_morph);
 	Utype.set("BaseHeadMorph", &char_def_head::base_head_morph);
 	Utype.set("NumSkinShaderParams", &char_def_head::num_skin_shader_params);
-	///Utype.set("SkinShaderParams", sol::property([](char_def_head& Self) { return std::ref(Self.skin_shader_params); })); //3x5 float array
+	///Utype.set("SkinShaderParams", sol::property([](char_def_head& Self) { return std::ref(Self.skin_shader_params); })); //3x5 float array //Todo: Bind this
 	RfgTable.set_usertype("CharDefHead", Utype);
 }
 
@@ -101,9 +101,9 @@ void Lua::BindHumanInfo(sol::state& LuaState)
 	Utype.set("AimErrorPercent", &HumanInfo::aim_error_pct);
 	Utype.set("FootEffects", &HumanInfo::foot_effects);
 	Utype.set("NumHeads", &HumanInfo::num_heads);
-	Utype.set("Name", sol::property([](HumanInfo& Self) { return std::ref(Self.heads); })); //heads[4]
-	//Utype.set("VoicePersonas", &HumanInfo::voice_personas);
-	///Utype.set("DefaultInventory", &HumanInfo::default_inventory); //farray<human_info_inventory_info, 15>
+	Utype.set("Heads", sol::property([](HumanInfo& Self) { return std::ref(Self.heads); })); //heads[4]
+	//Utype.set("VoicePersonas", &HumanInfo::voice_personas); //Todo: Bind this
+	///Utype.set("DefaultInventory", &HumanInfo::default_inventory); //farray<human_info_inventory_info, 15> //Todo: Bind this
 	Utype.set("NumGeneralProps", &HumanInfo::num_general_props);
 	Utype.set("GeneralProps", &HumanInfo::general_props);
 	Utype.set("LowerSpineBoneIndex", &HumanInfo::lower_spine_bone_index);
