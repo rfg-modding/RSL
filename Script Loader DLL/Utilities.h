@@ -16,3 +16,8 @@ namespace Utilities::GUI
 	void ShowHelpMarker(const char* Description);
     void LabelAndValue(std::string Label, std::string Value);
 }
+
+namespace Utilities::General
+{
+    void ThreadedBeep(ulong Frequency, ulong Duration);
+}

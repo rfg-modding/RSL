@@ -92,3 +92,13 @@ namespace Utilities::GUI
 	    ImGui::TextColored(Globals::SecondaryTextColor, Value.c_str());
     }
 }
+
+// Wrapper for the windows function "Beep". Runs Beep in it's own thread 
+// to avoid pausing execution in the current thread for the duration of the sound.
+// Still causes a slight pause, likely due to the overhead of starting a new thread, 
+// but it's better than running Beep in the same thread.
+void Utilities::General::ThreadedBeep(ulong Frequency, ulong Duration)
+{
+    std::thread BeepThread([&] {Beep(Frequency, Duration); });
+    BeepThread.detach();
+}
