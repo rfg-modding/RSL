@@ -11,8 +11,8 @@ void Lua::BindCharacterInstance(sol::state& LuaState)
 	Utype.set("OrigCharacterScale", &CharacterInstance::orig_character_scale);
 	Utype.set("CharacterScale", &CharacterInstance::character_scale);
 	Utype.set("CiFlags", &CharacterInstance::ci_flags);
-	Utype.set("RenderAlpha", &CharacterInstance::render_alpha);
-	Utype.set("CacheLod", &CharacterInstance::cache_lod);
+	Utype.set("RenderAlpha", sol::property([](CharacterInstance& Self) -> int {return static_cast<int>(Self.render_alpha); }, [](CharacterInstance& Self, int Value) {Self.render_alpha = static_cast<char>(Value); }));
+	Utype.set("CacheLod", sol::property([](CharacterInstance& Self) -> int {return static_cast<int>(Self.cache_lod); }, [](CharacterInstance& Self, int Value) {Self.cache_lod = static_cast<char>(Value); }));
 	Utype.set("BufVertsShadowOffset", &CharacterInstance::buf_verts_shadow_offset);
 	Utype.set("BufFrameVerts", &CharacterInstance::buf_frame_verts);
 	Utype.set("Next", &CharacterInstance::next);

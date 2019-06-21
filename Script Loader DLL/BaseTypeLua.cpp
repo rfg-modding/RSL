@@ -36,10 +36,10 @@ void Lua::BindColor(sol::state& LuaState)
 	auto Utype = RfgTable.create_simple_usertype<color>();
 	Utype.set("new", sol::constructors<color(), color(char), color(const color&), color(char, char, char, char)>());
 	Utype.set("SetAll", &color::SetAll);
-	Utype.set("Red", &color::red);
-	Utype.set("Green", &color::green);
-	Utype.set("Blue", &color::blue);
-	Utype.set("Alpha", &color::alpha);
+	Utype.set("Red", sol::property([](color& Self) -> int {return static_cast<int>(Self.red); }, [](color& Self, int Value) {Self.red = static_cast<char>(Value); }));
+	Utype.set("Green", sol::property([](color& Self) -> int {return static_cast<int>(Self.green); }, [](color& Self, int Value) {Self.green = static_cast<char>(Value); }));
+	Utype.set("Blue", sol::property([](color& Self) -> int {return static_cast<int>(Self.blue); }, [](color& Self, int Value) {Self.blue = static_cast<char>(Value); }));
+	Utype.set("Alpha", sol::property([](color& Self) -> int {return static_cast<int>(Self.alpha); }, [](color& Self, int Value) {Self.alpha = static_cast<char>(Value); }));
 	RfgTable.set_usertype("Color", Utype);
 }
 

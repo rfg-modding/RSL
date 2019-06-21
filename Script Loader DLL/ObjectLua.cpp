@@ -25,7 +25,7 @@ void Lua::BindObject(sol::state& LuaState)
 	Utype.set("ContactInfo", &Object::ContactInfo);
 	Utype.set("ObjFlags", &Object::ObjFlags);
 	//Utype.set("RemoteObjFlags", &Object::RemoteObjFlags);
-	//Utype.set("MPDcmoIndex", &Object::MPDcmoIndex);
+	//Utype.set("MPDcmoIndex", &Object::MPDcmoIndex); //Note: Use a sol::property if you bind this to avoid char<->int comparison issues
 	Utype.set("CheckingReset", &Object::CheckingReset);
 	Utype.set("NameIndex", &Object::NameIndex);
 	Utype.set("FlaggedNext", &Object::FlaggedNext);
@@ -36,8 +36,8 @@ void Lua::BindObject(sol::state& LuaState)
 	Utype.set("AllIndex", &Object::AllIndex);
 	Utype.set("TypeIndex", &Object::TypeIndex);
 	Utype.set("SubtypeIndex", &Object::SubtypeIndex);
-	Utype.set("Type", &Object::ObjectType);
-	Utype.set("SubType", &Object::SubType);
+	Utype.set("Type", sol::property([](Object& Self) -> int {return static_cast<int>(Self.ObjectType); }, [](Object& Self, int Value) {Self.ObjectType = static_cast<char>(Value); }));
+	Utype.set("SubType", sol::property([](Object& Self) -> int {return static_cast<int>(Self.SubType); }, [](Object& Self, int Value) {Self.SubType = static_cast<char>(Value); }));
 	Utype.set("LastKnownBMin", &Object::LastKnownBMin);
 	Utype.set("LastKnownBMax", &Object::LastKnownBMax);
 	Utype.set("SRID", &Object::SRID);

@@ -8,8 +8,8 @@ void Lua::BindStreamGridCell(sol::state& LuaState)
 	Utype.set("new", sol::no_constructor);
 	Utype.set("StreamMask", &stream_grid_cell::stream_mask);
 	Utype.set("SRID", sol::property([](stream_grid_cell& Self) { return std::ref(Self.srid); })); //uint[4]
-	Utype.set("GridX", &stream_grid_cell::grid_x);
-	Utype.set("GridZ", &stream_grid_cell::grid_z);
+	Utype.set("GridX", sol::property([](stream_grid_cell& Self) -> int {return static_cast<int>(Self.grid_x); }, [](stream_grid_cell& Self, int Value) {Self.grid_x = static_cast<char>(Value); }));
+	Utype.set("GridZ", sol::property([](stream_grid_cell& Self) -> int {return static_cast<int>(Self.grid_z); }, [](stream_grid_cell& Self, int Value) {Self.grid_z = static_cast<char>(Value); }));
 	Utype.set("LayerIndex", &stream_grid_cell::layer_index);
 	RfgTable.set_usertype("StreamGridCell", Utype);
 }
@@ -80,10 +80,10 @@ void Lua::BindTDistrict(sol::state& LuaState)
 	Utype.set("Color", &t_district::col);
 	Utype.set("VfxTintColor", &t_district::vfx_tint);
 	Utype.set("DiscLayer", &t_district::disc_layer);
-	Utype.set("Index", &t_district::index);
+	Utype.set("Index", sol::property([](t_district& Self) -> int {return static_cast<int>(Self.index); }, [](t_district& Self, int Value) {Self.index = static_cast<char>(Value); }));
 	Utype.set("Thumbnail", &t_district::thumbnail); //const char*
 	Utype.set("LoadScreenImages", sol::property([](t_district& Self) { return std::ref(Self.load_screen_images); }));
-	Utype.set("NumLoadScreenImages", &t_district::num_load_screen_images);
+	Utype.set("NumLoadScreenImages", sol::property([](t_district& Self) -> int {return static_cast<int>(Self.num_load_screen_images); }, [](t_district& Self, int Value) {Self.num_load_screen_images = static_cast<char>(Value); }));
 	//Utype.set("GridList", &t_district::list); //rfg::farray<grid_info, 21>
 	Utype.set("Next", &t_district::next); //tdistrict*
 	Utype.set("Prev", &t_district::prev); //tdistrict*
@@ -98,7 +98,7 @@ void Lua::BindTerritory(sol::state& LuaState)
 	Utype.set("Name", &territory::name); //const char*
 	Utype.set("TechLevelDefault", &territory::tech_level_default);
 	Utype.set("TechLevelMax", &territory::tech_level_max);
-	Utype.set("Index", &territory::index);
+	Utype.set("Index", sol::property([](territory& Self) -> int {return static_cast<int>(Self.index); }, [](territory& Self, int Value) {Self.index = static_cast<char>(Value); }));
 	Utype.set("Districts", &territory::districts);
 	Utype.set("VerticalMaskZones", &territory::vertical_mask_zones);
 	Utype.set("NumVMaskZones", &territory::num_v_mask_zones);
@@ -155,7 +155,7 @@ void Lua::BindGameSaveInfo(sol::state& LuaState)
 	Utype.set("UsedSlot", &game_save_info::used_slot);
 	Utype.set("DlcID", &game_save_info::dlc_id);
 	Utype.set("SaveSlotIndex", &game_save_info::save_slot_index);
-	Utype.set("HammersUnlocked", &game_save_info::hammers_unlocked);
+	Utype.set("HammersUnlocked", sol::property([](game_save_info& Self) -> int {return static_cast<int>(Self.hammers_unlocked); }, [](game_save_info& Self, int Value) {Self.hammers_unlocked = static_cast<char>(Value); }));
 	Utype.set("GoldenHammerDesired", &game_save_info::golden_hammer_desired);
 	Utype.set("NewData", &game_save_info::new_data);
 	//Utype.set("Padding", &game_save_info::padding); //Size 117 char array
@@ -257,7 +257,7 @@ void Lua::BindWorld(sol::state& LuaState)
 	//Utype.set("SaveFile", &World::save_file); //cfile*
 	Utype.set("FlaggedObjects", &World::flagged_objects);
 	Utype.set("CurrentFlaggedObject", &World::current_flagged_object);
-	Utype.set("CurrentFlaggedMode", &World::current_flagged_mode);
+	Utype.set("CurrentFlaggedMode", sol::property([](World& Self) -> int {return static_cast<int>(Self.current_flagged_mode); }, [](World& Self, int Value) {Self.current_flagged_mode = static_cast<char>(Value); }));
 	Utype.set("DeserializeState", &World::deserialize_state); //enum
 	//Utype.set("DeserializePool", &World::deserialize_pool); //virtual_mempool*
 	//Utype.set("DeserializeList", &World::deserialize_list); //farray<world_zone *, 32>

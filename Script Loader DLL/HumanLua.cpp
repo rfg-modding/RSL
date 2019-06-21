@@ -53,8 +53,8 @@ void Lua::BindHuman(sol::state& LuaState)
 	Utype.set("LastTriggerDownFrame", &Human::LastTriggerDownFrame);
 	Utype.set("Info", &Human::Info);
 	Utype.set("RenderDistance", &Human::render_distance);
-	Utype.set("XRayMaterial", &Human::XRayMaterial);
-	Utype.set("XrayRenderAlpha", &Human::XrayRenderAlpha);
+	Utype.set("XRayMaterial", sol::property([](Human& Self) -> int {return static_cast<int>(Self.XRayMaterial); }, [](Human& Self, int Value) {Self.XRayMaterial = static_cast<char>(Value); }));
+	Utype.set("XrayRenderAlpha", sol::property([](Human& Self) -> int {return static_cast<int>(Self.XrayRenderAlpha); }, [](Human& Self, int Value) {Self.XrayRenderAlpha = static_cast<char>(Value); }));
 	Utype.set("Rank", &Human::Rank);
 	Utype.set("ApproxLocalBmin", &Human::ApproxLocalBmin);
 	Utype.set("ApproxLocalBmax", &Human::ApproxLocalBmax);

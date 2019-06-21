@@ -38,7 +38,7 @@ void Lua::BindInvItemInfo(sol::state& LuaState)
 	Utype.set("MaxItem", &inv_item_info::max_item);
 	Utype.set("Description", &inv_item_info::description);
 	//Utype.set("WeaponInfo", &inv_item_info::w_info);
-	Utype.set("ItemOrder", &inv_item_info::item_order);
+	Utype.set("ItemOrder", sol::property([](inv_item_info& Self) -> int {return static_cast<int>(Self.item_order); }, [](inv_item_info& Self, int Value) {Self.item_order = static_cast<char>(Value); }));
 	//Utype.set("UseFunc", &inv_item_info::use);
 	RfgTable.set_usertype("InvItemInfo", Utype);
 }
