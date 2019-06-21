@@ -1,18 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
     <Filter Include="D3D11 Hook + ImGui">
       <UniqueIdentifier>{7dc8ed92-9f36-4fd6-ad03-7b3b12238419}</UniqueIdentifier>
     </Filter>
@@ -37,25 +25,36 @@
     <Filter Include="Lua Binding">
       <UniqueIdentifier>{a6816808-2e5b-4a81-85a5-515bcf4d5ea4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="General Files">
+      <UniqueIdentifier>{cd855315-0781-47b5-9928-aca0d85bb56c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="General Files\Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="General Files\Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CameraWrapper.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>General Files\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Main.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>General Files\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="SnippetManager.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>General Files\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="FunctionManager.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>General Files\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ScriptManager.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>General Files\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Functions.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>General Files\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="include\kiero\kiero.cpp">
       <Filter>D3D11 Hook + ImGui\Source Files</Filter>
@@ -79,25 +78,25 @@
       <Filter>D3D11 Hook + ImGui\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Hooks.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>General Files\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Globals.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>General Files\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Includes.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>General Files\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="imgui_stdlib.cpp">
       <Filter>D3D11 Hook + ImGui\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Logger.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>General Files\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="HookManager.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>General Files\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Utilities.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>General Files\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GuiSystem.cpp">
       <Filter>Overlay Gui\Source Files</Filter>
@@ -133,7 +132,7 @@
       <Filter>Overlay Gui\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="LuaFunctions.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>General Files\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="FreeCamGui.cpp">
       <Filter>Overlay Gui\Source Files</Filter>
@@ -208,27 +207,27 @@
       <Filter>Lua Binding</Filter>
     </ClCompile>
     <ClCompile Include="Application.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>General Files\Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CameraWrapper.h">
-      <Filter>Header Files</Filter>
+      <Filter>General Files\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Functions.h">
-      <Filter>Header Files</Filter>
+      <Filter>General Files\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Hooks.h">
-      <Filter>Header Files</Filter>
+      <Filter>General Files\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="FunctionManager.h">
-      <Filter>Header Files</Filter>
+      <Filter>General Files\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\kiero\kiero.h">
       <Filter>D3D11 Hook + ImGui\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\MinHook\MinHook.h">
-      <Filter>Header Files</Filter>
+      <Filter>General Files\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\ImGui\imconfig.h">
       <Filter>D3D11 Hook + ImGui\Header Files</Filter>
@@ -255,31 +254,31 @@
       <Filter>D3D11 Hook + ImGui\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="DeepCodeStorage.h">
-      <Filter>Header Files</Filter>
+      <Filter>General Files\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="imgui_stdlib.h">
       <Filter>D3D11 Hook + ImGui\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ScriptManager.h">
-      <Filter>Header Files</Filter>
+      <Filter>General Files\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SnippetManager.h">
-      <Filter>Header Files</Filter>
+      <Filter>General Files\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Includes.h">
-      <Filter>Header Files</Filter>
+      <Filter>General Files\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Logger.h">
-      <Filter>Header Files</Filter>
+      <Filter>General Files\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Globals.h">
-      <Filter>Header Files</Filter>
+      <Filter>General Files\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="HookManager.h">
-      <Filter>Header Files</Filter>
+      <Filter>General Files\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Utilities.h">
-      <Filter>Header Files</Filter>
+      <Filter>General Files\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GuiSystem.h">
       <Filter>Overlay Gui\Header Files</Filter>
@@ -327,10 +326,10 @@
       <Filter>RFGR Structs</Filter>
     </ClInclude>
     <ClInclude Include="LuaFunctions.h">
-      <Filter>Header Files</Filter>
+      <Filter>General Files\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ItsyBitsy.h">
-      <Filter>Header Files</Filter>
+      <Filter>General Files\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="FreeCamGui.h">
       <Filter>Overlay Gui\Header Files</Filter>
@@ -411,7 +410,7 @@
       <Filter>Lua Binding</Filter>
     </ClInclude>
     <ClInclude Include="RenderInterfaceD3D11.h">
-      <Filter>Header Files</Filter>
+      <Filter>General Files\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="HkpRigidBodyLua.h">
       <Filter>Lua Binding</Filter>
@@ -420,7 +419,7 @@
       <Filter>Lua Binding</Filter>
     </ClInclude>
     <ClInclude Include="Application.h">
-      <Filter>Header Files</Filter>
+      <Filter>General Files\Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
