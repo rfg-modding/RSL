@@ -96,36 +96,13 @@ void Lua::BindObject(sol::state& LuaState)
     //Utype.set("CastToAirstrikeDefenseNode", [](Object& Self) ->Human* {return static_cast<Human*>(&Self); });
     //Utype.set("CastToUpgradeNode", [](Object& Self) ->Human* {return static_cast<Human*>(&Self); });
     //Utype.set("CastToAreaDefenseNode", [](Object& Self) ->Human* {return static_cast<Human*>(&Self); });
+    Utype.set("GetName", [](Object& Self) -> const char*
+    {
+        if(Globals::RfgWorldPtr)
+        {
+            return world_get_object_name(Globals::RfgWorldPtr, nullptr, &Self);
+        }
+        return nullptr;
+    });
 	RfgTable.set_usertype("Object", Utype);
-
-	/*RfgTable.new_usertype<Object>
-	(
-		"Object",
-		"new", sol::constructors<Object(), Object(const Object&)>(),
-		"Position", &Object::Position,
-		"ChildPtr", &Object::ChildPtr,
-		"ChildNext", &Object::ChildNext,
-		"ChildPrevious", &Object::ChildPrevious,
-		"AttachInfo", &Object::AttachInfo,
-		"HavokHandle", &Object::HavokHandle,
-		"ContactInfo", &Object::ContactInfo,
-		"ObjFlags", &Object::ObjFlags,
-		//"RemoteObjFlags", &Object::RemoteObjFlags,
-		//"MPDcmoIndex", &Object::MPDcmoIndex,
-		"CheckingReset", &Object::CheckingReset,
-		"NameIndex", &Object::NameIndex,
-		"FlaggedNext", &Object::FlaggedNext,
-		"FlaggedPrevious", &Object::FlaggedPrevious,
-		"Handle", &Object::Handle,
-		"Parent", &Object::Parent,
-		"BPOHandle", &Object::BPOHandle,
-		"AllIndex", &Object::AllIndex,
-		"TypeIndex", &Object::TypeIndex,
-		"SubtypeIndex", &Object::SubtypeIndex,
-		"ObjectType", &Object::ObjectType,
-		"SubType", &Object::SubType,
-		"LastKnownBMin", &Object::LastKnownBMin,
-		"LastKnownBMax", &Object::LastKnownBMax,
-		"SRID", &Object::SRID
-	);*/
 }
