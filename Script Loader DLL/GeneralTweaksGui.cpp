@@ -573,15 +573,15 @@ void GeneralTweaksGui::Draw()
                         std::string ObjectName(TempName);
                         if(OnlyDumpNamedObjects)
                         {
-                            if(ObjectName[0] == ' ' || TempName == nullptr || ObjectName.length() < 3)
+                            if(TempName == nullptr || ObjectName.length() < 3)
                             {
                                 break;
                             }
                         }
 						PositionsDump << "Index: " << i << "\n";
 						PositionsDump << "Name: " << ObjectName << "\n";
-						PositionsDump << "Type: " << (int)(*Globals::RfgWorldPtr->all_objects[i]).ObjectType << "\n";
-						PositionsDump << "Subtype: " << (int)(*Globals::RfgWorldPtr->all_objects[i]).SubType << "\n";
+						PositionsDump << "Type: " << (int)(*Globals::RfgWorldPtr->all_objects[i]).ObjectType << "\n"; //Todo: Add type name string
+						PositionsDump << "Subtype: " << (int)(*Globals::RfgWorldPtr->all_objects[i]).SubType << "\n"; //Todo: Add subtype name string
 						PositionsDump << "Position:\n";
 						PositionsDump << "    x: " << (*Globals::RfgWorldPtr->all_objects[i]).Position.x << "\n";
 						PositionsDump << "    y: " << (*Globals::RfgWorldPtr->all_objects[i]).Position.y << "\n";
