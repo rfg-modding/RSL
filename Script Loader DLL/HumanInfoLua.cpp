@@ -20,7 +20,7 @@ void Lua::BindHumanInfoFlags(sol::state & LuaState)
 	Utype.set("NonFlammable", sol::property(itsy_bitsy::read<human_info_flags, 11>, itsy_bitsy::write<human_info_flags, 11>)); //int8 - 1
 	Utype.set("NoAttachingProjectiles", sol::property(itsy_bitsy::read<human_info_flags, 12>, itsy_bitsy::write<human_info_flags, 12>)); //int8 - 1
 	Utype.set("GuerrillaTech", sol::property(itsy_bitsy::read<human_info_flags, 13>, itsy_bitsy::write<human_info_flags, 13>)); //int8 - 1
-	Utype.set("GeurrillaRfc", sol::property(itsy_bitsy::read<human_info_flags, 14>, itsy_bitsy::write<human_info_flags, 14>)); //int8 - 1
+	Utype.set("GuerrillaRfc", sol::property(itsy_bitsy::read<human_info_flags, 14>, itsy_bitsy::write<human_info_flags, 14>)); //int8 - 1
 	Utype.set("OldCoot", sol::property(itsy_bitsy::read<human_info_flags, 15>, itsy_bitsy::write<human_info_flags, 15>)); //int8 - 1
 	Utype.set("Dan", sol::property(itsy_bitsy::read<human_info_flags, 16>, itsy_bitsy::write<human_info_flags, 16>)); //int8 - 1
 	Utype.set("Jenkins", sol::property(itsy_bitsy::read<human_info_flags, 17>, itsy_bitsy::write<human_info_flags, 17>)); //int8 - 1*/
@@ -37,7 +37,7 @@ void Lua::BindHumanPropGeneralInfo(sol::state& LuaState)
 	Utype.set("AppearancePercent", &human_prop_general_info::appearance_percent);
 	Utype.set("PropType", &human_prop_general_info::m_prop_type);
 	Utype.set("NumProps",& human_prop_general_info::num_props);
-	Utype.set("Props", &human_prop_general_info::props);
+	Utype.set("Props", &human_prop_general_info::props); //Todo: Bind this type
 	RfgTable.set_usertype("HumanPropGeneralInfo", Utype);
 }
 
@@ -105,7 +105,7 @@ void Lua::BindHumanInfo(sol::state& LuaState)
 	//Utype.set("VoicePersonas", &HumanInfo::voice_personas); //Todo: Bind this
 	///Utype.set("DefaultInventory", &HumanInfo::default_inventory); //farray<human_info_inventory_info, 15> //Todo: Bind this
 	Utype.set("NumGeneralProps", &HumanInfo::num_general_props);
-	Utype.set("GeneralProps", &HumanInfo::general_props);
+	//Utype.set("GeneralProps", &HumanInfo::general_props); //Todo: Bind this and the types it depends on.
 	Utype.set("LowerSpineBoneIndex", &HumanInfo::lower_spine_bone_index);
 	Utype.set("UpperSpineBoneIndex", &HumanInfo::upper_spine_bone_index);
 	Utype.set("PelvisBoneIndex", &HumanInfo::pelvis_bone_index);

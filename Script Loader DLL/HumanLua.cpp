@@ -13,7 +13,7 @@ void Lua::BindIKJoint(sol::state& LuaState)
 	Utype.set("FreezeObjHandle", &IK_Joint::freeze_obj_handle);
 	Utype.set("FreezeOffsetPos", &IK_Joint::freeze_offset_pos);
 	Utype.set("Location", &IK_Joint::location);
-	RfgTable.set_usertype("IKJoint", Utype);
+	RfgTable.set_usertype("IkJoint", Utype);
 }
 
 void Lua::BindWeaponAnimationFlags(sol::state& LuaState)
