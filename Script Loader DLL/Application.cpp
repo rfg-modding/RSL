@@ -51,6 +51,28 @@ void Application::InitRSL()
         }
         OpenConsole();
 
+        //Sleep(5000);
+
+        Globals::ModuleBase = reinterpret_cast<uintptr_t>(GetModuleHandle(nullptr));
+        Functions.Initialize();
+
+        GameState RFGRState = GameseqGetState();;
+        auto StartTime = std::chrono::steady_clock::now();
+        auto EndTime = std::chrono::steady_clock::now();
+        long long TimeElapsed = 0LL;
+        do
+        {
+            TimeElapsed = std::chrono::duration_cast<std::chrono::milliseconds>(EndTime - StartTime).count();
+            if (TimeElapsed > 1000LL) //Todo: Figure out if casting 1000 as a long long is necessary in this case or ever.
+            {
+                RFGRState = GameseqGetState();
+                StartTime = EndTime;
+                std::cout << "TimeElapsed: " << TimeElapsed << "\n";
+                std::cout << "Current RFGR State: " << (UINT32)RFGRState << "\n";
+            }
+            EndTime = std::chrono::steady_clock::now();
+        } while (RFGRState < 0 || RFGRState > 63);
+
         //Attempt to init kiero which is used for easy directx hooking. Shutdown if it fails.
         if (kiero::init(kiero::RenderType::D3D11) != kiero::Status::Success)
         {
@@ -67,7 +89,6 @@ void Application::InitRSL()
         }
 
         //Set global values which are frequently used in hooks.
-        Globals::ModuleBase = reinterpret_cast<uintptr_t>(GetModuleHandle(nullptr));
         Globals::GameWindowHandle = Globals::FindRfgTopWindow();
         Globals::MouseGenericPollMouseVisible = Globals::FindPattern("rfg.exe", "\x84\xD2\x74\x08\x38\x00\x00\x00\x00\x00\x75\x02", "xxxxx?????xx");
         Globals::CenterMouseCursorCall = Globals::FindPattern("rfg.exe", "\xE8\x00\x00\x00\x00\x89\x46\x4C\x89\x56\x50", "x????xxxxxx");
@@ -77,7 +98,6 @@ void Application::InitRSL()
         Globals::Camera = &this->Camera;
 
         Camera.Initialize(Globals::DefaultFreeCameraSpeed, 5.0);
-        Functions.Initialize();
         Scripts.Initialize();
 
         //Creates and enables all function hooks.

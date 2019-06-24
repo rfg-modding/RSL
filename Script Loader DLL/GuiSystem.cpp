@@ -83,6 +83,7 @@ void GuiSystem::Draw()
 {
 	try
 	{
+        PlayerPtr = Globals::PlayerPtr;
         if (!PlayerPtr)
         {
             if (DrawPassedOnce)
