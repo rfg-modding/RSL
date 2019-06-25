@@ -53,7 +53,7 @@ void Application::InitRSL()
 
         //Sleep(5000);
 
-        Globals::ModuleBase = reinterpret_cast<uintptr_t>(GetModuleHandle(nullptr));
+        //Globals::ModuleBase = reinterpret_cast<uintptr_t>(GetModuleHandle(nullptr));
         Functions.Initialize();
 
         GameState RFGRState = GameseqGetState();;
@@ -300,7 +300,6 @@ void Application::OpenConsole()
     if (Globals::OpenDebugConsole)
     {
         FILE* pFile = nullptr;
-        Globals::PID = GetCurrentProcessId();
 
         if (AttachConsole(Globals::PID) == 0)
         {

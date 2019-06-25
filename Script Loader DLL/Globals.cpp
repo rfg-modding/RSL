@@ -287,7 +287,7 @@ namespace Globals
 	std::string GetEXEPath(bool IncludeExeInPath)
 	{
 		char result[MAX_PATH];
-		std::string PathString = std::string(result, GetModuleFileName(nullptr, result, MAX_PATH));
+		std::string PathString = std::string(result, GetModuleFileName(0, result, MAX_PATH));
 
 		if (IncludeExeInPath)
 		{
