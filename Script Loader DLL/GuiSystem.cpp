@@ -84,14 +84,6 @@ void GuiSystem::Draw()
 	try
 	{
         PlayerPtr = Globals::PlayerPtr;
-        if (!PlayerPtr)
-        {
-            if (DrawPassedOnce)
-            {
-                throw std::exception("Player pointer is null! Failed to draw overlay gui!");
-            }
-            return;
-        }
 		if (!Globals::ImGuiInitialized)
 		{
 			if (DrawPassedOnce)
@@ -100,6 +92,18 @@ void GuiSystem::Draw()
 			}
 			return;
 		}
+        if (!PlayerPtr)
+        {
+            if(Globals::OverlayActive)
+            {
+                DrawPreInitWindow();
+            }
+            if (DrawPassedOnce)
+            {
+                throw std::exception("Player pointer is null! Failed to draw overlay gui!");
+            }
+            return;
+        }
 		if (!Scripts)
 		{
 			if (DrawPassedOnce)
@@ -200,6 +204,21 @@ void GuiSystem::Draw()
 		Logger::Log(ExceptionInfo, LogError, true, true);
 		//MessageBoxA(FindTopWindow(GetProcessID("rfg.exe")), ExceptionInfo.c_str(), "Failed to draw overlay gui!", MB_OK);
 	}
+}
+
+void GuiSystem::DrawPreInitWindow()
+{
+    ImGui::SetNextWindowSize(ImVec2(250.0f, 300.0f), ImGuiCond_FirstUseEver);
+    if (!ImGui::Begin("Initialization not complete", &ShowPreInitWindow, ImGuiWindowFlags_NoCollapse))
+    {
+        ImGui::End();
+        return;
+    }
+
+    ImGui::PushItemWidth(250.0f);
+    ImGui::TextWrapped("RSL initialization currently requires a save game to be loaded to complete. Please load a save game to access the rest of the overlay.");
+
+    ImGui::End();
 }
 
 /* Sets the Player pointer for all GUIs.*/

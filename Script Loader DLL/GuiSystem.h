@@ -33,6 +33,8 @@ public:
 	//bool LoadGUIConfig();
 	void Draw();
 
+    void DrawPreInitWindow();
+
 	void SetPlayerPtr(Player* NewPlayerPtr);
 	void SetPlayerPtr(void* NewPlayerPtr);
 
@@ -61,6 +63,7 @@ public:
     OverlayConsole* Console = nullptr;
     MenuBarGui* MainMenuBar = nullptr;
 
+    bool ShowPreInitWindow = true;
 
 	bool ShowAppWelcome = true;
 	bool ShowAppConsole = false;
