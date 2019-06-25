@@ -260,3 +260,5 @@ F_havok_body_apply_linear_impulse_B HavokBodyApplyLinearImpulseB;
 F_keen_graphics_beginFrame KeenGraphicsBeginFrame;
 
 F_keen_get_build_version_string KeenGetBuildVersionString;
+
+F_WorldObjectFromHandle WorldObjectFromHandle;
