@@ -1,5 +1,6 @@
 //This DLL is used to automatically load the script loader when the game is run. 
 //You shouldn't put much program logic into here as it's primary purpose is to just load other script loader dlls.
+//This is a slightly modified version of this: https://github.com/zerosum0x0/dinput-proxy-dll
 
 #include "dinputproxy.h"
 
