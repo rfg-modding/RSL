@@ -13,5 +13,12 @@ public:
 	~FunctionManager() = default;
 
 	void Initialize();
+
+    /*Helper function used which sets a function pointer to ModuleBase + RelativeAddress. Makes code cleaner and less repetitive.*/
+    template<typename T>
+    void RegisterFunction(T& Function, DWORD RelativeAddress)
+    {
+        Function = reinterpret_cast<T>(Globals::ModuleBase + RelativeAddress);
+    }
 };
 
