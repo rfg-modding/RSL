@@ -528,7 +528,7 @@ probably end up just using an external lib to render text for now.*/
 	PrimitiveState->d.v.m_zbias_mode = 0;
 	PrimitiveState->d.v.m_zbuf_mode = 0;
 
-	rl_draw_string(GlobalRlDrawPtr, nullptr, 100.0f, 100.0f, "Test string draw!!!", true, 0, PrimitiveState);
+	RlDrawString(GlobalRlDrawPtr, nullptr, 100.0f, 100.0f, "Test string draw!!!", true, 0, PrimitiveState);
 }*/
 
 /*This is experimental code meant to manipulate the remnants of the games
@@ -536,18 +536,18 @@ debug console. Currently just tries to activate it. Later on I'll try to
 manually add commands to it and run them. If that works, then I'll add them
 to the lua system and port them through the overlay lua console.*/
 /*ImGui::Text("Console Mode: "); ImGui::SameLine();
-ImGui::TextColored(SecondaryTextColor, std::to_string((int)console_get_console_mode).c_str());
+ImGui::TextColored(SecondaryTextColor, std::to_string((int)ConsoleGetConsoleMode).c_str());
 if (ImGui::Button("VCM_NORMAL (0)"))
 {
-	console_set_console_mode(VCM_NORMAL);
+	ConsoleSetConsoleMode(VCM_NORMAL);
 }
 if (ImGui::Button("VCM_CHAT (1)"))
 {
-	console_set_console_mode(VCM_CHAT);
+	ConsoleSetConsoleMode(VCM_CHAT);
 }
 if (ImGui::Button("VCM_TEAMCHAT (2)"))
 {
-	console_set_console_mode(VCM_TEAMCHAT);
+	ConsoleSetConsoleMode(VCM_TEAMCHAT);
 }
 
 if (ImGui::Button("Console init"))
@@ -558,15 +558,15 @@ if (ImGui::Button("Console init"))
 	ConsoleConfig->screen_height = 1050;
 	ConsoleConfig->save_history = true;
 	ConsoleConfig->safe_area_left = 0;
-	Console_Init(ConsoleConfig);
+	ConsoleInit(ConsoleConfig);
 }
 if (ImGui::Button("Console activate"))
 {
-	Console_Activate();
+	ConsoleActivate();
 }
 if (ImGui::Button("Console deactivate"))
 {
-	Console_Deactivate();
+	ConsoleDeactivate();
 }*/
 
 

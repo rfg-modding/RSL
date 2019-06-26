@@ -101,7 +101,7 @@ void GeneralTweaksGui::Draw()
 	
 	ImGui::Text("Alert level: ");
 	ImGui::SameLine();
-	gfm_alert_levels AlertCheck = gsm_get_alert_level();
+	gfm_alert_levels AlertCheck = GsmGetAlertLevel();
 	if (AlertCheck == ALERT_LEVEL_GREEN)
 	{
 		ImGui::TextColored(Globals::ColorGreen, std::string(std::string(ICON_FA_SMILE_BEAM) + u8" Green").c_str());
@@ -132,7 +132,7 @@ void GeneralTweaksGui::Draw()
 	ImGui::SameLine();
 	if (ImGui::Button("Set alert level"))
 	{
-		gsm_set_alert_level(CustomAlertLevel);
+		GsmSetAlertLevel(CustomAlertLevel);
 	}
 	ImGui::SameLine();
 	ImGui::Checkbox("Lock", &LockAlertLevel);
@@ -149,12 +149,12 @@ void GeneralTweaksGui::Draw()
 		{
 			if (XrayModeOn)
 			{
-				xray_effect_stop(XET_VISION_BACKPACK);
+				XrayEffectStop(XET_VISION_BACKPACK);
 				XrayModeOn = false;
 			}
 			else
 			{
-				xray_effect_start(XET_VISION_BACKPACK);
+				XrayEffectStart(XET_VISION_BACKPACK);
 				XrayModeOn = true;
 			}
 		}
@@ -162,12 +162,12 @@ void GeneralTweaksGui::Draw()
 		{
 			if (XrayModeOn)
 			{
-				xray_effect_stop(XET_RAIL_DRIVER);
+				XrayEffectStop(XET_RAIL_DRIVER);
 				XrayModeOn = false;
 			}
 			else
 			{
-				xray_effect_start(XET_RAIL_DRIVER);
+				XrayEffectStart(XET_RAIL_DRIVER);
 				XrayModeOn = true;
 			}
 		}
@@ -439,7 +439,7 @@ void GeneralTweaksGui::Draw()
 				int ValidObjectZoneCount = 0;
 				for (int i = 0; i < ZoneScanRange; i++)
 				{
-					world_zone* CurrentWorldZone = get_world_zone_by_index(Globals::RfgWorldPtr, NULL, i);
+					world_zone* CurrentWorldZone = GetWorldZoneByIndex(Globals::RfgWorldPtr, NULL, i);
 					if (CurrentWorldZone)
 					{
 						ValidWorldZoneCount++;
@@ -470,7 +470,7 @@ void GeneralTweaksGui::Draw()
 				Logger::Log("\nPrinting all world zone names...\n", LogInfo);
 				for (int i = 0; i < ZoneScanRange; i++)
 				{
-					world_zone* CurrentWorldZone = get_world_zone_by_index(Globals::RfgWorldPtr, NULL, i);
+					world_zone* CurrentWorldZone = GetWorldZoneByIndex(Globals::RfgWorldPtr, NULL, i);
 					if (CurrentWorldZone)
 					{
 						NumberOfWorldZonesFound++;
@@ -574,7 +574,7 @@ void GeneralTweaksGui::Draw()
 				{
 					if (Globals::RfgWorldPtr->all_objects[i])
 					{
-                        const char* TempName = world_get_object_name(Globals::RfgWorldPtr, NULL, Globals::RfgWorldPtr->all_objects[i]);
+                        const char* TempName = WorldGetObjectName(Globals::RfgWorldPtr, NULL, Globals::RfgWorldPtr->all_objects[i]);
                         std::string ObjectName(TempName);
                         if(OnlyDumpNamedObjects)
                         {

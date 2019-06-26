@@ -77,7 +77,7 @@ void IntrospectionGui::DrawPlayerIntrospectionGui(const char* Title)
         if(TargetObject)
         {
             ImGui::Text("Name:"); ImGui::SameLine();
-            ImGui::TextColored(Globals::SecondaryTextColor, world_get_object_name(Globals::RfgWorldPtr, NULL, TargetObject));
+            ImGui::TextColored(Globals::SecondaryTextColor, WorldGetObjectName(Globals::RfgWorldPtr, NULL, TargetObject));
             ImGui::Text("Position:"); ImGui::SameLine();
             ImGui::TextColored(Globals::SecondaryTextColor, TargetObject->Position.GetDataString(false, false).c_str());
 

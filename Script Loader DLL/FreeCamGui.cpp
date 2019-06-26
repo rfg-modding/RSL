@@ -106,15 +106,15 @@ void FreeCamGui::Draw()
 	//ImGui::Checkbox("First person smooth", &FirstPersonSmooth);
 	//if(ImGui::Button("Start first person"))
 	//{
-	//	camera_start_first_person(FirstPersonSmooth);
+	//	CameraStartFirstPerson(FirstPersonSmooth);
 	//}
 	//if(ImGui::Button("Start slew"))
 	//{
-	//	Camera_Start_Slew_Mode();
+	//	CameraStartSlewMode();
 	//}	
 	//if(ImGui::Button("Start third person"))
 	//{
-	//	Camera_Start_Third_Person();
+	//	CameraStartThirdPerson();
 	//}
 
 	//ImGui::InputFloat("Real FOV", &Camera->GameData->real_fov);

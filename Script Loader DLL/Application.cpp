@@ -280,9 +280,9 @@ void Application::CreateHooks()
     Hooks.CreateHook("ModeMismatchFixState", reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x497740), InitMultiplayerDataItemRespawnHook, reinterpret_cast<LPVOID*>(&InitMultiplayerDataItemRespawn));
     /*End of MP Detection Hooks*/
 
-    Hooks.CreateHook("world::do_frame", reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x540AB0), world_do_frame_hook, reinterpret_cast<LPVOID*>(&world_do_frame));
-    Hooks.CreateHook("rl_camera::render_begin", reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x137660), rl_camera_render_begin_hook, reinterpret_cast<LPVOID*>(&rl_camera_render_begin));
-    Hooks.CreateHook("hkpWorld::stepDeltaTime", reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x9E1A70), hkpWorld_stepDeltaTime_hook, reinterpret_cast<LPVOID*>(&hkpWorld_stepDeltaTime));
+    Hooks.CreateHook("world::do_frame", reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x540AB0), world_do_frame_hook, reinterpret_cast<LPVOID*>(&WorldDoFrame));
+    Hooks.CreateHook("rl_camera::render_begin", reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x137660), rl_camera_render_begin_hook, reinterpret_cast<LPVOID*>(&RlCameraRenderBegin));
+    Hooks.CreateHook("hkpWorld::stepDeltaTime", reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x9E1A70), hkpWorld_stepDeltaTime_hook, reinterpret_cast<LPVOID*>(&hkpWorldStepDeltaTime));
     Hooks.CreateHook("Application::UpdateTime", reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x5A880), ApplicationUpdateTimeHook, reinterpret_cast<LPVOID*>(&ApplicationUpdateTime));
 
     Hooks.CreateHook("LuaDoBuffer", reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x82FD20), LuaDoBufferHook, reinterpret_cast<LPVOID*>(&LuaDoBuffer));

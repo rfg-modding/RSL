@@ -216,13 +216,13 @@ LRESULT ProcessInput(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			{
 				const float Radius = Gui.TweaksMenu.RepairRadius;
 				const int Duration = Gui.TweaksMenu.RepairDuration;
-				rfg_dyn_repair_sphere(&Gui.TweaksMenu.PlayerPtr->Position, Radius, Duration, Gui.TweaksMenu.PlayerPtr);
+				RfgDynRepairSphere(&Gui.TweaksMenu.PlayerPtr->Position, Radius, Duration, Gui.TweaksMenu.PlayerPtr);
 			}
 			else if (Gui.TweaksMenu.RepairPosition == 1)
 			{
 				const float Radius = Gui.TweaksMenu.RepairRadius;
 				const int Duration = Gui.TweaksMenu.RepairDuration;
-				rfg_dyn_repair_sphere(&Gui.TweaksMenu.PlayerPtr->aim_pos, Radius, Duration, Gui.TweaksMenu.PlayerPtr);
+				RfgDynRepairSphere(&Gui.TweaksMenu.PlayerPtr->aim_pos, Radius, Duration, Gui.TweaksMenu.PlayerPtr);
 			}
 		}
 	}*/
@@ -584,7 +584,7 @@ void __fastcall PlayerDoFrameHook(Player* PlayerPtr)
 	}
 	if (Globals::Gui->TweaksMenu->LockAlertLevel)
 	{
-		gsm_set_alert_level(Globals::Gui->TweaksMenu->CustomAlertLevel);
+		GsmSetAlertLevel(Globals::Gui->TweaksMenu->CustomAlertLevel);
 	}
 
 	if (Globals::Camera->IsFreeCameraActive() && Globals::Gui->FreeCamSettings->PlayerFollowCam)
@@ -670,7 +670,7 @@ void __fastcall hkpWorld_stepDeltaTime_hook(hkpWorld* This, void* edx, float Phy
         }
     }
 
-    return hkpWorld_stepDeltaTime(This, edx, PhysicsDeltaTime);
+    return hkpWorldStepDeltaTime(This, edx, PhysicsDeltaTime);
 }
 
 void __fastcall rl_camera_render_begin_hook(rl_camera* This, void* edx, rl_renderer* Renderer) //.text:01027660 rfg.exe:$137660 #136A60 <rl_camera::render_begin>
@@ -686,7 +686,7 @@ void __fastcall rl_camera_render_begin_hook(rl_camera* This, void* edx, rl_rende
 			Globals::RlStateManagerPtr = Renderer->m_state_p;
 		}
 
-		Globals::MainScenePtr = game_render_get_main_scene();
+		Globals::MainScenePtr = GameRenderGetMainScene();
 		if (Globals::MainScenePtr)
 		{
 			Globals::MainSceneRendererPtr = Globals::MainScenePtr->m_scene_renderer_p;
@@ -702,7 +702,7 @@ void __fastcall rl_camera_render_begin_hook(rl_camera* This, void* edx, rl_rende
 		Globals::RlCameraPtr = This;
 	}
 
-	return rl_camera_render_begin(This, edx, Renderer);
+	return RlCameraRenderBegin(This, edx, Renderer);
 }
 
 void __fastcall ApplicationUpdateTimeHook(void* This, void* edx, float TimeStep)
@@ -730,7 +730,7 @@ void __fastcall world_do_frame_hook(World* This, void* edx, bool HardLoad)
             Globals::RfgWorldPtr = This;
             Logger::Log("RFG::World hooked!", LogInfo);
 
-            Globals::TODLightPtr = game_render_get_TOD_light();
+            Globals::TODLightPtr = GameRenderGetTodLight();
             if (Globals::Scripts)
             {
                 Globals::Scripts->UpdateRfgPointers();
@@ -747,11 +747,11 @@ void __fastcall world_do_frame_hook(World* This, void* edx, bool HardLoad)
     }
     if (!Globals::TODLightPtr)
     {
-        Globals::TODLightPtr = game_render_get_TOD_light();
+        Globals::TODLightPtr = GameRenderGetTodLight();
     }
     if (!Globals::Gui->TweaksMenu)
     {
-        return world_do_frame(This, edx, HardLoad);
+        return WorldDoFrame(This, edx, HardLoad);
     }
 
     if (Globals::Gui->TweaksMenu->UseCustomLevelAmbientLight)
@@ -774,7 +774,7 @@ void __fastcall world_do_frame_hook(World* This, void* edx, bool HardLoad)
         Globals::TODLightPtr->m_color.alpha = Globals::Gui->TweaksMenu->CustomTimeOfDayLightColor.alpha;
     }
 
-    return world_do_frame(This, edx, HardLoad);
+    return WorldDoFrame(This, edx, HardLoad);
 }
 
 int __cdecl LuaDoBufferHook(lua_State *L, const char *buff, unsigned int size, const char *name)

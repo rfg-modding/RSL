@@ -71,7 +71,7 @@ namespace Lua
         {
             if(Globals::RfgWorldPtr)
             {
-                std::string IndexName(world_get_object_name(Globals::RfgWorldPtr, NULL, Globals::RfgWorldPtr->all_objects[i]));
+                std::string IndexName(WorldGetObjectName(Globals::RfgWorldPtr, NULL, Globals::RfgWorldPtr->all_objects[i]));
                 if (IndexName == Name)
                 {
                     return Globals::RfgWorldPtr->all_objects[i];

@@ -100,7 +100,7 @@ void Lua::BindObject(sol::state& LuaState)
     {
         if(Globals::RfgWorldPtr)
         {
-            return world_get_object_name(Globals::RfgWorldPtr, nullptr, &Self);
+            return WorldGetObjectName(Globals::RfgWorldPtr, nullptr, &Self);
         }
         return nullptr;
     });

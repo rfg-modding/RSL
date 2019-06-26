@@ -122,10 +122,10 @@ void ScriptManager::SetupLua()
 	RfgTable["HideFog"] = HideFog;
 	RfgTable["ToggleFog"] = ToggleFog;
 	RfgTable["ToggleHud"] = ToggleHud;
-	RfgTable["SetFarClip"] = game_render_set_far_clip_distance;
-	RfgTable["GetFarClip"] = game_render_get_far_clip_distance;
-	RfgTable["SetAlertLevel"] = gsm_set_alert_level;
-	RfgTable["GetAlertLevel"] = gsm_get_alert_level;
+	RfgTable["SetFarClip"] = GameRenderSetFarClipDistance;
+	RfgTable["GetFarClip"] = GameRenderGetFarClipDistance;
+	RfgTable["SetAlertLevel"] = GsmSetAlertLevel;
+	RfgTable["GetAlertLevel"] = GsmGetAlertLevel;
 	RfgTable["TeleportHuman"] = HumanTeleportUnsafe;
 	RfgTable["GetPlayer"] = Lua::GetPlayer;
 	RfgTable["GetWorld"] = Lua::GetWorld;

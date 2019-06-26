@@ -20,145 +20,142 @@ extern void ToggleHud();
 extern void ToggleFog();
 
 using F_Camera_Start_Slew_Mode = void(__cdecl*)();
-extern F_Camera_Start_Slew_Mode Camera_Start_Slew_Mode;
+extern F_Camera_Start_Slew_Mode CameraStartSlewMode;
 
 using F_Camera_Stop_Slew_Mode = void(__cdecl*)();
-extern F_Camera_Stop_Slew_Mode Camera_Stop_Slew_Mode;
+extern F_Camera_Stop_Slew_Mode CameraStopSlewMode;
 
 using F_Interface_Debug_Mode_Activate = void(__cdecl*)();
-extern F_Interface_Debug_Mode_Activate Interface_Debug_Mode_Activate;
+extern F_Interface_Debug_Mode_Activate InterfaceDebugModeActivate;
 
 using F_Keen_Debug_WriteToLogFile = void(__cdecl*)(char* String);
-extern F_Keen_Debug_WriteToLogFile Keen_Debug_WriteToLogFile;
+extern F_Keen_Debug_WriteToLogFile KeenDebugWriteToLogFile;
 
 using F_Hud_Display_Distance = void(__cdecl*)(bool Value);
-extern F_Hud_Display_Distance Hud_Display_Distance;
+extern F_Hud_Display_Distance HudDisplayDistance;
 
-//.text:009BCD30 rfg.exe:$18CD30 #18C130 <console_set_console_mode>
+//.text:009BCD30 rfg.exe:$18CD30 #18C130 <ConsoleSetConsoleMode>
 using F_console_set_console_mode = void(__cdecl*)(vconsole_mode);
-extern F_console_set_console_mode console_set_console_mode;
+extern F_console_set_console_mode ConsoleSetConsoleMode;
 
-//.text:009BCD50 rfg.exe:$18CD50 #18C150 <console_get_console_mode>
+//.text:009BCD50 rfg.exe:$18CD50 #18C150 <ConsoleGetConsoleMode>
 using F_console_get_console_mode = vconsole_mode(__cdecl*)();
-extern F_console_get_console_mode console_get_console_mode;
+extern F_console_get_console_mode ConsoleGetConsoleMode;
 
 using F_Console_Init = void(__cdecl*)(vconsole_config* ConsoleInit);
-extern F_Console_Init Console_Init;
+extern F_Console_Init ConsoleInit;
 
 using F_Console_Activate = void(__cdecl*)();
-extern F_Console_Activate Console_Activate;
+extern F_Console_Activate ConsoleActivate;
 
 using F_Console_Deactivate = void(__cdecl*)();
-extern F_Console_Deactivate Console_Deactivate;
+extern F_Console_Deactivate ConsoleDeactivate;
 
 using F_Console_Printf = void(__cdecl*)(const char* String);
-extern F_Console_Printf Console_Printf;
+extern F_Console_Printf ConsolePrintf;
 
 using F_Console_Display_Help = void(__cdecl*)();
-extern F_Console_Display_Help Console_Display_Help;
+extern F_Console_Display_Help ConsoleDisplayHelp;
 
 using F_Console_Command_Enable = void(__cdecl*)(const char* String, bool Activate);
-extern F_Console_Command_Enable Console_Command_Enable;
+extern F_Console_Command_Enable ConsoleCommandEnable;
 
 using F_Console_Do_Command = void(__cdecl*)(const char* String);
-extern F_Console_Do_Command Console_Do_Command;
+extern F_Console_Do_Command ConsoleDoCommand;
 
 using F_Camera_First_Person_Pre_Process = void(__cdecl*)();
-extern F_Camera_First_Person_Pre_Process Camera_First_Person_Pre_Process;
+extern F_Camera_First_Person_Pre_Process CameraFirstPersonPreProcess;
 
 using F_Camera_Start_Third_Person = void(__cdecl*)();
-extern F_Camera_Start_Third_Person Camera_Start_Third_Person;
+extern F_Camera_Start_Third_Person CameraStartThirdPerson;
 
 using F_Game_Print_Screen = void(__cdecl*)(char* String);
-extern F_Game_Print_Screen Game_Print_Screen;
+extern F_Game_Print_Screen GamePrintScreen;
 
 using F_camera_free_system_init = void(__cdecl* )();
-extern F_camera_free_system_init camera_free_system_init;
+extern F_camera_free_system_init CameraFreeSystemInit;
 
 using F_camera_free_mode_init = void(__cdecl*)();
-extern F_camera_free_mode_init camera_free_mode_init;
+extern F_camera_free_mode_init CameraFreeModeInit;
 
 using F_console_chat_printf = void(__cdecl*)(const char* String);
-extern F_console_chat_printf console_chat_printf;
+extern F_console_chat_printf ConsoleChatPrintf;
 
 using F_unused_dcf_r_show_mem_usage = void(__cdecl*)();
-extern F_unused_dcf_r_show_mem_usage unused_dcf_r_show_mem_usage;
+extern F_unused_dcf_r_show_mem_usage UnusedDcfRShowMemUsage;
 
 using F_rfg_dyn_get_active_destruction_frame = unsigned __int16(__cdecl*)();
-extern F_rfg_dyn_get_active_destruction_frame rfg_dyn_get_active_destruction_frame;
+extern F_rfg_dyn_get_active_destruction_frame RfgDynGetActiveDestructionFrame;
 
 using F_rfg_dyn_reset_destruction_frame = void(__cdecl*)(unsigned __int16 Frame);
-extern F_rfg_dyn_reset_destruction_frame rfg_dyn_reset_destruction_frame;
+extern F_rfg_dyn_reset_destruction_frame RfgDynResetDestructionFrame;
 
 using F_rfg_dyn_system_shutdown = void(__cdecl*)();
-extern F_rfg_dyn_system_shutdown rfg_dyn_system_shutdown;
+extern F_rfg_dyn_system_shutdown RfgDynSystemShutdown;
 
 using F_get_screen_width = int(__cdecl*)();
-extern F_get_screen_width get_screen_width;
+extern F_get_screen_width GetScreenWidth;
 
 using F_console_is_active = bool(__cdecl*)();
-extern F_console_is_active console_is_active;
+extern F_console_is_active ConsoleIsActive;
 
 using F_debug_spew_projectile = void(__cdecl*)(const char* Format);
-extern F_debug_spew_projectile debug_spew_projectile;
+extern F_debug_spew_projectile DebugSpewProjectile;
 
 using F_debug_spew_game_io = void(__cdecl*)(const char* Format);
-extern F_debug_spew_game_io debug_spew_game_io;
+extern F_debug_spew_game_io DebugSpewGameIo;
 
 using F_rl_render_lib_get_metrics = rl_renderer_metrics*(__cdecl* )();
-extern F_rl_render_lib_get_metrics rl_render_lib_get_metrics;
+extern F_rl_render_lib_get_metrics RlRenderLibGetMetrics;
 
 using F_profile_dump_info = void(__cdecl*)();
-extern F_profile_dump_info profile_dump_info;
+extern F_profile_dump_info ProfileDumpInfo;
 
 using F_vint_render_text = void(__cdecl*)(int _handle, const unsigned int* _text, unsigned int _first_char, unsigned int _num_chars, matrix23* _xform, 
       vector2* _pos, bool reversed, vint_res_offset _res_offset_x, vint_res_offset _res_offset_y, vint_res_scale _res_scale_x, vint_res_scale _res_scale_y);
-extern F_vint_render_text vint_render_text;
+extern F_vint_render_text VintRenderText;
 
 using F_xray_effect_start = void(__cdecl*)(xray_effect_types xray_effect_type);
-extern F_xray_effect_start xray_effect_start;
+extern F_xray_effect_start XrayEffectStart;
 
 using F_xray_effect_stop = void(__cdecl*)(xray_effect_types xray_effect_type);
-extern F_xray_effect_stop xray_effect_stop;
+extern F_xray_effect_stop XrayEffectStop;
 
 using F_camera_start_first_person = void(__cdecl*)(bool Smooth);
-extern F_camera_start_first_person camera_start_first_person;
+extern F_camera_start_first_person CameraStartFirstPerson;
 
 using F_camera_stop_first_person = void(__cdecl*)(bool Smooth);
-extern F_camera_stop_first_person camera_stop_first_person;
+extern F_camera_stop_first_person CameraStopFirstPerson;
 
 using F_key_down = void(__cdecl*)(unsigned int Scancode);
-extern F_key_down key_down;
+extern F_key_down KeyDown;
 
 using F_game_render_set_bloom_exposure_factor = void(__cdecl*)(float ExposureFactor);
-extern F_game_render_set_bloom_exposure_factor game_render_set_bloom_exposure_factor;
+extern F_game_render_set_bloom_exposure_factor GameRenderSetBloomExposureFactor;
 
 using F_game_render_set_hdr_state = void(__cdecl*)(rl_hdr_state* hdr_state);
-extern F_game_render_set_hdr_state game_render_set_hdr_state;
+extern F_game_render_set_hdr_state GameRenderSetHdrState;
 
 using F_game_render_2d_text = void(__cdecl*)(const char* str, vector* text_pos);
-extern F_game_render_2d_text game_render_2d_text;
+extern F_game_render_2d_text GameRender2dText;
 
 using F_ui_add_debug_text = unsigned int(__cdecl*)(const char *text, debug_text_posn type);
-extern F_ui_add_debug_text ui_add_debug_text;
+extern F_ui_add_debug_text UiAddDebugText;
 
-using F_get_depth_of_field_enabled = bool(__thiscall*)(void* ThisCamera); //bool __thiscall rl_camera::get_depth_of_field_enabled(rl_camera *this)
-extern F_get_depth_of_field_enabled get_depth_of_field_enabled;
+using F_get_depth_of_field_enabled = bool(__thiscall*)(void* ThisCamera); //bool __thiscall rl_camera::GetDepthOfFieldEnabled(rl_camera *this)
+extern F_get_depth_of_field_enabled GetDepthOfFieldEnabled;
 
-using F_set_depth_of_field_enabled = void(__thiscall*)(void* ThisCamera, bool Enabled); //void __thiscall rl_camera::set_depth_of_field_enabled(rl_camera *this, bool depth_of_field_enabled)
-extern F_set_depth_of_field_enabled set_depth_of_field_enabled;
-
-using F_character_controller_set_pos = void(__thiscall*)(void* ThisController, vector* Position); //void __thiscall character_controller::set_pos(character_controller *this, vector *pos)																			   
-extern F_character_controller_set_pos character_controller_set_pos; //IDA shows this as using __thiscall, but using that causes the game to immediately crash
+using F_set_depth_of_field_enabled = void(__thiscall*)(void* ThisCamera, bool Enabled); //void __thiscall rl_camera::SetDepthOfFieldEnabled(rl_camera *this, bool depth_of_field_enabled)
+extern F_set_depth_of_field_enabled SetDepthOfFieldEnabled;
 
 using F_fog_of_war_clear = void(__cdecl*)();
-extern F_fog_of_war_clear fog_of_war_clear;
+extern F_fog_of_war_clear FogOfWarClear;
 
 using F_Hud_Hide = void(__cdecl*)(bool HideHud);
-extern F_Hud_Hide Hud_Hide;
+extern F_Hud_Hide HudHide;
 
 using F_game_render_set_fog_enabled = void(__cdecl*)(bool Enabled);
-extern F_game_render_set_fog_enabled game_render_set_fog_enabled;
+extern F_game_render_set_fog_enabled GameRenderSetFogEnabled;
 
 //typedef void (__cdecl* explosion_create)(explosion_info* ExplosionInfo, object* Source, object* Owner, vector* Position, matrix* Orientation, vector* Directiom, weapon_info* WeaponInfo, bool FromServer)
 using F_explosion_create = void(__cdecl*)(explosion_info* ExplosionInfo, void* Source, void* Owner, vector* Position,
@@ -285,12 +282,12 @@ extern F_ui_tool_tips_add_tip UiToolTipsAddTip;
 
 //.text:0093DDA0 rfg.exe:$10DDA0 #10D1A0 <rl_draw::tristrip_2d_begin>
 using F_rl_draw_tristrip_2d_begin = void(__fastcall*)(void*, void*, rl_primitive_state*); //2nd arg is edx, needed for __thiscall functions.
-extern F_rl_draw_tristrip_2d_begin rl_draw_tristrip_2d_begin;
+extern F_rl_draw_tristrip_2d_begin RlDrawTristrip2dBegin;
 
 //.text:00985BC0 rfg.exe:$155BC0 #154FC0 <rl_draw::string>
 //void __thiscall rl_draw::string(rl_draw *this, float sx, float sy, const char *s, bool centered, int fontnum, rl_primitive_state *state)
 using F_rl_draw_string = void(__fastcall*)(void* This, void* edx, float sx, float sy, const char* s, bool centered, int fontnum, rl_primitive_state* state); //2nd arg is edx, needed for __thiscall functions.
-extern F_rl_draw_string rl_draw_string;
+extern F_rl_draw_string RlDrawString;
 
 //.text:015C1690 rfg.exe:$3C1690 #3C0A90 <game_is_paused>
 using F_is_game_paused = bool(__cdecl*)();
@@ -298,116 +295,116 @@ extern F_is_game_paused IsGamePaused;
 
 //.text:01740AB0 rfg.exe:$540AB0 #53FEB0 <world::do_frame> //bool __thiscall world::do_frame(world *this, bool hard_load)
 using F_world_do_frame = void(__fastcall*)(World* This, void* edx, bool HardLoad); //2nd arg is edx, needed for __thiscall functions.
-extern F_world_do_frame world_do_frame;
+extern F_world_do_frame WorldDoFrame;
 
 //.text:0171C8A0 rfg.exe:$51C8A0 #51BCA0 <world::get_object_name> //const char *__thiscall world::get_object_name(world *this, object *objp)
 using F_world_get_object_name = const char*(__fastcall*)(World* This, void* edx, Object* ObjectPtr); //2nd arg is edx, needed for __thiscall functions.
-extern F_world_get_object_name world_get_object_name;
+extern F_world_get_object_name WorldGetObjectName;
 
 
 
 //.text:0171D9F0 rfg.exe:$51D9F0 #51CDF0 <world::get_object_zone_by_index> //obj_zone *__thiscall world::get_object_zone_by_index(world *this, int index)
 using F_world_get_object_zone_by_index = obj_zone*(__fastcall*)(World* This, void* edx, int Index); //2nd arg is edx, needed for __thiscall functions.
-extern F_world_get_object_zone_by_index world_get_object_zone_by_index;
+extern F_world_get_object_zone_by_index WorldGetObjectZoneByIndex;
 //.text:0171DA20 rfg.exe:$51DA20 #51CE20 <world::get_object_zone_by_grid_id> //obj_zone *__thiscall world::get_object_zone_by_grid_id(world *this, unsigned __int16 id)
 using F_world_get_object_zone_by_grid_id = obj_zone*(__fastcall*)(World* This, void* edx, unsigned __int16 id); //2nd arg is edx, needed for __thiscall functions.
-extern F_world_get_object_zone_by_grid_id world_get_object_zone_by_grid_id;
+extern F_world_get_object_zone_by_grid_id WorldGetObjectZoneByGridId;
 
-//.text:010DD610 rfg.exe:$35D610 #35CA10 <gsm_get_alert_level> //gfm_alert_levels __cdecl gsm_get_alert_level()
+//.text:010DD610 rfg.exe:$35D610 #35CA10 <GsmGetAlertLevel> //gfm_alert_levels __cdecl GsmGetAlertLevel()
 using F_gsm_get_alert_level = gfm_alert_levels(__cdecl*)();
-extern F_gsm_get_alert_level gsm_get_alert_level;
-//.text:0112A740 rfg.exe:$3AA740 #3A9B40 <gsm_set_alert_level> //void __cdecl gsm_set_alert_level(gfm_alert_levels new_alert_level)
+extern F_gsm_get_alert_level GsmGetAlertLevel;
+//.text:0112A740 rfg.exe:$3AA740 #3A9B40 <GsmSetAlertLevel> //void __cdecl GsmSetAlertLevel(gfm_alert_levels new_alert_level)
 using F_gsm_set_alert_level = void(__cdecl*)(gfm_alert_levels new_alert_level);
-extern F_gsm_set_alert_level gsm_set_alert_level;
+extern F_gsm_set_alert_level GsmSetAlertLevel;
 
-//.text:010DD630 rfg.exe:$35D630 #35CA30 <gsm_get_alert_value> //float __cdecl gsm_get_alert_value()
+//.text:010DD630 rfg.exe:$35D630 #35CA30 <GsmGetAlertValue> //float __cdecl GsmGetAlertValue()
 using F_gsm_get_alert_value = float(__cdecl*)();
-extern F_gsm_get_alert_value gsm_get_alert_value;
-//.text:011244B0 rfg.exe:$3A44B0 #3A38B0 <gsm_set_alert_value> //void __cdecl gsm_set_alert_value(float new_alert_value)
+extern F_gsm_get_alert_value GsmGetAlertValue;
+//.text:011244B0 rfg.exe:$3A44B0 #3A38B0 <GsmSetAlertValue> //void __cdecl GsmSetAlertValue(float new_alert_value)
 using F_gsm_set_alert_value = void(__cdecl*)(float new_alert_value);
-extern F_gsm_set_alert_value gsm_set_alert_value;
+extern F_gsm_set_alert_value GsmSetAlertValue;
 
-//.text:010DD680 rfg.exe:$35D680 #35CA80 <gsm_get_alert_level_cap> //void __cdecl gsm_get_alert_level_cap(gfm_alert_levels *min, gfm_alert_levels *max)
+//.text:010DD680 rfg.exe:$35D680 #35CA80 <GsmGetAlertLevelCap> //void __cdecl GsmGetAlertLevelCap(gfm_alert_levels *min, gfm_alert_levels *max)
 using F_gsm_get_alert_level_cap = void(__cdecl*)(gfm_alert_levels* min, gfm_alert_levels* max);
-extern F_gsm_get_alert_level_cap gsm_get_alert_level_cap;
-//.text:0112A770 rfg.exe:$3AA770 #3A9B70 <gsm_set_alert_level_cap> //void __cdecl gsm_set_alert_level_cap(gfm_alert_levels min, gfm_alert_levels max)
+extern F_gsm_get_alert_level_cap GsmGetAlertLevelCap;
+//.text:0112A770 rfg.exe:$3AA770 #3A9B70 <GsmSetAlertLevelCap> //void __cdecl GsmSetAlertLevelCap(gfm_alert_levels min, gfm_alert_levels max)
 using F_gsm_set_alert_level_cap = void(__cdecl*)(gfm_alert_levels min, gfm_alert_levels max);
-extern F_gsm_set_alert_level_cap gsm_set_alert_level_cap;
+extern F_gsm_set_alert_level_cap GsmSetAlertLevelCap;
 
-//.text:01142960 rfg.exe:$3C2960 #3C1D60 <game_render_get_TOD_light> //rl_light *__cdecl fav::game_render_get_TOD_light()
+//.text:01142960 rfg.exe:$3C2960 #3C1D60 <GameRenderGetTodLight> //rl_light *__cdecl fav::GameRenderGetTodLight()
 using F_game_render_get_TOD_light = rl_light*(__cdecl*)();
-extern F_game_render_get_TOD_light game_render_get_TOD_light;
-//.text:01142930 rfg.exe:$3C2930 #3C1D30 <game_render_set_TOD_light> //void __cdecl fav::game_render_set_TOD_light(rl_light *light_p)
+extern F_game_render_get_TOD_light GameRenderGetTodLight;
+//.text:01142930 rfg.exe:$3C2930 #3C1D30 <GameRenderSetTodLight> //void __cdecl fav::GameRenderSetTodLight(rl_light *light_p)
 using F_game_render_set_TOD_light = void(__cdecl*)(rl_light* light_p);
-extern F_game_render_set_TOD_light game_render_set_TOD_light;
+extern F_game_render_set_TOD_light GameRenderSetTodLight;
 
-//.text:01143000 rfg.exe:$3C3000 #3C2400 <game_render_get_tod_on_off_value> //void __cdecl fav::game_render_get_tod_on_off_value(float *val)
+//.text:01143000 rfg.exe:$3C3000 #3C2400 <GameRenderGetTodOnOffValue> //void __cdecl fav::GameRenderGetTodOnOffValue(float *val)
 using F_game_render_get_tod_on_off_value = void(__cdecl*)(float* Value);
-extern F_game_render_get_tod_on_off_value game_render_get_tod_on_off_value;
-//.text:01142FF0 rfg.exe:$3C2FF0 #3C23F0 <game_render_set_tod_on_off_value> //void __cdecl fav::game_render_set_tod_on_off_value(float val)
+extern F_game_render_get_tod_on_off_value GameRenderGetTodOnOffValue;
+//.text:01142FF0 rfg.exe:$3C2FF0 #3C23F0 <GameRenderSetTodOnOffValue> //void __cdecl fav::GameRenderSetTodOnOffValue(float val)
 using F_game_render_set_tod_on_off_value = void(__cdecl*)(float Value);
-extern F_game_render_set_tod_on_off_value game_render_set_tod_on_off_value;
+extern F_game_render_set_tod_on_off_value GameRenderSetTodOnOffValue;
 
-//.text:01142990 rfg.exe:$3C2990 #3C1D90 <game_render_set_TOD_light_color> //void __cdecl fav::game_render_set_TOD_light_color(rl_color_float *color)
+//.text:01142990 rfg.exe:$3C2990 #3C1D90 <GameRenderSetTodLightColor> //void __cdecl fav::GameRenderSetTodLightColor(rl_color_float *color)
 using F_game_render_set_TOD_light_color = void(__cdecl*)(rl_color_float* color);
-extern F_game_render_set_TOD_light_color game_render_set_TOD_light_color;
+extern F_game_render_set_TOD_light_color GameRenderSetTodLightColor;
 
-//.text:011415C0 rfg.exe:$3C15C0 #3C09C0 <game_clock_get_tod_partitioned> //game_clock_tod_partitioned __cdecl fav::game_clock_get_tod_partitioned()
+//.text:011415C0 rfg.exe:$3C15C0 #3C09C0 <GameClockGetTodPartitioned> //game_clock_tod_partitioned __cdecl fav::GameClockGetTodPartitioned()
 using F_game_clock_get_tod_partitioned = game_clock_tod_partitioned(__cdecl*)();
-extern F_game_clock_get_tod_partitioned game_clock_get_tod_partitioned;
+extern F_game_clock_get_tod_partitioned GameClockGetTodPartitioned;
 
-//.text:011415E0 rfg.exe:$3C15E0 #3C09E0 <game_clock_get_time_of_day> //game_clock_time_of_day __cdecl fav::game_clock_get_time_of_day()
+//.text:011415E0 rfg.exe:$3C15E0 #3C09E0 <GameClockGetTimeOfDay> //game_clock_time_of_day __cdecl fav::GameClockGetTimeOfDay()
 using F_game_clock_get_time_of_day = game_clock_time_of_day(__cdecl*)();
-extern F_game_clock_get_time_of_day game_clock_get_time_of_day;
-//.text:01141770 rfg.exe:$3C1770 #3C0B70 <game_clock_set_time> //void __cdecl fav::game_clock_set_time(int hours, int minutes, int seconds)
+extern F_game_clock_get_time_of_day GameClockGetTimeOfDay;
+//.text:01141770 rfg.exe:$3C1770 #3C0B70 <GameClockSetTime> //void __cdecl fav::GameClockSetTime(int hours, int minutes, int seconds)
 using F_game_clock_set_time = void(__cdecl*)(int hours, int minutes, int seconds);
-extern F_game_clock_set_time game_clock_set_time;
+extern F_game_clock_set_time GameClockSetTime;
 
-//.text:0115FA10 rfg.exe:$3DFA10 #3DEE10 <game_time_of_day_get_skybox_tod_colors> //void __cdecl game_time_of_day_get_skybox_tod_colors(rl_color_float *colors)
+//.text:0115FA10 rfg.exe:$3DFA10 #3DEE10 <GameTimeOfDayGetSkyboxTodColors> //void __cdecl GameTimeOfDayGetSkyboxTodColors(rl_color_float *colors)
 using F_game_time_of_day_get_skybox_tod_colors = void(__cdecl*)(rl_color_float* Colors);
-extern F_game_time_of_day_get_skybox_tod_colors game_time_of_day_get_skybox_tod_colors;
-//.text:01145880 rfg.exe:$3C5880 #3C4C80 <game_time_of_day_get_weather_settings> //void __cdecl fav::game_time_of_day_get_weather_settings(vector4 *horizon_strengths, vector4 *overhead_strengths)
+extern F_game_time_of_day_get_skybox_tod_colors GameTimeOfDayGetSkyboxTodColors;
+//.text:01145880 rfg.exe:$3C5880 #3C4C80 <GameTimeOfDayGetWeatherSettings> //void __cdecl fav::GameTimeOfDayGetWeatherSettings(vector4 *horizon_strengths, vector4 *overhead_strengths)
 using F_game_time_of_day_get_weather_settings = void(__cdecl*)(vector4* horizon_strengths, vector4* overhead_strengths);
-extern F_game_time_of_day_get_weather_settings game_time_of_day_get_weather_settings;
-//.text:011458C0 rfg.exe:$3C58C0 #3C4CC0 <game_time_of_day_get_cloud_scroll_values> //void __cdecl fav::game_time_of_day_get_cloud_scroll_values(float *layer01_scroll, float *layer23_scroll)
+extern F_game_time_of_day_get_weather_settings GameTimeOfDayGetWeatherSettings;
+//.text:011458C0 rfg.exe:$3C58C0 #3C4CC0 <GameTimeOfDayGetCloudScrollValues> //void __cdecl fav::GameTimeOfDayGetCloudScrollValues(float *layer01_scroll, float *layer23_scroll)
 using F_game_time_of_day_get_cloud_scroll_values = void(__cdecl*)(float* layer01_scroll, float* layer23_scroll);
-extern F_game_time_of_day_get_cloud_scroll_values game_time_of_day_get_cloud_scroll_values;
-//.text:011520C0 rfg.exe:$3D20C0 #3D14C0 <game_time_of_day_get_num_orbitals> //int __cdecl fav::game_time_of_day_get_num_orbitals()
+extern F_game_time_of_day_get_cloud_scroll_values GameTimeOfDayGetCloudScrollValues;
+//.text:011520C0 rfg.exe:$3D20C0 #3D14C0 <GameTimeOfDayGetNumOrbitals> //int __cdecl fav::GameTimeOfDayGetNumOrbitals()
 using F_game_time_of_day_get_num_orbitals = int(__cdecl*)();
-extern F_game_time_of_day_get_num_orbitals game_time_of_day_get_num_orbitals;
-//.text:011631B0 rfg.exe:$3E31B0 #3E25B0 <game_time_of_day_get_cloud_lighting> //void __cdecl game_time_of_day_get_cloud_lighting(rl_color_float *horizon_front_ambient, rl_color_float *horizon_back_ambient, rl_color_float *overhead_front_ambient, rl_color_float *overhead_back_ambient, float *backlight_strength, float *backlight_power, vector *light_direction)
+extern F_game_time_of_day_get_num_orbitals GameTimeOfDayGetNumOrbitals;
+//.text:011631B0 rfg.exe:$3E31B0 #3E25B0 <GameTimeOfDayGetCloudLighting> //void __cdecl GameTimeOfDayGetCloudLighting(rl_color_float *horizon_front_ambient, rl_color_float *horizon_back_ambient, rl_color_float *overhead_front_ambient, rl_color_float *overhead_back_ambient, float *backlight_strength, float *backlight_power, vector *light_direction)
 using F_game_time_of_day_get_cloud_lighting = void(__cdecl*)(rl_color_float* horizon_front_ambient, rl_color_float* horizon_back_ambient, rl_color_float* overhead_front_ambient, rl_color_float* overhead_back_ambient, float* backlight_strength, float* backlight_power, vector* light_direction);
-extern F_game_time_of_day_get_cloud_lighting game_time_of_day_get_cloud_lighting;
-//.text:01165400 rfg.exe:$3E5400 #3E4800 <game_time_of_day_get_orbital_params> //void __cdecl game_time_of_day_get_orbital_params(int idx, rl_skybox_orbital_params *params)
+extern F_game_time_of_day_get_cloud_lighting GameTimeOfDayGetCloudLighting;
+//.text:01165400 rfg.exe:$3E5400 #3E4800 <GameTimeOfDayGetOrbitalParams> //void __cdecl GameTimeOfDayGetOrbitalParams(int idx, rl_skybox_orbital_params *params)
 using F_game_time_of_day_get_orbital_params = void(__cdecl*)(int Index, rl_skybox_orbital_params* Params);
-extern F_game_time_of_day_get_orbital_params game_time_of_day_get_orbital_params;
+extern F_game_time_of_day_get_orbital_params GameTimeOfDayGetOrbitalParams;
 
-//.text:011EC4D0 rfg.exe:$46C4D0 #46B8D0 <district_from_name> //district *__cdecl district_from_name(const char *name)
+//.text:011EC4D0 rfg.exe:$46C4D0 #46B8D0 <DistrictFromName> //district *__cdecl DistrictFromName(const char *name)
 using F_district_from_name = district*(__cdecl*)(const char *name);
-extern F_district_from_name district_from_name;
+extern F_district_from_name DistrictFromName;
 
-//.text:0129D950 rfg.exe:$51D950 #51CD50 <world::get_world_zone_by_index> //world_zone *__thiscall world::get_world_zone_by_index(world *this, int index)
+//.text:0129D950 rfg.exe:$51D950 #51CD50 <world::GetWorldZoneByIndex> //world_zone *__thiscall world::GetWorldZoneByIndex(world *this, int index)
 using F_get_world_zone_by_index = world_zone*(__fastcall*)(World* This, void* edx, int Index); //2nd arg is edx, needed for __thiscall functions.
-extern F_get_world_zone_by_index get_world_zone_by_index;
-//.text:0129D970 rfg.exe:$51D970 #51CD70 <world::get_world_zone_by_grid_id> //world_zone *__thiscall world::get_world_zone_by_grid_id(world *this, unsigned __int16 id)
+extern F_get_world_zone_by_index GetWorldZoneByIndex;
+//.text:0129D970 rfg.exe:$51D970 #51CD70 <world::GetWorldZoneByGridId> //world_zone *__thiscall world::GetWorldZoneByGridId(world *this, unsigned __int16 id)
 using F_get_world_zone_by_grid_id = world_zone*(__fastcall*)(World* This, void* edx, unsigned __int16 id); //2nd arg is edx, needed for __thiscall functions.
-extern F_get_world_zone_by_grid_id get_world_zone_by_grid_id;
-//.text:0129D9A0 rfg.exe:$51D9A0 #51CDA0 <world::get_world_zone_by_name> //world_zone *__thiscall world::get_world_zone_by_name(world *this, const char *name)
+extern F_get_world_zone_by_grid_id GetWorldZoneByGridId;
+//.text:0129D9A0 rfg.exe:$51D9A0 #51CDA0 <world::GetWorldZoneByName> //world_zone *__thiscall world::GetWorldZoneByName(world *this, const char *name)
 using F_get_world_zone_by_name = world_zone*(__fastcall*)(World* This, void* edx, const char* name); //2nd arg is edx, needed for __thiscall functions.
-extern F_get_world_zone_by_name get_world_zone_by_name;
-//.text:012A3BA0 rfg.exe:$523BA0 #522FA0 <world::get_world_zone_by_pos> //world_zone *__thiscall world::get_world_zone_by_pos(world *this, vector *pos)
+extern F_get_world_zone_by_name GetWorldZoneByName;
+//.text:012A3BA0 rfg.exe:$523BA0 #522FA0 <world::GetWorldZoneByPos> //world_zone *__thiscall world::GetWorldZoneByPos(world *this, vector *pos)
 using F_get_world_zone_by_pos = world_zone*(__fastcall*)(World* This, void* edx, vector* Position); //2nd arg is edx, needed for __thiscall functions.
-extern F_get_world_zone_by_pos get_world_zone_by_pos;
-//.text:012A3C00 rfg.exe:$523C00 #523000 <world::get_world_zone_by_object_handle> //world_zone *__thiscall world::get_world_zone_by_object_handle(world *this, unsigned int handle)
+extern F_get_world_zone_by_pos GetWorldZoneByPos;
+//.text:012A3C00 rfg.exe:$523C00 #523000 <world::GetWorldZoneByObjectHandle> //world_zone *__thiscall world::GetWorldZoneByObjectHandle(world *this, unsigned int handle)
 using F_get_world_zone_by_object_handle = world_zone*(__fastcall*)(World* This, void* edx, unsigned int handle); //2nd arg is edx, needed for __thiscall functions.
-extern F_get_world_zone_by_object_handle get_world_zone_by_object_handle;
+extern F_get_world_zone_by_object_handle GetWorldZoneByObjectHandle;
 
-//.text:010924D0 rfg.exe:$3124D0 #3118D0 <rfg_dyn_apply_point_impulse> //void __usercall rfg_dyn_apply_point_impulse(int havok_handle, vector *impulse@<eax>, vector *impulse_pos, float mass@<xmm10>)
+//.text:010924D0 rfg.exe:$3124D0 #3118D0 <RfgDynApplyPointImpulse> //void __usercall RfgDynApplyPointImpulse(int havok_handle, vector *impulse@<eax>, vector *impulse_pos, float mass@<xmm10>)
 using F_rfg_dyn_apply_point_impulse = void(__cdecl*)(int havok_handle, vector* impulse, vector* impulse_pos, float mass); ///Figure out the proper calling convention...
-extern F_rfg_dyn_apply_point_impulse rfg_dyn_apply_point_impulse;
-//.text:01094820 rfg.exe:$314820 #313C20 <rfg_dyn_repair_sphere> //void __cdecl rfg_dyn_repair_sphere(vector *pos, const float radius, const int duration, human *hp)
+extern F_rfg_dyn_apply_point_impulse RfgDynApplyPointImpulse;
+//.text:01094820 rfg.exe:$314820 #313C20 <RfgDynRepairSphere> //void __cdecl RfgDynRepairSphere(vector *pos, const float radius, const int duration, human *hp)
 using F_rfg_dyn_repair_sphere = void(__cdecl*)(vector* pos, float radius, int duration, Human* hp);
-extern F_rfg_dyn_repair_sphere rfg_dyn_repair_sphere;
+extern F_rfg_dyn_repair_sphere RfgDynRepairSphere;
 
 //.text:00F78A10 rfg.exe:$1F8A10 #1F7E10 <world::object_cast<human>> //human *__thiscall world::object_cast<human>(world *this, object *objp)
 //.text:00F78C10 rfg.exe:$1F8C10 #1F8010 <world::object_cast<human>> //human *__thiscall world::object_cast<human>(world *this, object *objp)
@@ -423,27 +420,27 @@ extern district* CastObjectToDistrict(Object* ObjectPtr);
 
 /*Many of the funcs below were defined above when the code style was different.*/
 
-//.text:00679AC0 rfg.exe:$2C9AC0 #2C8EC0 <camera_start_first_person>
-//.text:00679B60 rfg.exe:$2C9B60 #2C8F60 <camera_stop_first_person>
+//.text:00679AC0 rfg.exe:$2C9AC0 #2C8EC0 <CameraStartFirstPerson>
+//.text:00679B60 rfg.exe:$2C9B60 #2C8F60 <CameraStopFirstPerson>
 
-//.text:00694E30 rfg.exe:$2E4E30 #2E4230 <xray_effect_start>
-//.text:00694E50 rfg.exe:$2E4E50 #2E4250 <xray_effect_stop>
+//.text:00694E30 rfg.exe:$2E4E30 #2E4230 <XrayEffectStart>
+//.text:00694E50 rfg.exe:$2E4E50 #2E4250 <XrayEffectStop>
 
-//.text:00E18AC0 rfg.exe:$168AC0 #167EC0 <key_down>
-//.text:01072F10 rfg.exe:$3C2F10 #3C2310 <game_render_set_bloom_exposure_factor>
+//.text:00E18AC0 rfg.exe:$168AC0 #167EC0 <KeyDown>
+//.text:01072F10 rfg.exe:$3C2F10 #3C2310 <GameRenderSetBloomExposureFactor>
 
 //.text:0107F210 rfg.exe:$3CF210 #3CE610 <__Game_render_stats::__Game_render_stats>
-//.text:01072BB0 rfg.exe:$3C2BB0 #3C1FB0 <game_render_set_hdr_state>
+//.text:01072BB0 rfg.exe:$3C2BB0 #3C1FB0 <GameRenderSetHdrState>
 
-//.text:01232500 rfg.exe:$3C2500 #3C1900 <game_render_2d_text>
-//.text:01311C00 rfg.exe:$4A1C00 #4A1000 <ui_add_debug_text>
+//.text:01232500 rfg.exe:$3C2500 #3C1900 <GameRender2dText>
+//.text:01311C00 rfg.exe:$4A1C00 #4A1000 <UiAddDebugText>
 
-//.text:00F28B40 rfg.exe:$B8B40 #B7F40 <rl_camera::get_depth_of_field_enabled>
-//.text:01231820 rfg.exe:$3C1820 #3C0C20 <rl_camera::set_depth_of_field_enabled>
+//.text:00F28B40 rfg.exe:$B8B40 #B7F40 <rl_camera::GetDepthOfFieldEnabled>
+//.text:01231820 rfg.exe:$3C1820 #3C0C20 <rl_camera::SetDepthOfFieldEnabled>
 
 //.text:00FA53D0 rfg.exe:$4153D0 #4147D0 <character_controller::set_pos>
 
-//.text:00EEF7F0 rfg.exe:$43F7F0 #43EBF0 <fog_of_war_clear>
+//.text:00EEF7F0 rfg.exe:$43F7F0 #43EBF0 <FogOfWarClear>
 
 
 
@@ -452,8 +449,8 @@ extern district* CastObjectToDistrict(Object* ObjectPtr);
 
 ///POSSIBLE DUPLICATES BELOW
 
-//.text:0075BA80 rfg.exe:$55BA80 #55AE80 <debug_spew_projectile> //Did nothing
-//.text:00755EB0 rfg.exe:$555EB0 #5552B0 <debug_spew_game_io>
+//.text:0075BA80 rfg.exe:$55BA80 #55AE80 <DebugSpewProjectile> //Did nothing
+//.text:00755EB0 rfg.exe:$555EB0 #5552B0 <DebugSpewGameIo>
 //.text:01267B60 rfg.exe:$B7B60 #B6F60 <rl_render_lib::get_metrics>
 
 //.text:00684760 rfg.exe:$484760 #483B60 <interface_debug_mode_activate> //Did nothing
@@ -474,26 +471,26 @@ extern district* CastObjectToDistrict(Object* ObjectPtr);
 
 //.text:004CCB90 rfg.exe:$2CCB90 #2CBF90 <camera_start_satellite_mode> //Caused crash
 //.text:00469C80 rfg.exe:$2C9C80 #2C9080 <camera_first_person_pre_process>
-//.text:004C9AC0 rfg.exe:$2C9AC0 #2C8EC0 <camera_start_first_person> //Set at masons feet, perhaps could work with some edits
+//.text:004C9AC0 rfg.exe:$2C9AC0 #2C8EC0 <CameraStartFirstPerson> //Set at masons feet, perhaps could work with some edits
 //.text:004CF0C0 rfg.exe:$2CF0C0 #2CE4C0 <camera_start_third_person> //Works
 //.text:004D3FE0 rfg.exe:$2D3FE0 #2D33E0 <camera_start_lookaround_mode> //Third person viewed in, not very useful
 //.text:77121812 kernelbase.dll:$111812 #110C12 //Camera_first_person_offset. Not sure if this is a function or what
 
 //.text:00560A90 rfg.exe:$3C0A90 #3BFE90 <game_print_screen>
 //.text:004705D0 rfg.exe:$2D05D0 #2CF9D0 <camera_set_view_player>
-//.text:004645B0 rfg.exe:$2C45B0 #2C39B0 <camera_free_system_init>
-//.text:00475610 rfg.exe:$2D5610 #2D4A10 <camera_free_mode_init>
+//.text:004645B0 rfg.exe:$2C45B0 #2C39B0 <CameraFreeSystemInit>
+//.text:00475610 rfg.exe:$2D5610 #2D4A10 <CameraFreeModeInit>
 //.text:00464DE0 rfg.exe:$2C4DE0 #2C41E0 <camera_free_render_debug>
-//.text:0034F4B0 rfg.exe:$1AF4B0 #1AE8B0 <console_chat_printf>
-//.text:0056F220 rfg.exe:$3CF220 #3CE620 <unused_dcf_r_show_mem_usage>
-//.text:004B4C40 rfg.exe:$314C40 #314040 <rfg_dyn_get_active_destruction_frame>
-//.text:004B4C30 rfg.exe:$314C30 #314030 <rfg_dyn_reset_destruction_frame>
-//.text:004B3750 rfg.exe:$313750 #312B50 <rfg_dyn_system_shutdown>
-//.text:001F8AE0 rfg.exe:$58AE0 #57EE0 <rl_screen_info::get_screen_width>
-//.text:0032CAD0 rfg.exe:$18CAD0 #18BED0 <console_is_active>
-//.text:01898690 rfg.exe:$6E8690 #6E7A90 <profile_dump_info>
+//.text:0034F4B0 rfg.exe:$1AF4B0 #1AE8B0 <ConsoleChatPrintf>
+//.text:0056F220 rfg.exe:$3CF220 #3CE620 <UnusedDcfRShowMemUsage>
+//.text:004B4C40 rfg.exe:$314C40 #314040 <RfgDynGetActiveDestructionFrame>
+//.text:004B4C30 rfg.exe:$314C30 #314030 <RfgDynResetDestructionFrame>
+//.text:004B3750 rfg.exe:$313750 #312B50 <RfgDynSystemShutdown>
+//.text:001F8AE0 rfg.exe:$58AE0 #57EE0 <rl_screen_info::GetScreenWidth>
+//.text:0032CAD0 rfg.exe:$18CAD0 #18BED0 <ConsoleIsActive>
+//.text:01898690 rfg.exe:$6E8690 #6E7A90 <ProfileDumpInfo>
 
-//.text:01034FE0 rfg.exe:$64FE0 #643E0 <vint_render_text>
+//.text:01034FE0 rfg.exe:$64FE0 #643E0 <VintRenderText>
 
 
 //.text:01390450 rfg.exe:$3C0450 #3BF850 <rl_scene::set_time_of_day_value>
@@ -502,8 +499,8 @@ extern district* CastObjectToDistrict(Object* ObjectPtr);
 
 //.text:0068D250 rfg.exe:$2DD250 #2DC650 <camera_third_person_process>
 
-//.text:00679AC0 rfg.exe:$2C9AC0 #2C8EC0 <camera_start_first_person>
-//.text:00679B60 rfg.exe:$2C9B60 #2C8F60 <camera_stop_first_person>
+//.text:00679AC0 rfg.exe:$2C9AC0 #2C8EC0 <CameraStartFirstPerson>
+//.text:00679B60 rfg.exe:$2C9B60 #2C8F60 <CameraStopFirstPerson>
 //.text:00679C80 rfg.exe:$2C9C80 #2C9080 <camera_first_person_pre_process>
 //.text:0067AA00 rfg.exe:$2CAA00 #2C9E00 <camera_first_person_process>
 
@@ -526,50 +523,50 @@ extern district* CastObjectToDistrict(Object* ObjectPtr);
 //.text:00680B00 rfg.exe:$2D0B00 #2CFF00 <camera_stop_turret_mode>
 
 //.text:00772C60 rfg.exe:$3C2C60 #3C2060 <game_render_get_fog_enabled>
-//.text:00772C70 rfg.exe:$3C2C70 #3C2070 <game_render_set_fog_enabled>
+//.text:00772C70 rfg.exe:$3C2C70 #3C2070 <GameRenderSetFogEnabled>
 
-//.text:00694E30 rfg.exe:$2E4E30 #2E4230 <xray_effect_start>
-//.text:00694E50 rfg.exe:$2E4E50 #2E4250 <xray_effect_stop>
+//.text:00694E30 rfg.exe:$2E4E30 #2E4230 <XrayEffectStart>
+//.text:00694E50 rfg.exe:$2E4E50 #2E4250 <XrayEffectStop>
 //.text:00694E70 rfg.exe:$2E4E70 #2E4270 <xray_effect_is_enabled>
 
-//.text:00E18AC0 rfg.exe:$168AC0 #167EC0 <key_down>
+//.text:00E18AC0 rfg.exe:$168AC0 #167EC0 <KeyDown>
 
-//.text:01072F10 rfg.exe:$3C2F10 #3C2310 <game_render_set_bloom_exposure_factor>
+//.text:01072F10 rfg.exe:$3C2F10 #3C2310 <GameRenderSetBloomExposureFactor>
 
-//.text:01232500 rfg.exe:$3C2500 #3C1900 <game_render_2d_text>
-//.text:01311C00 rfg.exe:$4A1C00 #4A1000 <ui_add_debug_text>
+//.text:01232500 rfg.exe:$3C2500 #3C1900 <GameRender2dText>
+//.text:01311C00 rfg.exe:$4A1C00 #4A1000 <UiAddDebugText>
 
-//.text:00F28B40 rfg.exe:$B8B40 #B7F40 <rl_camera::get_depth_of_field_enabled>
-//.text:01231820 rfg.exe:$3C1820 #3C0C20 <rl_camera::set_depth_of_field_enabled>
+//.text:00F28B40 rfg.exe:$B8B40 #B7F40 <rl_camera::GetDepthOfFieldEnabled>
+//.text:01231820 rfg.exe:$3C1820 #3C0C20 <rl_camera::SetDepthOfFieldEnabled>
 
 //.text:00FA53D0 rfg.exe:$4153D0 #4147D0 <character_controller::set_pos>
 
-//.text:00EEF7F0 rfg.exe:$43F7F0 #43EBF0 <fog_of_war_clear>
+//.text:00EEF7F0 rfg.exe:$43F7F0 #43EBF0 <FogOfWarClear>
 
 //.text:005B09C0 rfg.exe:$2D09C0 #2CFDC0 <camera_stop_slew_mode>
-//.text:005A9AC0 rfg.exe:$2C9AC0 #2C8EC0 <camera_start_first_person>
+//.text:005A9AC0 rfg.exe:$2C9AC0 #2C8EC0 <CameraStartFirstPerson>
 
 
 //void __thiscall rl_camera::render_begin(rl_camera *this, rl_renderer *renderer)
 //.text:01027660 rfg.exe:$137660 #136A60 <rl_camera::render_begin>
 using F_rl_camera_render_begin = void(__fastcall*)(rl_camera* This, void* edx, void* Renderer); //2nd arg is edx, needed for __thiscall functions.
-extern F_rl_camera_render_begin rl_camera_render_begin;
+extern F_rl_camera_render_begin RlCameraRenderBegin;
 
 //.text:012B2C40 rfg.exe:$3C2C40 #3C2040 <game_render_set_far_clip_distance> //void __cdecl fav::game_render_set_far_clip_distance(float distance)
 using F_game_render_set_far_clip_distance = void(__cdecl*)(float Distance);
-extern F_game_render_set_far_clip_distance game_render_set_far_clip_distance;
+extern F_game_render_set_far_clip_distance GameRenderSetFarClipDistance;
 
 //.text:012B2C50 rfg.exe:$3C2C50 #3C2050 <game_render_get_far_clip_distance> //float __cdecl fav::game_render_get_far_clip_distance()
 using F_game_render_get_far_clip_distance = float(__cdecl*)();
-extern F_game_render_get_far_clip_distance game_render_get_far_clip_distance;
+extern F_game_render_get_far_clip_distance GameRenderGetFarClipDistance;
 
 //.text:012B2920 rfg.exe:$3C2920 #3C1D20 <game_render_get_main_scene> //rl_scene *__cdecl fav::game_render_get_main_scene()
 using F_game_render_get_main_scene = rl_scene*(__cdecl*)();
-extern F_game_render_get_main_scene game_render_get_main_scene;
+extern F_game_render_get_main_scene GameRenderGetMainScene;
 
 //hkpStepResult __thiscall fav::hkpWorld::stepDeltaTime(hkpWorld *this, float physicsDeltaTime) //0x9E1A70
 using F_hkpWorld_stepDeltaTime = void(__fastcall*)(hkpWorld* This, void* edx, float PhysicsDeltaTime); //2nd arg is edx, needed for __thiscall functions.
-extern F_hkpWorld_stepDeltaTime hkpWorld_stepDeltaTime;
+extern F_hkpWorld_stepDeltaTime hkpWorldStepDeltaTime;
 
 //.text:0117A880 rfg.exe:$5A880 #59C80 <keen::rfg::Application::updateTime> //void __thiscall fav::keen::rfg::Application::updateTime(keen::rfg::Application *this, float timeStep)
 using F_ApplicationUpdateTime = void(__fastcall*)(void* This, void* edx, float TimeStep); //2nd arg is edx, needed for __thiscall functions.

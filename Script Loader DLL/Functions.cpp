@@ -33,7 +33,7 @@ void RestoreCameraDirectionCode()
 void HideHud(bool Hide)
 {
 	//HudVisible = !HudVisible; //This wasn't working for some odd reason so I just set them manually. Same for HideFog.
-	Hud_Hide(Hide);
+	HudHide(Hide);
 	if (Hide)
 	{
 		Globals::HudVisible = false;
@@ -46,7 +46,7 @@ void HideHud(bool Hide)
 
 void HideFog(bool Hide)
 {
-	game_render_set_fog_enabled(!Hide);
+	GameRenderSetFogEnabled(!Hide);
 	//FogVisible = !Hide;
 	if (Hide)
 	{
@@ -88,60 +88,60 @@ void ToggleFog()
 	//FogVisible = !FogVisible; //This wasn't working for some odd reason so I just set them manually.
 }
 
-F_Camera_Start_Slew_Mode Camera_Start_Slew_Mode;
-F_Camera_Stop_Slew_Mode Camera_Stop_Slew_Mode;
-F_Camera_Start_Third_Person Camera_Start_Third_Person;
-F_camera_start_first_person camera_start_first_person;
-F_camera_stop_first_person camera_stop_first_person;
+F_Camera_Start_Slew_Mode CameraStartSlewMode;
+F_Camera_Stop_Slew_Mode CameraStopSlewMode;
+F_Camera_Start_Third_Person CameraStartThirdPerson;
+F_camera_start_first_person CameraStartFirstPerson;
+F_camera_stop_first_person CameraStopFirstPerson;
 
-F_Camera_First_Person_Pre_Process Camera_First_Person_Pre_Process;
-F_camera_free_system_init camera_free_system_init;
-F_camera_free_mode_init camera_free_mode_init;
+F_Camera_First_Person_Pre_Process CameraFirstPersonPreProcess;
+F_camera_free_system_init CameraFreeSystemInit;
+F_camera_free_mode_init CameraFreeModeInit;
 
-F_Interface_Debug_Mode_Activate Interface_Debug_Mode_Activate;
-F_Keen_Debug_WriteToLogFile Keen_Debug_WriteToLogFile;
-F_Hud_Display_Distance Hud_Display_Distance;
+F_Interface_Debug_Mode_Activate InterfaceDebugModeActivate;
+F_Keen_Debug_WriteToLogFile KeenDebugWriteToLogFile;
+F_Hud_Display_Distance HudDisplayDistance;
 
-F_console_set_console_mode console_set_console_mode;
-F_console_get_console_mode console_get_console_mode;
-F_Console_Init Console_Init;
-F_Console_Activate Console_Activate;
-F_Console_Deactivate Console_Deactivate;
+F_console_set_console_mode ConsoleSetConsoleMode;
+F_console_get_console_mode ConsoleGetConsoleMode;
+F_Console_Init ConsoleInit;
+F_Console_Activate ConsoleActivate;
+F_Console_Deactivate ConsoleDeactivate;
 
-F_Console_Printf Console_Printf;
-F_Console_Display_Help Console_Display_Help;
-F_Console_Command_Enable Console_Command_Enable;
-F_Console_Do_Command Console_Do_Command;
+F_Console_Printf ConsolePrintf;
+F_Console_Display_Help ConsoleDisplayHelp;
+F_Console_Command_Enable ConsoleCommandEnable;
+F_Console_Do_Command ConsoleDoCommand;
 
-F_Game_Print_Screen Game_Print_Screen;
+F_Game_Print_Screen GamePrintScreen;
 
-F_console_chat_printf console_chat_printf;
-F_unused_dcf_r_show_mem_usage unused_dcf_r_show_mem_usage;
-F_rfg_dyn_get_active_destruction_frame rfg_dyn_get_active_destruction_frame;
-F_rfg_dyn_reset_destruction_frame rfg_dyn_reset_destruction_frame;
-F_rfg_dyn_system_shutdown rfg_dyn_system_shutdown;
-F_get_screen_width get_screen_width;
-F_console_is_active console_is_active;
-F_debug_spew_projectile debug_spew_projectile;
-F_debug_spew_game_io debug_spew_game_io;
-F_rl_render_lib_get_metrics rl_render_lib_get_metrics;
-F_profile_dump_info profile_dump_info;
-F_vint_render_text vint_render_text;
-F_xray_effect_start xray_effect_start;
-F_xray_effect_stop xray_effect_stop;
+F_console_chat_printf ConsoleChatPrintf;
+F_unused_dcf_r_show_mem_usage UnusedDcfRShowMemUsage;
+F_rfg_dyn_get_active_destruction_frame RfgDynGetActiveDestructionFrame;
+F_rfg_dyn_reset_destruction_frame RfgDynResetDestructionFrame;
+F_rfg_dyn_system_shutdown RfgDynSystemShutdown;
+F_get_screen_width GetScreenWidth;
+F_console_is_active ConsoleIsActive;
+F_debug_spew_projectile DebugSpewProjectile;
+F_debug_spew_game_io DebugSpewGameIo;
+F_rl_render_lib_get_metrics RlRenderLibGetMetrics;
+F_profile_dump_info ProfileDumpInfo;
+F_vint_render_text VintRenderText;
+F_xray_effect_start XrayEffectStart;
+F_xray_effect_stop XrayEffectStop;
 
-F_key_down key_down;
-F_game_render_set_bloom_exposure_factor game_render_set_bloom_exposure_factor;
-F_game_render_set_hdr_state game_render_set_hdr_state;
-F_game_render_2d_text game_render_2d_text;
-F_ui_add_debug_text ui_add_debug_text;
-F_get_depth_of_field_enabled get_depth_of_field_enabled;
-F_set_depth_of_field_enabled set_depth_of_field_enabled;
-F_character_controller_set_pos character_controller_set_pos; //IDA shows this as using __thiscall, but using that causes the game to immediately crash
-F_fog_of_war_clear fog_of_war_clear;
+F_key_down KeyDown;
+F_game_render_set_bloom_exposure_factor GameRenderSetBloomExposureFactor;
+F_game_render_set_hdr_state GameRenderSetHdrState;
+F_game_render_2d_text GameRender2dText;
+F_ui_add_debug_text UiAddDebugText;
+F_get_depth_of_field_enabled GetDepthOfFieldEnabled;
+F_set_depth_of_field_enabled SetDepthOfFieldEnabled;
+//F_character_controller_set_pos CharacterControllerSetPos; //IDA shows this as using __thiscall, but using that causes the game to immediately crash
+F_fog_of_war_clear FogOfWarClear;
 
-F_Hud_Hide Hud_Hide;
-F_game_render_set_fog_enabled game_render_set_fog_enabled;
+F_Hud_Hide HudHide;
+F_game_render_set_fog_enabled GameRenderSetFogEnabled;
 
 F_explosion_create ExplosionCreate;
 F_keen_graphics_beginframe GraphicsBeginFrame;
@@ -181,55 +181,55 @@ F_TargetOutlineAddObject TargetOutlineAddObject;
 
 F_ui_tool_tips_add_tip UiToolTipsAddTip;
 
-F_rl_draw_tristrip_2d_begin rl_draw_tristrip_2d_begin;
-F_rl_draw_string rl_draw_string;
+F_rl_draw_tristrip_2d_begin RlDrawTristrip2dBegin;
+F_rl_draw_string RlDrawString;
 
 F_is_game_paused IsGamePaused;
-F_world_do_frame world_do_frame;
-F_world_get_object_name world_get_object_name;
+F_world_do_frame WorldDoFrame;
+F_world_get_object_name WorldGetObjectName;
 
-F_world_get_object_zone_by_index world_get_object_zone_by_index;
-F_world_get_object_zone_by_grid_id world_get_object_zone_by_grid_id;
+F_world_get_object_zone_by_index WorldGetObjectZoneByIndex;
+F_world_get_object_zone_by_grid_id WorldGetObjectZoneByGridId;
 
-F_gsm_get_alert_level gsm_get_alert_level;
-F_gsm_set_alert_level gsm_set_alert_level;
+F_gsm_get_alert_level GsmGetAlertLevel;
+F_gsm_set_alert_level GsmSetAlertLevel;
 
-F_gsm_get_alert_value gsm_get_alert_value;
-F_gsm_set_alert_value gsm_set_alert_value;
+F_gsm_get_alert_value GsmGetAlertValue;
+F_gsm_set_alert_value GsmSetAlertValue;
 
-F_gsm_get_alert_level_cap gsm_get_alert_level_cap;
-F_gsm_set_alert_level_cap gsm_set_alert_level_cap;
+F_gsm_get_alert_level_cap GsmGetAlertLevelCap;
+F_gsm_set_alert_level_cap GsmSetAlertLevelCap;
 
-F_game_render_get_TOD_light game_render_get_TOD_light;
-F_game_render_set_TOD_light game_render_set_TOD_light;
+F_game_render_get_TOD_light GameRenderGetTodLight;
+F_game_render_set_TOD_light GameRenderSetTodLight;
 
-F_game_render_get_tod_on_off_value game_render_get_tod_on_off_value;
-F_game_render_set_tod_on_off_value game_render_set_tod_on_off_value;
+F_game_render_get_tod_on_off_value GameRenderGetTodOnOffValue;
+F_game_render_set_tod_on_off_value GameRenderSetTodOnOffValue;
 
-F_game_render_set_TOD_light_color game_render_set_TOD_light_color;
+F_game_render_set_TOD_light_color GameRenderSetTodLightColor;
 
-F_game_clock_get_tod_partitioned game_clock_get_tod_partitioned;
+F_game_clock_get_tod_partitioned GameClockGetTodPartitioned;
 
-F_game_clock_get_time_of_day game_clock_get_time_of_day;
-F_game_clock_set_time game_clock_set_time;
+F_game_clock_get_time_of_day GameClockGetTimeOfDay;
+F_game_clock_set_time GameClockSetTime;
 
-F_game_time_of_day_get_skybox_tod_colors game_time_of_day_get_skybox_tod_colors;
-F_game_time_of_day_get_weather_settings game_time_of_day_get_weather_settings;
-F_game_time_of_day_get_cloud_scroll_values game_time_of_day_get_cloud_scroll_values;
-F_game_time_of_day_get_num_orbitals game_time_of_day_get_num_orbitals;
-F_game_time_of_day_get_cloud_lighting game_time_of_day_get_cloud_lighting;
-F_game_time_of_day_get_orbital_params game_time_of_day_get_orbital_params;
+F_game_time_of_day_get_skybox_tod_colors GameTimeOfDayGetSkyboxTodColors;
+F_game_time_of_day_get_weather_settings GameTimeOfDayGetWeatherSettings;
+F_game_time_of_day_get_cloud_scroll_values GameTimeOfDayGetCloudScrollValues;
+F_game_time_of_day_get_num_orbitals GameTimeOfDayGetNumOrbitals;
+F_game_time_of_day_get_cloud_lighting GameTimeOfDayGetCloudLighting;
+F_game_time_of_day_get_orbital_params GameTimeOfDayGetOrbitalParams;
 
-F_district_from_name district_from_name;
+F_district_from_name DistrictFromName;
 
-F_get_world_zone_by_index get_world_zone_by_index;
-F_get_world_zone_by_grid_id get_world_zone_by_grid_id;
-F_get_world_zone_by_name get_world_zone_by_name;
-F_get_world_zone_by_pos get_world_zone_by_pos;
-F_get_world_zone_by_object_handle get_world_zone_by_object_handle;
+F_get_world_zone_by_index GetWorldZoneByIndex;
+F_get_world_zone_by_grid_id GetWorldZoneByGridId;
+F_get_world_zone_by_name GetWorldZoneByName;
+F_get_world_zone_by_pos GetWorldZoneByPos;
+F_get_world_zone_by_object_handle GetWorldZoneByObjectHandle;
 
-F_rfg_dyn_apply_point_impulse rfg_dyn_apply_point_impulse;
-F_rfg_dyn_repair_sphere rfg_dyn_repair_sphere;
+F_rfg_dyn_apply_point_impulse RfgDynApplyPointImpulse;
+F_rfg_dyn_repair_sphere RfgDynRepairSphere;
 
 
 
@@ -238,13 +238,13 @@ Player* CastObjectToPlayer(Object* ObjectPtr) { return static_cast<Player*>(Obje
 obj_zone* CastObjectToObjZone(Object* ObjectPtr) { return static_cast<obj_zone*>(ObjectPtr); }
 district* CastObjectToDistrict(Object* ObjectPtr) { return static_cast<district*>(ObjectPtr); }
 
-F_rl_camera_render_begin rl_camera_render_begin;
+F_rl_camera_render_begin RlCameraRenderBegin;
 
-F_game_render_set_far_clip_distance game_render_set_far_clip_distance;
-F_game_render_get_far_clip_distance game_render_get_far_clip_distance;
-F_game_render_get_main_scene game_render_get_main_scene;
+F_game_render_set_far_clip_distance GameRenderSetFarClipDistance;
+F_game_render_get_far_clip_distance GameRenderGetFarClipDistance;
+F_game_render_get_main_scene GameRenderGetMainScene;
 
-F_hkpWorld_stepDeltaTime hkpWorld_stepDeltaTime;
+F_hkpWorld_stepDeltaTime hkpWorldStepDeltaTime;
 F_ApplicationUpdateTime ApplicationUpdateTime;
 
 F_hkpWorldGetGravity hkpWorldGetGravity;
