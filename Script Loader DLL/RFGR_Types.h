@@ -435,6 +435,18 @@ public:
 	float y;
 };
 
+namespace rfg
+{
+    template <typename T>
+    std::string to_string_precise(const T Value, const int Precision = 1)
+    {
+        std::ostringstream Out;
+        Out.precision(Precision);
+        Out << std::fixed << Value;
+        return Out.str();
+    }
+}
+
 class vector
 {
 public:
@@ -531,20 +543,20 @@ public:
 			String += "x: ";
 
 		}
-		String += std::to_string(x);
+		String += rfg::to_string_precise(x, 2);
 		String += ", ";
 		if (Labels)
 		{
 			String += "y: ";
 
 		}
-		String += std::to_string(y);
+		String += rfg::to_string_precise(y, 2);
 		String += ", ";
 		if(Labels)
 		{
 			String += "z: ";
 		}
-		String += std::to_string(z);
+		String += rfg::to_string_precise(z, 2);
 		if (Parentheses)
 		{
 			String += ")";
