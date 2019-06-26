@@ -145,6 +145,18 @@ LRESULT ProcessInput(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		case VK_NUMPAD3:
 			Globals::Camera->ToggleFreeCamera();
 			break;
+        case VK_NUMPAD4:
+            if(Globals::Gui)
+            {
+                if(Globals::Gui->Introspection)
+                {
+                    if(Globals::PlayerPtr)
+                    {
+                        Globals::Gui->Introspection->SavedTargetObjectHandle = Globals::PlayerPtr->aim_target;
+                    }
+                }
+            }
+            break;
 		case VK_OEM_3: //Tilde
 			Globals::Gui->ToggleLuaConsole();
 			if (Globals::Gui->IsLuaConsoleActive())
