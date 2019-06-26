@@ -85,7 +85,7 @@ void WelcomeGui::Draw()
 	ImGui::PopStyleColor();
 	ImGui::PopFont();
 
-	ImGui::PushItemWidth(225.0f);
+	ImGui::SetNextItemWidth(225.0f);
 	ImGui::TextWrapped("Welcome to the RFGR Script Loader overlay. Above are some \
 buttons for menus which you might find useful. Tooltips with more info \
 appear if you hover over them. You can also access all of these menus \

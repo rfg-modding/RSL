@@ -75,7 +75,7 @@ void TeleportGui::Draw()
 	ImGui::TextColored(Globals::SecondaryTextColor, PlayerPositionString.c_str());
 
 	ImGui::Text("New player position:"); ImGui::SameLine();
-	ImGui::PushItemWidth(232.0f);
+	ImGui::SetNextItemWidth(232.0f);
 	ImGui::InputFloat3("##Player Position Target", PlayerPositionTargetArray, 3);
 	ImGui::SameLine();
 	if (ImGui::Button("Sync##PlayerPositionTarget"))
@@ -110,7 +110,7 @@ void TeleportGui::Draw()
 			ImGui::TextColored(Globals::ColorRed, "Name already used!");
 		}
 		ImGui::Text("Position:");
-		ImGui::PushItemWidth(232.0f);
+		ImGui::SetNextItemWidth(232.0f);
 		ImGui::InputFloat3("##TeleportEditPositionPlayerPositionTarget", (float*)(&NewTeleportPosition), 2);
 		ImGui::Text("Tooltip description:");
 		ImGui::InputTextMultiline("##TeleportEditTooltip descriptionPlayerPositionTarget", &NewTeleportDescription, ImVec2(500.0f, 350.0f));// , MainOverlayTeleportEditTextFlags);// , ImGuiInputTextFlags_CharsHexadecimal);
@@ -186,7 +186,7 @@ void TeleportGui::Draw()
 				ImGui::Text("Name:");
 				ImGui::InputText("##TeleportEditName", &NewTeleportName);
 				ImGui::Text("Position:");
-				ImGui::PushItemWidth(232.0f);
+				ImGui::SetNextItemWidth(232.0f);
 				ImGui::InputFloat3("##TeleportEditPosition", (float*)(&NewTeleportPosition), 2);
 				ImGui::Text("Tooltip description:");
 				ImGui::InputTextMultiline("##TeleportEditTooltip description", &NewTeleportDescription, ImVec2(500.0f, 350.0f));

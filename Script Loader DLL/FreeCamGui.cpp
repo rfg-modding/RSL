@@ -53,19 +53,19 @@ void FreeCamGui::Draw()
 
 	//ImGui::Text("Far clip distance: ");
 	//ImGui::SameLine();
-	//ImGui::TextColored(SecondaryTextColor, std::to_string(game_render_get_far_clip_distance()).c_str());
+	//ImGui::TextColored(SecondaryTextColor, std::to_string(GameRenderGetFarClipDistance()).c_str());
 
 	//ImGui::PushItemWidth(230.0f);
 	//ImGui::InputFloat("Custom far clip distance", &CustomFarClipDistance, 1.0f, 5.0f, 3);
 	//ImGui::SameLine();
 	//if (ImGui::Button("Set"))
 	//{
-	//	game_render_set_far_clip_distance(CustomFarClipDistance);
+	//	GameRenderSetFarClipDistance(CustomFarClipDistance);
 	//}
 
-	ImGui::PushItemWidth(230.0f);
+    ImGui::SetNextItemWidth(230.0f);
 	ImGui::InputFloat("Far clip distance", &Camera->GameData->m_far_clip_dist, 3);
-	ImGui::PushItemWidth(230.0f);
+    ImGui::SetNextItemWidth(230.0f);
 	ImGui::InputFloat("High LOD far clip distance", &Camera->GameData->m_high_lod_far_clip_dist, 3);
 
 	ImGui::Separator();
@@ -78,7 +78,7 @@ void FreeCamGui::Draw()
 	{
 		Camera->ToggleFirstPersonCamera();
 	}
-	ImGui::PushItemWidth(230.0f);
+    ImGui::SetNextItemWidth(230.0f);
 	ImGui::InputFloat3("Camera offset", (float*)&Camera->FirstPersonCameraOffset, 3);
 	ImGui::Checkbox("Use direction offset", &Camera->UseFirstPersonDirectionOffset);
 	ImGui::InputFloat("Direction offset multiplier", &Camera->FirstPersonDirectionOffsetMultiplier, 3);

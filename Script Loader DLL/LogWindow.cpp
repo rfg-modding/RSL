@@ -144,7 +144,7 @@ void LogWindow::Draw()
 			ImGui::SameLine();
 			ImGui::TextUnformatted("] ");
 			ImGui::SameLine();
-			ImGui::PushItemWidth(ImGui::GetWindowSize().x - 20.0f);
+			ImGui::SetNextItemWidth(ImGui::GetWindowSize().x - 20.0f);
 			ImGui::TextWrapped(Logger::LogData[i].Message.c_str());
 			BufferCount++;
 		}

@@ -192,8 +192,11 @@ void GeneralTweaksGui::Draw()
 		PlayerPtr->Flags.disallow_flinches_and_ragdolls = !PlayerPtr->Flags.disallow_flinches_and_ragdolls;
 		DisablePlayerRagdoll = PlayerPtr->Flags.disallow_flinches_and_ragdolls;
 	}
+    ImGui::SetNextItemWidth(230.0f);
 	ImGui::InputInt("Salvage", &PlayerPtr->Metadata.Salvage);
+    ImGui::SetNextItemWidth(230.0f);
 	ImGui::InputInt("Mining count", &PlayerPtr->Metadata.MiningCount);
+    ImGui::SetNextItemWidth(230.0f);
 	ImGui::InputInt("Supply crate count", &PlayerPtr->Metadata.SupplyCrateCount);
 
 	//Doesn't work quite yet, couldn't properly grab the players rigid body.
@@ -265,18 +268,18 @@ void GeneralTweaksGui::Draw()
 
 	//ImGui::Text("Code driven jump height:"); ImGui::SameLine();
 	//ImGui::TextColored(SecondaryTextColor, std::to_string(PlayerPtr->CodeDrivenJumpHeight).c_str());
-	ImGui::PushItemWidth(232.0f);
+    ImGui::SetNextItemWidth(230.0f);
 	ImGui::InputFloat("Custom player jump height", &CustomJumpHeight, 0.5f, 2.0f, 3); ImGui::SameLine();
 	ImGui::Checkbox("##Custom Player Jump Height", &NeedCustomJumpHeightSet);
 
 	//ImGui::Text("Player move speed:"); ImGui::SameLine();
 	//ImGui::TextColored(SecondaryTextColor, std::to_string(PlayerPtr->MoveSpeed).c_str());
-	ImGui::PushItemWidth(232.0f);
+    ImGui::SetNextItemWidth(230.0f);
 	ImGui::InputFloat("Player move speed", &CustomPlayerMoveSpeed, 1.0f, 5.0f, 3);
 	ImGui::SameLine();
 	ImGui::Checkbox("##Player move speed checkbox", &NeedCustomMoveSpeedSet);
 	
-	ImGui::PushItemWidth(232.0f);
+    ImGui::SetNextItemWidth(230.0f);
 	ImGui::InputFloat("Player max speed", &CustomPlayerMaxSpeed, 1.0f, 5.0f, 3);
 	ImGui::SameLine();
 	ImGui::Checkbox("##Player max move speed checkbox", &NeedCustomMaxMoveSpeedSet);
@@ -302,9 +305,11 @@ void GeneralTweaksGui::Draw()
 		CustomTimeOfDayLightColor.alpha = Globals::TODLightPtr->m_color.alpha;
 	}
 
+    ImGui::SetNextItemWidth(230.0f);
 	ImGui::InputFloat3("Level ambient light", (float*)&CustomLevelAmbientLight, 3);
 	ImGui::SameLine();
 	ImGui::Checkbox("##ToggleLevelAmbientLight", &UseCustomLevelAmbientLight);
+    ImGui::SetNextItemWidth(230.0f);
 	ImGui::InputFloat3("Level background ambient light", (float*)&CustomLevelBackgroundAmbientLight, 3);
 	ImGui::SameLine();
 	ImGui::Checkbox("##ToggleLevelBackgroundAmbientLight", &UseCustomLevelBackgroundAmbientLight);
@@ -587,7 +592,7 @@ void GeneralTweaksGui::Draw()
 						PositionsDump << "    y: " << (*Globals::RfgWorldPtr->all_objects[i]).Position.y << "\n";
 						PositionsDump << "    z: " << (*Globals::RfgWorldPtr->all_objects[i]).Position.z << "\n";
 
-						world_zone* ObjectWorldZone = get_world_zone_by_object_handle(Globals::RfgWorldPtr, NULL, (*Globals::RfgWorldPtr->all_objects[i]).Handle);
+						world_zone* ObjectWorldZone = GetWorldZoneByObjectHandle(Globals::RfgWorldPtr, NULL, (*Globals::RfgWorldPtr->all_objects[i]).Handle);
 						if (ObjectWorldZone)
 						{
 							PositionsDump << "Zone:\n";

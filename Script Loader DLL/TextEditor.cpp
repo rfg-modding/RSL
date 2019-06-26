@@ -1245,7 +1245,7 @@ void TextEditor::DrawNewScriptPopup()
 		}
 		if(ImGui::BeginPopup("NewScriptOverwriteConfirmation"))
 		{
-			ImGui::PushItemWidth(400.0f);
+			ImGui::SetNextItemWidth(400.0f);
 			ImGui::TextWrapped(std::string(FixScriptExtension(ScriptName) + " already exists. Are you sure you would like to overwrite it?").c_str());
 			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.952f, 0.545f, 0.462f, 1.0f));
 			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.972f, 0.545f, 0.462f, 1.0f));
@@ -1322,7 +1322,7 @@ void TextEditor::DrawOpenScriptPopup()
 		}
 		if (ImGui::BeginPopup("Delete file?"))
 		{
-			ImGui::PushItemWidth(400.0f);
+			ImGui::SetNextItemWidth(400.0f);
 			ImGui::TextWrapped(std::string("Are you sure you would like to delete " + ScriptToDelete + "?").c_str());
 			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.952f, 0.545f, 0.462f, 1.0f));
 			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.972f, 0.545f, 0.462f, 1.0f));
@@ -1359,7 +1359,7 @@ void TextEditor::DrawSaveAsScriptPopup()
 	static bool ShouldOpenOverwritePopup = false;
 	if (ImGui::BeginPopup("Save as"))
 	{
-		ImGui::PushItemWidth(400.0f);
+		ImGui::SetNextItemWidth(400.0f);
 		ImGui::TextWrapped("Please enter the new script file name. The .lua extension will be automatically added if you forget it.");
 		if (ImGui::InputText("File name", &NewNameBuffer, ImGuiInputTextFlags_EnterReturnsTrue))
 		{
@@ -1395,7 +1395,7 @@ void TextEditor::DrawSaveAsScriptPopup()
 		}
 		if (ImGui::BeginPopup("Overwrite script?"))
 		{
-			ImGui::PushItemWidth(400.0f);
+			ImGui::SetNextItemWidth(400.0f);
 			ImGui::TextWrapped(std::string("Are you sure you would like to overwrite " + FixScriptExtension(NewNameBuffer) + "?").c_str());
 			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.952f, 0.545f, 0.462f, 1.0f));
 			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.972f, 0.545f, 0.462f, 1.0f));

@@ -23,8 +23,8 @@ void IntrospectionGui::DrawPlayerIntrospectionGui(const char* Title)
 	ImGui::Text("Object introspection");
 	ImGui::PopFont();
 	ImGui::Separator();
-
-    ImGui::PushItemWidth(300.0f);
+    
+    ImGui::SetNextItemWidth(300.0f);
     ImGui::TextWrapped("Aim at an object and press numpad 4 to view it's info in this menu. Alternatively, search for an object using one of the following criteria. You can only search by one criteria at a time.");
     ImGui::Separator();
 
@@ -271,19 +271,19 @@ void IntrospectionGui::DrawPlayerIntrospectionGui(const char* Title)
             ImGui::TextColored(Globals::SecondaryTextColor, TargetObject->LastKnownBMin.GetDataString(false, false).c_str());
             ImGui::Text("LastKnownBMax:"); ImGui::SameLine();
             ImGui::TextColored(Globals::SecondaryTextColor, TargetObject->LastKnownBMax.GetDataString(false, false).c_str());
-            ImGui::Text("Handle:");ImGui::SameLine();
-            ImGui::TextColored(Globals::SecondaryTextColor, std::to_string(TargetObject->Handle).c_str());
+            ImGui::Text("SRID:");ImGui::SameLine();
+            ImGui::TextColored(Globals::SecondaryTextColor, std::to_string(TargetObject->SRID).c_str());
 
         }
         else
         {
-            ImGui::PushItemWidth(300.0f);
+            ImGui::SetNextItemWidth(300.0f);
             ImGui::TextWrapped("Invalid target object. Please lock a target object with numpad 4 or search for a targer to see it's information.");
         }
     }
     else
     {
-        ImGui::PushItemWidth(300.0f);
+        ImGui::SetNextItemWidth(300.0f);
         ImGui::TextWrapped("Invalid world pointer. Please load a save if you haven't already. If you've loaded a game and you see this, please report this to the RSL maintainer.");
     }
 

@@ -34,7 +34,7 @@ void ThemeEditorGui::Draw()
 	if (ref == NULL)
 		ref = &ref_saved_style;
 
-	ImGui::PushItemWidth(ImGui::GetWindowWidth() * 0.50f);
+	ImGui::SetNextItemWidth(ImGui::GetWindowWidth() * 0.50f);
 
 	if (ImGui::ShowStyleSelector("Colors##Selector"))
 		ref_saved_style = style;

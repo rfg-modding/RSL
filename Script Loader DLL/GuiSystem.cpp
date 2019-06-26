@@ -215,7 +215,7 @@ void GuiSystem::DrawPreInitWindow()
         return;
     }
 
-    ImGui::PushItemWidth(250.0f);
+    ImGui::SetNextItemWidth(250.0f);
     ImGui::TextWrapped("RSL initialization currently requires a save game to be loaded to complete. Please load a save game to access the rest of the overlay.");
 
     ImGui::End();

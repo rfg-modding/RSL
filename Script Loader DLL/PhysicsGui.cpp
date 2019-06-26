@@ -20,12 +20,12 @@ void PhysicsGui::Draw()
 		ImGui::PopFont();
 		ImGui::Separator();
 		ImGui::PushStyleColor(ImGuiCol_Text, Globals::ColorRed);
-		ImGui::PushItemWidth(400.0f);
+        ImGui::SetNextItemWidth(300.0f);
 		ImGui::TextWrapped("Warning: Be very careful with this menu if you want your game to be stable. Changing these values can make things go wacky quick.");
 		ImGui::PopStyleColor();
 		ImGui::Separator();
 
-		ImGui::PushItemWidth(230.0f);
+		ImGui::SetNextItemWidth(230.0f);
 		ImGui::InputFloat("Custom physics timestep multiplier", &CustomPhysicsTimeStepMultiplier, 0.01, 0.5, 3);
 		ImGui::SameLine();
 		ImGui::Checkbox("Use", &UseCustomPhysicsTimestepMultiplier);
@@ -140,21 +140,21 @@ void PhysicsGui::Draw()
 			{
 				SolverPtr->m_tauDivDamp = 0.600f;
 			}
-			ImGui::PushItemWidth(230.0f);
+			ImGui::SetNextItemWidth(230.0f);
 			ImGui::InputFloat("Damp div friction tau", &SolverPtr->m_dampDivFrictionTau, 0.01, 0.1, 3);
 			ImGui::SameLine();
 			if (ImGui::Button("Reset##DampDivFrictionTau"))
 			{
 				SolverPtr->m_dampDivFrictionTau = 3.333f;
 			}
-			ImGui::PushItemWidth(230.0f);
+			ImGui::SetNextItemWidth(230.0f);
 			ImGui::InputFloat("Friction tau div damp", &SolverPtr->m_frictionTauDivDamp, 0.01, 0.1, 3);
 			ImGui::SameLine();
 			if (ImGui::Button("Reset##FrictionTauDivDamp"))
 			{
 				SolverPtr->m_frictionTauDivDamp = 0.300f;
 			}
-			ImGui::PushItemWidth(230.0f);
+			ImGui::SetNextItemWidth(230.0f);
 			ImGui::InputFloat("Contact resting velocity", &SolverPtr->m_contactRestingVelocity, 0.01, 0.1, 3);
 			ImGui::SameLine();
 			if (ImGui::Button("Reset##ContactRestingVelocity"))
@@ -173,7 +173,7 @@ void PhysicsGui::Draw()
 			{
 				SolverPtr->m_numSteps = 4;
 			}
-			ImGui::PushItemWidth(230.0f);
+			ImGui::SetNextItemWidth(230.0f);
 			ImGui::InputInt("Num micro steps", &SolverPtr->m_numMicroSteps);
 			ImGui::SameLine();
 			if (ImGui::Button("Reset##NumMicroSteps"))

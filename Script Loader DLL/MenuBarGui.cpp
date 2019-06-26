@@ -119,11 +119,11 @@ void MenuBarGui::ShowAboutWindow(bool* p_open) const
 	}
 	ImGui::Text("RFGR Script Loader %s", Globals::GetScriptLoaderVersion());
 	ImGui::Separator();
-	ImGui::PushItemWidth(100.0f);
+    ImGui::SetNextItemWidth(100.0f);
 	ImGui::TextWrapped("By moneyl. See it's public wiki repo here:");
-	ImGui::PushItemWidth(100.0f);
+    ImGui::SetNextItemWidth(100.0f);
 	ImGui::TextWrapped("https://github.com/Moneyl/RFGR-Script-Loader-Wiki");
-	ImGui::PushItemWidth(100.0f);
+    ImGui::SetNextItemWidth(100.0f);
 	ImGui::TextWrapped("If you have any bugs or questions you can contact me on the official Red Faction discord (https://discord.gg/redfaction), @moneyl. If we can't solve the issue I'd appreciate if you made a github issue and described the steps to reproduce any bug you find.");
 
 	ImGui::Separator();
