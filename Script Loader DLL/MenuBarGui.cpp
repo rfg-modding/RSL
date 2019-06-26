@@ -53,6 +53,7 @@ void MenuBarGui::Draw()
 			if (ImGui::MenuItem(std::string(std::string(ICON_FA_PALETTE) + u8" Theme editor").c_str(), NULL, &Gui->ShowAppThemeEditor)) {}
 			if (ImGui::MenuItem(std::string(std::string(ICON_FA_CAMERA) + u8" Camera settings").c_str(), NULL, &Gui->ShowAppFreeCamSettings)) {}
 			if (ImGui::MenuItem(std::string(std::string(ICON_FA_VIAL) + u8" Physics settings").c_str(), NULL, &Gui->ShowAppPhysicsSettings)) {}
+			if (ImGui::MenuItem(std::string(std::string(ICON_FA_SEARCH) + u8" Object introspection").c_str(), NULL, &Gui->ShowAppIntrospectionMenu)) {}
 			ImGui::EndMenu();
 		}
 		if (ImGui::BeginMenu("Scripting"))

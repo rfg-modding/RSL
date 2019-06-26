@@ -36,7 +36,7 @@ void GuiSystem::Initialize()
 	PhysicsSettings = static_cast<PhysicsGui*>(GuiList.back());
     GuiList.push_back(new TeleportGui(&ShowAppTeleportMenu, "Teleport"));
     Teleport = static_cast<TeleportGui*>(GuiList.back());
-    GuiList.push_back(new IntrospectionGui(&ShowAppIntrospectionMenu, "Introspection"));
+    GuiList.push_back(new IntrospectionGui(&ShowAppIntrospectionMenu, "Object introspection"));
     Introspection = static_cast<IntrospectionGui*>(GuiList.back());
 
 	for (const auto& i : GuiList)

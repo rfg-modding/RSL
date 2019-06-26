@@ -612,3 +612,8 @@ extern F_keen_graphics_beginFrame KeenGraphicsBeginFrame;
 //.text:00C38740 rfg.exe:$58740 #57B40 <keen::getBuildVersionString>
 using F_keen_get_build_version_string = const char* (__cdecl*)();
 extern F_keen_get_build_version_string KeenGetBuildVersionString;
+
+
+//.text:0189C050 rfg.exe:$53C050 #53B450 <world::object_from_handle> //object *__thiscall world::object_from_handle(world *this, unsigned int handle)
+using F_WorldObjectFromHandle = Object* (__fastcall*)(World* This, void* edx, uint Handle); //2nd arg is edx, needed for __thiscall functions.
+extern F_WorldObjectFromHandle WorldObjectFromHandle;

@@ -117,7 +117,7 @@ namespace Globals
 	extern bool FogVisible;
 
 	extern const std::string ScriptLoaderVersion;
-
+    
 	const char* GetScriptLoaderVersion();
 	bool DirectoryExists(const std::string& Directory);
 	void CreateDirectoryIfNull(const std::string& Directory);
