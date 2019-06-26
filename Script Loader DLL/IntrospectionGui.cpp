@@ -42,7 +42,7 @@ void IntrospectionGui::DrawPlayerIntrospectionGui(const char* Title)
 
     static uint HandleSearchBuffer = 0;
     ImGui::Text("Search by handle (unsigned):"); ImGui::SameLine();
-    ImGui::InputInt("##ObjectHandleSearchInput", (int*)&HandleSearchBuffer); ImGui::SameLine(); //Todo: Need to update imgui to get stuff like ImGui::InputUint
+    ImGui::InputScalar("##ObjectHandleSearchInput", ImGuiDataType_U32, &HandleSearchBuffer); ImGui::SameLine(); //Todo: Need to update imgui to get stuff like ImGui::InputUint
     if (ImGui::Button("Search##ObjectHandleSearchButton"))
     {
         if(WorldObjectFromHandle(Globals::RfgWorldPtr, NULL, HandleSearchBuffer))
@@ -50,10 +50,10 @@ void IntrospectionGui::DrawPlayerIntrospectionGui(const char* Title)
             SavedTargetObjectHandle = HandleSearchBuffer;
         }
     }
-
+    
     static uint IndexSearchBuffer = 0;
     ImGui::Text("Search by index (unsigned):"); ImGui::SameLine();
-    ImGui::InputInt("##ObjectIndexSearchInput", (int*)& IndexSearchBuffer); ImGui::SameLine(); //Todo: Need to update imgui to get stuff like ImGui::InputUint
+    ImGui::InputScalar("##ObjectIndexSearchInput", ImGuiDataType_U32, &IndexSearchBuffer); ImGui::SameLine(); //Todo: Need to update imgui to get stuff like ImGui::InputUint
     if (ImGui::Button("Search##ObjectIndexSearchButton"))
     {
         if(Globals::RfgWorldPtr)
