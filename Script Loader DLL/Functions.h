@@ -142,10 +142,10 @@ extern F_game_render_2d_text GameRender2dText;
 using F_ui_add_debug_text = unsigned int(__cdecl*)(const char *text, debug_text_posn type);
 extern F_ui_add_debug_text UiAddDebugText;
 
-using F_get_depth_of_field_enabled = bool(__thiscall*)(void* ThisCamera); //bool __thiscall rl_camera::GetDepthOfFieldEnabled(rl_camera *this)
+using F_get_depth_of_field_enabled = bool(__thiscall*)(rl_camera* ThisCamera); //bool __thiscall rl_camera::GetDepthOfFieldEnabled(rl_camera *this)
 extern F_get_depth_of_field_enabled GetDepthOfFieldEnabled;
 
-using F_set_depth_of_field_enabled = void(__thiscall*)(void* ThisCamera, bool Enabled); //void __thiscall rl_camera::SetDepthOfFieldEnabled(rl_camera *this, bool depth_of_field_enabled)
+using F_set_depth_of_field_enabled = void(__thiscall*)(rl_camera* ThisCamera, bool Enabled); //void __thiscall rl_camera::SetDepthOfFieldEnabled(rl_camera *this, bool depth_of_field_enabled)
 extern F_set_depth_of_field_enabled SetDepthOfFieldEnabled;
 
 using F_fog_of_war_clear = void(__cdecl*)();
@@ -163,7 +163,7 @@ using F_explosion_create = void(__cdecl*)(explosion_info* ExplosionInfo, void* S
 extern F_explosion_create ExplosionCreate;
 
 //.text:0129DD00 rfg.exe:$86DD00 #86D100 <keen::graphics::beginFrame>
-using F_keen_graphics_beginframe = void(__cdecl*)(void* GraphicsSystem);
+using F_keen_graphics_beginframe = void(__cdecl*)(keen::GraphicsSystem* GraphicsSystem);
 extern F_keen_graphics_beginframe GraphicsBeginFrame;
 
 //.text:00B992B0 rfg.exe:$1692B0 #1686B0 <mouse_generic_auto_centering>
@@ -249,7 +249,7 @@ extern F_HudUiMultiplayerEnter HudUiMultiplayerEnter;
 //bool __cdecl keen::graphics::resizeRenderSwapChain(keen::RenderSwapChain *pSwapChain, unsigned int newWidth, unsigned int newHeight)
 //Can map out keen::RenderSwapChain later if data is needed from it, currently just hooking this as a signal init the D3D11 pointers again.
 //.text:00C2AB20 rfg.exe:$86AB20 #869F20 <keen::graphics::resizeRenderSwapChain>
-using F_KeenGraphicsResizeRenderSwapchain = bool(__cdecl*)(void* KeenSwapchain, unsigned int NewWidth, unsigned int NewHeight);
+using F_KeenGraphicsResizeRenderSwapchain = bool(__cdecl*)(keen::RenderSwapChain* KeenSwapchain, unsigned int NewWidth, unsigned int NewHeight);
 extern F_KeenGraphicsResizeRenderSwapchain KeenGraphicsResizeRenderSwapchain;
 
 //.text:0122FCF0 rfg.exe:$3BFCF0 #3BF0F0 <gameseq_get_state>
@@ -569,6 +569,7 @@ using F_hkpWorld_stepDeltaTime = void(__fastcall*)(hkpWorld* This, void* edx, fl
 extern F_hkpWorld_stepDeltaTime hkpWorldStepDeltaTime;
 
 //.text:0117A880 rfg.exe:$5A880 #59C80 <keen::rfg::Application::updateTime> //void __thiscall fav::keen::rfg::Application::updateTime(keen::rfg::Application *this, float timeStep)
+//rfg::Application
 using F_ApplicationUpdateTime = void(__fastcall*)(void* This, void* edx, float TimeStep); //2nd arg is edx, needed for __thiscall functions.
 extern F_ApplicationUpdateTime ApplicationUpdateTime;
 
