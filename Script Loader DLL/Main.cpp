@@ -92,6 +92,7 @@ void UnlockGameMain()
     SnippetManager::RestoreSnippet("RFG WinMain", true);
 }
 
+/*Be VERY VERY careful with this function or else you might crash your PC or every program it's running.*/
 void SuspendAllThreadsExceptLauncher()
 {
     const DWORD LauncherThreadID = GetThreadId(LauncherThreadHandle);
@@ -153,12 +154,10 @@ LRESULT __stdcall LauncherWndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lPa
         switch (wParam)
         {
         case 0:
-            SetWindowTextA(hWnd, "Pressed button 0!");
             ShouldLoadRSL = true;
             PostQuitMessage(0);
             break;
         case 1:
-            SetWindowTextA(hWnd, "Pressed button 1!");
             PostQuitMessage(0);
             break;
         default:
@@ -190,7 +189,7 @@ bool LauncherMainLoop(HMODULE hModule)
         WS_OVERLAPPED,            // Window style
 
         // Size and position
-        CW_USEDEFAULT, CW_USEDEFAULT, 400, 500,
+        1000, 400, 300, 500,
 
         nullptr,       // Parent window    
         nullptr,       // Menu
@@ -203,8 +202,9 @@ bool LauncherMainLoop(HMODULE hModule)
         return false;
     }
 
-    auto Button0 = CreateWindow("Button", "Play with RSL (MP Disabled)", BS_PUSHBUTTON | WS_CHILD | WS_VISIBLE, 50, 20, 300, 50, LauncherHwnd, static_cast<HMENU>(0), hModule, nullptr);
-    auto Button1 = CreateWindow("Button", "Play vanilla Re-mars-tered", BS_PUSHBUTTON | WS_CHILD | WS_VISIBLE, 50, 70, 300, 50, LauncherHwnd, reinterpret_cast<HMENU>(1), hModule, nullptr);
+    auto TopStaticText = CreateWindow("Static", "Choose whether or not to load the RSL into RFG.", WS_CHILD | WS_VISIBLE | SS_CENTER, 50, 20, 200, 40, LauncherHwnd, static_cast<HMENU>(0), hModule, nullptr);
+    auto Button0 = CreateWindow("Button", "Play with RSL (MP Disabled)", BS_DEFPUSHBUTTON | WS_CHILD | WS_VISIBLE, 50, 70, 200, 30, LauncherHwnd, static_cast<HMENU>(0), hModule, nullptr);
+    auto Button1 = CreateWindow("Button", "Play vanilla Re-mars-tered", BS_DEFPUSHBUTTON | WS_CHILD | WS_VISIBLE, 50, 110, 200, 30, LauncherHwnd, reinterpret_cast<HMENU>(1), hModule, nullptr);
 
     ShowWindow(LauncherHwnd, SW_SHOW);
     UpdateWindow(LauncherHwnd);
