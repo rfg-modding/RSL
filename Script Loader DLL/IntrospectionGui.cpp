@@ -30,6 +30,7 @@ void IntrospectionGui::DrawPlayerIntrospectionGui(const char* Title)
 
     static std::string NameSearchBuffer;
     ImGui::Text("Search by name:"); ImGui::SameLine();
+    ImGui::SetNextItemWidth(230.0f);
     ImGui::InputText("##ObjectNameSearchInput", &NameSearchBuffer); ImGui::SameLine();
     if(ImGui::Button("Search##ObjectNameSearchButton"))
     {
@@ -42,6 +43,7 @@ void IntrospectionGui::DrawPlayerIntrospectionGui(const char* Title)
 
     static uint HandleSearchBuffer = 0;
     ImGui::Text("Search by handle (unsigned):"); ImGui::SameLine();
+    ImGui::SetNextItemWidth(230.0f);
     ImGui::InputScalar("##ObjectHandleSearchInput", ImGuiDataType_U32, &HandleSearchBuffer); ImGui::SameLine(); //Todo: Need to update imgui to get stuff like ImGui::InputUint
     if (ImGui::Button("Search##ObjectHandleSearchButton"))
     {
@@ -53,6 +55,7 @@ void IntrospectionGui::DrawPlayerIntrospectionGui(const char* Title)
     
     static uint IndexSearchBuffer = 0;
     ImGui::Text("Search by index (unsigned):"); ImGui::SameLine();
+    ImGui::SetNextItemWidth(230.0f);
     ImGui::InputScalar("##ObjectIndexSearchInput", ImGuiDataType_U32, &IndexSearchBuffer); ImGui::SameLine(); //Todo: Need to update imgui to get stuff like ImGui::InputUint
     if (ImGui::Button("Search##ObjectIndexSearchButton"))
     {

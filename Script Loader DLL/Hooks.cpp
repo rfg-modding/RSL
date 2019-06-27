@@ -504,6 +504,9 @@ keen::GraphicsCommandBuffer* KeenGraphicsBeginFrameHook(keen::GraphicsSystem* pG
                             Globals::ImGuiInitialized = true;
                             UpdateD3D11Pointers = false;
 
+                            io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+                            //io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
+
                             Logger::Log("ImGui Initialized.", LogInfo);
 
 #if DebugDrawTestEnabled
