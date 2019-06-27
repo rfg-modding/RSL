@@ -34,7 +34,7 @@ void ThemeEditorGui::Draw()
 	if (ref == NULL)
 		ref = &ref_saved_style;
 
-	ImGui::SetNextItemWidth(ImGui::GetWindowWidth() * 0.50f);
+	//ImGui::SetNextItemWidth(ImGui::GetWindowWidth() * 0.50f);
 
 	if (ImGui::ShowStyleSelector("Colors##Selector"))
 		ref_saved_style = style;
@@ -122,7 +122,7 @@ void ThemeEditorGui::Draw()
 				}
 				ImGui::LogFinish();
 			}
-			ImGui::SameLine(); ImGui::PushItemWidth(120); ImGui::Combo("##output_type", &output_dest, "To Clipboard\0To TTY\0"); ImGui::PopItemWidth();
+			//ImGui::SameLine(); ImGui::PushItemWidth(120); ImGui::Combo("##output_type", &output_dest, "To Clipboard\0To TTY\0"); ImGui::PopItemWidth();
 			ImGui::SameLine(); ImGui::Checkbox("Only Modified Colors", &output_only_modified);
 
 			static ImGuiTextFilter filter;
@@ -135,7 +135,7 @@ void ThemeEditorGui::Draw()
 			Utilities::GUI::ShowHelpMarker("In the color list:\nLeft-click on colored square to open color picker,\nRight-click to open edit options menu.");
 
 			ImGui::BeginChild("##colors", ImVec2(0, 0), true, ImGuiWindowFlags_AlwaysVerticalScrollbar | ImGuiWindowFlags_AlwaysHorizontalScrollbar | ImGuiWindowFlags_NavFlattened);
-			ImGui::PushItemWidth(-160);
+			//ImGui::PushItemWidth(-160);
 			for (int i = 0; i < ImGuiCol_COUNT; i++)
 			{
 				const char* name = ImGui::GetStyleColorName(i);
@@ -154,7 +154,7 @@ void ThemeEditorGui::Draw()
 				ImGui::TextUnformatted(name);
 				ImGui::PopID();
 			}
-			ImGui::PopItemWidth();
+			//ImGui::PopItemWidth();
 			ImGui::EndChild();
 
 			ImGui::EndTabItem();
@@ -164,7 +164,7 @@ void ThemeEditorGui::Draw()
 		{
 			ImFontAtlas* atlas = ImGui::GetIO().Fonts;
 			Utilities::GUI::ShowHelpMarker("Read FAQ and misc/fonts/README.txt for details on font loading.");
-			ImGui::PushItemWidth(120);
+			//ImGui::PushItemWidth(120);
 			for (int i = 0; i < atlas->Fonts.Size; i++)
 			{
 				ImFont* font = atlas->Fonts[i];
@@ -239,7 +239,7 @@ void ThemeEditorGui::Draw()
 			if (ImGui::DragFloat("this window scale", &window_scale, 0.005f, 0.3f, 2.0f, "%.1f"))           // scale only this window
 				ImGui::SetWindowFontScale(window_scale);
 			ImGui::DragFloat("global scale", &ImGui::GetIO().FontGlobalScale, 0.005f, 0.3f, 2.0f, "%.1f");  // scale everything
-			ImGui::PopItemWidth();
+			//ImGui::PopItemWidth();
 
 			ImGui::EndTabItem();
 		}
@@ -249,11 +249,11 @@ void ThemeEditorGui::Draw()
 			ImGui::Checkbox("Anti-aliased lines", &style.AntiAliasedLines); ImGui::SameLine();
 			Utilities::GUI::ShowHelpMarker("When disabling anti-aliasing lines, you'll probably want to disable borders in your style as well.");
 			ImGui::Checkbox("Anti-aliased fill", &style.AntiAliasedFill);
-			ImGui::PushItemWidth(100);
+			//ImGui::PushItemWidth(100);
 			ImGui::DragFloat("Curve Tessellation Tolerance", &style.CurveTessellationTol, 0.02f, 0.10f, FLT_MAX, "%.2f", 2.0f);
 			if (style.CurveTessellationTol < 0.10f) style.CurveTessellationTol = 0.10f;
 			ImGui::DragFloat("Global Alpha", &style.Alpha, 0.005f, 0.20f, 1.0f, "%.2f"); // Not exposing zero here so user doesn't "lose" the UI (zero alpha clips all widgets). But application code could have a toggle to switch between zero and non-zero.
-			ImGui::PopItemWidth();
+			//ImGui::PopItemWidth();
 
 			ImGui::EndTabItem();
 		}
@@ -261,7 +261,7 @@ void ThemeEditorGui::Draw()
 		ImGui::EndTabBar();
 	}
 
-	ImGui::PopItemWidth();
+	//ImGui::PopItemWidth();
 	ImGui::End();
 }
 
