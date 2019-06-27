@@ -134,6 +134,7 @@
     <ClCompile Include="imgui_impl_dx11.cpp" />
     <ClCompile Include="imgui_impl_win32.cpp" />
     <ClCompile Include="imgui_stdlib.cpp" />
+    <ClCompile Include="include\ImGuiColorTextEdit\TextEditor.cpp" />
     <ClCompile Include="include\ImGui\imgui.cpp" />
     <ClCompile Include="include\ImGui\imgui_demo.cpp" />
     <ClCompile Include="include\ImGui\imgui_draw.cpp" />
@@ -152,6 +153,7 @@
     <ClCompile Include="ObjectRenderDistanceLua.cpp" />
     <ClCompile Include="PhysicsGui.cpp" />
     <ClCompile Include="PlayerLua.cpp" />
+    <ClCompile Include="TextEditorWrapper.cpp" />
     <ClCompile Include="VectorLua.cpp" />
     <ClCompile Include="WelcomeGui.cpp" />
     <ClCompile Include="Includes.cpp">
@@ -164,7 +166,6 @@
     <ClCompile Include="ScriptSelectGui.cpp" />
     <ClCompile Include="SnippetManager.cpp" />
     <ClCompile Include="TeleportGui.cpp" />
-    <ClCompile Include="TextEditor.cpp" />
     <ClCompile Include="ThemeEditorGui.cpp" />
     <ClCompile Include="Utilities.cpp" />
     <ClCompile Include="WorldLua.cpp" />
@@ -197,6 +198,7 @@
     <ClInclude Include="HumanLua.h" />
     <ClInclude Include="HumanMPFlagsLua.h" />
     <ClInclude Include="HumanRaycastHitInfoLua.h" />
+    <ClInclude Include="ImGuiColorTextEdit\TextEditor.h" />
     <ClInclude Include="imgui_impl_dx11.h" />
     <ClInclude Include="imgui_impl_win32.h" />
     <ClInclude Include="imgui_stdlib.h" />
@@ -210,6 +212,7 @@
     <ClInclude Include="include\MinHook\MinHook.h" />
     <ClInclude Include="IntrospectionGui.h" />
     <ClInclude Include="RenderInterfaceD3D11.h" />
+    <ClInclude Include="TextEditorWrapper.h" />
     <ClInclude Include="WorldLua.h" />
     <None Include="KeenNamespace2.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
@@ -247,7 +250,6 @@
     </None>
     <ClInclude Include="ScriptSelectGui.h" />
     <ClInclude Include="TeleportGui.h" />
-    <ClInclude Include="TextEditor.h" />
     <ClInclude Include="ThemeEditorGui.h" />
     <ClInclude Include="Utilities.h" />
     <None Include="RFGR Structs\KeenFileSystem.h">

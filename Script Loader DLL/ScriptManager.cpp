@@ -78,20 +78,20 @@ void ScriptManager::SetupLua()
     sol::state& LuaStateRef = *LuaState; //Used for easier access instead of doing weird ass pointer syntax.
 
     LuaStateRef["print"] = sol::nil;
-    LuaStateRef.set_function("tostring", sol::overload(
-        [](int Value) {return std::to_string(Value); },
-        [](long Value) {return std::to_string(Value); },
-        [](long long Value) {return std::to_string(Value); },
-        [](unsigned int Value) {return std::to_string(Value); },
-        [](unsigned long Value) {return std::to_string(Value); },
-        [](unsigned long long Value) {return std::to_string(Value); },
-        [](float Value) {return std::to_string(Value); },
-        [](double Value) {return std::to_string(Value); },
-        [](long double Value) {return std::to_string(Value); },
-        [](char Value) {return std::to_string(Value); },
-        [](const char* Value) {return std::string(Value); },
-        [](std::string Value) {return Value; }
-    ));
+    //LuaStateRef.set_function("tostring", sol::overload(
+    //    [](int Value) {return std::to_string(Value); },
+    //    [](long Value) {return std::to_string(Value); },
+    //    [](long long Value) {return std::to_string(Value); },
+    //    [](unsigned int Value) {return std::to_string(Value); },
+    //    [](unsigned long Value) {return std::to_string(Value); },
+    //    [](unsigned long long Value) {return std::to_string(Value); },
+    //    [](float Value) {return std::to_string(Value); },
+    //    [](double Value) {return std::to_string(Value); },
+    //    [](long double Value) {return std::to_string(Value); },
+    //    [](char Value) {return std::to_string(Value); },
+    //    [](const char* Value) {return std::string(Value); },
+    //    [](std::string Value) {return Value; }
+    //));
 
 	//Todo: Make necessary vars read only with sol::readonly(&some_class::variable)
 	auto RslTable = LuaStateRef["rsl"].get_or_create<sol::table>();

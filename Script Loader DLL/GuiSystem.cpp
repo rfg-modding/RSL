@@ -24,8 +24,8 @@ void GuiSystem::Initialize()
     ScriptList = static_cast<ScriptSelectGui*>(GuiList.back());
     GuiList.push_back(new FreeCamGui(&ShowAppFreeCamSettings, "Camera settings"));
     FreeCamSettings = static_cast<FreeCamGui*>(GuiList.back());
-	GuiList.push_back(new TextEditor(&ShowAppScriptEditor, "Script editor"));
-	ScriptEditor = static_cast<TextEditor*>(GuiList.back());
+	GuiList.push_back(new TextEditorWrapper(&ShowAppScriptEditor, "Script editor"));
+	ScriptEditor = static_cast<TextEditorWrapper*>(GuiList.back());
 	GuiList.push_back(new LogWindow(&ShowAppLogWindow , "Logger"));
 	LogGui = static_cast<LogWindow*>(GuiList.back());
     GuiList.push_back(new WelcomeGui(&ShowAppWelcome, "Welcome"));

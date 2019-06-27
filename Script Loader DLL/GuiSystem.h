@@ -6,7 +6,7 @@
 #include "GeneralTweaksGui.h"
 #include "ScriptSelectGui.h"
 #include "OverlayConsole.h"
-#include "TextEditor.h"
+#include "TextEditorWrapper.h"
 #include "MenuBarGui.h"
 #include "LogWindow.h"
 #include "FreeCamGui.h"
@@ -58,7 +58,7 @@ public:
     TeleportGui* Teleport = nullptr;
 	IntrospectionGui* Introspection = nullptr;
 	GeneralTweaksGui* TweaksMenu = nullptr;
-	TextEditor* ScriptEditor = nullptr;
+	TextEditorWrapper* ScriptEditor = nullptr;
 	FreeCamGui* FreeCamSettings = nullptr;
     OverlayConsole* Console = nullptr;
     MenuBarGui* MainMenuBar = nullptr;
