@@ -1,6 +1,18 @@
 #pragma once
 #include "LuaFunctions.h"
 
+class ScriptResult
+{
+public:
+    ScriptResult(bool Failed_, std::optional<uint> ErrorLineNumber_, std::string ErrorString_)
+    : Failed(Failed_), ErrorLineNumber(ErrorLineNumber_), ErrorString(ErrorString_){};
+    ~ScriptResult() = default;
+
+    bool Failed = false;
+    std::optional<uint> ErrorLineNumber = 0;
+    std::string ErrorString = {};
+};
+
 /* Contains basic information about a script to avoid duplicate calculations.
  * This includes it's full path, folder path, and file name. Currently does 
  * not buffer the script itself. Scripts are only loaded at the moment that
@@ -37,9 +49,11 @@ public:
 	void ScanScriptsFolder();
 
 	bool RunScript(const std::string& FullPath);
-	bool RunScript(size_t Index);
+	bool RunScript(const size_t Index);
 
-	bool RunStringAsScript(std::string Buffer, std::string Name);
+	ScriptResult RunStringAsScript(std::string Buffer, std::string Name);
+    std::optional<uint> GetLineFromErrorString(const std::string& ErrorString);
+    bool CharIsDigit(const char& Character) const;
 
 	sol::state* LuaState = nullptr; //Uses a pointer for easy LuaState resets.
 	std::vector <Script> Scripts; //List of scripts detected in Scripts folder on the last scan.

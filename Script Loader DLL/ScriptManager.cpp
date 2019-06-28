@@ -351,29 +351,66 @@ bool ScriptManager::RunScript(const size_t Index)
  * for convenience. If an exception occurs an the script should be
  * stopped and the exception should be safely contained and logged.
  */
-bool ScriptManager::RunStringAsScript(std::string Buffer, std::string Name)
+ScriptResult ScriptManager::RunStringAsScript(std::string Buffer, std::string Name)
 {
-    sol::state& LuaStateRef = *LuaState;
-	try
-	{
-		auto CodeResult = LuaStateRef.script(Buffer, [](lua_State*, sol::protected_function_result pfr)
-		{
-			return pfr;
-		});
+    sol::load_result LoadResult = LuaState->load(Buffer);
 
-		if (!CodeResult.valid())
-		{
-			sol::error ScriptError = CodeResult;
-			std::exception ScriptException(ScriptError.what());
-			throw(ScriptException);
-		}
-		return true;
-	}
-	catch (std::exception& Exception)
-	{
-		Logger::Log(std::string("Exception caught when running " + Name + std::string(Exception.what())), LogLua | LogError);
-		return false;
-	}
+    if(!LoadResult.valid()) //Check script syntax but don't execute
+    {
+        sol::error Error = LoadResult;
+        std::string What(Error.what());
+        Logger::Log(Name + " failed the syntax check! Message: " + What, LogError);
+        return ScriptResult(true, GetLineFromErrorString(What), What);
+    }
+
+    sol::protected_function_result Result = LoadResult();
+    if(!Result.valid())
+    {
+        sol::error Error = Result;
+        std::string What(Error.what());
+        Logger::Log(Name + " encountered an error! Message: " + What, LogError);
+        return ScriptResult(true, GetLineFromErrorString(What), What);
+    }
+
+    return ScriptResult(false, {}, {});
+}
+
+// Attempts to get the error line number by parsing a lua error string. 
+// Works on the assumption that the number will have a colon in front of it. Such as "[string "rfg.SetGravity(0.0, -2.8, 0...."]:5: attempt to call field 'FakeFunc' (a nil value)..."
+// In that example error the line number is :5:
+std::optional<uint> ScriptManager::GetLineFromErrorString(const std::string& ErrorString)
+{
+    for(int i = 0; i < ErrorString.length(); i++)
+    {
+        if(i < ErrorString.length() - 2) //Don't bother checking if you can't at least pull a 1-digit number from the rest of the string
+        {
+            char CurrentChar = ErrorString[i];
+            char NextChar = ErrorString[i + 1];
+
+            if (CurrentChar == ':')
+            {
+                if(CharIsDigit(NextChar))
+                {
+                    int NumberStartIndex = i + 1;
+                    int Index = i;
+                    do
+                    {
+                        Index++;
+                        CurrentChar = ErrorString[Index];
+                    } 
+                    while (CharIsDigit(CurrentChar) && i < ErrorString.length());
+
+                    return std::stoi(ErrorString.substr(NumberStartIndex, Index - NumberStartIndex));
+                }
+            }
+        }
+    }
+    return {}; //Return empty if no line number found
+}
+
+bool ScriptManager::CharIsDigit(const char& Character) const
+{
+    return Character >= '0' && Character <= '9';
 }
 
 /* Gets the name of a file given a path as an input. 
