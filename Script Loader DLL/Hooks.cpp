@@ -233,8 +233,7 @@ LRESULT ProcessInput(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		{
 			if (GetAsyncKeyState(VK_LCONTROL) && GetAsyncKeyState(0x53)) //Ctrl + S
 			{
-                //Todo: Fix Script Editor
-				///Globals::Gui->ScriptEditor->SaveScript();
+				Globals::Gui->ScriptEditor->SaveScript();
 			}
 		}
 		catch (const std::exception& Ex)
@@ -243,18 +242,15 @@ LRESULT ProcessInput(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		}
 		if (GetAsyncKeyState(VK_CONTROL) && GetAsyncKeyState(VK_SHIFT) && GetAsyncKeyState(0x53)) //Ctrl + Shift + S
 		{
-            //Todo: Fix Script Editor
-			///Globals::Gui->ScriptEditor->ShowSaveAsScriptPopup = true;
+			Globals::Gui->ScriptEditor->ShowSaveAsScriptPopup = true;
 		}
 		if (GetAsyncKeyState(VK_LCONTROL) && GetAsyncKeyState(0x4F)) //Ctrl + O
 		{
-            //Todo: Fix Script Editor
-			///Globals::Gui->ScriptEditor->ShowOpenScriptPopup = true;
+			Globals::Gui->ScriptEditor->ShowOpenScriptPopup = true;
 		}
 		if (GetAsyncKeyState(VK_LCONTROL) && GetAsyncKeyState(0x4E)) //Ctrl + N
 		{
-            //Todo: Fix Script Editor
-			///Globals::Gui->ScriptEditor->ShowNewScriptPopup = true;
+			Globals::Gui->ScriptEditor->ShowNewScriptPopup = true;
 		}
 		try
 		{
@@ -262,10 +258,8 @@ LRESULT ProcessInput(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			{
 				if(Globals::Gui->HasValidScriptManager())
 				{
-                    //Todo: Fix Script Editor
-					//std::string ScriptString = Globals::Gui->ScriptEditor->GetCurrentScriptString();
-					//Globals::Gui->GetScriptManager()->RunStringAsScript(ScriptString, "script editor run");
-					//Sleep(175);
+                    Globals::Gui->ScriptEditor->RunCurrentScript();
+					Sleep(175);
 				}
 			}
 		}

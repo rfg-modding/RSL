@@ -55,9 +55,8 @@ void ScriptSelectGui::Draw()
 		ImGui::SameLine();
 		if (ImGui::Button(std::string(std::string(ICON_FA_EDIT) + u8"##" + i.FullPath).c_str()))
 		{
-            //Todo: Fix Script Editor
-			//Gui->ScriptEditor->LoadScript(i.FullPath, i.Name);
-			//Gui->ShowAppScriptEditor = true;
+			Gui->ScriptEditor->LoadScript(i.FullPath, i.Name);
+			Gui->ShowAppScriptEditor = true;
 		}
 		ImGui::PopStyleColor(3);
 		ImGui::PopStyleVar();
