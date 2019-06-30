@@ -3137,13 +3137,42 @@ const TextEditor::LanguageDefinition& TextEditor::LanguageDefinition::Lua()
 			langDef.mIdentifiers.insert(std::make_pair(std::string(k), id));
 		}
 
-		langDef.mTokenRegexStrings.push_back(std::make_pair<std::string, PaletteIndex>("L?\\\"(\\\\.|[^\\\"])*\\\"", PaletteIndex::String));
-		langDef.mTokenRegexStrings.push_back(std::make_pair<std::string, PaletteIndex>("\\\'[^\\\']*\\\'", PaletteIndex::String));
-		langDef.mTokenRegexStrings.push_back(std::make_pair<std::string, PaletteIndex>("0[xX][0-9a-fA-F]+[uU]?[lL]?[lL]?", PaletteIndex::Number));
-		langDef.mTokenRegexStrings.push_back(std::make_pair<std::string, PaletteIndex>("[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)([eE][+-]?[0-9]+)?[fF]?", PaletteIndex::Number));
-		langDef.mTokenRegexStrings.push_back(std::make_pair<std::string, PaletteIndex>("[+-]?[0-9]+[Uu]?[lL]?[lL]?", PaletteIndex::Number));
-		langDef.mTokenRegexStrings.push_back(std::make_pair<std::string, PaletteIndex>("[a-zA-Z_][a-zA-Z0-9_]*", PaletteIndex::Identifier));
-		langDef.mTokenRegexStrings.push_back(std::make_pair<std::string, PaletteIndex>("[\\[\\]\\{\\}\\!\\%\\^\\&\\*\\(\\)\\-\\+\\=\\~\\|\\<\\>\\?\\/\\;\\,\\.]", PaletteIndex::Punctuation));
+		//langDef.mTokenRegexStrings.push_back(std::make_pair<std::string, PaletteIndex>("L?\\\"(\\\\.|[^\\\"])*\\\"", PaletteIndex::String));
+		//langDef.mTokenRegexStrings.push_back(std::make_pair<std::string, PaletteIndex>("\\\'[^\\\']*\\\'", PaletteIndex::String));
+		//langDef.mTokenRegexStrings.push_back(std::make_pair<std::string, PaletteIndex>("0[xX][0-9a-fA-F]+[uU]?[lL]?[lL]?", PaletteIndex::Number));
+		//langDef.mTokenRegexStrings.push_back(std::make_pair<std::string, PaletteIndex>("[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)([eE][+-]?[0-9]+)?[fF]?", PaletteIndex::Number));
+		//langDef.mTokenRegexStrings.push_back(std::make_pair<std::string, PaletteIndex>("[+-]?[0-9]+[Uu]?[lL]?[lL]?", PaletteIndex::Number));
+		//langDef.mTokenRegexStrings.push_back(std::make_pair<std::string, PaletteIndex>("[a-zA-Z_][a-zA-Z0-9_]*", PaletteIndex::Identifier));
+		//langDef.mTokenRegexStrings.push_back(std::make_pair<std::string, PaletteIndex>("[\\[\\]\\{\\}\\!\\%\\^\\&\\*\\(\\)\\-\\+\\=\\~\\|\\<\\>\\?\\/\\;\\,\\.]", PaletteIndex::Punctuation));
+
+        // Instead of writing a lua tokenizer I'm just using the c++ one. From my tests it works just as well coloring things and gets better performance. 
+        // No need to write a lua specific one for now. Just need to remember to edit this back in when updating the editor from the repo.
+        langDef.mTokenize = [](const char* in_begin, const char* in_end, const char*& out_begin, const char*& out_end, PaletteIndex& paletteIndex) -> bool
+        {
+            paletteIndex = PaletteIndex::Max;
+
+            while (in_begin < in_end && isascii(*in_begin) && isblank(*in_begin))
+                in_begin++;
+
+            if (in_begin == in_end)
+            {
+                out_begin = in_end;
+                out_end = in_end;
+                paletteIndex = PaletteIndex::Default;
+            }
+            else if (TokenizeCStyleString(in_begin, in_end, out_begin, out_end))
+                paletteIndex = PaletteIndex::String;
+            else if (TokenizeCStyleCharacterLiteral(in_begin, in_end, out_begin, out_end))
+                paletteIndex = PaletteIndex::CharLiteral;
+            else if (TokenizeCStyleIdentifier(in_begin, in_end, out_begin, out_end))
+                paletteIndex = PaletteIndex::Identifier;
+            else if (TokenizeCStyleNumber(in_begin, in_end, out_begin, out_end))
+                paletteIndex = PaletteIndex::Number;
+            else if (TokenizeCStylePunctuation(in_begin, in_end, out_begin, out_end))
+                paletteIndex = PaletteIndex::Punctuation;
+
+            return paletteIndex != PaletteIndex::Max;
+        };
 
 		langDef.mCommentStart = "--[[";
 		langDef.mCommentEnd = "]]";
