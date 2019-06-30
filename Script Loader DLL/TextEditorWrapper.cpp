@@ -58,7 +58,7 @@ void TextEditorWrapper::Draw()
 
             ImGui::EndMenu();
         }
-        if (ImGui::BeginMenu("View"))
+        if (ImGui::BeginMenu(std::string(std::string(ICON_FA_EYE) + u8" View##ScriptEditor").c_str()))
         {
             if (ImGui::MenuItem("Dark palette"))
                 Editor.SetPalette(TextEditor::GetDarkPalette());
