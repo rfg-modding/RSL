@@ -1,0 +1,329 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>15.0</VCProjectVersion>
+    <ProjectGuid>{50ED854C-08A3-4822-8963-ADD71AD339F5}</ProjectGuid>
+    <RootNamespace>ScriptLoaderDLL</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>RSL</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <PreferredToolArchitecture>x64</PreferredToolArchitecture>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <PreferredToolArchitecture>x64</PreferredToolArchitecture>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <CodeAnalysisRuleSet>NativeRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
+    <EnableManagedIncrementalBuild>false</EnableManagedIncrementalBuild>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <CodeAnalysisRuleSet>NativeRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
+    <EnableManagedIncrementalBuild>false</EnableManagedIncrementalBuild>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level4</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>false</ConformanceMode>
+      <AdditionalIncludeDirectories>.\include\debug-draw\vectormath;.\include\sol;.\include\IconFontCppHeaders;.\include\LuaJIT-2.0.5;.\include\sol3;.\include\ImGui;.\include\nlohmann;.\include\glm;.\chaiscript;.\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>PCH.hpp</PrecompiledHeaderFile>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <EnablePREfast>false</EnablePREfast>
+      <AdditionalOptions>/experimental:external /external:anglebrackets /external:W0 /external:I ./include/kiero/ %(AdditionalOptions)</AdditionalOptions>
+      <RuntimeTypeInfo>
+      </RuntimeTypeInfo>
+      <CompileAs>CompileAsCpp</CompileAs>
+    </ClCompile>
+    <Link>
+      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
+      <AdditionalDependencies>lua51.lib;luajit.lib;libMinHook.x86.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>.\lib\Minhook\x86;.\lib\LuaJIT-2.0.5;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/NODEFAULTLIB:LIBCMT %(AdditionalOptions)</AdditionalOptions>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level4</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>.\include\debug-draw\vectormath;.\include\sol;.\include\IconFontCppHeaders;.\include\LuaJIT-2.0.5;.\include\sol3;.\include\ImGui;.\include\nlohmann;.\include\glm;.\chaiscript;.\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>PCH.hpp</PrecompiledHeaderFile>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <EnablePREfast>false</EnablePREfast>
+      <AdditionalOptions>/experimental:external /external:anglebrackets /external:W0 /external:I ./include/kiero/ %(AdditionalOptions)</AdditionalOptions>
+      <RuntimeTypeInfo>
+      </RuntimeTypeInfo>
+      <CompileAs>CompileAsCpp</CompileAs>
+    </ClCompile>
+    <Link>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
+      <AdditionalDependencies>lua51.lib;luajit.lib;libMinHook.x86.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>.\lib\Minhook\x86;.\lib\LuaJIT-2.0.5;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/NODEFAULTLIB:LIBCMT %(AdditionalOptions)</AdditionalOptions>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="Application.cpp" />
+    <ClCompile Include="AttachInfoDataLua.cpp" />
+    <ClCompile Include="BaseGui.cpp" />
+    <ClCompile Include="BaseTypeLua.cpp" />
+    <ClCompile Include="HkpRigidBodyLua.cpp" />
+    <ClCompile Include="CameraWrapper.cpp" />
+    <ClCompile Include="CharacterInstanceLua.cpp" />
+    <ClCompile Include="ContactNodeLua.cpp" />
+    <ClCompile Include="FreeCamGui.cpp" />
+    <ClCompile Include="FunctionManager.cpp" />
+    <ClCompile Include="Functions.cpp" />
+    <ClCompile Include="GeneralTweaksGui.cpp" />
+    <ClCompile Include="Globals.cpp" />
+    <ClCompile Include="GuiSystem.cpp" />
+    <ClCompile Include="HavokBPOLua.cpp" />
+    <ClCompile Include="HkpSolverInfoLua.cpp" />
+    <ClCompile Include="HookManager.cpp" />
+    <ClCompile Include="Hooks.cpp" />
+    <ClCompile Include="HumanFlagsLua.cpp" />
+    <ClCompile Include="HumanInfoLua.cpp" />
+    <ClCompile Include="HumanLua.cpp" />
+    <ClCompile Include="HumanMPFlagsLua.cpp" />
+    <ClCompile Include="HumanRaycastHitInfoLua.cpp" />
+    <ClCompile Include="imgui_impl_dx11.cpp" />
+    <ClCompile Include="imgui_impl_win32.cpp" />
+    <ClCompile Include="imgui_stdlib.cpp" />
+    <ClCompile Include="include\ImGuiColorTextEdit\TextEditor.cpp" />
+    <ClCompile Include="include\ImGui\imgui.cpp" />
+    <ClCompile Include="include\ImGui\imgui_demo.cpp" />
+    <ClCompile Include="include\ImGui\imgui_draw.cpp" />
+    <ClCompile Include="include\ImGui\imgui_widgets.cpp" />
+    <ClCompile Include="include\kiero\kiero.cpp" />
+    <ClCompile Include="IntrospectionGui.cpp" />
+    <ClCompile Include="InvItemInfoLua.cpp" />
+    <ClCompile Include="Logger.cpp" />
+    <ClCompile Include="LogWindow.cpp" />
+    <ClCompile Include="LuaFunctions.cpp" />
+    <ClCompile Include="Matrix43Lua.cpp" />
+    <ClCompile Include="MatrixLua.cpp" />
+    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="ObjectFlagsLua.cpp" />
+    <ClCompile Include="ObjectLua.cpp" />
+    <ClCompile Include="ObjectRenderDistanceLua.cpp" />
+    <ClCompile Include="PhysicsGui.cpp" />
+    <ClCompile Include="PlayerLua.cpp" />
+    <ClCompile Include="TextEditorWrapper.cpp" />
+    <ClCompile Include="VectorLua.cpp" />
+    <ClCompile Include="WelcomeGui.cpp" />
+    <ClCompile Include="Includes.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="MenuBarGui.cpp" />
+    <ClCompile Include="OverlayConsole.cpp" />
+    <ClCompile Include="ScriptManager.cpp" />
+    <ClCompile Include="ScriptSelectGui.cpp" />
+    <ClCompile Include="SnippetManager.cpp" />
+    <ClCompile Include="TeleportGui.cpp" />
+    <ClCompile Include="ThemeEditorGui.cpp" />
+    <ClCompile Include="Utilities.cpp" />
+    <ClCompile Include="WorldLua.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Application.h" />
+    <ClInclude Include="AttachInfoDataLua.h" />
+    <ClInclude Include="BaseGui.h" />
+    <ClInclude Include="BaseTypeLua.h" />
+    <ClInclude Include="HkpRigidBodyLua.h" />
+    <ClInclude Include="CameraWrapper.h" />
+    <ClInclude Include="CharacterInstanceLua.h" />
+    <ClInclude Include="ContactNodeLua.h" />
+    <ClInclude Include="DeepCodeStorage.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="FreeCamGui.h" />
+    <ClInclude Include="FunctionManager.h" />
+    <ClInclude Include="Functions.h" />
+    <ClInclude Include="GeneralTweaksGui.h" />
+    <ClInclude Include="Globals.h" />
+    <ClInclude Include="GuiSystem.h" />
+    <ClInclude Include="HavokBPOLua.h" />
+    <ClInclude Include="HkpSolverInfoLua.h" />
+    <ClInclude Include="HookManager.h" />
+    <ClInclude Include="Hooks.h" />
+    <ClInclude Include="HumanFlagsLua.h" />
+    <ClInclude Include="HumanInfoLua.h" />
+    <ClInclude Include="HumanLua.h" />
+    <ClInclude Include="HumanMPFlagsLua.h" />
+    <ClInclude Include="HumanRaycastHitInfoLua.h" />
+    <ClInclude Include="ImGuiColorTextEdit\TextEditor.h" />
+    <ClInclude Include="imgui_impl_dx11.h" />
+    <ClInclude Include="imgui_impl_win32.h" />
+    <ClInclude Include="imgui_stdlib.h" />
+    <ClInclude Include="include\ImGui\imconfig.h" />
+    <ClInclude Include="include\ImGui\imgui.h" />
+    <ClInclude Include="include\ImGui\imgui_internal.h" />
+    <ClInclude Include="include\ImGui\imstb_rectpack.h" />
+    <ClInclude Include="include\ImGui\imstb_textedit.h" />
+    <ClInclude Include="include\ImGui\imstb_truetype.h" />
+    <ClInclude Include="include\kiero\kiero.h" />
+    <ClInclude Include="include\MinHook\MinHook.h" />
+    <ClInclude Include="IntrospectionGui.h" />
+    <ClInclude Include="RenderInterfaceD3D11.h" />
+    <ClInclude Include="TextEditorWrapper.h" />
+    <ClInclude Include="WorldLua.h" />
+    <None Include="KeenNamespace2.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </None>
+    <ClInclude Include="InvItemInfoLua.h" />
+    <ClInclude Include="ItsyBitsy.h" />
+    <ClInclude Include="Logger.h" />
+    <ClInclude Include="LogWindow.h" />
+    <ClInclude Include="LuaFunctions.h" />
+    <ClInclude Include="Matrix43Lua.h" />
+    <ClInclude Include="MatrixLua.h" />
+    <ClInclude Include="ObjectFlagsLua.h" />
+    <ClInclude Include="ObjectLua.h" />
+    <ClInclude Include="ObjectRenderDistanceLua.h" />
+    <ClInclude Include="PhysicsGui.h" />
+    <ClInclude Include="PlayerLua.h" />
+    <ClInclude Include="RFGR_Containers.h" />
+    <ClInclude Include="RFGR_Types_Havok.h" />
+    <ClInclude Include="RFGR_Types_StateManager.h" />
+    <ClInclude Include="RFGR_Types_World.h" />
+    <ClInclude Include="SolStateForward.h" />
+    <ClInclude Include="VectorLua.h" />
+    <ClInclude Include="WelcomeGui.h" />
+    <ClInclude Include="Includes.h" />
+    <ClInclude Include="MenuBarGui.h" />
+    <ClInclude Include="OverlayConsole.h" />
+    <None Include="RFGR Structs\BasicTypes.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </None>
+    <None Include="RFGR Structs\KaikoNamespace.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </None>
+    <ClInclude Include="ScriptSelectGui.h" />
+    <ClInclude Include="TeleportGui.h" />
+    <ClInclude Include="ThemeEditorGui.h" />
+    <ClInclude Include="Utilities.h" />
+    <None Include="RFGR Structs\KeenFileSystem.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</DeploymentContent>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</DeploymentContent>
+    </None>
+    <None Include="RFGR Structs\KeenGameFrameworkSystem.hpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </None>
+    <None Include="RFGR Structs\KeenGraphicsSystem.hpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </None>
+    <None Include="RFGR Structs\KeenMemorySystem.hpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </None>
+    <None Include="RFGR Structs\KeenNamespace.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </None>
+    <None Include="RFGR Structs\KeenNamespace2.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</DeploymentContent>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</DeploymentContent>
+    </None>
+    <None Include="RFGR Structs\KeenRenderEffectSystem.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</DeploymentContent>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</DeploymentContent>
+    </None>
+    <None Include="RFGR Structs\KeenSoundSystem.hpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </None>
+    <None Include="RFGR Structs\KeenTaskSystem.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</DeploymentContent>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</DeploymentContent>
+    </None>
+    <None Include="RFGR Structs\KeenTlsfAllocator.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</DeploymentContent>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</DeploymentContent>
+    </None>
+    <None Include="RFGR Structs\MiscTypes.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </None>
+    <None Include="RFGR Structs\rfg.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
+    </None>
+    <None Include="RFGR Structs\Unit4Namespace.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </None>
+    <ClInclude Include="RFGR_Types.h" />
+    <ClInclude Include="RFGR_Types_Player.h" />
+    <ClInclude Include="RFGR_Type_UI.h" />
+    <ClInclude Include="ScriptManager.h" />
+    <ClInclude Include="SnippetManager.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

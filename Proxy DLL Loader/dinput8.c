@@ -36,7 +36,7 @@ BOOL WINAPI DllMain(HINSTANCE hInst, DWORD reason,LPVOID v)
         //    printf("Failed to load Launcher DLL! Exiting!");
         //    return FALSE;
         //}
-        const HINSTANCE RSLDLL = LoadLibrary(".\\RFGR Script Loader\\RFGR Script Loader.dll");
+        const HINSTANCE RSLDLL = LoadLibrary(".\\RSL\\RSL.dll");
         if(!RSLDLL)
         {
             printf("Failed to load RSL DLL! Exiting!");

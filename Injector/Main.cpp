@@ -10,9 +10,9 @@ void TestConsoleOutput();
 
 int main()
 {
-	Logger::Init(LOGSUCCESS, GetEXEPath(false) + "RFGR Script Loader/Logs/");
+	Logger::Init(LOGSUCCESS, GetEXEPath(false) + "RSL/Logs/");
 	Logger::OpenLogFile("Injector Log.txt", LOGSUCCESS, std::ios_base::trunc);
-	Logger::Log("RFGR script loader injector started", LOGMESSAGE, true);
+	Logger::Log("RSL injector started", LOGMESSAGE, true);
 	ConsoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
 
 	if (!LoadDataFromConfig())
@@ -53,7 +53,7 @@ int main()
 			float Dummy1 = ProgramVersion + 77.912f + (rand() % (int)(ProgramVersion + 641.9f));
 			double Dummy2 = (3730.0 / ((double)ProgramVersion)) + 2.93 * ProgramVersion + (rand() % (int)(2 + pow(2, ProgramVersion)));
 			bool Dummy3 = (bool)ProgramVersion & (bool)(rand() % 222);
-			if (!InjectDLL(PID, ProgramPath + "/RFGR Script Loader.dll", Dummy1, Dummy2, Dummy3))
+			if (!InjectDLL(PID, ProgramPath + "/RSL.dll", Dummy1, Dummy2, Dummy3))
 			{
 				Logger::Log("Failure to inject dll. Closing injector in 5 seconds.", LOGERROR);
 			}
