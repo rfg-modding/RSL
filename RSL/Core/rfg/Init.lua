@@ -1,6 +1,7 @@
 local rfg = {}
 
 rfg.ObjectTypes = require("rfg.ObjectTypes")
+rfg.ObjectSubTypes = require("rfg.ObjectSubTypes")
 rfg.HumanTeams = require("rfg.HumanTeams")
 rfg.PropTypes = require("rfg.PropTypes")
 rfg.ObjectHitLocations = require("rfg.ObjectHitLocations")
