@@ -48,21 +48,26 @@ void MenuBarGui::Draw()
 		{
 			if (ImGui::MenuItem(std::string(std::string(ICON_FA_SLIDERS_H) + u8" General Tweaks").c_str(), NULL, &Gui->ShowAppTweaksMenu)) {}
 			if (ImGui::MenuItem(std::string(std::string(ICON_FA_MAP_MARKED) + u8" Teleport").c_str(), NULL, &Gui->ShowAppTeleportMenu)) {}
-			if (ImGui::MenuItem(std::string(std::string(ICON_FA_LIST) + u8" Logger").c_str(), NULL, &Gui->ShowAppLogWindow)) {}
-			//if (ImGui::MenuItem(std::string(std::string(ICON_FA_SEARCH) + u8" Player view").c_str(), NULL, &Gui->ShowAppIntrospectionMenu)) {}
-			if (ImGui::MenuItem(std::string(std::string(ICON_FA_PALETTE) + u8" Theme editor").c_str(), NULL, &Gui->ShowAppThemeEditor)) {}
 			if (ImGui::MenuItem(std::string(std::string(ICON_FA_CAMERA) + u8" Camera settings").c_str(), NULL, &Gui->ShowAppFreeCamSettings)) {}
 			if (ImGui::MenuItem(std::string(std::string(ICON_FA_VIAL) + u8" Physics settings").c_str(), NULL, &Gui->ShowAppPhysicsSettings)) {}
-			if (ImGui::MenuItem(std::string(std::string(ICON_FA_SEARCH) + u8" Object introspection").c_str(), NULL, &Gui->ShowAppIntrospectionMenu)) {}
+			//if (ImGui::MenuItem(std::string(std::string(ICON_FA_CAR) + u8" Vehicle spawner").c_str(), NULL, &Gui->ShowAppVehicleSpawner)) {}
 			ImGui::EndMenu();
 		}
-		if (ImGui::BeginMenu("Scripting"))
-		{
-			if (ImGui::MenuItem(std::string(std::string(ICON_FA_CODE) + u8" Scripts").c_str(), NULL, &Gui->ShowAppScriptsMenu)) {}
-			if (ImGui::MenuItem(std::string(std::string(ICON_FA_TERMINAL) + u8" Lua console").c_str(), "~ (Tilde)", &Gui->ShowAppConsole)) {}
-			if (ImGui::MenuItem(std::string(std::string(ICON_FA_EDIT) + u8" Script editor").c_str(), "F2", &Gui->ShowAppScriptEditor)) {}
-			ImGui::EndMenu();
-		}
+        if(ImGui::BeginMenu("Tools"))
+        {
+            if (ImGui::MenuItem(std::string(std::string(ICON_FA_BOMB) + u8" Explosion spawner").c_str(), NULL, &Gui->ShowAppExplosionSpawner)) {}
+            if (ImGui::MenuItem(std::string(std::string(ICON_FA_SEARCH) + u8" Object introspection").c_str(), NULL, &Gui->ShowAppIntrospectionMenu)) {}
+            if (ImGui::MenuItem(std::string(std::string(ICON_FA_LIST) + u8" Logger").c_str(), NULL, &Gui->ShowAppLogWindow)) {}
+            if (ImGui::MenuItem(std::string(std::string(ICON_FA_PALETTE) + u8" Theme editor").c_str(), NULL, &Gui->ShowAppThemeEditor)) {}
+            ImGui::EndMenu();
+        }
+        if (ImGui::BeginMenu("Scripting"))
+        {
+            if (ImGui::MenuItem(std::string(std::string(ICON_FA_CODE) + u8" Scripts").c_str(), NULL, &Gui->ShowAppScriptsMenu)) {}
+            if (ImGui::MenuItem(std::string(std::string(ICON_FA_TERMINAL) + u8" Lua console").c_str(), "~ (Tilde)", &Gui->ShowAppConsole)) {}
+            if (ImGui::MenuItem(std::string(std::string(ICON_FA_EDIT) + u8" Script editor").c_str(), "F2", &Gui->ShowAppScriptEditor)) {}
+            ImGui::EndMenu();
+        }
 		if (ImGui::BeginMenu("Help"))
 		{
 			if (ImGui::MenuItem(std::string(std::string(ICON_FA_HOME) + u8" Welcome").c_str(), NULL, &Gui->ShowAppWelcome)) {}

@@ -95,9 +95,6 @@
     <ClCompile Include="HookManager.cpp">
       <Filter>General Files\Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Utilities.cpp">
-      <Filter>General Files\Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="GuiSystem.cpp">
       <Filter>Overlay Gui\Source Files</Filter>
     </ClCompile>
@@ -212,6 +209,15 @@
     <ClCompile Include="include\ImGuiColorTextEdit\TextEditor.cpp">
       <Filter>Overlay Gui\Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ExplosionSpawnerGui.cpp">
+      <Filter>Overlay Gui\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Util.cpp">
+      <Filter>General Files\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="VehicleSpawnerGui.cpp">
+      <Filter>Overlay Gui\Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CameraWrapper.h">
@@ -278,9 +284,6 @@
       <Filter>General Files\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="HookManager.h">
-      <Filter>General Files\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Utilities.h">
       <Filter>General Files\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GuiSystem.h">
@@ -425,6 +428,21 @@
       <Filter>Overlay Gui\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ImGuiColorTextEdit\TextEditor.h">
+      <Filter>Overlay Gui\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FixedArrayWrapper.h">
+      <Filter>General Files\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ExplosionSpawnerGui.h">
+      <Filter>Overlay Gui\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Util.h">
+      <Filter>General Files\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RFGR_Types_Vehicle_Spawn_Params.h">
+      <Filter>RFGR Structs</Filter>
+    </ClInclude>
+    <ClInclude Include="VehicleSpawnerGui.h">
       <Filter>Overlay Gui\Header Files</Filter>
     </ClInclude>
   </ItemGroup>

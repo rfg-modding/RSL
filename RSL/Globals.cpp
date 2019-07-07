@@ -21,6 +21,18 @@ namespace Globals
 	lua_State* RfgVintLuaState = nullptr;
 	hkpRigidBody* PlayerRigidBody = nullptr;
     keen::GraphicsSystem* KeenGraphicsSystemPtr = nullptr;
+    stream_grid* MainStreamGrid = nullptr;
+    
+    FixedArrayWrapper<explosion_info> ExplosionInfos;
+    uint* NumExplosionInfos = nullptr;
+
+    FixedArrayWrapper<material_effect_info> MaterialEffectInfos;
+    uint* NumMaterialEffectInfos;
+
+    FixedArrayWrapper<effect_info> EffectInfos;
+    uint* NumEffectInfos;
+
+    rfg::farray<vehicle_info, 163> * VehicleInfos;
 
 	DWORD MouseGenericPollMouseVisible = 0;
 	DWORD CenterMouseCursorCall = 0;
@@ -359,4 +371,38 @@ namespace Globals
 		std::cout << "Error! Failed to find asm Pattern!\n";
 		return 0;
 	}
+
+    std::string CharArrayToString(char* Array, int Size)
+    {
+        std::string String;
+        for(int i = 0; i < Size; i++)
+        {
+            if(Array[i] == '\0')
+            {
+                break; //Stop at null terminator. Including null characters can mess up string comparisons elsewhere.
+            }
+            String += Array[i];
+        }
+        return String;
+    }
+
+    std::string CharArrayToString(const char* Array, int Size)
+	{
+        return CharArrayToString(const_cast<char*>(Array), Size);
+	}
+
+    std::optional<explosion_info*> GetExplosionInfo(std::string Name)
+    {
+        if(ExplosionInfos.Initialized())
+        {
+            for(int i = 0; i < ExplosionInfos.Size(); i++)
+            {
+                if(CharArrayToString(ExplosionInfos[i].m_name, 32) == Name)
+                {
+                    return const_cast<explosion_info*>(&ExplosionInfos[i]);
+                }
+            }
+        }
+        return {};
+    }
 }

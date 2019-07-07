@@ -19,7 +19,7 @@ public:
 private:
     void Init();
     void InitLogger();
-    void CheckForImproperInstallation();
+    void CheckForImproperInstallation() const;
     void InitRSL();
     void OpenDefaultLogs();
     void MainLoop();
@@ -30,7 +30,7 @@ private:
     void OpenConsole();
     void CloseConsole();
     void SetMemoryLocations();
-    bool IsFolderPlacementError();
+    bool IsFolderPlacementError() const;
     bool LoadDataFromConfig();
 
     CameraWrapper Camera;

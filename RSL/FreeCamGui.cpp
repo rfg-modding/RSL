@@ -26,13 +26,130 @@ void FreeCamGui::Draw()
 	ImGui::PopFont();
 	ImGui::Separator();
 
+    if(ImGui::Button("UnusedDcfRagdollPlayer"))
+    {
+        UnusedDcfRagdollPlayer();
+    }
+
+    //ImGui::Separator();
+    //ImGui::Text("Stream grid radius: ");
+    //ImGui::Separator();
+
+    //static bool StreamRadiusInited = false;
+    //static float CustomStreamGridRadius = 0.0f;
+    //static layout_layer StreamGridLayer = LAYER_LEVEL;
+
+    //if (Globals::MainStreamGrid)
+    //{
+    //    if(Globals::MainStreamGrid)
+    //    {
+    //        if (!StreamRadiusInited)
+    //        {
+    //            CustomStreamGridRadius = StreamGridGetStreamRadius(Globals::MainStreamGrid, nullptr, LAYER_LEVEL);
+    //            StreamRadiusInited = true;
+    //        }
+    //        ImGui::Text("Stream radius level:");
+    //        ImGui::SameLine();
+    //        ImGui::Text(std::to_string(StreamGridGetStreamRadius(Globals::MainStreamGrid, nullptr, LAYER_LEVEL)).c_str());
+    //        ImGui::Text("Stream radius terrain:");
+    //        ImGui::SameLine();
+    //        ImGui::Text(std::to_string(StreamGridGetStreamRadius(Globals::MainStreamGrid, nullptr, LAYER_TERRAIN)).c_str());
+
+    //        ImGui::Text("");
+    //        ImGui::Text("Stream grid layer to set radius for:");
+    //        ImGui::SameLine();
+    //        ImGui::RadioButton("Level", reinterpret_cast<int*>(&StreamGridLayer), LAYER_LEVEL);
+    //        ImGui::SameLine();
+    //        ImGui::RadioButton("Terrain", reinterpret_cast<int*>(&StreamGridLayer), LAYER_TERRAIN);
+
+    //        ImGui::InputFloat("Stream grid radius", &CustomStreamGridRadius);
+    //        ImGui::SameLine();
+    //        if (ImGui::Button("Set"))
+    //        {
+    //            StreamGridSetStreamRadius(Globals::MainStreamGrid, nullptr, StreamGridLayer, CustomStreamGridRadius);
+    //        }
+    //    }
+    //    else
+    //    {
+    //        ImGui::Text("Rfg world stream grid invalid. Can't display some gui elements.");
+    //    }
+    //}
+    //else
+    //{
+    //    ImGui::Text("Rfg world ptr invalid. Can't display stream grid info");
+    //}
+
+    ImGui::Separator();
+
+    if(ImGui::Button("Log explosion infos"))
+    {
+        if (Globals::ExplosionInfos.Initialized())
+        {
+            Logger::Log("Printing out all explosion names...");
+            for (int i = 0; i < Globals::ExplosionInfos.Size(); i++)
+            {
+                Logger::Log(std::to_string(i) + ": " + Globals::CharArrayToString((char*)& Globals::ExplosionInfos[i].m_name, 32));
+                Logger::Log("\t Effect 0: " + std::to_string(Globals::ExplosionInfos[i].m_effects[0]));
+                Logger::Log("\t Effect 1: " + std::to_string(Globals::ExplosionInfos[i].m_effects[1]));
+                Logger::Log("\t Effect 2: " + std::to_string(Globals::ExplosionInfos[i].m_effects[2]));
+                Logger::Log("\t Effect 3: " + std::to_string(Globals::ExplosionInfos[i].m_effects[3]));
+            }
+        }
+    }
+
+    if (ImGui::Button("Log material effect infos"))
+    {
+        if (Globals::MaterialEffectInfos.Initialized())
+        {
+            Logger::Log("Printing out all material_effect_info names and other info...");
+            for (int i = 0; i < Globals::MaterialEffectInfos.Size(); i++)
+            {
+                Logger::Log(std::to_string(i) + ": " + Globals::CharArrayToString((char*)& Globals::MaterialEffectInfos[i].name, 64));
+                Logger::Log("\t SRID: " + std::to_string(Globals::MaterialEffectInfos[i].srid));
+                Logger::Log("\t Num layers: " + std::to_string(Globals::MaterialEffectInfos[i].num_layers));
+            }
+        }
+    }
+
+    if(ImGui::Button("Log effect infos"))
+    {
+        if (Globals::EffectInfos.Initialized())
+        {
+            Logger::Log("Printing out all effect_info names and handles...");
+            for (int i = 0; i < Globals::EffectInfos.Size(); i++)
+            {
+                Logger::Log(std::to_string(i) + ": " + Globals::CharArrayToString((char*)& Globals::EffectInfos[i].name, 65));
+                Logger::Log("\t Visual handle: " + std::to_string(Globals::EffectInfos[i].visual_handle));
+                Logger::Log("\t Sound handle: " + std::to_string(Globals::EffectInfos[i].sound_handle));
+            }
+        }
+    }
+
+    if(ImGui::Button("Log vehicle infos"))
+    {
+        if(Globals::VehicleInfos)
+        {
+            for(int i = 0; i < Globals::VehicleInfos->Size(); i++)
+            {
+                Logger::Log("Index: " + std::to_string(i));
+                Logger::Log("\t Name: " + std::string((*Globals::VehicleInfos)[i].name));
+                Logger::Log("\t Display name: " + std::string((*Globals::VehicleInfos)[i].display_name));
+                Logger::Log("\t Mesh name: " + std::string((*Globals::VehicleInfos)[i].mesh_name));
+                Logger::Log("\t Flyer max up thrust: " + std::to_string((*Globals::VehicleInfos)[i].flyer_max_up_thrust));
+                Logger::Log("\t Flyer max turn angvel: " + std::to_string((*Globals::VehicleInfos)[i].flyer_max_turn_angvel));
+            }
+        }
+    }
+
+    ImGui::Separator();
+
 	if (ImGui::Button("Toggle free cam"))
 	{
 		Camera->ToggleFreeCamera();
 	}
 	ImGui::Checkbox("Return player to original position?", &ReturnPlayerToOriginalPosition);
 	ImGui::SameLine();
-	Utilities::GUI::ShowHelpMarker("If this is on the player will be teleported back to their original position after the free cam is disabled. If it's off then the player will be dropped wherever the free cam deactivates. So be careful.");
+	Util::Gui::ShowHelpMarker("If this is on the player will be teleported back to their original position after the free cam is disabled. If it's off then the player will be dropped wherever the free cam deactivates. So be careful.");
 	ImGui::InputFloat("Max speed", &Camera->MaxSpeed, 0.1, 5.0, 3);
 	if (Camera->SmoothCamera)
 	{
@@ -46,7 +163,7 @@ void FreeCamGui::Draw()
 
 	//ImGui::Checkbox("Have player follow camera", &PlayerFollowCam);
 	//ImGui::SameLine();
-	//Utilities::GUI::ShowHelpMarker("This causes the player to follow the camera via teleportation. This is a workaround to make npc and vehicles spawns work.");
+	//Util::Gui::ShowHelpMarker("This causes the player to follow the camera via teleportation. This is a workaround to make npc and vehicles spawns work.");
 	
 	//ImGui::InputFloat("Real FOV", (float*)Camera->RealFOV, 0.1, 5.0, 3);
 	//ImGui::InputFloat("Ideal FOV", (float*)Camera->IdealFOV, 0.1, 5.0, 3);

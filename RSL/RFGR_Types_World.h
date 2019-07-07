@@ -1,5 +1,11 @@
 #pragma once
 #include "RFGR_Type_UI.h"
+#include <ostream>
+
+using timestamp = Timestamp;
+using vehicle_seat_index = VehicleSeatIndex;
+using human_teams = HumanTeams;
+using damaged_by_types = DamagedByTypes;
 
 enum trigger_region_shape
 {
@@ -675,6 +681,13 @@ struct rl_outline_state
 
 struct bbox
 {
+    friend std::ostream& operator<<(std::ostream& os, const bbox& obj)
+    {
+        return os
+            << "\nmin: " << obj.min
+            << "\nmax: " << obj.max;
+    }
+
 	vector min;
 	vector max;
 };
@@ -2286,6 +2299,13 @@ struct stream_layer
 	vector cell_dim;
 };
 
+enum layout_layer
+{
+    LAYER_LEVEL = 0x0,
+    LAYER_TERRAIN = 0x1,
+    NUM_LAYERS = 0x2,
+};
+
 struct stream_grid
 {
 	stream_layer* layers;
@@ -2402,9 +2422,134 @@ struct __declspec(align(8)) World //11108
 
 struct vehicle_flags
 {
-    unsigned __int32 activity : 1;
-    unsigned __int32 old_activity : 1;
-    unsigned __int32 activity_destroyed : 1;
+    vehicle_flags()
+        : activity(0),
+          old_activity(0),
+          activity_destroyed(0),
+          convoy_vehicle(0),
+          ambient_spawn(0),
+          death_reported(0),
+          no_ragdoll(0),
+          despawned_squad_vehicle(0),
+          delete_mission_vehicle(0),
+          do_not_destroy_with_squad(0),
+          m_corpse(0),
+          m_despawn_after_fade(0),
+          m_door_collision_enabled(0),
+          m_engine_running(0),
+          m_engine_smoking(0),
+          m_fading_in(0),
+          m_fading_out(0),
+          m_fading_from_nano(0),
+          m_hidden(0),
+          m_hijacked(0),
+          m_scripted_bail(0),
+          m_scripted_abandon(0),
+          m_horn_down(0),
+          m_invulnerable(0),
+          m_mission_invulnerable(0),
+          m_is_player_car(0),
+          m_kill_by_vehicle(0),
+          m_mp_honked_horn(0),
+          m_needs_repair(0),
+          m_occupied(0),
+          m_on_fire(0),
+          m_nano_sim_fire(0),
+          m_nano_sim_smoke(0),
+          m_grenade_inside(0),
+          m_released_from_cutscene(0),
+          m_resource_access_disabled(0),
+          m_reverse_last_frame(0),
+          m_series_of_honks(0),
+          m_siren_dying(0),
+          m_siren_audio_on(0),
+          m_using_horn(0),
+          pass_by_getting_closer(0),
+          m_wheels_on_ground(0),
+          m_all_wheels_on_ground(0),
+          m_only_fire_damage(0),
+          m_headlights_on(0),
+          m_emergency_lights_on(0),
+          high_priority_target(0),
+          player_may_capture(0),
+          disable_for_npc_drivers(0),
+          disable_for_player(0),
+          disable_accelerator(0),
+          locked_in_place(0),
+          fixed_motion(0),
+          disable_turrets_for_npcs(0),
+          immediate_spawn(0),
+          no_player_use(0),
+          invisible_driver(0)
+    {
+    }
+
+    friend std::ostream& operator<<(std::ostream& os, const vehicle_flags& obj)
+    {
+        return os
+            << "\nactivity: " << obj.activity
+            << "\nold_activity: " << obj.old_activity
+            << "\nactivity_destroyed: " << obj.activity_destroyed
+            << "\nconvoy_vehicle: " << obj.convoy_vehicle
+            << "\nambient_spawn: " << obj.ambient_spawn
+            << "\ndeath_reported: " << obj.death_reported
+            << "\nno_ragdoll: " << obj.no_ragdoll
+            << "\ndespawned_squad_vehicle: " << obj.despawned_squad_vehicle
+            << "\ndelete_mission_vehicle: " << obj.delete_mission_vehicle
+            << "\ndo_not_destroy_with_squad: " << obj.do_not_destroy_with_squad
+            << "\nm_corpse: " << obj.m_corpse
+            << "\nm_despawn_after_fade: " << obj.m_despawn_after_fade
+            << "\nm_door_collision_enabled: " << obj.m_door_collision_enabled
+            << "\nm_engine_running: " << obj.m_engine_running
+            << "\nm_engine_smoking: " << obj.m_engine_smoking
+            << "\nm_fading_in: " << obj.m_fading_in
+            << "\nm_fading_out: " << obj.m_fading_out
+            << "\nm_fading_from_nano: " << obj.m_fading_from_nano
+            << "\nm_hidden: " << obj.m_hidden
+            << "\nm_hijacked: " << obj.m_hijacked
+            << "\nm_scripted_bail: " << obj.m_scripted_bail
+            << "\nm_scripted_abandon: " << obj.m_scripted_abandon
+            << "\nm_horn_down: " << obj.m_horn_down
+            << "\nm_invulnerable: " << obj.m_invulnerable
+            << "\nm_mission_invulnerable: " << obj.m_mission_invulnerable
+            << "\nm_is_player_car: " << obj.m_is_player_car
+            << "\nm_kill_by_vehicle: " << obj.m_kill_by_vehicle
+            << "\nm_mp_honked_horn: " << obj.m_mp_honked_horn
+            << "\nm_needs_repair: " << obj.m_needs_repair
+            << "\nm_occupied: " << obj.m_occupied
+            << "\nm_on_fire: " << obj.m_on_fire
+            << "\nm_nano_sim_fire: " << obj.m_nano_sim_fire
+            << "\nm_nano_sim_smoke: " << obj.m_nano_sim_smoke
+            << "\nm_grenade_inside: " << obj.m_grenade_inside
+            << "\nm_released_from_cutscene: " << obj.m_released_from_cutscene
+            << "\nm_resource_access_disabled: " << obj.m_resource_access_disabled
+            << "\nm_reverse_last_frame: " << obj.m_reverse_last_frame
+            << "\nm_series_of_honks: " << obj.m_series_of_honks
+            << "\nm_siren_dying: " << obj.m_siren_dying
+            << "\nm_siren_audio_on: " << obj.m_siren_audio_on
+            << "\nm_using_horn: " << obj.m_using_horn
+            << "\npass_by_getting_closer: " << obj.pass_by_getting_closer
+            << "\nm_wheels_on_ground: " << obj.m_wheels_on_ground
+            << "\nm_all_wheels_on_ground: " << obj.m_all_wheels_on_ground
+            << "\nm_only_fire_damage: " << obj.m_only_fire_damage
+            << "\nm_headlights_on: " << obj.m_headlights_on
+            << "\nm_emergency_lights_on: " << obj.m_emergency_lights_on
+            << "\nhigh_priority_target: " << obj.high_priority_target
+            << "\nplayer_may_capture: " << obj.player_may_capture
+            << "\ndisable_for_npc_drivers: " << obj.disable_for_npc_drivers
+            << "\ndisable_for_player: " << obj.disable_for_player
+            << "\ndisable_accelerator: " << obj.disable_accelerator
+            << "\nlocked_in_place: " << obj.locked_in_place
+            << "\nfixed_motion: " << obj.fixed_motion
+            << "\ndisable_turrets_for_npcs: " << obj.disable_turrets_for_npcs
+            << "\nimmediate_spawn: " << obj.immediate_spawn
+            << "\nno_player_use: " << obj.no_player_use
+            << "\ninvisible_driver: " << obj.invisible_driver;
+    }
+
+    unsigned __int32 activity : 1; //78
+    unsigned __int32 old_activity : 1; //82
+    unsigned __int32 activity_destroyed : 1; //86
     unsigned __int32 convoy_vehicle : 1;
     unsigned __int32 ambient_spawn : 1;
     unsigned __int32 death_reported : 1;

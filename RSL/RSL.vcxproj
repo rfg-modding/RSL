@@ -113,6 +113,7 @@
     <ClCompile Include="AttachInfoDataLua.cpp" />
     <ClCompile Include="BaseGui.cpp" />
     <ClCompile Include="BaseTypeLua.cpp" />
+    <ClCompile Include="ExplosionSpawnerGui.cpp" />
     <ClCompile Include="HkpRigidBodyLua.cpp" />
     <ClCompile Include="CameraWrapper.cpp" />
     <ClCompile Include="CharacterInstanceLua.cpp" />
@@ -156,6 +157,7 @@
     <ClCompile Include="PlayerLua.cpp" />
     <ClCompile Include="TextEditorWrapper.cpp" />
     <ClCompile Include="VectorLua.cpp" />
+    <ClCompile Include="VehicleSpawnerGui.cpp" />
     <ClCompile Include="WelcomeGui.cpp" />
     <ClCompile Include="Includes.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
@@ -168,7 +170,7 @@
     <ClCompile Include="SnippetManager.cpp" />
     <ClCompile Include="TeleportGui.cpp" />
     <ClCompile Include="ThemeEditorGui.cpp" />
-    <ClCompile Include="Utilities.cpp" />
+    <ClCompile Include="Util.cpp" />
     <ClCompile Include="WorldLua.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -176,6 +178,8 @@
     <ClInclude Include="AttachInfoDataLua.h" />
     <ClInclude Include="BaseGui.h" />
     <ClInclude Include="BaseTypeLua.h" />
+    <ClInclude Include="ExplosionSpawnerGui.h" />
+    <ClInclude Include="FixedArrayWrapper.h" />
     <ClInclude Include="HkpRigidBodyLua.h" />
     <ClInclude Include="CameraWrapper.h" />
     <ClInclude Include="CharacterInstanceLua.h" />
@@ -213,7 +217,9 @@
     <ClInclude Include="include\MinHook\MinHook.h" />
     <ClInclude Include="IntrospectionGui.h" />
     <ClInclude Include="RenderInterfaceD3D11.h" />
+    <ClInclude Include="RFGR_Types_Vehicle_Spawn_Params.h" />
     <ClInclude Include="TextEditorWrapper.h" />
+    <ClInclude Include="VehicleSpawnerGui.h" />
     <ClInclude Include="WorldLua.h" />
     <None Include="KeenNamespace2.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
@@ -252,7 +258,7 @@
     <ClInclude Include="ScriptSelectGui.h" />
     <ClInclude Include="TeleportGui.h" />
     <ClInclude Include="ThemeEditorGui.h" />
-    <ClInclude Include="Utilities.h" />
+    <ClInclude Include="Util.h" />
     <None Include="RFGR Structs\KeenFileSystem.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</DeploymentContent>

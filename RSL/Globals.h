@@ -1,6 +1,7 @@
 #pragma once
 #include "Includes.h"
-#include "RFGR_Types_Havok.h"
+#include "RFGR_Types_Vehicle_Spawn_Params.h"
+#include "FixedArrayWrapper.h"
 
 /*RSL*/
 
@@ -37,6 +38,18 @@ namespace Globals
 	extern lua_State* RfgVintLuaState;
 	extern hkpRigidBody* PlayerRigidBody;
     extern keen::GraphicsSystem* KeenGraphicsSystemPtr;
+    extern stream_grid* MainStreamGrid;
+
+    extern FixedArrayWrapper<explosion_info> ExplosionInfos;
+    extern uint* NumExplosionInfos;
+
+    extern FixedArrayWrapper<material_effect_info> MaterialEffectInfos; //.data:0226B6F0 rfg.exe:$19EB6F0 #0 <Effect_infos>
+    extern uint* NumMaterialEffectInfos; //.data:0226E4C4 rfg.exe:$19EE4C4 #0 <Num_effect_infos>
+
+    extern FixedArrayWrapper<effect_info> EffectInfos; //.data:02602E60 rfg.exe:$1D82E60 #0 <Effect_info>
+    extern uint* NumEffectInfos; //.data:02602DF0 rfg.exe:$1D82DF0 #0 <Num_effect_types>
+
+    extern rfg::farray<vehicle_info, 163>* VehicleInfos; //.data:012FA5F8 rfg.exe:$12BA5F8 #12B8FF8 <Vehicle_info_pool>
 
 	extern DWORD MouseGenericPollMouseVisible;
 	extern DWORD CenterMouseCursorCall;
@@ -136,6 +149,10 @@ namespace Globals
 	void PlaceNOP(BYTE* Address, DWORD Length = 1);
 	MODULEINFO GetModuleInfo(const char* ModuleName);
 	DWORD FindPattern(const char* ModuleName, const char* PatternString, const char* MaskString);
+    std::string CharArrayToString(char* Array, int Size);
+    std::string CharArrayToString(const char* Array, int Size);
+
+    std::optional<explosion_info*> GetExplosionInfo(std::string Name);
 
 	template <typename T>
 	std::string to_string_precise(const T Value, const int Precision = 1)

@@ -38,6 +38,10 @@ void GuiSystem::Initialize()
     Teleport = static_cast<TeleportGui*>(GuiList.back());
     GuiList.push_back(new IntrospectionGui(&ShowAppIntrospectionMenu, "Object introspection"));
     Introspection = static_cast<IntrospectionGui*>(GuiList.back());
+    GuiList.push_back(new ExplosionSpawnerGui(&ShowAppExplosionSpawner, "Explosion spawner"));
+    ExplosionSpawner = static_cast<ExplosionSpawnerGui*>(GuiList.back());
+    //GuiList.push_back(new VehicleSpawnerGui(&ShowAppVehicleSpawner, "Vehicle spawner"));
+    //VehicleSpawner = static_cast<VehicleSpawnerGui*>(GuiList.back());
 
 	for (const auto& i : GuiList)
 	{

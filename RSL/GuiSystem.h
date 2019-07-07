@@ -11,6 +11,8 @@
 #include "LogWindow.h"
 #include "FreeCamGui.h"
 #include "PhysicsGui.h"
+#include "ExplosionSpawnerGui.h"
+#include "VehicleSpawnerGui.h"
 
 class ScriptManager;
 
@@ -62,6 +64,8 @@ public:
 	FreeCamGui* FreeCamSettings = nullptr;
     OverlayConsole* Console = nullptr;
     MenuBarGui* MainMenuBar = nullptr;
+    ExplosionSpawnerGui* ExplosionSpawner = nullptr;
+    VehicleSpawnerGui* VehicleSpawner = nullptr;
 
     bool ShowPreInitWindow = true;
 
@@ -82,6 +86,8 @@ public:
 	bool ShowAppScriptEditor = false;
     bool ShowAppFreeCamSettings = false;
 	bool ShowAppLogWindow = false;
+    bool ShowAppExplosionSpawner = false;
+    bool ShowAppVehicleSpawner = false;
 
 private:
 	bool LuaConsoleActive = false;

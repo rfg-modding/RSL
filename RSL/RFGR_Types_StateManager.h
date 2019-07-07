@@ -1,6 +1,41 @@
 #pragma once
 #include "RFGR_Types_World.h"
 
+struct effect_info_flags
+{
+    __int8 sound_kill_oneshot_when_done : 1;
+    __int8 sound_follows_effect_pos : 1;
+    __int8 vfx_kill_particles_on_stop : 1;
+    __int8 stop_when_host_destroyed : 1;
+};
+
+/* 5437 */
+const struct  __declspec(align(4)) effect_info
+{
+    char name[65];
+    unsigned int visual_handle;
+    int sound_handle;
+    int sound_alr_handle;
+    float vfx_kill_particles_fade_time_s;
+    effect_info_flags flags;
+};
+
+struct material_effect_layer_info
+{
+    char mat_name[64];
+    int map_index;
+    unsigned int flags;
+};
+
+/* 8381 */
+struct material_effect_info
+{
+    char name[64];
+    int num_layers;
+    material_effect_layer_info layers[4];
+    unsigned int srid;
+};
+
 /*struct rl_shader_header_runtime
 {
 	int signature;

@@ -1,6 +1,6 @@
-#include "Utilities.h"
+#include "Util.h"
 
-namespace Utilities::Json
+namespace Util::Json
 {
 	void SetFloat4(nlohmann::json& JsonObject, const char* FirstKey, const char* SecondKey, float r, float g, float b, float a)
 	{
@@ -29,7 +29,7 @@ namespace Utilities::Json
 	}
 }
 
-namespace Utilities::GUI
+namespace Util::Gui
 {
     /* Creates a tooltip with the given description and font on the previous ImGui element
      * created. The font argument is optional. If you leave it blank it'll use the current
@@ -85,7 +85,7 @@ namespace Utilities::GUI
      * the resulting gui would be:
      * F1: Toggle Overlay
      */
-    void LabelAndValue(std::string Label, std::string Value)
+    void LabelAndValue(const std::string& Label, const std::string& Value)
     {
         ImGui::Text(Label.c_str());
         ImGui::SameLine(); 
@@ -97,8 +97,25 @@ namespace Utilities::GUI
 // to avoid pausing execution in the current thread for the duration of the sound.
 // Still causes a slight pause, likely due to the overhead of starting a new thread, 
 // but it's better than running Beep in the same thread.
-void Utilities::General::ThreadedBeep(ulong Frequency, ulong Duration)
+void Util::General::ThreadedBeep(ulong Frequency, ulong Duration)
 {
     std::thread BeepThread([&] {Beep(Frequency, Duration); });
     BeepThread.detach();
+}
+
+// Loads a file into a string and returns that string.
+// Got this from here: https://stackoverflow.com/a/2602060
+std::string Util::General::LoadFileToString(const std::string& FullPath)
+{
+    std::ifstream t(FullPath);
+    std::string str;
+
+    t.seekg(0, std::ios::end);
+    str.reserve(t.tellg());
+    t.seekg(0, std::ios::beg);
+
+    str.assign((std::istreambuf_iterator<char>(t)),
+        std::istreambuf_iterator<char>());
+
+    return str;
 }

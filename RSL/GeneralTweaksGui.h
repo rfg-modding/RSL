@@ -27,10 +27,6 @@ public:
 	bool UseCustomLevelAmbientLight = false;
 	bool UseCustomLevelBackgroundAmbientLight = false;
 
-	explosion_info CustomExplosionInfo; 
-	bool MiddleMouseBoomActive = false;
-	int MiddleMouseExplosionsPerSecond = 20;
-
 	bool UseCustomTimeOfDayLight = false;
 	rl_color_float CustomTimeOfDayLightColor;
 

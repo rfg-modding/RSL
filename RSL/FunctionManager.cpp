@@ -135,4 +135,17 @@ void FunctionManager::Initialize()
     RegisterFunction(KeenGetBuildVersionString, 0x58740);
     
     RegisterFunction(WorldObjectFromHandle, 0x53C050);
+
+    RegisterFunction(UnusedDcfRagdollPlayer, 0x6D4F30);
+
+    RegisterFunction(StreamGridSetStreamRadius, 0x51AEB0);
+    RegisterFunction(StreamGridGetStreamRadius, 0x51AFB0);
+    RegisterFunction(StreamGridDoFrame, 0x530FB0);
+
+    RegisterFunction(CutsceneSpawnVehicle, 0x305D70);
+    //RegisterFunction(ObjectSpawnVehicle, 0x757F40);
+    RegisterFunction(VehicleInfoGetMasterList, 0x768E40);
+    RegisterFunction(SpSpawnVehicle, 0x756420);
+
+    RegisterFunction(create_new_vehicle_raw, 0x748960);
 }

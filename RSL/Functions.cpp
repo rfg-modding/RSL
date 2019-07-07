@@ -262,3 +262,15 @@ F_keen_graphics_beginFrame KeenGraphicsBeginFrame;
 F_keen_get_build_version_string KeenGetBuildVersionString;
 
 F_WorldObjectFromHandle WorldObjectFromHandle;
+
+F_unused_dcf_ragdoll_player UnusedDcfRagdollPlayer;
+
+F_StreamGridSetStreamRadius StreamGridSetStreamRadius;
+F_StreamGridGetStreamRadius StreamGridGetStreamRadius;
+F_StreamGridDoFrame StreamGridDoFrame;
+
+F_cutscene_spawn_vehicle CutsceneSpawnVehicle;
+//F_object_spawn_vehicle ObjectSpawnVehicle;
+F_vehicle_info_get_master_list VehicleInfoGetMasterList;
+F_sp_spawn_vehicle SpSpawnVehicle;
+F_create_new_vehicle create_new_vehicle_raw;

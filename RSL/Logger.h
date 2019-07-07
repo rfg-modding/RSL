@@ -1,5 +1,5 @@
 #pragma once
-#include "Utilities.h"
+#include "Util.h"
 
 /*Uses bitflags to allow for multiple log types. For example,
 LogSuccess | LogLua would be a lua success message, while

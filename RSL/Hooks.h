@@ -61,6 +61,12 @@ void __fastcall ObjectUpdatePosAndOrientHook(Object* ObjectPtr, void* edx, vecto
 extern std::once_flag HookObjectUpdatePosAndOrientInitialCall;
 extern std::once_flag HookHumanUpdatePosAndOrientInitialCall;
 
+void __fastcall StreamGridDoFrameHook(stream_grid* This, void* edx, vector* StreamPos, bool SingleZoneMode);
+
+vehicle* __cdecl CutsceneSpawnVehicleHook(vehicle_info* v_info, vector* pos, matrix* orient);
+
+//spawn_status_result __cdecl ObjectSpawnVehicleHook(vehicle_spawn_params* spawn_param);
+
 /*Start of MP Detection Hooks*/
 bool __fastcall IsValidGameLinkLobbyKaikoHook(void* This);
 void __cdecl GameMusicMultiplayerStartHook();

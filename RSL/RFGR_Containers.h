@@ -41,7 +41,7 @@ namespace rfg
 	};
 
 	template <class T, unsigned int InitialSize>
-	class farray : base_array<T>
+	class farray : public base_array<T>
 	{
 	public:
 		T data[InitialSize];

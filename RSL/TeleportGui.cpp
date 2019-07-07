@@ -89,7 +89,7 @@ void TeleportGui::Draw()
 	{
 		HumanTeleportUnsafe(PlayerPtr, vector(PlayerPositionTargetArray[0], PlayerPositionTargetArray[1], PlayerPositionTargetArray[2]), PlayerPtr->Orientation);
 	}
-	Utilities::GUI::TooltipOnPrevious("This will teleport the player to the value's you've typed, even if they are out of bounds. When setting TP points for later, try to set the y value a bit higher. If the game doesn't load quick enough your player will fall through the map. Usually the game will pull them back up, but sometimes it fails.");
+	Util::Gui::TooltipOnPrevious("This will teleport the player to the value's you've typed, even if they are out of bounds. When setting TP points for later, try to set the y value a bit higher. If the game doesn't load quick enough your player will fall through the map. Usually the game will pull them back up, but sometimes it fails.");
 	ImGui::SameLine();
 	if (ImGui::Button("Save as new##PlayerPositionTarget"))
 	{
@@ -166,7 +166,7 @@ void TeleportGui::Draw()
 			{
 				HumanTeleportUnsafe(PlayerPtr, vector(i["Position"][0].get<float>(), i["Position"][1].get<float>(), i["Position"][2].get<float>()), PlayerPtr->Orientation);
 			}
-			Utilities::GUI::TooltipOnPrevious(std::string(i["TooltipDescription"].get<std::string>() 
+			Util::Gui::TooltipOnPrevious(std::string(i["TooltipDescription"].get<std::string>() 
 				+ std::string(" Position: (") + Globals::to_string_precise(i["Position"][0].get<float>())
 				+ std::string(", ") + Globals::to_string_precise(i["Position"][1].get<float>())
 				+ std::string(", ") + Globals::to_string_precise(i["Position"][2].get<float>()) + std::string(")")).c_str());
@@ -221,7 +221,7 @@ void TeleportGui::Draw()
 		Logger::Log("Unknown exception while drawing teleport menu!", LogFatalError);
 	}
 	
-	Utilities::GUI::TooltipOnPrevious("Manual and preset teleport controls for the player. Works in vehicles.");
+	Util::Gui::TooltipOnPrevious("Manual and preset teleport controls for the player. Works in vehicles.");
 	ImGui::End();
 }
 

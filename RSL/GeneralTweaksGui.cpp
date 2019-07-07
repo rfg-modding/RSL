@@ -5,60 +5,6 @@ GeneralTweaksGui::GeneralTweaksGui(bool* OpenState_, std::string Title_)
 	OpenState = OpenState_;
 	Title = Title_;
 
-	strcpy_s(CustomExplosionInfo.m_name, "Custom Explosion");
-	CustomExplosionInfo.m_unique_id = 303; //A value of 255 caused explosions to cause no damage. Want to make sure it's actually unique to avoid issues.
-	CustomExplosionInfo.m_name_crc_str = 1234535;
-	CustomExplosionInfo.flags = 1;
-	CustomExplosionInfo.m_radius = 4.0f;
-	CustomExplosionInfo.m_secondary_radius = 6.0f;
-	CustomExplosionInfo.m_knockdown_radius = 3.0f;
-	CustomExplosionInfo.m_flinch_radius = 4.0f;
-	CustomExplosionInfo.m_ai_sound_radius = 2.0f;
-	CustomExplosionInfo.m_human_min_damage_hitpoints = 30;
-	CustomExplosionInfo.m_human_max_damage_hitpoints = 40;
-	CustomExplosionInfo.m_vehicle_min_damage_hitpoints = 40;
-	CustomExplosionInfo.m_vehicle_max_damage_hitpoints = 50;
-	CustomExplosionInfo.player_damage_mult = 0.1f;
-	CustomExplosionInfo.player_veh_damage_mult = 0.1f;
-	CustomExplosionInfo.player_vehicle_impulse_mult = 1.0f;
-	CustomExplosionInfo.m_impulse_magnitude = 40000.0f;
-	CustomExplosionInfo.m_structural_damage = 12000;
-	CustomExplosionInfo.expanding_explosion_duration = 0;
-	CustomExplosionInfo.expanding_explosion_delay = 0;
-	CustomExplosionInfo.m_num_effects = 1;
-	CustomExplosionInfo.m_effects[0] = 444;
-	CustomExplosionInfo.m_effects[1] = 0;
-	CustomExplosionInfo.m_effects[2] = 0;
-	CustomExplosionInfo.m_effects[3] = 0;
-	CustomExplosionInfo.m_num_material_effects = 0;
-	CustomExplosionInfo.m_material_effects[0] = 0;
-	CustomExplosionInfo.m_material_effects[1] = 0;
-	CustomExplosionInfo.m_material_effects[2] = 0;
-	CustomExplosionInfo.m_material_effects[3] = 0;
-	CustomExplosionInfo.m_material_effects[4] = 0;
-	CustomExplosionInfo.m_material_effects[5] = 0;
-	CustomExplosionInfo.m_material_effects[6] = 0;
-	CustomExplosionInfo.m_material_effects[7] = 0;
-	CustomExplosionInfo.m_material_referenece[0] = 0;
-	CustomExplosionInfo.m_material_referenece[1] = 0;
-	CustomExplosionInfo.m_material_referenece[2] = 0;
-	CustomExplosionInfo.m_material_referenece[3] = 0;
-	CustomExplosionInfo.m_material_referenece[4] = 0;
-	CustomExplosionInfo.m_material_referenece[5] = 0;
-	CustomExplosionInfo.m_material_referenece[6] = 0;
-	CustomExplosionInfo.m_material_referenece[7] = 0;
-	CustomExplosionInfo.salvage_material = SALVAGE_MATERIAL_METAL;
-	CustomExplosionInfo.salvage_max_pieces = 0;
-	CustomExplosionInfo.salvage_probability = 1.0f;
-	CustomExplosionInfo.time_between_breaks = 1;
-	CustomExplosionInfo.half_angle_dot = 0.8f;
-	CustomExplosionInfo.blast_decal_radius = 2.0f;
-	strcpy_s(CustomExplosionInfo.camera_shake_type, "");
-	CustomExplosionInfo.camera_shake_multiplier = 1.0f;
-	CustomExplosionInfo.camera_shake_falloff = 1.0f;
-	CustomExplosionInfo.ignore_orientation = false;
-	CustomExplosionInfo.always_ragdoll = false;
-
 	CustomTimeOfDayLightColor.red = 0.0f;
 	CustomTimeOfDayLightColor.green = 0.0f;
 	CustomTimeOfDayLightColor.blue = 0.0f;
@@ -315,92 +261,6 @@ void GeneralTweaksGui::Draw()
 	ImGui::Checkbox("##ToggleLevelBackgroundAmbientLight", &UseCustomLevelBackgroundAmbientLight);
 	ImGui::Separator();
 
-	//ImGui::InputInt("Middle mouse spawns per second", &MiddleMouseExplosionsPerSecond);
-	//Utilities::GUI::TooltipOnPrevious("Used to determine how many time per second and explosion or repair sphere can be spawned per second by the middle mouse. Used to prevent lag from 100's of explosions per second.");
-	if (ImGui::CollapsingHeader("Custom explosion spawn settings"))
-	{
-		ImGui::Separator();
-		ImGui::PushFont(Globals::FontBig);
-		ImGui::Text("Explosion info:");
-		ImGui::PopFont();
-		ImGui::Separator();
-
-		ImGui::Checkbox("Spawn explosion with middle mouse?", &MiddleMouseBoomActive);
-		ImGui::InputInt("Middle mouse explosions per second limit", &MiddleMouseExplosionsPerSecond);
-		ImGui::SameLine();
-		Utilities::GUI::ShowHelpMarker("Used to prevent lag from 100s of explosions per second since the script loader thread is currently uncapped.");
-		if (ImGui::Button("Boom"))
-		{
-			ExplosionCreate(&CustomExplosionInfo, PlayerPtr, PlayerPtr, &PlayerPtr->aim_pos, &PlayerPtr->Orientation, &PlayerPtr->aim_pos, NULL, false);
-		}
-		ImGui::SameLine();
-		Utilities::GUI::ShowHelpMarker("Spawns an explosion with the values entered below where the player is aiming. The middle mouse button option is much more convenient.");
-		ImGui::Separator();
-
-		ImGui::InputText("Name", (char*)&CustomExplosionInfo.m_name, 32);
-		ImGui::InputInt("Unique ID", &CustomExplosionInfo.m_unique_id);
-		ImGui::SameLine();
-		Utilities::GUI::ShowHelpMarker("Make sure that you use a unique value for the unique id variable or you might get behavior not matching the variables you've set. I believe that all of the games explosions use the lower unique id values. So if you just use a value larger than 1000 you shouldn't have an issue.");
-		ImGui::InputInt("Name CRC", (int*)&CustomExplosionInfo.m_name_crc_str); //Todo: Need to make a wrapper for this so the range isn't limited to the signed range.
-		ImGui::SameLine();
-		Utilities::GUI::ShowHelpMarker("You also need to be careful that this value is unique. Currently there's no easy way to check that, but the default value never seems to have issues.");
-		ImGui::InputFloat("Radius", &CustomExplosionInfo.m_radius);
-		ImGui::InputFloat("Secondary radius", &CustomExplosionInfo.m_secondary_radius);
-		ImGui::InputFloat("Knockdown radius", &CustomExplosionInfo.m_knockdown_radius);
-		ImGui::InputFloat("Flinch radius", &CustomExplosionInfo.m_flinch_radius);
-		ImGui::InputFloat("AI sound radius", &CustomExplosionInfo.m_ai_sound_radius);
-		ImGui::InputInt("Human min damage hitpoints", (int*)&CustomExplosionInfo.m_human_min_damage_hitpoints);
-		ImGui::InputInt("Human max damage hitpoints", (int*)&CustomExplosionInfo.m_human_max_damage_hitpoints);
-		ImGui::InputInt("Vehicle min damage hitpoints", (int*)&CustomExplosionInfo.m_vehicle_min_damage_hitpoints);
-		ImGui::InputInt("Vehicle max damage hitpoints", (int*)&CustomExplosionInfo.m_vehicle_max_damage_hitpoints);
-		ImGui::InputFloat("Player damage multiplier", &CustomExplosionInfo.player_damage_mult);
-		ImGui::InputFloat("Player vehicle damage multiplier", &CustomExplosionInfo.player_veh_damage_mult);
-		ImGui::InputFloat("Player vehicle impulse multiplier", &CustomExplosionInfo.player_vehicle_impulse_mult);
-		ImGui::InputFloat("Impulse magnitude", &CustomExplosionInfo.m_impulse_magnitude);
-		ImGui::InputInt("Structural damage", &CustomExplosionInfo.m_structural_damage);
-
-		ImGui::InputInt("Expanding explosion duration", (int*)&CustomExplosionInfo.expanding_explosion_duration);
-		ImGui::InputInt("Expanding explosion delay", (int*)&CustomExplosionInfo.expanding_explosion_delay);
-		ImGui::InputInt("Number of effects", (int*)&CustomExplosionInfo.m_num_effects);
-		ImGui::InputInt("Effect 0", (int*)&CustomExplosionInfo.m_effects[0]);
-		ImGui::SameLine();
-		Utilities::GUI::ShowHelpMarker("Try some of the values up in the hundreds. You can try checking the values in EffectsInfo.txt, but they don't seem to match up with these values. I'll try to figure out a better way to choose an explosion effect other than guessing.");
-		ImGui::InputInt("Effect 1", (int*)&CustomExplosionInfo.m_effects[1]);
-		ImGui::InputInt("Effect 2", (int*)&CustomExplosionInfo.m_effects[2]);
-		ImGui::InputInt("Effect 3", (int*)&CustomExplosionInfo.m_effects[3]);
-		ImGui::InputInt("Number of material effects", (int*)&CustomExplosionInfo.m_num_material_effects);
-		ImGui::InputInt("Material effect 0", (int*)&CustomExplosionInfo.m_material_effects[0]);
-		ImGui::InputInt("Material effect 1", (int*)&CustomExplosionInfo.m_material_effects[1]);
-		ImGui::InputInt("Material effect 2", (int*)&CustomExplosionInfo.m_material_effects[2]);
-		ImGui::InputInt("Material effect 3", (int*)&CustomExplosionInfo.m_material_effects[3]);
-		ImGui::InputInt("Material effect 4", (int*)&CustomExplosionInfo.m_material_effects[4]);
-		ImGui::InputInt("Material effect 5", (int*)&CustomExplosionInfo.m_material_effects[5]);
-		ImGui::InputInt("Material effect 6", (int*)&CustomExplosionInfo.m_material_effects[6]);
-		ImGui::InputInt("Material effect 7", (int*)&CustomExplosionInfo.m_material_effects[7]);
-		//Material reference array
-
-		ImGui::Text("Salvage material type:");
-		ImGui::RadioButton("Invalid Material", (int*)&CustomExplosionInfo.salvage_material, INVALID_SALVAGE_MATERIAL);
-		ImGui::SameLine();
-		ImGui::RadioButton("Metal", (int*)&CustomExplosionInfo.salvage_material, SALVAGE_MATERIAL_METAL);
-		ImGui::SameLine();
-		ImGui::RadioButton("Ore", (int*)&CustomExplosionInfo.salvage_material, SALVAGE_MATERIAL_ORE);
-		ImGui::SameLine();
-		ImGui::RadioButton("Chemical", (int*)&CustomExplosionInfo.salvage_material, SALVAGE_MATERIAL_CHEMICAL);
-
-		ImGui::InputInt("Salvage max pieces", &CustomExplosionInfo.salvage_max_pieces);
-		ImGui::InputFloat("Salvage probability", &CustomExplosionInfo.salvage_probability);
-		ImGui::InputInt("Time between breaks", &CustomExplosionInfo.time_between_breaks);
-		ImGui::InputFloat("Half angle dot", &CustomExplosionInfo.half_angle_dot);
-		ImGui::InputFloat("Blast decal radius", &CustomExplosionInfo.blast_decal_radius);
-		//camera_shake_type[32]
-		ImGui::InputFloat("Camera shake multiplier", &CustomExplosionInfo.camera_shake_multiplier);
-		ImGui::InputFloat("Camera shake falloff", &CustomExplosionInfo.camera_shake_falloff);
-		ImGui::Checkbox("Ignore orientation", &CustomExplosionInfo.ignore_orientation);
-		ImGui::Checkbox("Always ragdoll", &CustomExplosionInfo.always_ragdoll);
-	}
-	ImGui::Separator();
-
 	/*if (ImGui::CollapsingHeader("Repair sphere"))
 	{
 		ImGui::Checkbox("Spawn repair sphere with middle mouse?", &MiddleMouseRepairSphereActive);
@@ -426,7 +286,7 @@ void GeneralTweaksGui::Draw()
 		static int ZoneScanRange = 2000;
 		ImGui::InputInt("Zone scan range", &ZoneScanRange);
 		ImGui::SameLine();
-		Utilities::GUI::ShowHelpMarker("Only used by the first 2 buttons below this. A working list of zones in the games memory hasn't been found yet, so instead, a function that grabs zones by index is used to check every zone in this range. 2000 seems to be a good default, and setting it higher I never found any more zones.");
+		Util::Gui::ShowHelpMarker("Only used by the first 2 buttons below this. A working list of zones in the games memory hasn't been found yet, so instead, a function that grabs zones by index is used to check every zone in this range. 2000 seems to be a good default, and setting it higher I never found any more zones.");
 		static float CustomMinWindSpeed = 0.0f;
 		static float CustomMaxWindSpeed = 0.0f;
 		ImGui::InputFloat("Custom min wind speed", &CustomMinWindSpeed);
@@ -457,7 +317,7 @@ void GeneralTweaksGui::Draw()
 			}
 		}
 		ImGui::SameLine();
-		Utilities::GUI::ShowHelpMarker("Sets the min and max wind speed values you've chosen in any zones it finds in the range you've chosen. Added for experimentation. I haven't see any changes from this.");
+		Util::Gui::ShowHelpMarker("Sets the min and max wind speed values you've chosen in any zones it finds in the range you've chosen. Added for experimentation. I haven't see any changes from this.");
 
 		if (ImGui::Button("Dump zone info"))
 		{
@@ -509,7 +369,7 @@ void GeneralTweaksGui::Draw()
 			}
 		}
 		ImGui::SameLine();
-		Utilities::GUI::ShowHelpMarker("Prints info about the any world_zones it finds to ZoneInfoDump.txt. Many zone indices don't have a valid zone, and so the range set above is scanned through and only valid zones are printed to the file.");
+		Util::Gui::ShowHelpMarker("Prints info about the any world_zones it finds to ZoneInfoDump.txt. Many zone indices don't have a valid zone, and so the range set above is scanned through and only valid zones are printed to the file.");
 		ImGui::Separator();
 
 		if (ImGui::Button("Print misc world values"))
@@ -534,7 +394,7 @@ void GeneralTweaksGui::Draw()
 			std::cout << "Done!\n";
 		}
 		ImGui::SameLine();
-		Utilities::GUI::ShowHelpMarker("Prints info about the rfg world to WorldInfoDump.txt. Much shorter than the other info dumps.");
+		Util::Gui::ShowHelpMarker("Prints info about the rfg world to WorldInfoDump.txt. Much shorter than the other info dumps.");
 
         static bool OnlyDumpNamedObjects = false;
         ImGui::Checkbox("Only dump named objects", &OnlyDumpNamedObjects);
@@ -618,7 +478,7 @@ void GeneralTweaksGui::Draw()
 			}
 		}
 		ImGui::SameLine();
-		Utilities::GUI::ShowHelpMarker("Prints info about all rfg objects into ObjectInfoDump.txt. Overwrites data from the previous write each time.");
+		Util::Gui::ShowHelpMarker("Prints info about all rfg objects into ObjectInfoDump.txt. Overwrites data from the previous write each time.");
 	}
 
 	if (ImGui::CollapsingHeader("Time of day light")) //Todo: Add rl_scene_entity and rl_3d_entity info to this.
@@ -636,7 +496,7 @@ void GeneralTweaksGui::Draw()
 
 			ImGui::Text("Color:");
 			ImGui::Checkbox("Use custom color", &UseCustomTimeOfDayLight);
-			Utilities::GUI::TooltipOnPrevious("This needs to be checked for your values to be properly set");
+			Util::Gui::TooltipOnPrevious("This needs to be checked for your values to be properly set");
 			ImGui::InputFloat("Red", &CustomTimeOfDayLightColor.red, 0.01, 0.1, 3);
 			ImGui::InputFloat("Green", &CustomTimeOfDayLightColor.green, 0.01, 0.1, 3);
 			ImGui::InputFloat("Blue", &CustomTimeOfDayLightColor.blue, 0.01, 0.1, 3);

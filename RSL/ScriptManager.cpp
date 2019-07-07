@@ -115,7 +115,12 @@ void ScriptManager::SetupLua()
     RslTable["GetTimeString"] = Logger::GetTimeString;
 
     //RslTable["Beep"] = [](DWORD Frequency, DWORD Duration) {std::async((std::launch::async), [&] {Beep(Frequency, Duration); }); };
-    RslTable["Beep"] = Utilities::General::ThreadedBeep;
+    RslTable["Beep"] = Util::General::ThreadedBeep;
+
+    RslTable.set_function("CharArrayToString", sol::overload(
+        [](char* Array, int Size) { Globals::CharArrayToString(Array, Size); },
+        [](const char* Array, int Size) {Globals::CharArrayToString(Array, Size); }
+    ));
 
 	auto RfgTable = LuaStateRef["rfg"].get_or_create<sol::table>();
 	RfgTable["HideHud"] = HideHud;
@@ -247,21 +252,32 @@ void ScriptManager::ScanScriptsFolder()
 {
 	try 
 	{
-		Scripts.clear();
+		SubFolders.clear();
 		const std::string ScriptFolderPath(Globals::GetEXEPath(false) + "RSL/Scripts/");
-		for (auto& i : fs::directory_iterator(ScriptFolderPath))
+		for (auto& SubFolder : fs::directory_iterator(ScriptFolderPath))
 		{
-			if (IsValidScriptExtensionFromPath(i.path().string()))
-			{
-				const std::string ThisScriptPath = i.path().string();
-				const std::string ThisScriptFolderPath = GetScriptFolderFromPath(i.path().string());
-				const std::string ThisScriptName = GetScriptNameFromPath(i.path().string());
-				Scripts.push_back(Script(ThisScriptPath, ThisScriptFolderPath, ThisScriptName));
+            if(SubFolder.is_directory())
+            {
+                SubFolders.push_back(ScriptFolder(SubFolder.path().string(), GetScriptNameFromPath(SubFolder.path().string())));
+                for(auto& File : fs::directory_iterator(SubFolder.path()))
+                {
+                    if (IsValidScriptExtensionFromPath(File.path().string()))
+                    {
+                        const std::string ThisScriptPath = File.path().string();
+                        const std::string ThisScriptFolderPath = GetScriptFolderFromPath(File.path().string());
+                        const std::string ThisScriptName = GetScriptNameFromPath(File.path().string());
+                        SubFolders.back().Scripts.push_back(Script(ThisScriptPath, ThisScriptFolderPath, ThisScriptName));
 
-				//Logger::Log(i.path().string(), LogInfo);
-				//Logger::Log("Script Name: " + ThisScriptName, LogInfo);
-				//Logger::Log("Script Folder: " + ThisScriptFolderPath, LogInfo);
-			}
+                        //Logger::Log(i.path().string(), LogInfo);
+                        //Logger::Log("Script Name: " + ThisScriptName, LogInfo);
+                        //Logger::Log("Script Folder: " + ThisScriptFolderPath, LogInfo);
+                    }
+                }
+                if(SubFolders.back().Scripts.empty())
+                {
+                    SubFolders.pop_back(); //Ignore empty sub folders
+                }
+            }
 		}
 	}
 	catch(std::exception& Ex)
@@ -278,6 +294,11 @@ void ScriptManager::ScanScriptsFolder()
 	}
 }
 
+void ScriptManager::RunStartupScripts()
+{
+
+}
+
 /* Tries to run the file at the given path as a lua script. Includes error 
  * detection and handling code for convenience. If an exception occurs an the 
  * script should be stopped and the exception should be safely contained and
@@ -285,34 +306,27 @@ void ScriptManager::ScanScriptsFolder()
  */
 bool ScriptManager::RunScript(const std::string& FullPath)                     
 {
-    sol::state& LuaStateRef = *LuaState;
-	if (IsValidScriptExtensionFromPath(FullPath))
-	{
-		try
-		{
-			auto CodeResult = LuaStateRef.script_file(FullPath, [](lua_State*, sol::protected_function_result pfr)
-			{
-				return pfr;
-			}, sol::load_mode::text);
+    sol::load_result LoadResult = LuaState->load(Util::General::LoadFileToString(FullPath));
+    std::string Name = GetScriptNameFromPath(FullPath);
 
-			if (!CodeResult.valid())
-			{
-				sol::error ScriptError = CodeResult;
-				std::exception ScriptException(ScriptError.what());
-				throw(ScriptException);
-			}
-			return true;
-		}
-		catch (std::exception& Exception)
-		{
-			Logger::Log(std::string("Exception caught when running " + GetScriptNameFromPath(FullPath) + ": " + std::string(Exception.what())), LogLua | LogError);
-			return false;
-		}
-	}
-	else
-	{
-		return false;
-	}
+    if (!LoadResult.valid())
+    {
+        sol::error Error = LoadResult;
+        std::string What(Error.what());
+        Logger::Log(Name + " failed the syntax check! Message: " + What, LogError);
+        return true;
+    }
+
+    sol::protected_function_result Result = LoadResult();
+    if (!Result.valid())
+    {
+        sol::error Error = Result;
+        std::string What(Error.what());
+        Logger::Log(Name + " encountered an error! Message: " + What, LogError);
+        return true;
+    }
+
+    return false;
 }
 
 /* Tries to an already loaded script at the given index of
@@ -322,28 +336,27 @@ bool ScriptManager::RunScript(const std::string& FullPath)
  */
 bool ScriptManager::RunScript(const size_t Index)
 {
-    sol::state& LuaStateRef = *LuaState;
-	const std::string& FullPath = Scripts[Index].FullPath;
-	try
-	{
-		auto CodeResult = LuaStateRef.script_file(FullPath, [](lua_State*, sol::protected_function_result pfr)
-		{
-			return pfr;
-		}, sol::load_mode::text);
+    auto& Script = SubFolders[Index];
+    sol::load_result LoadResult = LuaState->load(Util::General::LoadFileToString(Script.FullPath));
 
-		if (!CodeResult.valid())
-		{
-			sol::error ScriptError = CodeResult;
-			std::exception ScriptException(ScriptError.what());
-			throw(ScriptException);
-		}
-		return true;
-	}
-	catch (std::exception& Exception)
-	{
-		Logger::Log(std::string("Exception caught when running " + Scripts[Index].Name + std::string(Exception.what())), LogLua | LogError);
-		return false;
-	}
+    if(!LoadResult.valid())
+    {
+        sol::error Error = LoadResult;
+        std::string What(Error.what());
+        Logger::Log(Script.Name + " failed the syntax check! Message: " + What, LogError);
+        return true;
+    }
+
+    sol::protected_function_result Result = LoadResult();
+    if (!Result.valid())
+    {
+        sol::error Error = Result;
+        std::string What(Error.what());
+        Logger::Log(Script.Name + " encountered an error! Message: " + What, LogError);
+        return true;
+    }
+
+    return false;
 }
 
 /* Tries to the provided string as a lua script. Uses the name for 
@@ -378,7 +391,7 @@ ScriptResult ScriptManager::RunStringAsScript(std::string Buffer, std::string Na
 // Attempts to get the error line number by parsing a lua error string. 
 // Works on the assumption that the number will have a colon in front of it. Such as "[string "rfg.SetGravity(0.0, -2.8, 0...."]:5: attempt to call field 'FakeFunc' (a nil value)..."
 // In that example error the line number is :5:
-std::optional<uint> ScriptManager::GetLineFromErrorString(const std::string& ErrorString)
+std::optional<uint> ScriptManager::GetLineFromErrorString(const std::string& ErrorString) const
 {
     for(int i = 0; i < ErrorString.length(); i++)
     {
@@ -437,7 +450,7 @@ std::string ScriptManager::GetScriptNameFromPath(std::string FullPath) const
  * the end of it's path. Returns an empty string if no forward
  * or backslashes are found.
  */
-std::string ScriptManager::GetScriptFolderFromPath(std::string FullPath) const
+std::string ScriptManager::GetScriptFolderFromPath(const std::string& FullPath) const
 {
 	for (int i = FullPath.length() - 1; i > 0; i--)
 	{
@@ -455,7 +468,7 @@ std::string ScriptManager::GetScriptFolderFromPath(std::string FullPath) const
 /* Gets the extension of a file given it's full path. Returns
  * an empty string if no period is found in the name.
  */
-std::string ScriptManager::GetScriptExtensionFromPath(std::string FullPath) const
+std::string ScriptManager::GetScriptExtensionFromPath(const std::string& FullPath) const
 {
 	for (int i = FullPath.length() - 1; i > 0; i--)
 	{
@@ -470,7 +483,7 @@ std::string ScriptManager::GetScriptExtensionFromPath(std::string FullPath) cons
 /* Checks if the file at the provided path has a valid script
  * file extension. Returns true if so, and false if not.
  */
-bool ScriptManager::IsValidScriptExtensionFromPath(std::string FullPath)
+bool ScriptManager::IsValidScriptExtensionFromPath(std::string FullPath) const
 {
 	if (IsValidScriptExtension(GetScriptExtensionFromPath(FullPath)))
 	{

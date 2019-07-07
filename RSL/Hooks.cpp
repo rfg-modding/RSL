@@ -165,7 +165,7 @@ LRESULT ProcessInput(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
                 }
             }
             break;
-		case VK_OEM_3: //Tilde
+		case VK_F4: //Tilde
 			Globals::Gui->ToggleLuaConsole();
 			if (Globals::Gui->IsLuaConsoleActive())
 			{
@@ -204,13 +204,13 @@ LRESULT ProcessInput(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		break;
 	}
 
-	if (MiddleMouseDown && Globals::Gui->TweaksMenu->MiddleMouseBoomActive)
+	if (MiddleMouseDown && Globals::Gui->ExplosionSpawner->MiddleMouseBoomActive)
 	{
 		ExplosionTimerEnd = std::chrono::steady_clock::now();
 		//std::cout << "Time since last explosion spawn: " << std::chrono::duration_cast<std::chrono::milliseconds>(ExplosionTimerEnd - ExplosionTimerBegin).count() << "\n";
-		if (std::chrono::duration_cast<std::chrono::milliseconds>(ExplosionTimerEnd - ExplosionTimerBegin).count() > 1000 / Globals::Gui->TweaksMenu->MiddleMouseExplosionsPerSecond)
+		if (std::chrono::duration_cast<std::chrono::milliseconds>(ExplosionTimerEnd - ExplosionTimerBegin).count() > 1000 / Globals::Gui->ExplosionSpawner->MiddleMouseExplosionsPerSecond)
 		{
-			ExplosionCreate(&Globals::Gui->TweaksMenu->CustomExplosionInfo, Globals::PlayerPtr, Globals::PlayerPtr,
+			ExplosionCreate(&Globals::Gui->ExplosionSpawner->CustomExplosionInfo, Globals::PlayerPtr, Globals::PlayerPtr,
 				&Globals::PlayerPtr->aim_pos, &Globals::PlayerPtr->mp_camera_orient, &Globals::PlayerPtr->aim_pos, nullptr, false);
 			ExplosionTimerBegin = std::chrono::steady_clock::now();
 		}
@@ -387,6 +387,7 @@ HRESULT __stdcall D3D11PresentHook(IDXGISwapChain* pSwapChain, UINT SyncInterval
 		ImGui::NewFrame();
 
 		Globals::Gui->Draw();
+        ImGui::ShowDemoWindow(&Globals::OverlayActive);
 		Globals::D3D11Context->OMSetRenderTargets(1, &Globals::MainRenderTargetView, nullptr);
         //Globals::D3D11Context->ClearRenderTargetView(Globals::MainRenderTargetView, (float*)& clear_color);
 		ImGui::Render();
@@ -854,6 +855,29 @@ void __fastcall ObjectUpdatePosAndOrientHook(Object* ObjectPtr, void* edx, vecto
 
     return ObjectUpdatePosAndOrient(ObjectPtr, edx, UpdatedPosition, UpdatedOrientation, SetHavokData);
 }
+
+void __fastcall StreamGridDoFrameHook(stream_grid* This, void* edx, vector* StreamPos, bool SingleZoneMode)
+{
+    if(!Globals::MainStreamGrid || Globals::MainStreamGrid != This)
+    {
+        Globals::MainStreamGrid = This;
+        Logger::Log("StreamGridPtr changed, new address: " + std::to_string(*reinterpret_cast<DWORD*>(This)));
+    }
+    return StreamGridDoFrame(This, edx, StreamPos, SingleZoneMode);
+}
+
+//spawn_status_result ObjectSpawnVehicleHook(vehicle_spawn_params* spawn_param)
+//{
+//    //Todo: Print custom params address (with adn without modulebase) as hex and compare with x32dbg values
+//    std::cout << "\t[Hook] ModuleBase, decimal: " << Globals::ModuleBase << "\n";
+//    std::cout << "\t[Hook] ModuleBase, hex: " << std::hex << Globals::ModuleBase << "\n";
+//    std::cout << "\t[Hook] &CustomVehicleSpawnParams, decimal: " << &spawn_param << "\n";
+//    std::cout << "\t[Hook] &CustomVehicleSpawnParams, hex: " << std::hex << &spawn_param << "\n";
+//    std::cout << "\t[Hook] ModuleBase + &CustomVehicleSpawnParams, decimal: " << Globals::ModuleBase + (DWORD)&spawn_param << "\n";
+//    std::cout << "\t[Hook] ModuleBase + &CustomVehicleSpawnParams, hex: " << std::hex << Globals::ModuleBase + (DWORD)&spawn_param << "\n";
+//
+//    return ObjectSpawnVehicle(spawn_param);
+//}
 
 /*Start of MP Detection Hooks*/
 bool __fastcall IsValidGameLinkLobbyKaikoHook(void* This)

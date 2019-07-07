@@ -615,3 +615,48 @@ extern F_keen_get_build_version_string KeenGetBuildVersionString;
 //.text:0189C050 rfg.exe:$53C050 #53B450 <world::object_from_handle> //object *__thiscall world::object_from_handle(world *this, unsigned int handle)
 using F_WorldObjectFromHandle = Object* (__fastcall*)(World* This, void* edx, uint Handle); //2nd arg is edx, needed for __thiscall functions.
 extern F_WorldObjectFromHandle WorldObjectFromHandle;
+
+//.text:00F54F30 rfg.exe:$6D4F30 #6D4330 <unused_dcf_ragdoll_player>
+using F_unused_dcf_ragdoll_player =  void(__cdecl*)();
+extern F_unused_dcf_ragdoll_player UnusedDcfRagdollPlayer;
+
+//.text:00D9AEB0 rfg.exe:$51AEB0 #51A2B0 <stream_grid::set_stream_radius> //void __thiscall stream_grid::set_stream_radius(stream_grid *this, layout_layer layer, float radius)
+using F_StreamGridSetStreamRadius = void(__fastcall*)(stream_grid* This, void* edx, layout_layer Layer, float Radius); //2nd arg is edx, needed for __thiscall functions.
+extern F_StreamGridSetStreamRadius StreamGridSetStreamRadius;
+
+//.text:00D9AFB0 rfg.exe:$51AFB0 #51A3B0 <stream_grid::get_stream_radius> //float __thiscall stream_grid::get_stream_radius(stream_grid *this, layout_layer layer)
+using F_StreamGridGetStreamRadius = float(__fastcall*)(stream_grid* This, void* edx, layout_layer Layer); //2nd arg is edx, needed for __thiscall functions.
+extern F_StreamGridGetStreamRadius StreamGridGetStreamRadius;
+
+//.text:00DB0FB0 rfg.exe:$530FB0 #5303B0 <stream_grid::do_frame> //void __thiscall stream_grid::do_frame(stream_grid *this, vector *stream_pos, bool single_zone_mode)
+using F_StreamGridDoFrame = void(__fastcall*)(stream_grid* This, void* edx, vector* StreamPos, bool SingleZoneMode); //2nd arg is edx, needed for __thiscall functions.
+extern F_StreamGridDoFrame StreamGridDoFrame;
+
+//.text:00345D70 rfg.exe:$305D70 #305170 <cutscene_spawn_vehicle> //vehicle *__cdecl cutscene_spawn_vehicle(vehicle_info *v_info, vector *pos, matrix *orient)
+using F_cutscene_spawn_vehicle = vehicle*(__cdecl*)(vehicle_info* v_info, vector* pos, matrix* orient);
+extern F_cutscene_spawn_vehicle CutsceneSpawnVehicle;
+
+//.text:00797F40 rfg.exe:$757F40 #757340 <object_spawn_vehicle> //spawn_status_result __cdecl object_spawn_vehicle(vehicle_spawn_params *spawn_param)
+//using F_object_spawn_vehicle = spawn_status_result(__cdecl*)(vehicle_spawn_params* spawn_param);
+//extern F_object_spawn_vehicle ObjectSpawnVehicle;
+
+//.text:007A8E40 rfg.exe:$768E40 #768240 <vehicle_info_get_master_list> //farray<vehicle_info,163> *__cdecl fav_vehicle_info_get_master_list()
+using F_vehicle_info_get_master_list =  rfg::farray<vehicle_info, 163>*(__cdecl*)();
+extern F_vehicle_info_get_master_list VehicleInfoGetMasterList;
+
+//.text:00796420 rfg.exe:$756420 #755820 <sp_spawn_vehicle> //bool __cdecl sp_spawn_vehicle(vehicle_spawn_params *spawn_param)
+using F_sp_spawn_vehicle = bool(__cdecl*)(vehicle_spawn_params* spawn_param);
+extern F_sp_spawn_vehicle SpSpawnVehicle;
+
+//.text:00788960 rfg.exe:$748960 #747D60 <create_new_vehicle> //bool __usercall create_new_vehicle@<al>(vehicle_spawn_params *spawn_param@<eax>)
+using F_create_new_vehicle = bool(__cdecl*)();//(vehicle_spawn_params* spawn_param);
+extern F_create_new_vehicle create_new_vehicle_raw;
+
+inline bool CreateNewVehicle(vehicle_spawn_params* spawn_params)
+{
+    __asm
+    {
+        mov eax, spawn_params
+    }
+    return create_new_vehicle_raw();
+}

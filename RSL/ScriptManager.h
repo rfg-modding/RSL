@@ -5,7 +5,7 @@ class ScriptResult
 {
 public:
     ScriptResult(bool Failed_, std::optional<uint> ErrorLineNumber_, std::string ErrorString_)
-    : Failed(Failed_), ErrorLineNumber(ErrorLineNumber_), ErrorString(ErrorString_){};
+    : Failed(Failed_), ErrorLineNumber(ErrorLineNumber_), ErrorString(ErrorString_){}
     ~ScriptResult() = default;
 
     bool Failed = false;
@@ -22,12 +22,23 @@ class Script
 {
 public:
 	Script() = default;;
-	Script(std::string FullPath_, std::string FolderPath_, std::string Name_) : FullPath(FullPath_), FolderPath(FolderPath_), Name(Name_) { };
+	Script(std::string FullPath_, std::string FolderPath_, std::string Name_) : FullPath(FullPath_), FolderPath(FolderPath_), Name(Name_) { }
 	~Script() = default;;
 
 	std::string FullPath; //Full path with file name.
 	std::string FolderPath; //Full path without file name.
 	std::string Name; //Script file name.
+};
+
+class ScriptFolder
+{
+public:
+    ScriptFolder() = default;
+    ScriptFolder(std::string FullPath_, std::string Name_) : FullPath(FullPath_), Name(Name_) { }
+
+    std::string FullPath;
+    std::string Name;
+    std::vector<Script> Scripts;
 };
 
 /* This class manages the script loader lua state and scripting. This includes binding
@@ -47,23 +58,24 @@ public:
 	void UpdateRfgPointers();
 
 	void ScanScriptsFolder();
+    void RunStartupScripts();
 
 	bool RunScript(const std::string& FullPath);
 	bool RunScript(const size_t Index);
 
 	ScriptResult RunStringAsScript(std::string Buffer, std::string Name);
-    std::optional<uint> GetLineFromErrorString(const std::string& ErrorString);
-    bool CharIsDigit(const char& Character) const;
+    std::optional<uint> GetLineFromErrorString(const std::string& ErrorString) const;
+    [[nodiscard]] bool CharIsDigit(const char& Character) const;
 
 	sol::state* LuaState = nullptr; //Uses a pointer for easy LuaState resets.
-	std::vector <Script> Scripts; //List of scripts detected in Scripts folder on the last scan.
+	std::vector <ScriptFolder> SubFolders; //List of scripts detected in SubFolders folder on the last scan.
 
 private:
-	std::string GetScriptNameFromPath(std::string FullPath) const;
-	std::string GetScriptFolderFromPath(std::string FullPath) const;
-	std::string GetScriptExtensionFromPath(std::string FullPath) const;
-	bool IsValidScriptExtensionFromPath(std::string FullPath);
-	bool IsValidScriptExtension(std::string Extension) const;
+    [[nodiscard]] std::string GetScriptNameFromPath(std::string FullPath) const;
+    [[nodiscard]] std::string GetScriptFolderFromPath(const std::string& FullPath) const;
+    [[nodiscard]] std::string GetScriptExtensionFromPath(const std::string& FullPath) const;
+	[[nodiscard]] bool IsValidScriptExtensionFromPath(std::string FullPath) const;
+    [[nodiscard]] bool IsValidScriptExtension(std::string Extension) const;
 
 	void SetupLua();
 };

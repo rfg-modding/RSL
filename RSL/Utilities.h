@@ -1,7 +1,7 @@
 #pragma once
 #include "RenderInterfaceD3D11.h"
 
-namespace Utilities::Json
+namespace Util::Json
 {
 	void SetFloat4(nlohmann::json& Json, const char* FirstKey, const char* SecondKey, float r, float g, float b, float a);
 	void SetFloat4(nlohmann::json& Json, const char* FirstKey, const char* SecondKey, ImVec4 Color);
@@ -9,15 +9,16 @@ namespace Utilities::Json
 	ImVec4 GetFloat4(nlohmann::json& Json, const char* FirstKey, const char* SecondKey);
 }
 
-namespace Utilities::GUI
+namespace Util::Gui
 {
 	void TooltipOnPrevious(std::string& Description, ImFont* Font = nullptr);
 	void TooltipOnPrevious(const char* Description, ImFont* Font = nullptr);
 	void ShowHelpMarker(const char* Description);
-    void LabelAndValue(std::string Label, std::string Value);
+    void LabelAndValue(const std::string& Label, const std::string& Value);
 }
 
-namespace Utilities::General
+namespace Util::General
 {
     void ThreadedBeep(ulong Frequency, ulong Duration);
+    std::string LoadFileToString(const std::string& FullPath);
 }

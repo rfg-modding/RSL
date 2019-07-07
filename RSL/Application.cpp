@@ -32,7 +32,7 @@ void Application::InitLogger()
     }
 }
 
-void Application::CheckForImproperInstallation()
+void Application::CheckForImproperInstallation() const
 {
     if (IsFolderPlacementError())
     {
@@ -125,6 +125,7 @@ void Application::InitRSL()
         Beep(900, 200);
 
         SetMemoryLocations();
+        Scripts.RunStartupScripts();
     }
     catch (std::exception& Ex)
     {
@@ -266,6 +267,7 @@ void Application::Exit()
 
 void Application::CreateHooks()
 {
+    //Todo: Make helpers or improve this function to need less casting fuckery
     Hooks.CreateHook("PlayerDoFrame", reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x6D5A80), PlayerDoFrameHook, reinterpret_cast<LPVOID*>(&PlayerDoFrame));
     Hooks.CreateHook("ExplosionCreate", reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x2EC720), ExplosionCreateHook, reinterpret_cast<LPVOID*>(&ExplosionCreate));
     Hooks.CreateHook("KeenGraphicsBeginFrame", reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x86DD00), KeenGraphicsBeginFrameHook, reinterpret_cast<LPVOID*>(&KeenGraphicsBeginFrame));
@@ -288,6 +290,10 @@ void Application::CreateHooks()
     Hooks.CreateHook("LuaDoBuffer", reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x82FD20), LuaDoBufferHook, reinterpret_cast<LPVOID*>(&LuaDoBuffer));
 
     Hooks.CreateHook("D3D11Present", reinterpret_cast<LPVOID>(kiero::getMethodsTable()[8]), D3D11PresentHook, reinterpret_cast<LPVOID*>(&D3D11PresentObject));
+
+    //Disabling for now since stream grid tests had issues.
+    //Hooks.CreateHook("StreamGridDoFrame", reinterpret_cast<LPVOID>(Globals::ModuleBase + 0x530FB0), StreamGridDoFrameHook, reinterpret_cast<LPVOID*>(&StreamGridDoFrame));
+    //Hooks.CreateHook("ObjectSpawnVehicle", reinterpret_cast<LPVOID>(Globals::ModuleBase + 0x757F40), ObjectSpawnVehicleHook, reinterpret_cast<LPVOID*>(&ObjectSpawnVehicle));
 }
 
 bool Application::ShouldClose() const
@@ -333,25 +339,43 @@ void Application::SetMemoryLocations()
         MessageBoxA(Globals::FindRfgTopWindow(), "MP usage detected, shutting down!", "Multiplayer mode detected", MB_OK);
         std::cout << "MP detected. Shutting down!\n";
     }
-}
+    //Todo: See if I can simplify this cast by removing the DWORD* bit. 
+    //Todo: Make helpers for stuff like this so theres less casting fuckery and guess work.
+    Globals::NumExplosionInfos = reinterpret_cast<uint*>(reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x19EE490));
+    Logger::Log("NumExplosionInfos = " + std::to_string(*Globals::NumExplosionInfos));
+    auto ExplosionInfosPtr = reinterpret_cast<explosion_info*>(reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x19E6CD8));
+    Globals::ExplosionInfos.Init(ExplosionInfosPtr, 80, *Globals::NumExplosionInfos);
+
+    Globals::NumMaterialEffectInfos = reinterpret_cast<uint*>(reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x19EE4C4));
+    Logger::Log("Num material effect infos = " + std::to_string(*Globals::NumMaterialEffectInfos));
+    auto MaterialEffectInfosPtr = reinterpret_cast<material_effect_info*>(reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x19EB6F0));
+    Globals::MaterialEffectInfos.Init(MaterialEffectInfosPtr, *Globals::NumMaterialEffectInfos, *Globals::NumMaterialEffectInfos);
+
+    Globals::NumEffectInfos = reinterpret_cast<uint*>(reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x1D82DF0));
+    Logger::Log("Num effect infos = " + std::to_string(*Globals::NumEffectInfos));
+    auto EffectInfosPtr = reinterpret_cast<effect_info*>(reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x1D82E60));
+    Globals::EffectInfos.Init(EffectInfosPtr, *Globals::NumEffectInfos, *Globals::NumEffectInfos);
+
+    Globals::VehicleInfos = reinterpret_cast<rfg::farray<vehicle_info, 163>*>(reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x12BA5F8));
+} 
 
 /* Tries to find common installation mistakes such as placing it in the rfg root directory rather than it's own
  * folder. Returns true if errors were found. Returns false if errors were not found.
  */
-bool Application::IsFolderPlacementError()
+bool Application::IsFolderPlacementError() const
 {
-    std::string ExePath = Globals::GetEXEPath(false);
+    const std::string ExePath = Globals::GetEXEPath(false);
     if (!fs::exists(ExePath + "RSL/Core/")) //Detect if the core lua lib folder is missing.
     {
         if (fs::exists(ExePath + "Core/")) //Detect if the user put it in the rfg folder on accident rather than the script loader folder.
         {
-            std::string ErrorString = R"(RSL Core folder is in the wrong directory! Make sure that it's at "Red Faction Guerrilla Re-MARS-tered\RSL\Core". It should not be in the same folder as rfg.exe! Shutting down script loader.)";
+            const std::string ErrorString = R"(RSL Core folder is in the wrong directory! Make sure that it's at "Red Faction Guerrilla Re-MARS-tered\RSL\Core". It should not be in the same folder as rfg.exe! Shutting down script loader.)";
             Logger::Log(ErrorString, LogFatalError, true, true);
             MessageBoxA(Globals::FindRfgTopWindow(), ErrorString.c_str(), "Error! Core folder in wrong root directory!", MB_OK);
         }
         else
         {
-            std::string ErrorString = R"(RSL Core folder not detected! Make sure that it's at "\Red Faction Guerrilla Re-MARS-tered\RSL\Core". Double check the installation guide for an image of how it should look when installed properly. Shutting down script loader.)";
+            const std::string ErrorString = R"(RSL Core folder not detected! Make sure that it's at "\Red Faction Guerrilla Re-MARS-tered\RSL\Core". Double check the installation guide for an image of how it should look when installed properly. Shutting down script loader.)";
             Logger::Log(ErrorString, LogFatalError, true, true);
             MessageBoxA(Globals::FindRfgTopWindow(), ErrorString.c_str(), "Error! Core folder not found!", MB_OK);
         }
@@ -361,13 +385,13 @@ bool Application::IsFolderPlacementError()
     {
         if (fs::exists(ExePath + "Fonts/")) //Detect if the user put it in the rfg folder on accident rather than the script loader folder.
         {
-            std::string ErrorString = R"(Script Loader Fonts folder is in the wrong directory! Make sure that it's at "\Red Faction Guerrilla Re-MARS-tered\RSL\Fonts". It should not be in the same folder as rfg.exe! Shutting down script loader.)";
+            const std::string ErrorString = R"(Script Loader Fonts folder is in the wrong directory! Make sure that it's at "\Red Faction Guerrilla Re-MARS-tered\RSL\Fonts". It should not be in the same folder as rfg.exe! Shutting down script loader.)";
             Logger::Log(ErrorString, LogFatalError, true, true);
             MessageBoxA(Globals::FindRfgTopWindow(), ErrorString.c_str(), "Error! Fonts folder in wrong root directory!", MB_OK);
         }
         else
         {
-            std::string ErrorString = R"(Script Loader Fonts folder not detected! Make sure that it's at "\Red Faction Guerrilla Re-MARS-tered\RSL\Fonts". Double check the installation guide for an image of how it should look when installed properly. Shutting down script loader.)";
+            const std::string ErrorString = R"(Script Loader Fonts folder not detected! Make sure that it's at "\Red Faction Guerrilla Re-MARS-tered\RSL\Fonts". Double check the installation guide for an image of how it should look when installed properly. Shutting down script loader.)";
             Logger::Log(ErrorString, LogFatalError, true, true);
             MessageBoxA(Globals::FindRfgTopWindow(), ErrorString.c_str(), "Error! Fonts folder not found.", MB_OK);
         }
