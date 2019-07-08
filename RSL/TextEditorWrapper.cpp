@@ -10,6 +10,9 @@ TextEditorWrapper::TextEditorWrapper(bool* OpenState_, std::string Title_)
     MainOverlayWindowFlags |= ImGuiWindowFlags_MenuBar;
 
     LoadLanguageDefinitions();
+    GenerateFileBrowserNodes();
+    Logger::Log("Generated file browser nodes for the first time.");
+    LastFileBrowserGeneration = std::chrono::steady_clock::now();
 }
 
 void TextEditorWrapper::Draw()
@@ -34,15 +37,11 @@ void TextEditorWrapper::Draw()
 
     ImGui::BeginChild("File explorer");
 
-    static bool TreeGenerated = false;
-    if(!TreeGenerated)
-    {
-        GenerateFileBrowserNodes();
-        TreeGenerated = true;
-        Logger::Log("Generated file browser tree!");
-    }
-    DrawFileBrowserNodes();
+    ImGui::Text("File explorer");
+    ImGui::Separator();
 
+    UpdateFileBrowser();
+    DrawFileBrowserNodes();
 
     ImGui::EndChild();
 
@@ -182,6 +181,17 @@ void TextEditorWrapper::DrawToolbar()
     ImGui::Text("| Line %d | Column %d | %d lines | %s | %s", cpos.mLine + 1, cpos.mColumn + 1, Editor.GetTotalLines(),
         Editor.IsOverwrite() ? "Ovr" : "Ins",
         ScriptName.c_str());
+}
+
+void TextEditorWrapper::UpdateFileBrowser()
+{
+    auto CurrentTime = std::chrono::steady_clock::now();
+    long long TimeElapsed = std::chrono::duration_cast<std::chrono::milliseconds>(CurrentTime - LastFileBrowserGeneration).count();
+    if (TimeElapsed > BrowserUpdatePeriodMs)
+    {
+        GenerateFileBrowserNodes();
+        LastFileBrowserGeneration = std::chrono::steady_clock::now();
+    }
 }
 
 void TextEditorWrapper::DrawFileBrowserNodes()

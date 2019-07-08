@@ -36,6 +36,8 @@ public:
     void DrawMenuBar();
     void DrawToolbar();
 
+    void UpdateFileBrowser();
+
     void DrawFileBrowserNodes();
     void DrawFileBrowserNode(FileBrowserNode& Node);
 
@@ -87,4 +89,8 @@ private:
 
     std::string InitialScript;
     FileBrowserNode* PendingOpenNode = nullptr;
+
+    std::chrono::steady_clock::time_point LastFileBrowserGeneration;
+
+    long long BrowserUpdatePeriodMs = 3000; //Time between updating the file browser tree nodes
 };
