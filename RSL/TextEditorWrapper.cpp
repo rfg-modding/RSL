@@ -13,6 +13,7 @@ TextEditorWrapper::TextEditorWrapper(bool* OpenState_, std::string Title_)
     GenerateFileBrowserNodes();
     Logger::Log("Generated file browser nodes for the first time.");
     LastFileBrowserGeneration = std::chrono::steady_clock::now();
+    ScriptPath = Globals::GetEXEPath() + "RSL//Scripts//Default//" + ScriptName;
 }
 
 void TextEditorWrapper::Draw()
@@ -33,7 +34,12 @@ void TextEditorWrapper::Draw()
     ImGui::Separator();
 
     ImGui::Columns(2);
-    //ImGui::SetColumnWidth(0, 200.0f);
+    if(!DrawnOnce)
+    {
+        //Set initial file explorer column width.
+        ImGui::SetColumnWidth(0, DefaultFileBrowserColumnWidthPercentage * ImGui::GetWindowContentRegionWidth());
+        DrawnOnce = true;
+    }
 
     ImGui::BeginChild("File explorer");
 
@@ -204,6 +210,14 @@ void TextEditorWrapper::DrawFileBrowserNodes()
 
 void TextEditorWrapper::DrawFileBrowserNode(FileBrowserNode& Node) //const std::filesystem::path& NodePath
 {
+    if(Node.Index == SelectedIndex)
+    {
+        Node.IsSelected = true;
+    }
+    else
+    {
+        Node.IsSelected = false;
+    }
     if(!(Node.IsEmpty && Node.IsFolder))
     {
         bool NodeOpen = ImGui::TreeNodeEx((void*)(intptr_t)Node.Index, Node.Flags | Node.IsSelected, Node.Label.c_str());
@@ -230,7 +244,7 @@ void TextEditorWrapper::GenerateFileBrowserNodes()
 {
     NodeIndex = 0;
     FileBrowserRootNode.IsFolder = true;
-    FileBrowserRootNode.Path = std::filesystem::path(Globals::GetEXEPath(false) + R"(./RSL/Scripts)");
+    FileBrowserRootNode.Path = std::filesystem::path(Globals::GetEXEPath() + "RSL\\Scripts");
     FileBrowserRootNode.Children.clear();
     FileBrowserRootNode.Index = NodeIndex++;
     GenerateFileBrowserNode(FileBrowserRootNode);
@@ -318,6 +332,7 @@ bool TextEditorWrapper::LoadScript(std::string FullPath, std::string NewScriptNa
         std::string ScriptString((std::istreambuf_iterator<char>(ScriptStream)), std::istreambuf_iterator<char>());
 
         ScriptName = NewScriptName;
+        ScriptPath = FullPath;
         Editor.SetText(ScriptString);
         ImGui::CloseCurrentPopup();
         ClearErrorMarkers();
@@ -381,17 +396,19 @@ bool TextEditorWrapper::LoadScript(std::string FullPath, std::string NewScriptNa
 bool TextEditorWrapper::SaveScript()
 {
     bool Successful = true;
-    std::string FullPath;
     try
     {
+        std::string ParentPath = fs::path(ScriptPath).parent_path().string();
+        if (!fs::exists(ParentPath))
+        {
+            fs::create_directories(ParentPath);
+        }
         std::string ScriptString = Editor.GetText();
         std::string FinalScriptName = FixScriptExtension(ScriptName);
 
-        //std::cout << "Writing script to path: " << GetEXEPath(false) + "RFGR Script Loader/Scripts/" + FinalScriptName << "\n";
-        FullPath = Globals::GetEXEPath(false) + "RSL//Scripts//Default//" + ScriptName;
         std::ofstream ScriptStream;
         ScriptStream.exceptions(std::ios::failbit | std::ios::badbit);
-        ScriptStream.open(FullPath, std::ios_base::trunc);
+        ScriptStream.open(ScriptPath, std::ios_base::trunc | std::ios_base::out);
 
         ScriptStream << ScriptString;
         ScriptStream.close();
@@ -404,7 +421,7 @@ bool TextEditorWrapper::SaveScript()
         Successful = false;
         std::string ExceptionInfo = Ex.what();
         ExceptionInfo += " \nstd::ios_base::failure when saving ";
-        ExceptionInfo += FullPath;
+        ExceptionInfo += ScriptPath;
         ExceptionInfo += ", Additional info: ";
         ExceptionInfo += "Error code: ";
         ExceptionInfo += Ex.code().message();
@@ -422,7 +439,7 @@ bool TextEditorWrapper::SaveScript()
         Successful = false;
         std::string ExceptionInfo = Ex.what();
         ExceptionInfo += " \nstd::exception when saving ";
-        ExceptionInfo += FullPath;
+        ExceptionInfo += ScriptPath;
         ExceptionInfo += ", Additional info: ";
         ExceptionInfo += "File: ";
         ExceptionInfo += __FILE__;
@@ -438,7 +455,7 @@ bool TextEditorWrapper::SaveScript()
         Successful = false;
         std::string ExceptionInfo;// = Ex.what();
         ExceptionInfo += " \nDefault exception when saving ";
-        ExceptionInfo += FullPath;
+        ExceptionInfo += ScriptPath;
         ExceptionInfo += ", Additional info: ";
         ExceptionInfo += "File: ";
         ExceptionInfo += __FILE__;
@@ -474,6 +491,7 @@ void TextEditorWrapper::ClearScript()
     Editor.SetText("");
     InitialScript = "";
     ScriptName = "NewScript.lua";
+    ScriptPath = Globals::GetEXEPath() + "RSL//Scripts//Default//NewScript.lua";
     while (fs::exists(Globals::GetEXEPath(false) + "RSL/Scripts/" + ScriptName))
     {
         ScriptName = "NewScript" + std::to_string(time(nullptr)) + ".lua";
@@ -526,6 +544,7 @@ void TextEditorWrapper::ProcessPopups()
     }
     if (ShowSaveAsScriptPopup)
     {
+        PathBuffer = fs::path(ScriptPath).parent_path().string() + "//";
         NewNameBuffer = ScriptName;
         ImGui::OpenPopup("Save as");
         ShowSaveAsScriptPopup = false;
@@ -537,7 +556,6 @@ void TextEditorWrapper::ProcessPopups()
     }
     DrawNewScriptPopup();
     DrawOpenScriptPopup();
-    DrawSaveScriptPopup();
     DrawSaveAsScriptPopup();
     DrawConfirmSaveChangesPopup();
 }
@@ -552,7 +570,7 @@ void TextEditorWrapper::DrawNewScriptPopup()
         if (ImGui::Button("Yes"))
         {
             const std::string FinalScriptName = FixScriptExtension(ScriptName);
-            if (fs::exists(Globals::GetEXEPath(false) + "RSL//Scripts//Default//" + FinalScriptName))
+            if (fs::exists(ScriptPath))
             {
                 ShouldOpenOverwriteConfirmationDialog = true;
             }
@@ -690,38 +708,32 @@ void TextEditorWrapper::DrawOpenScriptPopup()
     }
 }
 
-void TextEditorWrapper::DrawSaveScriptPopup()
-{
-    /*if (ImGui::BeginPopup("Save script"))
-    {
-
-        ImGui::EndPopup();
-    }*/
-}
-
 void TextEditorWrapper::DrawSaveAsScriptPopup()
 {
     static bool ShouldOpenOverwritePopup = false;
+    static bool ShouldCloseMainPopup = false;
     if (ImGui::BeginPopup("Save as"))
     {
-        ImGui::SetNextItemWidth(400.0f);
+        ImGui::SetNextItemWidth(300.0f);
         ImGui::TextWrapped("Please enter the new script file name. The .lua extension will be automatically added if you forget it.");
-        if (ImGui::InputText("File name", &NewNameBuffer, ImGuiInputTextFlags_EnterReturnsTrue))
-        {
-            ScriptName = FixScriptExtension(NewNameBuffer);
-            SaveScript();
-            ImGui::CloseCurrentPopup();
-        }
+        ImGui::InputText("##File path", &PathBuffer);
+        ImGui::SameLine();
+        ImGui::InputText("##File name", &NewNameBuffer);
 
         if (ImGui::Button("Save"))
         {
             std::string FinalScriptName = FixScriptExtension(NewNameBuffer);
-            if (fs::exists(Globals::GetEXEPath(false) + "RSL/Scripts/" + FinalScriptName))
+            if (fs::exists(PathBuffer + FinalScriptName))
             {
                 ShouldOpenOverwritePopup = true;
             }
             else
             {
+                //if(PathBuffer.back() != '/' || PathBuffer.back() != '\\')
+                //{
+                //    PathBuffer += '\\';
+                //}
+                ScriptPath = PathBuffer + FinalScriptName;
                 ScriptName = NewNameBuffer;
                 SaveScript();
                 ImGui::CloseCurrentPopup();
@@ -749,6 +761,7 @@ void TextEditorWrapper::DrawSaveAsScriptPopup()
             {
                 ScriptName = NewNameBuffer;
                 SaveScript();
+                ShouldCloseMainPopup = true;
                 ImGui::CloseCurrentPopup();
             }
             ImGui::PopStyleColor(3);
@@ -758,6 +771,11 @@ void TextEditorWrapper::DrawSaveAsScriptPopup()
                 ImGui::CloseCurrentPopup();
             }
             ImGui::EndPopup();
+        }
+        if(ShouldCloseMainPopup)
+        {
+            ShouldCloseMainPopup = false;
+            ImGui::CloseCurrentPopup();
         }
         ImGui::EndPopup();
     }

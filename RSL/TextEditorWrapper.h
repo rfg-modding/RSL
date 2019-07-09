@@ -45,7 +45,7 @@ public:
     void GenerateFileBrowserNode(FileBrowserNode& Node);
 
     void TryOpenBrowserNode(FileBrowserNode& Node);
-    bool ScriptBeenEdited() const;
+    [[nodiscard]] bool ScriptBeenEdited() const;
 
     ImGuiWindowFlags MainOverlayWindowFlags = 0;
 
@@ -60,7 +60,6 @@ public:
     void ProcessPopups();
     void DrawNewScriptPopup();
     void DrawOpenScriptPopup();
-    void DrawSaveScriptPopup();
     void DrawSaveAsScriptPopup();
     void DrawConfirmSaveChangesPopup();
 
@@ -68,6 +67,7 @@ public:
     void LoadLanguageDefinitions();
 
     std::string ScriptName = "NewScript.lua";
+    std::string ScriptPath;
     const std::string DefaultScriptName = "NewScript.lua";
     //ScriptManager* Scripts = nullptr;
 
@@ -93,4 +93,9 @@ private:
     std::chrono::steady_clock::time_point LastFileBrowserGeneration;
 
     long long BrowserUpdatePeriodMs = 3000; //Time between updating the file browser tree nodes
+
+    bool DrawnOnce = false;
+    float DefaultFileBrowserColumnWidthPercentage = 0.3f;
+
+    std::string PathBuffer; //Used as buffer for path input in save as popup
 };
