@@ -145,7 +145,7 @@ namespace Globals
 	DWORD GetProcessID(const std::string& ProcessName);
 	void EnforceFloatRange(float& Value, float& Minimum, float& Maximum);
 	void ChangeMemoryFloat(DWORD BaseAddress, float Value, DWORD Offset1, DWORD Offset2, bool PrintMessage);
-	std::string GetEXEPath(bool IncludeExeInPath);
+	std::string GetEXEPath(bool IncludeExeInPath = false);
 	void PlaceNOP(BYTE* Address, DWORD Length = 1);
 	MODULEINFO GetModuleInfo(const char* ModuleName);
 	DWORD FindPattern(const char* ModuleName, const char* PatternString, const char* MaskString);
