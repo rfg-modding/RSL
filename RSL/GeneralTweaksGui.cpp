@@ -311,9 +311,9 @@ void GeneralTweaksGui::Draw()
 						}
 					}
 				}
-				Logger::Log("Done setting zone wind speeds", LogInfo);
-				Logger::Log(std::string("# of valid world zones: " + std::to_string(ValidWorldZoneCount)), LogInfo);
-				Logger::Log(std::string("# of valid object zones: " + std::to_string(ValidObjectZoneCount)), LogInfo);
+				Logger::Log("Done setting zone wind speeds\n");
+				Logger::Log("# of valid world zones: {}\n", ValidWorldZoneCount);
+				Logger::Log("# of valid object zones: {}\n", ValidObjectZoneCount);
 			}
 		}
 		ImGui::SameLine();
@@ -327,7 +327,7 @@ void GeneralTweaksGui::Draw()
 				int NumberOfObjectZonesFound = 0;
 				std::ofstream ZoneDump(Globals::GetEXEPath(false) + "RSL/ZoneInfoDump.txt", std::ios_base::trunc);
 				ZoneDump << "\nPrinting all world zone names...\n";
-				Logger::Log("\nPrinting all world zone names...\n", LogInfo);
+				Logger::Log("\nPrinting all world zone names...\n");
 				for (int i = 0; i < ZoneScanRange; i++)
 				{
 					world_zone* CurrentWorldZone = GetWorldZoneByIndex(Globals::RfgWorldPtr, NULL, i);
@@ -356,16 +356,16 @@ void GeneralTweaksGui::Draw()
 						}
 					}
 				}
-				Logger::Log("Done printing all world zone info. Check ZoneInfoDump.txt in the script loader folder.", LogInfo);
-				Logger::Log(std::string("Number of world zones found: " + std::to_string(NumberOfWorldZonesFound)), LogInfo);
-				Logger::Log(std::string("Number of object zones found: " + std::to_string(NumberOfObjectZonesFound)), LogInfo);
+				Logger::Log("Done printing all world zone info. Check ZoneInfoDump.txt in the script loader folder.\n");
+				Logger::Log("Number of world zones found: {}\n", NumberOfWorldZonesFound);
+				Logger::Log("Number of object zones found: {}\n", NumberOfObjectZonesFound);
 				ZoneDump << "Done printing all world zone info\n";
 				ZoneDump << "Number of zones found: " << NumberOfWorldZonesFound;
 				ZoneDump << "Number of zones found: " << NumberOfObjectZonesFound;
 			}
 			else
 			{
-				Logger::Log("Could not print zone names, the world pointer is null!\n", LogError);
+				Logger::LogError("Could not print zone names, the world pointer is null!\n");
 			}
 		}
 		ImGui::SameLine();
@@ -389,7 +389,7 @@ void GeneralTweaksGui::Draw()
 			else
 			{
 				WorldDump << "Could not print misc world values, the world pointer is null!\n";
-				Logger::Log("Could not print misc world values, the world pointer is null!\n", LogError);
+				Logger::LogError("Could not print misc world values, the world pointer is null!\n");
 			}
 			std::cout << "Done!\n";
 		}
@@ -423,7 +423,7 @@ void GeneralTweaksGui::Draw()
 				DumpFileName += ".txt";
 				std::cout << "Dump file name: " << DumpFileName << "\n";
 				std::cout << "Dump file path: " << Globals::GetEXEPath(false) + "RSL/Info dumps/Object info dumps/" + DumpFileName << "\n";
-				Logger::Log(std::string("\nDumping all object info to /RSL/Info dumps/Object info dumps/") + std::string(DumpFileName) + std::string(".\n"), LogInfo);
+				Logger::Log("\nDumping all object info to /RSL/Info dumps/Object info dumps/{}.\n", DumpFileName);
 				std::ofstream PositionsDump(Globals::GetEXEPath(false) + "RSL/Info dumps/Object info dumps/" + DumpFileName.c_str(), std::ios_base::trunc);
 				PositionsDump << "Start of object info dump...\n";
 				PositionsDump << "Objects array capacity: " << Globals::RfgWorldPtr->all_objects.Capacity() << "\n";
@@ -469,12 +469,12 @@ void GeneralTweaksGui::Draw()
 					}
 				}
 				PositionsDump << "End of object info dump.";
-				Logger::Log("Finished dumped all object into to ObjectInfoDump.txt!", LogInfo);
+				Logger::Log("Finished dumped all object into to ObjectInfoDump.txt!\n");
 				PositionsDump.close();
 			}
 			else
 			{
-				Logger::Log("Could not print zone names, the world pointer is null!", LogError);
+				Logger::Log("Could not print zone names, the world pointer is null!\n");
 			}
 		}
 		ImGui::SameLine();

@@ -190,9 +190,7 @@ void GuiSystem::Draw()
 		ExceptionInfo += __FILE__;
 		ExceptionInfo += ", Function: ";
 		ExceptionInfo += __func__;
-		ExceptionInfo += ", Line: ";
-		ExceptionInfo += __LINE__;
-		Logger::Log(ExceptionInfo, LogError, true, true);
+		Logger::LogError("{}\n", ExceptionInfo);
 		//MessageBoxA(FindTopWindow(GetProcessID("rfg.exe")), ExceptionInfo.c_str(), "Failed to draw overlay gui!", MB_OK);
 	}
 	catch (...)
@@ -203,9 +201,7 @@ void GuiSystem::Draw()
 		ExceptionInfo += __FILE__;
 		ExceptionInfo += ", Function: ";
 		ExceptionInfo += __func__;
-		ExceptionInfo += ", Line: ";
-		ExceptionInfo += __LINE__;
-		Logger::Log(ExceptionInfo, LogError, true, true);
+		Logger::LogError("{}\n", ExceptionInfo);
 		//MessageBoxA(FindTopWindow(GetProcessID("rfg.exe")), ExceptionInfo.c_str(), "Failed to draw overlay gui!", MB_OK);
 	}
 }

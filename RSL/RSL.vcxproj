@@ -136,6 +136,8 @@
     <ClCompile Include="imgui_impl_dx11.cpp" />
     <ClCompile Include="imgui_impl_win32.cpp" />
     <ClCompile Include="imgui_stdlib.cpp" />
+    <ClCompile Include="include\fmt\format.cc" />
+    <ClCompile Include="include\fmt\posix.cc" />
     <ClCompile Include="include\ImGuiColorTextEdit\TextEditor.cpp" />
     <ClCompile Include="include\ImGui\imgui.cpp" />
     <ClCompile Include="include\ImGui\imgui_demo.cpp" />

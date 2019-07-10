@@ -19,7 +19,7 @@ namespace Lua
 
 	void LogModuleBase()
 	{
-		Logger::Log(std::string("Module base: " + std::to_string(Globals::ModuleBase)), LogInfo);
+        Logger::Log("Module base: {}", Globals::ModuleBase);
 	}
 
     vector GetGravity()

@@ -288,9 +288,7 @@ void ScriptManager::ScanScriptsFolder()
 		ExceptionInfo += __FILE__;
 		ExceptionInfo += ", Function: ";
 		ExceptionInfo += __func__;
-		ExceptionInfo += ", Line: ";
-		ExceptionInfo += __LINE__;
-		Logger::Log(ExceptionInfo, LogFatalError, true, true);
+		Logger::LogFatalError("{}\n", ExceptionInfo);
 	}
 }
 
@@ -313,7 +311,7 @@ bool ScriptManager::RunScript(const std::string& FullPath)
     {
         sol::error Error = LoadResult;
         std::string What(Error.what());
-        Logger::Log(Name + " failed the syntax check! Message: " + What, LogError);
+        Logger::LogError("{} failed the syntax check! Message: {}", Name, What);
         return true;
     }
 
@@ -322,7 +320,7 @@ bool ScriptManager::RunScript(const std::string& FullPath)
     {
         sol::error Error = Result;
         std::string What(Error.what());
-        Logger::Log(Name + " encountered an error! Message: " + What, LogError);
+        Logger::LogError("{} encountered an error! Message: {}", Name, What);
         return true;
     }
 
@@ -343,7 +341,7 @@ bool ScriptManager::RunScript(const size_t Index)
     {
         sol::error Error = LoadResult;
         std::string What(Error.what());
-        Logger::Log(Script.Name + " failed the syntax check! Message: " + What, LogError);
+        Logger::LogError("{} failed the syntax check! Message: {}", Script.Name, What);
         return true;
     }
 
@@ -352,7 +350,7 @@ bool ScriptManager::RunScript(const size_t Index)
     {
         sol::error Error = Result;
         std::string What(Error.what());
-        Logger::Log(Script.Name + " encountered an error! Message: " + What, LogError);
+        Logger::LogError("{} encountered an error! Message: {}", Script.Name, What);
         return true;
     }
 
@@ -372,7 +370,7 @@ ScriptResult ScriptManager::RunStringAsScript(std::string Buffer, std::string Na
     {
         sol::error Error = LoadResult;
         std::string What(Error.what());
-        Logger::Log(Name + " failed the syntax check! Message: " + What, LogError);
+        Logger::LogError("{} failed the syntax check! Message: {}", Name, What);
         return ScriptResult(true, GetLineFromErrorString(What), What);
     }
 
@@ -381,7 +379,7 @@ ScriptResult ScriptManager::RunStringAsScript(std::string Buffer, std::string Na
     {
         sol::error Error = Result;
         std::string What(Error.what());
-        Logger::Log(Name + " encountered an error! Message: " + What, LogError);
+        Logger::LogError("{} encountered an error! Message: {}", Name, What);
         return ScriptResult(true, GetLineFromErrorString(What), What);
     }
 

@@ -304,13 +304,13 @@ void ThemeEditorGui::ShowFontSelector(const char* label)
 bool ThemeEditorGui::LoadGUIConfig()
 {
 	std::string ExePath = Globals::GetEXEPath(false);
-	Logger::Log("Started loading \"GUI Config.json\".", LogInfo);
+	Logger::Log("Started loading \"GUI Config.json\".\n");
 
 	if (fs::exists(ExePath + "RSL/Settings/GUI Config.json"))
 	{
 		if (!JsonExceptionHandler([&]
 		{
-			Logger::Log("Parsing \"GUI Config.json\"", LogInfo);
+			Logger::Log("Parsing \"GUI Config.json\"\n");
 			std::ifstream Config(ExePath + "RSL/Settings/GUI Config.json");
 			Config >> GUIConfig;
 			Config.close();
@@ -319,13 +319,13 @@ bool ThemeEditorGui::LoadGUIConfig()
 		{
 			return false;
 		}
-		Logger::Log("No parse exceptions detected.", LogInfo);
+		Logger::Log("No parse exceptions detected.\n");
 	}
 	else
 	{
 		if (!JsonExceptionHandler([&]
 		{
-			Logger::Log("\"GUI Settings.json\" not found. Creating from default values.", LogWarning);
+			Logger::LogWarning("\"GUI Settings.json\" not found. Creating from default values.\n");
 			Globals::CreateDirectoryIfNull(ExePath + "RSL/Settings/");
 
 			GUIConfig["Theme Info"]["Theme name"] = std::string("Default Dark Theme");
@@ -476,12 +476,12 @@ bool ThemeEditorGui::LoadGUIConfig()
 		{
 			return false;
 		}
-		Logger::Log("No write exceptions detected.", LogInfo);
+		Logger::Log("No write exceptions detected.\n");
 	}
 
 	if (!JsonExceptionHandler([&]
 	{
-		Logger::Log("Start of gui style reading.", LogInfo);
+		Logger::Log("Start of gui style reading.\n");
 		ImGuiStyle& Style = ImGui::GetStyle(); //Currently 25 items
 		Style.Alpha = GUIConfig["Style"]["Alpha"].get<float>();
 		Style.AntiAliasedFill = GUIConfig["Style"]["AntiAliasedFill"].get<bool>();
@@ -513,9 +513,9 @@ bool ThemeEditorGui::LoadGUIConfig()
 		Style.WindowPadding = Util::Json::GetFloat2(GUIConfig, "Style", "WindowPadding");
 		Style.WindowRounding = GUIConfig["Style"]["WindowRounding"].get<float>();
 		Style.WindowTitleAlign = Util::Json::GetFloat2(GUIConfig, "Style", "WindowTitleAlign");
-		Logger::Log("Done reading gui style.", LogInfo);
+		Logger::Log("Done reading gui style.\n");
 
-		Logger::Log("Start of gui color reading.", LogInfo);
+		Logger::Log("Start of gui color reading.\n");
 		ImVec4* Colors = ImGui::GetStyle().Colors; //48 items
 		Colors[ImGuiCol_Text] = Util::Json::GetFloat4(GUIConfig, "Colors", "Text");
 		Colors[ImGuiCol_TextDisabled] = Util::Json::GetFloat4(GUIConfig, "Colors", "TextDisabled");
@@ -565,17 +565,17 @@ bool ThemeEditorGui::LoadGUIConfig()
 		Colors[ImGuiCol_NavWindowingHighlight] = Util::Json::GetFloat4(GUIConfig, "Colors", "NavWindowingHighlight");
 		Colors[ImGuiCol_NavWindowingDimBg] = Util::Json::GetFloat4(GUIConfig, "Colors", "NavWindowingDimBackground");
 		Colors[ImGuiCol_ModalWindowDimBg] = Util::Json::GetFloat4(GUIConfig, "Colors", "ModalWindowDimBackground");
-		Logger::Log("Done reading gui color.", LogInfo);
-		Logger::Log("End of gui theme reading.", LogInfo);
+		Logger::Log("Done reading gui color.\n");
+		Logger::Log("End of gui theme reading.\n");
 
 		return true;
 	}, "GUI Config.json", "read", "reading"))
 	{
 		return false;
 	}
-	Logger::Log("No read exceptions detected.", LogInfo);
+	Logger::Log("No read exceptions detected.\n");
 
-	Logger::Log("Done loading \"GUIConfig.json\".", LogInfo);
+	Logger::Log("Done loading \"GUIConfig.json\".\n");
 	return true;
 }
 
@@ -583,7 +583,7 @@ bool ThemeEditorGui::SaveGUIConfig(std::string ThemeName, std::string Descriptio
 {
 	if (!JsonExceptionHandler([&]
 	{
-		Logger::Log("Started saving \"GUI Config.json\".", LogInfo);
+		Logger::Log("Started saving \"GUI Config.json\".\n");
 		std::string ExePath = Globals::GetEXEPath(false);
 		Globals::CreateDirectoryIfNull(ExePath + "RSL/Settings/");
 
@@ -685,8 +685,8 @@ bool ThemeEditorGui::SaveGUIConfig(std::string ThemeName, std::string Descriptio
 	{
 		return false;
 	}
-	Logger::Log("No write exceptions detected.", LogInfo);
+	Logger::Log("No write exceptions detected.\n");
 
-	Logger::Log("Done saving \"GUI Config.json\".", LogInfo);
+	Logger::Log("Done saving \"GUI Config.json\".\n");
 	return true;
 }

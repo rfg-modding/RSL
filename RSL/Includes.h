@@ -82,3 +82,6 @@
 #define DEBUG_DRAW_CXX11_SUPPORTED true
 #include "debug-draw/debug_draw.hpp"
 #include "vectormath.h"
+
+#define FMT_HEADER_ONLY 1
+#include <fmt/core.h>

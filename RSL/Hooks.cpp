@@ -38,7 +38,7 @@ LRESULT __stdcall WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		ImGui_ImplWin32_WndProcHandler(hWnd, msg, wParam, lParam);
 		if (msg == WM_SIZE)
 		{
-			Logger::Log("WM_SIZE Received in custom WndProc. Invalidating ImGui DX11 device object. Releasing MainRenderTargetView.", LogWarning);
+			Logger::LogWarning("WM_SIZE Received in custom WndProc. Invalidating ImGui DX11 device object. Releasing MainRenderTargetView.\n");
 			ImGui_ImplDX11_InvalidateDeviceObjects();
 			UpdateD3D11Pointers = true;
 			Globals::D3D11Context->OMSetRenderTargets(0, 0, 0);
@@ -246,7 +246,7 @@ LRESULT ProcessInput(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		}
 		catch (const std::exception& Ex)
 		{
-			Logger::Log(std::string("Exception when using Ctrl+S save script shortcut. Message: " + std::string(Ex.what())), LogFatalError);
+			Logger::LogFatalError("Exception when using Ctrl+S save script shortcut. Message: {}\n", Ex.what());
 		}
 		if (GetAsyncKeyState(VK_CONTROL) && GetAsyncKeyState(VK_SHIFT) && GetAsyncKeyState(0x53)) //Ctrl + Shift + S
 		{
@@ -273,7 +273,7 @@ LRESULT ProcessInput(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		}
 		catch (const std::exception& Ex)
 		{
-			Logger::Log(std::string("Exception when using F5 run script shortcut. Message: " + std::string(Ex.what())), LogFatalError);
+			Logger::LogFatalError("Exception when using F5 run script shortcut. Message: {}\n", Ex.what());
 		}
 	}
 	return 0;
@@ -332,7 +332,7 @@ HRESULT D3D11_DEVICE_CONTEXT_FROM_SWAPCHAIN(IDXGISwapChain* pSwapChain, ID3D11De
 
 	if(Result != S_OK)
 	{
-		Logger::Log(std::string("ID3D11SwapChain::GetDevice() failed, return value: " + std::to_string(Result)), LogFatalError);
+        Logger::LogFatalError("ID3D11SwapChain::GetDevice() failed, return value: {}\n", Result);
 		return E_FAIL;
 	}
 	(*ppDevice)->GetImmediateContext(ppContext);
@@ -369,7 +369,7 @@ HRESULT __stdcall D3D11PresentHook(IDXGISwapChain* pSwapChain, UINT SyncInterval
 
                     const ddVec3 DebugTextPosition = { 0.2f, 0.2f, 0.0f };
                     const ddVec3 DebugTextColor = { 1.0f, 0.0f, 0.0f };
-                    dd::screenText("hOi!!!!! I'm tEMMIE!!", DebugTextPosition, DebugTextColor, 2.0f, 5000);
+                    dd::screenText("hOi!!!!! I'm tEMMIE!!", DebugTextPosition, DebugTextColor, 2.0f, 5000); //Highly experimental code...
 
                     //dd::projectedText("Space asshole", boxCenter, DebugTextColor, Globals::vpMatrix, 300, 300, 300, 300, 1.0f);
                 }
@@ -378,7 +378,7 @@ HRESULT __stdcall D3D11PresentHook(IDXGISwapChain* pSwapChain, UINT SyncInterval
         }
         catch (std::exception& Ex)
         {
-            Logger::Log(std::string("Exception caught while testing debug draw cube! Message: ") + std::string(Ex.what()), LogError);
+            Logger::LogError("Exception caught while testing debug draw cube! Message: {}\n", Ex.what());
         }
 #endif
         
@@ -424,7 +424,7 @@ keen::GraphicsCommandBuffer* KeenGraphicsBeginFrameHook(keen::GraphicsSystem* pG
     });
     if(Globals::KeenGraphicsSystemPtr != pGraphicsSystem)
     {
-        Logger::Log("Globals::KeenGraphicsSystemPtr changed!", LogWarning);
+        Logger::LogWarning("Globals::KeenGraphicsSystemPtr changed!\n");
         Globals::KeenGraphicsSystemPtr = pGraphicsSystem;
     }
     //Grab required D3D11 pointers for rendering and set up imgui.
@@ -448,7 +448,7 @@ keen::GraphicsCommandBuffer* KeenGraphicsBeginFrameHook(keen::GraphicsSystem* pG
                             HRESULT Result = Globals::D3D11SwapchainPtr->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<LPVOID*>(&BackBuffer));
                             if (Result != S_OK)
                             {
-                                Logger::Log(std::string("GetBuffer() failed, return value: " + std::to_string(Result)), LogFatalError);
+                                Logger::LogFatalError("GetBuffer() failed, return value: {}\n", Result);
                             }
 
                             D3D11_RENDER_TARGET_VIEW_DESC desc = {};
@@ -458,7 +458,7 @@ keen::GraphicsCommandBuffer* KeenGraphicsBeginFrameHook(keen::GraphicsSystem* pG
                             Result = Globals::D3D11Device->CreateRenderTargetView(BackBuffer, &desc, &Globals::MainRenderTargetView);
                             if (Result != S_OK)
                             {
-                                Logger::Log(std::string("CreateRenderTargetView() failed, return value: " + std::to_string(Result)), LogFatalError);
+                                Logger::LogFatalError("CreateRenderTargetView() failed, return value: {}\n", Result);
                             }
                             BackBuffer->Release();
 
@@ -477,7 +477,7 @@ keen::GraphicsCommandBuffer* KeenGraphicsBeginFrameHook(keen::GraphicsSystem* pG
                             const bool RectResult = GetWindowRect(Globals::GameWindowHandle, &Globals::WindowRect);
                             if (!RectResult)
                             {
-                                Logger::Log("GetWindowRect() failed during script loader init!", LogError);
+                                Logger::LogError("GetWindowRect() failed during script loader init!\n");
                             }
                             ImGui_ImplWin32_Init(Globals::GameWindowHandle);
 
@@ -499,7 +499,7 @@ keen::GraphicsCommandBuffer* KeenGraphicsBeginFrameHook(keen::GraphicsSystem* pG
                             IconsConfig.MergeMode = true;
                             IconsConfig.PixelSnapH = true;
                             std::string FontAwesomeSolidPath(Globals::GetEXEPath(false) + "RSL/Fonts/fa-solid-900.ttf");
-                            Logger::Log(FontAwesomeSolidPath, LogWarning);
+
                             Globals::FontNormal = io.Fonts->AddFontFromFileTTF(FontAwesomeSolidPath.c_str(), GlobalFontSize, &IconsConfig, IconsRanges);
 
                             const float GlobalBigFontSize = 24.0f;
@@ -530,7 +530,7 @@ keen::GraphicsCommandBuffer* KeenGraphicsBeginFrameHook(keen::GraphicsSystem* pG
                             Globals::ImGuiInitialized = true;
                             UpdateD3D11Pointers = false;
 
-                            Logger::Log("ImGui Initialized.", LogInfo);
+                            Logger::Log("ImGui Initialized.\n");
 
 #if DebugDrawTestEnabled
                             try
@@ -540,7 +540,7 @@ keen::GraphicsCommandBuffer* KeenGraphicsBeginFrameHook(keen::GraphicsSystem* pG
                             }
                             catch (std::exception& Ex)
                             {
-                            	Logger::Log(std::string("Exception caught while initializing debug draw! Message: ") + std::string(Ex.what()), LogError);
+                            	Logger::LogError("Exception caught while initializing debug draw! Message: {}\n", Ex.what());
                             }
 #endif
                         }  
@@ -680,7 +680,7 @@ void __fastcall hkpWorld_stepDeltaTime_hook(hkpWorld* This, void* edx, float Phy
         });
     if (This != Globals::hkpWorldPtr)
     {
-        Logger::Log("GlobalhkpWorldPtr address changed!", LogWarning);
+        Logger::LogWarning("GlobalhkpWorldPtr address changed!\n");
         Globals::hkpWorldPtr = This;
         if (Globals::Scripts)
         {
@@ -754,7 +754,7 @@ void __fastcall world_do_frame_hook(World* This, void* edx, bool HardLoad)
     std::call_once(HookWorldDoFrameInitialCall, [&]()
         {
             Globals::RfgWorldPtr = This;
-            Logger::Log("RFG::World hooked!", LogInfo);
+            Logger::Log("RFG::World hooked!\n");
 
             Globals::TODLightPtr = GameRenderGetTodLight();
             if (Globals::Scripts)
@@ -764,7 +764,7 @@ void __fastcall world_do_frame_hook(World* This, void* edx, bool HardLoad)
         });
     if (Globals::RfgWorldPtr != This)
     {
-        Logger::Log("GlobalRfgWorldPtr changed!", LogWarning);
+        Logger::LogWarning("GlobalRfgWorldPtr changed!\n");
         Globals::RfgWorldPtr = This;
         if (Globals::Scripts)
         {
@@ -812,7 +812,7 @@ int __cdecl LuaDoBufferHook(lua_State *L, const char *buff, unsigned int size, c
 	});
 	if(!L)
 	{
-		Logger::Log("RFG lua_state pointer null", LogWarning);
+		Logger::LogWarning("RFG lua_state pointer null\n");
 		return LuaDoBuffer(L, buff, size, name);
 	}
 
@@ -825,7 +825,7 @@ int __cdecl LuaDoBufferHook(lua_State *L, const char *buff, unsigned int size, c
 	std::string DumpFilePath = RfgLuaPath + "Lua_Dumps/";
 	fs::create_directory(DumpFilePath);
 	DumpFilePath += Name;
-	Logger::Log(std::string(std::string("Dumping ") + Name), LogInfo);
+    Logger::Log("Dumping {}\n", Name);
 	std::ofstream myfile;
 	myfile.open(DumpFilePath, std::ios_base::trunc);
 	myfile << Buffer;
@@ -837,7 +837,7 @@ int __cdecl LuaDoBufferHook(lua_State *L, const char *buff, unsigned int size, c
 	{
 		std::ifstream OverrideStream(OverrideFilePath);
 		std::string OverrideBuffer((std::istreambuf_iterator<char>(OverrideStream)), std::istreambuf_iterator<char>());
-		Logger::Log(std::string(std::string("Overriding ") + Name), LogInfo);
+        Logger::Log("Overriding {}\n", Name);
 
         TempBuffer.clear();
         TempBuffer = OverrideBuffer;
@@ -861,7 +861,7 @@ void __fastcall StreamGridDoFrameHook(stream_grid* This, void* edx, vector* Stre
     if(!Globals::MainStreamGrid || Globals::MainStreamGrid != This)
     {
         Globals::MainStreamGrid = This;
-        Logger::Log("StreamGridPtr changed, new address: " + std::to_string(*reinterpret_cast<DWORD*>(This)));
+        Logger::Log("StreamGridPtr changed, new address: {}\n", std::to_string(*reinterpret_cast<DWORD*>(This)));
     }
     return StreamGridDoFrame(This, edx, StreamPos, SingleZoneMode);
 }

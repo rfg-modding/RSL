@@ -85,14 +85,14 @@ void FreeCamGui::Draw()
     {
         if (Globals::ExplosionInfos.Initialized())
         {
-            Logger::Log("Printing out all explosion names...");
+            Logger::Log("Printing out all explosion names...\n");
             for (int i = 0; i < Globals::ExplosionInfos.Size(); i++)
             {
-                Logger::Log(std::to_string(i) + ": " + Globals::CharArrayToString((char*)& Globals::ExplosionInfos[i].m_name, 32));
-                Logger::Log("\t Effect 0: " + std::to_string(Globals::ExplosionInfos[i].m_effects[0]));
-                Logger::Log("\t Effect 1: " + std::to_string(Globals::ExplosionInfos[i].m_effects[1]));
-                Logger::Log("\t Effect 2: " + std::to_string(Globals::ExplosionInfos[i].m_effects[2]));
-                Logger::Log("\t Effect 3: " + std::to_string(Globals::ExplosionInfos[i].m_effects[3]));
+                Logger::Log("{}: {}\n", i, Globals::CharArrayToString((char*)& Globals::ExplosionInfos[i].m_name, 32));
+                Logger::Log("\t Effect 0: {}\n", Globals::ExplosionInfos[i].m_effects[0]);
+                Logger::Log("\t Effect 1: {}\n", Globals::ExplosionInfos[i].m_effects[1]);
+                Logger::Log("\t Effect 2: {}\n", Globals::ExplosionInfos[i].m_effects[2]);
+                Logger::Log("\t Effect 3: {}\n", Globals::ExplosionInfos[i].m_effects[3]);
             }
         }
     }
@@ -101,12 +101,12 @@ void FreeCamGui::Draw()
     {
         if (Globals::MaterialEffectInfos.Initialized())
         {
-            Logger::Log("Printing out all material_effect_info names and other info...");
+            Logger::Log("Printing out all material_effect_info names and other info...\n");
             for (int i = 0; i < Globals::MaterialEffectInfos.Size(); i++)
             {
-                Logger::Log(std::to_string(i) + ": " + Globals::CharArrayToString((char*)& Globals::MaterialEffectInfos[i].name, 64));
-                Logger::Log("\t SRID: " + std::to_string(Globals::MaterialEffectInfos[i].srid));
-                Logger::Log("\t Num layers: " + std::to_string(Globals::MaterialEffectInfos[i].num_layers));
+                Logger::Log("{}: {}\n", i, Globals::CharArrayToString((char*)& Globals::MaterialEffectInfos[i].name, 64));
+                Logger::Log("\t SRID: {}\n", Globals::MaterialEffectInfos[i].srid);
+                Logger::Log("\t Num layers: {}\n", Globals::MaterialEffectInfos[i].num_layers);
             }
         }
     }
@@ -115,12 +115,12 @@ void FreeCamGui::Draw()
     {
         if (Globals::EffectInfos.Initialized())
         {
-            Logger::Log("Printing out all effect_info names and handles...");
+            Logger::Log("Printing out all effect_info names and handles...\n");
             for (int i = 0; i < Globals::EffectInfos.Size(); i++)
             {
-                Logger::Log(std::to_string(i) + ": " + Globals::CharArrayToString((char*)& Globals::EffectInfos[i].name, 65));
-                Logger::Log("\t Visual handle: " + std::to_string(Globals::EffectInfos[i].visual_handle));
-                Logger::Log("\t Sound handle: " + std::to_string(Globals::EffectInfos[i].sound_handle));
+                Logger::Log("{}: {}\n", i, Globals::CharArrayToString((char*)& Globals::EffectInfos[i].name, 65));
+                Logger::Log("\t Visual handle: {}\n", Globals::EffectInfos[i].visual_handle);
+                Logger::Log("\t Sound handle: {}\n", Globals::EffectInfos[i].sound_handle);
             }
         }
     }
@@ -131,12 +131,12 @@ void FreeCamGui::Draw()
         {
             for(int i = 0; i < Globals::VehicleInfos->Size(); i++)
             {
-                Logger::Log("Index: " + std::to_string(i));
-                Logger::Log("\t Name: " + std::string((*Globals::VehicleInfos)[i].name));
-                Logger::Log("\t Display name: " + std::string((*Globals::VehicleInfos)[i].display_name));
-                Logger::Log("\t Mesh name: " + std::string((*Globals::VehicleInfos)[i].mesh_name));
-                Logger::Log("\t Flyer max up thrust: " + std::to_string((*Globals::VehicleInfos)[i].flyer_max_up_thrust));
-                Logger::Log("\t Flyer max turn angvel: " + std::to_string((*Globals::VehicleInfos)[i].flyer_max_turn_angvel));
+                Logger::Log("Index: {}\n", i);
+                Logger::Log("\t Name: {}\n", (*Globals::VehicleInfos)[i].name);
+                Logger::Log("\t Display name: {}\n", (*Globals::VehicleInfos)[i].display_name);
+                Logger::Log("\t Mesh name: {}\n", (*Globals::VehicleInfos)[i].mesh_name);
+                Logger::Log("\t Flyer max up thrust: {}\n", (*Globals::VehicleInfos)[i].flyer_max_up_thrust);
+                Logger::Log("\t Flyer max turn angvel: {}\n", (*Globals::VehicleInfos)[i].flyer_max_turn_angvel);
             }
         }
     }

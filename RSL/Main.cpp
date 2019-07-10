@@ -67,7 +67,7 @@ DWORD WINAPI MainThread(HMODULE hModule)
     {
         std::string MessageBoxString = R"(Uncaught exception in RSL main thread! Message: )";
         MessageBoxString += Ex.what();
-        Logger::Log(MessageBoxString, LogFatalError, true, true);
+        Logger::LogFatalError("{}\n", MessageBoxString);
         MessageBoxA(Globals::FindRfgTopWindow(), MessageBoxString.c_str(), "Uncaught exception in RSL main thread!", MB_OK);
     }
     FreeLibraryAndExitThread(hModule, 0);

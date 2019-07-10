@@ -8,6 +8,9 @@ public:
 	~TeleportGui() = default;
 
 	void Draw() override;
+    void DrawMenuHeader();
+    void DrawLocationList();
+    void DrawSavePopup();
 
 	bool LoadTeleportLocations();
 	bool SaveTeleportLocations();
@@ -19,13 +22,12 @@ public:
 	nlohmann::json TeleportLocations;
 
 	bool TeleportEditPopupOpen = false;
-	std::string NewTeleportName;
-	vector NewTeleportPosition;
-	std::string NewTeleportDescription;
+	std::string NewTeleportName{};
+	vector NewTeleportPosition{ 0.0f };
+	std::string NewTeleportDescription{};
 
-	float PlayerPositionTargetArray[3] = { 0 };
+	vector PlayerPositionTarget = { 0.0f };
 
 	ImGuiWindowFlags WindowFlags = 0;
-	ImGuiWindowFlags ModalFlags = 0;
+	ImGuiWindowFlags ModalFlags = ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse;
 };
-

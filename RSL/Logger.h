@@ -45,13 +45,61 @@ the right log files and the console depending on their log type.*/
 class Logger
 {
 public:
-	static void Init(int _ConsoleLogLevel, std::string _DefaultLogPath, unsigned int _MaximumLogCount);
+	static void Init(int _ConsoleLogFlags, std::string _DefaultLogPath, unsigned int _MaximumLogCount);
 
 	static void OpenLogFile(std::string FileName, int LogFlags, std::ios_base::openmode Mode = std::ios_base::out, std::string CustomFilePath = "DEFAULT");
 	static void CloseLogFile(const std::string& FileName);
 	static void CloseAllLogFiles();
 	
-	static void Log(std::string Message, int LogFlags = LogInfo, bool LogTime = false, bool NewLine = true);
+	static void LogInternal(std::string Message, int LogFlags = LogType::LogInfo, bool LogTime = false, bool NewLine = false);
+
+    template <typename... Args>
+    static void Log(std::string fmt, const Args&... args)
+    {
+        LogInternal(fmt::format(fmt, args...));
+    }
+
+    template <typename... Args>
+    static void LogNone(std::string fmt, const Args& ... args)
+    {
+        LogInternal(fmt::format(fmt, args...), LogType::LogNone);
+    }
+
+    template <typename... Args>
+    static void LogInfo(std::string fmt, const Args& ... args)
+    {
+        LogInternal(fmt::format(fmt, args...), LogType::LogInfo);
+    }
+
+    template <typename... Args>
+    static void LogWarning(std::string fmt, const Args& ... args)
+    {
+        LogInternal(fmt::format(fmt, args...), LogType::LogWarning);
+    }
+
+    template <typename... Args>
+    static void LogError(std::string fmt, const Args& ... args)
+    {
+        LogInternal(fmt::format(fmt, args...), LogType::LogError);
+    }
+
+    template <typename... Args>
+    static void LogFatalError(std::string fmt, const Args& ... args)
+    {
+        LogInternal(fmt::format(fmt, args...), LogType::LogFatalError);
+    }
+
+    template <typename... Args>
+    static void LogLua(std::string fmt, const Args& ... args)
+    {
+        LogInternal(fmt::format(fmt, args...), LogType::LogLua);
+    }
+
+    template <typename... Args>
+    static void LogJson(std::string fmt, const Args& ... args)
+    {
+        LogInternal(fmt::format(fmt, args...), LogType::LogJson);
+    }
 
 	static void LogFlagWithColor(int LogFlags);
 	static std::string GetFlagString(int LogFlags);
@@ -80,89 +128,83 @@ auto JsonExceptionHandler(Callable&& Function, std::string FileName, std::string
 	}
 	catch (nlohmann::json::parse_error& Exception)
 	{
-		Logger::Log("Parse exception caught while " + ActionConjugated + " \"" + FileName + "\"!", LogFatalError);
-		Logger::Log(std::string(Exception.what()), LogFatalError);
+        Logger::LogFatalError("Parse exception caught while {0} \"{1}\"! Message: {2}\n", ActionConjugated, FileName, Exception.what());
 
 		std::string ExceptionMessage("Parse exception caught while " + ActionConjugated + " \"" + FileName + "\"! See logs. ");
 		ExceptionMessage += "Message: ";
 		ExceptionMessage += Exception.what();
 
 		MessageBoxA(Globals::FindRfgTopWindow(), ExceptionMessage.c_str(), "Json parse exception caught", MB_OK);
-		Logger::Log("Failed to " + Action + " \"" + FileName + "\", exiting.", LogFatalError);
+        Logger::LogFatalError("Failed to {0} \"{1}\", exiting.\n", Action, FileName);
 		return false;
 	}
 	catch (nlohmann::json::basic_json::invalid_iterator& Exception)
 	{
-		Logger::Log("Invalid iterator exception caught while " + ActionConjugated + " \"" + FileName + "\"!", LogFatalError);
-		Logger::Log(std::string(Exception.what()), LogFatalError);
+        Logger::LogFatalError("Invalid iterator exception caught while {0} \"{1}\"! Message: {2}\n", ActionConjugated, FileName, Exception.what());
 
 		std::string ExceptionMessage("Invalid iterator exception caught while " + ActionConjugated + " \"" + FileName + "\"! See logs. ");
 		ExceptionMessage += "Message: ";
 		ExceptionMessage += Exception.what();
 
 		MessageBoxA(Globals::FindRfgTopWindow(), ExceptionMessage.c_str(), "Json invalid iterator exception caught", MB_OK);
-		Logger::Log("Failed to " + Action + " \"" + FileName + "\", exiting.", LogFatalError);
+        Logger::LogFatalError("Failed to {0} \"{1}\", exiting.\n", Action, FileName);
 		return false;
 	}
 	catch (nlohmann::json::basic_json::type_error& Exception)
 	{
-		Logger::Log("Type error exception caught while " + ActionConjugated + " \"" + FileName + "\"!", LogFatalError);
-		Logger::Log(std::string(Exception.what()), LogFatalError);
+        Logger::LogFatalError("Type error exception caught while {0} \"{1}\"! Message: {2}\n", ActionConjugated, FileName, Exception.what());
 
 		std::string ExceptionMessage("Type error exception caught while " + ActionConjugated + " \"" + FileName + "\"! See logs. ");
 		ExceptionMessage += "Message: ";
 		ExceptionMessage += Exception.what();
 
 		MessageBoxA(Globals::FindRfgTopWindow(), ExceptionMessage.c_str(), "Json type error exception caught", MB_OK);
-		Logger::Log("Failed to " + Action + " \"" + FileName + "\", exiting.", LogFatalError);
+        Logger::LogFatalError("Failed to {0} \"{1}\", exiting.\n", Action, FileName);
 		return false;
 	}
 	catch (nlohmann::json::basic_json::out_of_range& Exception)
 	{
-		Logger::Log("Out of range exception caught while " + ActionConjugated + " \"" + FileName + "\"!", LogFatalError);
-		Logger::Log(std::string(Exception.what()), LogFatalError);
+        Logger::LogFatalError("Out of range exception caught while {0} \"{1}\"! Message: {2}\n", ActionConjugated, FileName, Exception.what());
 
 		std::string ExceptionMessage("Parse exception caught while " + ActionConjugated + " \"" + FileName + "\"! See logs. ");
 		ExceptionMessage += "Message: ";
 		ExceptionMessage += Exception.what();
 
 		MessageBoxA(Globals::FindRfgTopWindow(), ExceptionMessage.c_str(), "Json out of range exception caught", MB_OK);
-		Logger::Log("Failed to " + Action + " \"" + FileName + "\", exiting.", LogFatalError);
+        Logger::LogFatalError("Failed to {0} \"{1}\", exiting.\n", Action, FileName);
 		return false;
 	}
 	catch (nlohmann::json::basic_json::other_error& Exception)
 	{
-		Logger::Log("Other error exception caught while " + ActionConjugated + " \"" + FileName + "\"!", LogFatalError);
-		Logger::Log(std::string(Exception.what()), LogFatalError);
+        Logger::LogFatalError("Other exception caught while {0} \"{1}\"! Message: {2}\n", ActionConjugated, FileName, Exception.what());
 
 		std::string ExceptionMessage("Other error exception caught while " + ActionConjugated + " \"" + FileName + "\"! See logs. ");
 		ExceptionMessage += "Message: ";
 		ExceptionMessage += Exception.what();
 
 		MessageBoxA(Globals::FindRfgTopWindow(), ExceptionMessage.c_str(), "Json other error exception caught", MB_OK);
-		Logger::Log("Failed to " + Action + " \"" + FileName + "\", exiting.", LogFatalError);
+        Logger::LogFatalError("Failed to {0} \"{1}\", exiting.\n", Action, FileName);
 		return false;
 	}
 	catch (std::exception& Exception)
 	{
-		Logger::Log("General exception caught while " + ActionConjugated + " \"" + FileName + "\"!", LogFatalError);
-		Logger::Log(std::string(Exception.what()), LogFatalError);
+        Logger::LogFatalError("General exception caught while {0} \"{1}\"! Message: {2}\n", ActionConjugated, FileName, Exception.what());
 
 		std::string ExceptionMessage("General exception caught while " + ActionConjugated + " \"" + FileName + "\"! See logs. ");
 		ExceptionMessage += "Message: ";
 		ExceptionMessage += Exception.what();
 
 		MessageBoxA(Globals::FindRfgTopWindow(), ExceptionMessage.c_str(), "Json general exception caught", MB_OK);
-		Logger::Log("Failed to " + Action + " \"" + FileName + "\", exiting.", LogFatalError);
+        Logger::LogFatalError("Failed to {0} \"{1}\", exiting.\n", Action, FileName);
 		return false;
 	}
 	catch (...)
 	{
-		Logger::Log("Default exception caught while " + ActionConjugated + " \"" + FileName + "\"!", LogFatalError);
+        Logger::LogFatalError("Default exception caught while {0} \"{1}\"!\n", ActionConjugated, FileName);
 
 		std::string ExceptionMessage("Default exception caught while " + ActionConjugated + " \"" + FileName + "\"! See logs. ");
 		MessageBoxA(Globals::FindRfgTopWindow(), ExceptionMessage.c_str(), "Json default exception caught", MB_OK);
-		Logger::Log("Failed to " + Action + " \"" + FileName + "\", exiting.", LogFatalError);
+        Logger::LogFatalError("Failed to {0} \"{1}\", exiting.\n", Action, FileName);
 		return false;
 	}
 }

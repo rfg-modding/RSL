@@ -35,7 +35,7 @@ void Logger::OpenLogFile(std::string FileName, int LogFlags, std::ios_base::open
 		{
 			if (i.first == FileName)
 			{
-				Log(std::string(FileName + " already exists. New log file not created."), LogError);
+                LogError("{} already exists. New log file not created.", FileName);
 				return;
 			}
 		}
@@ -57,8 +57,6 @@ void Logger::OpenLogFile(std::string FileName, int LogFlags, std::ios_base::open
 		ExceptionInfo += __FILE__;
 		ExceptionInfo += ", Function: ";
 		ExceptionInfo += __func__;
-		ExceptionInfo += ", Line: ";
-		ExceptionInfo += __LINE__;
 		throw(std::exception(ExceptionInfo.c_str()));
 	}
 	catch (std::exception& Ex)
@@ -71,8 +69,6 @@ void Logger::OpenLogFile(std::string FileName, int LogFlags, std::ios_base::open
 		ExceptionInfo += __FILE__;
 		ExceptionInfo += ", Function: ";
 		ExceptionInfo += __func__;
-		ExceptionInfo += ", Line: ";
-		ExceptionInfo += __LINE__;
 		throw(std::exception(ExceptionInfo.c_str()));
 	}
 	catch (...)
@@ -85,8 +81,6 @@ void Logger::OpenLogFile(std::string FileName, int LogFlags, std::ios_base::open
 		ExceptionInfo += __FILE__;
 		ExceptionInfo += ", Function: ";
 		ExceptionInfo += __func__;
-		ExceptionInfo += ", Line: ";
-		ExceptionInfo += __LINE__;
 		throw std::exception(ExceptionInfo.c_str());
 	}
 }
@@ -106,7 +100,7 @@ void Logger::CloseAllLogFiles()
 	LogFileMap.erase(LogFileMap.begin(), LogFileMap.end());
 }
 
-void Logger::Log(std::string Message, int LogFlags, bool LogTime, bool NewLine)
+void Logger::LogInternal(std::string Message, int LogFlags, bool LogTime, bool NewLine)
 {
 	std::string TimeString = GetTimeString(false);
 	std::string FlagString = GetFlagString(LogFlags);
@@ -136,9 +130,7 @@ void Logger::Log(std::string Message, int LogFlags, bool LogTime, bool NewLine)
 			ExceptionInfo += __FILE__;
 			ExceptionInfo += ", Function: ";
 			ExceptionInfo += __func__;
-			ExceptionInfo += ", Line: ";
-			ExceptionInfo += __LINE__;
-			Logger::Log(ExceptionInfo, LogError, true, true);
+			LogError("{}\n", ExceptionInfo);
 			MessageBoxA(Globals::FindRfgTopWindow(), ExceptionInfo.c_str(), "Failed to log to external console!", MB_OK);
 		}
 		catch (...)
@@ -149,9 +141,7 @@ void Logger::Log(std::string Message, int LogFlags, bool LogTime, bool NewLine)
 			ExceptionInfo += __FILE__;
 			ExceptionInfo += ", Function: ";
 			ExceptionInfo += __func__;
-			ExceptionInfo += ", Line: ";
-			ExceptionInfo += __LINE__;
-			Logger::Log(ExceptionInfo, LogError, true, true);
+            LogError("{}\n", ExceptionInfo);
 			MessageBoxA(Globals::FindRfgTopWindow(), ExceptionInfo.c_str(), "Failed to log to external console!", MB_OK);
 		}
 	}
@@ -187,9 +177,7 @@ void Logger::Log(std::string Message, int LogFlags, bool LogTime, bool NewLine)
 			ExceptionInfo += __FILE__;
 			ExceptionInfo += ", Function: ";
 			ExceptionInfo += __func__;
-			ExceptionInfo += ", Line: ";
-			ExceptionInfo += __LINE__;
-			Logger::Log(ExceptionInfo, LogError, true, true);
+            LogError("{}\n", ExceptionInfo);
 			MessageBoxA(Globals::FindRfgTopWindow(), ExceptionInfo.c_str(), "Failed to log to file!", MB_OK);
 		}	
 		catch (std::exception& Ex)
@@ -202,9 +190,7 @@ void Logger::Log(std::string Message, int LogFlags, bool LogTime, bool NewLine)
 			ExceptionInfo += __FILE__;
 			ExceptionInfo += ", Function: ";
 			ExceptionInfo += __func__;
-			ExceptionInfo += ", Line: ";
-			ExceptionInfo += __LINE__;
-			Logger::Log(ExceptionInfo, LogError, true, true);
+            LogError("{}\n", ExceptionInfo);
 			MessageBoxA(Globals::FindRfgTopWindow(), ExceptionInfo.c_str(), "Failed to log to file!", MB_OK);
 		}
 		catch (...)
@@ -216,9 +202,7 @@ void Logger::Log(std::string Message, int LogFlags, bool LogTime, bool NewLine)
 			ExceptionInfo += __FILE__;
 			ExceptionInfo += ", Function: ";
 			ExceptionInfo += __func__;
-			ExceptionInfo += ", Line: ";
-			ExceptionInfo += __LINE__;
-			Logger::Log(ExceptionInfo, LogError, true, true);
+            LogError("{}\n", ExceptionInfo);
 			MessageBoxA(Globals::FindRfgTopWindow(), ExceptionInfo.c_str(), "Failed to log to file!", MB_OK);
 		}
 	}
@@ -248,7 +232,7 @@ void Logger::Log(std::string Message, int LogFlags, bool LogTime, bool NewLine)
 
 void Logger::LogFlagWithColor(const int LogFlags)
 {
-	if (LogFlags & LogInfo)
+	if (LogFlags & LogType::LogInfo)
 	{
 		std::cout << "[";
 		Globals::SetConsoleAttributes(Globals::ConsoleMessageLabelTextAttributes);
@@ -256,7 +240,7 @@ void Logger::LogFlagWithColor(const int LogFlags)
 		Globals::ResetConsoleAttributes();
 		std::cout << "]";
 	}
-	else if (LogFlags & LogWarning)
+	else if (LogFlags & LogType::LogWarning)
 	{
 		std::cout << "[";
 		Globals::SetConsoleAttributes(Globals::ConsoleWarningTextAttributes);
@@ -264,7 +248,7 @@ void Logger::LogFlagWithColor(const int LogFlags)
 		Globals::ResetConsoleAttributes();
 		std::cout << "]";
 	}
-	else if (LogFlags & LogError)
+	else if (LogFlags & LogType::LogError)
 	{
 		std::cout << "[";
 		Globals::SetConsoleAttributes(Globals::ConsoleErrorTextAttributes);
@@ -272,7 +256,7 @@ void Logger::LogFlagWithColor(const int LogFlags)
 		Globals::ResetConsoleAttributes();
 		std::cout << "]";
 	}
-	else if (LogFlags & LogFatalError)
+	else if (LogFlags & LogType::LogFatalError)
 	{
 		std::cout << "[";
 		Globals::SetConsoleAttributes(Globals::ConsoleFatalErrorTextAttributes);
@@ -289,27 +273,27 @@ void Logger::LogFlagWithColor(const int LogFlags)
 
 std::string Logger::GetFlagString(const int LogFlags)
 {
-	if (LogFlags & LogInfo)
+	if (LogFlags & LogType::LogInfo)
 	{
 		return "[Info]";
 	}
-	else if (LogFlags & LogWarning)
+	else if (LogFlags & LogType::LogWarning)
 	{
 		return "[Warning]";
 	}
-	else if (LogFlags & LogLua)
+	else if (LogFlags & LogType::LogLua)
 	{
 		return "[Lua]";
 	}
-	else if (LogFlags & LogJson)
+	else if (LogFlags & LogType::LogJson)
 	{
 		return "[Json]";
 	}
-	else if (LogFlags & LogError)
+	else if (LogFlags & LogType::LogError)
 	{
 		return "[Error]";
 	}
-	else if (LogFlags & LogFatalError)
+	else if (LogFlags & LogType::LogFatalError)
 	{
 		return "[Fatal Error]";
 	}

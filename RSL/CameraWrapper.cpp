@@ -75,7 +75,7 @@ void CameraWrapper::MoveFreeCamera(CameraDirection Direction)
 			}
 			else
 			{
-				Logger::Log("Invalid camera direction passed to MoveFreeCamera()", LogError);
+				Logger::LogError("Invalid camera direction passed to MoveFreeCamera()\n");
 			}
 			ButtonPressedAfterUpdate = true;
 		}
@@ -115,7 +115,7 @@ void CameraWrapper::MoveFreeCamera(CameraDirection Direction)
 			}
 			else
 			{
-				Logger::Log("Invalid camera direction passed to MoveFreeCamera()", LogError);
+				Logger::LogError("Invalid camera direction passed to MoveFreeCamera()\n");
 			}
 		}
 
@@ -124,7 +124,7 @@ void CameraWrapper::MoveFreeCamera(CameraDirection Direction)
 
 void CameraWrapper::ActivateFreeCamera()
 {
-	Logger::Log("Activating free camera", LogInfo);
+	Logger::Log("Activating free camera\n");
 	FreeCameraActive = true;
 	DisableCameraCode(CameraYWriteAddress, CameraZWriteAddress);
 
@@ -136,7 +136,7 @@ void CameraWrapper::ActivateFreeCamera()
 
 void CameraWrapper::DeactivateFreeCamera(bool Shutdown)
 {
-	Logger::Log("Deactivating free camera", LogInfo);
+	Logger::Log("Deactivating free camera\n");
 	RestoreCameraCode();
 
 	FreeCameraActive = false;
@@ -166,7 +166,7 @@ void CameraWrapper::ToggleFreeCamera()
 		}
 		else
 		{
-			Logger::Log("Failed to activate free camera. First cam already active.", LogError);
+			Logger::LogError("Failed to activate free camera. First cam already active.\n");
 		}
 	}
 }
@@ -258,14 +258,14 @@ void CameraWrapper::UpdateFreeView()
 
 void CameraWrapper::ActivateFirstPersonCamera()
 {
-	Logger::Log("Activating first person camera", LogInfo);
+	Logger::Log("Activating first person camera\n");
 	FirstPersonCameraActive = true;
 	DisableCameraCode(CameraYWriteAddress, CameraZWriteAddress);
 }
 
 void CameraWrapper::DeactivateFirstPersonCamera()
 {
-	Logger::Log("Deactivating first person camera", LogInfo);
+	Logger::Log("Deactivating first person camera\n");
 	RestoreCameraCode();
 
 	FirstPersonCameraActive = false;
@@ -287,7 +287,7 @@ void CameraWrapper::ToggleFirstPersonCamera()
 		}
 		else
 		{
-			Logger::Log("Failed to activate first person camera. Free cam already active.", LogError);
+			Logger::LogError("Failed to activate first person camera. Free cam already active.\n");
 		}
 	}
 }

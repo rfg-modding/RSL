@@ -13,12 +13,12 @@ bool HookManager::CreateHook(const std::string& HookName, LPVOID Target, LPVOID 
 {
 	if (HookExists(HookName))
 	{
-		Logger::Log(std::string("A hook with the name \"" + HookName + "\" already exists. Failed to create."), LogError);
+		Logger::LogError("A hook with the name \"{}\" already exists. Failed to create.\n", HookName);
 		return false;
 	}
 	if (MH_CreateHook(Target, Detour, Original) != MH_OK)
 	{
-		Logger::Log(std::string("Failed to create " + HookName + " hook. RSL deactivating."), LogFatalError);
+		Logger::LogFatalError("Failed to create {} hook. RSL deactivating.\n", HookName);
 		return false;
 	}
 
@@ -35,12 +35,12 @@ bool HookManager::EnableHook(const std::string& HookName)
 {
 	if (!HookExists(HookName))
 	{
-		Logger::Log(std::string("A hook with the name \"" + HookName + "\" does not exist. Failed to enable."), LogError);
+        Logger::LogError("A hook with the name \"{}\" does not exist. Failed to enable.\n", HookName);
 		return false;
 	}
 	if (MH_EnableHook(HookMap[HookName].Target) != MH_OK)
 	{
-		Logger::Log(std::string("Failed to enable " + HookName + " hook. RSL deactivating."), LogFatalError);
+        Logger::LogFatalError("Failed to enable {} hook. RSL deactivating.\n", HookName);
 		return false;
 	}
 	return true;
@@ -53,12 +53,12 @@ bool HookManager::DisableHook(const std::string& HookName)
 {
 	if (!HookExists(HookName))
 	{
-		Logger::Log(std::string("A hook with the name \"" + HookName + "\" does not exist. Failed to disable."), LogError);
+        Logger::LogError("A hook with the name \"{}\" does not exist. Failed to disable.\n", HookName);
 		return false;
 	}
 	if (MH_DisableHook(HookMap[HookName].Target) != MH_OK)
 	{
-		Logger::Log(std::string("Failed to disable " + HookName + " hook. RSL deactivating."), LogFatalError);
+        Logger::LogFatalError("Failed to disable {} hook. RSL deactivating.\n", HookName);
 		return false;
 	}
 	return false;

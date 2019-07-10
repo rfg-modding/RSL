@@ -15,7 +15,7 @@ void Lua::BindVector2(sol::state& LuaState)
 	Utype.set("SetAll", &vector2::SetAll);
 	Utype.set("x", &vector2::x);
 	Utype.set("y", &vector2::y);
-	Utype.set("Print", [](vector2& Self) { Logger::Log(std::string("x: " + std::to_string(Self.x) + ", y: " + std::to_string(Self.y)), LogNone); });
+    Utype.set("Print", [](vector2& Self) { Logger::LogNone("x: {}, y: {}", Self.x, Self.y);});
     Utype.set("GetDataString", sol::overload(
         [](vector2& Self) {return Self.GetDataString(false, true); },
         [](vector2& Self, bool Parentheses) {return Self.GetDataString(Parentheses, true); },
@@ -40,7 +40,7 @@ void Lua::BindVector(sol::state& LuaState)
 	Utype.set("y", &vector::y);
 	Utype.set("z", &vector::z);
     Utype.set("UnitVector", &vector::UnitVector);
-	Utype.set("Print", [](vector& Self) { Logger::Log(std::string("x: " + std::to_string(Self.x) + ", y: " + std::to_string(Self.y) + ", z: " + std::to_string(Self.z)), LogNone); });
+	Utype.set("Print", [](vector& Self) { Logger::LogNone("x: {}, y: {}, z: {}", Self.x, Self.y, Self.z); });
 	Utype.set("GetDataString", sol::overload(
         [](vector& Self) {return Self.GetDataString(false, true); },
         [](vector& Self, bool Parentheses) {return Self.GetDataString(Parentheses, true); },

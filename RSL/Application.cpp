@@ -21,7 +21,7 @@ void Application::InitLogger()
     {
         Logger::Init(LogAll, Globals::GetEXEPath(false) + "RSL/Logs/", 10000);
         Logger::OpenLogFile("Load Log.txt", LogAll, std::ios_base::trunc);
-        Logger::Log("RSL started. Activating.", LogInfo, true);
+        Logger::Log("RSL started. Activating.\n");
     }
     catch (std::exception& Ex)
     {
@@ -76,14 +76,14 @@ void Application::InitRSL()
         //Attempt to init kiero which is used for easy directx hooking. Shutdown if it fails.
         if (kiero::init(kiero::RenderType::D3D11) != kiero::Status::Success)
         {
-            Logger::Log(std::string("Kiero error: " + std::to_string(kiero::init(kiero::RenderType::D3D11))), LogFatalError, true);
-            Logger::Log("Failed to initialize kiero for D3D11. RSL deactivating.", LogFatalError, true);
+            Logger::LogFatalError("Kiero error: {}\n", kiero::init(kiero::RenderType::D3D11));
+            Logger::LogFatalError("Failed to initialize kiero for D3D11. RSL deactivating.\n");
             FreeLibraryAndExitThread(Globals::ScriptLoaderModule, 0);
             return;
         }
         if (MH_Initialize() != MH_OK)
         {
-            Logger::Log("Failed to initialize MinHook. RSL deactivating.", LogFatalError, true);
+            Logger::LogFatalError("Failed to initialize MinHook. RSL deactivating.\n");
             FreeLibraryAndExitThread(Globals::ScriptLoaderModule, 0);
             return;
         }
@@ -104,7 +104,7 @@ void Application::InitRSL()
         CreateHooks();
 
         Globals::OriginalWndProc = reinterpret_cast<WNDPROC>(SetWindowLongPtr(Globals::GameWindowHandle, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(WndProc)));
-        Logger::Log("Custom WndProc set.", LogInfo);
+        Logger::Log("Custom WndProc set.\n");
 
         /*Waits for ImGui init to complete before continuing to GuiSystem (The overlay) init.*/
         while (!Globals::ImGuiInitialized) //ImGui Initialization occurs in KeenGraphicsBeginFrameHook in Hooks.cpp
@@ -131,7 +131,7 @@ void Application::InitRSL()
     {
         std::string MessageBoxString = R"(Exception detected during script loader initialization! Please provide this and a zip file with your logs folder (./RSL/Logs/) to the maintainer.)";
         MessageBoxString += Ex.what();
-        Logger::Log(MessageBoxString, LogFatalError, true, true);
+        Logger::LogFatalError("{}\n", MessageBoxString);
         MessageBoxA(Globals::FindRfgTopWindow(), MessageBoxString.c_str(), "Script loader failed to initialize!", MB_OK);
     }
 }
@@ -140,7 +140,7 @@ void Application::OpenDefaultLogs()
 {
     try
     {
-        Logger::Log("RSL successfully activated.", LogInfo, true);
+        Logger::Log("RSL successfully activated.\n");
         Logger::CloseLogFile("Load Log.txt");
 
         Logger::OpenLogFile("General Log.txt", LogInfo, std::ios_base::trunc);
@@ -152,7 +152,7 @@ void Application::OpenDefaultLogs()
     {
         std::string MessageBoxString = R"(Exception detected when opening the default log files. Please show this to the current script loader maintainer. It's much harder to fix any further problems which might occur without logs.)";
         MessageBoxString += Ex.what();
-        Logger::Log(MessageBoxString, LogFatalError, true, true);
+        Logger::Log("{}\n", MessageBoxString);
         MessageBoxA(Globals::FindRfgTopWindow(), MessageBoxString.c_str(), "Logger failed to open default log files!", MB_OK);
     }
 }
@@ -174,31 +174,31 @@ void Application::MainLoop()
         switch (RSLState)
         {
         case GS_WRECKING_CREW_MAIN_MENU:
-            Logger::Log("Failed to catch exception in UI hook. RSL crashing!", LogFatalError, true);
+            Logger::LogFatalError("Failed to catch exception in UI hook. RSL crashing!\n");
             FreeLibraryAndExitThread(Globals::ScriptLoaderModule, 0);
             break;
         case GS_WRECKING_CREW_CHARACTER_SELECT:
-            Logger::Log("Null memory access attempted. RSL crashing!", LogFatalError, true);
+            Logger::LogFatalError("Null memory access attempted. RSL crashing!\n");
             FreeLibraryAndExitThread(Globals::ScriptLoaderModule, 0);
             break;
         case GS_WRECKING_CREW_SCOREBOARD:
-            Logger::Log("Rfg deleted something important. RSL crashing!", LogFatalError, true);
+            Logger::LogFatalError("Rfg deleted something important. RSL crashing!\n");
             FreeLibraryAndExitThread(Globals::ScriptLoaderModule, 0);
             break;
         case GS_MULTIPLAYER_LIVE:
-            Logger::Log("Failed to relocate rfg application struct after patch. RSL crashing!", LogFatalError, true);
+            Logger::LogFatalError("Failed to relocate rfg application struct after patch. RSL crashing!\n");
             FreeLibraryAndExitThread(Globals::ScriptLoaderModule, 0);
             break;
         case GS_WC_INIT:
-            Logger::Log("Free cam init binary patched something it shouldn't have. RSL crashing!", LogFatalError, true);
+            Logger::LogFatalError("Free cam init binary patched something it shouldn't have. RSL crashing!\n");
             FreeLibraryAndExitThread(Globals::ScriptLoaderModule, 0);
             break;
         case GS_WC_SHUTDOWN:
-            Logger::Log("Dynamic allocator failure. RSL crashing!", LogFatalError, true);
+            Logger::LogFatalError("Dynamic allocator failure. RSL crashing!\n");
             FreeLibraryAndExitThread(Globals::ScriptLoaderModule, 0);
             break;
         case GS_MULTIPLAYER_LIVE_FIND_SERVERS:
-            Logger::Log("Failed to refresh object hashmap. RSL crashing!", LogFatalError, true);
+            Logger::LogFatalError("Failed to refresh object hashmap. RSL crashing!\n");
             FreeLibraryAndExitThread(Globals::ScriptLoaderModule, 0);
             break;
         default:
@@ -206,13 +206,13 @@ void Application::MainLoop()
         }
         if (*Globals::InMultiplayer)
         {
-            Logger::Log("Invalid graphics state in RSL overlay, crashing!", LogFatalError, true);
+            Logger::LogFatalError("Invalid graphics state in RSL overlay, crashing!\n");
             FreeLibraryAndExitThread(Globals::ScriptLoaderModule, 0);
             return;
         }
         if (Globals::MultiplayerHookTriggered)
         {
-            Logger::Log("Null pointer in RSL callback system, crashing!", LogFatalError, true);
+            Logger::LogFatalError("Null pointer in RSL callback system, crashing!\n");
             FreeLibraryAndExitThread(Globals::ScriptLoaderModule, 0);
             return;
         }
@@ -261,7 +261,7 @@ void Application::Exit()
 
     CloseConsole();
 
-    Logger::Log("RSL deactivated", LogInfo, true);
+    Logger::Log("RSL deactivated\n");
     Logger::CloseAllLogFiles();
 }
 
@@ -342,17 +342,17 @@ void Application::SetMemoryLocations()
     //Todo: See if I can simplify this cast by removing the DWORD* bit. 
     //Todo: Make helpers for stuff like this so theres less casting fuckery and guess work.
     Globals::NumExplosionInfos = reinterpret_cast<uint*>(reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x19EE490));
-    Logger::Log("NumExplosionInfos = " + std::to_string(*Globals::NumExplosionInfos));
+    Logger::Log("NumExplosionInfos = {}\n", *Globals::NumExplosionInfos);
     auto ExplosionInfosPtr = reinterpret_cast<explosion_info*>(reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x19E6CD8));
     Globals::ExplosionInfos.Init(ExplosionInfosPtr, 80, *Globals::NumExplosionInfos);
 
     Globals::NumMaterialEffectInfos = reinterpret_cast<uint*>(reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x19EE4C4));
-    Logger::Log("Num material effect infos = " + std::to_string(*Globals::NumMaterialEffectInfos));
+    Logger::Log("Num material effect infos = {}\n", *Globals::NumMaterialEffectInfos);
     auto MaterialEffectInfosPtr = reinterpret_cast<material_effect_info*>(reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x19EB6F0));
     Globals::MaterialEffectInfos.Init(MaterialEffectInfosPtr, *Globals::NumMaterialEffectInfos, *Globals::NumMaterialEffectInfos);
 
     Globals::NumEffectInfos = reinterpret_cast<uint*>(reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x1D82DF0));
-    Logger::Log("Num effect infos = " + std::to_string(*Globals::NumEffectInfos));
+    Logger::Log("Num effect infos = {}\n", *Globals::NumEffectInfos);
     auto EffectInfosPtr = reinterpret_cast<effect_info*>(reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x1D82E60));
     Globals::EffectInfos.Init(EffectInfosPtr, *Globals::NumEffectInfos, *Globals::NumEffectInfos);
 
@@ -370,13 +370,13 @@ bool Application::IsFolderPlacementError() const
         if (fs::exists(ExePath + "Core/")) //Detect if the user put it in the rfg folder on accident rather than the script loader folder.
         {
             const std::string ErrorString = R"(RSL Core folder is in the wrong directory! Make sure that it's at "Red Faction Guerrilla Re-MARS-tered\RSL\Core". It should not be in the same folder as rfg.exe! Shutting down script loader.)";
-            Logger::Log(ErrorString, LogFatalError, true, true);
+            Logger::LogFatalError("{}\n", ErrorString);
             MessageBoxA(Globals::FindRfgTopWindow(), ErrorString.c_str(), "Error! Core folder in wrong root directory!", MB_OK);
         }
         else
         {
             const std::string ErrorString = R"(RSL Core folder not detected! Make sure that it's at "\Red Faction Guerrilla Re-MARS-tered\RSL\Core". Double check the installation guide for an image of how it should look when installed properly. Shutting down script loader.)";
-            Logger::Log(ErrorString, LogFatalError, true, true);
+            Logger::LogFatalError("{}\n", ErrorString);
             MessageBoxA(Globals::FindRfgTopWindow(), ErrorString.c_str(), "Error! Core folder not found!", MB_OK);
         }
         return true;
@@ -386,13 +386,13 @@ bool Application::IsFolderPlacementError() const
         if (fs::exists(ExePath + "Fonts/")) //Detect if the user put it in the rfg folder on accident rather than the script loader folder.
         {
             const std::string ErrorString = R"(Script Loader Fonts folder is in the wrong directory! Make sure that it's at "\Red Faction Guerrilla Re-MARS-tered\RSL\Fonts". It should not be in the same folder as rfg.exe! Shutting down script loader.)";
-            Logger::Log(ErrorString, LogFatalError, true, true);
+            Logger::LogFatalError("{}\n", ErrorString);
             MessageBoxA(Globals::FindRfgTopWindow(), ErrorString.c_str(), "Error! Fonts folder in wrong root directory!", MB_OK);
         }
         else
         {
             const std::string ErrorString = R"(Script Loader Fonts folder not detected! Make sure that it's at "\Red Faction Guerrilla Re-MARS-tered\RSL\Fonts". Double check the installation guide for an image of how it should look when installed properly. Shutting down script loader.)";
-            Logger::Log(ErrorString, LogFatalError, true, true);
+            Logger::LogFatalError("{}\n", ErrorString);
             MessageBoxA(Globals::FindRfgTopWindow(), ErrorString.c_str(), "Error! Fonts folder not found.", MB_OK);
         }
         return true;
@@ -403,13 +403,13 @@ bool Application::IsFolderPlacementError() const
 bool Application::LoadDataFromConfig()
 {
     std::string ExePath = Globals::GetEXEPath(false);
-    Logger::Log("Started loading \"Settings.json\".", LogInfo);
+    Logger::Log("Started loading \"Settings.json\".\n");
 
     if (fs::exists(ExePath + "RSL/Settings/Settings.json"))
     {
         if (!JsonExceptionHandler([&]
         {
-            Logger::Log("Parsing \"Settings.json\"", LogInfo);
+            Logger::Log("Parsing \"Settings.json\"\n");
             std::ifstream Config(ExePath + "RSL/Settings/Settings.json");
             Config >> Globals::MainConfig;
             Config.close();
@@ -418,14 +418,14 @@ bool Application::LoadDataFromConfig()
         {
             return false;
         }
-            Logger::Log("No parse exceptions detected.", LogInfo);
+            Logger::Log("No parse exceptions detected.\n");
     }
     else
     {
         if (!JsonExceptionHandler([&]
         {
             Globals::CreateDirectoryIfNull(ExePath + "RSL/Settings/");
-            Logger::Log("\"Settings.json\" not found. Creating from default values.", LogWarning);
+            Logger::Log("\"Settings.json\" not found. Creating from default values.\n");
 
             Globals::MainConfig["Open debug console"] = false;
 
@@ -437,7 +437,7 @@ bool Application::LoadDataFromConfig()
         {
             return false;
         }
-            Logger::Log("No write exceptions detected.", LogInfo);
+            Logger::Log("No write exceptions detected.\n");
     }
 
     if (!JsonExceptionHandler([&]
@@ -448,8 +448,8 @@ bool Application::LoadDataFromConfig()
     {
         return false;
     }
-    Logger::Log("No read exceptions detected.", LogInfo);
+    Logger::Log("No read exceptions detected.\n");
 
-    Logger::Log("Done loading \"Settings.json\".", LogInfo);
+    Logger::Log("Done loading \"Settings.json\".\n");
     return true;
 }

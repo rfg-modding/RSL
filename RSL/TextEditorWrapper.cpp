@@ -11,7 +11,7 @@ TextEditorWrapper::TextEditorWrapper(bool* OpenState_, std::string Title_)
 
     LoadLanguageDefinitions();
     GenerateFileBrowserNodes();
-    Logger::Log("Generated file browser nodes for the first time.");
+    Logger::Log("Generated file browser nodes for the first time.\n");
     LastFileBrowserGeneration = std::chrono::steady_clock::now();
     ScriptPath = Globals::GetEXEPath() + "RSL//Scripts//Default//" + ScriptName;
 }
@@ -352,9 +352,7 @@ bool TextEditorWrapper::LoadScript(std::string FullPath, std::string NewScriptNa
         ExceptionInfo += __FILE__;
         ExceptionInfo += ", Function: ";
         ExceptionInfo += __func__;
-        ExceptionInfo += ", Line: ";
-        ExceptionInfo += __LINE__;
-        Logger::Log(ExceptionInfo, LogError, true, true);
+        Logger::LogError("{}\n", ExceptionInfo);
         MessageBoxA(Globals::FindRfgTopWindow(), ExceptionInfo.c_str(), "Failed to load script!", MB_OK);
     }
     catch (std::exception& Ex)
@@ -368,9 +366,7 @@ bool TextEditorWrapper::LoadScript(std::string FullPath, std::string NewScriptNa
         ExceptionInfo += __FILE__;
         ExceptionInfo += ", Function: ";
         ExceptionInfo += __func__;
-        ExceptionInfo += ", Line: ";
-        ExceptionInfo += __LINE__;
-        Logger::Log(ExceptionInfo, LogError, true, true);
+        Logger::LogError("{}\n", ExceptionInfo);
         MessageBoxA(Globals::FindRfgTopWindow(), ExceptionInfo.c_str(), "Failed to load script!", MB_OK);
     }
     catch (...)
@@ -384,9 +380,7 @@ bool TextEditorWrapper::LoadScript(std::string FullPath, std::string NewScriptNa
         ExceptionInfo += __FILE__;
         ExceptionInfo += ", Function: ";
         ExceptionInfo += __func__;
-        ExceptionInfo += ", Line: ";
-        ExceptionInfo += __LINE__;
-        Logger::Log(ExceptionInfo, LogError, true, true);
+        Logger::LogError("{}\n", ExceptionInfo);
         MessageBoxA(Globals::FindRfgTopWindow(), ExceptionInfo.c_str(), "Failed to load script!", MB_OK);
     }
 
@@ -429,9 +423,7 @@ bool TextEditorWrapper::SaveScript()
         ExceptionInfo += __FILE__;
         ExceptionInfo += ", Function: ";
         ExceptionInfo += __func__;
-        ExceptionInfo += ", Line: ";
-        ExceptionInfo += __LINE__;
-        Logger::Log(ExceptionInfo, LogError, true, true);
+        Logger::LogError("{}\n", ExceptionInfo);
         MessageBoxA(Globals::FindRfgTopWindow(), ExceptionInfo.c_str(), "Failed to save script!", MB_OK);
     }
     catch (std::exception& Ex)
@@ -445,9 +437,7 @@ bool TextEditorWrapper::SaveScript()
         ExceptionInfo += __FILE__;
         ExceptionInfo += ", Function: ";
         ExceptionInfo += __func__;
-        ExceptionInfo += ", Line: ";
-        ExceptionInfo += __LINE__;
-        Logger::Log(ExceptionInfo, LogError, true, true);
+        Logger::LogError("{}\n", ExceptionInfo);
         MessageBoxA(Globals::FindRfgTopWindow(), ExceptionInfo.c_str(), "Failed to save script!", MB_OK);
     }
     catch (...)
@@ -461,9 +451,7 @@ bool TextEditorWrapper::SaveScript()
         ExceptionInfo += __FILE__;
         ExceptionInfo += ", Function: ";
         ExceptionInfo += __func__;
-        ExceptionInfo += ", Line: ";
-        ExceptionInfo += __LINE__;
-        Logger::Log(ExceptionInfo, LogError, true, true);
+        Logger::LogError("{}\n", ExceptionInfo);
         MessageBoxA(Globals::FindRfgTopWindow(), ExceptionInfo.c_str(), "Failed to save script!", MB_OK);
     }
 
@@ -824,21 +812,21 @@ void TextEditorWrapper::LoadLanguageDefinitions()
     auto Lang = TextEditor::LanguageDefinition::Lua();
 
     std::string ExePath = Globals::GetEXEPath(false);
-    Logger::Log(R"(Started loading "LanguageConfig.json".)", LogInfo);
+    Logger::Log("Started loading \"LanguageConfig.json\".\n");
 
     // Load and parse LanguageConfig.json
     if (fs::exists(ExePath + "RSL/Settings/LanguageConfig.json"))
     {
         if (JsonExceptionHandler([&]
            {
-               Logger::Log(R"(Parsing "LanguageConfig.json")", LogInfo);
+               Logger::Log("Parsing \"LanguageConfig.json\".\n");
                std::ifstream Config(ExePath + "RSL/Settings/LanguageConfig.json");
                Config >> LanguageConfig;
                Config.close();
                return true;
            }, "LanguageConfig.json", "parse", "parsing"))
         {
-            Logger::Log(R"(No parse exceptions detected for "LanguageConfig.json".)", LogInfo);
+            Logger::Log("No parse exceptions detected for \"LanguageConfig.json\".\n");
         }
     }
     // Read values from LanguageConfig.json and use them to setup syntax highlighting and type tooltips.
@@ -869,9 +857,9 @@ void TextEditorWrapper::LoadLanguageDefinitions()
             return true;
        }, "LanguageConfig.json", "read", "reading"))
     {
-        Logger::Log(R"(No read exceptions detected for "LanguageConfig.json".)", LogInfo);
+        Logger::Log("No read exceptions detected for \"LanguageConfig.json\".\n");
     }
-    Logger::Log(R"(Done loading "LanguageConfig.json".)", LogInfo);
+    Logger::Log("Done loading \"LanguageConfig.json\".\n");
 
     Editor.SetLanguageDefinition(Lang);
 }

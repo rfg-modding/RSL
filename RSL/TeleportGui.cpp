@@ -1,39 +1,12 @@
 #include "TeleportGui.h"
+#include <utility>
 
 TeleportGui::TeleportGui(bool* OpenState_, std::string Title_)
 {
 	OpenState = OpenState_;
-	Title = Title_;
+	Title = std::move(Title_);
 
 	LoadTeleportLocations();
-
-	WindowFlags = 0;
-	//WindowFlags |= ImGuiWindowFlags_NoTitleBar;
-	//WindowFlags |= ImGuiWindowFlags_NoScrollbar;
-	///WindowFlags |= ImGuiWindowFlags_MenuBar;
-	//WindowFlags |= ImGuiWindowFlags_NoMove;
-	//WindowFlags |= ImGuiWindowFlags_NoResize;
-	///WindowFlags |= ImGuiWindowFlags_NoCollapse;
-	//WindowFlags |= ImGuiWindowFlags_NoNav;
-	//WindowFlags |= ImGuiWindowFlags_NoBackground;
-	//WindowFlags |= ImGuiWindowFlags_NoBringToFrontOnFocus;
-
-	ModalFlags = 0;
-	//ModalFlags |= ImGuiWindowFlags_NoTitleBar;
-	//ModalFlags |= ImGuiWindowFlags_NoScrollbar;
-	//ModalFlags |= ImGuiWindowFlags_MenuBar;
-	//ModalFlags |= ImGuiWindowFlags_NoMove;
-	ModalFlags |= ImGuiWindowFlags_NoResize;
-	ModalFlags |= ImGuiWindowFlags_NoCollapse;
-	//ModalFlags |= ImGuiWindowFlags_NoNav;
-	//ModalFlags |= ImGuiWindowFlags_NoBackground;
-	//ModalFlags |= ImGuiWindowFlags_NoBringToFrontOnFocus;
-
-	NewTeleportName = "";
-	NewTeleportPosition.x = 0.0f;
-	NewTeleportPosition.y = 0.0f;
-	NewTeleportPosition.z = 0.0f;
-	NewTeleportDescription = "";
 }
 
 void TeleportGui::Draw()
@@ -55,186 +28,170 @@ void TeleportGui::Draw()
 		return;
 	}
 
-	//ImGui::Text("Teleport:"); 
-	//ImGui::SameLine(); ShowHelpMarker("Works in vehicles and out.");
-	//ImGui::Checkbox("Use unsafe teleport", &UseUnsafeTeleport);
-	//ImGui::Checkbox("Allow safe teleport fail", &AllowSafeTeleportFail);
-	//ImGui::InputFloat("Safe teleport placement range: ", &SafeTeleportPlacementRange, 1.0, 5.0, 3);
-	static bool NameAlreadyUsedWarning = false;
+    DrawMenuHeader();
+    DrawLocationList();
+    DrawSavePopup();
 
-	//ImGui::Separator();
-	ImGui::PushFont(Globals::FontBig);
-	ImGui::Text("Manual:");
-	ImGui::PopFont();
-	ImGui::Separator();
-
-	//ImGui::Separator();
-	ImGui::Text("Current player position: ");
-	ImGui::SameLine();
-	std::string PlayerPositionString("(" + std::to_string(PlayerPtr->Position.x) + ", " + std::to_string(PlayerPtr->Position.y) + ", " + std::to_string(PlayerPtr->Position.z) + ")");
-	ImGui::TextColored(Globals::SecondaryTextColor, PlayerPositionString.c_str());
-
-	ImGui::Text("New player position:"); ImGui::SameLine();
-	ImGui::SetNextItemWidth(232.0f);
-	ImGui::InputFloat3("##Player Position Target", PlayerPositionTargetArray, 3);
-	ImGui::SameLine();
-	if (ImGui::Button("Sync##PlayerPositionTarget"))
-	{
-		PlayerPositionTargetArray[0] = PlayerPtr->Position.x;
-		PlayerPositionTargetArray[1] = PlayerPtr->Position.y;
-		PlayerPositionTargetArray[2] = PlayerPtr->Position.z;
-	}
-	ImGui::SameLine();
-	if (ImGui::Button("Teleport##PlayerPositionTarget"))
-	{
-		HumanTeleportUnsafe(PlayerPtr, vector(PlayerPositionTargetArray[0], PlayerPositionTargetArray[1], PlayerPositionTargetArray[2]), PlayerPtr->Orientation);
-	}
-	Util::Gui::TooltipOnPrevious("This will teleport the player to the value's you've typed, even if they are out of bounds. When setting TP points for later, try to set the y value a bit higher. If the game doesn't load quick enough your player will fall through the map. Usually the game will pull them back up, but sometimes it fails.");
-	ImGui::SameLine();
-	if (ImGui::Button("Save as new##PlayerPositionTarget"))
-	{
-		ImGui::OpenPopup("Save teleport location##PlayerPositionTarget");
-		NewTeleportName = "";
-		NewTeleportPosition.x = PlayerPositionTargetArray[0];
-		NewTeleportPosition.y = PlayerPositionTargetArray[1];
-		NewTeleportPosition.z = PlayerPositionTargetArray[2];
-		NewTeleportDescription = "";
-	}
-	if (ImGui::BeginPopupModal("Save teleport location##PlayerPositionTarget", NULL, ModalFlags))
-	{
-		ImGui::Text("Name:");
-		ImGui::InputText("##TeleportEditNamePlayerPositionTarget", &NewTeleportName);
-		if (NameAlreadyUsedWarning)
-		{
-			ImGui::SameLine();
-			ImGui::TextColored(Globals::ColorRed, "Name already used!");
-		}
-		ImGui::Text("Position:");
-		ImGui::SetNextItemWidth(232.0f);
-		ImGui::InputFloat3("##TeleportEditPositionPlayerPositionTarget", (float*)(&NewTeleportPosition), 2);
-		ImGui::Text("Tooltip description:");
-		ImGui::InputTextMultiline("##TeleportEditTooltip descriptionPlayerPositionTarget", &NewTeleportDescription, ImVec2(500.0f, 350.0f));// , MainOverlayTeleportEditTextFlags);// , ImGuiInputTextFlags_CharsHexadecimal);
-		if (ImGui::Button("Save##PlayerPositionTarget"))
-		{
-			if (SetTeleportLocation(NewTeleportName, NewTeleportPosition.x, NewTeleportPosition.y, NewTeleportPosition.z, NewTeleportDescription))
-			{
-				NameAlreadyUsedWarning = false;
-				SaveTeleportLocations();
-				ImGui::CloseCurrentPopup();
-			}
-			else
-			{
-				NameAlreadyUsedWarning = true;
-			}
-		}
-		ImGui::SameLine();
-		if (ImGui::Button("Cancel##PlayerPositionTarget"))
-		{
-			ImGui::CloseCurrentPopup();
-		}
-		ImGui::EndPopup();
-	}
-
-	/*if (ImGui::Button("Sync##PlayerVelocityTarget"))
-	{
-		PlayerVelocityTargetArray[0] = PlayerPtr->Velocity.x;
-		PlayerVelocityTargetArray[1] = PlayerPtr->Velocity.y;
-		PlayerVelocityTargetArray[2] = PlayerPtr->Velocity.z;
-	}
-	ImGui::SameLine();
-	if (ImGui::Button("Set##PlayerVelocityTarget"))
-	{
-		PlayerPtr->Velocity.x = PlayerVelocityTargetArray[0];
-		PlayerPtr->Velocity.y = PlayerVelocityTargetArray[1];
-		PlayerPtr->Velocity.z = PlayerVelocityTargetArray[2];
-		NeedPlayerVelocitySet = true;
-	}
-	ImGui::SameLine(); ShowHelpMarker("This is always equal to the true player velocity. Haven't quite nailed down how objects are moved yet so there's only partial control for now. You can still set the velocity, but once you move out of that edit box it'll go back to the normal values.");
-	*/
-
-	ImGui::Separator();
-	ImGui::PushFont(Globals::FontBig);
-	ImGui::Text("Saved locations:");
-	ImGui::PopFont();
-	ImGui::Separator();
-	ImGui::Text("Credit to TimeFlier for many of the default locations.");
-	try
-	{
-		for (auto i : TeleportLocations)
-		{
-			if (ImGui::Button(i["Name"].get<std::string>().c_str()))
-			{
-				HumanTeleportUnsafe(PlayerPtr, vector(i["Position"][0].get<float>(), i["Position"][1].get<float>(), i["Position"][2].get<float>()), PlayerPtr->Orientation);
-			}
-			Util::Gui::TooltipOnPrevious(std::string(i["TooltipDescription"].get<std::string>() 
-				+ std::string(" Position: (") + Globals::to_string_precise(i["Position"][0].get<float>())
-				+ std::string(", ") + Globals::to_string_precise(i["Position"][1].get<float>())
-				+ std::string(", ") + Globals::to_string_precise(i["Position"][2].get<float>()) + std::string(")")).c_str());
-			ImGui::SameLine();
-			if (ImGui::Button(std::string("Edit##" + i["Name"].get<std::string>()).c_str()))
-			{
-				ImGui::OpenPopup(std::string("Teleport location edit##" + i["Name"].get<std::string>()).c_str());
-				TeleportEditPopupOpen = true;
-				NewTeleportName = i["Name"].get<std::string>();
-				NewTeleportPosition.x = i["Position"][0];
-				NewTeleportPosition.y = i["Position"][1];
-				NewTeleportPosition.z = i["Position"][2];
-				NewTeleportDescription = i["TooltipDescription"].get<std::string>();
-			}
-			if (ImGui::BeginPopupModal(std::string("Teleport location edit##" + i["Name"].get<std::string>()).c_str(), NULL, ModalFlags))
-			{
-				ImGui::Text("Name:");
-				ImGui::InputText("##TeleportEditName", &NewTeleportName);
-				ImGui::Text("Position:");
-				ImGui::SetNextItemWidth(232.0f);
-				ImGui::InputFloat3("##TeleportEditPosition", (float*)(&NewTeleportPosition), 2);
-				ImGui::Text("Tooltip description:");
-				ImGui::InputTextMultiline("##TeleportEditTooltip description", &NewTeleportDescription, ImVec2(500.0f, 350.0f));
-				if (ImGui::Button(std::string("Save##" + i["Name"].get<std::string>()).c_str()))
-				{
-					ChangeTeleportLocation(i["Name"], NewTeleportName, NewTeleportPosition.x, NewTeleportPosition.y, NewTeleportPosition.z, NewTeleportDescription);
-					SaveTeleportLocations();
-					ImGui::CloseCurrentPopup();
-				}
-				ImGui::SameLine();
-				if (ImGui::Button(std::string("Cancel##" + i["Name"].get<std::string>()).c_str()))
-				{
-					ImGui::CloseCurrentPopup();
-				}
-				ImGui::EndPopup();
-			}
-			/*if (ShowName)
-			{
-				std::cout << "Name after exiting modal: " << i["Name"] << "\n";
-				i["Name"] = NewTeleportName;
-				ShowName = false;
-			}*/
-		}
-	}
-	catch (std::exception& Exception)
-	{
-		Logger::Log("Exception while drawing teleport menu!", LogFatalError);
-		Logger::Log(Exception.what(), LogFatalError);
-	}
-	catch (...)
-	{
-		Logger::Log("Unknown exception while drawing teleport menu!", LogFatalError);
-	}
-	
-	Util::Gui::TooltipOnPrevious("Manual and preset teleport controls for the player. Works in vehicles.");
 	ImGui::End();
+}
+
+void TeleportGui::DrawMenuHeader()
+{
+    ImGui::PushFont(Globals::FontBig);
+    ImGui::Text("Manual:");
+    ImGui::PopFont();
+    ImGui::Separator();
+
+    //ImGui::Separator();
+    ImGui::Text("Current player position: ");
+    ImGui::SameLine();
+    const std::string PlayerPositionString = PlayerPtr->Position.GetDataString(false, true);
+    ImGui::TextColored(Globals::SecondaryTextColor, PlayerPositionString.c_str());
+
+    ImGui::Text("New player position:"); ImGui::SameLine();
+    ImGui::SetNextItemWidth(232.0f);
+    ImGui::InputFloat3("##PPT", reinterpret_cast<float*>(&PlayerPositionTarget), 3);
+    ImGui::SameLine();
+    if (ImGui::Button("Sync"))
+    {
+        PlayerPositionTarget = PlayerPtr->Position;
+    }
+    ImGui::SameLine();
+    if (ImGui::Button("Teleport##PPT"))
+    {
+        HumanTeleportUnsafe(PlayerPtr, PlayerPositionTarget, PlayerPtr->Orientation);
+    }
+    Util::Gui::TooltipOnPrevious("This will teleport the player to the value's you've typed, even if they are out of bounds. When setting TP points for later, try to set the y value a bit higher. If the game doesn't load quick enough your player will fall through the map. Usually the game will pull them back up, but sometimes it fails.");
+    ImGui::SameLine();
+    if (ImGui::Button("Save as new##PPT"))
+    {
+        ImGui::OpenPopup("Save teleport location##PPT");
+        NewTeleportName = "";
+        NewTeleportPosition = PlayerPositionTarget;
+        NewTeleportDescription = "";
+    }
+    ImGui::Separator();
+}
+
+void TeleportGui::DrawLocationList()
+{
+    ImGui::PushFont(Globals::FontBig);
+    ImGui::Text("Saved locations:");
+    ImGui::PopFont();
+    ImGui::Separator();
+    ImGui::Text("Credit to TimeFlier for many of the default locations.");
+    try
+    {
+        for (auto i : TeleportLocations)
+        {
+            if (ImGui::Button(i["Name"].get<std::string>().c_str()))
+            {
+                HumanTeleportUnsafe(PlayerPtr, vector(i["Position"][0].get<float>(), i["Position"][1].get<float>(), i["Position"][2].get<float>()), PlayerPtr->Orientation);
+            }
+
+            Util::Gui::TooltipOnPrevious(fmt::format("{} Position: ({}, {}, {})",
+                i["TooltipDescription"].get<std::string>(),
+                Globals::to_string_precise(i["Position"][0].get<float>()),
+                Globals::to_string_precise(i["Position"][1].get<float>()),
+                Globals::to_string_precise(i["Position"][2].get<float>())).c_str());
+            ImGui::SameLine();
+
+            if (ImGui::Button(std::string("Edit##" + i["Name"].get<std::string>()).c_str()))
+            {
+                ImGui::OpenPopup(std::string("Teleport location edit##" + i["Name"].get<std::string>()).c_str());
+                TeleportEditPopupOpen = true;
+                NewTeleportName = i["Name"].get<std::string>();
+                NewTeleportPosition.x = i["Position"][0];
+                NewTeleportPosition.y = i["Position"][1];
+                NewTeleportPosition.z = i["Position"][2];
+                NewTeleportDescription = i["TooltipDescription"].get<std::string>();
+            }
+
+            if (ImGui::BeginPopupModal(std::string("Teleport location edit##" + i["Name"].get<std::string>()).c_str(), NULL, ModalFlags))
+            {
+                ImGui::Text("Name:");
+                ImGui::InputText("##NTN2", &NewTeleportName);
+                ImGui::Text("Position:");
+                ImGui::SetNextItemWidth(232.0f);
+                ImGui::InputFloat3("##NTP2", reinterpret_cast<float*>(&NewTeleportPosition), 2);
+                ImGui::Text("Tooltip description:");
+                ImGui::InputTextMultiline("##NTD2", &NewTeleportDescription, ImVec2(500.0f, 350.0f));
+                if (ImGui::Button(std::string("Save##" + i["Name"].get<std::string>()).c_str()))
+                {
+                    ChangeTeleportLocation(i["Name"], NewTeleportName, NewTeleportPosition.x, NewTeleportPosition.y, NewTeleportPosition.z, NewTeleportDescription);
+                    SaveTeleportLocations();
+                    ImGui::CloseCurrentPopup();
+                }
+                ImGui::SameLine();
+                if (ImGui::Button(std::string("Cancel##" + i["Name"].get<std::string>()).c_str()))
+                {
+                    ImGui::CloseCurrentPopup();
+                }
+                ImGui::EndPopup();
+            }
+        }
+    }
+    catch (std::exception& Exception)
+    {
+        Logger::LogFatalError("Exception while drawing teleport menu! Message: {}\n", Exception.what());
+    }
+    catch (...)
+    {
+        Logger::LogFatalError("Unknown exception while drawing teleport menu!\n");
+    }
+
+    Util::Gui::TooltipOnPrevious("Manual and preset teleport controls for the player. Works in vehicles.");
+}
+
+void TeleportGui::DrawSavePopup()
+{
+    static bool NameAlreadyUsedWarning = false;
+    if (ImGui::BeginPopupModal("Save teleport location##PPT", nullptr, ModalFlags))
+    {
+        ImGui::Text("Name:");
+        ImGui::InputText("##NTN", &NewTeleportName);
+        if (NameAlreadyUsedWarning)
+        {
+            ImGui::SameLine();
+            ImGui::TextColored(Globals::ColorRed, "Name already used!");
+        }
+        ImGui::Text("Position:");
+        ImGui::SetNextItemWidth(232.0f);
+        ImGui::InputFloat3("##NTP", reinterpret_cast<float*>(&NewTeleportPosition), 2);
+        ImGui::Text("Tooltip description:");
+        ImGui::InputTextMultiline("##NTD", &NewTeleportDescription, ImVec2(500.0f, 350.0f));// , MainOverlayTeleportEditTextFlags);// , ImGuiInputTextFlags_CharsHexadecimal);
+        if (ImGui::Button("Save##PPT"))
+        {
+            if (SetTeleportLocation(NewTeleportName, NewTeleportPosition.x, NewTeleportPosition.y, NewTeleportPosition.z, NewTeleportDescription))
+            {
+                NameAlreadyUsedWarning = false;
+                SaveTeleportLocations();
+                ImGui::CloseCurrentPopup();
+            }
+            else
+            {
+                NameAlreadyUsedWarning = true;
+            }
+        }
+        ImGui::SameLine();
+        if (ImGui::Button("Cancel##PPT"))
+        {
+            ImGui::CloseCurrentPopup();
+        }
+        ImGui::EndPopup();
+    }
 }
 
 bool TeleportGui::LoadTeleportLocations()
 {
 	std::string ExePath = Globals::GetEXEPath(false);
-	Logger::Log("Started loading \"Teleport Locations.json\".", LogInfo);
+	Logger::Log("Started loading \"Teleport Locations.json\".\n");
 
 	if (fs::exists(ExePath + "RSL/Settings/Teleport Locations.json"))
 	{
 		if (!JsonExceptionHandler([&]
 		{
-			Logger::Log("Parsing \"Teleport Locations.json\"...", LogInfo);
+			Logger::Log("Parsing \"Teleport Locations.json\"...\n");
 			std::ifstream Config(ExePath + "RSL/Settings/Teleport Locations.json");
 			Config >> TeleportLocations;
 			Config.close();
@@ -243,13 +200,13 @@ bool TeleportGui::LoadTeleportLocations()
 		{
 			return false;
 		}
-		Logger::Log("No parse exceptions detected.", LogInfo);
+		Logger::Log("No parse exceptions detected.\n");
 	}
 	else
 	{
 		if (!JsonExceptionHandler([&]
 		{
-			Logger::Log("\"Teleport Locations.json\" not found. Creating from default values.", LogWarning);
+			Logger::LogWarning("\"Teleport Locations.json\" not found. Creating from default values.\n");
 			Globals::CreateDirectoryIfNull(ExePath + "RSL/Settings/");
 
 			SetTeleportLocation("Parker - Tutorial Area", -2328.29f, 30.0f, -2317.9f, "Tutorial area at the start of the game.");
@@ -311,19 +268,19 @@ bool TeleportGui::LoadTeleportLocations()
 		{
 			return false;
 		}
-		Logger::Log("No write exceptions detected.", LogInfo);
+		Logger::Log("No write exceptions detected.\n");
 	}
 
-	Logger::Log("Done loading \"Teleport Locations.json\".", LogInfo);
+    Logger::Log("Done loading \"Teleport Locations.json\".\n");
 	return true;
 }
 
 bool TeleportGui::SaveTeleportLocations()
 {
-	Logger::Log("Started writing \"Teleport Locations.json\"", LogInfo);
+	Logger::Log("Started writing \"Teleport Locations.json\"\n");
 	if (!JsonExceptionHandler([&]
 	{
-		Logger::Log("\"Teleport Locations.json\" not found. Creating from default values.", LogWarning);
+		Logger::LogWarning("\"Teleport Locations.json\" not found. Creating from default values.\n");
 		const std::string ExePath = Globals::GetEXEPath(false);
 		Globals::CreateDirectoryIfNull(ExePath + "RSL/Settings/");
 
@@ -336,9 +293,9 @@ bool TeleportGui::SaveTeleportLocations()
 	{
 		return false;
 	}
-	Logger::Log("No write exceptions detected.", LogInfo);
+	Logger::Log("No write exceptions detected.\n");
 
-	Logger::Log("Done writing \"Teleport Locations.json\"", LogInfo);
+	Logger::Log("Done writing \"Teleport Locations.json\"\n");
 	return true;
 }
 

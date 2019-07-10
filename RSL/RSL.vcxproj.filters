@@ -36,6 +36,12 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
     </Filter>
+    <Filter Include="General Files\Libraries">
+      <UniqueIdentifier>{6621adfc-d1d4-4299-aa02-2cb64da01534}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="General Files\Libraries\fmt">
+      <UniqueIdentifier>{17b8a0fa-c3b4-4855-8110-8f692d260b5c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CameraWrapper.cpp">
@@ -217,6 +223,12 @@
     </ClCompile>
     <ClCompile Include="VehicleSpawnerGui.cpp">
       <Filter>Overlay Gui\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="include\fmt\format.cc">
+      <Filter>General Files\Libraries\fmt</Filter>
+    </ClCompile>
+    <ClCompile Include="include\fmt\posix.cc">
+      <Filter>General Files\Libraries\fmt</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
