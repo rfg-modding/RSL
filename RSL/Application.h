@@ -42,5 +42,5 @@ private:
     /* Used to ensure proper opening/closing of the debug console. Mainly used to make sure
        multiple consoles aren't opened when repeatedly injecting the script loader during dev.*/
     bool PreExistingConsole = true;
-
+    bool AutorunScriptsRun = false;
 };

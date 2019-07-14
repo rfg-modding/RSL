@@ -163,6 +163,14 @@ void Application::MainLoop()
     const ulong MillisecondsPerUpdate = 1000 / UpdatesPerSecond;
     while (!ShouldClose()) //Todo: Change to respond to PostQuitMessage(0) in WndProc
     {
+        //Todo: Have startup event here which checks for playerptr being valid and perhaps other values.
+        //if(!AutorunScriptsRun)
+        //{
+        //    if(Globals::PlayerPtr && Globals::RfgWorldPtr && Globals::hkpWorldPtr) //Todo: Make a func that checks all pointers and other info used by scripts. For now this should work.
+        //    {
+        //        
+        //    }
+        //}
         std::chrono::steady_clock::time_point Begin = std::chrono::steady_clock::now();
         /*Note 1: The error messages in the next three if statements are BS. They really
         detect if the player has entered a multiplayer mode. I changed them to

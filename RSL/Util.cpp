@@ -119,3 +119,11 @@ std::string Util::General::LoadFileToString(const std::string& FullPath)
 
     return str;
 }
+
+// Takes a string as input and returns it's fully lowercase equivalent. This function might crash if non ascii characters are passed in.
+std::string Util::General::ToLower(std::string& String)
+{
+    std::string Copy = String; //Copy the string since we want to leave the original string intact
+    std::transform(Copy.begin(), Copy.end(), Copy.begin(), [](unsigned char c) { return std::tolower(c); });
+    return Copy;
+}

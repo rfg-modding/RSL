@@ -104,7 +104,7 @@ void ScriptManager::SetupLua()
     RslTable["CloseLogFile"] = Logger::CloseLogFile;
     RslTable["CloseAllLogFiles"] = Logger::CloseAllLogFiles;
 
-    //RslTable["Log"] = Lua::Log;
+    RslTable["Log"] = Lua::Log;
     RslTable["LogNone"] = Lua::LogNone;
     RslTable["LogInfo"] = Lua::LogInfo;
     RslTable["LogWarning"] = Lua::LogWarning;
@@ -130,7 +130,7 @@ void ScriptManager::SetupLua()
 	RfgTable["HideHud"] = HideHud;
 	RfgTable["HideFog"] = HideFog;
 	RfgTable["ToggleFog"] = ToggleFog;
-	RfgTable["ToggleHud"] = ToggleHud;
+    RfgTable["ToggleHud"] = ToggleHud;
 	RfgTable["SetFarClip"] = GameRenderSetFarClipDistance;
 	RfgTable["GetFarClip"] = GameRenderGetFarClipDistance;
 	RfgTable["SetAlertLevel"] = GsmSetAlertLevel;
@@ -298,7 +298,16 @@ void ScriptManager::ScanScriptsFolder()
 
 void ScriptManager::RunStartupScripts()
 {
-
+    for(auto& Folder : SubFolders)
+    {
+        for(auto& Script : Folder.Scripts)
+        {
+            if(Util::General::ToLower(Script.Name) == "main.lua")
+            {
+                RunScript(Script.FullPath);
+            }
+        }
+    }
 }
 
 /* Tries to run the file at the given path as a lua script. Includes error 

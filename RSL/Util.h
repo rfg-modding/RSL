@@ -21,4 +21,5 @@ namespace Util::General
 {
     void ThreadedBeep(ulong Frequency, ulong Duration);
     std::string LoadFileToString(const std::string& FullPath);
+    std::string ToLower(std::string& String);
 }
