@@ -103,23 +103,27 @@ void ScriptManager::SetupLua()
     RslTable["OpenLogFile"] = Logger::OpenLogFile;
     RslTable["CloseLogFile"] = Logger::CloseLogFile;
     RslTable["CloseAllLogFiles"] = Logger::CloseAllLogFiles;
-    RslTable.set_function("Log", sol::overload(
-        [](std::string Message) {Logger::Log(Message, LogInfo, false, true); },
-        [](std::string Message, LogType Type) {Logger::Log(Message, Type, false, true); },
-        [](std::string Message, LogType Type, bool LogTime) {Logger::Log(Message, Type, LogTime, true); },
-        [](std::string Message, LogType Type, bool LogTime, bool Newline) {Logger::Log(Message, Type, LogTime, Newline); }
-    ));
+
+    //RslTable["Log"] = Lua::Log;
+    RslTable["LogNone"] = Lua::LogNone;
+    RslTable["LogInfo"] = Lua::LogInfo;
+    RslTable["LogWarning"] = Lua::LogWarning;
+    RslTable["LogError"] = Lua::LogError;
+    RslTable["LogFatalError"] = Lua::LogFatalError;
+    RslTable["LogLua"] = Lua::LogLua;
+    RslTable["LogJson"] = Lua::LogJson;
+
     RslTable["LogFlagWithColor"] = Logger::LogFlagWithColor;
     RslTable["GetFlagString"] = Logger::GetFlagString;
     RslTable["LogToFile"] = Logger::LogToFile;
     RslTable["GetTimeString"] = Logger::GetTimeString;
 
     //RslTable["Beep"] = [](DWORD Frequency, DWORD Duration) {std::async((std::launch::async), [&] {Beep(Frequency, Duration); }); };
-    RslTable["Beep"] = Util::General::ThreadedBeep;
+    //RslTable["Beep"] = Util::General::ThreadedBeep;
 
     RslTable.set_function("CharArrayToString", sol::overload(
-        [](char* Array, int Size) { Globals::CharArrayToString(Array, Size); },
-        [](const char* Array, int Size) {Globals::CharArrayToString(Array, Size); }
+        [](char* Array, int Size) { return Globals::CharArrayToString(Array, Size); },
+        [](const char* Array, int Size) { return Globals::CharArrayToString(Array, Size); }
     ));
 
 	auto RfgTable = LuaStateRef["rfg"].get_or_create<sol::table>();

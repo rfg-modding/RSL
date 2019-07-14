@@ -95,4 +95,100 @@ namespace Lua
         }
         return nullptr;
     }
+
+    std::vector<fmt::basic_format_arg<fmt::format_context>> GenerateFmtListFromSolVariadicArgs(sol::variadic_args& Args)
+    {
+        std::vector<fmt::basic_format_arg<fmt::format_context>> FmtArgsList;
+        for (auto& Arg : Args)
+        {
+            switch (Arg.get_type())
+            {
+            case sol::type::none:
+                FmtArgsList.push_back(fmt::internal::make_arg<fmt::format_context>("<unsupported format type>"));
+                break;
+            case sol::type::lua_nil: //covers lua_nil and nil
+                FmtArgsList.push_back(fmt::internal::make_arg<fmt::format_context>("nil"));
+                break;
+            case sol::type::string:
+                FmtArgsList.push_back(fmt::internal::make_arg<fmt::format_context>(Arg.get<const char*>()));
+                break;
+            case sol::type::number:
+                FmtArgsList.push_back(fmt::internal::make_arg<fmt::format_context>(Arg.get<long long>()));
+                break;
+            case sol::type::thread:
+                FmtArgsList.push_back(fmt::internal::make_arg<fmt::format_context>("<unsupported format type>"));
+                break;
+            case sol::type::boolean:
+                FmtArgsList.push_back(fmt::internal::make_arg<fmt::format_context>(Arg.get<bool>()));
+                break;
+            case sol::type::function:
+                FmtArgsList.push_back(fmt::internal::make_arg<fmt::format_context>("<unsupported format type>"));
+                break;
+            case sol::type::userdata:
+                FmtArgsList.push_back(fmt::internal::make_arg<fmt::format_context>("<unsupported format type>"));
+                break;
+            case sol::type::lightuserdata:
+                FmtArgsList.push_back(fmt::internal::make_arg<fmt::format_context>("<unsupported format type>"));
+                break;
+            case sol::type::table:
+                FmtArgsList.push_back(fmt::internal::make_arg<fmt::format_context>("<unsupported format type>"));
+                break;
+            case sol::type::poly:
+                FmtArgsList.push_back(fmt::internal::make_arg<fmt::format_context>("<unsupported format type>"));
+                break;
+            default:;
+            }
+
+        }
+        return FmtArgsList;
+    }
+
+    //Todo: Try to support more unsupported types if possible
+    void Log(std::string Fmt, sol::variadic_args Args)
+    {
+        auto ArgsList = GenerateFmtListFromSolVariadicArgs(Args);
+        Logger::LogInternal(fmt::vformat(Fmt, fmt::basic_format_args<fmt::format_context>(ArgsList.data(), static_cast<unsigned>(ArgsList.size()))), LogType::LogInfo);
+    }
+
+    void LogNone(std::string Fmt, sol::variadic_args Args)
+    {
+        auto ArgsList = GenerateFmtListFromSolVariadicArgs(Args);
+        Logger::LogInternal(fmt::vformat(Fmt, fmt::basic_format_args<fmt::format_context>(ArgsList.data(), static_cast<unsigned>(ArgsList.size()))), LogType::LogNone);
+    }
+
+    void LogInfo(std::string Fmt, sol::variadic_args Args)
+    {
+        auto ArgsList = GenerateFmtListFromSolVariadicArgs(Args);
+        Logger::LogInternal(fmt::vformat(Fmt, fmt::basic_format_args<fmt::format_context>(ArgsList.data(), static_cast<unsigned>(ArgsList.size()))), LogType::LogInfo);
+    }
+
+    void LogWarning(std::string Fmt, sol::variadic_args Args)
+    {
+        auto ArgsList = GenerateFmtListFromSolVariadicArgs(Args);
+        Logger::LogInternal(fmt::vformat(Fmt, fmt::basic_format_args<fmt::format_context>(ArgsList.data(), static_cast<unsigned>(ArgsList.size()))), LogType::LogWarning);
+    }
+
+    void LogError(std::string Fmt, sol::variadic_args Args)
+    {
+        auto ArgsList = GenerateFmtListFromSolVariadicArgs(Args);
+        Logger::LogInternal(fmt::vformat(Fmt, fmt::basic_format_args<fmt::format_context>(ArgsList.data(), static_cast<unsigned>(ArgsList.size()))), LogType::LogError);
+    }
+
+    void LogFatalError(std::string Fmt, sol::variadic_args Args)
+    {
+        auto ArgsList = GenerateFmtListFromSolVariadicArgs(Args);
+        Logger::LogInternal(fmt::vformat(Fmt, fmt::basic_format_args<fmt::format_context>(ArgsList.data(), static_cast<unsigned>(ArgsList.size()))), LogType::LogFatalError);
+    }
+
+    void LogLua(std::string Fmt, sol::variadic_args Args)
+    {
+        auto ArgsList = GenerateFmtListFromSolVariadicArgs(Args);
+        Logger::LogInternal(fmt::vformat(Fmt, fmt::basic_format_args<fmt::format_context>(ArgsList.data(), static_cast<unsigned>(ArgsList.size()))), LogType::LogLua);
+    }
+
+    void LogJson(std::string Fmt, sol::variadic_args Args)
+    {
+        auto ArgsList = GenerateFmtListFromSolVariadicArgs(Args);
+        Logger::LogInternal(fmt::vformat(Fmt, fmt::basic_format_args<fmt::format_context>(ArgsList.data(), static_cast<unsigned>(ArgsList.size()))), LogType::LogJson);
+    }
 }
