@@ -135,7 +135,11 @@ void ScriptManager::SetupLua()
 	RfgTable["GetFarClip"] = GameRenderGetFarClipDistance;
 	RfgTable["SetAlertLevel"] = GsmSetAlertLevel;
 	RfgTable["GetAlertLevel"] = GsmGetAlertLevel;
-	RfgTable["TeleportHuman"] = HumanTeleportUnsafe;
+	//RfgTable["TeleportHuman"] = HumanTeleportUnsafe;
+    RfgTable.set_function("TeleportHuman", sol::overload(
+        [](Human* Target, vector Position, matrix Orientation) { HumanTeleportUnsafe(Target, Position, Orientation); },
+        [](Human* Target, vector Position) { HumanTeleportUnsafe(Target, Position, Target->Orientation); }
+    ));
 	RfgTable["GetPlayer"] = Lua::GetPlayer;
 	RfgTable["GetWorld"] = Lua::GetWorld;
 	RfgTable["GetPhysicsWorld"] = Lua::GetPhysicsWorld;
@@ -154,8 +158,9 @@ void ScriptManager::SetupLua()
 	RfgTable.set_function("ApplyLinearImpulse", sol::overload(HavokBodyApplyLinearImpulseA, HavokBodyApplyLinearImpulseB));
 
 	RfgTable.set_function("TeleportPlayer", sol::overload(
- [](vector Position, matrix Orientation) {HumanTeleportUnsafe(Globals::PlayerPtr, Position, Orientation); }, 
-		[](vector Position) {HumanTeleportUnsafe(Globals::PlayerPtr, Position, Globals::PlayerPtr->Orientation); }));
+        [](vector Position, matrix Orientation) {HumanTeleportUnsafe(Globals::PlayerPtr, Position, Orientation); }, 
+		[](vector Position) {HumanTeleportUnsafe(Globals::PlayerPtr, Position, Globals::PlayerPtr->Orientation); }
+    ));
 
     RfgTable["GetVersion"] = KeenGetBuildVersionString;
 
