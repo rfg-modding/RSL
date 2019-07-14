@@ -103,10 +103,12 @@ with the top menu bar above.");
     Util::Gui::LabelAndValue("Toggle overlay: ", "F1");
     Util::Gui::LabelAndValue("Toggle script editor: ", "F2");
     Util::Gui::LabelAndValue("Toggle lua console: ", "F4");
+    Util::Gui::LabelAndValue("Run current script in editor: ", "F5");
     Util::Gui::LabelAndValue("Toggle hud: ", "Numpad 1");
     Util::Gui::LabelAndValue("Toggle fog: ", "Numpad 2");
     Util::Gui::LabelAndValue("Toggle free cam: ", "Numpad 3");
     Util::Gui::LabelAndValue("Lock object in crosshairs to introspection menu: ", "Numpad 4");
+    Util::Gui::LabelAndValue("Ragdoll player: ", "Numpad 5");
 
 	ImGui::End();
 }

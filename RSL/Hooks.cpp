@@ -165,6 +165,12 @@ LRESULT ProcessInput(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
                 }
             }
             break;
+        case VK_NUMPAD5:
+            if(Globals::PlayerPtr) //Rough check of if the player is inited / a save is loaded.
+            {
+                UnusedDcfRagdollPlayer();
+            }
+            break;
 		case VK_F4: //Tilde
 			Globals::Gui->ToggleLuaConsole();
 			if (Globals::Gui->IsLuaConsoleActive())
