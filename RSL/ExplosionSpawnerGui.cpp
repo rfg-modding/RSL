@@ -61,7 +61,7 @@ void ExplosionSpawnerGui::Draw()
         ImGui::InputInt("Unique ID", &CustomExplosionInfo.m_unique_id);
         ImGui::SameLine();
         Util::Gui::ShowHelpMarker("Make sure that you use a unique value for the unique id variable or you might get behavior not matching the variables you've set. I believe that all of the games explosions use the lower unique id values. So if you just use a value larger than 1000 you shouldn't have an issue.");
-        ImGui::InputInt("Name CRC", (int*)&CustomExplosionInfo.m_name_crc_str); //Todo: Need to make a wrapper for this so the range isn't limited to the signed range.
+        ImGui::InputInt("Name CRC", (int*)&CustomExplosionInfo.m_name_crc_str); //Todo: Need to switch these to use the proper types with ImGui::InputScalar
         ImGui::SameLine();
         Util::Gui::ShowHelpMarker("You also need to be careful that this value is unique. Currently there's no easy way to check that, but the default value never seems to have issues.");
         ImGui::InputFloat("Radius", &CustomExplosionInfo.m_radius);
