@@ -230,6 +230,9 @@
     <ClCompile Include="include\fmt\posix.cc">
       <Filter>General Files\Libraries\fmt</Filter>
     </ClCompile>
+    <ClCompile Include="ExplosionInfoLua.cpp">
+      <Filter>Lua Binding</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CameraWrapper.h">
@@ -456,6 +459,9 @@
     </ClInclude>
     <ClInclude Include="VehicleSpawnerGui.h">
       <Filter>Overlay Gui\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ExplosionInfoLua.h">
+      <Filter>Lua Binding</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

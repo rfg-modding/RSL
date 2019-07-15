@@ -113,6 +113,7 @@
     <ClCompile Include="AttachInfoDataLua.cpp" />
     <ClCompile Include="BaseGui.cpp" />
     <ClCompile Include="BaseTypeLua.cpp" />
+    <ClCompile Include="ExplosionInfoLua.cpp" />
     <ClCompile Include="ExplosionSpawnerGui.cpp" />
     <ClCompile Include="HkpRigidBodyLua.cpp" />
     <ClCompile Include="CameraWrapper.cpp" />
@@ -180,6 +181,7 @@
     <ClInclude Include="AttachInfoDataLua.h" />
     <ClInclude Include="BaseGui.h" />
     <ClInclude Include="BaseTypeLua.h" />
+    <ClInclude Include="ExplosionInfoLua.h" />
     <ClInclude Include="ExplosionSpawnerGui.h" />
     <ClInclude Include="FixedArrayWrapper.h" />
     <ClInclude Include="HkpRigidBodyLua.h" />

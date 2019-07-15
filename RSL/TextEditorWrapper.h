@@ -1,6 +1,6 @@
 #pragma once
 #include "BaseGui.h"
-#include "ImGuiColorTextEdit/TextEditor.h"
+#include <ImGuiColorTextEdit/TextEditor.h>
 
 class FileBrowserNode
 {
