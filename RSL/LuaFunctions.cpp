@@ -119,7 +119,7 @@ namespace Lua
         return nullptr;
     }
 
-    std::vector<fmt::basic_format_arg<fmt::format_context>> GenerateFmtListFromSolVariadicArgs(sol::variadic_args& Args)
+    std::vector<fmt::basic_format_arg<fmt::format_context>> GenerateFmtListFromSolVariadicArgs(const sol::variadic_args& Args)
     {
         std::vector<fmt::basic_format_arg<fmt::format_context>> FmtArgsList;
         for (auto& Arg : Args)
