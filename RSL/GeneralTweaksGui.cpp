@@ -117,6 +117,8 @@ void GeneralTweaksGui::Draw()
 			}
 		}
 	}
+    ImGui::Separator();
+
 	ImGui::Checkbox("Infinite jetpack", &Globals::InfiniteJetpack);
 	if (ImGui::Checkbox("Invulnerability", &Invulnerable))
 	{
@@ -137,6 +139,8 @@ void GeneralTweaksGui::Draw()
 		PlayerPtr->Flags.disallow_flinches_and_ragdolls = !PlayerPtr->Flags.disallow_flinches_and_ragdolls;
 		DisablePlayerRagdoll = PlayerPtr->Flags.disallow_flinches_and_ragdolls;
 	}
+    ImGui::Separator();
+
     ImGui::SetNextItemWidth(230.0f);
 	ImGui::InputInt("Salvage", &PlayerPtr->Metadata.Salvage);
     ImGui::SetNextItemWidth(230.0f);
@@ -188,7 +192,6 @@ void GeneralTweaksGui::Draw()
 	ImGui::InputFloat3("Level background ambient light", (float*)&CustomLevelBackgroundAmbientLight, 3);
 	ImGui::SameLine();
 	ImGui::Checkbox("##ToggleLevelBackgroundAmbientLight", &UseCustomLevelBackgroundAmbientLight);
-	ImGui::Separator();
 
 	ImGui::End();
 }
