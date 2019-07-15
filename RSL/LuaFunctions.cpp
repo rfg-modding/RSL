@@ -67,14 +67,17 @@ namespace Lua
 
     Object* GetObjectByName(std::string Name)
     {
-        for(int i = 0; i < Globals::RfgWorldPtr->all_objects.Size(); i++)
+        if (Globals::RfgWorldPtr)
         {
-            if(Globals::RfgWorldPtr)
+            for (int i = 0; i < Globals::RfgWorldPtr->all_objects.Size(); i++)
             {
-                std::string IndexName(WorldGetObjectName(Globals::RfgWorldPtr, NULL, Globals::RfgWorldPtr->all_objects[i]));
-                if (IndexName == Name)
+                if (Globals::RfgWorldPtr)
                 {
-                    return Globals::RfgWorldPtr->all_objects[i];
+                    std::string IndexName(WorldGetObjectName(Globals::RfgWorldPtr, NULL, Globals::RfgWorldPtr->all_objects[i]));
+                    if (IndexName == Name)
+                    {
+                        return Globals::RfgWorldPtr->all_objects[i];
+                    }
                 }
             }
         }
@@ -83,13 +86,33 @@ namespace Lua
 
     Object* GetObjectByHandle(uint Handle)
     {
-        for (int i = 0; i < Globals::RfgWorldPtr->all_objects.Size(); i++)
+        if(Globals::RfgWorldPtr)
         {
-            if (Globals::RfgWorldPtr)
+            for (int i = 0; i < Globals::RfgWorldPtr->all_objects.Size(); i++)
             {
-                if(Globals::RfgWorldPtr->all_objects[i]->Handle == Handle)
+                if (Globals::RfgWorldPtr)
                 {
-                    return Globals::RfgWorldPtr->all_objects[i];
+                    if (Globals::RfgWorldPtr->all_objects[i]->Handle == Handle)
+                    {
+                        return Globals::RfgWorldPtr->all_objects[i];
+                    }
+                }
+            }
+        }
+        return nullptr;
+    }
+
+    explosion_info* GetExplosionInfo(std::string Name)
+    {
+        if(Globals::ExplosionInfos.Initialized())
+        {
+            for(int i = 0; i < Globals::ExplosionInfos.Size(); i++)
+            {
+                //Todo: Check if this works without the temporary string. Use a const char* comparison func.
+                std::string IndexName(Globals::ExplosionInfos[i].m_name);
+                if(IndexName == Name)
+                {
+                    return const_cast<explosion_info*>(&Globals::ExplosionInfos[i]);
                 }
             }
         }

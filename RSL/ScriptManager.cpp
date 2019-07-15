@@ -20,6 +20,7 @@
 #include "HumanLua.h"
 #include "PlayerLua.h"
 #include "WorldLua.h"
+#include "ExplosionInfoLua.h"
 
 ScriptManager::~ScriptManager()
 {
@@ -164,6 +165,14 @@ void ScriptManager::SetupLua()
 
     RfgTable["GetVersion"] = KeenGetBuildVersionString;
 
+    RfgTable.set_function("ExplosionCreate", sol::overload(
+        [](explosion_info* Info, Object* Source, Object* Owner, vector* Position, matrix* Orientation, vector* Direction, void* WeaponInfo)
+        {ExplosionCreate(Info, Source, Owner, Position, Orientation, Direction, WeaponInfo, false); },
+        [](explosion_info* Info, vector* Position) {ExplosionCreate(Info, nullptr, nullptr, Position, new matrix(0.0f), new vector(0.0f, 1.0f, 0.0f), nullptr, false); }
+    ));
+    RfgTable["GetExplosionInfo"] = Lua::GetExplosionInfo;
+
+    //explosion_info* ExplosionInfo, void* Source, void* Owner, vector* Position, matrix* Orientation, vector* Direction, void* WeaponInfo, bool FromServer
 	//This warning appears hundreds of times in a row during binding unless disabled. Is harmless due to some lambdas used to grab usertype variables.
 	#pragma warning(push)
 	#pragma warning(disable : C4172)
@@ -230,6 +239,9 @@ void ScriptManager::SetupLua()
 	Lua::BindZoneHeader(LuaStateRef);
 	Lua::BindWorldZone(LuaStateRef);
 	Lua::BindWorld(LuaStateRef);
+
+    Lua::BindFixedArrayWrapperExplosionInfo(LuaStateRef);
+    Lua::BindExplosionInfo(LuaStateRef);
 	#pragma warning(pop) 
 
     UpdateRfgPointers();
@@ -252,6 +264,7 @@ void ScriptManager::UpdateRfgPointers()
 	RfgTable["ActiveWorld"] = Globals::RfgWorldPtr;
 	RfgTable["ActivePhysicsWorld"] = Globals::hkpWorldPtr;
     RfgTable["PhysicsSolver"] = &Globals::hkpWorldPtr->m_dynamicsStepInfo.m_solverInfo;
+    RfgTable["ExplosionInfos"] = Globals::ExplosionInfos;
 }
 
 /* Scans all files in the Scripts folder. Creates a new script object and adds it to
