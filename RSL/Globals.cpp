@@ -112,6 +112,11 @@ namespace Globals
 	bool HudVisible = true;
 	bool FogVisible = true;
 
+    namespace Launcher
+    {
+        bool ShouldRunRsl = false;
+    }
+
 	const std::string ScriptLoaderVersion("0.4.0-Alpha");
 
 	const char* GetScriptLoaderVersion()

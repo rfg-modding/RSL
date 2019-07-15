@@ -147,6 +147,7 @@
     <ClCompile Include="include\kiero\kiero.cpp" />
     <ClCompile Include="IntrospectionGui.cpp" />
     <ClCompile Include="InvItemInfoLua.cpp" />
+    <ClCompile Include="Launcher.cpp" />
     <ClCompile Include="Logger.cpp" />
     <ClCompile Include="LogWindow.cpp" />
     <ClCompile Include="LuaFunctions.cpp" />
@@ -220,6 +221,7 @@
     <ClInclude Include="include\kiero\kiero.h" />
     <ClInclude Include="include\MinHook\MinHook.h" />
     <ClInclude Include="IntrospectionGui.h" />
+    <ClInclude Include="Launcher.h" />
     <ClInclude Include="RenderInterfaceD3D11.h" />
     <ClInclude Include="RFGR_Types_Vehicle_Spawn_Params.h" />
     <ClInclude Include="TextEditorWrapper.h" />

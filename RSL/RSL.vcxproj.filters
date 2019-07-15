@@ -233,6 +233,9 @@
     <ClCompile Include="ExplosionInfoLua.cpp">
       <Filter>Lua Binding</Filter>
     </ClCompile>
+    <ClCompile Include="Launcher.cpp">
+      <Filter>General Files\Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CameraWrapper.h">
@@ -462,6 +465,9 @@
     </ClInclude>
     <ClInclude Include="ExplosionInfoLua.h">
       <Filter>Lua Binding</Filter>
+    </ClInclude>
+    <ClInclude Include="Launcher.h">
+      <Filter>General Files\Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

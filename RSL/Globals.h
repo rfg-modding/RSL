@@ -129,6 +129,11 @@ namespace Globals
 	extern bool HudVisible;
 	extern bool FogVisible;
 
+    namespace Launcher
+    {
+        extern bool ShouldRunRsl; //Used by the launcher WndProc to track if the launcher should launch the main RSL code after it closes or start a vanilla game.
+    }
+
 	extern const std::string ScriptLoaderVersion;
     
 	const char* GetScriptLoaderVersion();
