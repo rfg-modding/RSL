@@ -12,10 +12,10 @@ public:
     void Run();
     bool MainLoop();
 
-    void SuspendAllThreadsExceptLauncher();
-    void ResumeAllThreads();
     void LockGameMain();
     void UnlockGameMain();
+    void SuspendAllThreadsExceptLauncher();
+    void ResumeAllThreads();
 
     std::vector<HANDLE> RfgThreadHandles;
     HANDLE LauncherThreadHandle = nullptr;

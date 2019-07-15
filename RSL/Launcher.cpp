@@ -8,7 +8,8 @@ void Launcher::Run()
 {
     std::cout << "Entered launcher thread...\n";
     std::cout << "Sleeping all threads except launcher thread!\n";
-    SuspendAllThreadsExceptLauncher();
+    ///SuspendAllThreadsExceptLauncher();
+    LockGameMain();
 
     std::cout << "Calling Launcher::MainLoop()\n";
     MainLoop(); //Todo: Check the return value of this and try to add error reporting if the launcher fails to work.
@@ -21,7 +22,8 @@ void Launcher::Run()
     //printf("Done unlocking rfg winmain, sleeping for 15 seconds for debug purposes.\n");
     //Sleep(15000);
 
-    ResumeAllThreads();
+    ///ResumeAllThreads();
+    UnlockGameMain();
     if (Globals::Launcher::ShouldRunRsl)
     {
         
@@ -110,6 +112,25 @@ LRESULT __stdcall LauncherWndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lPa
     return 0;
 }
 
+void Launcher::LockGameMain()
+{
+    //.text:019D0E80 rfg.exe:$810E80 #810280 <WinMain>
+    DWORD RFGWinMainAddress = Globals::FindPattern("rfg.exe", "\x8B\x4C\x24\x3C\x53\x33\xDB\xBA", "xxxxxxxx");
+    printf("RfgWinMain patch target address: %#010x\n", RFGWinMainAddress);
+    printf("RfgWinMain patch target address static casted to int: %#010x\n", static_cast<int>(RFGWinMainAddress));
+    printf("RfgWinMain patch target address static casted to BYTE: %#010x\n", static_cast<BYTE>(RFGWinMainAddress));
+
+    //DWORD RFGWinMainAddress = static_cast<DWORD>(Globals::ModuleBase + static_cast<DWORD>(0x810E80) + static_cast<DWORD>(0x12));
+    //std::vector<int> NewOpcodes{NOP, JMP_REL8, static_cast<int>(RFGWinMainAddress), NOP};
+    std::vector<int> NewOpcodes{ NOP, JMP_REL8, 0xFD, NOP };
+    SnippetManager::ReplaceSnippet("RFG WinMain", RFGWinMainAddress, NewOpcodes);
+}
+
+void Launcher::UnlockGameMain()
+{
+    SnippetManager::RestoreSnippet("RFG WinMain", true);
+}
+
 /*Be VERY VERY careful with this function or else you might crash your PC or other programs.*/
 void Launcher::SuspendAllThreadsExceptLauncher()
 {
@@ -157,4 +178,3 @@ void Launcher::ResumeAllThreads()
         ResumeThread(i);
     }
 }
-
