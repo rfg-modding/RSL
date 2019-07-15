@@ -2267,6 +2267,10 @@ void TextEditor::ColorizeInternal()
 		while (currentLine < endLine || currentIndex < endIndex)
 		{
 			auto& line = mLines[currentLine];
+            if (currentIndex >= line.size()) //Note: quick fix for a crash I'm getting. Normally should never edit this file for easier maintenance.
+            {
+                break;
+            }
 
 			if (currentIndex == 0 && !concatenate)
 			{
