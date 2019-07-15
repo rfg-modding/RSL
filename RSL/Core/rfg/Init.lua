@@ -35,6 +35,7 @@ rfg.AlertLevels = require("rfg.AlertLevels")
 rfg.WorldDeserializeStates = require("rfg.WorldDeserializeStates")
 rfg.WorldZoneStates = require("rfg.WorldZoneStates")
 rfg.WorldStateModes = require("rfg.WorldStateModes")
+rfg.SalvageMaterialTypes = require("rfg.SalvageMaterialTypes")
 
 -- Takes the ObjectType integer value and returns it's string name or nil.
 function rfg.GetObjectTypeByValue(ObjectTypeValue)
