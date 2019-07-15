@@ -32,22 +32,9 @@ public:
 
 	gfm_alert_levels CustomAlertLevel;
 
-	bool MiddleMouseRepairSphereActive = false;
-	float RepairRadius = 6.0f;
-	int RepairDuration = 1;
-	int RepairPosition = 0;
-
 	bool LockAlertLevel = false;
-	bool UnlimitedAmmo = false;
-
-	bool TempUseCustoms = false;
-	int CustomUnlimitedAmmo = 0;
-	float CustomStealthPercent = 0.0f;
-	float CustomRenderAlpha = 0.0f;
 
 	bool AiIgnore = false;
 	bool DisablePlayerRagdoll = false;
-
-	vector CustomPlayerImpulseApply;
 };
 
