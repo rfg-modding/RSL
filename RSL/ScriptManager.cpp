@@ -264,7 +264,7 @@ void ScriptManager::UpdateRfgPointers()
 	RfgTable["ActiveWorld"] = Globals::RfgWorldPtr;
 	RfgTable["ActivePhysicsWorld"] = Globals::hkpWorldPtr;
     RfgTable["PhysicsSolver"] = &Globals::hkpWorldPtr->m_dynamicsStepInfo.m_solverInfo;
-    RfgTable["ExplosionInfos"] = Globals::ExplosionInfos;
+    RfgTable["ExplosionInfos"] = &Globals::ExplosionInfos;
 }
 
 /* Scans all files in the Scripts folder. Creates a new script object and adds it to

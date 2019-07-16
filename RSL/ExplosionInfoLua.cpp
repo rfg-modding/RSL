@@ -18,7 +18,7 @@ void Lua::BindExplosionInfo(sol::state& LuaState)
     auto RfgTable = LuaState["rfg"].get_or_create<sol::table>();
     auto Utype = RfgTable.create_simple_usertype<explosion_info>();
     Utype.set("new", sol::constructors<explosion_info(), explosion_info(const explosion_info&)>());
-    Utype.set("Name", sol::property([](explosion_info& Self) {return std::ref(Self.m_name); })); 
+    Utype.set("Name", sol::property([](explosion_info& Self) {return Globals::CharArrayToString(Self.m_name, 32); }));//sol::property([](explosion_info& Self) {return std::ref(Self.m_name); }));// sol::property([](explosion_info& Self) {return Globals::CharArrayToString(Self.m_name, 32); }));
     Utype.set("UniqueId", &explosion_info::m_unique_id);
     Utype.set("NameCrcStr", &explosion_info::m_name_crc_str);
     Utype.set("Flags", &explosion_info::flags);

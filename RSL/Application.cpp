@@ -365,6 +365,8 @@ void Application::SetMemoryLocations()
     Globals::EffectInfos.Init(EffectInfosPtr, *Globals::NumEffectInfos, *Globals::NumEffectInfos);
 
     Globals::VehicleInfos = reinterpret_cast<rfg::farray<vehicle_info, 163>*>(reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x12BA5F8));
+
+    Scripts.UpdateRfgPointers();
 } 
 
 /* Tries to find common installation mistakes such as placing it in the rfg root directory rather than it's own
