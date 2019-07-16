@@ -64,7 +64,7 @@ void MenuBarGui::Draw()
         if (ImGui::BeginMenu("Scripting"))
         {
             if (ImGui::MenuItem(std::string(std::string(ICON_FA_CODE) + u8" Scripts").c_str(), NULL, &Gui->ShowAppScriptsMenu)) {}
-            if (ImGui::MenuItem(std::string(std::string(ICON_FA_TERMINAL) + u8" Lua console").c_str(), "~ (Tilde)", &Gui->ShowAppConsole)) {}
+            if (ImGui::MenuItem(std::string(std::string(ICON_FA_TERMINAL) + u8" Lua console").c_str(), "F4", &Gui->ShowAppConsole)) {}
             if (ImGui::MenuItem(std::string(std::string(ICON_FA_EDIT) + u8" Script editor").c_str(), "F2", &Gui->ShowAppScriptEditor)) {}
             ImGui::EndMenu();
         }
