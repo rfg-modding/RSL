@@ -9,6 +9,12 @@ public:
     FileBrowserNode(const std::filesystem::path& Path_) : Path(Path_) {}
     ~FileBrowserNode() { Children.clear(); }
 
+    //Sort children so that folders are before files
+    void SortChildren()
+    {
+        std::partition(std::begin(Children), std::end(Children), [](FileBrowserNode& Child) { return Child.IsFolder; });
+    }
+
     std::vector<FileBrowserNode> Children;
 
     std::filesystem::path Path;

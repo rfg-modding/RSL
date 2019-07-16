@@ -267,6 +267,7 @@ void TextEditorWrapper::GenerateFileBrowserNode(FileBrowserNode& Node)
                 Node.Children.push_back(ChildNode);
                 Node.Index = NodeIndex++;
             }
+            Node.SortChildren();
         }
     }
     else
