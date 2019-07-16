@@ -660,3 +660,14 @@ inline bool CreateNewVehicle(vehicle_spawn_params* spawn_params)
     }
     return create_new_vehicle_raw();
 }
+
+//.text:00EF95F0 rfg.exe:$4895F0 #4889F0 <load_level_internal> //void __usercall load_level_internal(const char *filename@<esi>, bool new_game, bool single_zone)
+using F_load_level_internal = void(__cdecl*)(bool NewGame, bool SingleZone);
+extern F_load_level_internal load_level_internal;
+
+extern void LoadLevelWrapper(std::string Filename, bool NewGame, bool SingleZone);
+
+//bool __thiscall world::set_pending_territory_load(world *this, const char *filename, bool new_game, bool single_zone, bool player_start_at_safehouse, int dlc_id, bool reset_destruction)
+//.text:00F8C4A0 rfg.exe:$51C4A0 #51B8A0 <world::set_pending_territory_load>
+using F_WorldSetPendingTerritoryLoad = void(__fastcall*)(World* worldptr, void* edx, const char* filename, bool new_game, bool single_zone, bool player_start_at_safehouse, int dlc_id, bool reset_destruction); //2nd arg is edx, needed for __thiscall functions.
+extern F_WorldSetPendingTerritoryLoad WorldSetPendingTerritoryLoad;

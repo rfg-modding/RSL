@@ -148,4 +148,7 @@ void FunctionManager::Initialize()
     RegisterFunction(SpSpawnVehicle, 0x756420);
 
     RegisterFunction(create_new_vehicle_raw, 0x748960);
+
+    RegisterFunction(load_level_internal, 0x4895F0);
+    RegisterFunction(WorldSetPendingTerritoryLoad, 0x51C4A0);
 }

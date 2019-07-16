@@ -274,3 +274,16 @@ F_cutscene_spawn_vehicle CutsceneSpawnVehicle;
 F_vehicle_info_get_master_list VehicleInfoGetMasterList;
 F_sp_spawn_vehicle SpSpawnVehicle;
 F_create_new_vehicle create_new_vehicle_raw;
+
+F_load_level_internal load_level_internal;
+
+void LoadLevelWrapper(std::string Filename, bool NewGame, bool SingleZone)
+{
+    const char* FilenameAsCharPtr = Filename.c_str();
+
+    __asm mov esi, FilenameAsCharPtr;
+
+    load_level_internal(NewGame, SingleZone);
+}
+
+F_WorldSetPendingTerritoryLoad WorldSetPendingTerritoryLoad;

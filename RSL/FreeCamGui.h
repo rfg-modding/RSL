@@ -24,5 +24,11 @@ public:
 
 	bool ReturnPlayerToOriginalPosition = false;
 	vector OriginalPosition{0.0f};
-};
 
+    std::string LevelNameBuffer;
+    bool NewGame = false;
+    bool SingleZone = true;
+    bool PlayerStartAtSafehouse = false;
+    uint DlcId = 4294967295; //0xFFFFFFFF (Default one I saw passed in IDA)
+    bool ResetDestruction = false;
+};

@@ -26,10 +26,20 @@ void FreeCamGui::Draw()
 	ImGui::PopFont();
 	ImGui::Separator();
 
-    if(ImGui::Button("UnusedDcfRagdollPlayer"))
+    ImGui::Text("This doesn't seem to work but I'm leaving it in for fun.");
+    ImGui::InputText("Level filename", &LevelNameBuffer);
+    ImGui::Checkbox("New game", &NewGame);
+    ImGui::Checkbox("Single zone", &SingleZone);
+    ImGui::Checkbox("Player start at safehouse", &PlayerStartAtSafehouse);
+    ImGui::InputScalar("DlcId", ImGuiDataType_U32, &DlcId);
+    ImGui::Checkbox("Reset destruction", &ResetDestruction);
+    if(ImGui::Button("Try  to load level"))
     {
-        UnusedDcfRagdollPlayer();
+        //LoadLevelWrapper(LevelNameBuffer, NewGame, SingleZone);
+        WorldSetPendingTerritoryLoad(Globals::RfgWorldPtr, nullptr, LevelNameBuffer.c_str(), NewGame, SingleZone, PlayerStartAtSafehouse, DlcId, ResetDestruction);
     }
+    //terr01_03_12
+    ImGui::Separator();
 
     //ImGui::Separator();
     //ImGui::Text("Stream grid radius: ");
