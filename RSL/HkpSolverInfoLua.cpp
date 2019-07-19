@@ -25,8 +25,12 @@ void Lua::BindHkpSolverInfo(sol::state& LuaState)
     Utype.set("NumSteps", &hkpSolverInfo::m_numSteps);
     Utype.set("NumMicroSteps", &hkpSolverInfo::m_numMicroSteps);
     Utype.set("InvNumMicroSteps", sol::readonly(&hkpSolverInfo::m_invNumMicroSteps));
-    Utype.set("InvNumSteps", &hkpSolverInfo::m_invNumSteps);
-    Utype.set("ForceCoherentConstraintOrderingInSolver", &hkpSolverInfo::m_forceCoherentConstraintOrderingInSolver);
+    Utype.set("InvNumSteps", sol::readonly(&hkpSolverInfo::m_invNumSteps));
+    Utype.set("ForceCoherentConstraintOrderingInSolver",
+        sol::property(
+            [](hkpSolverInfo& Self) {return static_cast<bool>(Self.m_forceCoherentConstraintOrderingInSolver.m_bool); },
+            [](hkpSolverInfo& Self, bool Value) {Self.m_forceCoherentConstraintOrderingInSolver.m_bool = static_cast<char>(Value); }
+        ));
     //Utype.set("", &hkpSolverInfo::m_deactivationNumInactiveFramesSelectFlag); //Todo: Try binding this
     //Utype.set("", &hkpSolverInfo::m_deactivationIntegrateCounter);
     //Utype.set("", &hkpSolverInfo::m_maxConstraintViolationSqrd);

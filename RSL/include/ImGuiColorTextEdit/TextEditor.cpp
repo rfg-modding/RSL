@@ -2360,6 +2360,10 @@ void TextEditor::ColorizeInternal()
 						}
 					}
 				}
+                if(currentIndex >= line.size())
+                {
+                    break;
+                }
 				line[currentIndex].mPreprocessor = withinPreproc;
 				currentIndex += UTF8CharLength(c);
 				if (currentIndex >= (int)line.size())

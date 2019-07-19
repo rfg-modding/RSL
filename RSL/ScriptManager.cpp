@@ -103,7 +103,7 @@ void ScriptManager::SetupLua()
     //auto LoggerTable = LuaStateRef["Logger"].get_or_create<sol::table>();
     RslTable["OpenLogFile"] = Logger::OpenLogFile;
     RslTable["CloseLogFile"] = Logger::CloseLogFile;
-    RslTable["CloseAllLogFiles"] = Logger::CloseAllLogFiles;
+    RslTable["CloseAllLogFiles"] = Logger::CloseAllLogFiles; //Todo: Probably should document this func and the previous two in lua
 
     RslTable["Log"] = Lua::Log;
     RslTable["LogNone"] = Lua::LogNone;
@@ -114,7 +114,7 @@ void ScriptManager::SetupLua()
     RslTable["LogLua"] = Lua::LogLua;
     RslTable["LogJson"] = Lua::LogJson;
 
-    RslTable["LogFlagWithColor"] = Logger::LogFlagWithColor;
+    RslTable["LogFlagWithColor"] = Logger::LogFlagWithColor; //Todo: Probably should document these 4 funcs at some point in lua.
     RslTable["GetFlagString"] = Logger::GetFlagString;
     RslTable["LogToFile"] = Logger::LogToFile;
     RslTable["GetTimeString"] = Logger::GetTimeString;
@@ -141,10 +141,10 @@ void ScriptManager::SetupLua()
         [](Human* Target, vector Position, matrix Orientation) { HumanTeleportUnsafe(Target, Position, Orientation); },
         [](Human* Target, vector Position) { HumanTeleportUnsafe(Target, Position, Target->Orientation); }
     ));
-	RfgTable["GetPlayer"] = Lua::GetPlayer;
+	RfgTable["GetPlayer"] = Lua::GetPlayer; //Didn't document these "get" functions online since we have "rfg.ActiveXXX". Probably can just remove these.
 	RfgTable["GetWorld"] = Lua::GetWorld;
 	RfgTable["GetPhysicsWorld"] = Lua::GetPhysicsWorld;
-    RfgTable.set_function("GetObject", sol::overload(
+    RfgTable.set_function("GetObject", sol::overload( //Documented
         Lua::GetObjectByName,
         Lua::GetObjectByHandle
     ));
@@ -165,9 +165,9 @@ void ScriptManager::SetupLua()
 
     RfgTable["GetVersion"] = KeenGetBuildVersionString;
 
-    RfgTable.set_function("ExplosionCreate", sol::overload(
-        [](explosion_info* Info, Object* Source, Object* Owner, vector* Position, matrix* Orientation, vector* Direction, void* WeaponInfo)
-        {ExplosionCreate(Info, Source, Owner, Position, Orientation, Direction, WeaponInfo, false); },
+    RfgTable.set_function("ExplosionCreate", sol::overload( //Todo: Maybe rename this to SpawnExplosion. //Todo: Add overload that just takes preset name and position.
+        [](explosion_info* Info, Object* Source, Object* Owner, vector* Position, matrix* Orientation, vector* Direction)// , weapon_info* WeaponInfo) //Todo: Add WeaponInfo once that's bound to lua
+        {ExplosionCreate(Info, Source, Owner, Position, Orientation, Direction, nullptr, false); }, //Todo: remember to replace this nullptr with WeaponInfo once bound
         [](explosion_info* Info, vector* Position) {ExplosionCreate(Info, nullptr, nullptr, Position, new matrix(0.0f), new vector(0.0f, 1.0f, 0.0f), nullptr, false); }
     ));
     RfgTable["GetExplosionInfo"] = Lua::GetExplosionInfo;
