@@ -49,7 +49,7 @@ void Lua::BindExplosionInfo(sol::state& LuaState)
     Utype.set("TimeBetweenBreaks", &explosion_info::time_between_breaks);
     Utype.set("HalfAngleDot", &explosion_info::half_angle_dot);
     Utype.set("BlastDecalRadius", &explosion_info::blast_decal_radius);
-    Utype.set("CameraShakeType", sol::property([](explosion_info& Self) {return std::ref(Self.camera_shake_type); }));
+    Utype.set("CameraShakeType", sol::property([](explosion_info& Self) {return Globals::CharArrayToString(Self.camera_shake_type, 32); }));
     Utype.set("CameraShakeMultiplier", &explosion_info::camera_shake_multiplier);
     Utype.set("CameraShakeFalloff", &explosion_info::camera_shake_falloff);
     Utype.set("IgnoreOrientation", &explosion_info::ignore_orientation);
