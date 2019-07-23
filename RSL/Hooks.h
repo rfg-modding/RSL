@@ -65,6 +65,8 @@ void __fastcall StreamGridDoFrameHook(stream_grid* This, void* edx, vector* Stre
 
 vehicle* __cdecl CutsceneSpawnVehicleHook(vehicle_info* v_info, vector* pos, matrix* orient);
 
+bool __cdecl peg_load_wrapper_hook(const char* filename, unsigned int srid, char* cpu_preload, int cpu_size, char* gpu_preload, int gpu_size);
+
 //spawn_status_result __cdecl ObjectSpawnVehicleHook(vehicle_spawn_params* spawn_param);
 
 /*Start of MP Detection Hooks*/

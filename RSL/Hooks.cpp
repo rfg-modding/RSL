@@ -885,6 +885,13 @@ void __fastcall StreamGridDoFrameHook(stream_grid* This, void* edx, vector* Stre
 //    return ObjectSpawnVehicle(spawn_param);
 //}
 
+bool peg_load_wrapper_hook(const char* filename, unsigned srid, char* cpu_preload, int cpu_size, char* gpu_preload, int gpu_size)
+{
+    Logger::Log("peg_load_wrapper hook: filename: {}, srid: {}, cpu_preload: {}, cpu_size: {},  gpu_preload: {}, gpu_size: {}\n", filename, srid, reinterpret_cast<DWORD>(cpu_preload), cpu_size, reinterpret_cast<DWORD>(gpu_preload), gpu_size);
+
+    return peg_load_wrapper(filename, srid, cpu_preload, cpu_size, gpu_preload, gpu_size);
+}
+
 /*Start of MP Detection Hooks*/
 bool __fastcall IsValidGameLinkLobbyKaikoHook(void* This)
 {

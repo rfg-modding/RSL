@@ -671,3 +671,7 @@ extern void LoadLevelWrapper(std::string Filename, bool NewGame, bool SingleZone
 //.text:00F8C4A0 rfg.exe:$51C4A0 #51B8A0 <world::set_pending_territory_load>
 using F_WorldSetPendingTerritoryLoad = void(__fastcall*)(World* worldptr, void* edx, const char* filename, bool new_game, bool single_zone, bool player_start_at_safehouse, int dlc_id, bool reset_destruction); //2nd arg is edx, needed for __thiscall functions.
 extern F_WorldSetPendingTerritoryLoad WorldSetPendingTerritoryLoad;
+
+//.text:00B41F10 rfg.exe:$1D1F10 #1D1310 <peg_load_wrapper> //bool __cdecl peg_load_wrapper(const char *fname, unsigned int srid, char *cpu_preload, int cpu_size, char *gpu_preload, int gpu_size)
+using F_peg_load_wrapper = bool(__cdecl*)(const char* filename, unsigned int srid, char* cpu_preload, int cpu_size, char* gpu_preload, int gpu_size);
+extern F_peg_load_wrapper peg_load_wrapper;

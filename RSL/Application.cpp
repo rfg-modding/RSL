@@ -299,6 +299,8 @@ void Application::CreateHooks()
 
     Hooks.CreateHook("D3D11Present", reinterpret_cast<LPVOID>(kiero::getMethodsTable()[8]), D3D11PresentHook, reinterpret_cast<LPVOID*>(&D3D11PresentObject));
 
+    Hooks.CreateHook("peg_load_wrapper", reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x1D1F10), peg_load_wrapper_hook, reinterpret_cast<LPVOID*>(&peg_load_wrapper));
+
     //Disabling for now since stream grid tests had issues.
     //Hooks.CreateHook("StreamGridDoFrame", reinterpret_cast<LPVOID>(Globals::ModuleBase + 0x530FB0), StreamGridDoFrameHook, reinterpret_cast<LPVOID*>(&StreamGridDoFrame));
     //Hooks.CreateHook("ObjectSpawnVehicle", reinterpret_cast<LPVOID>(Globals::ModuleBase + 0x757F40), ObjectSpawnVehicleHook, reinterpret_cast<LPVOID*>(&ObjectSpawnVehicle));
