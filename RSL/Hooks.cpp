@@ -387,17 +387,23 @@ HRESULT __stdcall D3D11PresentHook(IDXGISwapChain* pSwapChain, UINT SyncInterval
             Logger::LogError("Exception caught while testing debug draw cube! Message: {}\n", Ex.what());
         }
 #endif
-        
-		ImGui_ImplDX11_NewFrame();
-		ImGui_ImplWin32_NewFrame();
-		ImGui::NewFrame();
 
-		Globals::Gui->Draw();
-        //ImGui::ShowDemoWindow(&Globals::OverlayActive);
-		Globals::D3D11Context->OMSetRenderTargets(1, &Globals::MainRenderTargetView, nullptr);
-        //Globals::D3D11Context->ClearRenderTargetView(Globals::MainRenderTargetView, (float*)& clear_color);
-		ImGui::Render();
-		ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+        if(Globals::Gui)
+        {
+            if(Globals::Gui->Ready())
+            {
+                ImGui_ImplDX11_NewFrame();
+                ImGui_ImplWin32_NewFrame();
+                ImGui::NewFrame();
+
+                Globals::Gui->Draw();
+                //ImGui::ShowDemoWindow(&Globals::OverlayActive);
+                Globals::D3D11Context->OMSetRenderTargets(1, &Globals::MainRenderTargetView, nullptr);
+                //Globals::D3D11Context->ClearRenderTargetView(Globals::MainRenderTargetView, (float*)& clear_color);
+                ImGui::Render();
+                ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+            }
+        }
 	}
 	return D3D11PresentObject(pSwapChain, SyncInterval, Flags);
 }
@@ -478,12 +484,12 @@ keen::GraphicsCommandBuffer* KeenGraphicsBeginFrameHook(keen::GraphicsSystem* pG
                             io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
                             ///io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable; //Todo: viewports
                             ImGui::StyleColorsDark();
-
+                            
                             ImGui_ImplDX11_Init(Globals::D3D11Device, Globals::D3D11Context);
                             const bool RectResult = GetWindowRect(Globals::GameWindowHandle, &Globals::WindowRect);
                             if (!RectResult)
                             {
-                                Logger::LogError("GetWindowRect() failed during script loader init!\n");
+                                Logger::LogError("GetWindowRect() failed during script loader init!\n Error message: {}\n", Globals::GetLastWin32ErrorAsString());
                             }
                             ImGui_ImplWin32_Init(Globals::GameWindowHandle);
 
