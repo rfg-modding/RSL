@@ -136,7 +136,7 @@ namespace Lua
                 FmtArgsList.push_back(fmt::internal::make_arg<fmt::format_context>(Arg.get<const char*>()));
                 break;
             case sol::type::number:
-                FmtArgsList.push_back(fmt::internal::make_arg<fmt::format_context>(Arg.get<long long>()));
+                FmtArgsList.push_back(fmt::internal::make_arg<fmt::format_context>(Arg.get<float>()));
                 break;
             case sol::type::thread:
                 FmtArgsList.push_back(fmt::internal::make_arg<fmt::format_context>("<unsupported format type>"));
