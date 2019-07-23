@@ -21,6 +21,7 @@ void Application::InitLogger()
     {
         Logger::Init(LogAll, Globals::GetEXEPath(false) + "RSL/Logs/", 10000);
         Logger::OpenLogFile("Load Log.txt", LogAll, std::ios_base::trunc);
+        Logger::OpenLogFile("Master Log.txt", LogAll, std::ios_base::trunc);
         Logger::Log("RSL started. Activating.\n");
     }
     catch (std::exception& Ex)
@@ -54,7 +55,26 @@ void Application::InitRSL()
         //Sleep(5000);
 
         //Globals::ModuleBase = reinterpret_cast<uintptr_t>(GetModuleHandle(nullptr));
+
+        //Attempt to init kiero which is used for easy directx hooking. Shutdown if it fails.
+        if (kiero::init(kiero::RenderType::D3D11) != kiero::Status::Success)
+        {
+            Logger::LogFatalError("Kiero error: {}\n", kiero::init(kiero::RenderType::D3D11));
+            Logger::LogFatalError("Failed to initialize kiero for D3D11. RSL deactivating.\n");
+            FreeLibraryAndExitThread(Globals::ScriptLoaderModule, 0);
+            return;
+        }
+        if (MH_Initialize() != MH_OK)
+        {
+            Logger::LogFatalError("Failed to initialize MinHook. RSL deactivating.\n");
+            FreeLibraryAndExitThread(Globals::ScriptLoaderModule, 0);
+            return;
+        }
+
+        //Sleep(10000);
+        Globals::GameWindowHandle = Globals::FindRfgTopWindow();
         Functions.Initialize();
+        CreateHooks();
 
         GameState RFGRState = GameseqGetState();;
         auto StartTime = std::chrono::steady_clock::now();
@@ -73,23 +93,22 @@ void Application::InitRSL()
             EndTime = std::chrono::steady_clock::now();
         } while (RFGRState < 0 || RFGRState > 63);
 
-        //Attempt to init kiero which is used for easy directx hooking. Shutdown if it fails.
-        if (kiero::init(kiero::RenderType::D3D11) != kiero::Status::Success)
-        {
-            Logger::LogFatalError("Kiero error: {}\n", kiero::init(kiero::RenderType::D3D11));
-            Logger::LogFatalError("Failed to initialize kiero for D3D11. RSL deactivating.\n");
-            FreeLibraryAndExitThread(Globals::ScriptLoaderModule, 0);
-            return;
-        }
-        if (MH_Initialize() != MH_OK)
-        {
-            Logger::LogFatalError("Failed to initialize MinHook. RSL deactivating.\n");
-            FreeLibraryAndExitThread(Globals::ScriptLoaderModule, 0);
-            return;
-        }
+        ////Attempt to init kiero which is used for easy directx hooking. Shutdown if it fails.
+        //if (kiero::init(kiero::RenderType::D3D11) != kiero::Status::Success)
+        //{
+        //    Logger::LogFatalError("Kiero error: {}\n", kiero::init(kiero::RenderType::D3D11));
+        //    Logger::LogFatalError("Failed to initialize kiero for D3D11. RSL deactivating.\n");
+        //    FreeLibraryAndExitThread(Globals::ScriptLoaderModule, 0);
+        //    return;
+        //}
+        //if (MH_Initialize() != MH_OK)
+        //{
+        //    Logger::LogFatalError("Failed to initialize MinHook. RSL deactivating.\n");
+        //    FreeLibraryAndExitThread(Globals::ScriptLoaderModule, 0);
+        //    return;
+        //}
 
         //Set global values which are frequently used in hooks.
-        Globals::GameWindowHandle = Globals::FindRfgTopWindow();
         Globals::MouseGenericPollMouseVisible = Globals::FindPattern("rfg.exe", "\x84\xD2\x74\x08\x38\x00\x00\x00\x00\x00\x75\x02", "xxxxx?????xx");
         Globals::CenterMouseCursorCall = Globals::FindPattern("rfg.exe", "\xE8\x00\x00\x00\x00\x89\x46\x4C\x89\x56\x50", "x????xxxxxx");
         Globals::Program = this;
@@ -101,9 +120,13 @@ void Application::InitRSL()
         Scripts.Initialize();
 
         //Creates and enables all function hooks.
-        CreateHooks();
-
+        ///CreateHooks();
+        
         Globals::OriginalWndProc = reinterpret_cast<WNDPROC>(SetWindowLongPtr(Globals::GameWindowHandle, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(WndProc)));
+        if(!Globals::OriginalWndProc)
+        {
+            Logger::LogFatalError("Failed to set custom WndProc! Error message: {}\n", Globals::GetLastWin32ErrorAsString());
+        }
         Logger::Log("Custom WndProc set.\n");
 
         /*Waits for ImGui init to complete before continuing to GuiSystem (The overlay) init.*/
