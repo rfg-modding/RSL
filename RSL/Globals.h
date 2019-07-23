@@ -158,6 +158,7 @@ namespace Globals
     std::string CharArrayToString(const char* Array, int Size);
 
     std::string GetLastWin32ErrorAsString();
+    std::string RemoveFileExtension(std::string Filename);
 
     std::optional<explosion_info*> GetExplosionInfo(std::string Name);
 

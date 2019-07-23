@@ -415,6 +415,11 @@ namespace Globals
         return message;
     }
 
+    std::string RemoveFileExtension(std::string Filename)
+    {
+        return Filename.substr(0, Filename.find_last_of("."));
+    }
+
     std::optional<explosion_info*> GetExplosionInfo(std::string Name)
     {
         if(ExplosionInfos.Initialized())
