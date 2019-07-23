@@ -157,6 +157,8 @@ namespace Globals
     std::string CharArrayToString(char* Array, int Size);
     std::string CharArrayToString(const char* Array, int Size);
 
+    std::string GetLastWin32ErrorAsString();
+
     std::optional<explosion_info*> GetExplosionInfo(std::string Name);
 
 	template <typename T>
