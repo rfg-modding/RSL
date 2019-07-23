@@ -415,9 +415,14 @@ namespace Globals
         return message;
     }
 
-    std::string RemoveFileExtension(std::string Filename)
+    std::string RemoveFileExtension(const std::string& Filename)
     {
-        return Filename.substr(0, Filename.find_last_of("."));
+        return Filename.substr(0, Filename.find_last_of('.'));
+    }
+
+    std::tuple<std::string, std::string> SplitFilename(const std::string& Filename)
+    {
+        return { Filename.substr(0, Filename.find_last_of('.')), Filename.substr(Filename.find_last_of('.'), Filename.length() - 1) };
     }
 
     std::optional<explosion_info*> GetExplosionInfo(std::string Name)
