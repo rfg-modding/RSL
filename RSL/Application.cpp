@@ -56,25 +56,8 @@ void Application::InitRSL()
 
         //Globals::ModuleBase = reinterpret_cast<uintptr_t>(GetModuleHandle(nullptr));
 
-        //Attempt to init kiero which is used for easy directx hooking. Shutdown if it fails.
-        if (kiero::init(kiero::RenderType::D3D11) != kiero::Status::Success)
-        {
-            Logger::LogFatalError("Kiero error: {}\n", kiero::init(kiero::RenderType::D3D11));
-            Logger::LogFatalError("Failed to initialize kiero for D3D11. RSL deactivating.\n");
-            FreeLibraryAndExitThread(Globals::ScriptLoaderModule, 0);
-            return;
-        }
-        if (MH_Initialize() != MH_OK)
-        {
-            Logger::LogFatalError("Failed to initialize MinHook. RSL deactivating.\n");
-            FreeLibraryAndExitThread(Globals::ScriptLoaderModule, 0);
-            return;
-        }
 
-        //Sleep(10000);
-        Globals::GameWindowHandle = Globals::FindRfgTopWindow();
         Functions.Initialize();
-        CreateHooks();
 
         GameState RFGRState = GameseqGetState();;
         auto StartTime = std::chrono::steady_clock::now();
@@ -92,6 +75,27 @@ void Application::InitRSL()
             }
             EndTime = std::chrono::steady_clock::now();
         } while (RFGRState < 0 || RFGRState > 63);
+
+
+        //Attempt to init kiero which is used for easy directx hooking. Shutdown if it fails.
+        if (kiero::init(kiero::RenderType::D3D11) != kiero::Status::Success)
+        {
+            Logger::LogFatalError("Kiero error: {}\n", kiero::init(kiero::RenderType::D3D11));
+            Logger::LogFatalError("Failed to initialize kiero for D3D11. RSL deactivating.\n");
+            FreeLibraryAndExitThread(Globals::ScriptLoaderModule, 0);
+            return;
+        }
+        if (MH_Initialize() != MH_OK)
+        {
+            Logger::LogFatalError("Failed to initialize MinHook. RSL deactivating.\n");
+            FreeLibraryAndExitThread(Globals::ScriptLoaderModule, 0);
+            return;
+        }
+
+        //Sleep(10000);
+        Globals::GameWindowHandle = Globals::FindRfgTopWindow();
+        CreateHooks();
+
 
         ////Attempt to init kiero which is used for easy directx hooking. Shutdown if it fails.
         //if (kiero::init(kiero::RenderType::D3D11) != kiero::Status::Success)
