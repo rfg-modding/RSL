@@ -168,7 +168,12 @@ void ScriptManager::SetupLua()
     RfgTable.set_function("ExplosionCreate", sol::overload( //Todo: Maybe rename this to SpawnExplosion. //Todo: Add overload that just takes preset name and position.
         [](explosion_info* Info, Object* Source, Object* Owner, vector* Position, matrix* Orientation, vector* Direction)// , weapon_info* WeaponInfo) //Todo: Add WeaponInfo once that's bound to lua
         {ExplosionCreate(Info, Source, Owner, Position, Orientation, Direction, nullptr, false); }, //Todo: remember to replace this nullptr with WeaponInfo once bound
-        [](explosion_info* Info, vector* Position) {ExplosionCreate(Info, nullptr, nullptr, Position, new matrix(0.0f), new vector(0.0f, 1.0f, 0.0f), nullptr, false); }
+        [](explosion_info* Info, vector* Position) {ExplosionCreate(Info, nullptr, nullptr, Position, new matrix(0.0f), new vector(0.0f, 1.0f, 0.0f), nullptr, false); },
+        [](explosion_info* Info, float x, float y, float z)
+        {
+            vector Position(x, y, z); 
+            ExplosionCreate(Info, nullptr, nullptr, &Position, new matrix(0.0f), new vector(0.0f, 1.0f, 0.0f), nullptr, false);
+        }
     ));
     RfgTable["GetExplosionInfo"] = Lua::GetExplosionInfo;
 
