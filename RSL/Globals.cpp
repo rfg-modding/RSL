@@ -62,6 +62,7 @@ namespace Globals
 	ImFont* FontHuge = nullptr;
 
 	bool OpenDebugConsole = false;
+    bool DumpTexturesWhenLoading = false;
 	nlohmann::json MainConfig;
 	float DefaultFreeCameraSpeed = 0.3f;
 	float DefaultRotationSpeed = 0.7f;

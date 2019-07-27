@@ -467,6 +467,7 @@ bool Application::LoadDataFromConfig()
             Logger::Log("\"Settings.json\" not found. Creating from default values.\n");
 
             Globals::MainConfig["Open debug console"] = false;
+            Globals::MainConfig["Dump textures when loading"] = false;
 
             std::ofstream ConfigOutput(ExePath + "RSL/Settings/Settings.json");
             ConfigOutput << std::setw(4) << Globals::MainConfig << "\n";
@@ -482,6 +483,7 @@ bool Application::LoadDataFromConfig()
     if (!JsonExceptionHandler([&]
     {
         Globals::OpenDebugConsole = Globals::MainConfig["Open debug console"].get<bool>();
+        Globals::DumpTexturesWhenLoading = Globals::MainConfig["Dump textures when loading"].get<bool>();
         return true;
     }, "Settings.json", "read", "reading"))
     {
