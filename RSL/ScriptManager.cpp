@@ -164,6 +164,7 @@ void ScriptManager::SetupLua()
     ));
 
     RfgTable["GetVersion"] = KeenGetBuildVersionString;
+    RfgTable["StringHash"] = Lua::RfgStringHashWrapper;
 
     RfgTable.set_function("ExplosionCreate", sol::overload( //Todo: Maybe rename this to SpawnExplosion. //Todo: Add overload that just takes preset name and position.
         [](explosion_info* Info, Object* Source, Object* Owner, vector* Position, matrix* Orientation, vector* Direction)// , weapon_info* WeaponInfo) //Todo: Add WeaponInfo once that's bound to lua

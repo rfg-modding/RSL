@@ -289,3 +289,5 @@ void LoadLevelWrapper(std::string Filename, bool NewGame, bool SingleZone)
 F_WorldSetPendingTerritoryLoad WorldSetPendingTerritoryLoad;
 
 F_peg_load_wrapper peg_load_wrapper;
+
+F_string_hash string_hash;

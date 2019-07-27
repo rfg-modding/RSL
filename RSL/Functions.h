@@ -675,3 +675,7 @@ extern F_WorldSetPendingTerritoryLoad WorldSetPendingTerritoryLoad;
 //.text:00B41F10 rfg.exe:$1D1F10 #1D1310 <peg_load_wrapper> //bool __cdecl peg_load_wrapper(const char *fname, unsigned int srid, char *cpu_preload, int cpu_size, char *gpu_preload, int gpu_size)
 using F_peg_load_wrapper = bool(__cdecl*)(const char* filename, unsigned int srid, char* cpu_preload, int cpu_size, char* gpu_preload, int gpu_size);
 extern F_peg_load_wrapper peg_load_wrapper;
+
+//.text:00A8FE90 rfg.exe:$18FE90 #18F290 <string_hash> //unsigned int __cdecl string_hash(const char *key, unsigned int hash_size)
+using F_string_hash = uint(__cdecl*)(const char* key, unsigned int hash_size);
+extern F_string_hash string_hash;

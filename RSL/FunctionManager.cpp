@@ -153,4 +153,6 @@ void FunctionManager::Initialize()
     RegisterFunction(WorldSetPendingTerritoryLoad, 0x51C4A0);
 
     RegisterFunction(peg_load_wrapper, 0x1D1F10);
+
+    RegisterFunction(string_hash, 0x18FE90);
 }

@@ -214,4 +214,9 @@ namespace Lua
         auto ArgsList = GenerateFmtListFromSolVariadicArgs(Args);
         Logger::LogInternal(fmt::vformat(Fmt, fmt::basic_format_args<fmt::format_context>(ArgsList.data(), static_cast<unsigned>(ArgsList.size()))), LogType::LogJson);
     }
+
+    uint RfgStringHashWrapper(std::string Key)
+    {
+        return string_hash(Key.c_str(), Key.length());
+    }
 }

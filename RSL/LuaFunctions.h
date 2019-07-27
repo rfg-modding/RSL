@@ -29,4 +29,6 @@ namespace Lua
     extern void LogFatalError(std::string Fmt, sol::variadic_args Args);
     extern void LogLua(std::string Fmt, sol::variadic_args Args);
     extern void LogJson(std::string Fmt, sol::variadic_args Args);
+
+    extern uint RfgStringHashWrapper(std::string Key);
 }
