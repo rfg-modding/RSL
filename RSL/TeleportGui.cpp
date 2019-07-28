@@ -16,7 +16,7 @@ void TeleportGui::Draw()
 		return;
 	}
 	ImGui::SetNextWindowSize(ImVec2(700.0f, 800.0f), ImGuiCond_FirstUseEver);
-	if (!ImGui::Begin(Title.c_str(), OpenState, WindowFlags))
+	if (!ImGui::Begin(Title, OpenState, WindowFlags))
 	{
 		ImGui::End();
 		return;
@@ -46,7 +46,7 @@ void TeleportGui::DrawMenuHeader()
     ImGui::Text("Current player position: ");
     ImGui::SameLine();
     const std::string PlayerPositionString = PlayerPtr->Position.GetDataString(false, true);
-    ImGui::TextColored(Globals::SecondaryTextColor, PlayerPositionString.c_str());
+    ImGui::TextColored(Globals::SecondaryTextColor, PlayerPositionString);
 
     ImGui::Text("New player position:"); ImGui::SameLine();
     ImGui::SetNextItemWidth(232.0f);
@@ -84,7 +84,7 @@ void TeleportGui::DrawLocationList()
     {
         for (auto i : TeleportLocations)
         {
-            if (ImGui::Button(i["Name"].get<std::string>().c_str()))
+            if (ImGui::Button(i["Name"].get<std::string>()))
             {
                 HumanTeleportUnsafe(PlayerPtr, vector(i["Position"][0].get<float>(), i["Position"][1].get<float>(), i["Position"][2].get<float>()), PlayerPtr->Orientation);
             }
@@ -96,9 +96,9 @@ void TeleportGui::DrawLocationList()
                 Globals::to_string_precise(i["Position"][2].get<float>())).c_str());
             ImGui::SameLine();
 
-            if (ImGui::Button(std::string("Edit##" + i["Name"].get<std::string>()).c_str()))
+            if (ImGui::Button("Edit##" + i["Name"].get<std::string>()))
             {
-                ImGui::OpenPopup(std::string("Teleport location edit##" + i["Name"].get<std::string>()).c_str());
+                ImGui::OpenPopup("Teleport location edit##" + i["Name"].get<std::string>());
                 TeleportEditPopupOpen = true;
                 NewTeleportName = i["Name"].get<std::string>();
                 NewTeleportPosition.x = i["Position"][0];
@@ -107,7 +107,7 @@ void TeleportGui::DrawLocationList()
                 NewTeleportDescription = i["TooltipDescription"].get<std::string>();
             }
 
-            if (ImGui::BeginPopupModal(std::string("Teleport location edit##" + i["Name"].get<std::string>()).c_str(), NULL, ModalFlags))
+            if (ImGui::BeginPopupModal("Teleport location edit##" + i["Name"].get<std::string>(), nullptr, ModalFlags))
             {
                 ImGui::Text("Name:");
                 ImGui::InputText("##NTN2", &NewTeleportName);
@@ -116,14 +116,14 @@ void TeleportGui::DrawLocationList()
                 ImGui::InputFloat3("##NTP2", reinterpret_cast<float*>(&NewTeleportPosition), 2);
                 ImGui::Text("Tooltip description:");
                 ImGui::InputTextMultiline("##NTD2", &NewTeleportDescription, ImVec2(500.0f, 350.0f));
-                if (ImGui::Button(std::string("Save##" + i["Name"].get<std::string>()).c_str()))
+                if (ImGui::Button("Save##" + i["Name"].get<std::string>()))
                 {
                     ChangeTeleportLocation(i["Name"], NewTeleportName, NewTeleportPosition.x, NewTeleportPosition.y, NewTeleportPosition.z, NewTeleportDescription);
                     SaveTeleportLocations();
                     ImGui::CloseCurrentPopup();
                 }
                 ImGui::SameLine();
-                if (ImGui::Button(std::string("Cancel##" + i["Name"].get<std::string>()).c_str()))
+                if (ImGui::Button("Cancel##" + i["Name"].get<std::string>()))
                 {
                     ImGui::CloseCurrentPopup();
                 }
