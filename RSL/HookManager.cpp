@@ -5,29 +5,6 @@ HookManager::~HookManager()
 	DisableAllHooks();
 }
 
-/* Creates a function hook using the given args. HookName is used for debugging and logging 
- * purposes. If EnableNow is true, then the hook will be immediately enabled. Returns true if
- * the hook was successfully created and false if it was not.
- */
-bool HookManager::CreateHook(const std::string& HookName, LPVOID Target, LPVOID Detour, LPVOID* Original)
-{
-	if (HookExists(HookName))
-	{
-		Logger::LogError("A hook with the name \"{}\" already exists. Failed to create.\n", HookName);
-		return false;
-	}
-	if (MH_CreateHook(Target, Detour, Original) != MH_OK)
-	{
-		Logger::LogFatalError("Failed to create {} hook. RSL deactivating.\n", HookName);
-		return false;
-	}
-
-	HookMap[HookName] = Hook(Target, Detour, Original);
-	EnableHook(HookName);
-
-	return true;
-}
-
 /* Enables a hook of the provided name if it exists. Returns true if it was successfully
  * enabled and false if it was not.
  */
