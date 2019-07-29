@@ -156,10 +156,10 @@ void ExplosionSpawnerGui::Draw()
                 ImGui::BulletText("%s, ID: %i", Globals::CharArrayToString(Globals::EffectInfos[i].name, 65).c_str(), i); ImGui::SameLine();
                 ImGui::NextColumn();
                 ImGui::SetColumnWidth(1, 500.0f);
-                if (ImGui::Button(std::string("Effect 0##" + std::to_string(i)).c_str())) { CustomExplosionInfo.m_effects[0] = i; } ImGui::SameLine();
-                if (ImGui::Button(std::string("Effect 1##" + std::to_string(i)).c_str())) { CustomExplosionInfo.m_effects[1] = i; } ImGui::SameLine();
-                if (ImGui::Button(std::string("Effect 2##" + std::to_string(i)).c_str())) { CustomExplosionInfo.m_effects[2] = i; } ImGui::SameLine();
-                if (ImGui::Button(std::string("Effect 3##" + std::to_string(i)).c_str())) { CustomExplosionInfo.m_effects[3] = i; }
+                if (ImGui::Button(fmt::format("Effect 0##{}", i))) { CustomExplosionInfo.m_effects[0] = i; } ImGui::SameLine();
+                if (ImGui::Button(fmt::format("Effect 1##{}", i))) { CustomExplosionInfo.m_effects[1] = i; } ImGui::SameLine();
+                if (ImGui::Button(fmt::format("Effect 2##{}", i))) { CustomExplosionInfo.m_effects[2] = i; } ImGui::SameLine();
+                if (ImGui::Button(fmt::format("Effect 3##{}", i))) { CustomExplosionInfo.m_effects[3] = i; }
                 ImGui::NextColumn();
             }
         }

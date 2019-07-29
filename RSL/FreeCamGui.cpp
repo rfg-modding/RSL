@@ -16,7 +16,7 @@ void FreeCamGui::Draw()
 	}
 	if (!Camera)
 	{
-		ImGui::Text(std::string(std::string(u8"Camera pointer not set. What do? ") + std::string(ICON_FA_FROWN_OPEN)).c_str());
+		ImGui::Text(u8"Camera pointer not set. What do? " + std::string(ICON_FA_FROWN_OPEN));
 		ImGui::End();
 		return;
 	}
