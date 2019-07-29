@@ -8,12 +8,12 @@ void IntrospectionGui::Draw()
 
 void IntrospectionGui::DrawPlayerIntrospectionGui(const char* Title)
 {
-	if (!*OpenState)
+	if (!Visible)
 	{
 		return;
 	}
 	ImGui::SetNextWindowSize(ImVec2(600.0f, 700.0f), ImGuiCond_FirstUseEver);
-	if (!ImGui::Begin(Title, OpenState, WindowFlags))
+	if (!ImGui::Begin(Title, &Visible, WindowFlags))
 	{
 		ImGui::End();
 		return;

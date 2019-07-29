@@ -4,7 +4,7 @@
 class IntrospectionGui : public BaseGui
 {
 public:
-	IntrospectionGui(bool* OpenState_, std::string Title_) { OpenState = OpenState_; Title = Title_; }
+	IntrospectionGui(std::string Title_) { Title = Title_; }
 	~IntrospectionGui() = default;
 
 	void Draw() override;

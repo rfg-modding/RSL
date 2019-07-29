@@ -14,39 +14,6 @@ GuiSystem::~GuiSystem()
  */
 void GuiSystem::Initialize()
 {
-	GuiList.push_back(new MenuBarGui(&ShowAppMainMenuBar, "Top Menu Bar"));
-	MainMenuBar = static_cast<MenuBarGui*>(GuiList.back());
-    GuiList.push_back(new GeneralTweaksGui(&ShowAppTweaksMenu, "General tweaks"));
-    TweaksMenu = static_cast<GeneralTweaksGui*>(GuiList.back());
-	GuiList.push_back(new OverlayConsole(&ShowAppConsole, "Lua console"));
-	Console = static_cast<OverlayConsole*>(GuiList.back());
-    GuiList.push_back(new ScriptSelectGui(&ShowAppScriptsMenu, "Scripts"));
-    ScriptList = static_cast<ScriptSelectGui*>(GuiList.back());
-    GuiList.push_back(new FreeCamGui(&ShowAppFreeCamSettings, "Camera settings"));
-    FreeCamSettings = static_cast<FreeCamGui*>(GuiList.back());
-	GuiList.push_back(new TextEditorWrapper(&ShowAppScriptEditor, "Script editor"));
-	ScriptEditor = static_cast<TextEditorWrapper*>(GuiList.back());
-	GuiList.push_back(new LogWindow(&ShowAppLogWindow , "Logger"));
-	LogGui = static_cast<LogWindow*>(GuiList.back());
-    GuiList.push_back(new WelcomeGui(&ShowAppWelcome, "Welcome"));
-    Welcome = static_cast<WelcomeGui*>(GuiList.back());
-    GuiList.push_back(new ThemeEditorGui(&ShowAppThemeEditor, "Theme editor"));
-    ThemeEditor = static_cast<ThemeEditorGui*>(GuiList.back());
-	GuiList.push_back(new PhysicsGui(&ShowAppPhysicsSettings, "Physics settings"));
-	PhysicsSettings = static_cast<PhysicsGui*>(GuiList.back());
-    GuiList.push_back(new TeleportGui(&ShowAppTeleportMenu, "Teleport"));
-    Teleport = static_cast<TeleportGui*>(GuiList.back());
-    GuiList.push_back(new IntrospectionGui(&ShowAppIntrospectionMenu, "Object introspection"));
-    Introspection = static_cast<IntrospectionGui*>(GuiList.back());
-    GuiList.push_back(new ExplosionSpawnerGui(&ShowAppExplosionSpawner, "Explosion spawner"));
-    ExplosionSpawner = static_cast<ExplosionSpawnerGui*>(GuiList.back());
-    //GuiList.push_back(new VehicleSpawnerGui(&ShowAppVehicleSpawner, "Vehicle spawner"));
-    //VehicleSpawner = static_cast<VehicleSpawnerGui*>(GuiList.back());
-
-	for (const auto& i : GuiList)
-	{
-		i->Gui = this;
-	}
 	Initialized = true;
 }
 
@@ -56,30 +23,6 @@ bool GuiSystem::Ready() const
 	return Initialized;
 }
 
-/* Sets the ScriptManager pointer for all GUIs. This function is used instead of manually
- * setting it to avoid accidentally missing one of the GUIs and to avoid code duplication.
- */
-void GuiSystem::SetScriptManager(ScriptManager* Scripts_)
-{
-	Scripts = Scripts_;
-	for (const auto& i : GuiList)
-	{
-		i->Scripts = Scripts_;
-	}
-}
-
-/* Gets this instances ScriptManager pointer. */
-ScriptManager* GuiSystem::GetScriptManager() const
-{
-	return Scripts;
-}
-
-/* Returns true if ScriptManager pointer is not a nullptr, and false if it is.*/
-bool GuiSystem::HasValidScriptManager() const
-{
-	return (Scripts != nullptr);
-}
-
 /* Draws all GUIs in GuiList. Has exception checking so that if one gui fails it shouldn't 
  * break all other GUIs.
  */
@@ -87,7 +30,6 @@ void GuiSystem::Draw()
 {
 	try
 	{
-        PlayerPtr = Globals::PlayerPtr;
 		if (!Globals::ImGuiInitialized)
 		{
 			if (DrawPassedOnce)
@@ -96,7 +38,7 @@ void GuiSystem::Draw()
 			}
 			return;
 		}
-        if (!PlayerPtr)
+        if (!Globals::PlayerPtr)
         {
             if(Globals::OverlayActive)
             {
@@ -108,7 +50,7 @@ void GuiSystem::Draw()
             }
             return;
         }
-		if (!Scripts)
+		if (!Globals::Scripts)
 		{
 			if (DrawPassedOnce)
 			{
@@ -122,10 +64,6 @@ void GuiSystem::Draw()
 		{
 			for (const auto& i : GuiList)
 			{
-				i->PlayerPtr = PlayerPtr;
-				i->Scripts = Scripts;
-				i->Gui = this;
-
 				//This is used to prevent the spamming of failure messages from invalid pointers before they've been set.
 				//So, error messages from invalid pointers will only show up after they've all been set properly once.
 				//Need to consider if this could obscure bugs in some instances, but for now I've got no better way of doing this.
@@ -163,7 +101,7 @@ void GuiSystem::Draw()
 		{
 			try
 			{
-				Console->Draw();
+                LuaConsole.Get().Draw();
 			}
 			catch (const std::exception& Ex)
 			{
@@ -221,27 +159,11 @@ void GuiSystem::DrawPreInitWindow()
     ImGui::End();
 }
 
-/* Sets the Player pointer for all GUIs.*/
-void GuiSystem::SetPlayerPtr(Player* NewPlayerPtr)
-{
-	PlayerPtr = NewPlayerPtr;
-	for (const auto& i : GuiList)
-	{
-		i->PlayerPtr = NewPlayerPtr;
-	}
-}
-
-/* Sets the Player pointer for all GUIs.*/
-void GuiSystem::SetPlayerPtr(void* NewPlayerPtr)
-{
-	SetPlayerPtr(static_cast<Player*>(NewPlayerPtr));
-}
-
 /* Toggles visibility of the lua console*/
 void GuiSystem::ToggleLuaConsole()
 {
 	LuaConsoleActive = !LuaConsoleActive;
-	ShowAppConsole = !ShowAppConsole;
+    LuaConsole.Get().Toggle();
 }
 
 /* Returns true if the lua console is active/visible.*/
@@ -260,4 +182,10 @@ void GuiSystem::DeactivateLuaConsole()
 void GuiSystem::ActivateLuaConsole()
 {
 	LuaConsoleActive = true;
+}
+
+void GuiSystem::AddChildGui(BaseGui* Gui, bool InitialVisibility)
+{
+    GuiList.push_back(Gui);
+    GuiList.back()->Visible = InitialVisibility;
 }

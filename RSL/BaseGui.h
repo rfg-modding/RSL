@@ -12,10 +12,10 @@ public:
 	
 	std::string Title;
 
-	Player* PlayerPtr = nullptr;
-	GuiSystem* Gui = nullptr;
-	ScriptManager* Scripts = nullptr;
+    void Show() { Visible = true; }
+    void Hide() { Visible = false; }
+    void Toggle() { Visible = !Visible; }
+    bool IsVisible() const { return Visible; }
 
-protected:
-	bool* OpenState = nullptr;
+	bool Visible = false;
 };

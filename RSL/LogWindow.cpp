@@ -3,13 +3,13 @@
 void LogWindow::Draw()
 {
 	//auto StartTime = std::chrono::steady_clock::now();
-	if (!*OpenState)
+	if (!Visible)
 	{
 		return;
 	}
 
 	ImGui::SetNextWindowSize(ImVec2(800.0f, 700.0f), ImGuiCond_Once);
-	if (!ImGui::Begin(Title.c_str(), OpenState, WindowFlags))
+	if (!ImGui::Begin(Title.c_str(), &Visible, WindowFlags))
 	{
 		ImGui::End();
 		return;

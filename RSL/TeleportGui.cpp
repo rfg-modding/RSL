@@ -1,9 +1,8 @@
 #include "TeleportGui.h"
 #include <utility>
 
-TeleportGui::TeleportGui(bool* OpenState_, std::string Title_)
+TeleportGui::TeleportGui(std::string Title_)
 {
-	OpenState = OpenState_;
 	Title = std::move(Title_);
 
 	LoadTeleportLocations();
@@ -11,17 +10,17 @@ TeleportGui::TeleportGui(bool* OpenState_, std::string Title_)
 
 void TeleportGui::Draw()
 {
-	if (!*OpenState)
+	if (!Visible)
 	{
 		return;
 	}
 	ImGui::SetNextWindowSize(ImVec2(700.0f, 800.0f), ImGuiCond_FirstUseEver);
-	if (!ImGui::Begin(Title, OpenState, WindowFlags))
+	if (!ImGui::Begin(Title, &Visible, WindowFlags))
 	{
 		ImGui::End();
 		return;
 	}
-	if (!PlayerPtr)
+	if (!Globals::PlayerPtr)
 	{
 		ImGui::Text("Player pointer is null. Please load a save and try to re-opening this.");
 		ImGui::End();
@@ -45,7 +44,7 @@ void TeleportGui::DrawMenuHeader()
     //ImGui::Separator();
     ImGui::Text("Current player position: ");
     ImGui::SameLine();
-    const std::string PlayerPositionString = PlayerPtr->Position.GetDataString(false, true);
+    const std::string PlayerPositionString = Globals::PlayerPtr->Position.GetDataString(false, true);
     ImGui::TextColored(Globals::SecondaryTextColor, PlayerPositionString);
 
     ImGui::Text("New player position:"); ImGui::SameLine();
@@ -54,12 +53,12 @@ void TeleportGui::DrawMenuHeader()
     ImGui::SameLine();
     if (ImGui::Button("Sync"))
     {
-        PlayerPositionTarget = PlayerPtr->Position;
+        PlayerPositionTarget = Globals::PlayerPtr->Position;
     }
     ImGui::SameLine();
     if (ImGui::Button("Teleport##PPT"))
     {
-        HumanTeleportUnsafe(PlayerPtr, PlayerPositionTarget, PlayerPtr->Orientation);
+        HumanTeleportUnsafe(Globals::PlayerPtr, PlayerPositionTarget, Globals::PlayerPtr->Orientation);
     }
     Util::Gui::TooltipOnPrevious("This will teleport the player to the value's you've typed, even if they are out of bounds. When setting TP points for later, try to set the y value a bit higher. If the game doesn't load quick enough your player will fall through the map. Usually the game will pull them back up, but sometimes it fails.");
     ImGui::SameLine();
@@ -86,7 +85,7 @@ void TeleportGui::DrawLocationList()
         {
             if (ImGui::Button(i["Name"].get<std::string>()))
             {
-                HumanTeleportUnsafe(PlayerPtr, vector(i["Position"][0].get<float>(), i["Position"][1].get<float>(), i["Position"][2].get<float>()), PlayerPtr->Orientation);
+                HumanTeleportUnsafe(Globals::PlayerPtr, vector(i["Position"][0].get<float>(), i["Position"][1].get<float>(), i["Position"][2].get<float>()), Globals::PlayerPtr->Orientation);
             }
 
             Util::Gui::TooltipOnPrevious(fmt::format("{} Position: ({}, {}, {})",

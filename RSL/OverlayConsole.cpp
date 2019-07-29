@@ -1,9 +1,8 @@
 #include "OverlayConsole.h"
 #include "ScriptManager.h"
 
-OverlayConsole::OverlayConsole(bool* OpenState_, std::string Title_)
+OverlayConsole::OverlayConsole(std::string Title_)
 {
-	OpenState = OpenState_;
 	Title = Title_;
 
 	WindowFlags = 0;
@@ -21,7 +20,7 @@ OverlayConsole::OverlayConsole(bool* OpenState_, std::string Title_)
 void OverlayConsole::Draw()
 {
 	//auto StartTime = std::chrono::steady_clock::now();
-	if (!*OpenState)
+	if (!Visible)
 	{
 		return;
 	}
@@ -41,7 +40,7 @@ void OverlayConsole::Draw()
 	ImGui::PushStyleColor(ImGuiCol_ResizeGrip, Colors[ImGuiCol_WindowBg]);
 	ImGui::PushStyleColor(ImGuiCol_ResizeGripHovered, Colors[ImGuiCol_WindowBg]);
 	ImGui::PushStyleColor(ImGuiCol_ResizeGripActive, Colors[ImGuiCol_WindowBg]);
-	if (!ImGui::Begin(Title.c_str(), OpenState, WindowFlags))
+	if (!ImGui::Begin(Title.c_str(), &Visible, WindowFlags))
 	{
 		ImGui::End();
 		return;
@@ -171,7 +170,7 @@ void OverlayConsole::Draw()
 		CommandHistory.push_back(InputBuffer);
         Logger::LogLua("{}\n", InputBuffer);
 		HistoryPosition = CommandHistory.size(); //Since pressing the up arrow key will subtract by one, the subtraction by one is not done here to insure the latest history entry isn't skipped.
-		Scripts->RunStringAsScript(InputBuffer, "lua console command");
+        Globals::Scripts->RunStringAsScript(InputBuffer, "lua console command");
 		InputBuffer.clear();
 		ReclaimFocus = true;
 	}

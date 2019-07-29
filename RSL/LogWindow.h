@@ -4,7 +4,7 @@
 class LogWindow : public BaseGui
 {
 public:
-	LogWindow(bool* OpenState_, std::string Title_) { OpenState = OpenState_; Title = Title_; }
+	LogWindow(std::string Title_) { Title = Title_; }
 	~LogWindow() = default;
 
 	void Draw() override;

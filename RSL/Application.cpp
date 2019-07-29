@@ -139,9 +139,10 @@ void Application::InitRSL()
             Sleep(100);
         }
 
+        InitOverlays();
         Gui.Initialize(); //Todo: Change gui so it can be initialized before imgui is initialized
-        Gui.SetScriptManager(&Scripts);
-        Gui.FreeCamSettings->Camera = &Camera;
+        //Gui.SetScriptManager(&Scripts);
+        //Gui.FreeCamSettings->Camera = &Camera;
 
         //Update global lua pointers after init just to be sure. Can't hurt.
         Scripts.UpdateRfgPointers();
@@ -161,6 +162,24 @@ void Application::InitRSL()
         Logger::LogFatalError("{}\n", MessageBoxString);
         MessageBoxA(Globals::FindRfgTopWindow(), MessageBoxString.c_str(), "Script loader failed to initialize!", MB_OK);
     }
+}
+
+void Application::InitOverlays()
+{
+    Gui.AddChildGui(new MenuBarGui("Top menu bar"), true);
+    Gui.AddChildGui(new GeneralTweaksGui("General tweaks"));
+    Gui.AddChildGui(new OverlayConsole("Lua console"));
+    Gui.LuaConsole = Gui.GetGuiReference<OverlayConsole>("Lua console").value();
+    Gui.AddChildGui(new ScriptSelectGui("Scripts"));
+    Gui.AddChildGui(new FreeCamGui("Camera settings"));
+    Gui.AddChildGui(new TextEditorWrapper("Script editor"));
+    Gui.AddChildGui(new LogWindow("Logger"));
+    Gui.AddChildGui(new WelcomeGui("Welcome"), true);
+    Gui.AddChildGui(new ThemeEditorGui("Theme editor"));
+    Gui.AddChildGui(new PhysicsGui("Physics settings"));
+    Gui.AddChildGui(new TeleportGui("Teleport"));
+    Gui.AddChildGui(new IntrospectionGui("Object introspection"));
+    Gui.AddChildGui(new ExplosionSpawnerGui("Explosion spawner"));
 }
 
 void Application::OpenDefaultLogs()

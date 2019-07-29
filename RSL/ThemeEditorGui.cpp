@@ -1,8 +1,7 @@
 #include "ThemeEditorGui.h"
 
-ThemeEditorGui::ThemeEditorGui(bool* OpenState_, std::string Title_)
+ThemeEditorGui::ThemeEditorGui(std::string Title_)
 {
-	OpenState = OpenState_;
 	Title = Title_;
 
 	LoadGUIConfig();
@@ -10,12 +9,12 @@ ThemeEditorGui::ThemeEditorGui(bool* OpenState_, std::string Title_)
 
 void ThemeEditorGui::Draw()
 {
-	if (!*OpenState)
+	if (!Visible)
 	{
 		return;
 	}
 	ImGui::SetNextWindowSize(ImVec2(600.0f, 700.0f), ImGuiCond_FirstUseEver);
-	if (!ImGui::Begin(Title.c_str(), OpenState))
+	if (!ImGui::Begin(Title.c_str(), &Visible))
 	{
 		ImGui::End();
 		return;

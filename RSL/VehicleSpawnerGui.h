@@ -4,7 +4,7 @@
 class VehicleSpawnerGui : public BaseGui
 {
 public:
-    VehicleSpawnerGui(bool* OpenState_, std::string Title_);
+    VehicleSpawnerGui(std::string Title_);
     ~VehicleSpawnerGui() = default;
 
     void Draw() override;

@@ -2,9 +2,8 @@
 #include "GuiSystem.h"
 #include "ScriptManager.h"
 
-MenuBarGui::MenuBarGui(bool* OpenState_, std::string Title_)
+MenuBarGui::MenuBarGui(std::string Title_)
 {
-	OpenState = OpenState_;
 	Title = Title_;
 
 	WindowFlags = 0;
@@ -22,10 +21,24 @@ MenuBarGui::MenuBarGui(bool* OpenState_, std::string Title_)
 void MenuBarGui::Draw()
 {
 	static bool ShowDeactivationConfirmationPopup = false;
-	if (!*OpenState)
+	if (!Visible)
 	{
 		return;
 	}
+
+   static auto GeneralTweaksGuiRef = Globals::Gui->GetGuiReference<GeneralTweaksGui>("General tweaks").value();
+   static auto LuaConsoleRef = Globals::Gui->GetGuiReference<OverlayConsole>("Lua console").value();
+   static auto ScriptSelectRef = Globals::Gui->GetGuiReference<ScriptSelectGui>("Scripts").value();
+   static auto CameraSettingsRef = Globals::Gui->GetGuiReference<FreeCamGui>("Camera settings").value();
+   static auto ScriptEditorRef = Globals::Gui->GetGuiReference<TextEditorWrapper>("Script editor").value();
+   static auto LoggerRef = Globals::Gui->GetGuiReference<LogWindow>("Logger").value();
+   static auto WelcomeRef = Globals::Gui->GetGuiReference<WelcomeGui>("Welcome").value();
+   static auto ThemeEditorRef = Globals::Gui->GetGuiReference<ThemeEditorGui>("Theme editor").value();
+   static auto PhysicsSettingsRef = Globals::Gui->GetGuiReference<PhysicsGui>("Physics settings").value();
+   static auto TeleportGuiRef = Globals::Gui->GetGuiReference<TeleportGui>("Teleport").value();
+   static auto IntrospectionGuiRef = Globals::Gui->GetGuiReference<IntrospectionGui>("Object introspection").value();
+   static auto ExplosionSpawnerGuiRef = Globals::Gui->GetGuiReference<ExplosionSpawnerGui>("Explosion spawner").value();
+
 	if (ImGui::BeginMainMenuBar())
 	{
 		if (ImGui::BeginMenu("System"))
@@ -39,40 +52,40 @@ void MenuBarGui::Draw()
             ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.0f, 0.4784f, 0.8f, 1.0f)); //Push light blue color for the reset button
             if(ImGui::MenuItem(std::string(std::string(ICON_FA_SYNC) + u8" Reset core lua state").c_str()))
             {
-                Scripts->Reset();
+                Globals::Scripts->Reset();
             }
             ImGui::PopStyleColor(); //Pop reset button color
 			ImGui::EndMenu();
 		}
 		if (ImGui::BeginMenu("Tweaks"))
 		{
-			if (ImGui::MenuItem(std::string(std::string(ICON_FA_SLIDERS_H) + u8" General Tweaks").c_str(), NULL, &Gui->ShowAppTweaksMenu)) {}
-			if (ImGui::MenuItem(std::string(std::string(ICON_FA_MAP_MARKED) + u8" Teleport").c_str(), NULL, &Gui->ShowAppTeleportMenu)) {}
-			if (ImGui::MenuItem(std::string(std::string(ICON_FA_CAMERA) + u8" Camera settings").c_str(), NULL, &Gui->ShowAppFreeCamSettings)) {}
-			if (ImGui::MenuItem(std::string(std::string(ICON_FA_VIAL) + u8" Physics settings").c_str(), NULL, &Gui->ShowAppPhysicsSettings)) {}
+			if (ImGui::MenuItem(std::string(std::string(ICON_FA_SLIDERS_H) + u8" General Tweaks").c_str(), NULL, &GeneralTweaksGuiRef.Get().Visible)) {}
+			if (ImGui::MenuItem(std::string(std::string(ICON_FA_MAP_MARKED) + u8" Teleport").c_str(), NULL, &TeleportGuiRef.Get().Visible)) {}
+			if (ImGui::MenuItem(std::string(std::string(ICON_FA_CAMERA) + u8" Camera settings").c_str(), NULL, &CameraSettingsRef.Get().Visible)) {}
+			if (ImGui::MenuItem(std::string(std::string(ICON_FA_VIAL) + u8" Physics settings").c_str(), NULL, &PhysicsSettingsRef.Get().Visible)) {}
 			//if (ImGui::MenuItem(std::string(std::string(ICON_FA_CAR) + u8" Vehicle spawner").c_str(), NULL, &Gui->ShowAppVehicleSpawner)) {}
 			ImGui::EndMenu();
 		}
         if(ImGui::BeginMenu("Tools"))
         {
-            if (ImGui::MenuItem(std::string(std::string(ICON_FA_BOMB) + u8" Explosion spawner").c_str(), NULL, &Gui->ShowAppExplosionSpawner)) {}
-            if (ImGui::MenuItem(std::string(std::string(ICON_FA_SEARCH) + u8" Object introspection").c_str(), NULL, &Gui->ShowAppIntrospectionMenu)) {}
-            if (ImGui::MenuItem(std::string(std::string(ICON_FA_LIST) + u8" Logger").c_str(), NULL, &Gui->ShowAppLogWindow)) {}
-            if (ImGui::MenuItem(std::string(std::string(ICON_FA_PALETTE) + u8" Theme editor").c_str(), NULL, &Gui->ShowAppThemeEditor)) {}
+            if (ImGui::MenuItem(std::string(std::string(ICON_FA_BOMB) + u8" Explosion spawner").c_str(), NULL, &ExplosionSpawnerGuiRef.Get().Visible)) {}
+            if (ImGui::MenuItem(std::string(std::string(ICON_FA_SEARCH) + u8" Object introspection").c_str(), NULL, &IntrospectionGuiRef.Get().Visible)) {}
+            if (ImGui::MenuItem(std::string(std::string(ICON_FA_LIST) + u8" Logger").c_str(), NULL, &LoggerRef.Get().Visible)) {}
+            if (ImGui::MenuItem(std::string(std::string(ICON_FA_PALETTE) + u8" Theme editor").c_str(), NULL, &ThemeEditorRef.Get().Visible)) {}
             ImGui::EndMenu();
         }
         if (ImGui::BeginMenu("Scripting"))
         {
-            if (ImGui::MenuItem(std::string(std::string(ICON_FA_CODE) + u8" Scripts").c_str(), NULL, &Gui->ShowAppScriptsMenu)) {}
-            if (ImGui::MenuItem(std::string(std::string(ICON_FA_TERMINAL) + u8" Lua console").c_str(), "F4", &Gui->ShowAppConsole)) {}
-            if (ImGui::MenuItem(std::string(std::string(ICON_FA_EDIT) + u8" Script editor").c_str(), "F2", &Gui->ShowAppScriptEditor)) {}
+            if (ImGui::MenuItem(std::string(std::string(ICON_FA_CODE) + u8" Scripts").c_str(), NULL, &ScriptSelectRef.Get().Visible)) {}
+            if (ImGui::MenuItem(std::string(std::string(ICON_FA_TERMINAL) + u8" Lua console").c_str(), "F4", &LuaConsoleRef.Get().Visible)) {}
+            if (ImGui::MenuItem(std::string(std::string(ICON_FA_EDIT) + u8" Script editor").c_str(), "F2", &ScriptEditorRef.Get().Visible)) {}
             ImGui::EndMenu();
         }
 		if (ImGui::BeginMenu("Help"))
 		{
-			if (ImGui::MenuItem(std::string(std::string(ICON_FA_HOME) + u8" Welcome").c_str(), NULL, &Gui->ShowAppWelcome)) {}
-			if (ImGui::MenuItem(std::string(std::string(ICON_FA_INFO) + u8" Metrics").c_str(), NULL, &Gui->ShowAppMetrics)) {}
-			if (ImGui::MenuItem(std::string(std::string(ICON_FA_QUESTION) + u8" About").c_str(), NULL, &Gui->ShowAppAbout)) {}
+			if (ImGui::MenuItem(std::string(std::string(ICON_FA_HOME) + u8" Welcome").c_str(), NULL, &WelcomeRef.Get().Visible)) {}
+			if (ImGui::MenuItem(std::string(std::string(ICON_FA_INFO) + u8" Metrics").c_str(), NULL, &Globals::Gui->ShowAppMetrics)) {}
+			if (ImGui::MenuItem(std::string(std::string(ICON_FA_QUESTION) + u8" About").c_str(), NULL, &Globals::Gui->ShowAppAbout)) {}
 			ImGui::EndMenu();
 		}
 		ImGui::EndMainMenuBar();
@@ -84,13 +97,13 @@ void MenuBarGui::Draw()
 	}
 	ConfirmScriptLoaderDeactivation();
 
-	if (Gui->ShowAppMetrics)
+	if (Globals::Gui->ShowAppMetrics)
 	{
-		ImGui::ShowMetricsWindow(&Gui->ShowAppMetrics);
+		ImGui::ShowMetricsWindow(&Globals::Gui->ShowAppMetrics);
 	}
-	if (Gui->ShowAppAbout)
+	if (Globals::Gui->ShowAppAbout)
 	{
-		ShowAboutWindow(&Gui->ShowAppAbout);
+		ShowAboutWindow(&Globals::Gui->ShowAppAbout);
 	}
 }
 

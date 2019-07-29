@@ -21,6 +21,7 @@ private:
     void InitLogger();
     void CheckForImproperInstallation() const;
     void InitRSL();
+    void InitOverlays();
     void OpenDefaultLogs();
     void MainLoop();
     void Exit();

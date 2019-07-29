@@ -2,12 +2,12 @@
 
 void PhysicsGui::Draw()
 {
-	if (!*OpenState)
+	if (!Visible)
 	{
 		return;
 	}
 	ImGui::SetNextWindowSize(ImVec2(600.0f, 700.0f), ImGuiCond_FirstUseEver);
-	if (!ImGui::Begin(Title.c_str(), OpenState))
+	if (!ImGui::Begin(Title.c_str(), &Visible))
 	{
 		ImGui::End();
 		return;

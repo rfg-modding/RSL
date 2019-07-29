@@ -86,6 +86,11 @@ LRESULT ProcessInput(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	{
 		return 0;
 	}
+
+    auto ScriptEditorGuiRef = Globals::Gui->GetGuiReference<TextEditorWrapper>("Script editor").value();
+    auto IntrospectionGuiRef = Globals::Gui->GetGuiReference<IntrospectionGui>("Object introspection").value();
+    auto ExplosionSpawnerGuiRef = Globals::Gui->GetGuiReference<ExplosionSpawnerGui>("Explosion spawner").value();
+
 	switch(msg)
 	{
 	case WM_KEYDOWN:
@@ -142,7 +147,7 @@ LRESULT ProcessInput(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			//Sleep(150);
 			break;
 		case VK_F2:
-			Globals::Gui->ShowAppScriptEditor = !Globals::Gui->ShowAppScriptEditor;
+            ScriptEditorGuiRef.Get().Toggle();
 			break;
 		case VK_NUMPAD1:
 			ToggleHud();
@@ -156,11 +161,11 @@ LRESULT ProcessInput(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         case VK_NUMPAD4:
             if(Globals::Gui)
             {
-                if(Globals::Gui->Introspection)
+                if(IntrospectionGuiRef.IsReady())
                 {
                     if(Globals::PlayerPtr)
                     {
-                        Globals::Gui->Introspection->SavedTargetObjectHandle = Globals::PlayerPtr->aim_target;
+                        IntrospectionGuiRef.Get().SavedTargetObjectHandle = Globals::PlayerPtr->aim_target;
                     }
                 }
             }
@@ -175,8 +180,8 @@ LRESULT ProcessInput(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			Globals::Gui->ToggleLuaConsole();
 			if (Globals::Gui->IsLuaConsoleActive())
 			{
-				Globals::Gui->Console->InputBuffer.clear();
-				Globals::Gui->Console->ReclaimFocus = true; //Tell console to set focus to it's text input.
+				Globals::Gui->LuaConsole.Get().InputBuffer.clear();
+				Globals::Gui->LuaConsole.Get().ReclaimFocus = true; //Tell console to set focus to it's text input.
 				if (!Globals::OverlayActive)
 				{
 					SnippetManager::BackupSnippet("MouseGenericPollMouseVisible", Globals::MouseGenericPollMouseVisible, 12, true);
@@ -185,7 +190,7 @@ LRESULT ProcessInput(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			}
 			else
 			{
-				Globals::Gui->Console->InputBuffer.clear();
+				Globals::Gui->LuaConsole.Get().InputBuffer.clear();
 				if (!Globals::OverlayActive)
 				{
 					SnippetManager::RestoreSnippet("MouseGenericPollMouseVisible", true);
@@ -210,13 +215,13 @@ LRESULT ProcessInput(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		break;
 	}
 
-	if (MiddleMouseDown && Globals::Gui->ExplosionSpawner->MiddleMouseBoomActive)
+	if (MiddleMouseDown && ExplosionSpawnerGuiRef.Get().MiddleMouseBoomActive)
 	{
 		ExplosionTimerEnd = std::chrono::steady_clock::now();
 		//std::cout << "Time since last explosion spawn: " << std::chrono::duration_cast<std::chrono::milliseconds>(ExplosionTimerEnd - ExplosionTimerBegin).count() << "\n";
-		if (std::chrono::duration_cast<std::chrono::milliseconds>(ExplosionTimerEnd - ExplosionTimerBegin).count() > 1000 / Globals::Gui->ExplosionSpawner->MiddleMouseExplosionsPerSecond)
+		if (std::chrono::duration_cast<std::chrono::milliseconds>(ExplosionTimerEnd - ExplosionTimerBegin).count() > 1000 / ExplosionSpawnerGuiRef.Get().MiddleMouseExplosionsPerSecond)
 		{
-			ExplosionCreate(&Globals::Gui->ExplosionSpawner->CustomExplosionInfo, Globals::PlayerPtr, Globals::PlayerPtr,
+			ExplosionCreate(&ExplosionSpawnerGuiRef.Get().CustomExplosionInfo, Globals::PlayerPtr, Globals::PlayerPtr,
 				&Globals::PlayerPtr->aim_pos, &Globals::PlayerPtr->mp_camera_orient, &Globals::PlayerPtr->aim_pos, nullptr, false);
 			ExplosionTimerBegin = std::chrono::steady_clock::now();
 		}
@@ -241,13 +246,13 @@ LRESULT ProcessInput(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		}
 	}*/
 
-	if (Globals::Gui->ShowAppScriptEditor)
+	if (ScriptEditorGuiRef.Get().IsVisible())
 	{
 		try
 		{
 			if (GetAsyncKeyState(VK_LCONTROL) && GetAsyncKeyState(0x53)) //Ctrl + S
 			{
-				Globals::Gui->ScriptEditor->SaveScript();
+                ScriptEditorGuiRef.Get().SaveScript();
 			}
 		}
 		catch (const std::exception& Ex)
@@ -256,23 +261,23 @@ LRESULT ProcessInput(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		}
 		if (GetAsyncKeyState(VK_CONTROL) && GetAsyncKeyState(VK_SHIFT) && GetAsyncKeyState(0x53)) //Ctrl + Shift + S
 		{
-			Globals::Gui->ScriptEditor->ShowSaveAsScriptPopup = true;
+            ScriptEditorGuiRef.Get().ShowSaveAsScriptPopup = true;
 		}
 		if (GetAsyncKeyState(VK_LCONTROL) && GetAsyncKeyState(0x4F)) //Ctrl + O
 		{
-			Globals::Gui->ScriptEditor->ShowOpenScriptPopup = true;
+            ScriptEditorGuiRef.Get().ShowOpenScriptPopup = true;
 		}
 		if (GetAsyncKeyState(VK_LCONTROL) && GetAsyncKeyState(0x4E)) //Ctrl + N
 		{
-			Globals::Gui->ScriptEditor->ShowNewScriptPopup = true;
+            ScriptEditorGuiRef.Get().ShowNewScriptPopup = true;
 		}
 		try
 		{
 			if (GetAsyncKeyState(VK_F5))
 			{
-				if(Globals::Gui->HasValidScriptManager())
+				if(ScriptEditorGuiRef.IsReady())
 				{
-                    Globals::Gui->ScriptEditor->RunCurrentScript();
+                    ScriptEditorGuiRef.Get().RunCurrentScript();
 					Sleep(175);
 				}
 			}
@@ -573,7 +578,6 @@ void __fastcall PlayerDoFrameHook(Player* PlayerPtr)
 		{
 			Globals::PlayerPtr = PlayerPtr;
 			Globals::PlayerRigidBody = HavokBodyGetPointer(PlayerPtr->HavokHandle);
-			Globals::Gui->SetPlayerPtr(PlayerPtr);
 			if(Globals::Scripts)
 			{
 				Globals::Scripts->UpdateRfgPointers();
@@ -584,22 +588,29 @@ void __fastcall PlayerDoFrameHook(Player* PlayerPtr)
 	{
 		Globals::PlayerPtr = PlayerPtr;
 		Globals::PlayerRigidBody = HavokBodyGetPointer(PlayerPtr->HavokHandle);
-		Globals::Gui->SetPlayerPtr(PlayerPtr);
 		if (Globals::Scripts)
 		{
 			Globals::Scripts->UpdateRfgPointers();
 		}
 	}
-	if (!Globals::Gui->TweaksMenu || !Globals::Gui->FreeCamSettings || !Globals::Gui->FreeCamSettings->Camera)
+
+    if(!Globals::Gui)
+    {
+        return PlayerDoFrame(PlayerPtr);
+    }
+    static GuiReference<GeneralTweaksGui> TweaksMenuRef = Globals::Gui->GetGuiReference<GeneralTweaksGui>("General tweaks").value();
+    static GuiReference<FreeCamGui> FreeCamMenuRef = Globals::Gui->GetGuiReference<FreeCamGui>("Camera settings").value();
+
+	if (!Globals::Camera)
 	{
 		return PlayerDoFrame(PlayerPtr);
 	}
-
+    
 	if (Globals::InfiniteJetpack)
 	{
 		PlayerPtr->JetpackFuelPercent = 1.0f;
 	}
-	if (Globals::Gui->TweaksMenu->Invulnerable || (Globals::Camera->IsFreeCameraActive() && Globals::Gui->FreeCamSettings->PlayerFollowCam))
+	if (TweaksMenuRef.Get().Invulnerable || (Globals::Camera->IsFreeCameraActive() && FreeCamMenuRef.Get().PlayerFollowCam))
 	{
 		PlayerPtr->Flags.invulnerable = true;
 		PlayerPtr->HitPoints = 2147483647.0f;
@@ -608,24 +619,24 @@ void __fastcall PlayerDoFrameHook(Player* PlayerPtr)
 	{
 		PlayerPtr->Flags.ai_ignore = true;
 	}
-	if (Globals::Gui->TweaksMenu->NeedCustomJumpHeightSet)
+	if (TweaksMenuRef.Get().NeedCustomJumpHeightSet)
 	{
-		PlayerPtr->CodeDrivenJumpHeight = Globals::Gui->TweaksMenu->CustomJumpHeight;
+		PlayerPtr->CodeDrivenJumpHeight = TweaksMenuRef.Get().CustomJumpHeight;
 	}
-	if (Globals::Gui->TweaksMenu->NeedCustomMoveSpeedSet)
+	if (TweaksMenuRef.Get().NeedCustomMoveSpeedSet)
 	{
-		PlayerPtr->MoveSpeed = Globals::Gui->TweaksMenu->CustomPlayerMoveSpeed;
+		PlayerPtr->MoveSpeed = TweaksMenuRef.Get().CustomPlayerMoveSpeed;
 	}
-	if (Globals::Gui->TweaksMenu->NeedCustomMaxMoveSpeedSet)
+	if (TweaksMenuRef.Get().NeedCustomMaxMoveSpeedSet)
 	{
-		PlayerPtr->MaxSpeed = Globals::Gui->TweaksMenu->CustomPlayerMaxSpeed;
+		PlayerPtr->MaxSpeed = TweaksMenuRef.Get().CustomPlayerMaxSpeed;
 	}
-	if (Globals::Gui->TweaksMenu->LockAlertLevel)
+	if (TweaksMenuRef.Get().LockAlertLevel)
 	{
-		GsmSetAlertLevel(Globals::Gui->TweaksMenu->CustomAlertLevel);
+		GsmSetAlertLevel(TweaksMenuRef.Get().CustomAlertLevel);
 	}
 
-	if (Globals::Camera->IsFreeCameraActive() && Globals::Gui->FreeCamSettings->PlayerFollowCam)
+	if (Globals::Camera->IsFreeCameraActive() && FreeCamMenuRef.Get().PlayerFollowCam)
 	{
 		Globals::Camera->UpdateFreeView();
 		vector CameraPos(*Globals::Camera->RealX, *Globals::Camera->RealY + 1.5f, *Globals::Camera->RealZ);
@@ -633,7 +644,7 @@ void __fastcall PlayerDoFrameHook(Player* PlayerPtr)
 	}
 	if (!Globals::Camera->IsFreeCameraActive() && Globals::Camera->NeedPostDeactivationCleanup)
 	{
-		if (Globals::Gui->FreeCamSettings->ReturnPlayerToOriginalPosition)
+		if (FreeCamMenuRef.Get().ReturnPlayerToOriginalPosition)
 		{
 			HumanTeleportUnsafe(PlayerPtr, Globals::Camera->OriginalCameraPosition, PlayerPtr->Orientation);
 		}
@@ -675,21 +686,32 @@ void __fastcall hkpWorld_stepDeltaTime_hook(hkpWorld* This, void* edx, float Phy
             {
                 Globals::Scripts->UpdateRfgPointers();
             }
-            if (Globals::Gui->PhysicsSettings)
-            {
-                Globals::Gui->PhysicsSettings->CurrentGravity = hkpWorldGetGravity(Globals::hkpWorldPtr, nullptr);
 
-                Globals::Gui->PhysicsSettings->CustomGravityVector.m_quad.m128_f32[0] = Globals::Gui->PhysicsSettings->CurrentGravity->m_quad.m128_f32[0];
-                Globals::Gui->PhysicsSettings->CustomGravityVector.m_quad.m128_f32[1] = Globals::Gui->PhysicsSettings->CurrentGravity->m_quad.m128_f32[1];
-                Globals::Gui->PhysicsSettings->CustomGravityVector.m_quad.m128_f32[2] = Globals::Gui->PhysicsSettings->CurrentGravity->m_quad.m128_f32[2];
-                Globals::Gui->PhysicsSettings->CustomGravityVector.m_quad.m128_f32[3] = Globals::Gui->PhysicsSettings->CurrentGravity->m_quad.m128_f32[3];
-
-                Globals::Gui->PhysicsSettings->DefaultGravityVector.m_quad.m128_f32[0] = Globals::Gui->PhysicsSettings->CurrentGravity->m_quad.m128_f32[0];
-                Globals::Gui->PhysicsSettings->DefaultGravityVector.m_quad.m128_f32[1] = Globals::Gui->PhysicsSettings->CurrentGravity->m_quad.m128_f32[1];
-                Globals::Gui->PhysicsSettings->DefaultGravityVector.m_quad.m128_f32[2] = Globals::Gui->PhysicsSettings->CurrentGravity->m_quad.m128_f32[2];
-                Globals::Gui->PhysicsSettings->DefaultGravityVector.m_quad.m128_f32[3] = Globals::Gui->PhysicsSettings->CurrentGravity->m_quad.m128_f32[3];
-            }
         });
+
+    static bool InitCustomGravityVector = false;
+    if (!Globals::Gui)
+    {
+        return hkpWorldStepDeltaTime(This, edx, PhysicsDeltaTime);
+    }
+    static GuiReference<PhysicsGui> PhysicsMenuRef = Globals::Gui->GetGuiReference<PhysicsGui>("Physics settings").value();
+
+    if (!InitCustomGravityVector)
+    {
+        PhysicsMenuRef.Get().CurrentGravity = hkpWorldGetGravity(Globals::hkpWorldPtr, nullptr);
+
+        PhysicsMenuRef.Get().CustomGravityVector.m_quad.m128_f32[0] = PhysicsMenuRef.Get().CurrentGravity->m_quad.m128_f32[0];
+        PhysicsMenuRef.Get().CustomGravityVector.m_quad.m128_f32[1] = PhysicsMenuRef.Get().CurrentGravity->m_quad.m128_f32[1];
+        PhysicsMenuRef.Get().CustomGravityVector.m_quad.m128_f32[2] = PhysicsMenuRef.Get().CurrentGravity->m_quad.m128_f32[2];
+        PhysicsMenuRef.Get().CustomGravityVector.m_quad.m128_f32[3] = PhysicsMenuRef.Get().CurrentGravity->m_quad.m128_f32[3];
+
+        PhysicsMenuRef.Get().DefaultGravityVector.m_quad.m128_f32[0] = PhysicsMenuRef.Get().CurrentGravity->m_quad.m128_f32[0];
+        PhysicsMenuRef.Get().DefaultGravityVector.m_quad.m128_f32[1] = PhysicsMenuRef.Get().CurrentGravity->m_quad.m128_f32[1];
+        PhysicsMenuRef.Get().DefaultGravityVector.m_quad.m128_f32[2] = PhysicsMenuRef.Get().CurrentGravity->m_quad.m128_f32[2];
+        PhysicsMenuRef.Get().DefaultGravityVector.m_quad.m128_f32[3] = PhysicsMenuRef.Get().CurrentGravity->m_quad.m128_f32[3];
+        InitCustomGravityVector = true;
+    }
+
     if (This != Globals::hkpWorldPtr)
     {
         Logger::LogWarning("GlobalhkpWorldPtr address changed!\n");
@@ -700,11 +722,11 @@ void __fastcall hkpWorld_stepDeltaTime_hook(hkpWorld* This, void* edx, float Phy
         }
     }
 
-    if (Globals::Gui->PhysicsSettings)
+    if (PhysicsMenuRef.IsReady())
     {
-        if (Globals::Gui->PhysicsSettings->UseCustomPhysicsTimestepMultiplier)
+        if (PhysicsMenuRef.Get().UseCustomPhysicsTimestepMultiplier)
         {
-            PhysicsDeltaTime *= Globals::Gui->PhysicsSettings->CustomPhysicsTimeStepMultiplier;
+            PhysicsDeltaTime *= PhysicsMenuRef.Get().CustomPhysicsTimeStepMultiplier;
         }
     }
 
@@ -787,29 +809,30 @@ void __fastcall world_do_frame_hook(World* This, void* edx, bool HardLoad)
     {
         Globals::TODLightPtr = GameRenderGetTodLight();
     }
-    if (!Globals::Gui->TweaksMenu)
+    if (!Globals::Gui)
     {
         return WorldDoFrame(This, edx, HardLoad);
     }
+    static GuiReference<GeneralTweaksGui> TweaksMenuRef = Globals::Gui->GetGuiReference<GeneralTweaksGui>("General tweaks").value();
 
-    if (Globals::Gui->TweaksMenu->UseCustomLevelAmbientLight)
+    if (TweaksMenuRef.Get().UseCustomLevelAmbientLight)
     {
-        Globals::RfgWorldPtr->level_ambient.x = Globals::Gui->TweaksMenu->CustomLevelAmbientLight.x;
-        Globals::RfgWorldPtr->level_ambient.y = Globals::Gui->TweaksMenu->CustomLevelAmbientLight.y;
-        Globals::RfgWorldPtr->level_ambient.z = Globals::Gui->TweaksMenu->CustomLevelAmbientLight.z;
+        Globals::RfgWorldPtr->level_ambient.x = TweaksMenuRef.Get().CustomLevelAmbientLight.x;
+        Globals::RfgWorldPtr->level_ambient.y = TweaksMenuRef.Get().CustomLevelAmbientLight.y;
+        Globals::RfgWorldPtr->level_ambient.z = TweaksMenuRef.Get().CustomLevelAmbientLight.z;
     }
-    if (Globals::Gui->TweaksMenu->UseCustomLevelBackgroundAmbientLight)
+    if (TweaksMenuRef.Get().UseCustomLevelBackgroundAmbientLight)
     {
-        Globals::RfgWorldPtr->level_back_ambient.x = Globals::Gui->TweaksMenu->CustomLevelBackgroundAmbientLight.x;
-        Globals::RfgWorldPtr->level_back_ambient.y = Globals::Gui->TweaksMenu->CustomLevelBackgroundAmbientLight.y;
-        Globals::RfgWorldPtr->level_back_ambient.z = Globals::Gui->TweaksMenu->CustomLevelBackgroundAmbientLight.z;
+        Globals::RfgWorldPtr->level_back_ambient.x = TweaksMenuRef.Get().CustomLevelBackgroundAmbientLight.x;
+        Globals::RfgWorldPtr->level_back_ambient.y = TweaksMenuRef.Get().CustomLevelBackgroundAmbientLight.y;
+        Globals::RfgWorldPtr->level_back_ambient.z = TweaksMenuRef.Get().CustomLevelBackgroundAmbientLight.z;
     }
-    if (Globals::Gui->TweaksMenu->UseCustomTimeOfDayLight)
+    if (TweaksMenuRef.Get().UseCustomTimeOfDayLight)
     {
-        Globals::TODLightPtr->m_color.red = Globals::Gui->TweaksMenu->CustomTimeOfDayLightColor.red;
-        Globals::TODLightPtr->m_color.green = Globals::Gui->TweaksMenu->CustomTimeOfDayLightColor.green;
-        Globals::TODLightPtr->m_color.blue = Globals::Gui->TweaksMenu->CustomTimeOfDayLightColor.blue;
-        Globals::TODLightPtr->m_color.alpha = Globals::Gui->TweaksMenu->CustomTimeOfDayLightColor.alpha;
+        Globals::TODLightPtr->m_color.red = TweaksMenuRef.Get().CustomTimeOfDayLightColor.red;
+        Globals::TODLightPtr->m_color.green = TweaksMenuRef.Get().CustomTimeOfDayLightColor.green;
+        Globals::TODLightPtr->m_color.blue = TweaksMenuRef.Get().CustomTimeOfDayLightColor.blue;
+        Globals::TODLightPtr->m_color.alpha = TweaksMenuRef.Get().CustomTimeOfDayLightColor.alpha;
     }
 
     return WorldDoFrame(This, edx, HardLoad);

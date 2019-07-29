@@ -4,7 +4,7 @@
 class PhysicsGui : public BaseGui
 {
 public:
-	PhysicsGui(bool* OpenState_, std::string Title_) { OpenState = OpenState_; Title = Title_; };
+	PhysicsGui(std::string Title_) { Title = Title_; };
 	~PhysicsGui() = default;
 
 	void Draw() override;

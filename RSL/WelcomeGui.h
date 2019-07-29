@@ -4,7 +4,7 @@
 class WelcomeGui : public BaseGui
 {
 public:
-	WelcomeGui(bool* OpenState_, std::string Title_);
+	WelcomeGui(std::string Title_);
 	~WelcomeGui() = default;
 
 	void Draw() override;

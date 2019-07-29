@@ -1,8 +1,7 @@
 #include "GeneralTweaksGui.h"
 
-GeneralTweaksGui::GeneralTweaksGui(bool* OpenState_, std::string Title_)
+GeneralTweaksGui::GeneralTweaksGui(std::string Title_)
 {
-	OpenState = OpenState_;
 	Title = Title_;
 
 	CustomTimeOfDayLightColor.red = 0.0f;
@@ -15,12 +14,12 @@ GeneralTweaksGui::GeneralTweaksGui(bool* OpenState_, std::string Title_)
 
 void GeneralTweaksGui::Draw()
 {
-	if (!*OpenState)
+	if (!Visible)
 	{
 		return;
 	}
 	ImGui::SetNextWindowSize(ImVec2(600.0f, 700.0f), ImGuiCond_FirstUseEver);
-	if (!ImGui::Begin(Title.c_str(), OpenState))
+	if (!ImGui::Begin(Title.c_str(), &Visible))
 	{
 		ImGui::End();
 		return;
@@ -122,31 +121,31 @@ void GeneralTweaksGui::Draw()
 	ImGui::Checkbox("Infinite jetpack", &Globals::InfiniteJetpack);
 	if (ImGui::Checkbox("Invulnerability", &Invulnerable))
 	{
-		PlayerPtr->HitPoints = PlayerPtr->MaxHitPoints;
+        Globals::PlayerPtr->HitPoints = Globals::PlayerPtr->MaxHitPoints;
 	}
 	if (!Invulnerable)
 	{
-		PlayerPtr->Flags.invulnerable = false;
+        Globals::PlayerPtr->Flags.invulnerable = false;
 	}
 	if (ImGui::Checkbox("Ignored by AI", &AiIgnore))
 	{
 		//Have to manually set rather than sticking in checkbox call because bitfields addresses can't be captured.
-		PlayerPtr->Flags.ai_ignore = !PlayerPtr->Flags.ai_ignore;
-		AiIgnore = PlayerPtr->Flags.ai_ignore;
+        Globals::PlayerPtr->Flags.ai_ignore = !Globals::PlayerPtr->Flags.ai_ignore;
+		AiIgnore = Globals::PlayerPtr->Flags.ai_ignore;
 	}
 	if(ImGui::Checkbox("Disable player ragdoll", &DisablePlayerRagdoll))
 	{
-		PlayerPtr->Flags.disallow_flinches_and_ragdolls = !PlayerPtr->Flags.disallow_flinches_and_ragdolls;
-		DisablePlayerRagdoll = PlayerPtr->Flags.disallow_flinches_and_ragdolls;
+        Globals::PlayerPtr->Flags.disallow_flinches_and_ragdolls = !Globals::PlayerPtr->Flags.disallow_flinches_and_ragdolls;
+		DisablePlayerRagdoll = Globals::PlayerPtr->Flags.disallow_flinches_and_ragdolls;
 	}
     ImGui::Separator();
 
     ImGui::SetNextItemWidth(230.0f);
-	ImGui::InputInt("Salvage", &PlayerPtr->Metadata.Salvage);
+	ImGui::InputInt("Salvage", &Globals::PlayerPtr->Metadata.Salvage);
     ImGui::SetNextItemWidth(230.0f);
-	ImGui::InputInt("Mining count", &PlayerPtr->Metadata.MiningCount);
+	ImGui::InputInt("Mining count", &Globals::PlayerPtr->Metadata.MiningCount);
     ImGui::SetNextItemWidth(230.0f);
-	ImGui::InputInt("Supply crate count", &PlayerPtr->Metadata.SupplyCrateCount);
+	ImGui::InputInt("Supply crate count", &Globals::PlayerPtr->Metadata.SupplyCrateCount);
 
 
     ImGui::SetNextItemWidth(230.0f);

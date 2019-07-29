@@ -1,9 +1,8 @@
 #include "WelcomeGui.h"
 #include "GuiSystem.h"
 
-WelcomeGui::WelcomeGui(bool* OpenState_, std::string Title_)
+WelcomeGui::WelcomeGui(std::string Title_)
 {
-	OpenState = OpenState_;
 	Title = Title_;
 
 	MainOverlayWindowFlags = 0;
@@ -22,22 +21,29 @@ WelcomeGui::WelcomeGui(bool* OpenState_, std::string Title_)
 
 void WelcomeGui::Draw()
 {
-	if (!*OpenState)
+	if (!Visible)
 	{
 		return;
 	}
-	if (!ImGui::Begin(Title.c_str(), OpenState, MainOverlayWindowFlags))
+	if (!ImGui::Begin(Title.c_str(), &Visible, MainOverlayWindowFlags))
 	{
 		ImGui::End();
 		return;
 	}
+
+    static auto GeneralTweaksGuiRef = Globals::Gui->GetGuiReference<GeneralTweaksGui>("General tweaks").value();
+    static auto ScriptSelectRef = Globals::Gui->GetGuiReference<ScriptSelectGui>("Scripts").value();
+    static auto CameraSettingsRef = Globals::Gui->GetGuiReference<FreeCamGui>("Camera settings").value();
+    static auto ScriptEditorRef = Globals::Gui->GetGuiReference<TextEditorWrapper>("Script editor").value();
+    static auto TeleportGuiRef = Globals::Gui->GetGuiReference<TeleportGui>("Teleport").value();
+    static auto ExplosionSpawnerGuiRef = Globals::Gui->GetGuiReference<ExplosionSpawnerGui>("Explosion spawner").value();
 
 	ImGui::PushStyleColor(ImGuiCol_Button, ImVec4());
 	ImGui::PushFont(Globals::FontLarge);
 	ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.556f, 0.823f, 0.541f, 1.0f));
 	if (ImGui::Button(std::string(std::string(ICON_FA_CODE) + u8" Scripts " + u8"##ScriptSelectIcon").c_str()))
 	{
-		Gui->ShowAppScriptsMenu = !Gui->ShowAppScriptsMenu;
+        ScriptSelectRef.Get().Toggle();
 	}
 	ImGui::PopStyleColor();
 	Util::Gui::TooltipOnPrevious("This menu displays all the scripts detected in the scripts folder and lets you run, edit, and stop them on command. If the script isn't using event hooks then stopping it does nothing, since it stops after running once.", Globals::FontNormal);
@@ -45,7 +51,7 @@ void WelcomeGui::Draw()
 	ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.357f, 0.659f, 0.863f, 1.0f));
 	if (ImGui::Button(std::string(std::string(ICON_FA_TERMINAL) + u8" Lua console " + u8"##LuaConsoleIcon").c_str()))
 	{
-		Gui->ToggleLuaConsole();
+        Globals::Gui->ToggleLuaConsole();
 	}
 	ImGui::PopStyleColor();
 	Util::Gui::TooltipOnPrevious("The console is useful for quickly setting values or calling functions without writing a script. Anything that scripts have access to, the console does too. The console is just running your input into it as a script.", Globals::FontNormal);
@@ -53,7 +59,7 @@ void WelcomeGui::Draw()
 	ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 0.808f, 0.267f, 1.0f));
 	if (ImGui::Button(std::string(std::string(ICON_FA_EDIT) + u8" Script editor " + u8"##ScriptEditorIcon").c_str()))
 	{
-		Gui->ShowAppScriptEditor = !Gui->ShowAppScriptEditor;
+        ScriptEditorRef.Get().Toggle();
 	}
 	ImGui::PopStyleColor();
 	Util::Gui::TooltipOnPrevious("The script editor allows you to save, load, edit, and run lua scripts in game, and provides basic lua syntax highlighting.", Globals::FontNormal);
@@ -61,7 +67,7 @@ void WelcomeGui::Draw()
 	ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.404f, 0.416f, 0.435f, 1.0f));
 	if (ImGui::Button(std::string(std::string(ICON_FA_SLIDERS_H) + u8" Tweaks menu " + u8"##TweaksIcon").c_str()))
 	{
-		Gui->ShowAppTweaksMenu = !Gui->ShowAppTweaksMenu;
+        GeneralTweaksGuiRef.Get().Toggle();
 	}
 	ImGui::PopStyleColor();
 	Util::Gui::TooltipOnPrevious("This menu has settings for invulnerability, infinite jetpack, player move speed, player jump height, xray vision, and more.", Globals::FontNormal);
@@ -69,7 +75,7 @@ void WelcomeGui::Draw()
 	ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.961f, 0.753f, 0.698f, 1.0f));
 	if (ImGui::Button(std::string(std::string(ICON_FA_MAP_MARKED) + u8" Teleport menu " + u8"##TeleportIcon").c_str()))
 	{
-		Gui->ShowAppTeleportMenu = !Gui->ShowAppTeleportMenu;
+        TeleportGuiRef.Get().Toggle();
 	}
 	ImGui::PopStyleColor();
 	Util::Gui::TooltipOnPrevious("This menu allows you to teleport around the map. There are many preset locations, and you may create your own. Any of your custom locations are saved in TeleportLocations.json. You don't need to edit it by hand as you can do all the editing you need in the gui.", Globals::FontNormal);
@@ -77,7 +83,7 @@ void WelcomeGui::Draw()
 	ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.361f, 0.129f, 1.0f, 1.0f));
 	if (ImGui::Button(std::string(std::string(ICON_FA_CAMERA) + u8" Camera menu " + u8"##CameraIcon").c_str()))
 	{
-		Gui->ShowAppFreeCamSettings = !Gui->ShowAppFreeCamSettings;
+        CameraSettingsRef.Get().Toggle();
 	}
 	ImGui::PopStyleColor();
 	Util::Gui::TooltipOnPrevious("Contains several settings for the free camera and and experimental first person camera. Includes settings for clip distance which determines how far away you can see terrain and some shadows from.", Globals::FontNormal);
@@ -85,7 +91,7 @@ void WelcomeGui::Draw()
     ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.784f, 0.094f, 0.035f, 1.0f));
     if (ImGui::Button(std::string(std::string(ICON_FA_BOMB) + u8" Explosion spawner " + u8"##BombIcon").c_str()))
     {
-        Gui->ShowAppExplosionSpawner = !Gui->ShowAppExplosionSpawner;
+        ExplosionSpawnerGuiRef.Get().Toggle();
     }
     ImGui::PopStyleColor();
     Util::Gui::TooltipOnPrevious("This menu lets you turn on the explosion spawn feature, customize your explosion starting from presets, view explosion and effect presets, and more.", Globals::FontNormal);

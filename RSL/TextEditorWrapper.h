@@ -34,7 +34,7 @@ public:
 class TextEditorWrapper : public BaseGui
 {
 public:
-    TextEditorWrapper(bool* OpenState_, std::string Title_);
+    TextEditorWrapper(std::string Title_);
     ~TextEditorWrapper() = default;
 
     void Draw() override;

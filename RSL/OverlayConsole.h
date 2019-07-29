@@ -6,7 +6,7 @@ class ScriptManager;
 class OverlayConsole : public BaseGui
 {
 public:
-	OverlayConsole(bool* OpenState_, std::string Title_);
+	OverlayConsole(std::string Title_);
 	~OverlayConsole() = default;
 
 	void Draw() override;

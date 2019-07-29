@@ -2,9 +2,8 @@
 #include <utility>
 #include "ScriptManager.h"
 
-TextEditorWrapper::TextEditorWrapper(bool* OpenState_, std::string Title_)
+TextEditorWrapper::TextEditorWrapper(std::string Title_)
 {
-    OpenState = OpenState_;
     Title = std::move(Title_);
 
     MainOverlayWindowFlags |= ImGuiWindowFlags_MenuBar;
@@ -18,12 +17,12 @@ TextEditorWrapper::TextEditorWrapper(bool* OpenState_, std::string Title_)
 
 void TextEditorWrapper::Draw()
 {
-    if (!*OpenState)
+    if (!Visible)
     {
         return;
     }
     ImGui::SetNextWindowSize(ImVec2(800.0f, 500.0f), ImGuiCond_FirstUseEver);
-    if (!ImGui::Begin(Title.c_str(), OpenState, MainOverlayWindowFlags))
+    if (!ImGui::Begin(Title.c_str(), &Visible, MainOverlayWindowFlags))
     {
         ImGui::End();
         return;
@@ -630,9 +629,9 @@ void TextEditorWrapper::DrawOpenScriptPopup()
     {
         if (ImGui::Button("Rescan"))
         {
-            Scripts->ScanScriptsFolder();
+            Globals::Scripts->ScanScriptsFolder();
         }
-        for (auto& SubFolder : Scripts->SubFolders)
+        for (auto& SubFolder : Globals::Scripts->SubFolders)
         {
             if (ImGui::TreeNode(SubFolder.Name.c_str()))
             {
@@ -682,7 +681,7 @@ void TextEditorWrapper::DrawOpenScriptPopup()
             if (ImGui::Button("Delete##DeleteConfirmPopup"))
             {
                 fs::remove(ScriptToDeleteFullPath);
-                Scripts->ScanScriptsFolder();
+                Globals::Scripts->ScanScriptsFolder();
                 ImGui::CloseCurrentPopup();
             }
             ImGui::PopStyleColor(3);

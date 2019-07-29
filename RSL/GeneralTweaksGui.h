@@ -4,7 +4,7 @@
 class GeneralTweaksGui : public BaseGui
 {
 public:
-	GeneralTweaksGui(bool* OpenState_, std::string Title_);
+	GeneralTweaksGui(std::string Title_);
 	~GeneralTweaksGui() = default;
 
 	void Draw() override;

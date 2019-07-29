@@ -1,8 +1,7 @@
 #include "VehicleSpawnerGui.h"
 
-VehicleSpawnerGui::VehicleSpawnerGui(bool* OpenState_, std::string Title_)
+VehicleSpawnerGui::VehicleSpawnerGui(std::string Title_)
 {
-    OpenState = OpenState_;
     Title = Title_;
 
     CustomVehicleSpawnParams.veh_info = nullptr;
@@ -22,13 +21,13 @@ VehicleSpawnerGui::VehicleSpawnerGui(bool* OpenState_, std::string Title_)
 
 void VehicleSpawnerGui::Draw()
 {
-    if (!*OpenState)
+    if (!Visible)
     {
         return;
     }
 
     ImGui::SetNextWindowSize(ImVec2(850.0f, 600.0f), ImGuiCond_FirstUseEver);
-    if (!ImGui::Begin(Title.c_str(), OpenState))
+    if (!ImGui::Begin(Title.c_str(), &Visible))
     {
         ImGui::End();
         return;

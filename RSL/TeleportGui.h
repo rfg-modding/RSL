@@ -4,7 +4,7 @@
 class TeleportGui : public BaseGui
 {
 public:
-	TeleportGui(bool* OpenState_, std::string Title_);
+	TeleportGui(std::string Title_);
 	~TeleportGui() = default;
 
 	void Draw() override;

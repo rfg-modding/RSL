@@ -6,12 +6,10 @@ class CameraWrapper;
 class FreeCamGui : public BaseGui
 {
 public:
-	FreeCamGui(bool* OpenState_, std::string Title_) { OpenState = OpenState_; Title = Title_; }
+	FreeCamGui(std::string Title_) { Title = Title_; }
 	~FreeCamGui() = default;
 
 	void Draw() override;
-
-	CameraWrapper* Camera = nullptr;
 
 	/*WARNING: If this option is disabled two bugs are introduced. 
 	1. The game will often crash if the player clicks when far from the character.

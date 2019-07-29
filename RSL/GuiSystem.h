@@ -14,7 +14,56 @@
 #include "ExplosionSpawnerGui.h"
 #include "VehicleSpawnerGui.h"
 
-class ScriptManager;
+//Used to reference a Gui without needing direct access to the GuiList
+template <class T>
+class GuiReference
+{
+public:
+    GuiReference() {}
+    GuiReference(int Index_, std::vector<BaseGui*>* List_) : Index(Index_), List(List_) { Ready = true; }
+
+    void Set(int Index_, std::vector<BaseGui*>* List_)
+    {
+        Index = Index_;
+        List = List_;
+        Ready = true;
+    }
+    T& Get()
+    {
+        if(Ready)
+        {
+            return *reinterpret_cast<T*>(List->at(Index));
+        }
+    }
+    void Clear()
+    {
+        Index = -1;
+        List = nullptr;
+        Ready = false;
+    }
+    bool IsReady() const
+    {
+        return Ready;
+    }
+
+
+    GuiReference& operator=(const GuiReference& other)
+    {
+        if (this == &other)
+        {
+            return *this;
+        }
+        Index = other.Index;
+        List = other.List;
+        Ready = other.Ready;
+        return *this;
+    }
+
+private:
+    int Index = -1; //Index of the gui on the GuiList
+    std::vector<BaseGui*>* List = nullptr; //Pointer to the GuiList
+    bool Ready = false;
+};
 
 /* Keeps track of all menus/gui's used in the script loader overlay. Handles visibility, 
  * updates common values they use, and manages access to the GUI's by other parts of the code.
@@ -28,74 +77,44 @@ public:
 
 	void Initialize();
 	bool Ready() const;
-	void SetScriptManager(ScriptManager* Scripts_);
-	ScriptManager* GetScriptManager() const;
-	bool HasValidScriptManager() const;
-	//bool LoadTeleportLocations();
-	//bool LoadGUIConfig();
+
 	void Draw();
 
     void DrawPreInitWindow();
-
-	void SetPlayerPtr(Player* NewPlayerPtr);
-	void SetPlayerPtr(void* NewPlayerPtr);
 
 	void ToggleLuaConsole();
 	bool IsLuaConsoleActive() const;
 	void DeactivateLuaConsole();
 	void ActivateLuaConsole();
 
-	std::vector <BaseGui*> GuiList;
+    void AddChildGui(BaseGui* Gui, bool InitialVisibility = false);
+
+    template<typename T>
+    std::optional<GuiReference<T>> GetGuiReference(const std::string& Name)
+    {
+        for(int i = 0; i < GuiList.size(); i++)
+        {
+            if(GuiList[i]->Title == Name)
+            {
+                return GuiReference<T>(i, &GuiList);
+            }
+        }
+        return {};
+    }
+
+    //Todo: Consider using a smart pointer for this to avoid any memory leak issues.
+    std::vector <BaseGui*> GuiList;
 
 	std::once_flag InitialDrawCheck;
 	bool DrawPassedOnce = false;
-
-	//These pointers are used by any other class which wants quick access to a gui's state
-	//Avoids the cost of a search for each access.
-    LogWindow* LogGui = nullptr;
-    ScriptSelectGui* ScriptList = nullptr;
-    PhysicsGui* PhysicsSettings = nullptr;
-    ThemeEditorGui* ThemeEditor = nullptr;
-	WelcomeGui* Welcome = nullptr;
-    TeleportGui* Teleport = nullptr;
-	IntrospectionGui* Introspection = nullptr;
-	GeneralTweaksGui* TweaksMenu = nullptr;
-	TextEditorWrapper* ScriptEditor = nullptr;
-	FreeCamGui* FreeCamSettings = nullptr;
-    OverlayConsole* Console = nullptr;
-    MenuBarGui* MainMenuBar = nullptr;
-    ExplosionSpawnerGui* ExplosionSpawner = nullptr;
-    VehicleSpawnerGui* VehicleSpawner = nullptr;
-
     bool ShowPreInitWindow = true;
 
-	bool ShowAppWelcome = true;
-	bool ShowAppConsole = false;
-    bool ShowAppIntrospectionMenu = false;
-	bool ShowAppThemeEditor = false;
-	bool ShowAppAbout = false;
-	bool ShowAppGameInfoOverlay = false;
-	bool ShowAppMainMenuBar = true;
+    GuiReference<OverlayConsole> LuaConsole;
+
     bool ShowAppMetrics = false;
-	bool ShowAppSimpleOverlay = false;
-	bool ShowAppHelpWindow = false;
-    bool ShowAppPhysicsSettings = false;
-	bool ShowAppTweaksMenu = false;
-	bool ShowAppScriptsMenu = false;
-    bool ShowAppTeleportMenu = false;
-	bool ShowAppScriptEditor = false;
-    bool ShowAppFreeCamSettings = false;
-	bool ShowAppLogWindow = false;
-    bool ShowAppExplosionSpawner = false;
-    bool ShowAppVehicleSpawner = false;
+    bool ShowAppAbout = false;
 
 private:
 	bool LuaConsoleActive = false;
-	/*This is private to prevent accidental changes.*/
-	ScriptManager* Scripts = nullptr;
-	/*Private to insure that every instance of PlayerPtr is properly set,
-	instead of mistakenly just setting this one.*/
-	Player* PlayerPtr = nullptr;
 	bool Initialized = false;
 };
-

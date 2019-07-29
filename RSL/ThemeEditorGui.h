@@ -4,7 +4,7 @@
 class ThemeEditorGui : public BaseGui
 {
 public:
-	ThemeEditorGui(bool* OpenState_, std::string Title_);
+	ThemeEditorGui(std::string Title_);
 	~ThemeEditorGui() = default;
 
 	void Draw() override;

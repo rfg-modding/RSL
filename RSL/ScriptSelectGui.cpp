@@ -5,16 +5,18 @@
 
 void ScriptSelectGui::Draw()
 {
-	if (!*OpenState)
+	if (!Visible)
 	{
 		return;
 	}
 	ImGui::SetNextWindowSize(ImVec2(400.0f, 500.0f), ImGuiCond_FirstUseEver);
-	if (!ImGui::Begin(Title.c_str(), OpenState, WindowFlags))
+	if (!ImGui::Begin(Title.c_str(), &Visible, WindowFlags))
 	{
 		ImGui::End();
 		return;
 	}
+
+    static auto ScriptEditorRef = Globals::Gui->GetGuiReference<TextEditorWrapper>("Script editor").value();
 
 	ImGui::PushFont(Globals::FontBig);
 	ImGui::Text("Scripts folder:");
@@ -23,11 +25,11 @@ void ScriptSelectGui::Draw()
 
 	if (ImGui::Button("Rescan"))
 	{
-		Scripts->ScanScriptsFolder();
+        Globals::Scripts->ScanScriptsFolder();
 	}
     ImGui::Separator();
 
-	for (const auto& SubFolder : Scripts->SubFolders)
+	for (const auto& SubFolder : Globals::Scripts->SubFolders)
 	{
         if(ImGui::TreeNode(SubFolder.Name.c_str()))
         {
@@ -47,7 +49,7 @@ void ScriptSelectGui::Draw()
                 ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.556f, 0.823f, 0.541f, 1.0f));
                 if (ImGui::Button(std::string(std::string(ICON_FA_PLAY) + u8"##" + Script.FullPath).c_str()))
                 {
-                    bool Result = Scripts->RunScript(Script.FullPath);
+                    bool Result = Globals::Scripts->RunScript(Script.FullPath);
                 }
                 ImGui::PopStyleColor();
                 ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.952f, 0.545f, 0.462f, 1.0f));
@@ -60,8 +62,8 @@ void ScriptSelectGui::Draw()
                 ImGui::SameLine();
                 if (ImGui::Button(std::string(std::string(ICON_FA_EDIT) + u8"##" + Script.FullPath).c_str()))
                 {
-                    Gui->ScriptEditor->LoadScript(Script.FullPath, Script.Name);
-                    Gui->ShowAppScriptEditor = true;
+                    ScriptEditorRef.Get().LoadScript(Script.FullPath, Script.Name);
+                    ScriptEditorRef.Get().Visible = true;
                 }
                 ImGui::PopStyleColor(3);
                 ImGui::PopStyleVar();

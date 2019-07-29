@@ -4,7 +4,7 @@
 class MenuBarGui : public BaseGui
 {
 public:
-	MenuBarGui(bool* OpenState_, std::string Title_);
+	MenuBarGui(std::string Title_);
 	~MenuBarGui() = default;
 
 	void Draw() override;

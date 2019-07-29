@@ -4,7 +4,7 @@
 class ExplosionSpawnerGui : public BaseGui
 {
 public:
-    ExplosionSpawnerGui(bool* OpenState_, std::string Title_);
+    ExplosionSpawnerGui(std::string Title_);
     ~ExplosionSpawnerGui() = default;
 
     void Draw() override;

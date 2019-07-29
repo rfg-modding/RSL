@@ -1,20 +1,19 @@
 #include "ExplosionSpawnerGui.h"
 
-ExplosionSpawnerGui::ExplosionSpawnerGui(bool* OpenState_, std::string Title_)
+ExplosionSpawnerGui::ExplosionSpawnerGui(std::string Title_)
 {
-    OpenState = OpenState_; 
     Title = Title_;
 }
 
 void ExplosionSpawnerGui::Draw()
 {
-    if (!*OpenState)
+    if (!Visible)
     {
         return;
     }
 
     ImGui::SetNextWindowSize(ImVec2(850.0f, 600.0f), ImGuiCond_FirstUseEver);
-    if (!ImGui::Begin(Title.c_str(), OpenState))
+    if (!ImGui::Begin(Title.c_str(), &Visible))
     {
         ImGui::End();
         return;
@@ -41,7 +40,7 @@ void ExplosionSpawnerGui::Draw()
     Util::Gui::ShowHelpMarker("Used to prevent lag from 100s of explosions per second since the script loader thread is currently uncapped.");
     if (ImGui::Button("Boom"))
     {
-        ExplosionCreate(&CustomExplosionInfo, PlayerPtr, PlayerPtr, &PlayerPtr->aim_pos, &PlayerPtr->Orientation, &PlayerPtr->aim_pos, NULL, false);
+        ExplosionCreate(&CustomExplosionInfo, Globals::PlayerPtr, Globals::PlayerPtr, &Globals::PlayerPtr->aim_pos, &Globals::PlayerPtr->Orientation, &Globals::PlayerPtr->aim_pos, NULL, false);
     }
     ImGui::SameLine();
     Util::Gui::ShowHelpMarker("Spawns an explosion with the values entered below where the player is aiming. The middle mouse button option is much more convenient.");
