@@ -61,3 +61,8 @@
 #*.PDF   diff=astextplain
 #*.rtf   diff=astextplain
 #*.RTF   diff=astextplain
+
+RSL/include/* linguist-vendored
+RSL/lib/* linguist-vendored
+Proxy DLL Loader/* linguist-vendored
+Injector/include/* linguist-vendored
