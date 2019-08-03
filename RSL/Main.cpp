@@ -1,7 +1,7 @@
 ﻿#include "Launcher.h"
 
 // Launcher is disabled for now due to it (for some unknown reason) causing issues with multiplayer even when the vanilla game option is selected.
-#define UseLauncher false
+#define UseLauncher true
 
 DWORD WINAPI MainThread(HMODULE hModule);
 DWORD WINAPI LauncherThread(HMODULE hModule);
