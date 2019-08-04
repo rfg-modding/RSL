@@ -29,7 +29,7 @@ private:
 
     bool ShouldClose() const;
     void OpenConsole();
-    void CloseConsole();
+    void CloseConsole() const;
     void SetMemoryLocations();
     bool IsFolderPlacementError() const;
     bool LoadDataFromConfig();

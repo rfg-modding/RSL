@@ -379,7 +379,7 @@ void Application::OpenConsole()
     }
 }
 
-void Application::CloseConsole()
+void Application::CloseConsole() const
 {
     if (PreExistingConsole)
 	{
