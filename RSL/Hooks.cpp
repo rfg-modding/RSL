@@ -1,38 +1,16 @@
 #include "Hooks.h"
 #include "Application.h"
 
-//Todo: Move each hook function into their own file, stick the in the Hooks namespace
-//Todo: See if the std::once_flag values can just be made into static vars in their hooks
-//Todo: Add uncaught exception handling to D3DPresent hook since a lot of gui and other stuff goes on in there
 
-D3D11Present D3D11PresentObject;
+Hooks::D3D11Present Hooks::D3D11PresentFuncPtr;
 
-std::chrono::steady_clock::time_point ExplosionTimerBegin;
-std::chrono::steady_clock::time_point ExplosionTimerEnd;
+bool Hooks::UpdateD3D11Pointers = true;
 
-std::once_flag HookD3D11PresentInitialCall;
-std::once_flag KeenGraphicsBeginFrameHookInitialCall;
-
-std::once_flag HookExplosionCreateInitialCall;
-
-std::once_flag HookPlayerDoFrameInitialCall;
-
-std::once_flag HookObjectUpdatePosAndOrientInitialCall;
-std::once_flag HookHumanUpdatePosAndOrientInitialCall;
-
-bool UpdateD3D11Pointers = true;
-
-std::once_flag HookWorldDoFrameInitialCall;
-
-std::once_flag HookRlCameraRenderBegin;
-std::once_flag HookhkpWorld_stepDeltaTime;
-std::once_flag HookApplicationUpdateTime;
-std::once_flag HookLuaDoBuffer;
 
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
-LRESULT __stdcall WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
+LRESULT __stdcall Hooks::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-	ProcessInput(hWnd, msg, wParam, lParam);
+    Hooks::ProcessInput(hWnd, msg, wParam, lParam);
 	if (Globals::OverlayActive || Globals::Gui->IsLuaConsoleActive())
 	{
 		ImGui_ImplWin32_WndProcHandler(hWnd, msg, wParam, lParam);
@@ -79,8 +57,10 @@ LRESULT __stdcall WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	return CallWindowProc(Globals::OriginalWndProc, Globals::GameWindowHandle, msg, wParam, lParam);
 }
 
-LRESULT ProcessInput(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
+LRESULT Hooks::ProcessInput(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
+    static std::chrono::steady_clock::time_point ExplosionTimerBegin;
+    static std::chrono::steady_clock::time_point ExplosionTimerEnd;
 	static bool MiddleMouseDown = false;
 	if(!Globals::Gui->Ready())
 	{
@@ -290,7 +270,7 @@ LRESULT ProcessInput(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	return 0;
 }
 
-void UpdateDebugDrawRenderInterfaceValues()
+void Hooks::UpdateDebugDrawRenderInterfaceValues()
 {
     if(Globals::RlCameraPtr)
     {
@@ -352,11 +332,11 @@ HRESULT D3D11_DEVICE_CONTEXT_FROM_SWAPCHAIN(IDXGISwapChain* pSwapChain, ID3D11De
 }
 
 
-HRESULT __stdcall D3D11PresentHook(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT Flags)
+HRESULT __stdcall Hooks::D3D11PresentHook(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT Flags)
 {
 	if (!Globals::ImGuiInitialized)
 	{
-		return D3D11PresentObject(pSwapChain, SyncInterval, Flags);
+		return D3D11PresentFuncPtr(pSwapChain, SyncInterval, Flags);
 	}
 
 	if (!Globals::ScriptLoaderCloseRequested)
@@ -410,10 +390,10 @@ HRESULT __stdcall D3D11PresentHook(IDXGISwapChain* pSwapChain, UINT SyncInterval
             }
         }
 	}
-	return D3D11PresentObject(pSwapChain, SyncInterval, Flags);
+	return D3D11PresentFuncPtr(pSwapChain, SyncInterval, Flags);
 }
 
-bool __cdecl KeenGraphicsResizeRenderSwapchainHook(keen::RenderSwapChain* KeenSwapchain, unsigned int NewWidth, unsigned int NewHeight)
+bool __cdecl Hooks::KeenGraphicsResizeRenderSwapchainHook(keen::RenderSwapChain* KeenSwapchain, unsigned int NewWidth, unsigned int NewHeight)
 {
     ///Logger::Log("Entered Keen::Graphics::ResizeRenderSwapchain Hook!", LogWarning);
 	//UpdateD3D11Pointers = true;
@@ -433,12 +413,13 @@ bool __cdecl KeenGraphicsResizeRenderSwapchainHook(keen::RenderSwapChain* KeenSw
     //return nullptr;
 }
 
-keen::GraphicsCommandBuffer* KeenGraphicsBeginFrameHook(keen::GraphicsSystem* pGraphicsSystem, keen::RenderSwapChain* pSwapChain)
+keen::GraphicsCommandBuffer* Hooks::KeenGraphicsBeginFrameHook(keen::GraphicsSystem* pGraphicsSystem, keen::RenderSwapChain* pSwapChain)
 {
-    std::call_once(KeenGraphicsBeginFrameHookInitialCall, [&]()
-    {
-        Globals::KeenGraphicsSystemPtr = pGraphicsSystem;
-    });
+    //static std::once_flag KeenGraphicsBeginFrameHookInitialCall;
+    //std::call_once(KeenGraphicsBeginFrameHookInitialCall, [&]()
+    //{
+    //    Globals::KeenGraphicsSystemPtr = pGraphicsSystem;
+    //});
     if(Globals::KeenGraphicsSystemPtr != pGraphicsSystem)
     {
         Logger::LogWarning("Globals::KeenGraphicsSystemPtr changed!\n");
@@ -570,20 +551,8 @@ keen::GraphicsCommandBuffer* KeenGraphicsBeginFrameHook(keen::GraphicsSystem* pG
     return KeenGraphicsBeginFrame(pGraphicsSystem, pSwapChain);
 }
 
-void __fastcall PlayerDoFrameHook(Player* PlayerPtr)
+void __fastcall Hooks::PlayerDoFrameHook(Player* PlayerPtr)
 {
-	std::call_once(HookPlayerDoFrameInitialCall, [&]()
-	{
-		if (!Globals::PlayerPtr)
-		{
-			Globals::PlayerPtr = PlayerPtr;
-			Globals::PlayerRigidBody = HavokBodyGetPointer(PlayerPtr->HavokHandle);
-			if(Globals::Scripts)
-			{
-				Globals::Scripts->UpdateRfgPointers();
-			}
-		}
-	});
 	if (Globals::PlayerPtr != PlayerPtr)
 	{
 		Globals::PlayerPtr = PlayerPtr;
@@ -667,27 +636,22 @@ void __fastcall PlayerDoFrameHook(Player* PlayerPtr)
 	return PlayerDoFrame(PlayerPtr);
 }
 
-void __cdecl ExplosionCreateHook(explosion_info * ExplosionInfo, void * Source, void * Owner, vector * Position, matrix * Orientation, vector * Direction, void * WeaponInfo, bool FromServer)
+void __cdecl Hooks::ExplosionCreateHook(explosion_info * ExplosionInfo, void * Source, void * Owner, vector * Position, matrix * Orientation, vector * Direction, void * WeaponInfo, bool FromServer)
 {
-    std::call_once(HookExplosionCreateInitialCall, [&]()
-        {
-
-        });
 
     return ExplosionCreate(ExplosionInfo, Source, Owner, Position, Orientation, Direction, WeaponInfo, FromServer);
 }
 
-void __fastcall hkpWorld_stepDeltaTime_hook(hkpWorld* This, void* edx, float PhysicsDeltaTime) //0x9E1A70
+void __fastcall Hooks::hkpWorld_stepDeltaTime_hook(hkpWorld* This, void* edx, float PhysicsDeltaTime) //0x9E1A70
 {
-    std::call_once(HookhkpWorld_stepDeltaTime, [&]()
+    if(Globals::hkpWorldPtr != This)
+    {
+        Globals::hkpWorldPtr = This;
+        if (Globals::Scripts)
         {
-            Globals::hkpWorldPtr = This;
-            if (Globals::Scripts)
-            {
-                Globals::Scripts->UpdateRfgPointers();
-            }
-
-        });
+            Globals::Scripts->UpdateRfgPointers();
+        }
+    }
 
     static bool InitCustomGravityVector = false;
     if (!Globals::Gui)
@@ -733,8 +697,9 @@ void __fastcall hkpWorld_stepDeltaTime_hook(hkpWorld* This, void* edx, float Phy
     return hkpWorldStepDeltaTime(This, edx, PhysicsDeltaTime);
 }
 
-void __fastcall rl_camera_render_begin_hook(rl_camera* This, void* edx, rl_renderer* Renderer) //.text:01027660 rfg.exe:$137660 #136A60 <rl_camera::render_begin>
+void __fastcall Hooks::rl_camera_render_begin_hook(rl_camera* This, void* edx, rl_renderer* Renderer) //.text:01027660 rfg.exe:$137660 #136A60 <rl_camera::render_begin>
 {
+    static std::once_flag HookRlCameraRenderBegin;
 	std::call_once(HookRlCameraRenderBegin, [&]()
 	{
 		Globals::RlCameraPtr = This;
@@ -765,40 +730,16 @@ void __fastcall rl_camera_render_begin_hook(rl_camera* This, void* edx, rl_rende
 	return RlCameraRenderBegin(This, edx, Renderer);
 }
 
-void __fastcall ApplicationUpdateTimeHook(void* This, void* edx, float TimeStep)
+void __fastcall Hooks::ApplicationUpdateTimeHook(void* This, void* edx, float TimeStep)
 {
-	std::call_once(HookApplicationUpdateTime, [&]()
-	{
-		//GlobalApplicationPtr = This;
-	});
-
-	/*if (Gui.TweaksMenu)
-	{
-		if (Gui.TweaksMenu->UseCustomPhysicsTimestepMultiplier)
-		{
-			TimeStep *= Gui.TweaksMenu->CustomPhysicsTimeStepMultiplier;
-		}
-	}*/
-
 	return ApplicationUpdateTime(This, edx, TimeStep);
 }
 
-void __fastcall world_do_frame_hook(World* This, void* edx, bool HardLoad)
+void __fastcall Hooks::world_do_frame_hook(World* This, void* edx, bool HardLoad)
 {
-    std::call_once(HookWorldDoFrameInitialCall, [&]()
-        {
-            Globals::RfgWorldPtr = This;
-            Logger::Log("RFG::World hooked!\n");
-
-            Globals::TODLightPtr = GameRenderGetTodLight();
-            if (Globals::Scripts)
-            {
-                Globals::Scripts->UpdateRfgPointers();
-            }
-        });
     if (Globals::RfgWorldPtr != This)
     {
-        Logger::LogWarning("GlobalRfgWorldPtr changed!\n");
+        Logger::LogWarning("Globals::RfgWorldPtr changed!\n");
         Globals::RfgWorldPtr = This;
         if (Globals::Scripts)
         {
@@ -808,13 +749,17 @@ void __fastcall world_do_frame_hook(World* This, void* edx, bool HardLoad)
     if (!Globals::TODLightPtr)
     {
         Globals::TODLightPtr = GameRenderGetTodLight();
+        if (Globals::Scripts)
+        {
+            Globals::Scripts->UpdateRfgPointers();
+        }
     }
     if (!Globals::Gui)
     {
         return WorldDoFrame(This, edx, HardLoad);
     }
-    static GuiReference<GeneralTweaksGui> TweaksMenuRef = Globals::Gui->GetGuiReference<GeneralTweaksGui>("General tweaks").value();
 
+    static GuiReference<GeneralTweaksGui> TweaksMenuRef = Globals::Gui->GetGuiReference<GeneralTweaksGui>("General tweaks").value();
     if (TweaksMenuRef.Get().UseCustomLevelAmbientLight)
     {
         Globals::RfgWorldPtr->level_ambient.x = TweaksMenuRef.Get().CustomLevelAmbientLight.x;
@@ -838,13 +783,13 @@ void __fastcall world_do_frame_hook(World* This, void* edx, bool HardLoad)
     return WorldDoFrame(This, edx, HardLoad);
 }
 
-int __cdecl LuaDoBufferHook(lua_State *L, const char *buff, unsigned int size, const char *name)
+int __cdecl Hooks::LuaDoBufferHook(lua_State *L, const char *buff, unsigned int size, const char *name)
 {
     static std::string TempBuffer;
-	std::call_once(HookLuaDoBuffer, [&]()
-	{
-		Globals::RfgVintLuaState = L;
-	});
+    if(Globals::RfgVintLuaState != L)
+    {
+        Globals::RfgVintLuaState = L;
+    }
 	if(!L)
 	{
 		Logger::LogWarning("RFG lua_state pointer null\n");
@@ -881,17 +826,12 @@ int __cdecl LuaDoBufferHook(lua_State *L, const char *buff, unsigned int size, c
 	return LuaDoBuffer(L, buff, size, name);
 }
 
-void __fastcall ObjectUpdatePosAndOrientHook(Object* ObjectPtr, void* edx, vector* UpdatedPosition, matrix* UpdatedOrientation, bool SetHavokData)
+void __fastcall Hooks::ObjectUpdatePosAndOrientHook(Object* ObjectPtr, void* edx, vector* UpdatedPosition, matrix* UpdatedOrientation, bool SetHavokData)
 {
-    std::call_once(HookObjectUpdatePosAndOrientInitialCall, [&]()
-        {
-
-        });
-
     return ObjectUpdatePosAndOrient(ObjectPtr, edx, UpdatedPosition, UpdatedOrientation, SetHavokData);
 }
 
-void __fastcall StreamGridDoFrameHook(stream_grid* This, void* edx, vector* StreamPos, bool SingleZoneMode)
+void __fastcall Hooks::StreamGridDoFrameHook(stream_grid* This, void* edx, vector* StreamPos, bool SingleZoneMode)
 {
     if(!Globals::MainStreamGrid || Globals::MainStreamGrid != This)
     {
@@ -914,7 +854,7 @@ void __fastcall StreamGridDoFrameHook(stream_grid* This, void* edx, vector* Stre
 //    return ObjectSpawnVehicle(spawn_param);
 //}
 
-bool peg_load_wrapper_hook(const char* filename, unsigned srid, char* cpu_preload, int cpu_size, char* gpu_preload, int gpu_size)
+bool __cdecl Hooks::peg_load_wrapper_hook(const char* filename, unsigned srid, char* cpu_preload, int cpu_size, char* gpu_preload, int gpu_size)
 {
 #ifdef DEBUG
     Logger::Log("peg_load_wrapper hook: filename: {}, srid: {}, cpu_preload: {}, cpu_size: {},  gpu_preload: {}, gpu_size: {}\n", filename, srid, reinterpret_cast<DWORD>(cpu_preload), cpu_size, reinterpret_cast<DWORD>(gpu_preload), gpu_size);
@@ -976,31 +916,31 @@ bool peg_load_wrapper_hook(const char* filename, unsigned srid, char* cpu_preloa
 }
 
 /*Start of MP Detection Hooks*/
-bool __fastcall IsValidGameLinkLobbyKaikoHook(void* This)
+bool __fastcall Hooks::IsValidGameLinkLobbyKaikoHook(void* This)
 {
     Globals::MultiplayerHookTriggered = true;
     return IsValidGameLinkLobbyKaiko(This);
 }
 
-void __cdecl GameMusicMultiplayerStartHook()
+void __cdecl Hooks::GameMusicMultiplayerStartHook()
 {
     Globals::MultiplayerHookTriggered = true;
     return GameMusicMultiplayerStart();
 }
 
-void __cdecl InitMultiplayerDataItemRespawnHook(void* Item)
+void __cdecl Hooks::InitMultiplayerDataItemRespawnHook(void* Item)
 {
     Globals::MultiplayerHookTriggered = true;
     return InitMultiplayerDataItemRespawn(Item);
 }
 
-void __cdecl HudUiMultiplayerProcessHook(float DeltaTime)
+void __cdecl Hooks::HudUiMultiplayerProcessHook(float DeltaTime)
 {
     Globals::MultiplayerHookTriggered = true;
     return HudUiMultiplayerProcess(DeltaTime);
 }
 
-void __cdecl HudUiMultiplayerEnterHook()
+void __cdecl Hooks::HudUiMultiplayerEnterHook()
 {
     Globals::MultiplayerHookTriggered = true;
     return HudUiMultiplayerEnter();

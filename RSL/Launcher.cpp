@@ -8,7 +8,7 @@ void Launcher::Run()
 {
     std::cout << "Entered launcher thread...\n";
     std::cout << "Sleeping all threads except launcher thread!\n";
-    ///SuspendAllThreadsExceptLauncher();
+    SuspendAllThreadsExceptLauncher();
     LockGameMain();
 
     std::cout << "Calling Launcher::MainLoop()\n";
@@ -22,7 +22,7 @@ void Launcher::Run()
     //printf("Done unlocking rfg winmain, sleeping for 15 seconds for debug purposes.\n");
     //Sleep(15000);
 
-    ///ResumeAllThreads();
+    ResumeAllThreads();
     UnlockGameMain();
     if (Globals::Launcher::ShouldRunRsl)
     {

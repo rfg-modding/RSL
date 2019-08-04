@@ -126,7 +126,7 @@ void Application::InitRSL()
         //Creates and enables all function hooks.
         ///CreateHooks();
         
-        Globals::OriginalWndProc = reinterpret_cast<WNDPROC>(SetWindowLongPtr(Globals::GameWindowHandle, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(WndProc)));
+        Globals::OriginalWndProc = reinterpret_cast<WNDPROC>(SetWindowLongPtr(Globals::GameWindowHandle, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(Hooks::WndProc)));
         if(!Globals::OriginalWndProc)
         {
             Logger::LogFatalError("Failed to set custom WndProc! Error message: {}\n", Globals::GetLastWin32ErrorAsString());
@@ -322,30 +322,30 @@ void Application::Exit()
 void Application::CreateHooks()
 {
     //Todo: Make helpers or improve this function to need less casting fuckery
-    Hooks.CreateHook("PlayerDoFrame", Globals::ModuleBase + 0x6D5A80, PlayerDoFrameHook, PlayerDoFrame);
-    Hooks.CreateHook("ExplosionCreate", Globals::ModuleBase + 0x2EC720, ExplosionCreateHook, ExplosionCreate);
-    Hooks.CreateHook("KeenGraphicsBeginFrame", Globals::ModuleBase + 0x86DD00, KeenGraphicsBeginFrameHook, KeenGraphicsBeginFrame);
-    Hooks.CreateHook("KeenGraphicsResizeRenderSwapchain", Globals::ModuleBase + 0x86AB20, KeenGraphicsResizeRenderSwapchainHook, KeenGraphicsResizeRenderSwapchain);
+    Hooks.CreateHook("PlayerDoFrame", Globals::ModuleBase + 0x6D5A80, Hooks::PlayerDoFrameHook, PlayerDoFrame);
+    Hooks.CreateHook("ExplosionCreate", Globals::ModuleBase + 0x2EC720, Hooks::ExplosionCreateHook, ExplosionCreate);
+    Hooks.CreateHook("KeenGraphicsBeginFrame", Globals::ModuleBase + 0x86DD00, Hooks::KeenGraphicsBeginFrameHook, KeenGraphicsBeginFrame);
+    Hooks.CreateHook("KeenGraphicsResizeRenderSwapchain", Globals::ModuleBase + 0x86AB20, Hooks::KeenGraphicsResizeRenderSwapchainHook, KeenGraphicsResizeRenderSwapchain);
 
     /*Start of MP Detection Hooks*/
     //Using phony names to make finding the MP hooks a bit more difficult.
-    Hooks.CreateHook("FreeSubmodeDoFrame", Globals::ModuleBase + 0x516D80, HudUiMultiplayerEnterHook, HudUiMultiplayerEnter);
-    Hooks.CreateHook("FreeSubmodeInit", Globals::ModuleBase + 0x3CC750, GameMusicMultiplayerStartHook, GameMusicMultiplayerStart);
-    Hooks.CreateHook("SatelliteModeInit", Globals::ModuleBase + 0x4F50B0, HudUiMultiplayerProcessHook, HudUiMultiplayerProcess);
-    Hooks.CreateHook("SatelliteModeDoFrame", Globals::ModuleBase + 0x1D0DD0, IsValidGameLinkLobbyKaikoHook, IsValidGameLinkLobbyKaiko);
-    Hooks.CreateHook("ModeMismatchFixState", Globals::ModuleBase + 0x497740, InitMultiplayerDataItemRespawnHook, InitMultiplayerDataItemRespawn);
+    Hooks.CreateHook("FreeSubmodeDoFrame", Globals::ModuleBase + 0x516D80, Hooks::HudUiMultiplayerEnterHook, HudUiMultiplayerEnter);
+    Hooks.CreateHook("FreeSubmodeInit", Globals::ModuleBase + 0x3CC750, Hooks::GameMusicMultiplayerStartHook, GameMusicMultiplayerStart);
+    Hooks.CreateHook("SatelliteModeInit", Globals::ModuleBase + 0x4F50B0, Hooks::HudUiMultiplayerProcessHook, HudUiMultiplayerProcess);
+    Hooks.CreateHook("SatelliteModeDoFrame", Globals::ModuleBase + 0x1D0DD0, Hooks::IsValidGameLinkLobbyKaikoHook, IsValidGameLinkLobbyKaiko);
+    Hooks.CreateHook("ModeMismatchFixState", Globals::ModuleBase + 0x497740, Hooks::InitMultiplayerDataItemRespawnHook, InitMultiplayerDataItemRespawn);
     /*End of MP Detection Hooks*/
 
-    Hooks.CreateHook("world::do_frame", Globals::ModuleBase + 0x540AB0, world_do_frame_hook, WorldDoFrame);
-    Hooks.CreateHook("rl_camera::render_begin", Globals::ModuleBase + 0x137660, rl_camera_render_begin_hook, RlCameraRenderBegin);
-    Hooks.CreateHook("hkpWorld::stepDeltaTime", Globals::ModuleBase + 0x9E1A70, hkpWorld_stepDeltaTime_hook, hkpWorldStepDeltaTime);
-    Hooks.CreateHook("Application::UpdateTime", Globals::ModuleBase + 0x5A880, ApplicationUpdateTimeHook, ApplicationUpdateTime);
+    Hooks.CreateHook("world::do_frame", Globals::ModuleBase + 0x540AB0, Hooks::world_do_frame_hook, WorldDoFrame);
+    Hooks.CreateHook("rl_camera::render_begin", Globals::ModuleBase + 0x137660, Hooks::rl_camera_render_begin_hook, RlCameraRenderBegin);
+    Hooks.CreateHook("hkpWorld::stepDeltaTime", Globals::ModuleBase + 0x9E1A70, Hooks::hkpWorld_stepDeltaTime_hook, hkpWorldStepDeltaTime);
+    Hooks.CreateHook("Application::UpdateTime", Globals::ModuleBase + 0x5A880, Hooks::ApplicationUpdateTimeHook, ApplicationUpdateTime);
 
-    Hooks.CreateHook("LuaDoBuffer", Globals::ModuleBase + 0x82FD20, LuaDoBufferHook, LuaDoBuffer);
+    Hooks.CreateHook("LuaDoBuffer", Globals::ModuleBase + 0x82FD20, Hooks::LuaDoBufferHook, LuaDoBuffer);
 
-    Hooks.CreateHook("D3D11Present", kiero::getMethodsTable()[8], D3D11PresentHook, D3D11PresentObject);
+    Hooks.CreateHook("D3D11Present", kiero::getMethodsTable()[8], Hooks::D3D11PresentHook, Hooks::D3D11PresentFuncPtr);
 
-    Hooks.CreateHook("peg_load_wrapper", Globals::ModuleBase + 0x1D1F10, peg_load_wrapper_hook, peg_load_wrapper);
+    Hooks.CreateHook("peg_load_wrapper", Globals::ModuleBase + 0x1D1F10, Hooks::peg_load_wrapper_hook, peg_load_wrapper);
 
     //Disabling for now since stream grid tests had issues.
     //Hooks.CreateHook("StreamGridDoFrame", reinterpret_cast<LPVOID>(Globals::ModuleBase + 0x530FB0), StreamGridDoFrameHook, reinterpret_cast<LPVOID*>(&StreamGridDoFrame));

@@ -60,8 +60,7 @@ DWORD WINAPI LauncherThread(HMODULE hModule)
 
     if(Globals::Launcher::ShouldRunRsl)
     {
-        //Todo: Dunno if the message below still applies...
-        //Todo: ResumeAllThreads should be called after RSL init in the RSL thread. That way it can init safely then re-enabled threads.
+        //Todo: Maybe consider letting the script loader thread init, and do all it's hooking, and then resuming the games threads. This should allow early code patches and hooks.
         CreateThread(0, 0, reinterpret_cast<LPTHREAD_START_ROUTINE>(MainThread), hModule, 0, 0);
     }
 
