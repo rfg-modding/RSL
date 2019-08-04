@@ -1064,3 +1064,57 @@ else
 	{
 
 	}*/
+
+
+
+
+
+
+
+/*
+ *
+ *
+ *     if(Globals::MainScenePtr)
+    {
+        ImGui::Checkbox("Diffraction enabled", &Globals::MainScenePtr->m_diffraction_enabled);
+        ImGui::InputFloat4("Ambient color", (float*)& Globals::MainScenePtr->m_ambient_color);
+        ImGui::InputFloat4("Back ambient color", (float*)& Globals::MainScenePtr->m_back_ambient_color);
+        ImGui::InputFloat("Time val", &Globals::MainScenePtr->m_time_val);
+        ImGui::InputFloat("Time of day val", &Globals::MainScenePtr->m_time_of_day_val);
+
+        ImGui::Separator();
+        ImGui::Text("Hdr state:");
+        ImGui::Checkbox("Enabled", &Globals::MainScenePtr->m_hdr_state.m_enable);
+        ImGui::InputFloat("Luminance range", &Globals::MainScenePtr->m_hdr_state.m_lum_range);
+        ImGui::InputFloat("Luminance offset", &Globals::MainScenePtr->m_hdr_state.m_lum_offset);
+        ImGui::InputFloat("Bloom exposure", &Globals::MainScenePtr->m_hdr_state.m_bloom_exposure);
+        ImGui::InputFloat3("Luminance conversion", (float*)&Globals::MainScenePtr->m_hdr_state.m_luminance_conversion); //vec
+        ImGui::InputFloat("Iris rate", &Globals::MainScenePtr->m_hdr_state.m_iris_rate); 
+        ImGui::InputFloat("Luminance max", &Globals::MainScenePtr->m_hdr_state.m_luminance_max); 
+        ImGui::InputFloat("Luminance min", &Globals::MainScenePtr->m_hdr_state.m_luminance_min); 
+        ImGui::InputFloat("Luminance mask max", &Globals::MainScenePtr->m_hdr_state.m_luminance_mask_max); 
+        ImGui::InputFloat("Brightness threshold", &Globals::MainScenePtr->m_hdr_state.m_brightpass_threshold); 
+        ImGui::InputFloat("Brightness offset", &Globals::MainScenePtr->m_hdr_state.m_brightpass_offset); 
+        ImGui::Checkbox("Bloom soft", &Globals::MainScenePtr->m_hdr_state.m_bloom_soft); //bool
+        ImGui::Checkbox("Bloom alternate", &Globals::MainScenePtr->m_hdr_state.m_bloom_alternate); //bool
+        ImGui::Checkbox("Tone mapped bloom", &Globals::MainScenePtr->m_hdr_state.m_tone_mapped_bloom); //bool
+        ImGui::Checkbox("Use hdr level", &Globals::MainScenePtr->m_hdr_state.m_use_hdr_level); //bool
+        ImGui::InputFloat("Eye adaption base", &Globals::MainScenePtr->m_hdr_state.m_eye_adaption_base);
+        ImGui::InputFloat("Eye adaption amount", &Globals::MainScenePtr->m_hdr_state.m_eye_adaption_amount);
+        ImGui::InputFloat("Eye fade min", &Globals::MainScenePtr->m_hdr_state.m_eye_fade_min);
+        ImGui::InputFloat("Eye fade max", &Globals::MainScenePtr->m_hdr_state.m_eye_fade_max);
+        ImGui::InputFloat("Bloom amount", &Globals::MainScenePtr->m_hdr_state.m_bloom_amount);
+        ImGui::Checkbox("Bloom new", &Globals::MainScenePtr->m_hdr_state.m_bloom_new); //bool
+        ImGui::InputFloat("Bloom theta", &Globals::MainScenePtr->m_hdr_state.m_bloom_theta);
+        ImGui::InputFloat("Bloom slope A", &Globals::MainScenePtr->m_hdr_state.m_bloom_slope_A);
+        ImGui::InputFloat("Bloom slope B", &Globals::MainScenePtr->m_hdr_state.m_bloom_slope_B);
+        ImGui::InputFloat3("Sun shafts position", (float*)&Globals::MainScenePtr->m_hdr_state.m_sun_shafts_position); //vec
+    }
+    else
+    {
+        ImGui::Text("Globals::MainScenePtr is invalid. Can't display it's vars.");
+    }
+
+    ImGui::Separator();
+
+ */
