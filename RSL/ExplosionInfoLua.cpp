@@ -7,6 +7,7 @@ void Lua::BindFixedArrayWrapperExplosionInfo(sol::state& LuaState)
     auto Utype = RfgTable.create_simple_usertype<FixedArrayWrapper<explosion_info>>();
     Utype.set("new", sol::no_constructor);
     Utype.set("Size", &FixedArrayWrapper<explosion_info>::Size);
+    Utype.set("Length", &FixedArrayWrapper<explosion_info>::Length);
     Utype.set("Capacity", &FixedArrayWrapper<explosion_info>::Capacity);
     Utype.set("Initialized", &FixedArrayWrapper<explosion_info>::Initialized);
     Utype.set(sol::meta_function::index, &FixedArrayWrapper<explosion_info>::operator[]);

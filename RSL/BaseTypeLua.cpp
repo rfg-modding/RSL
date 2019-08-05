@@ -7,6 +7,7 @@ void Lua::BindRfgBaseArray(sol::state& LuaState)
 	auto Utype = RfgTable.create_simple_usertype<rfg::base_array<Object*>>();
 	Utype.set("new", sol::no_constructor);
 	Utype.set("Size", &rfg::base_array<Object*>::Size);
+	Utype.set("Length", &rfg::base_array<Object*>::Length);
 	Utype.set("Capacity", &rfg::base_array<Object*>::Capacity);
 	Utype.set(sol::meta_function::index, &rfg::base_array<Object*>::operator[]);
 	RfgTable.set_usertype("RfgBaseArray", Utype);

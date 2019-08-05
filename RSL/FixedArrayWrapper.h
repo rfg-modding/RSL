@@ -23,6 +23,7 @@ public:
     }
 
     [[nodiscard]] int Size() const { return NumberOfElements; }
+    [[nodiscard]] int Length() const { return NumberOfElements; }
     [[nodiscard]] int Capacity() const { return ArraySize; }
     [[nodiscard]] bool Initialized() const { return _Initialized; }
 

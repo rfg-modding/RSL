@@ -31,6 +31,7 @@ namespace rfg
 			return Elements[Index];
 		}
 		int Size() { return NumberOfElements; }
+		int Length() { return NumberOfElements; }
 		int Capacity() { return ArraySize; }
 
 	private:
