@@ -71,6 +71,7 @@
       <RuntimeTypeInfo>
       </RuntimeTypeInfo>
       <CompileAs>CompileAsCpp</CompileAs>
+      <PreprocessorDefinitions>DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
