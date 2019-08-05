@@ -52,30 +52,8 @@ void Application::InitRSL()
         }
         OpenConsole();
 
-        //Sleep(5000);
-
-        //Globals::ModuleBase = reinterpret_cast<uintptr_t>(GetModuleHandle(nullptr));
-
-
         Functions.Initialize();
-
-        GameState RFGRState = GameseqGetState();;
-        auto StartTime = std::chrono::steady_clock::now();
-        auto EndTime = std::chrono::steady_clock::now();
-        long long TimeElapsed = 0LL;
-        do
-        {
-            TimeElapsed = std::chrono::duration_cast<std::chrono::milliseconds>(EndTime - StartTime).count();
-            if (TimeElapsed > 1000LL) //Todo: Figure out if casting 1000 as a long long is necessary in this case or ever.
-            {
-                RFGRState = GameseqGetState();
-                StartTime = EndTime;
-                std::cout << "TimeElapsed: " << TimeElapsed << "\n";
-                std::cout << "Current RFGR State: " << (UINT32)RFGRState << "\n";
-            }
-            EndTime = std::chrono::steady_clock::now();
-        } while (RFGRState < 0 || RFGRState > 63);
-
+        WaitForValidGameState();
 
         //Attempt to init kiero which is used for easy directx hooking. Shutdown if it fails.
         if (kiero::init(kiero::RenderType::D3D11) != kiero::Status::Success)
@@ -92,25 +70,8 @@ void Application::InitRSL()
             return;
         }
 
-        //Sleep(10000);
         Globals::GameWindowHandle = Globals::FindRfgTopWindow();
-        CreateHooks();
-
-
-        ////Attempt to init kiero which is used for easy directx hooking. Shutdown if it fails.
-        //if (kiero::init(kiero::RenderType::D3D11) != kiero::Status::Success)
-        //{
-        //    Logger::LogFatalError("Kiero error: {}\n", kiero::init(kiero::RenderType::D3D11));
-        //    Logger::LogFatalError("Failed to initialize kiero for D3D11. RSL deactivating.\n");
-        //    FreeLibraryAndExitThread(Globals::ScriptLoaderModule, 0);
-        //    return;
-        //}
-        //if (MH_Initialize() != MH_OK)
-        //{
-        //    Logger::LogFatalError("Failed to initialize MinHook. RSL deactivating.\n");
-        //    FreeLibraryAndExitThread(Globals::ScriptLoaderModule, 0);
-        //    return;
-        //}
+        CreateHooks(); //Creates and enables all function hooks.
 
         //Set global values which are frequently used in hooks.
         Globals::MouseGenericPollMouseVisible = Globals::FindPattern("rfg.exe", "\x84\xD2\x74\x08\x38\x00\x00\x00\x00\x00\x75\x02", "xxxxx?????xx");
@@ -123,8 +84,6 @@ void Application::InitRSL()
         Camera.Initialize(Globals::DefaultFreeCameraSpeed, 5.0);
         Scripts.Initialize();
 
-        //Creates and enables all function hooks.
-        ///CreateHooks();
         
         Globals::OriginalWndProc = reinterpret_cast<WNDPROC>(SetWindowLongPtr(Globals::GameWindowHandle, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(Hooks::WndProc)));
         if(!Globals::OriginalWndProc)
@@ -141,8 +100,6 @@ void Application::InitRSL()
 
         InitOverlays();
         Gui.Initialize(); //Todo: Change gui so it can be initialized before imgui is initialized
-        //Gui.SetScriptManager(&Scripts);
-        //Gui.FreeCamSettings->Camera = &Camera;
 
         //Update global lua pointers after init just to be sure. Can't hurt.
         Scripts.UpdateRfgPointers();
@@ -162,6 +119,26 @@ void Application::InitRSL()
         Logger::LogFatalError("{}\n", MessageBoxString);
         MessageBoxA(Globals::FindRfgTopWindow(), MessageBoxString.c_str(), "Script loader failed to initialize!", MB_OK);
     }
+}
+
+void Application::WaitForValidGameState() const
+{
+    GameState RFGRState = GameseqGetState();;
+    auto StartTime = std::chrono::steady_clock::now();
+    auto EndTime = std::chrono::steady_clock::now();
+    long long TimeElapsed = 0LL;
+    do
+    {
+        TimeElapsed = std::chrono::duration_cast<std::chrono::milliseconds>(EndTime - StartTime).count();
+        if (TimeElapsed > 1000LL) //Todo: Figure out if casting 1000 as a long long is necessary in this case or ever.
+        {
+            RFGRState = GameseqGetState();
+            StartTime = EndTime;
+            Logger::Log("Current RFGR State: {}\n", uint(RFGRState));
+        }
+        EndTime = std::chrono::steady_clock::now();
+    } 
+    while (RFGRState < 0 || RFGRState > 63);
 }
 
 void Application::InitOverlays()
@@ -209,14 +186,6 @@ void Application::MainLoop()
     const ulong MillisecondsPerUpdate = 1000 / UpdatesPerSecond;
     while (!ShouldClose()) //Todo: Change to respond to PostQuitMessage(0) in WndProc
     {
-        //Todo: Have startup event here which checks for playerptr being valid and perhaps other values.
-        //if(!AutorunScriptsRun)
-        //{
-        //    if(Globals::PlayerPtr && Globals::RfgWorldPtr && Globals::hkpWorldPtr) //Todo: Make a func that checks all pointers and other info used by scripts. For now this should work.
-        //    {
-        //        
-        //    }
-        //}
         std::chrono::steady_clock::time_point Begin = std::chrono::steady_clock::now();
         switch (GameseqGetState())
         {

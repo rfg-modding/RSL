@@ -8,19 +8,13 @@ void Launcher::Run()
 {
     std::cout << "Entered launcher thread...\n";
     std::cout << "Sleeping all threads except launcher thread!\n";
+
     SuspendAllThreadsExceptLauncher();
     LockGameMain();
 
     std::cout << "Calling Launcher::MainLoop()\n";
     MainLoop(); //Todo: Check the return value of this and try to add error reporting if the launcher fails to work.
     std::cout << "Exited Launcher::MainLoop()\n";
-
-    //printf("Sleeping launcher thread for 15 seconds...\n");
-    //Sleep(15000);
-    //printf("Done sleeping launcher thread. Unlocking rfg WinMain!\n");
-    //UnlockGameMain(); //Repatch rfg's WinMain so the game can continue execution as normal.
-    //printf("Done unlocking rfg winmain, sleeping for 15 seconds for debug purposes.\n");
-    //Sleep(15000);
 
     ResumeAllThreads();
     UnlockGameMain();
@@ -65,9 +59,9 @@ bool Launcher::MainLoop()
         return false;
     }
 
-    auto TopStaticText = CreateWindow("Static", "Choose whether or not to load the RSL into RFG.", WS_CHILD | WS_VISIBLE | SS_CENTER, 50, 20, 200, 40, LauncherHwnd, static_cast<HMENU>(0), hModule, nullptr);
-    auto Button0 = CreateWindow("Button", "Play with RSL (MP Disabled)", BS_DEFPUSHBUTTON | WS_CHILD | WS_VISIBLE, 50, 70, 200, 30, LauncherHwnd, static_cast<HMENU>(0), hModule, nullptr);
-    auto Button1 = CreateWindow("Button", "Play vanilla Re-mars-tered", BS_DEFPUSHBUTTON | WS_CHILD | WS_VISIBLE, 50, 110, 200, 30, LauncherHwnd, reinterpret_cast<HMENU>(1), hModule, nullptr);
+    auto TopStaticText = CreateWindow("Static", "Choose whether or not to load the RSL into RFGR.", WS_CHILD | WS_VISIBLE | SS_CENTER, 50, 20, 200, 40, LauncherHwnd, nullptr, hModule, nullptr);
+    auto Button0 = CreateWindow("Button", "Play with RSL (MP Disabled)", WS_CHILD | WS_VISIBLE, 50, 70, 200, 30, LauncherHwnd, nullptr, hModule, nullptr);
+    auto Button1 = CreateWindow("Button", "Play vanilla Re-mars-tered", WS_CHILD | WS_VISIBLE, 50, 110, 200, 30, LauncherHwnd, reinterpret_cast<HMENU>(1), hModule, nullptr);
 
     ShowWindow(LauncherHwnd, SW_SHOW);
     UpdateWindow(LauncherHwnd);
@@ -131,7 +125,9 @@ void Launcher::UnlockGameMain()
     SnippetManager::RestoreSnippet("RFG WinMain", true);
 }
 
-/*Be VERY VERY careful with this function or else you might crash your PC or other programs.*/
+/*Be VERY VERY careful with this function or else you might crash your PC or other programs.
+ * Mainly since I don't know if it could pause the threads of all other programs if edited.
+ */
 void Launcher::SuspendAllThreadsExceptLauncher()
 {
     const DWORD LauncherThreadID = GetThreadId(LauncherThreadHandle);
