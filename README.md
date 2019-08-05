@@ -1,5 +1,5 @@
-# RFGR Script Loader
-  RFGR Script Loader is a scripting interface for Red Faction Guerrilla Re-mars-tered edition. Using LuaJIT 2.0.5 as the scripting language. This is the private repo for contributors. Currently it's blank but I'll work on a contributing guide soon. See the public [wiki repo](https://github.com/Moneyl/RFGR-Script-Loader-Wiki) for releases, user instructions, a roadmap, and issues. This readme allow includes links to many of those below.
+# Re-mars-tered Script Loader
+RSL is a lua scripting interface and modding tool for Red Faction Guerrilla Re-mars-tered. The main goal of this project is to greatly expand what mods can do to the game, and what they can change, and to improve the mod development experience.
 
 ## Contents
 - [Project goals](https://github.com/Moneyl/RFGR-Script-Loader-Wiki#project-goals) 
@@ -11,9 +11,9 @@
 
 
 ## Project goals
-  Normally, modding RFGR involves editing xml files included in the game which define things such as AI behavior, the properties of vehicles, weapons, and more. This allows modders to change the game in many ways. Even so, there are many hardcoded values and behaviors that cannot be changed, ultimately limited what modders can do. This tool aims to bypass some of these limitations by allowing modders to change many hardcoded values and giving them access to the power and flexibility which a scripting languages allow for.
+Normally, modding RFGR involves editing xml files included in the game which define things such as AI behavior, the properties of vehicles, weapons, and more. This allows modders to change the game in many ways. Even so, there are many hardcoded values and behaviors that cannot be changed, ultimately limited what modders can do. This tool aims to bypass some of these limitations by allowing modders to change many hardcoded values and giving them access to the power and flexibility which a scripting languages allow for.
 
-  Before this is possible an interface between the game's structures and the scripts must be created. As of now the project is still very early on and few things are accesible by the scripts. The scripting interface will need to be expanded, and ways to easily control the scripts must be added. Another goal would be to provide debugging tools and GUIs in game, allowing modders to view the state of the game world as it changes and to understand the effects that their scripts are having on that world.
+Before this is possible an interface between the game's structures and the scripts must be created. As of now the project is still very early on and few things are accesible by the scripts. The scripting interface will need to be expanded, and ways to easily control the scripts must be added. Another goal would be to provide debugging tools and GUIs in game, allowing modders to view the state of the game world as it changes and to understand the effects that their scripts are having on that world.
 
 See the [wiki](https://github.com/Moneyl/RFGR-Script-Loader-Wiki/wiki) for info on how to install and use the script loader.
 
@@ -28,7 +28,7 @@ See the [roadmap](https://github.com/Moneyl/RFGR-Script-Loader-Wiki/wiki/Roadmap
 Main overlay from version 0.02. Visible here are the infinite jetpack and invulnerability options. The global explosion strength options, the teleport menu, and finally the prototype player values section.
 
 ## Why this is closed source
-  One of my primary concerns with this project being open source is that people will use it to cheat in the MP mode of the game. While the MP mode isn't as active as it used to be, I'd still hate for it to be ruined for everyone. There are many checks which will crash the game if the player enters MP mode while the script loader is active. If the source was public then it would be trivial to remove those checks from the code and use it as a cheating tool.
+One of my primary concerns with this project being open source is that people will use it to cheat in the MP mode of the game. While the MP mode isn't as active as it used to be, I'd still hate for it to be ruined for everyone. There are many checks which will crash the game if the player enters MP mode while the script loader is active. If the source was public then it would be trivial to remove those checks from the code and use it as a cheating tool.
   
 ## Libraries used
 [Dear ImGui](https://github.com/ocornut/imgui) - Used for the in game overlay GUIs.
