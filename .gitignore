@@ -260,3 +260,10 @@ paket-files/
 __pycache__/
 *.pyc
 CodeGraphData/
+
+# Documentation build files and tool test output
+\.vscode/settings\.json
+Docs/_build/
+\.vscode/
+Tools/Player\.rst
+Tools/TestFile\.h
