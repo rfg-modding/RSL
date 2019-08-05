@@ -20,8 +20,8 @@ void Application::InitLogger()
     try
     {
         Logger::Init(LogAll, Globals::GetEXEPath(false) + "RSL/Logs/", 10000);
-        Logger::OpenLogFile("Load Log.txt", LogAll, std::ios_base::trunc);
-        Logger::OpenLogFile("Master Log.txt", LogAll, std::ios_base::trunc);
+        Logger::OpenLogFile("Load Log.log", LogAll, std::ios_base::trunc);
+        Logger::OpenLogFile("Master Log.log", LogAll, std::ios_base::trunc);
         Logger::Log("RSL started. Activating.\n");
     }
     catch (std::exception& Ex)
@@ -187,12 +187,12 @@ void Application::OpenDefaultLogs()
     try
     {
         Logger::Log("RSL successfully activated.\n");
-        Logger::CloseLogFile("Load Log.txt");
+        Logger::CloseLogFile("Load Log.log");
 
-        Logger::OpenLogFile("General Log.txt", LogInfo, std::ios_base::trunc);
-        Logger::OpenLogFile("Error Log.txt", LogWarning | LogError | LogFatalError, std::ios_base::trunc);
-        Logger::OpenLogFile("Json Log.txt", LogJson, std::ios_base::trunc);
-        Logger::OpenLogFile("Lua Log.txt", LogLua, std::ios_base::trunc);
+        Logger::OpenLogFile("General Log.log", LogInfo, std::ios_base::trunc);
+        Logger::OpenLogFile("Error Log.log", LogWarning | LogError | LogFatalError, std::ios_base::trunc);
+        Logger::OpenLogFile("Json Log.log", LogJson, std::ios_base::trunc);
+        Logger::OpenLogFile("Lua Log.log", LogLua, std::ios_base::trunc);
     }
     catch (std::exception& Ex)
     {
