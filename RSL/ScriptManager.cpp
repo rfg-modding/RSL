@@ -160,7 +160,8 @@ void ScriptManager::SetupLua()
 
 	RfgTable.set_function("TeleportPlayer", sol::overload(
         [](vector Position, matrix Orientation) {HumanTeleportUnsafe(Globals::PlayerPtr, Position, Orientation); }, 
-		[](vector Position) {HumanTeleportUnsafe(Globals::PlayerPtr, Position, Globals::PlayerPtr->Orientation); }
+		[](vector Position) {HumanTeleportUnsafe(Globals::PlayerPtr, Position, Globals::PlayerPtr->Orientation); },
+		[](float x, float y, float z) {HumanTeleportUnsafe(Globals::PlayerPtr, vector(x, y, z), Globals::PlayerPtr->Orientation); }
     ));
 
     RfgTable["GetVersion"] = KeenGetBuildVersionString;
