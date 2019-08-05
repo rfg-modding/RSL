@@ -121,7 +121,7 @@ namespace Globals
         bool ShouldRunRsl = false;
     }
 
-	const std::string ScriptLoaderVersion("0.4.0-Alpha");
+	const std::string ScriptLoaderVersion("0.5.0-Alpha");
 
 	const char* GetScriptLoaderVersion()
 	{
