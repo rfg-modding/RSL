@@ -1,36 +1,54 @@
 # Re-mars-tered Script Loader
-RSL is a lua scripting interface and modding tool for Red Faction Guerrilla Re-mars-tered. The main goal of this project is to greatly expand what mods can do to the game, and what they can change, and to improve the mod development experience.
+RSL is a lua scripting interface and modding tool for Red Faction Guerrilla Re-mars-tered. The main goal of this project is to greatly expand what mods can do to the game, and what they can change, and to improve the mod development experience. Please see the [docs](https://rsl.readthedocs.io/en/latest/) for much more info about the project, the features it provides, and how to contribute to it. 
 
 ## Contents
-- [Project goals](https://github.com/Moneyl/RFGR-Script-Loader-Wiki#project-goals) 
-- [Bug reports and feature requests](https://github.com/Moneyl/RFGR-Script-Loader-Wiki#bugs-and-feature-requests)
-- [Future updates](https://github.com/Moneyl/RFGR-Script-Loader-Wiki#future-updates)
-- [Gallery](https://github.com/Moneyl/RFGR-Script-Loader-Wiki#gallery) 
-- [Why this is closed source](https://github.com/Moneyl/RFGR-Script-Loader-Wiki#why-this-is-closed-source)
-- [Libraries used](https://github.com/Moneyl/RFGR-Script-Loader-Wiki#libraries-used)
-
+- [Project goals](https://github.com/Moneyl/RSL#project-goals) 
+- [Bug reports and feature requests](https://github.com/Moneyl/RSL#bugs-and-feature-requests)
+- [Examples](https://github.com/Moneyl/RSL#gallery) 
+- [Libraries used](https://github.com/Moneyl/RSL#libraries-used)
 
 ## Project goals
 Normally, modding RFGR involves editing xml files included in the game which define things such as AI behavior, the properties of vehicles, weapons, and more. This allows modders to change the game in many ways. Even so, there are many hardcoded values and behaviors that cannot be changed, ultimately limited what modders can do. This tool aims to bypass some of these limitations by allowing modders to change many hardcoded values and giving them access to the power and flexibility which a scripting languages allow for.
 
-Before this is possible an interface between the game's structures and the scripts must be created. As of now the project is still very early on and few things are accesible by the scripts. The scripting interface will need to be expanded, and ways to easily control the scripts must be added. Another goal would be to provide debugging tools and GUIs in game, allowing modders to view the state of the game world as it changes and to understand the effects that their scripts are having on that world.
+Since this involves manipulating many parts of the games code and memory, this will likely expand to other modding features over time, such as replacing textures and other files without unpacking any vpp_pc files.
 
-See the [wiki](https://github.com/Moneyl/RFGR-Script-Loader-Wiki/wiki) for info on how to install and use the script loader.
+See the [docs](https://rsl.readthedocs.io/en/latest/) for info on how to install and use the script loader, description of the scripting API and script examples.
 
 ## Bug reports and feature requests
-See the [issues](https://github.com/Moneyl/RFGR-Script-Loader-Wiki/issues) section and search for an issue which already describes your bug/feature/question. If you can't find it, create a new one.
+See the [issues](https://github.com/Moneyl/RSL/issues) section and search for an issue which already describes your bug/feature/question. If you can't find it, create a new one.
 
-## Future updates
-See the [roadmap](https://github.com/Moneyl/RFGR-Script-Loader-Wiki/wiki/Roadmap) on the wiki for a rough plan of future updates, and the [milestones](https://github.com/Moneyl/RFGR-Script-Loader-Wiki/milestones) page for progress on upcoming updates. The milestones are a decent indicator of how close the next update is to release, but keep in mind that some features coming to an update might not have an accompanying issue, or new bugs might be encountered. 
+## Examples
+![alt text](https://github.com/Moneyl/RSL/blob/master/Images/0.5.0-GuiExample1.jpg "Main overlay from 0.5.0")
+Above is an image of the overlay provided by the RSL in version 0.5.0. The overlay includes useful features such as a script editor, and explosion spawner, a teleport menu, and some preset tweaks which can be useful such having AI ignore the player, or invulnerability. These can be useful for fun, and also when testing out mods or trying to learn more about how the game works.
 
-## Gallery
-![alt text](https://github.com/Moneyl/RFGR-Script-Loader-Wiki/blob/master/Images/0.02%20Main%20Overlay.jpg?raw=true "Main overlay example from 0.02")
-Main overlay from version 0.02. Visible here are the infinite jetpack and invulnerability options. The global explosion strength options, the teleport menu, and finally the prototype player values section.
+### Scripting examples
+Below are some examples of the scripting API as of version 0.5.0. Please see the [scripting intro](https://rsl.readthedocs.io/en/latest/Scripting/Guides/Introduction.html) and the other guides and examples in the docs for more info.
 
-## Why this is closed source
-One of my primary concerns with this project being open source is that people will use it to cheat in the MP mode of the game. While the MP mode isn't as active as it used to be, I'd still hate for it to be ruined for everyone. There are many checks which will crash the game if the player enters MP mode while the script loader is active. If the source was public then it would be trivial to remove those checks from the code and use it as a cheating tool.
-  
+```lua
+HumanCount = 0
+for i=0, rfg.ActiveWorld.AllObjects:Size(), 1 do --Loop through the global object list
+    CurrentObject = rfg.ActiveWorld.AllObjects[i] --Make a reference variable to the current object for convenience.
+    if CurrentObject.Type == rfg.ObjectTypes.Human then --Check if current object is a human object
+        HumanCount = HumanCount + 1
+    end
+end
+
+rsl.Log("HumanCount: {}\n", HumanCount)
+```
+The above example shows how you can loop through the games global list of objects, filter them by type, and interact with them. The next example shows a few other things that can be done.
+```lua
+rfg.TeleportPlayer(1434.0, 15.0, 693.3) --Teleport the player to the Oasis safehouse
+rfg.ExplosionCreate(rfg.GetExplosionInfo("remote_charge"), 1434.0, 25.0, 693.3) --Create a remote charge explosion 10m above the player
+rfg.SetGravity(0.0, -3.7, 0.0) --Set the gravity to actual mars gravity (default is -9.82)
+rfg.SetAlertLevel(rfg.AlertLevels.Red) --Set the alert level to red
+```
 ## Libraries used
 [Dear ImGui](https://github.com/ocornut/imgui) - Used for the in game overlay GUIs.
 
-[Sol 3](https://github.com/ThePhD/sol2/tree/sol3) - Used for quick and easy lua binding. Currently a branch of Sol2.
+[Sol 2](https://github.com/ThePhD/sol2/) - Used for quick and easy lua binding.
+
+[LuaJIT](https://luajit.org/) - A JIT compiled version of Lua. Used as the primary language of the scripting API.
+
+[Minhook](https://github.com/TsudaKageyu/minhook) - Used for function hooking.
+
+[Kiero](https://github.com/Rebzzel/kiero) - Used to aid in locating directx functions for hooking.
