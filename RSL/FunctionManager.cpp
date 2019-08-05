@@ -34,11 +34,11 @@ void FunctionManager::Initialize()
     RegisterFunction(HumanTeleportUnsafe, 0x67C660);
 
     /*Start of MP Detection Hooks*/
-    RegisterFunction(IsValidGameLinkLobbyKaiko, 0x1D0DD0);
-    RegisterFunction(GameMusicMultiplayerStart, 0x3CC750);
-    RegisterFunction(InitMultiplayerDataItemRespawn, 0x497740);
-    RegisterFunction(HudUiMultiplayerProcess, 0x4F50B0);
-    RegisterFunction(HudUiMultiplayerEnter, 0x516D80);
+    RegisterFunction(IsValidEigenGradient, 0x1D0DD0);
+    RegisterFunction(HookDoFrame, 0x3CC750);
+    RegisterFunction(InvertDataItem, 0x497740);
+    RegisterFunction(AllocatorStillValid, 0x4F50B0);
+    RegisterFunction(CsWrapSlice, 0x516D80);
     /*End of MP Detection Hooks*/
 
     RegisterFunction(KeenGraphicsResizeRenderSwapchain, 0x86AB20);

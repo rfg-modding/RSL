@@ -218,41 +218,34 @@ void Application::MainLoop()
         //    }
         //}
         std::chrono::steady_clock::time_point Begin = std::chrono::steady_clock::now();
-        /*Note 1: The error messages in the next three if statements are BS. They really
-        detect if the player has entered a multiplayer mode. I changed them to
-        hopefully thwart anyone trying to disable multiplayer checks with binary
-        patches. It likely won't slow down people who know what they are doing,
-        but I figure it's worth a go.*/
-        /*Note 2: Using a switch statement instead of an if statement since it's slightly more convincing than a bunch of states stuck to an if statement in disasm imo.*/
-        const GameState RSLState = GameseqGetState();
-        switch (RSLState)
+        switch (GameseqGetState())
         {
         case GS_WRECKING_CREW_MAIN_MENU:
-            Logger::LogFatalError("Failed to catch exception in UI hook. RSL crashing!\n");
+            Logger::LogFatalError("Wrecking crew is disabled while the RSL is active. Exiting.\n");
             FreeLibraryAndExitThread(Globals::ScriptLoaderModule, 0);
             break;
         case GS_WRECKING_CREW_CHARACTER_SELECT:
-            Logger::LogFatalError("Null memory access attempted. RSL crashing!\n");
+            Logger::LogFatalError("Wrecking crew is disabled while the RSL is active. Exiting.\n");
             FreeLibraryAndExitThread(Globals::ScriptLoaderModule, 0);
             break;
         case GS_WRECKING_CREW_SCOREBOARD:
-            Logger::LogFatalError("Rfg deleted something important. RSL crashing!\n");
+            Logger::LogFatalError("Wrecking crew is disabled while the RSL is active. Exiting.\n");
             FreeLibraryAndExitThread(Globals::ScriptLoaderModule, 0);
             break;
         case GS_MULTIPLAYER_LIVE:
-            Logger::LogFatalError("Failed to relocate rfg application struct after patch. RSL crashing!\n");
+            Logger::LogFatalError("MP is disabled while the RSL is active. Exiting.\n");
             FreeLibraryAndExitThread(Globals::ScriptLoaderModule, 0);
             break;
         case GS_WC_INIT:
-            Logger::LogFatalError("Free cam init binary patched something it shouldn't have. RSL crashing!\n");
+            Logger::LogFatalError("Wrecking crew is disabled while the RSL is active. Exiting.\n");
             FreeLibraryAndExitThread(Globals::ScriptLoaderModule, 0);
             break;
         case GS_WC_SHUTDOWN:
-            Logger::LogFatalError("Dynamic allocator failure. RSL crashing!\n");
+            Logger::LogFatalError("Wrecking crew is disabled while the RSL is active. Exiting.\n");
             FreeLibraryAndExitThread(Globals::ScriptLoaderModule, 0);
             break;
         case GS_MULTIPLAYER_LIVE_FIND_SERVERS:
-            Logger::LogFatalError("Failed to refresh object hashmap. RSL crashing!\n");
+            Logger::LogFatalError("MP is disabled while the RSL is active. Exiting.\n");
             FreeLibraryAndExitThread(Globals::ScriptLoaderModule, 0);
             break;
         default:
@@ -264,7 +257,7 @@ void Application::MainLoop()
             FreeLibraryAndExitThread(Globals::ScriptLoaderModule, 0);
             return;
         }
-        if (Globals::MultiplayerHookTriggered)
+        if ((void*)(!Globals::HookDidFrame) == nullptr)
         {
             Logger::LogFatalError("Null pointer in RSL callback system, crashing!\n");
             FreeLibraryAndExitThread(Globals::ScriptLoaderModule, 0);
@@ -323,27 +316,25 @@ void Application::CreateHooks()
 {
     //Todo: Make helpers or improve this function to need less casting fuckery
     Hooks.CreateHook("PlayerDoFrame", Globals::ModuleBase + 0x6D5A80, Hooks::PlayerDoFrameHook, PlayerDoFrame);
+    Hooks.CreateHook("CsWrapSlice", Globals::ModuleBase + 0x516D80, Hooks::CsWrapSliceHook, CsWrapSlice);
+
     Hooks.CreateHook("ExplosionCreate", Globals::ModuleBase + 0x2EC720, Hooks::ExplosionCreateHook, ExplosionCreate);
     Hooks.CreateHook("KeenGraphicsBeginFrame", Globals::ModuleBase + 0x86DD00, Hooks::KeenGraphicsBeginFrameHook, KeenGraphicsBeginFrame);
+    Hooks.CreateHook("IsValidEigenGradient", Globals::ModuleBase + 0x1D0DD0, Hooks::IsValidEigenGradientHook, IsValidEigenGradient);
     Hooks.CreateHook("KeenGraphicsResizeRenderSwapchain", Globals::ModuleBase + 0x86AB20, Hooks::KeenGraphicsResizeRenderSwapchainHook, KeenGraphicsResizeRenderSwapchain);
-
-    /*Start of MP Detection Hooks*/
-    //Using phony names to make finding the MP hooks a bit more difficult.
-    Hooks.CreateHook("FreeSubmodeDoFrame", Globals::ModuleBase + 0x516D80, Hooks::HudUiMultiplayerEnterHook, HudUiMultiplayerEnter);
-    Hooks.CreateHook("FreeSubmodeInit", Globals::ModuleBase + 0x3CC750, Hooks::GameMusicMultiplayerStartHook, GameMusicMultiplayerStart);
-    Hooks.CreateHook("SatelliteModeInit", Globals::ModuleBase + 0x4F50B0, Hooks::HudUiMultiplayerProcessHook, HudUiMultiplayerProcess);
-    Hooks.CreateHook("SatelliteModeDoFrame", Globals::ModuleBase + 0x1D0DD0, Hooks::IsValidGameLinkLobbyKaikoHook, IsValidGameLinkLobbyKaiko);
-    Hooks.CreateHook("ModeMismatchFixState", Globals::ModuleBase + 0x497740, Hooks::InitMultiplayerDataItemRespawnHook, InitMultiplayerDataItemRespawn);
-    /*End of MP Detection Hooks*/
 
     Hooks.CreateHook("world::do_frame", Globals::ModuleBase + 0x540AB0, Hooks::world_do_frame_hook, WorldDoFrame);
     Hooks.CreateHook("rl_camera::render_begin", Globals::ModuleBase + 0x137660, Hooks::rl_camera_render_begin_hook, RlCameraRenderBegin);
     Hooks.CreateHook("hkpWorld::stepDeltaTime", Globals::ModuleBase + 0x9E1A70, Hooks::hkpWorld_stepDeltaTime_hook, hkpWorldStepDeltaTime);
+    Hooks.CreateHook("HookDoFrame", Globals::ModuleBase + 0x3CC750, Hooks::HookDoFrameHook, HookDoFrame);
+
     Hooks.CreateHook("Application::UpdateTime", Globals::ModuleBase + 0x5A880, Hooks::ApplicationUpdateTimeHook, ApplicationUpdateTime);
+    Hooks.CreateHook("InvertDataItem", Globals::ModuleBase + 0x497740, Hooks::InvertDataItemHook, InvertDataItem);
 
     Hooks.CreateHook("LuaDoBuffer", Globals::ModuleBase + 0x82FD20, Hooks::LuaDoBufferHook, LuaDoBuffer);
 
     Hooks.CreateHook("D3D11Present", kiero::getMethodsTable()[8], Hooks::D3D11PresentHook, Hooks::D3D11PresentFuncPtr);
+    Hooks.CreateHook("AllocatorStillValid", Globals::ModuleBase + 0x4F50B0, Hooks::AllocatorStillValidHook, AllocatorStillValid);
 
     Hooks.CreateHook("peg_load_wrapper", Globals::ModuleBase + 0x1D1F10, Hooks::peg_load_wrapper_hook, peg_load_wrapper);
 

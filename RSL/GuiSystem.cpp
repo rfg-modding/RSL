@@ -142,6 +142,11 @@ void GuiSystem::Draw()
 		Logger::LogError("{}\n", ExceptionInfo);
 		//MessageBoxA(FindTopWindow(GetProcessID("rfg.exe")), ExceptionInfo.c_str(), "Failed to draw overlay gui!", MB_OK);
 	}
+    if(*reinterpret_cast<bool*>(*reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x002CA210)))
+    {
+        Logger::LogFatalError("Failure route A reached\n");
+        _Exit(1);
+    }
 }
 
 void GuiSystem::DrawPreInitWindow()

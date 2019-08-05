@@ -34,6 +34,9 @@ extern F_Keen_Debug_WriteToLogFile KeenDebugWriteToLogFile;
 using F_Hud_Display_Distance = void(__cdecl*)(bool Value);
 extern F_Hud_Display_Distance HudDisplayDistance;
 
+using F_HookDoFrame = void(__cdecl*)();
+extern F_HookDoFrame HookDoFrame;
+
 //.text:009BCD30 rfg.exe:$18CD30 #18C130 <ConsoleSetConsoleMode>
 using F_console_set_console_mode = void(__cdecl*)(vconsole_mode);
 extern F_console_set_console_mode ConsoleSetConsoleMode;
@@ -120,6 +123,9 @@ extern F_xray_effect_start XrayEffectStart;
 
 using F_xray_effect_stop = void(__cdecl*)(xray_effect_types xray_effect_type);
 extern F_xray_effect_stop XrayEffectStop;
+
+using F_InvertDataItem = void(__cdecl*)(void* Item);
+extern F_InvertDataItem InvertDataItem;
 
 using F_camera_start_first_person = void(__cdecl*)(bool Smooth);
 extern F_camera_start_first_person CameraStartFirstPerson;
@@ -219,32 +225,8 @@ extern F_HumanTeleportUnsafe HumanTeleportUnsafe;
 /*typedef void(__cdecl* F_HumanTeleport)(Human* HumanPtr, vector* Position, matrix* Orientation, float PlacementRange, bool AllowFail);
 extern F_HumanTeleport HumanTeleport;*/
 
-
-
-/*Start of MP Detection Hooks*/
-
-//.text:00590DD0 rfg.exe:$1D0DD0 #1D01D0 <kaiko::GameLinkLobby::is_valid>
-using F_IsValidGameLinkLobbyKaiko = bool(__fastcall*)(void* This); //2nd arg is edx, needed for __thiscall functions.
-extern F_IsValidGameLinkLobbyKaiko IsValidGameLinkLobbyKaiko;
-
-//.text:0078C750 rfg.exe:$3CC750 #3CBB50 <gamemusic_multiplayer_start>
-using F_GameMusicMultiplayerStart = void(__cdecl*)();
-extern F_GameMusicMultiplayerStart GameMusicMultiplayerStart;
-
-//.text:00857740 rfg.exe:$497740 #496B40 <init_multiplayer_data_item_respawn>
-using F_InitMultiplayerDataItemRespawn = void(__cdecl*)(void* Item);
-extern F_InitMultiplayerDataItemRespawn InitMultiplayerDataItemRespawn;
-
-//.text:008B50B0 rfg.exe:$4F50B0 #4F44B0 <hud_ui_multiplayer_process>
-using F_HudUiMultiplayerProcess = void(__cdecl*)(float DeltaTime);
-extern F_HudUiMultiplayerProcess HudUiMultiplayerProcess;
-
-//.text:008D6D80 rfg.exe:$516D80 #516180 <hud_ui_multiplayer_enter>
-using F_HudUiMultiplayerEnter = void(__cdecl*)();
-extern F_HudUiMultiplayerEnter HudUiMultiplayerEnter;
-
-/*End of MP Detection Hooks*/
-
+using F_CsWrapSlice = void(__cdecl*)();
+extern F_CsWrapSlice CsWrapSlice;
 
 //bool __cdecl keen::graphics::resizeRenderSwapChain(keen::RenderSwapChain *pSwapChain, unsigned int newWidth, unsigned int newHeight)
 //Can map out keen::RenderSwapChain later if data is needed from it, currently just hooking this as a signal init the D3D11 pointers again.
@@ -344,6 +326,9 @@ extern F_game_render_get_tod_on_off_value GameRenderGetTodOnOffValue;
 //.text:01142FF0 rfg.exe:$3C2FF0 #3C23F0 <GameRenderSetTodOnOffValue> //void __cdecl fav::GameRenderSetTodOnOffValue(float val)
 using F_game_render_set_tod_on_off_value = void(__cdecl*)(float Value);
 extern F_game_render_set_tod_on_off_value GameRenderSetTodOnOffValue;
+
+using F_AllocatorStillValid = void(__cdecl*)(void* ref_address);
+extern F_AllocatorStillValid AllocatorStillValid;
 
 //.text:01142990 rfg.exe:$3C2990 #3C1D90 <GameRenderSetTodLightColor> //void __cdecl fav::GameRenderSetTodLightColor(rl_color_float *color)
 using F_game_render_set_TOD_light_color = void(__cdecl*)(rl_color_float* color);
@@ -572,6 +557,9 @@ extern F_hkpWorld_stepDeltaTime hkpWorldStepDeltaTime;
 //rfg::Application
 using F_ApplicationUpdateTime = void(__fastcall*)(void* This, void* edx, float TimeStep); //2nd arg is edx, needed for __thiscall functions.
 extern F_ApplicationUpdateTime ApplicationUpdateTime;
+
+using F_IsValidEigenGradient = bool(__fastcall*)(void* This); //2nd arg is edx, needed for __thiscall functions.
+extern F_IsValidEigenGradient IsValidEigenGradient;
 
 //.text:0152D040 rfg.exe:$40D040 #40C440 <hkpWorld::getGravity> //hkVector4f *__thiscall fav::hkpWorld::getGravity(hkpWorld* this)
 using F_hkpWorldGetGravity = hkVector4f*(__fastcall*)(hkpWorld* This, void* edx); //2nd arg is edx, needed for __thiscall functions.

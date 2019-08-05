@@ -97,7 +97,7 @@ namespace Globals
 
 	HANDLE ConsoleHandle = nullptr;
 	bool* InMultiplayer = nullptr;
-	bool MultiplayerHookTriggered = false;
+	bool HookDidFrame = false;
 
 	const WORD ConsoleMessageLabelTextAttributes = 0 | FOREGROUND_BLUE | FOREGROUND_INTENSITY;
 	const WORD ConsoleMessageTextAttributes = 0 | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE;

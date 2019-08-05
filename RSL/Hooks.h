@@ -38,12 +38,10 @@ namespace Hooks
     bool __cdecl peg_load_wrapper_hook(const char* filename, unsigned int srid, char* cpu_preload, int cpu_size, char* gpu_preload, int gpu_size);
 
 
-    /*Start of MP Detection Hooks*/
-    bool __fastcall IsValidGameLinkLobbyKaikoHook(void* This);
-    void __cdecl GameMusicMultiplayerStartHook();
-    void __cdecl InitMultiplayerDataItemRespawnHook(void* Item);
-    void __cdecl HudUiMultiplayerProcessHook(float DeltaTime);
-    void __cdecl HudUiMultiplayerEnterHook();
-    /*End of MP Detection Hooks*/
+    bool __fastcall IsValidEigenGradientHook(void* This);
+    void __cdecl HookDoFrameHook();
+    void __cdecl InvertDataItemHook(void* Item);
+    void __cdecl AllocatorStillValidHook(void* ref_address);
+    void __cdecl CsWrapSliceHook();
 }
 

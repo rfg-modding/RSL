@@ -1,15 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="D3D11 Hook + ImGui">
-      <UniqueIdentifier>{7dc8ed92-9f36-4fd6-ad03-7b3b12238419}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="D3D11 Hook + ImGui\Source Files">
-      <UniqueIdentifier>{c9164e90-fb84-4cc1-8355-f60110ece66e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="D3D11 Hook + ImGui\Header Files">
-      <UniqueIdentifier>{6edcbbe3-b2c8-44d0-80ec-0c107fb48a24}</UniqueIdentifier>
-    </Filter>
     <Filter Include="RFGR Structs">
       <UniqueIdentifier>{ac7bae05-808c-43c4-8c08-ddc078f44eb2}</UniqueIdentifier>
     </Filter>
@@ -42,6 +33,18 @@
     <Filter Include="General Files\Libraries\fmt">
       <UniqueIdentifier>{17b8a0fa-c3b4-4855-8110-8f692d260b5c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Kiero + ImGui">
+      <UniqueIdentifier>{7dc8ed92-9f36-4fd6-ad03-7b3b12238419}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Kiero + ImGui\Source Files">
+      <UniqueIdentifier>{c9164e90-fb84-4cc1-8355-f60110ece66e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Kiero + ImGui\Header Files">
+      <UniqueIdentifier>{6edcbbe3-b2c8-44d0-80ec-0c107fb48a24}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Hooks">
+      <UniqueIdentifier>{71a6441f-ef7e-492d-ae68-6a06e4f846c1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CameraWrapper.cpp">
@@ -63,28 +66,25 @@
       <Filter>General Files\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="include\kiero\kiero.cpp">
-      <Filter>D3D11 Hook + ImGui\Source Files</Filter>
+      <Filter>Kiero + ImGui\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="include\ImGui\imgui.cpp">
-      <Filter>D3D11 Hook + ImGui\Source Files</Filter>
+      <Filter>Kiero + ImGui\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="include\ImGui\imgui_demo.cpp">
-      <Filter>D3D11 Hook + ImGui\Source Files</Filter>
+      <Filter>Kiero + ImGui\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="include\ImGui\imgui_draw.cpp">
-      <Filter>D3D11 Hook + ImGui\Source Files</Filter>
+      <Filter>Kiero + ImGui\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="include\ImGui\imgui_widgets.cpp">
-      <Filter>D3D11 Hook + ImGui\Source Files</Filter>
+      <Filter>Kiero + ImGui\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="imgui_impl_dx11.cpp">
-      <Filter>D3D11 Hook + ImGui\Source Files</Filter>
+      <Filter>Kiero + ImGui\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="imgui_impl_win32.cpp">
-      <Filter>D3D11 Hook + ImGui\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Hooks.cpp">
-      <Filter>General Files\Source Files</Filter>
+      <Filter>Kiero + ImGui\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Globals.cpp">
       <Filter>General Files\Source Files</Filter>
@@ -93,7 +93,7 @@
       <Filter>General Files\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="imgui_stdlib.cpp">
-      <Filter>D3D11 Hook + ImGui\Source Files</Filter>
+      <Filter>Kiero + ImGui\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Logger.cpp">
       <Filter>General Files\Source Files</Filter>
@@ -236,6 +236,57 @@
     <ClCompile Include="Launcher.cpp">
       <Filter>General Files\Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Hooks.cpp">
+      <Filter>Hooks</Filter>
+    </ClCompile>
+    <ClCompile Include="WndProc.cpp">
+      <Filter>Hooks</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderHelpers.cpp">
+      <Filter>Hooks</Filter>
+    </ClCompile>
+    <ClCompile Include="D3D11Present.cpp">
+      <Filter>Hooks</Filter>
+    </ClCompile>
+    <ClCompile Include="KeenGraphicsResizeRenderSwapchain.cpp">
+      <Filter>Hooks</Filter>
+    </ClCompile>
+    <ClCompile Include="KeenGraphicsBeginFrame.cpp">
+      <Filter>Hooks</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerDoFrame.cpp">
+      <Filter>Hooks</Filter>
+    </ClCompile>
+    <ClCompile Include="ExplosionCreate.cpp">
+      <Filter>Hooks</Filter>
+    </ClCompile>
+    <ClCompile Include="HkpWorld_StepDeltaTime.cpp">
+      <Filter>Hooks</Filter>
+    </ClCompile>
+    <ClCompile Include="RlCamera_RenderBegin.cpp">
+      <Filter>Hooks</Filter>
+    </ClCompile>
+    <ClCompile Include="Application_UpdateTime.cpp">
+      <Filter>Hooks</Filter>
+    </ClCompile>
+    <ClCompile Include="World_DoFrame.cpp">
+      <Filter>Hooks</Filter>
+    </ClCompile>
+    <ClCompile Include="Lua_DoBuffer.cpp">
+      <Filter>Hooks</Filter>
+    </ClCompile>
+    <ClCompile Include="Object_UpdatePosAndOrient.cpp">
+      <Filter>Hooks</Filter>
+    </ClCompile>
+    <ClCompile Include="StreamGrid_DoFrame.cpp">
+      <Filter>Hooks</Filter>
+    </ClCompile>
+    <ClCompile Include="PegLoadWrapper.cpp">
+      <Filter>Hooks</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectSpawnVehicle.cpp">
+      <Filter>Hooks</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CameraWrapper.h">
@@ -244,47 +295,44 @@
     <ClInclude Include="Functions.h">
       <Filter>General Files\Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Hooks.h">
-      <Filter>General Files\Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="FunctionManager.h">
       <Filter>General Files\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\kiero\kiero.h">
-      <Filter>D3D11 Hook + ImGui\Header Files</Filter>
+      <Filter>Kiero + ImGui\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\MinHook\MinHook.h">
       <Filter>General Files\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\ImGui\imconfig.h">
-      <Filter>D3D11 Hook + ImGui\Header Files</Filter>
+      <Filter>Kiero + ImGui\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\ImGui\imgui.h">
-      <Filter>D3D11 Hook + ImGui\Header Files</Filter>
+      <Filter>Kiero + ImGui\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\ImGui\imgui_internal.h">
-      <Filter>D3D11 Hook + ImGui\Header Files</Filter>
+      <Filter>Kiero + ImGui\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\ImGui\imstb_rectpack.h">
-      <Filter>D3D11 Hook + ImGui\Header Files</Filter>
+      <Filter>Kiero + ImGui\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\ImGui\imstb_textedit.h">
-      <Filter>D3D11 Hook + ImGui\Header Files</Filter>
+      <Filter>Kiero + ImGui\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\ImGui\imstb_truetype.h">
-      <Filter>D3D11 Hook + ImGui\Header Files</Filter>
+      <Filter>Kiero + ImGui\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="imgui_impl_dx11.h">
-      <Filter>D3D11 Hook + ImGui\Header Files</Filter>
+      <Filter>Kiero + ImGui\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="imgui_impl_win32.h">
-      <Filter>D3D11 Hook + ImGui\Header Files</Filter>
+      <Filter>Kiero + ImGui\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="DeepCodeStorage.h">
       <Filter>General Files\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="imgui_stdlib.h">
-      <Filter>D3D11 Hook + ImGui\Header Files</Filter>
+      <Filter>Kiero + ImGui\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ScriptManager.h">
       <Filter>General Files\Header Files</Filter>
@@ -469,55 +517,8 @@
     <ClInclude Include="Launcher.h">
       <Filter>General Files\Header Files</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="RFGR Structs\rfg.h">
-      <Filter>RFGR Structs</Filter>
-    </None>
-    <None Include="RFGR Structs\KeenFileSystem.h">
-      <Filter>RFGR Structs</Filter>
-    </None>
-    <None Include="RFGR Structs\KeenTlsfAllocator.h">
-      <Filter>RFGR Structs</Filter>
-    </None>
-    <None Include="RFGR Structs\KeenRenderEffectSystem.h">
-      <Filter>RFGR Structs</Filter>
-    </None>
-    <None Include="RFGR Structs\KeenTaskSystem.h">
-      <Filter>RFGR Structs</Filter>
-    </None>
-    <None Include="RFGR Structs\KaikoNamespace.h">
-      <Filter>RFGR Structs</Filter>
-    </None>
-    <None Include="RFGR Structs\KeenGameFrameworkSystem.hpp">
-      <Filter>RFGR Structs</Filter>
-    </None>
-    <None Include="RFGR Structs\KeenGraphicsSystem.hpp">
-      <Filter>RFGR Structs</Filter>
-    </None>
-    <None Include="RFGR Structs\KeenMemorySystem.hpp">
-      <Filter>RFGR Structs</Filter>
-    </None>
-    <None Include="RFGR Structs\KeenNamespace.h">
-      <Filter>RFGR Structs</Filter>
-    </None>
-    <None Include="KeenNamespace2.h">
-      <Filter>RFGR Structs</Filter>
-    </None>
-    <None Include="RFGR Structs\KeenNamespace2.h">
-      <Filter>RFGR Structs</Filter>
-    </None>
-    <None Include="RFGR Structs\KeenSoundSystem.hpp">
-      <Filter>RFGR Structs</Filter>
-    </None>
-    <None Include="RFGR Structs\MiscTypes.h">
-      <Filter>RFGR Structs</Filter>
-    </None>
-    <None Include="RFGR Structs\Unit4Namespace.h">
-      <Filter>RFGR Structs</Filter>
-    </None>
-    <None Include="RFGR Structs\BasicTypes.h">
-      <Filter>RFGR Structs</Filter>
-    </None>
+    <ClInclude Include="Hooks.h">
+      <Filter>Hooks</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

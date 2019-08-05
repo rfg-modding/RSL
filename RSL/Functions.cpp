@@ -108,6 +108,7 @@ F_Console_Init ConsoleInit;
 F_Console_Activate ConsoleActivate;
 F_Console_Deactivate ConsoleDeactivate;
 
+F_InvertDataItem InvertDataItem;
 F_Console_Printf ConsolePrintf;
 F_Console_Display_Help ConsoleDisplayHelp;
 F_Console_Command_Enable ConsoleCommandEnable;
@@ -122,6 +123,7 @@ F_rfg_dyn_reset_destruction_frame RfgDynResetDestructionFrame;
 F_rfg_dyn_system_shutdown RfgDynSystemShutdown;
 F_get_screen_width GetScreenWidth;
 F_console_is_active ConsoleIsActive;
+F_AllocatorStillValid AllocatorStillValid;
 F_debug_spew_projectile DebugSpewProjectile;
 F_debug_spew_game_io DebugSpewGameIo;
 F_rl_render_lib_get_metrics RlRenderLibGetMetrics;
@@ -162,13 +164,7 @@ F_HumanUpdatePosAndOrient HumanUpdatePosAndOrient;
 F_HumanTeleportUnsafe HumanTeleportUnsafe;
 //F_HumanTeleport HumanTeleport;
 
-/*Start of MP Detection Hooks*/
-F_IsValidGameLinkLobbyKaiko IsValidGameLinkLobbyKaiko;
-F_GameMusicMultiplayerStart GameMusicMultiplayerStart;
-F_InitMultiplayerDataItemRespawn InitMultiplayerDataItemRespawn;
-F_HudUiMultiplayerProcess HudUiMultiplayerProcess;
-F_HudUiMultiplayerEnter HudUiMultiplayerEnter;
-/*End of MP Detection Hooks*/
+F_HookDoFrame HookDoFrame;
 
 F_KeenGraphicsResizeRenderSwapchain KeenGraphicsResizeRenderSwapchain;
 F_GameseqGetState GameseqGetState;
@@ -231,7 +227,7 @@ F_get_world_zone_by_object_handle GetWorldZoneByObjectHandle;
 F_rfg_dyn_apply_point_impulse RfgDynApplyPointImpulse;
 F_rfg_dyn_repair_sphere RfgDynRepairSphere;
 
-
+F_IsValidEigenGradient IsValidEigenGradient;
 
 Human* CastObjectToHuman(Object* ObjectPtr) { return static_cast<Human*>(ObjectPtr); }
 Player* CastObjectToPlayer(Object* ObjectPtr) { return static_cast<Player*>(ObjectPtr); }
@@ -268,6 +264,8 @@ F_unused_dcf_ragdoll_player UnusedDcfRagdollPlayer;
 F_StreamGridSetStreamRadius StreamGridSetStreamRadius;
 F_StreamGridGetStreamRadius StreamGridGetStreamRadius;
 F_StreamGridDoFrame StreamGridDoFrame;
+F_CsWrapSlice CsWrapSlice;
+
 
 F_cutscene_spawn_vehicle CutsceneSpawnVehicle;
 //F_object_spawn_vehicle ObjectSpawnVehicle;

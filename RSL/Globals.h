@@ -114,7 +114,7 @@ namespace Globals
 
 	extern HANDLE ConsoleHandle;
 	extern bool* InMultiplayer;
-	extern bool MultiplayerHookTriggered;
+	extern bool HookDidFrame;
 
 	extern const WORD ConsoleMessageLabelTextAttributes;
 	extern const WORD ConsoleMessageTextAttributes;
