@@ -53,27 +53,18 @@ void Application::InitRSL()
         OpenConsole();
 
         Functions.Initialize();
-        WaitForValidGameState();
 
-        //Attempt to init kiero which is used for easy directx hooking. Shutdown if it fails.
-        if (kiero::init(kiero::RenderType::D3D11) != kiero::Status::Success)
-        {
-            Logger::LogFatalError("Kiero error: {}\n", kiero::init(kiero::RenderType::D3D11));
-            Logger::LogFatalError("Failed to initialize kiero for D3D11. RSL deactivating.\n");
-            FreeLibraryAndExitThread(Globals::ScriptLoaderModule, 0);
-            return;
-        }
-        if (MH_Initialize() != MH_OK)
-        {
-            Logger::LogFatalError("Failed to initialize MinHook. RSL deactivating.\n");
-            FreeLibraryAndExitThread(Globals::ScriptLoaderModule, 0);
-            return;
-        }
-
-        Globals::GameWindowHandle = Globals::FindRfgTopWindow();
+        InitHookingSystem();
         CreateHooks(); //Creates and enables all function hooks.
 
+#if UseLauncher
+        Globals::ResumeAllThreads();
+        Globals::UnlockGameMain();
+#endif
+        WaitForValidGameState();
+
         //Set global values which are frequently used in hooks.
+        Globals::GameWindowHandle = Globals::FindRfgTopWindow();
         Globals::MouseGenericPollMouseVisible = Globals::FindPattern("rfg.exe", "\x84\xD2\x74\x08\x38\x00\x00\x00\x00\x00\x75\x02", "xxxxx?????xx");
         Globals::CenterMouseCursorCall = Globals::FindPattern("rfg.exe", "\xE8\x00\x00\x00\x00\x89\x46\x4C\x89\x56\x50", "x????xxxxxx");
         Globals::Program = this;
@@ -83,7 +74,6 @@ void Application::InitRSL()
 
         Camera.Initialize(Globals::DefaultFreeCameraSpeed, 5.0);
         Scripts.Initialize();
-
         
         Globals::OriginalWndProc = reinterpret_cast<WNDPROC>(SetWindowLongPtr(Globals::GameWindowHandle, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(Hooks::WndProc)));
         if(!Globals::OriginalWndProc)
@@ -92,8 +82,10 @@ void Application::InitRSL()
         }
         Logger::Log("Custom WndProc set.\n");
 
+        Globals::ReadyForImGuiInit = true;
+
         /*Waits for ImGui init to complete before continuing to GuiSystem (The overlay) init.*/
-        while (!Globals::ImGuiInitialized) //ImGui Initialization occurs in KeenGraphicsBeginFrameHook in Hooks.cpp
+        while (!Globals::ImGuiInitialized) //ImGui Initialization occurs in KeenGraphicsBeginFrameHook 
         {
             Sleep(100);
         }
@@ -118,6 +110,24 @@ void Application::InitRSL()
         MessageBoxString += Ex.what();
         Logger::LogFatalError("{}\n", MessageBoxString);
         MessageBoxA(Globals::FindRfgTopWindow(), MessageBoxString.c_str(), "Script loader failed to initialize!", MB_OK);
+    }
+}
+
+void Application::InitHookingSystem()
+{        
+    //Attempt to init kiero which is used for easy directx hooking. Shutdown if it fails.
+    if (kiero::init(kiero::RenderType::D3D11) != kiero::Status::Success)
+    {
+        Logger::LogFatalError("Kiero error: {}\n", kiero::init(kiero::RenderType::D3D11));
+        Logger::LogFatalError("Failed to initialize kiero for D3D11. RSL deactivating.\n");
+        FreeLibraryAndExitThread(Globals::ScriptLoaderModule, 0);
+        return;
+    }
+    if (MH_Initialize() != MH_OK)
+    {
+        Logger::LogFatalError("Failed to initialize MinHook. RSL deactivating.\n");
+        FreeLibraryAndExitThread(Globals::ScriptLoaderModule, 0);
+        return;
     }
 }
 

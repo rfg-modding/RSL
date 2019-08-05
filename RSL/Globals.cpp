@@ -1,4 +1,5 @@
 #include "Globals.h"
+#include "SnippetManager.h"
 
 namespace Globals
 {
@@ -112,6 +113,8 @@ namespace Globals
 
 	bool HudVisible = true;
 	bool FogVisible = true;
+
+    bool ReadyForImGuiInit = false;
 
     namespace Launcher
     {
@@ -439,5 +442,75 @@ namespace Globals
             }
         }
         return {};
+    }
+
+    std::vector<HANDLE> RfgThreadHandles;
+    void LockGameMain()
+    {
+        //.text:019D0E80 rfg.exe:$810E80 #810280 <WinMain>
+        DWORD RFGWinMainAddress = Globals::FindPattern("rfg.exe", "\x8B\x4C\x24\x3C\x53\x33\xDB\xBA", "xxxxxxxx");
+        printf("RfgWinMain patch target address: %#010x\n", RFGWinMainAddress);
+        printf("RfgWinMain patch target address static casted to int: %#010x\n", static_cast<int>(RFGWinMainAddress));
+        printf("RfgWinMain patch target address static casted to BYTE: %#010x\n", static_cast<BYTE>(RFGWinMainAddress));
+
+        //DWORD RFGWinMainAddress = static_cast<DWORD>(Globals::ModuleBase + static_cast<DWORD>(0x810E80) + static_cast<DWORD>(0x12));
+        //std::vector<int> NewOpcodes{NOP, JMP_REL8, static_cast<int>(RFGWinMainAddress), NOP};
+        std::vector<int> NewOpcodes{ NOP, JMP_REL8, 0xFD, NOP };
+        SnippetManager::ReplaceSnippet("RFG WinMain", RFGWinMainAddress, NewOpcodes);
+    }
+
+    void UnlockGameMain()
+    {
+        SnippetManager::RestoreSnippet("RFG WinMain", true);
+    }
+
+    /*Be VERY VERY careful with this function or else you might crash your PC or other programs.
+     * Mainly since I don't know if it could pause the threads of all other programs if edited.
+     */
+    void SuspendAllThreadsExceptLauncher(HANDLE LauncherThreadHandle)
+    {
+        const DWORD LauncherThreadID = GetThreadId(LauncherThreadHandle);
+        HANDLE h = CreateToolhelp32Snapshot(TH32CS_SNAPTHREAD, 0);
+        if (h != INVALID_HANDLE_VALUE)
+        {
+            THREADENTRY32 te;
+            te.dwSize = sizeof(te);
+            if (Thread32First(h, &te))
+            {
+                do
+                {
+                    if (te.dwSize >= FIELD_OFFSET(THREADENTRY32, th32OwnerProcessID) + sizeof(te.th32OwnerProcessID))
+                    {
+                        if (te.th32OwnerProcessID == Globals::PID)
+                        {
+                            if (te.th32ThreadID != LauncherThreadID)
+                            {
+                                HANDLE ThreadHandle = OpenThread(THREAD_ALL_ACCESS, FALSE, te.th32ThreadID);
+                                RfgThreadHandles.push_back(ThreadHandle);
+                                if (ThreadHandle)
+                                {
+                                    SuspendThread(ThreadHandle);
+                                }
+                            }
+                            //printf("Process 0x%04x Thread 0x%04x\n", te.th32OwnerProcessID, te.th32ThreadID);
+                            //if(te.th32ThreadID == LauncherThreadID)
+                            //{
+                            //    printf("^^^That's the launcher thread!\n");
+                            //}
+                        }
+                    }
+                    te.dwSize = sizeof(te);
+                } while (Thread32Next(h, &te));
+            }
+            CloseHandle(h);
+        }
+    }
+
+    void ResumeAllThreads()
+    {
+        for (auto& i : RfgThreadHandles)
+        {
+            ResumeThread(i);
+        }
     }
 }

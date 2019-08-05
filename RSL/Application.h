@@ -21,6 +21,7 @@ private:
     void InitLogger();
     void CheckForImproperInstallation() const;
     void InitRSL();
+    void InitHookingSystem();
     void WaitForValidGameState() const;
     void InitOverlays();
     void OpenDefaultLogs();

@@ -14,7 +14,7 @@ keen::GraphicsCommandBuffer* Hooks::KeenGraphicsBeginFrameHook(keen::GraphicsSys
         Globals::KeenGraphicsSystemPtr = pGraphicsSystem;
     }
     //Grab required D3D11 pointers for rendering and set up imgui.
-    if (!Globals::ImGuiInitialized)
+    if (!Globals::ImGuiInitialized && Globals::ReadyForImGuiInit)
     {
         if (pGraphicsSystem->pDevice)
         {

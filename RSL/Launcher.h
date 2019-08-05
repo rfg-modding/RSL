@@ -12,12 +12,6 @@ public:
     void Run();
     bool MainLoop();
 
-    void LockGameMain();
-    void UnlockGameMain();
-    void SuspendAllThreadsExceptLauncher();
-    void ResumeAllThreads();
-
-    std::vector<HANDLE> RfgThreadHandles;
     HANDLE LauncherThreadHandle = nullptr;
     HMODULE hModule;
 };

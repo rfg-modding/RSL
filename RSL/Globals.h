@@ -4,6 +4,7 @@
 #include "FixedArrayWrapper.h"
 
 /*RSL*/
+#define UseLauncher true
 
 //using json = nlohmann::json;
 namespace fs = std::filesystem;
@@ -130,6 +131,8 @@ namespace Globals
 	extern bool HudVisible;
 	extern bool FogVisible;
 
+    extern bool ReadyForImGuiInit;
+
     namespace Launcher
     {
         extern bool ShouldRunRsl; //Used by the launcher WndProc to track if the launcher should launch the main RSL code after it closes or start a vanilla game.
@@ -173,4 +176,10 @@ namespace Globals
 		Out << std::fixed << Value;
 		return Out.str();
 	}
+
+    extern std::vector<HANDLE> RfgThreadHandles;
+    extern void LockGameMain();
+    extern void UnlockGameMain();
+    extern void SuspendAllThreadsExceptLauncher(HANDLE LauncherThreadHandle);
+    extern void ResumeAllThreads();
 }

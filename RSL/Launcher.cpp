@@ -6,25 +6,10 @@
 
 void Launcher::Run()
 {
-    std::cout << "Entered launcher thread...\n";
-    std::cout << "Sleeping all threads except launcher thread!\n";
+    Globals::LockGameMain();
+    Globals::SuspendAllThreadsExceptLauncher(LauncherThreadHandle);
 
-    SuspendAllThreadsExceptLauncher();
-    LockGameMain();
-
-    std::cout << "Calling Launcher::MainLoop()\n";
-    MainLoop(); //Todo: Check the return value of this and try to add error reporting if the launcher fails to work.
-    std::cout << "Exited Launcher::MainLoop()\n";
-
-    ResumeAllThreads();
-    UnlockGameMain();
-    if (Globals::Launcher::ShouldRunRsl)
-    {
-        
-        
-    }
-
-    std::cout << "Exiting launcher thread. Normally at this point the main RSL thread would be started if that option was selected.\n";
+    MainLoop(); 
 }
 
 bool Launcher::MainLoop()
@@ -72,7 +57,7 @@ bool Launcher::MainLoop()
         TranslateMessage(&msg);
         DispatchMessage(&msg);
     }
-    //return msg.wParam;
+
     return true;
 }
 
@@ -104,73 +89,4 @@ LRESULT __stdcall LauncherWndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lPa
         return DefWindowProc(hWnd, msg, wParam, lParam);
     }
     return 0;
-}
-
-void Launcher::LockGameMain()
-{
-    //.text:019D0E80 rfg.exe:$810E80 #810280 <WinMain>
-    DWORD RFGWinMainAddress = Globals::FindPattern("rfg.exe", "\x8B\x4C\x24\x3C\x53\x33\xDB\xBA", "xxxxxxxx");
-    printf("RfgWinMain patch target address: %#010x\n", RFGWinMainAddress);
-    printf("RfgWinMain patch target address static casted to int: %#010x\n", static_cast<int>(RFGWinMainAddress));
-    printf("RfgWinMain patch target address static casted to BYTE: %#010x\n", static_cast<BYTE>(RFGWinMainAddress));
-
-    //DWORD RFGWinMainAddress = static_cast<DWORD>(Globals::ModuleBase + static_cast<DWORD>(0x810E80) + static_cast<DWORD>(0x12));
-    //std::vector<int> NewOpcodes{NOP, JMP_REL8, static_cast<int>(RFGWinMainAddress), NOP};
-    std::vector<int> NewOpcodes{ NOP, JMP_REL8, 0xFD, NOP };
-    SnippetManager::ReplaceSnippet("RFG WinMain", RFGWinMainAddress, NewOpcodes);
-}
-
-void Launcher::UnlockGameMain()
-{
-    SnippetManager::RestoreSnippet("RFG WinMain", true);
-}
-
-/*Be VERY VERY careful with this function or else you might crash your PC or other programs.
- * Mainly since I don't know if it could pause the threads of all other programs if edited.
- */
-void Launcher::SuspendAllThreadsExceptLauncher()
-{
-    const DWORD LauncherThreadID = GetThreadId(LauncherThreadHandle);
-    HANDLE h = CreateToolhelp32Snapshot(TH32CS_SNAPTHREAD, 0);
-    if (h != INVALID_HANDLE_VALUE)
-    {
-        THREADENTRY32 te;
-        te.dwSize = sizeof(te);
-        if (Thread32First(h, &te))
-        {
-            do
-            {
-                if (te.dwSize >= FIELD_OFFSET(THREADENTRY32, th32OwnerProcessID) + sizeof(te.th32OwnerProcessID))
-                {
-                    if (te.th32OwnerProcessID == Globals::PID)
-                    {
-                        if (te.th32ThreadID != LauncherThreadID)
-                        {
-                            HANDLE ThreadHandle = OpenThread(THREAD_ALL_ACCESS, FALSE, te.th32ThreadID);
-                            RfgThreadHandles.push_back(ThreadHandle);
-                            if (ThreadHandle)
-                            {
-                                SuspendThread(ThreadHandle);
-                            }
-                        }
-                        //printf("Process 0x%04x Thread 0x%04x\n", te.th32OwnerProcessID, te.th32ThreadID);
-                        //if(te.th32ThreadID == LauncherThreadID)
-                        //{
-                        //    printf("^^^That's the launcher thread!\n");
-                        //}
-                    }
-                }
-                te.dwSize = sizeof(te);
-            } while (Thread32Next(h, &te));
-        }
-        CloseHandle(h);
-    }
-}
-
-void Launcher::ResumeAllThreads()
-{
-    for (auto& i : RfgThreadHandles)
-    {
-        ResumeThread(i);
-    }
 }

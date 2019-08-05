@@ -1,8 +1,5 @@
 ﻿#include "Launcher.h"
 
-// Launcher is disabled for now due to it (for some unknown reason) causing issues with multiplayer even when the vanilla game option is selected.
-#define UseLauncher true
-
 DWORD WINAPI MainThread(HMODULE hModule);
 DWORD WINAPI LauncherThread(HMODULE hModule);
 HANDLE LauncherThreadHandle;
@@ -21,9 +18,7 @@ BOOL WINAPI DllMain(HMODULE hModule, DWORD dwReason, LPVOID lpReserved)
         Globals::PID = GetCurrentProcessId();
         Globals::ModuleBase = reinterpret_cast<uintptr_t>(GetModuleHandle(nullptr));
 #if UseLauncher
-        std::cout << "Starting launcher thread...\n";
         LauncherThreadHandle = CreateThread(0, 0, reinterpret_cast<LPTHREAD_START_ROUTINE>(LauncherThread), hModule, 0, 0);
-        //Todo: Test if different flags/permissions passed to the threads would help fix some bugs/crashes ^^
 #else
         CreateThread(0, 0, reinterpret_cast<LPTHREAD_START_ROUTINE>(MainThread), hModule, 0, 0);
 #endif
