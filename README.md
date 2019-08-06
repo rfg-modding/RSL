@@ -2,10 +2,10 @@
 RSL is a lua scripting interface and modding tool for Red Faction Guerrilla Re-mars-tered. The main goal of this project is to greatly expand what mods can do to the game, and what they can change, and to improve the mod development experience. Please see the [docs](https://rsl.readthedocs.io/en/latest/) for much more info about the project, the features it provides, and how to contribute to it. 
 
 ## Contents
-- [Project goals](https://github.com/Moneyl/RSL#project-goals) 
-- [Bug reports and feature requests](https://github.com/Moneyl/RSL#bugs-and-feature-requests)
-- [Examples](https://github.com/Moneyl/RSL#gallery) 
-- [Libraries used](https://github.com/Moneyl/RSL#libraries-used)
+- [Project goals](https://github.com/rsl-dev/RSL#project-goals) 
+- [Bug reports and feature requests](https://github.com/rsl-dev/RSL#bugs-and-feature-requests)
+- [Examples](https://github.com/rsl-dev/RSL#gallery) 
+- [Libraries used](https://github.com/rsl-dev/RSL#libraries-used)
 
 ## Project goals
 Normally, modding RFGR involves editing xml files included in the game which define things such as AI behavior, the properties of vehicles, weapons, and more. This allows modders to change the game in many ways. Even so, there are many hardcoded values and behaviors that cannot be changed, ultimately limited what modders can do. This tool aims to bypass some of these limitations by allowing modders to change many hardcoded values and giving them access to the power and flexibility which a scripting languages allow for.
@@ -15,10 +15,10 @@ Since this involves manipulating many parts of the games code and memory, this w
 See the [docs](https://rsl.readthedocs.io/en/latest/) for info on how to install and use the script loader, description of the scripting API and script examples.
 
 ## Bug reports and feature requests
-See the [issues](https://github.com/Moneyl/RSL/issues) section and search for an issue which already describes your bug/feature/question. If you can't find it, create a new one.
+See the [issues](https://github.com/rsl-dev/RSL/issues) section and search for an issue which already describes your bug/feature/question. If you can't find it, create a new one.
 
 ## Examples
-![alt text](https://github.com/Moneyl/RSL/blob/master/Images/0.5.0-GuiExample1.jpg "Main overlay from 0.5.0")
+![alt text](https://github.com/rsl-dev/RSL/blob/master/Images/0.5.0-GuiExample1.jpg "Main overlay from 0.5.0")
 Above is an image of the overlay provided by the RSL in version 0.5.0. The overlay includes useful features such as a script editor, and explosion spawner, a teleport menu, and some preset tweaks which can be useful such having AI ignore the player, or invulnerability. These can be useful for fun, and also when testing out mods or trying to learn more about how the game works.
 
 ### Scripting examples
