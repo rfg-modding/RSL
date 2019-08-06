@@ -287,6 +287,9 @@
     <ClCompile Include="ObjectSpawnVehicle.cpp">
       <Filter>Hooks</Filter>
     </ClCompile>
+    <ClCompile Include="D3D11_ResizeBuffers.cpp">
+      <Filter>Hooks</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CameraWrapper.h">

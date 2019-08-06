@@ -116,6 +116,7 @@
     <ClCompile Include="BaseGui.cpp" />
     <ClCompile Include="BaseTypeLua.cpp" />
     <ClCompile Include="D3D11Present.cpp" />
+    <ClCompile Include="D3D11_ResizeBuffers.cpp" />
     <ClCompile Include="ExplosionCreate.cpp" />
     <ClCompile Include="ExplosionInfoLua.cpp" />
     <ClCompile Include="ExplosionSpawnerGui.cpp" />
