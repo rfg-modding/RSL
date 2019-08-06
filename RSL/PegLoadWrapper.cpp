@@ -4,7 +4,7 @@
 bool __cdecl Hooks::peg_load_wrapper_hook(const char* filename, unsigned srid, char* cpu_preload, int cpu_size, char* gpu_preload, int gpu_size)
 {
 #ifdef DEBUG
-    Logger::Log("peg_load_wrapper hook: filename: {}, srid: {}, cpu_preload: {}, cpu_size: {},  gpu_preload: {}, gpu_size: {}\n", filename, srid, reinterpret_cast<DWORD>(cpu_preload), cpu_size, reinterpret_cast<DWORD>(gpu_preload), gpu_size);
+    //Logger::Log("peg_load_wrapper hook: filename: {}, srid: {}, cpu_preload: {}, cpu_size: {},  gpu_preload: {}, gpu_size: {}\n", filename, srid, reinterpret_cast<DWORD>(cpu_preload), cpu_size, reinterpret_cast<DWORD>(gpu_preload), gpu_size);
 #endif
 
     if (Globals::DumpTexturesWhenLoading)
@@ -13,11 +13,13 @@ bool __cdecl Hooks::peg_load_wrapper_hook(const char* filename, unsigned srid, c
         auto SplitName = Globals::SplitFilename(filename);
         if (std::get<1>(SplitName) == ".cpeg_pc")
         {
+            Logger::Log("Dumping texture file \"{}\" and \"{}\"\n", filename, std::get<0>(SplitName) + ".gpeg_pc");
             std::ofstream("RSL/Dumps/Textures/" + std::string(filename), std::ios::binary).write(cpu_preload, cpu_size);
             std::ofstream("RSL/Dumps/Textures/" + std::get<0>(SplitName) + ".gpeg_pc", std::ios::binary).write(gpu_preload, gpu_size);
         }
         else if (std::get<1>(SplitName) == ".cvbm_pc")
         {
+            Logger::Log("Dumping texture file \"{}\" and \"{}\"\n", filename, std::get<0>(SplitName) + ".gvbm_pc");
             std::ofstream("RSL/Dumps/Textures/" + std::string(filename), std::ios::binary).write(cpu_preload, cpu_size);
             std::ofstream("RSL/Dumps/Textures/" + std::get<0>(SplitName) + ".gvbm_pc", std::ios::binary).write(gpu_preload, gpu_size);
         }
@@ -31,7 +33,7 @@ bool __cdecl Hooks::peg_load_wrapper_hook(const char* filename, unsigned srid, c
     {
         auto SplitName = Globals::SplitFilename(filename);
         //Todo: Figure out if it's necessary to call delete on the games char array to avoid a memory leak.
-        Logger::Log("Found texture file {}. Replacing.", "./RSL/Overrides/Textures/" + std::string(filename));
+        Logger::Log("Found texture file \"{}\". Replacing...\n", "./RSL/Overrides/Textures/" + std::string(filename));
 
         const int cpu_file_size = fs::file_size("RSL/Overrides/Textures/" + std::string(filename));
         char* TempCpuBuffer = new char[cpu_file_size];
@@ -40,21 +42,35 @@ bool __cdecl Hooks::peg_load_wrapper_hook(const char* filename, unsigned srid, c
 
         if (std::get<1>(SplitName) == ".cpeg_pc")
         {
-            const int gpu_file_size = fs::file_size("RSL/Overrides/Textures/" + std::get<0>(SplitName) + ".gpeg_pc");
-            char* TempGpuBuffer = new char[gpu_file_size];
+            if(fs::exists("RSL/Overrides/Textures/" + std::get<0>(SplitName) + ".gpeg_pc"))
+            {
+                const int gpu_file_size = fs::file_size("RSL/Overrides/Textures/" + std::get<0>(SplitName) + ".gpeg_pc");
+                char* TempGpuBuffer = new char[gpu_file_size];
 
-            std::ifstream("RSL/Overrides/Textures/" + std::get<0>(SplitName) + ".gpeg_pc", std::ios::binary).read(TempGpuBuffer, gpu_file_size);
+                std::ifstream("RSL/Overrides/Textures/" + std::get<0>(SplitName) + ".gpeg_pc", std::ios::binary).read(TempGpuBuffer, gpu_file_size);
 
-            return peg_load_wrapper(filename, srid, TempCpuBuffer, cpu_file_size, TempGpuBuffer, gpu_file_size);
+                return peg_load_wrapper(filename, srid, TempCpuBuffer, cpu_file_size, TempGpuBuffer, gpu_file_size);
+            }
+            else
+            {
+                Logger::Log("Failed to find the matching gpeg_pc file for \"{}\". Using default texture instead.\n", "./RSL/Overrides/Textures/" + std::string(filename));
+            }
         }
         else if (std::get<1>(SplitName) == ".cvbm_pc")
         {
-            int gpu_file_size = fs::file_size("RSL/Overrides/Textures/" + std::get<0>(SplitName) + ".gvbm_pc");
-            char* TempGpuBuffer = new char[gpu_file_size];
+            if (fs::exists("RSL/Overrides/Textures/" + std::get<0>(SplitName) + ".gvbm_pc"))
+            {
+                int gpu_file_size = fs::file_size("RSL/Overrides/Textures/" + std::get<0>(SplitName) + ".gvbm_pc");
+                char* TempGpuBuffer = new char[gpu_file_size];
 
-            std::ifstream("RSL/Overrides/Textures/" + std::get<0>(SplitName) + ".gvbm_pc", std::ios::binary).read(TempGpuBuffer, gpu_file_size);
+                std::ifstream("RSL/Overrides/Textures/" + std::get<0>(SplitName) + ".gvbm_pc", std::ios::binary).read(TempGpuBuffer, gpu_file_size);
 
-            return peg_load_wrapper(filename, srid, TempCpuBuffer, cpu_file_size, TempGpuBuffer, gpu_file_size);
+                return peg_load_wrapper(filename, srid, TempCpuBuffer, cpu_file_size, TempGpuBuffer, gpu_file_size);
+            }
+            else
+            {
+                Logger::Log("Failed to find the matching gpeg_pc file for \"{}\". Using default texture instead.\n", "./RSL/Overrides/Textures/" + std::string(filename));
+            }
         }
     }
 
