@@ -26,18 +26,18 @@ void MenuBarGui::Draw()
 		return;
 	}
 
-   static auto GeneralTweaksGuiRef = Globals::Gui->GetGuiReference<GeneralTweaksGui>("General tweaks").value();
-   static auto LuaConsoleRef = Globals::Gui->GetGuiReference<OverlayConsole>("Lua console").value();
-   static auto ScriptSelectRef = Globals::Gui->GetGuiReference<ScriptSelectGui>("Scripts").value();
-   static auto CameraSettingsRef = Globals::Gui->GetGuiReference<FreeCamGui>("Camera settings").value();
-   static auto ScriptEditorRef = Globals::Gui->GetGuiReference<TextEditorWrapper>("Script editor").value();
-   static auto LoggerRef = Globals::Gui->GetGuiReference<LogWindow>("Logger").value();
-   static auto WelcomeRef = Globals::Gui->GetGuiReference<WelcomeGui>("Welcome").value();
-   static auto ThemeEditorRef = Globals::Gui->GetGuiReference<ThemeEditorGui>("Theme editor").value();
-   static auto PhysicsSettingsRef = Globals::Gui->GetGuiReference<PhysicsGui>("Physics settings").value();
-   static auto TeleportGuiRef = Globals::Gui->GetGuiReference<TeleportGui>("Teleport").value();
-   static auto IntrospectionGuiRef = Globals::Gui->GetGuiReference<IntrospectionGui>("Object introspection").value();
-   static auto ExplosionSpawnerGuiRef = Globals::Gui->GetGuiReference<ExplosionSpawnerGui>("Explosion spawner").value();
+    static auto GeneralTweaksGuiRef = Globals::Gui->GetGuiReference<GeneralTweaksGui>("General tweaks").value();
+    static auto LuaConsoleRef = Globals::Gui->GetGuiReference<OverlayConsole>("Lua console").value();
+    static auto ScriptSelectRef = Globals::Gui->GetGuiReference<ScriptSelectGui>("Scripts").value();
+    static auto CameraSettingsRef = Globals::Gui->GetGuiReference<FreeCamGui>("Camera settings").value();
+    static auto ScriptEditorRef = Globals::Gui->GetGuiReference<TextEditorWrapper>("Script editor").value();
+    static auto LoggerRef = Globals::Gui->GetGuiReference<LogWindow>("Logger").value();
+    static auto WelcomeRef = Globals::Gui->GetGuiReference<WelcomeGui>("Welcome").value();
+    static auto ThemeEditorRef = Globals::Gui->GetGuiReference<ThemeEditorGui>("Theme editor").value();
+    static auto PhysicsSettingsRef = Globals::Gui->GetGuiReference<PhysicsGui>("Physics settings").value();
+    static auto TeleportGuiRef = Globals::Gui->GetGuiReference<TeleportGui>("Teleport").value();
+    static auto IntrospectionGuiRef = Globals::Gui->GetGuiReference<IntrospectionGui>("Object introspection").value();
+    static auto ExplosionSpawnerGuiRef = Globals::Gui->GetGuiReference<ExplosionSpawnerGui>("Explosion spawner").value();
 
 	if (ImGui::BeginMainMenuBar())
 	{
@@ -135,14 +135,12 @@ void MenuBarGui::ShowAboutWindow(bool* p_open) const
 		ImGui::End();
 		return;
 	}
-	ImGui::Text("RSL %s", Globals::GetScriptLoaderVersion());
+	ImGui::Text("RSL version: %s", Globals::GetScriptLoaderVersion());
 	ImGui::Separator();
     ImGui::SetNextItemWidth(100.0f);
-	ImGui::TextWrapped("By moneyl. See it's public wiki repo here:");
+	ImGui::TextWrapped("By the RSL dev team, see it's repo at https://github.com/rsl-dev/RSL. Pull requests and feature suggestions are welcome!");
     ImGui::SetNextItemWidth(100.0f);
-	ImGui::TextWrapped("https://github.com/Moneyl/RFGR-Script-Loader-Wiki");
-    ImGui::SetNextItemWidth(100.0f);
-	ImGui::TextWrapped("If you have any bugs or questions you can contact me on the official Red Faction discord (https://discord.gg/redfaction), @moneyl. If we can't solve the issue I'd appreciate if you made a github issue and described the steps to reproduce any bug you find.");
+	ImGui::TextWrapped("If you have any bugs or questions you can get help on the official Red Faction discord (https://discord.gg/wYT7pj5), ping @moneyl. Alternatively, you can make a new issue on github and report any bugs or suggestions there.");
 
 	ImGui::Separator();
 	ImGui::Text("About libraries used:");
