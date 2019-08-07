@@ -458,6 +458,7 @@ bool Application::LoadDataFromConfig()
 
             Globals::MainConfig["Open debug console"] = false;
             Globals::MainConfig["Dump textures when loading"] = false;
+            Globals::MainConfig["Disable numpad while overlay is visible"] = true;
 
             std::ofstream ConfigOutput(ExePath + "RSL/Settings/Settings.json");
             ConfigOutput << std::setw(4) << Globals::MainConfig << "\n";
@@ -474,6 +475,7 @@ bool Application::LoadDataFromConfig()
     {
         Globals::OpenDebugConsole = Globals::MainConfig["Open debug console"].get<bool>();
         Globals::DumpTexturesWhenLoading = Globals::MainConfig["Dump textures when loading"].get<bool>();
+        Globals::DisableNumpadWhileOverlayVisible = Globals::MainConfig["Disable numpad while overlay is visible"].get<bool>();
         return true;
     }, "Settings.json", "read", "reading"))
     {

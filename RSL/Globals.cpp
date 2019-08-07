@@ -64,6 +64,7 @@ namespace Globals
 
 	bool OpenDebugConsole = false;
     bool DumpTexturesWhenLoading = false;
+    bool DisableNumpadWhileOverlayVisible = true;
 	nlohmann::json MainConfig;
 	float DefaultFreeCameraSpeed = 0.3f;
 	float DefaultRotationSpeed = 0.7f;

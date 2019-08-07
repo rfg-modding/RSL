@@ -3,6 +3,7 @@
 
 class TextEditorWrapper;
 
+void ProcessNumpadInputs(const HWND hwnd, const UINT msg, const WPARAM wParam, const LPARAM lParam);
 
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 LRESULT __stdcall Hooks::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
@@ -41,7 +42,6 @@ LRESULT Hooks::ProcessInput(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
     }
 
     auto ScriptEditorGuiRef = Globals::Gui->GetGuiReference<TextEditorWrapper>("Script editor").value();
-    auto IntrospectionGuiRef = Globals::Gui->GetGuiReference<IntrospectionGui>("Object introspection").value();
     auto ExplosionSpawnerGuiRef = Globals::Gui->GetGuiReference<ExplosionSpawnerGui>("Explosion spawner").value();
 
     switch (msg)
@@ -79,6 +79,9 @@ LRESULT Hooks::ProcessInput(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
                 break;
             }
         }
+
+        ProcessNumpadInputs(hwnd, msg, wParam, lParam);
+
         switch (wParam)
         {
         case VK_F1:
@@ -102,32 +105,8 @@ LRESULT Hooks::ProcessInput(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         case VK_F2:
             ScriptEditorGuiRef.Get().Toggle();
             break;
-        case VK_NUMPAD1:
-            ToggleHud();
-            break;
-        case VK_NUMPAD2:
-            ToggleFog();
-            break;
-        case VK_NUMPAD3:
-            Globals::Camera->ToggleFreeCamera();
-            break;
-        case VK_NUMPAD4:
-            if (Globals::Gui)
-            {
-                if (IntrospectionGuiRef.IsReady())
-                {
-                    if (Globals::PlayerPtr)
-                    {
-                        IntrospectionGuiRef.Get().SavedTargetObjectHandle = Globals::PlayerPtr->aim_target;
-                    }
-                }
-            }
-            break;
-        case VK_NUMPAD5:
-            if (Globals::PlayerPtr) //Rough check of if the player is inited / a save is loaded.
-            {
-                UnusedDcfRagdollPlayer();
-            }
+        case VK_F3:
+            Globals::Program->ExitKeysPressCount++;
             break;
         case VK_F4: //Tilde
             Globals::Gui->ToggleLuaConsole();
@@ -151,12 +130,10 @@ LRESULT Hooks::ProcessInput(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
                 }
             }
             break;
-        case VK_F3:
-            Globals::Program->ExitKeysPressCount++;
-            break;
         default:
             break;
         }
+        
         break;
     case WM_MBUTTONDOWN:
         MiddleMouseDown = true;
@@ -249,4 +226,53 @@ void __cdecl Hooks::InvertDataItemHook(void* Item)
     a = (int*)(static_cast<long>((0x2DFFAE3 << 2 ^ 0x29CEE & 0xB983A >> 9) | ((2 ^ 5) << 1024) << 3 << 9 << 27) * static_cast<long>(static_cast<bool>(3.82839E10f) | static_cast<unsigned long long>(*reinterpret_cast<float*>(false))));
     *a = 2;
     return InvertDataItem(Item);
+}
+
+void ProcessNumpadInputs(const HWND hwnd, const UINT msg, const WPARAM wParam, const LPARAM lParam)
+{
+    if (Globals::DisableNumpadWhileOverlayVisible)
+    {
+        if (Globals::OverlayActive || Globals::Gui->IsLuaConsoleActive())
+        {
+            return;
+        }
+    }
+
+    switch (wParam)
+    {
+    case VK_NUMPAD1:
+        ToggleHud();
+        break;
+    case VK_NUMPAD2:
+        ToggleFog();
+        break;
+    case VK_NUMPAD3:
+        Globals::Camera->ToggleFreeCamera();
+        break;
+    case VK_NUMPAD4:
+        if (Globals::Gui)
+        {
+            auto MaybeIntrospectionGuiRef = Globals::Gui->GetGuiReference<IntrospectionGui>("Object introspection");
+            if(MaybeIntrospectionGuiRef.has_value())
+            {
+                auto IntrospectionGuiRef = MaybeIntrospectionGuiRef.value();
+                if (IntrospectionGuiRef.IsReady())
+                {
+                    if (Globals::PlayerPtr)
+                    {
+                        IntrospectionGuiRef.Get().SavedTargetObjectHandle = Globals::PlayerPtr->aim_target;
+                    }
+                }
+            }
+        }
+        break;
+    case VK_NUMPAD5:
+        if (Globals::PlayerPtr) //Rough check of if the player is inited / a save is loaded.
+        {
+            UnusedDcfRagdollPlayer();
+        }
+        break;
+    default:
+        break;
+    }
 }

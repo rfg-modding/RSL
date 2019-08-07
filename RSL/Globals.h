@@ -78,10 +78,11 @@ namespace Globals
 	extern ImFont* FontNormal;
 	extern ImFont* FontBig;
 	extern ImFont* FontLarge;
-	extern ImFont* FontHuge;
+	extern ImFont* FontHuge; 
 
 	extern bool OpenDebugConsole;
     extern bool DumpTexturesWhenLoading;
+    extern bool DisableNumpadWhileOverlayVisible;
 	extern nlohmann::json MainConfig;
 	extern float DefaultFreeCameraSpeed;
 	extern float DefaultRotationSpeed;
