@@ -2,6 +2,7 @@
 #include "Includes.h"
 #include "RFGR_Types_Vehicle_Spawn_Params.h"
 #include "FixedArrayWrapper.h"
+#include "Version.h"
 
 /*RSL*/
 #define UseLauncher true
@@ -138,8 +139,6 @@ namespace Globals
     {
         extern bool ShouldRunRsl; //Used by the launcher WndProc to track if the launcher should launch the main RSL code after it closes or start a vanilla game.
     }
-
-	extern const std::string ScriptLoaderVersion;
     
 	const char* GetScriptLoaderVersion();
 	bool DirectoryExists(const std::string& Directory);

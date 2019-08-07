@@ -122,11 +122,9 @@ namespace Globals
         bool ShouldRunRsl = false;
     }
 
-	const std::string ScriptLoaderVersion("0.5.0-Alpha");
-
 	const char* GetScriptLoaderVersion()
 	{
-		return Globals::ScriptLoaderVersion.c_str();
+		return RSL_VERSION;
 	}
 
 	bool DirectoryExists(const std::string& Directory)

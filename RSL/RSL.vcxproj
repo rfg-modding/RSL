@@ -244,6 +244,7 @@
     <ClInclude Include="RFGR_Types_Vehicle_Spawn_Params.h" />
     <ClInclude Include="TextEditorWrapper.h" />
     <ClInclude Include="VehicleSpawnerGui.h" />
+    <ClInclude Include="Version.h" />
     <ClInclude Include="WorldLua.h" />
     <ClInclude Include="InvItemInfoLua.h" />
     <ClInclude Include="ItsyBitsy.h" />

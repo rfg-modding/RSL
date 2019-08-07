@@ -523,5 +523,8 @@
     <ClInclude Include="Hooks.h">
       <Filter>Hooks</Filter>
     </ClInclude>
+    <ClInclude Include="Version.h">
+      <Filter>General Files\Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
