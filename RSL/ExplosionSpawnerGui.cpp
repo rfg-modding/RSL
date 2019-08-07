@@ -132,10 +132,15 @@ void ExplosionSpawnerGui::Draw()
                 ImGui::BulletText("%s", Globals::CharArrayToString(Globals::ExplosionInfos[i].m_name, 32).c_str());
                 ImGui::SameLine();
                 ImGui::NextColumn();
-                ImGui::SetColumnWidth(1, 120.0f);
+                ImGui::SetColumnWidth(1, 180.0f);
                 if(ImGui::Button(std::string("Copy values##" + std::to_string(i)).c_str()))
                 {
                     CustomExplosionInfo = Globals::ExplosionInfos[i];
+                }
+                if(Globals::CharArrayToString(Globals::ExplosionInfos[i].m_name, 32) == "edf_power_core")
+                {
+                    ImGui::SameLine();
+                    Util::Gui::ShowHelpMarker("Note that this explosion has no visual effect unless you've entered the free fire zone, and is not guaranteed to work outside of it. It still damages the environment, just does not have a vfx.", "(Bug note)");
                 }
                 ImGui::NextColumn();
             }

@@ -13,7 +13,7 @@ namespace Util::Gui
 {
     void TooltipOnPrevious(std::string& Description, ImFont* Font = nullptr);
     void TooltipOnPrevious(const char* Description, ImFont* Font = nullptr);
-    void ShowHelpMarker(const char* Description);
+    void ShowHelpMarker(const char* Description, const char* Label = "(?)");
     void LabelAndValue(const std::string& Label, const std::string& Value);
 }
 

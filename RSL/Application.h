@@ -12,6 +12,7 @@ public:
     ~Application() = default;
 
     void Run();
+    bool LoadDataFromConfig();
 
     //Keeps track of how long someone has held down the deactivation key. Currently F3.
     unsigned int ExitKeysPressCount = 0;
@@ -34,7 +35,7 @@ private:
     void CloseConsole() const;
     void SetMemoryLocations();
     bool IsFolderPlacementError() const;
-    bool LoadDataFromConfig();
+    
 
     CameraWrapper Camera;
     FunctionManager Functions;

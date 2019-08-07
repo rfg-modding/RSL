@@ -1,6 +1,4 @@
-#include "MenuBarGui.h"
-#include "GuiSystem.h"
-#include "ScriptManager.h"
+#include "Application.h"
 
 MenuBarGui::MenuBarGui(std::string Title_)
 {
@@ -55,6 +53,12 @@ void MenuBarGui::Draw()
                 Globals::Scripts->Reset();
             }
             ImGui::PopStyleColor(); //Pop reset button color
+            ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.0f, 0.8f, 0.106f, 1.0f)); //Light green color
+            if (ImGui::MenuItem(std::string(std::string(ICON_FA_SYNC) + u8" Reload settings.json").c_str()))
+            {
+                Globals::Program->LoadDataFromConfig();
+            }
+            ImGui::PopStyleColor(); 
 			ImGui::EndMenu();
 		}
 		if (ImGui::BeginMenu("Tweaks"))

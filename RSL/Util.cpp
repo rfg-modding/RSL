@@ -67,9 +67,9 @@ namespace Util::Gui
     /* Adds a text element of "(?)" to the current gui with the provided description as it's
      * tooltip.
      */
-    void ShowHelpMarker(const char* Description)
+    void ShowHelpMarker(const char* Description, const char* Label)
     {
-        ImGui::TextDisabled("(?)");
+        ImGui::TextDisabled(Label);
         if (ImGui::IsItemHovered())
         {
             ImGui::BeginTooltip();
