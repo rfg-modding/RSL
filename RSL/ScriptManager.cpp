@@ -35,6 +35,7 @@ void ScriptManager::Reset()
     delete LuaState;
     Initialize();
     UpdateRfgPointers();
+    RunStartupScripts();
 }
 
 /* Initializes the lua state and calls all necessary functions and scripts 
