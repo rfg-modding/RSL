@@ -26,20 +26,20 @@ void FreeCamGui::Draw()
 	ImGui::PopFont();
 	ImGui::Separator();
 
-    ImGui::Text("This doesn't seem to work but I'm leaving it in for fun.");
-    ImGui::InputText("Level filename", &LevelNameBuffer);
-    ImGui::Checkbox("New game", &NewGame);
-    ImGui::Checkbox("Single zone", &SingleZone);
-    ImGui::Checkbox("Player start at safehouse", &PlayerStartAtSafehouse);
-    ImGui::InputScalar("DlcId", ImGuiDataType_U32, &DlcId);
-    ImGui::Checkbox("Reset destruction", &ResetDestruction);
-    if(ImGui::Button("Try  to load level"))
-    {
-        //LoadLevelWrapper(LevelNameBuffer, NewGame, SingleZone);
-        WorldSetPendingTerritoryLoad(Globals::RfgWorldPtr, nullptr, LevelNameBuffer.c_str(), NewGame, SingleZone, PlayerStartAtSafehouse, DlcId, ResetDestruction);
-    }
-    //terr01_03_12
-    ImGui::Separator();
+    //ImGui::Text("This doesn't seem to work but I'm leaving it in for fun.");
+    //ImGui::InputText("Level filename", &LevelNameBuffer);
+    //ImGui::Checkbox("New game", &NewGame);
+    //ImGui::Checkbox("Single zone", &SingleZone);
+    //ImGui::Checkbox("Player start at safehouse", &PlayerStartAtSafehouse);
+    //ImGui::InputScalar("DlcId", ImGuiDataType_U32, &DlcId);
+    //ImGui::Checkbox("Reset destruction", &ResetDestruction);
+    //if(ImGui::Button("Try  to load level"))
+    //{
+    //    //LoadLevelWrapper(LevelNameBuffer, NewGame, SingleZone);
+    //    WorldSetPendingTerritoryLoad(Globals::RfgWorldPtr, nullptr, LevelNameBuffer.c_str(), NewGame, SingleZone, PlayerStartAtSafehouse, DlcId, ResetDestruction);
+    //}
+    ////terr01_03_12
+    //ImGui::Separator();
 
     //ImGui::Separator();
     //ImGui::Text("Stream grid radius: ");
@@ -89,69 +89,69 @@ void FreeCamGui::Draw()
     //    ImGui::Text("Rfg world ptr invalid. Can't display stream grid info");
     //}
 
-    ImGui::Separator();
+    //ImGui::Separator();
 
-    if(ImGui::Button("Log explosion infos"))
-    {
-        if (Globals::ExplosionInfos.Initialized())
-        {
-            Logger::Log("Printing out all explosion names...\n");
-            for (int i = 0; i < Globals::ExplosionInfos.Size(); i++)
-            {
-                Logger::Log("{}: {}\n", i, Globals::CharArrayToString((char*)& Globals::ExplosionInfos[i].m_name, 32));
-                Logger::Log("\t Effect 0: {}\n", Globals::ExplosionInfos[i].m_effects[0]);
-                Logger::Log("\t Effect 1: {}\n", Globals::ExplosionInfos[i].m_effects[1]);
-                Logger::Log("\t Effect 2: {}\n", Globals::ExplosionInfos[i].m_effects[2]);
-                Logger::Log("\t Effect 3: {}\n", Globals::ExplosionInfos[i].m_effects[3]);
-            }
-        }
-    }
+    //if(ImGui::Button("Log explosion infos"))
+    //{
+    //    if (Globals::ExplosionInfos.Initialized())
+    //    {
+    //        Logger::Log("Printing out all explosion names...\n");
+    //        for (int i = 0; i < Globals::ExplosionInfos.Size(); i++)
+    //        {
+    //            Logger::Log("{}: {}\n", i, Globals::CharArrayToString((char*)& Globals::ExplosionInfos[i].m_name, 32));
+    //            Logger::Log("\t Effect 0: {}\n", Globals::ExplosionInfos[i].m_effects[0]);
+    //            Logger::Log("\t Effect 1: {}\n", Globals::ExplosionInfos[i].m_effects[1]);
+    //            Logger::Log("\t Effect 2: {}\n", Globals::ExplosionInfos[i].m_effects[2]);
+    //            Logger::Log("\t Effect 3: {}\n", Globals::ExplosionInfos[i].m_effects[3]);
+    //        }
+    //    }
+    //}
 
-    if (ImGui::Button("Log material effect infos"))
-    {
-        if (Globals::MaterialEffectInfos.Initialized())
-        {
-            Logger::Log("Printing out all material_effect_info names and other info...\n");
-            for (int i = 0; i < Globals::MaterialEffectInfos.Size(); i++)
-            {
-                Logger::Log("{}: {}\n", i, Globals::CharArrayToString((char*)& Globals::MaterialEffectInfos[i].name, 64));
-                Logger::Log("\t SRID: {}\n", Globals::MaterialEffectInfos[i].srid);
-                Logger::Log("\t Num layers: {}\n", Globals::MaterialEffectInfos[i].num_layers);
-            }
-        }
-    }
+    //if (ImGui::Button("Log material effect infos"))
+    //{
+    //    if (Globals::MaterialEffectInfos.Initialized())
+    //    {
+    //        Logger::Log("Printing out all material_effect_info names and other info...\n");
+    //        for (int i = 0; i < Globals::MaterialEffectInfos.Size(); i++)
+    //        {
+    //            Logger::Log("{}: {}\n", i, Globals::CharArrayToString((char*)& Globals::MaterialEffectInfos[i].name, 64));
+    //            Logger::Log("\t SRID: {}\n", Globals::MaterialEffectInfos[i].srid);
+    //            Logger::Log("\t Num layers: {}\n", Globals::MaterialEffectInfos[i].num_layers);
+    //        }
+    //    }
+    //}
 
-    if(ImGui::Button("Log effect infos"))
-    {
-        if (Globals::EffectInfos.Initialized())
-        {
-            Logger::Log("Printing out all effect_info names and handles...\n");
-            for (int i = 0; i < Globals::EffectInfos.Size(); i++)
-            {
-                Logger::Log("{}: {}\n", i, Globals::CharArrayToString((char*)& Globals::EffectInfos[i].name, 65));
-                Logger::Log("\t Visual handle: {}\n", Globals::EffectInfos[i].visual_handle);
-                Logger::Log("\t Sound handle: {}\n", Globals::EffectInfos[i].sound_handle);
-            }
-        }
-    }
+    //if(ImGui::Button("Log effect infos"))
+    //{
+    //    if (Globals::EffectInfos.Initialized())
+    //    {
+    //        Logger::Log("Printing out all effect_info names and handles...\n");
+    //        for (int i = 0; i < Globals::EffectInfos.Size(); i++)
+    //        {
+    //            Logger::Log("{}: {}\n", i, Globals::CharArrayToString((char*)& Globals::EffectInfos[i].name, 65));
+    //            Logger::Log("\t Visual handle: {}\n", Globals::EffectInfos[i].visual_handle);
+    //            Logger::Log("\t Sound handle: {}\n", Globals::EffectInfos[i].sound_handle);
+    //        }
+    //    }
+    //}
 
-    if(ImGui::Button("Log vehicle infos"))
-    {
-        if(Globals::VehicleInfos)
-        {
-            for(int i = 0; i < Globals::VehicleInfos->Size(); i++)
-            {
-                Logger::Log("Index: {}\n", i);
-                Logger::Log("\t Name: {}\n", (*Globals::VehicleInfos)[i].name);
-                Logger::Log("\t Display name: {}\n", (*Globals::VehicleInfos)[i].display_name);
-                Logger::Log("\t Mesh name: {}\n", (*Globals::VehicleInfos)[i].mesh_name);
-                Logger::Log("\t Flyer max up thrust: {}\n", (*Globals::VehicleInfos)[i].flyer_max_up_thrust);
-                Logger::Log("\t Flyer max turn angvel: {}\n", (*Globals::VehicleInfos)[i].flyer_max_turn_angvel);
-            }
-        }
-    }
+    //if(ImGui::Button("Log vehicle infos"))
+    //{
+    //    if(Globals::VehicleInfos)
+    //    {
+    //        for(int i = 0; i < Globals::VehicleInfos->Size(); i++)
+    //        {
+    //            Logger::Log("Index: {}\n", i);
+    //            Logger::Log("\t Name: {}\n", (*Globals::VehicleInfos)[i].name);
+    //            Logger::Log("\t Display name: {}\n", (*Globals::VehicleInfos)[i].display_name);
+    //            Logger::Log("\t Mesh name: {}\n", (*Globals::VehicleInfos)[i].mesh_name);
+    //            Logger::Log("\t Flyer max up thrust: {}\n", (*Globals::VehicleInfos)[i].flyer_max_up_thrust);
+    //            Logger::Log("\t Flyer max turn angvel: {}\n", (*Globals::VehicleInfos)[i].flyer_max_turn_angvel);
+    //        }
+    //    }
+    //}
 
-    ImGui::Separator();
+    //ImGui::Separator();
 
 	if (ImGui::Button("Toggle free cam"))
 	{
