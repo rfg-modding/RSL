@@ -52,6 +52,7 @@ void Application::InitRSL()
         }
         OpenConsole();
 
+        Globals::ModuleBase = reinterpret_cast<uintptr_t>(GetModuleHandle(nullptr));
         Functions.Initialize();
 
         InitHookingSystem();
@@ -293,7 +294,6 @@ void Application::Exit()
 
 void Application::CreateHooks()
 {
-    //Todo: Make helpers or improve this function to need less casting fuckery
     Hooks.CreateHook("PlayerDoFrame", Globals::ModuleBase + 0x6D5A80, Hooks::PlayerDoFrameHook, PlayerDoFrame);
     Hooks.CreateHook("CsWrapSlice", Globals::ModuleBase + 0x516D80, Hooks::CsWrapSliceHook, CsWrapSlice);
 
