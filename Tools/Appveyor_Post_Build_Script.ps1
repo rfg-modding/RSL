@@ -1,12 +1,12 @@
-mkdir "./Red Faction Guerrilla Re-mars-tered"
-mkdir "./Red Faction Guerrilla Re-mars-tered/RSL"
+mkdir ".\Red Faction Guerrilla Re-mars-tered"
+mkdir ".\Red Faction Guerrilla Re-mars-tered\RSL"
 
 Copy-Item ".\Release\dinput8.dll" -Destination ".\Red Faction Guerrilla Re-mars-tered"
-Copy-Item ".\Release\Injector.exe" -Destination ".\Red Faction Guerrilla Re-mars-tered\RSL"
 Copy-Item ".\Release\RSL.dll" -Destination ".\Red Faction Guerrilla Re-mars-tered\RSL"
 Copy-Item ".\Core" -Destination ".\Red Faction Guerrilla Re-mars-tered\RSL\Core" -Recurse
-Copy-Item ".\Scripts" -Destination ".\Red Faction Guerrilla Re-mars-tered\RSL\Scripts" -Recurse
-Copy-Item ".\Fonts" -Destination ".\Red Faction Guerrilla Re-mars-tered\RSL\Fonts" -Recurse
+Copy-Item ".\Content\Scripts" -Destination ".\Red Faction Guerrilla Re-mars-tered\RSL\Scripts" -Recurse
+Copy-Item ".\Content\Fonts" -Destination ".\Red Faction Guerrilla Re-mars-tered\RSL\Fonts" -Recurse
+Copy-Item ".\Content\Settings" -Destination ".\Red Faction Guerrilla Re-mars-tered\RSL\Settings" -Recurse
 
 Copy-Item ".\LICENSE" -Destination ".\Red Faction Guerrilla Re-mars-tered\RSL"
 Copy-Item ".\readme.md" -Destination ".\Red Faction Guerrilla Re-mars-tered\RSL"
