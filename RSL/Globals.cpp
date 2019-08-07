@@ -74,6 +74,7 @@ namespace Globals
 	ID3D11RenderTargetView* MainRenderTargetView = nullptr;
 	HWND GameWindowHandle = nullptr;
 	RECT WindowRect = { 0, 0, 0, 0 };
+    keen::GraphicsSystem* GraphicsSystemPtr = nullptr;
 
 	RenderInterfaceD3D11* DebugDrawRenderInterface = nullptr;
     matrix44 vpMatrix;

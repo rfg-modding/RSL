@@ -7,43 +7,19 @@ class TextEditorWrapper;
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 LRESULT __stdcall Hooks::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-    Hooks::ProcessInput(hWnd, msg, wParam, lParam);
+    ProcessInput(hWnd, msg, wParam, lParam);
     if (Globals::OverlayActive || Globals::Gui->IsLuaConsoleActive())
     {
-        ImGui_ImplWin32_WndProcHandler(hWnd, msg, wParam, lParam);
         if (msg == WM_SIZE)
         {
-            Logger::LogWarning("WM_SIZE Received in custom WndProc. Invalidating ImGui DX11 device object. Releasing MainRenderTargetView.\n");
-            ImGui_ImplDX11_InvalidateDeviceObjects();
-            UpdateD3D11Pointers = true;
-            Globals::D3D11Context->OMSetRenderTargets(0, 0, 0);
-            Globals::MainRenderTargetView->Release();
             return CallWindowProc(Globals::OriginalWndProc, Globals::GameWindowHandle, msg, wParam, lParam);
         }
+        ImGui_ImplWin32_WndProcHandler(hWnd, msg, wParam, lParam);
         return true;
     }
 
     switch (msg)
     {
-    case WM_SIZE:
-        //Logger::Log("WM_SIZE Received in custom WndProc. Invalidating ImGui DX11 device object. Releasing MainRenderTargetView.", LogWarning);
-//         Globals::MainRenderTargetView->Release();
-//         Globals::MainRenderTargetView = nullptr;
-//         Globals::D3D11SwapchainPtr->ResizeBuffers(0, (UINT)LOWORD(lParam), (UINT)HIWORD(lParam), DXGI_FORMAT_UNKNOWN, 0);
-//         ID3D11Texture2D* pBackBuffer;
-//         Globals::D3D11SwapchainPtr->GetBuffer(0, IID_PPV_ARGS(&pBackBuffer));
-//         Globals::D3D11Device->CreateRenderTargetView(pBackBuffer, NULL, &Globals::MainRenderTargetView);
-//         pBackBuffer->Release();
-
-         //ImGui_ImplDX11_InvalidateDeviceObjects();
-         //UpdateD3D11Pointers = true;
-         //Globals::D3D11Context->OMSetRenderTargets(0, 0, 0);
-         //Globals::MainRenderTargetView->Release();
-        break;
-    case WM_SYSCOMMAND:
-        if ((wParam & 0xfff0) == SC_KEYMENU) // Disable ALT application menu
-            return 0;
-        break;
     case WM_DESTROY:
         PostQuitMessage(0);
         return 0;

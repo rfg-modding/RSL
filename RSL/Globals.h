@@ -91,6 +91,7 @@ namespace Globals
 	extern ID3D11RenderTargetView* MainRenderTargetView;
 	extern HWND GameWindowHandle;
 	extern RECT WindowRect;
+    extern keen::GraphicsSystem* GraphicsSystemPtr;
     
 	extern RenderInterfaceD3D11* DebugDrawRenderInterface;
     extern matrix44 vpMatrix;

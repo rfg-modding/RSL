@@ -21,6 +21,7 @@ keen::GraphicsCommandBuffer* Hooks::KeenGraphicsBeginFrameHook(keen::GraphicsSys
     {
         if(ReadyForD3D11Init(pGraphicsSystem))
         {
+            Globals::GraphicsSystemPtr = pGraphicsSystem;
             Globals::D3D11Device = pGraphicsSystem->pDevice;
             Globals::D3D11Context = pGraphicsSystem->pImmediateContext;
             Globals::D3D11SwapchainPtr = pGraphicsSystem->pDefaultSwapChain->pSwapChain;
