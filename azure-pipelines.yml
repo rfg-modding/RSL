@@ -6,6 +6,8 @@
 trigger:
 - master
 
+name: latest-$(BuildID)
+
 pool:
   vmImage: 'windows-2019'
 
@@ -16,7 +18,7 @@ steps:
 
 - task: VSBuild@1
   inputs:
-    solution: '.\RSL\RSL.sln'
+    solution: '.\RSL.sln'
     vsVersion: '16.0'
     platform: 'x86'
     configuration: 'Release'
