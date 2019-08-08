@@ -58,6 +58,10 @@ DWORD WINAPI LauncherThread(HMODULE hModule)
         //Todo: Maybe consider letting the script loader thread init, and do all it's hooking, and then resuming the games threads. This should allow early code patches and hooks.
         CreateThread(0, 0, reinterpret_cast<LPTHREAD_START_ROUTINE>(MainThread), hModule, 0, 0);
     }
+    else
+    {
+        Globals::ResumeAllThreads();
+    }
 
     ExitThread(0);
 }
