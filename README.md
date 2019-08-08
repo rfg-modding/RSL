@@ -1,7 +1,7 @@
 [![Build status](https://ci.appveyor.com/api/projects/status/pe6ee7xn6rgqn2pm/branch/master?svg=true)](https://ci.appveyor.com/project/Moneyl/rsl/branch/master)
 
 # Re-mars-tered Script Loader
-RSL is a lua scripting interface and modding tool for Red Faction Guerrilla Re-mars-tered. The main goal of this project is to greatly expand what mods can do to the game, and what they can change, and to improve the mod development experience. Please see the [docs](https://rsl.readthedocs.io/en/latest/) for much more info about the project, the features it provides, and how to contribute to it. 
+RSL is a lua scripting interface and modding tool for Red Faction Guerrilla Re-mars-tered. The main goal of this project is to greatly expand what mods can do to the game, and what they can change, and to improve the mod development experience. Please see the [docs](https://rsl.readthedocs.io/en/latest/) for much more info about the project, the features it provides, and how to contribute to it. See the [Official Red Faction Discord Server](https://discord.gg/wYT7pj5) to talk with the devs, other modders, and RF fans.
 
 ## Contents
 - [Project goals](https://github.com/rsl-dev/RSL#project-goals) 
