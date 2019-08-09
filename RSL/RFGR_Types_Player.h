@@ -981,6 +981,24 @@ enum object_type
 	OT_AREA_DEFENSE_NODE = 0x34,
 	NUM_OBJECT_TYPES = 0x35,
 };
+
+enum object_sub_type
+{
+    OT_SUB_UNDEFINED = 0xFFFFFFFF,
+    OT_SUB_MOVER_GENERAL = 0x0,
+    OT_SUB_MOVER_RFG = 0x1,
+    OT_SUB_HUMAN_NPC = 0x2,
+    OT_SUB_HUMAN_PLAYER = 0x3,
+    OT_SUB_VEHICLE_AUTO = 0x4,
+    OT_SUB_VEHICLE_FLYER = 0x5,
+    OT_SUB_VEHICLE_WALKER = 0x6,
+    OT_SUB_ITEM_WEAPON = 0x7,
+    OT_SUB_ITEM_PROJECTILE = 0x8,
+    OT_SUB_ITEM_MULTI_FLAG = 0x9,
+    OT_SUB_ITEM_MULTI_BACKPACK = 0xA,
+    NUM_OBJECT_SUB_TYPES = 0xB,
+};
+
 /* 675 */
 enum LipsyncDataHandle
 {
