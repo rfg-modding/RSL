@@ -98,11 +98,13 @@ void Application::InitRSL()
         Scripts.UpdateRfgPointers();
         Scripts.ScanScriptsFolder();
 
+        //Attempts to set important memory values and tries to compensate for varied game loading times by retrying the process if it fails the first time.
+        TrySetMemoryLocations(); 
+
         Beep(600, 100);
         Beep(700, 100);
         Beep(900, 200);
 
-        SetMemoryLocations();
         Scripts.RunStartupScripts();
     }
     catch (std::exception& Ex)
@@ -150,6 +152,65 @@ void Application::WaitForValidGameState() const
         EndTime = std::chrono::steady_clock::now();
     } 
     while (RFGRState < 0 || RFGRState > 63);
+}
+
+//Todo: Simplify this function by instead hooking explosion_parse_table (for explosions) and the relevant functions for other values, and setting their values after those functions are called
+//Todo: (continued) ... that way it will be guaranteed that if the explosion presets were loaded by the game, that the script loader will have them.
+void Application::TrySetMemoryLocations()
+{
+    SetMemoryLocations();
+    for (int i = 0; i < 30; i++)
+    {
+        if (*Globals::NumExplosionInfos == 0)
+        {
+            Logger::LogWarning("Trying to set memory locations...\n");
+            SetMemoryLocations();
+            if (*Globals::NumExplosionInfos == 0)
+            {
+                Logger::LogWarning("Still not set... waiting 0.5 seconds\n");
+                Sleep(500);
+            }
+            else
+            {
+                Logger::LogWarning("Successfully set memory locations!\n");
+            }
+        }
+        else
+        {
+            Logger::LogWarning("Successfully set memory locations! NumExplosionInfos: {}, {}\n", *Globals::NumExplosionInfos, Globals::ExplosionInfos.Initialized() ? "Exp list initialized" : "Exp list not initialized");
+            auto ExplosionInfosPtr = reinterpret_cast<explosion_info*>(reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x19E6CD8));
+            Globals::ExplosionInfos.Init(ExplosionInfosPtr, 80, *Globals::NumExplosionInfos);
+            break;
+        }
+    }
+    if (*Globals::NumExplosionInfos == 0)
+    {
+        Logger::LogFatalError("Failed to set memory locations! Attempting to dump explosion info to log...\n");
+
+        Globals::NumExplosionInfos = reinterpret_cast<uint*>(Globals::ModuleBase + 0x19EE490);
+        Logger::Log("Alternative Address of NumExplosionInfos: {:#x}\n", (DWORD)Globals::NumExplosionInfos);
+        Logger::Log("AltNumExplosionInfos = {}\n", *Globals::NumExplosionInfos);
+        auto ExplosionInfosPtr = reinterpret_cast<explosion_info*>(reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x19E6CD8));
+        Logger::Log("ExplosionInfos address: {:#x}\n", (DWORD)ExplosionInfosPtr);
+        Globals::ExplosionInfos.Init(ExplosionInfosPtr, 80, 72);
+
+        if (ExplosionInfosPtr)
+        {
+            Logger::Log("\n\n\nExplosion dump attempt: \n");
+            for (int i = 0; i < 72; i++)
+            {
+                Logger::Log("\n\nIndex: {}\n", i);
+                Logger::Log("Name: {}\n", Globals::CharArrayToString(Globals::ExplosionInfos[i].m_name, 32));
+                Logger::Log("Unique ID: {}\n", Globals::ExplosionInfos[i].m_unique_id);
+                Logger::Log("Knockdown radius: {}\n", Globals::ExplosionInfos[i].m_knockdown_radius);
+                Logger::Log("Player damage mult: {}\n", Globals::ExplosionInfos[i].player_damage_mult);
+                Logger::Log("Structural damage: {}\n", Globals::ExplosionInfos[i].m_structural_damage);
+                Logger::Log("Salvage max pieces: {}\n", Globals::ExplosionInfos[i].salvage_max_pieces);
+                Logger::Log("Ignore orientation: {}\n", Globals::ExplosionInfos[i].ignore_orientation);
+            }
+        }
+        FreeLibraryAndExitThread(Globals::ScriptLoaderModule, 0);
+    }
 }
 
 void Application::InitOverlays()
@@ -360,6 +421,9 @@ void Application::CloseConsole() const
 
 void Application::SetMemoryLocations()
 {
+    Logger::Log("Setting memory locations. ModuleBase value: {:#x}\n", (DWORD)Globals::ModuleBase);
+    Globals::ModuleBase = reinterpret_cast<uintptr_t>(GetModuleHandle(nullptr));
+    Logger::Log("New ModuleBase value: {:#x}\n", (DWORD)Globals::ModuleBase);
     Globals::InMultiplayer = reinterpret_cast<bool*>(*reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x002CA210));
     if (*Globals::InMultiplayer)
     {
@@ -369,18 +433,24 @@ void Application::SetMemoryLocations()
     //Todo: See if I can simplify this cast by removing the DWORD* bit. 
     //Todo: Make helpers for stuff like this so theres less casting fuckery and guess work.
     Globals::NumExplosionInfos = reinterpret_cast<uint*>(reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x19EE490));
+    Logger::Log("Address of NumExplosionInfos: {:#x}\n", (DWORD)Globals::NumExplosionInfos);
     Logger::Log("NumExplosionInfos = {}\n", *Globals::NumExplosionInfos);
     auto ExplosionInfosPtr = reinterpret_cast<explosion_info*>(reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x19E6CD8));
+    Logger::Log("ExplosionInfos address: {:#x}\n", (DWORD)ExplosionInfosPtr);
     Globals::ExplosionInfos.Init(ExplosionInfosPtr, 80, *Globals::NumExplosionInfos);
 
     Globals::NumMaterialEffectInfos = reinterpret_cast<uint*>(reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x19EE4C4));
+    Logger::Log("Address of NumMaterialEffectInfos: {:#x}\n", (DWORD)Globals::NumMaterialEffectInfos);
     Logger::Log("Num material effect infos = {}\n", *Globals::NumMaterialEffectInfos);
     auto MaterialEffectInfosPtr = reinterpret_cast<material_effect_info*>(reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x19EB6F0));
+    Logger::Log("MaterialEffectInfos address: {:#x}\n", (DWORD)MaterialEffectInfosPtr);
     Globals::MaterialEffectInfos.Init(MaterialEffectInfosPtr, *Globals::NumMaterialEffectInfos, *Globals::NumMaterialEffectInfos);
 
     Globals::NumEffectInfos = reinterpret_cast<uint*>(reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x1D82DF0));
+    Logger::Log("Address of NumEffectInfos: {:#x}\n", (DWORD)Globals::NumEffectInfos);
     Logger::Log("Num effect infos = {}\n", *Globals::NumEffectInfos);
     auto EffectInfosPtr = reinterpret_cast<effect_info*>(reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x1D82E60));
+    Logger::Log("EffectInfos address: {:#x}\n", (DWORD)EffectInfosPtr);
     Globals::EffectInfos.Init(EffectInfosPtr, *Globals::NumEffectInfos, *Globals::NumEffectInfos);
 
     Globals::VehicleInfos = reinterpret_cast<rfg::farray<vehicle_info, 163>*>(reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x12BA5F8));

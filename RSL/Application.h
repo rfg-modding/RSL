@@ -24,6 +24,7 @@ private:
     void InitRSL();
     void InitHookingSystem();
     void WaitForValidGameState() const;
+    void TrySetMemoryLocations();
     void InitOverlays();
     void OpenDefaultLogs();
     void MainLoop();
