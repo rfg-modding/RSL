@@ -127,3 +127,155 @@ std::string Util::General::ToLower(std::string& String)
     std::transform(Copy.begin(), Copy.end(), Copy.begin(), [](unsigned char c) { return std::tolower(c); });
     return Copy;
 }
+
+std::string Util::RFG::GetObjectTypeString(char ObjectType)
+{
+    switch (ObjectType)
+    {
+    case 0:
+        return "Human";
+    case 1:
+        return "Item";
+    case 2:
+        return "Mover";
+    case 3:
+        return "Vehicle";
+    case 4:
+        return "Effect";
+    case 5:
+        return "Debris";
+    case 6:
+        return "Turret";
+    case 7:
+        return "Light";
+    case 8:
+        return "PlayerStart";
+    case 9:
+        return "CoverNode";
+    case 10:
+        return "NavPoint";
+    case 11:
+        return "Squad";
+    case 12:
+        return "Convoy";
+    case 13:
+        return "ConvoyEnd";
+    case 14:
+        return "Patrol";
+    case 15:
+        return "GuardNode";
+    case 16:
+        return "Skybox";
+    case 17:
+        return "Ladder";
+    case 18:
+        return "Constraint";
+    case 19:
+        return "Zone";
+    case 20:
+        return "TriggerRegion";
+    case 21:
+        return "MarauderAmbushRegion";
+    case 22:
+        return "RestrictedArea";
+    case 23:
+        return "SpawnRegion";
+    case 24:
+        return "AmbientSpawnRegion";
+    case 25:
+        return "VehicleSpawnNode";
+    case 26:
+        return "NpcSpawnNode";
+    case 27:
+        return "TurretSpawnNode";
+    case 28:
+        return "ActionNode";
+    case 29:
+        return "SquadSpawnNode";
+    case 30:
+        return "RoadblockNode";
+    case 31:
+        return "ShapeCutter";
+    case 32:
+        return "District";
+    case 33:
+        return "MultiMarker";
+    case 34:
+        return "PathRoad";
+    case 35:
+        return "LightParams";
+    case 36:
+        return "Dummy";
+    case 37:
+        return "ActivitySpawn";
+    case 38:
+        return "RaidNode";
+    case 39:
+        return "Subzone";
+    case 40:
+        return "HouseArrestNode";
+    case 41:
+        return "DemolitionsMasterNode";
+    case 42:
+        return "RidingShotgunNode";
+    case 43:
+        return "DeliveryNode";
+    case 44:
+        return "BoundingBox";
+    case 45:
+        return "MissionStartNode";
+    case 46:
+        return "Courier";
+    case 47:
+        return "CourierEnd";
+    case 48:
+        return "Safehouse";
+    case 49:
+        return "BftpNode";
+    case 50:
+        return "AirstrikeDefenseNode";
+    case 51:
+        return "UpgradeNode";
+    case 52:
+        return "AreaDefenseNode";
+    case 4294967295:
+        return "Undefined";
+    default:
+        return "Invalid object type";
+    }
+}
+
+std::string Util::RFG::GetObjectSubTypeString(char ObjectSubType)
+{
+    switch (ObjectSubType)
+    {
+    case 4294967295:
+        return "Undefined";
+    case 0:
+        return "MoverGeneral";
+    case 1:
+        return "MoverRfg";
+    case 2:
+        return "HumanNpc";
+    case 3:
+        return "HumanPlayer";
+    case 4:
+        return "VehicleAuto";
+    case 5:
+        return "VehicleFlyer";
+    case 6:
+        return "VehicleWalker";
+    case 7:
+        return "ItemWeapon";
+    case 8:
+        return "ItemProjectile";
+    case 9:
+        return "ItemMultiFlag";
+    case 10:
+        return "ItemMultiBackpack";
+    case 11:
+        return "NumObjectSubTypes (You probably shouldn't be seeing this...)";
+    default:
+        return "Invalid object subtype";
+    }
+}

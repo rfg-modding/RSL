@@ -23,3 +23,9 @@ namespace Util::General
     std::string LoadFileToString(const std::string& FullPath);
     std::string ToLower(std::string& String);
 }
+
+namespace Util::RFG
+{
+    std::string GetObjectTypeString(char ObjectType);
+    std::string GetObjectSubTypeString(char ObjectSubType);
+}

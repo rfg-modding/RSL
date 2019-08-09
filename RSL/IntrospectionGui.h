@@ -10,9 +10,6 @@ public:
 	void Draw() override;
 	void DrawPlayerIntrospectionGui(const char* Title);
 
-    static std::string GetObjectTypeString(char ObjectType);
-    static std::string GetObjectSubTypeString(char ObjectSubType);
-
 	ImGuiWindowFlags WindowFlags = 0;
 
     uint SavedTargetObjectHandle = 0;
