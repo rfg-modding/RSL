@@ -1,4 +1,5 @@
 #include "ExplosionSpawnerGui.h"
+#include "Application.h"
 
 ExplosionSpawnerGui::ExplosionSpawnerGui(std::string Title_)
 {
@@ -21,6 +22,18 @@ void ExplosionSpawnerGui::Draw()
 
     if(!DrawnOnce)
     {
+        
+        Globals::NumExplosionInfos = reinterpret_cast<uint*>(Globals::ModuleBase + 0x19EE490);
+        auto ExplosionInfosPtr = reinterpret_cast<explosion_info*>(reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x19E6CD8));
+        Globals::ExplosionInfos.Init(ExplosionInfosPtr, 80, *Globals::NumExplosionInfos);
+
+        Globals::NumMaterialEffectInfos = reinterpret_cast<uint*>(reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x19EE4C4));
+        auto MaterialEffectInfosPtr = reinterpret_cast<material_effect_info*>(reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x19EB6F0));
+        Globals::MaterialEffectInfos.Init(MaterialEffectInfosPtr, *Globals::NumMaterialEffectInfos, *Globals::NumMaterialEffectInfos);
+
+        Globals::NumEffectInfos = reinterpret_cast<uint*>(reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x1D82DF0));
+        auto EffectInfosPtr = reinterpret_cast<effect_info*>(reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x1D82E60));
+        Globals::EffectInfos.Init(EffectInfosPtr, *Globals::NumEffectInfos, *Globals::NumEffectInfos);
         std::optional<explosion_info*> NewInfo = Globals::GetExplosionInfo("mine"); //Set default values to the land mine
         if(NewInfo)
         {
@@ -33,6 +46,29 @@ void ExplosionSpawnerGui::Draw()
     ImGui::Text("Explosion spawner:");
     ImGui::PopFont();
     ImGui::Separator();
+
+    if (ImGui::Button("Reload this gui"))
+    {
+        Globals::NumExplosionInfos = reinterpret_cast<uint*>(Globals::ModuleBase + 0x19EE490);
+        auto ExplosionInfosPtr = reinterpret_cast<explosion_info*>(reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x19E6CD8));
+        Globals::ExplosionInfos.Init(ExplosionInfosPtr, 80, *Globals::NumExplosionInfos);
+
+        Globals::NumMaterialEffectInfos = reinterpret_cast<uint*>(reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x19EE4C4));
+        auto MaterialEffectInfosPtr = reinterpret_cast<material_effect_info*>(reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x19EB6F0));
+        Globals::MaterialEffectInfos.Init(MaterialEffectInfosPtr, *Globals::NumMaterialEffectInfos, *Globals::NumMaterialEffectInfos);
+
+        Globals::NumEffectInfos = reinterpret_cast<uint*>(reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x1D82DF0));
+        auto EffectInfosPtr = reinterpret_cast<effect_info*>(reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x1D82E60));
+        Globals::EffectInfos.Init(EffectInfosPtr, *Globals::NumEffectInfos, *Globals::NumEffectInfos);
+        std::optional<explosion_info*> NewInfo = Globals::GetExplosionInfo("mine"); //Set default values to the land mine
+        if (NewInfo)
+        {
+            CustomExplosionInfo = *NewInfo.value();
+        }
+        DrawnOnce = true;
+    }
+    ImGui::SameLine();
+    Util::Gui::ShowHelpMarker("If the explosions preset list or the effects list is empty, try pressing this button. If that doesn't fix it, report this issue to the RSL devs. Tell them your RSL version and give them a copy of your RSL master log, in RSL/Logs/Master Log.log");
 
     ImGui::Checkbox("Spawn explosion with middle mouse?", &MiddleMouseBoomActive);
     ImGui::InputInt("Middle mouse explosions per second limit", &MiddleMouseExplosionsPerSecond);
