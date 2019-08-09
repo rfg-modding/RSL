@@ -49,7 +49,7 @@ Variables
     Unknown value. ``ReadOnly``. Equals ``1 / DeltaTime``.
 
 **NumSteps** (`int`_)
-   "Step" is a process of calculating system's next state. 
+     "Step" is a process of calculating system's next state. 
     Timestep is the time interval for which simulation will progress during next "step". 
     It works simliar to Timestep multiplier.
 
