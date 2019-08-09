@@ -41,9 +41,19 @@ void Lua::BindObject(sol::state& LuaState)
 	Utype.set("LastKnownBMin", &Object::LastKnownBMin);
 	Utype.set("LastKnownBMax", &Object::LastKnownBMax);
 	Utype.set("SRID", &Object::SRID);
+
+    //Todo: Add formatting to the casting throws and make note of the actual type of the object, and the casting function that should be used, if that type is supported yet.
     //Casting functions
-    Utype.set("CastToHuman", [](Object& Self) ->Human* {return static_cast<Human*>(&Self); });
-    Utype.set("CastToPlayer", [](Object& Self) ->Player* {return static_cast<Player*>(&Self); });
+    Utype.set("CastToHuman", [](Object& Self) ->Human*
+    {
+        if (Self.ObjectType != OT_HUMAN) throw std::exception("Cannot cast to a human, since the object is not a human object. Check that YourObject.Type == rfg.ObjectTypes.Human before casting.");
+        return static_cast<Human*>(&Self);
+    });
+    Utype.set("CastToPlayer", [](Object& Self) ->Player*
+    {
+        if (Self.ObjectType != OT_HUMAN && Self.SubType == OT_SUB_HUMAN_PLAYER) throw std::exception("Cannot cast to a player, since the object is not a player object. Check that YourObject.Type == rfg.ObjectTypes.Human and that Object.SubType == rfg.ObjectSubTypes.HumanPlayer before casting.");
+        return static_cast<Player*>(&Self);
+    });
     //Utype.set("CastToItem", [](Object& Self) ->Human* {return static_cast<Item*>(&Self); });
     //Utype.set("CastToMover", [](Object& Self) ->Human* {return static_cast<Human*>(&Self); });
     //Utype.set("CastToVehicle", [](Object& Self) ->Human* {return static_cast<vehicle*>(&Self); });
@@ -54,7 +64,11 @@ void Lua::BindObject(sol::state& LuaState)
     //Utype.set("CastToPlayerStart", [](Object& Self) ->Human* {return static_cast<Human*>(&Self); });
     //Utype.set("CastToCoverNode", [](Object& Self) ->Human* {return static_cast<Human*>(&Self); });
     //Utype.set("CastToNavPoint", [](Object& Self) ->Human* {return static_cast<Human*>(&Self); });
-    Utype.set("CastToSquad", [](Object& Self) ->object_squad* {return static_cast<object_squad*>(&Self); });
+    Utype.set("CastToSquad", [](Object& Self) ->object_squad*
+    {
+        if (Self.ObjectType != OT_SQUAD) throw std::exception("Cannot cast to a squad, since the object is not a squad object. Check that YourObject.Type == rfg.ObjectTypes.Squad before casting.");
+        return static_cast<object_squad*>(&Self);
+    });
     //Utype.set("CastToConvoy", [](Object& Self) ->Human* {return static_cast<Human*>(&Self); });
     //Utype.set("CastToConvoyEnd", [](Object& Self) ->Human* {return static_cast<Human*>(&Self); });
     //Utype.set("CastToPatrol", [](Object& Self) ->Human* {return static_cast<Human*>(&Self); });
@@ -62,9 +76,21 @@ void Lua::BindObject(sol::state& LuaState)
     //Utype.set("CastToSkybox", [](Object& Self) ->Human* {return static_cast<Human*>(&Self); });
     //Utype.set("CastToLadder", [](Object& Self) ->Human* {return static_cast<Human*>(&Self); });
     //Utype.set("CastToConstraint", [](Object& Self) ->Human* {return static_cast<Human*>(&Self); });
-    Utype.set("CastToZone", [](Object& Self) ->obj_zone* {return static_cast<obj_zone*>(&Self); });
-    Utype.set("CastToTriggerRegion", [](Object& Self) ->trigger_region* {return static_cast<trigger_region*>(&Self); });
-    Utype.set("CastToMarauderAmbushRegion", [](Object& Self) ->marauder_ambush_region* {return static_cast<marauder_ambush_region*>(&Self); });
+    Utype.set("CastToZone", [](Object& Self) ->obj_zone*
+    {
+        if (Self.ObjectType != OT_ZONE) throw std::exception("Cannot cast to a zone, since the object is not a zone object. Check that YourObject.Type == rfg.ObjectTypes.Zone before casting.");
+        return static_cast<obj_zone*>(&Self);
+    });
+    Utype.set("CastToTriggerRegion", [](Object& Self) ->trigger_region*
+    {
+        if (Self.ObjectType != OT_TRIGGER_REGION) throw std::exception("Cannot cast to a trigger region, since the object is not a trigger region object. Check that YourObject.Type == rfg.ObjectTypes.TriggerRegion before casting.");
+        return static_cast<trigger_region*>(&Self);
+    });
+    Utype.set("CastToMarauderAmbushRegion", [](Object& Self) ->marauder_ambush_region*
+    {
+        if (Self.ObjectType != OT_MARAUDER_AMBUSH_REGION) throw std::exception("Cannot cast to a marauder ambush region, since the object is not a marauder ambush region object. Check that YourObject.Type == rfg.ObjectTypes.MarauderAmbushRegion before casting.");
+        return static_cast<marauder_ambush_region*>(&Self);
+    });
     //Utype.set("CastToRestrictedArea", [](Object& Self) ->Human* {return static_cast<Human*>(&Self); });
     //Utype.set("CastToSpawnRegion", [](Object& Self) ->Human* {return static_cast<Human*>(&Self); });
     //Utype.set("CastToAmbientSpawnRegion", [](Object& Self) ->Human* {return static_cast<Human*>(&Self); });
@@ -72,10 +98,18 @@ void Lua::BindObject(sol::state& LuaState)
     //Utype.set("CastToNpcSpawnNode", [](Object& Self) ->Human* {return static_cast<Human*>(&Self); });
     //Utype.set("CastToTurretSpawnNode", [](Object& Self) ->Human* {return static_cast<Human*>(&Self); });
     //Utype.set("CastToActionNode", [](Object& Self) ->Human* {return static_cast<Human*>(&Self); });
-    Utype.set("CastToSquadSpawnNode", [](Object& Self) ->object_squad_spawn_node* {return static_cast<object_squad_spawn_node*>(&Self); });
+    Utype.set("CastToSquadSpawnNode", [](Object& Self) ->object_squad_spawn_node*
+    {
+        if (Self.ObjectType != OT_SQUAD_SPAWN_NODE) throw std::exception("Cannot cast to a squad spawn node, since the object is not a squad spawn node object. Check that YourObject.Type == rfg.ObjectTypes.SquadSpawnNode before casting.");
+        return static_cast<object_squad_spawn_node*>(&Self);
+    });
     //Utype.set("CastToRoadblockNode", [](Object& Self) ->Human* {return static_cast<Human*>(&Self); });
     //Utype.set("CastToShapeCutter", [](Object& Self) ->Human* {return static_cast<Human*>(&Self); });
-    Utype.set("CastToDistrict", [](Object& Self) ->district* {return static_cast<district*>(&Self); });
+    Utype.set("CastToDistrict", [](Object& Self) ->district*
+    {
+        if (Self.ObjectType != OT_DISTRICT) throw std::exception("Cannot cast to a district, since the object is not a district object. Check that YourObject.Type == rfg.ObjectTypes.District before casting.");
+        return static_cast<district*>(&Self);
+    });
     //Utype.set("CastToMultiMarker", [](Object& Self) ->Human* {return static_cast<Human*>(&Self); });
     //Utype.set("CastToPathRoad", [](Object& Self) ->Human* {return static_cast<Human*>(&Self); });
     //Utype.set("CastToLightParams", [](Object& Self) ->Human* {return static_cast<Human*>(&Self); });

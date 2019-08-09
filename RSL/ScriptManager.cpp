@@ -139,8 +139,18 @@ void ScriptManager::SetupLua()
 	RfgTable["GetAlertLevel"] = GsmGetAlertLevel;
 	//RfgTable["TeleportHuman"] = HumanTeleportUnsafe;
     RfgTable.set_function("TeleportHuman", sol::overload(
-        [](Human* Target, vector Position, matrix Orientation) { HumanTeleportUnsafe(Target, Position, Orientation); },
-        [](Human* Target, vector Position) { HumanTeleportUnsafe(Target, Position, Target->Orientation); }
+        [](Human* Target, vector Position, matrix Orientation)
+        {
+            if (!Target) throw std::exception("[TeleportHuman]: The target passed to TeleportHuman is nil!");
+            if (Target->ObjectType != OT_HUMAN) throw std::exception(fmt::format("The target passed to TeleportHuman is not a human object! It's a {} object.", Util::RFG::GetObjectTypeString(Target->ObjectType)).c_str());
+            HumanTeleportUnsafe(Target, Position, Orientation);
+        },
+        [](Human* Target, vector Position)
+        {
+            if (!Target) throw std::exception("[TeleportHuman]: The target passed to TeleportHuman is nil!");
+            if (Target->ObjectType != OT_HUMAN) throw std::exception(fmt::format("The target passed to TeleportHuman is not a human object! It's a {} object.", Util::RFG::GetObjectTypeString(Target->ObjectType)).c_str());
+            HumanTeleportUnsafe(Target, Position, Target->Orientation);
+        }
     ));
 	RfgTable["GetPlayer"] = Lua::GetPlayer; //Didn't document these "get" functions online since we have "rfg.ActiveXXX". Probably can just remove these.
 	RfgTable["GetWorld"] = Lua::GetWorld;
@@ -170,10 +180,24 @@ void ScriptManager::SetupLua()
 
     RfgTable.set_function("ExplosionCreate", sol::overload( //Todo: Maybe rename this to SpawnExplosion. //Todo: Add overload that just takes preset name and position.
         [](explosion_info* Info, Object* Source, Object* Owner, vector* Position, matrix* Orientation, vector* Direction)// , weapon_info* WeaponInfo) //Todo: Add WeaponInfo once that's bound to lua
-        {ExplosionCreate(Info, Source, Owner, Position, Orientation, Direction, nullptr, false); }, //Todo: remember to replace this nullptr with WeaponInfo once bound
-        [](explosion_info* Info, vector* Position) {ExplosionCreate(Info, nullptr, nullptr, Position, new matrix(0.0f), new vector(0.0f, 1.0f, 0.0f), nullptr, false); },
+        {
+            if (!Info) throw std::exception("[ExplosionCreate]: Info argument is nil!");
+            //if (!Source) throw std::exception("[ExplosionCreate]: Source argument is nil!"); //Should not crash when passed nil
+            //if (!Owner) throw std::exception("[ExplosionCreate]: Owner argument is nil!"); //Should not crash when passed nil
+            if (!Position) throw std::exception("[ExplosionCreate]: Position argument is nil!");
+            if (!Orientation) throw std::exception("[ExplosionCreate]: Orientation argument is nil!");
+            //if (!Direction) throw std::exception("[ExplosionCreate]: Direction argument is nil!"); //Should not crash when passed nil
+            ExplosionCreate(Info, Source, Owner, Position, Orientation, Direction, nullptr, false);
+        }, //Todo: remember to replace this nullptr with WeaponInfo once bound
+        [](explosion_info* Info, vector* Position)
+        {
+            if (!Info) throw std::exception("[ExplosionCreate]: Info argument is nil!");
+            if (!Position) throw std::exception("[ExplosionCreate]: Position argument is nil!");
+            ExplosionCreate(Info, nullptr, nullptr, Position, new matrix(0.0f), new vector(0.0f, 1.0f, 0.0f), nullptr, false);
+        },
         [](explosion_info* Info, float x, float y, float z)
         {
+            if (!Info) throw std::exception("[ExplosionCreate]: Info argument is nil!");
             vector Position(x, y, z); 
             ExplosionCreate(Info, nullptr, nullptr, &Position, new matrix(0.0f), new vector(0.0f, 1.0f, 0.0f), nullptr, false);
         }
