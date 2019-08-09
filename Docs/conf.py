@@ -19,7 +19,7 @@
 
 project = 'Re-mars-tered Script Loader'
 copyright = '2019, RSL'
-author = 'RSL'
+author = 'RSL Dev Team'
 
 
 # -- General configuration ---------------------------------------------------
