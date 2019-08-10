@@ -389,6 +389,8 @@ void Application::CreateHooks()
 
     Hooks.CreateHook("peg_load_wrapper", Globals::ModuleBase + 0x1D1F10, Hooks::peg_load_wrapper_hook, peg_load_wrapper);
 
+    Hooks.CreateHook("object_spawn_vehicle_hook", Globals::ModuleBase + 0x757F40, Hooks::object_spawn_vehicle_hook, object_spawn_vehicle);
+
     //Disabling for now since stream grid tests had issues.
     //Hooks.CreateHook("StreamGridDoFrame", reinterpret_cast<LPVOID>(Globals::ModuleBase + 0x530FB0), StreamGridDoFrameHook, reinterpret_cast<LPVOID*>(&StreamGridDoFrame));
     //Hooks.CreateHook("ObjectSpawnVehicle", reinterpret_cast<LPVOID>(Globals::ModuleBase + 0x757F40), ObjectSpawnVehicleHook, reinterpret_cast<LPVOID*>(&ObjectSpawnVehicle));

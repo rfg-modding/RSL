@@ -155,4 +155,6 @@ void FunctionManager::Initialize()
     RegisterFunction(peg_load_wrapper, 0x1D1F10);
 
     RegisterFunction(string_hash, 0x18FE90);
+
+    RegisterFunction(object_spawn_vehicle, 0x757F40);
 }

@@ -667,3 +667,7 @@ extern F_peg_load_wrapper peg_load_wrapper;
 //.text:00A8FE90 rfg.exe:$18FE90 #18F290 <string_hash> //unsigned int __cdecl string_hash(const char *key, unsigned int hash_size)
 using F_string_hash = uint(__cdecl*)(const char* key, unsigned int hash_size);
 extern F_string_hash string_hash;
+
+//.text:01317F40 rfg.exe:$757F40 #757340 <object_spawn_vehicle> //spawn_status_result __cdecl object_spawn_vehicle(vehicle_spawn_params *spawn_param)
+using F_object_spawn_vehicle = spawn_status_result(__cdecl*)(vehicle_spawn_params* spawn_param);
+extern F_object_spawn_vehicle object_spawn_vehicle;

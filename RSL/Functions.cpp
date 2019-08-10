@@ -289,3 +289,5 @@ F_WorldSetPendingTerritoryLoad WorldSetPendingTerritoryLoad;
 F_peg_load_wrapper peg_load_wrapper;
 
 F_string_hash string_hash;
+
+F_object_spawn_vehicle object_spawn_vehicle;
