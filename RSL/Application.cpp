@@ -467,6 +467,14 @@ void Application::SetMemoryLocations()
 
     Globals::VehicleInfos = reinterpret_cast<rfg::farray<vehicle_info, 163>*>(reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x12BA5F8));
 
+    Globals::UnlimitedAmmo = reinterpret_cast<bool*>(Globals::ModuleBase + 0x3482CB6);
+    Globals::UnlimitedMagazineAmmo = reinterpret_cast<bool*>(Globals::ModuleBase + 0x3482CBC);
+    Globals::UnlimitedAiThrownWeapons = reinterpret_cast<bool*>(Globals::ModuleBase + 0x3482CB7);
+    Globals::VehicleMaxSpeed = reinterpret_cast<float*>(Globals::ModuleBase + 0x12BA434);
+    Globals::SsaoVisionEnabled = reinterpret_cast<bool*>(Globals::ModuleBase + 0x177BD1E);
+    Globals::RfgMaxCharges = reinterpret_cast<int*>(Globals::ModuleBase + 0x1251568);
+    Globals::TodEnabled = reinterpret_cast<bool*>(Globals::ModuleBase + 0x125CCA7);
+
     Scripts.UpdateRfgPointers();
 } 
 

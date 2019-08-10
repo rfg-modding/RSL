@@ -141,14 +141,6 @@ void GeneralTweaksGui::Draw()
     ImGui::Separator();
 
     ImGui::SetNextItemWidth(230.0f);
-	ImGui::InputInt("Salvage", &Globals::PlayerPtr->Metadata.Salvage);
-    ImGui::SetNextItemWidth(230.0f);
-	ImGui::InputInt("Mining count", &Globals::PlayerPtr->Metadata.MiningCount);
-    ImGui::SetNextItemWidth(230.0f);
-	ImGui::InputInt("Supply crate count", &Globals::PlayerPtr->Metadata.SupplyCrateCount);
-
-
-    ImGui::SetNextItemWidth(230.0f);
 	ImGui::InputFloat("Custom player jump height", &CustomJumpHeight, 0.5f, 2.0f, 3); ImGui::SameLine();
 	ImGui::Checkbox("##Custom Player Jump Height", &NeedCustomJumpHeightSet);
 
@@ -162,6 +154,35 @@ void GeneralTweaksGui::Draw()
 	ImGui::SameLine();
 	ImGui::Checkbox("##Player max move speed checkbox", &NeedCustomMaxMoveSpeedSet);
 	ImGui::Separator();
+
+    ImGui::Checkbox("Unlimited ammo", Globals::UnlimitedAmmo);
+    ImGui::Checkbox("Unlimited magazine ammo", Globals::UnlimitedMagazineAmmo);
+    ImGui::Checkbox("Unlimited AI thrown weapons", Globals::UnlimitedAiThrownWeapons); 
+    ImGui::SameLine();
+    Util::Gui::ShowHelpMarker("Unsure what exactly this does. Added it in case anyone figures it out.");
+    ImGui::SetNextItemWidth(230.0f);
+    ImGui::InputFloat("Max vehicle speed", Globals::VehicleMaxSpeed);
+    ImGui::SameLine();
+    if(ImGui::Button("Reset"))
+    {
+        *Globals::VehicleMaxSpeed = 40.233601f;
+    }
+    ImGui::Checkbox("SSAO Vision", Globals::SsaoVisionEnabled);
+    ImGui::SetNextItemWidth(230.0f);
+    ImGui::InputInt("Max remote charges placed", Globals::RfgMaxCharges);
+    ImGui::SameLine();
+    Util::Gui::ShowHelpMarker("The default value might be lower than your current amount. Just set it to whatever value you want, and it'll override your upgrade level.");
+    ImGui::Checkbox("Time of day change enabled", Globals::TodEnabled);
+
+    ImGui::Separator();
+
+    ImGui::SetNextItemWidth(230.0f);
+    ImGui::InputInt("Salvage", &Globals::PlayerPtr->Metadata.Salvage);
+    ImGui::SetNextItemWidth(230.0f);
+    ImGui::InputInt("Mining count", &Globals::PlayerPtr->Metadata.MiningCount);
+    ImGui::SetNextItemWidth(230.0f);
+    ImGui::InputInt("Supply crate count", &Globals::PlayerPtr->Metadata.SupplyCrateCount);
+    ImGui::Separator();
 
 	if (!UseCustomLevelAmbientLight)
 	{

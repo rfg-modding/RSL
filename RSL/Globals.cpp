@@ -118,6 +118,14 @@ namespace Globals
 
     bool ReadyForImGuiInit = false;
 
+    bool* UnlimitedAmmo = nullptr;
+    bool* UnlimitedMagazineAmmo = nullptr;
+    bool* UnlimitedAiThrownWeapons = nullptr;
+    float* VehicleMaxSpeed = nullptr;
+    bool* SsaoVisionEnabled = nullptr;
+    int* RfgMaxCharges = nullptr;
+    bool* TodEnabled = nullptr;
+
     namespace Launcher
     {
         bool ShouldRunRsl = false;
