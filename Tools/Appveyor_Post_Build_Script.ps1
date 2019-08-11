@@ -12,3 +12,4 @@ Copy-Item ".\readme.md" ".\Red Faction Guerrilla Re-mars-tered\RSL"
 cmd /c 7z a "$env:APPVEYOR_BUILD_VERSION.zip" ".\Red Faction Guerrilla Re-mars-tered"
 
 Push-AppveyorArtifact "$env:APPVEYOR_BUILD_VERSION.zip"
+Push-AppveyorArtifact ".\Appveyor\RSL.pdb"
