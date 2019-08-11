@@ -183,6 +183,14 @@ void GeneralTweaksGui::Draw()
     ImGui::SetNextItemWidth(230.0f);
     ImGui::InputInt("Supply crate count", &Globals::PlayerPtr->Metadata.SupplyCrateCount);
     ImGui::Separator();
+    ImGui::Text("Current time of day:");
+    ImGui::SameLine();
+    ImGui::TextColored(Globals::SecondaryTextColor, std::to_string(*Globals::CurrentTimeOfDay));
+    ImGui::SetNextItemWidth(230.0f);
+    ImGui::SliderFloat("Custom time of day", &CustomTodOverride, 0.00f, 23.99f);
+    ImGui::SameLine();
+    ImGui::Checkbox("Use custom value (Locks time change)", &UseCustomTodOverride);
+    ImGui::Separator();
 
 	if (!UseCustomLevelAmbientLight)
 	{

@@ -143,6 +143,9 @@ namespace Globals
     extern bool* SsaoVisionEnabled;
     extern int* RfgMaxCharges;
     extern bool* TodEnabled;
+    //Note: TodOverride seems to really be something like "MaxTodValue", gotta be careful writing to it. Only use Globals::SetFloat, since it's apparently write protected by default.
+    //extern float* TodOverride; //.rdata:01AAEB60 rfg.exe:$EEEB60 #EED760 <__real@41c00000>
+    extern float* CurrentTimeOfDay; //.data:01E1CC80 rfg.exe:$125CC80 #125B680 <Current_time_of_day>
 
     namespace Launcher
     {
@@ -166,6 +169,7 @@ namespace Globals
 	void ChangeMemoryFloat(DWORD BaseAddress, float Value, DWORD Offset1, DWORD Offset2, bool PrintMessage);
 	std::string GetEXEPath(bool IncludeExeInPath = false);
 	void PlaceNOP(BYTE* Address, DWORD Length = 1);
+    void SetFloat(float* Address, float NewValue);
 	MODULEINFO GetModuleInfo(const char* ModuleName);
 	DWORD FindPattern(const char* ModuleName, const char* PatternString, const char* MaskString);
     std::string CharArrayToString(char* Array, int Size);

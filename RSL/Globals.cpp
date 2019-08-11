@@ -125,6 +125,8 @@ namespace Globals
     bool* SsaoVisionEnabled = nullptr;
     int* RfgMaxCharges = nullptr;
     bool* TodEnabled = nullptr;
+    //float* TodOverride = nullptr;
+    float* CurrentTimeOfDay = nullptr;
 
     namespace Launcher
     {
@@ -353,7 +355,16 @@ namespace Globals
 		VirtualProtect(Address, Length, OriginalProtectionPermissions, &Backup);
 	}
 
-	//Get all module related info, this will include the base DLL and the size of the module
+    void SetFloat(float* Address, float NewValue)
+    {
+        DWORD OriginalProtectionPermissions;
+        DWORD Backup;
+        VirtualProtect(Address, sizeof(float), PAGE_EXECUTE_READWRITE, &OriginalProtectionPermissions);
+        *Address = NewValue;
+        VirtualProtect(Address, sizeof(float), OriginalProtectionPermissions, &Backup);
+    }
+
+    //Get all module related info, this will include the base DLL and the size of the module
 	MODULEINFO GetModuleInfo(const char* ModuleName)
 	{
 		MODULEINFO ModuleInfo = { nullptr };

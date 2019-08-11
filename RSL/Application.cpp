@@ -474,6 +474,7 @@ void Application::SetMemoryLocations()
     Globals::SsaoVisionEnabled = reinterpret_cast<bool*>(Globals::ModuleBase + 0x177BD1E);
     Globals::RfgMaxCharges = reinterpret_cast<int*>(Globals::ModuleBase + 0x1251568);
     Globals::TodEnabled = reinterpret_cast<bool*>(Globals::ModuleBase + 0x125CCA7);
+    Globals::CurrentTimeOfDay = reinterpret_cast<float*>(Globals::ModuleBase + 0x125CC80);
 
     Scripts.UpdateRfgPointers();
 } 

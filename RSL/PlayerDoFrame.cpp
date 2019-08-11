@@ -75,12 +75,12 @@ void __fastcall Hooks::PlayerDoFrameHook(Player* PlayerPtr)
         if (Globals::Camera->IsFirstPersonCameraActive())
         {
             Globals::Camera->UpdateFirstPersonView();
-            Globals::PlayerPtr->Flags.disallow_flinches_and_ragdolls = true;
         }
-        if (Globals::Camera->IsFirstPersonCameraActive())
-        {
-            Globals::Camera->UpdateFirstPersonView();
-        }
+    }
+
+    if(TweaksMenuRef.Get().UseCustomTodOverride)
+    {
+        *Globals::CurrentTimeOfDay = TweaksMenuRef.Get().CustomTodOverride;
     }
 
     return PlayerDoFrame(PlayerPtr);
