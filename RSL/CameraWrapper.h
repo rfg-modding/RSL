@@ -53,8 +53,8 @@ public:
 	bool ButtonPressedAfterUpdate = false;
 	bool SmoothCamera = false;
 
-	vector FirstPersonCameraOffset = {0.0f, 0.1f, 0.0f};
-	float FirstPersonDirectionOffsetMultiplier = 0.3f;
+	vector FirstPersonCameraOffset = {0.0f, 0.25f, 0.0f};
+	float FirstPersonDirectionOffsetMultiplier = 0.25f;
 	bool UseFirstPersonDirectionOffset = true;
     bool UseFirstPersonAutoPlayerDirection = true;
     bool UseThirdPersonForVehicles = true;
