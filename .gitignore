@@ -265,3 +265,8 @@ Docs/_build/
 \.vscode/
 Tools/Player\.rst
 Tools/TestFile\.h
+Proxy DLL Loader/Appveyor/
+
+RSL/Appveyor/
+
+Appveyor/
