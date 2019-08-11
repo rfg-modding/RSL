@@ -291,3 +291,10 @@ F_peg_load_wrapper peg_load_wrapper;
 F_string_hash string_hash;
 
 F_object_spawn_vehicle object_spawn_vehicle;
+
+F_human_get_head_pos_orient human_get_head_pos_orient;
+F_human_set_render human_set_render;
+F_human_hide human_hide;
+F_human_set_opacity_plus_child_items human_set_opacity_plus_child_items;
+
+F_matrix_rotate_around_local_vector matrix_rotate_around_local_vector;

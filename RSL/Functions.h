@@ -671,3 +671,23 @@ extern F_string_hash string_hash;
 //.text:01317F40 rfg.exe:$757F40 #757340 <object_spawn_vehicle> //spawn_status_result __cdecl object_spawn_vehicle(vehicle_spawn_params *spawn_param)
 using F_object_spawn_vehicle = spawn_status_result(__cdecl*)(vehicle_spawn_params* spawn_param);
 extern F_object_spawn_vehicle object_spawn_vehicle;
+
+//.text:0125B5D0 rfg.exe:$69B5D0 #69A9D0 <human_get_head_pos_orient> //void __cdecl human_get_head_pos_orient(human *hp, vector& head_pos, matrix& head_orient)
+using F_human_get_head_pos_orient = void(__cdecl*)(Human* hp, vector& head_pos, matrix& head_orient);
+extern F_human_get_head_pos_orient human_get_head_pos_orient;
+
+//.text:0125B8C0 rfg.exe:$69B8C0 #69ACC0 <human_set_render> //void __cdecl human_set_render(human *hp, bool render)
+using F_human_set_render = void(__cdecl*)(Human* hp, bool render);
+extern F_human_set_render human_set_render;
+
+//.text:0125B7E0 rfg.exe:$69B7E0 #69ABE0 <human_hide> //void __cdecl human_hide(human *hp, bool hide)
+using F_human_hide = void(__cdecl*)(Human* hp, bool hide);
+extern F_human_hide human_hide;
+
+//.text:0123E1D0 rfg.exe:$67E1D0 #67D5D0 <human::set_opacity_plus_child_items> //void __thiscall human::set_opacity_plus_child_items(human *this, float alpha)
+using F_human_set_opacity_plus_child_items = void(__fastcall*)(Human* this_ptr, void* edx, float alpha); //2nd arg is edx, needed for __thiscall functions.
+extern F_human_set_opacity_plus_child_items human_set_opacity_plus_child_items;
+
+//.text:00D64370 rfg.exe:$1A4370 #1A3770 <matrix::rotate_around_local_vector> //void __thiscall matrix::rotate_around_local_vector(matrix *this, vector *axis, float ang_rad)
+using F_matrix_rotate_around_local_vector = void(__fastcall*)(matrix* this_ptr, void* edx, vector& axis, float angle_radians); //2nd arg is edx, needed for __thiscall functions.
+extern F_matrix_rotate_around_local_vector matrix_rotate_around_local_vector;

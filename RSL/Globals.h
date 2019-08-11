@@ -153,6 +153,7 @@ namespace Globals
 	bool DirectoryExists(const std::string& Directory);
 	void CreateDirectoryIfNull(const std::string& Directory);
 	float FloatConvertDegreesToRadians(float AngleInDegrees);
+	float FloatConvertRadiansToDegrees(float AngleInRadians);
 	float sind(float AngleInDegrees);
 	float cosd(float AngleInDegrees);
 	float tand(float AngleInDegrees);

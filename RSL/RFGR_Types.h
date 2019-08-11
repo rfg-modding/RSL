@@ -481,7 +481,7 @@ public:
 	{
 		return vector(x - B.x, y - B.y, z - B.z);
 	}
-	float operator*(const vector& B)
+	float operator*(const vector& B) //Dot product
 	{
 		return (x * B.x) + (y * B.y) + (z * B.z);
 	}
@@ -539,6 +539,22 @@ public:
         float Magnitude = this->Magnitude();
         UnitVec.Scale(1.0f / Magnitude);
         return UnitVec;
+	}
+    vector Midpoint(vector& B)
+	{
+        vector Mid;
+        Mid.x = (this->x + B.x) / 2.0f;
+        Mid.y = (this->y + B.y) / 2.0f;
+        Mid.z = (this->z + B.z) / 2.0f;
+        return Mid;
+	}
+    vector Lerp(vector& B, float parameter)
+	{
+        vector NewPos;
+        NewPos.x = this->x + parameter * (B.x - this->x);
+        NewPos.y = this->y + parameter * (B.y - this->y);
+        NewPos.z = this->z + parameter * (B.z - this->z);
+        return NewPos;
 	}
 	std::string GetDataString(bool Parentheses, bool Labels)
 	{

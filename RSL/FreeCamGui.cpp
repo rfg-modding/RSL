@@ -210,24 +210,17 @@ void FreeCamGui::Draw()
 	ImGui::Checkbox("Use direction offset", &Globals::Camera->UseFirstPersonDirectionOffset);
 	ImGui::InputFloat("Direction offset multiplier", &Globals::Camera->FirstPersonDirectionOffsetMultiplier, 3);
 
-	//ImGui::Checkbox("Use auto player direction", &Camera->UseFirstPersonAutoPlayerDirection);
-	//ImGui::Checkbox("Use auto player direction angle offset", &Camera->UseFirstPersonAutoPlayerDirectionAngleOffset);
-	//ImGui::InputFloat("Auto player direction angle offset (Degrees)", &Camera->FirstPersonAutoPlayerDirectionAngleOffset);
+    //ImGui::Text(fmt::format("Last cam position: {}", Globals::Camera->LastFirstPersonPosition.GetDataString(false, true)).c_str());
+    //ImGui::Checkbox("Smooth first person cam", &Globals::Camera->FirstPersonSmoothingEnabled);
+    //ImGui::Checkbox("Use midpoint smoothing", &Globals::Camera->UseMidpointSmoothing);
+    //ImGui::SameLine();
+    //Util::Gui::ShowHelpMarker("Uses lerp smoothing otherwise");
+    //ImGui::SetNextItemWidth(230.0f);
+    //ImGui::InputFloat("Lerp smoothing param", &Globals::Camera->LerpParameter);
 
-	//ImGui::Checkbox("Update by axis", &Camera->UpdateByAxis);
-	//if(Camera->UpdateByAxis)
-	//{
-	//	ImGui::Checkbox("Update player orient x", &Camera->UpdateX);
-	//	ImGui::Checkbox("Update player orient y", &Camera->UpdateY);
-	//	ImGui::Checkbox("Update player orient z", &Camera->UpdateZ);
-	//}
-	//else
-	//{
-	//	ImGui::Checkbox("Update player orient rvec", &Camera->UpdatePlayerRvec);
-	//	ImGui::Checkbox("Update player orient uvec", &Camera->UpdatePlayerUvec);
-	//	ImGui::Checkbox("Update player orient fvec", &Camera->UpdatePlayerFvec);
-	//}
-
+	ImGui::Checkbox("Use auto player direction", &Globals::Camera->UseFirstPersonAutoPlayerDirection);
+    ImGui::SetNextItemWidth(230.0f);
+    ImGui::InputFloat("Min angle difference for autorotation (degrees)", &Globals::Camera->MinAngleDifferenceForRotation);
 
 	//static bool FirstPersonSmooth = false;
 	//ImGui::Checkbox("First person smooth", &FirstPersonSmooth);

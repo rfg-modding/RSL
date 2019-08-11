@@ -193,7 +193,12 @@ namespace Globals
 		return (Globals::pi / 180.0f) * AngleInDegrees;
 	}
 
-	float sind(float AngleInDegrees)
+    float FloatConvertRadiansToDegrees(float AngleInRadians)
+    {
+        return (180.0f / Globals::pi) * AngleInRadians;
+    }
+
+    float sind(float AngleInDegrees)
 	{
 		return sin(FloatConvertDegreesToRadians(AngleInDegrees));
 	}

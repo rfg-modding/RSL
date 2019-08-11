@@ -74,7 +74,7 @@ void __fastcall Hooks::PlayerDoFrameHook(Player* PlayerPtr)
     {
         if (Globals::Camera->IsFirstPersonCameraActive())
         {
-            Globals::PlayerPtr->Flags.ai_ignore = true;
+            Globals::Camera->UpdateFirstPersonView();
             Globals::PlayerPtr->Flags.disallow_flinches_and_ragdolls = true;
         }
         if (Globals::Camera->IsFirstPersonCameraActive())

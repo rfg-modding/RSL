@@ -166,7 +166,7 @@ void CameraWrapper::ToggleFreeCamera()
 		}
 		else
 		{
-			Logger::LogError("Failed to activate free camera. First cam already active.\n");
+			Logger::LogError("Failed to activate free camera. First person cam already active.\n");
 		}
 	}
 }
@@ -261,6 +261,7 @@ void CameraWrapper::ActivateFirstPersonCamera()
 	Logger::Log("Activating first person camera\n");
 	FirstPersonCameraActive = true;
 	DisableCameraCode(CameraYWriteAddress, CameraZWriteAddress);
+    LastFirstPersonPosition = Globals::PlayerPtr->Position;
 }
 
 void CameraWrapper::DeactivateFirstPersonCamera()
@@ -294,83 +295,60 @@ void CameraWrapper::ToggleFirstPersonCamera()
 
 void CameraWrapper::UpdateFirstPersonView()
 {
-	GameData->real_pos = Globals::PlayerPtr->Position + FirstPersonCameraOffset;
-	CurrentSpeed = Globals::PlayerPtr->Velocity.Magnitude();
-	if(UseFirstPersonDirectionOffset)
-	{
-		vector TempVec = Globals::PlayerPtr->Orientation.fvec;
-		GameData->real_pos += TempVec.Scale(FirstPersonDirectionOffsetMultiplier);
-	}
+    vector HeadVector(0.0f);
+    matrix HeadMatrix(0.0f);
 
-	//Not working, more weird player scale issues start to pop up...
-	//if (UseFirstPersonAutoPlayerDirection)
-	//{
-	//	if(UseFirstPersonAutoPlayerDirectionAngleOffset)
-	//	{
-	//		float XDirAngle = acosf(*RealDirectionX);
-	//		float ZDirAngle = asinf(*RealDirectionZ);
-	//		GlobalPlayerPtr->Orientation.fvec.x = cosf(XDirAngle + FloatConvertDegreesToRadians(FirstPersonAutoPlayerDirectionAngleOffset));
-	//		GlobalPlayerPtr->Orientation.fvec.y = 0.0f;
-	//		GlobalPlayerPtr->Orientation.fvec.z = sinf(ZDirAngle + FloatConvertDegreesToRadians(FirstPersonAutoPlayerDirectionAngleOffset));
-	//	}
-	//	else
-	//	{
-	//		GlobalPlayerPtr->Orientation.fvec.x = *RealDirectionX;
-	//		GlobalPlayerPtr->Orientation.fvec.y = 0.0f;
-	//		GlobalPlayerPtr->Orientation.fvec.z = *RealDirectionZ;
-	//	}
+    human_get_head_pos_orient(Globals::PlayerPtr, HeadVector, HeadMatrix);
 
-	//	GlobalPlayerPtr->Orientation.uvec.x = 0.0f;
-	//	GlobalPlayerPtr->Orientation.uvec.y = 1.0f;
-	//	GlobalPlayerPtr->Orientation.uvec.z = 0.0f;
+    vector NewPos = GameData->real_pos;
 
-	//	vector TempRightVec = GlobalPlayerPtr->Orientation.fvec.Cross(GlobalPlayerPtr->Orientation.uvec);
-	//	TempRightVec.y = 0.0f;
-	//	TempRightVec.Scale(-1.0f);
-	//	GlobalPlayerPtr->Orientation.rvec = TempRightVec;
-	//}
 
-	//if(UpdateByAxis)
-	//{
-	//	if(UpdateX)
-	//	{
-	//		GlobalPlayerPtr->Orientation.rvec.x = GameData->real_orient.rvec.x;
-	//		GlobalPlayerPtr->Orientation.uvec.x = GameData->real_orient.uvec.x;
-	//		GlobalPlayerPtr->Orientation.fvec.x = GameData->real_orient.fvec.x;
-	//	}	
-	//	if(UpdateY)
-	//	{
-	//		GlobalPlayerPtr->Orientation.rvec.y = GameData->real_orient.rvec.y;
-	//		GlobalPlayerPtr->Orientation.uvec.y = GameData->real_orient.uvec.y;
-	//		GlobalPlayerPtr->Orientation.fvec.y = GameData->real_orient.fvec.y;
-	//	}	
-	//	if(UpdateZ)
-	//	{
-	//		GlobalPlayerPtr->Orientation.rvec.z = GameData->real_orient.rvec.z;
-	//		GlobalPlayerPtr->Orientation.uvec.z = GameData->real_orient.uvec.z;
-	//		GlobalPlayerPtr->Orientation.fvec.z = GameData->real_orient.fvec.z;
-	//	}
-	//}
-	//else
-	//{
-	//	if (UpdatePlayerRvec)
-	//	{
-	//		GlobalPlayerPtr->Orientation.rvec = GameData->real_orient.rvec;
-	//	}
-	//	if (UpdatePlayerUvec)
-	//	{
-	//		GlobalPlayerPtr->Orientation.uvec = GameData->real_orient.uvec;
-	//	}
-	//	if (UpdatePlayerFvec)
-	//	{
-	//		GlobalPlayerPtr->Orientation.fvec = GameData->real_orient.fvec;
-	//	}
-	//}
+    NewPos = HeadVector + FirstPersonCameraOffset;
+    CurrentSpeed = Globals::PlayerPtr->Velocity.Magnitude(); //Note: Not sure what the point of this line is...
+    if (UseFirstPersonDirectionOffset)
+    {
+        vector TempVec = Globals::PlayerPtr->Orientation.fvec;
+        NewPos += TempVec.Scale(FirstPersonDirectionOffsetMultiplier);
+    }
 
-	//GlobalPlayerPtr->Orientation = GameData->real_orient;
-	//*RealX = GlobalPlayerPtr->Position.x + FirstPersonCameraOffset.x;
-	//*RealY = GlobalPlayerPtr->Position.y + FirstPersonCameraOffset.y;
-	//*RealZ = GlobalPlayerPtr->Position.z + FirstPersonCameraOffset.z;
+    if(FirstPersonSmoothingEnabled) //Doesn't really seem to help vehicle shakiness much. 
+    {
+        if(UseMidpointSmoothing)
+        {
+            vector TempVec = NewPos;
+            NewPos = LastFirstPersonPosition.Midpoint(TempVec);
+        }
+        else
+        {
+            vector TempVec = NewPos;
+            NewPos = LastFirstPersonPosition.Lerp(TempVec, LerpParameter);
+        }
+    }
+
+    if(UseFirstPersonAutoPlayerDirection)
+    {
+        vector2 CamFvec{ GameData->real_orient.fvec.x, GameData->real_orient.fvec.z };
+        vector2 PlayerFvec{ Globals::PlayerPtr->Orientation.fvec.x, Globals::PlayerPtr->Orientation.fvec.z };
+        float DotProduct = CamFvec * PlayerFvec;
+        float MagProduct = CamFvec.Magnitude() * PlayerFvec.Magnitude();
+        float AngleRadians = acos(DotProduct / MagProduct);
+
+        float Angle2 = atan2((PlayerFvec.x * CamFvec.y) - (PlayerFvec.y * CamFvec.x), (PlayerFvec.x * CamFvec.x) - (PlayerFvec.y * CamFvec.y));
+
+        if(abs(Globals::FloatConvertRadiansToDegrees(AngleRadians)) > MinAngleDifferenceForRotation)
+        {
+            vector YAxis = { 0.0f, 1.0f, 0.0f };
+
+            if (Angle2 > 0.0f)
+            {
+                AngleRadians *= -1.0f;
+            }
+            matrix_rotate_around_local_vector(&Globals::PlayerPtr->Orientation, nullptr, YAxis, AngleRadians);
+        }
+    }
+
+    GameData->real_pos = NewPos;
+    LastFirstPersonPosition = GameData->real_pos;
 }
 
 bool CameraWrapper::IsFreeCameraActive() const

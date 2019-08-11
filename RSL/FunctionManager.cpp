@@ -157,4 +157,11 @@ void FunctionManager::Initialize()
     RegisterFunction(string_hash, 0x18FE90);
 
     RegisterFunction(object_spawn_vehicle, 0x757F40);
+
+    RegisterFunction(human_get_head_pos_orient, 0x69B5D0);
+    RegisterFunction(human_set_render, 0x69B8C0);
+    RegisterFunction(human_hide, 0x69B7E0);
+    RegisterFunction(human_set_opacity_plus_child_items, 0x67E1D0);
+
+    RegisterFunction(matrix_rotate_around_local_vector, 0x1A4370);
 }

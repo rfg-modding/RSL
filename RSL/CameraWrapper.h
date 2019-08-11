@@ -49,12 +49,20 @@ public:
 	bool ButtonPressedAfterUpdate = false;
 	bool SmoothCamera = false;
 
-	vector FirstPersonCameraOffset = {0.0f, 1.7f, 0.0f};
-	float FirstPersonDirectionOffsetMultiplier = 0.4f;
+	vector FirstPersonCameraOffset = {0.0f, 0.1f, 0.0f};
+	float FirstPersonDirectionOffsetMultiplier = 0.3f;
 	bool UseFirstPersonDirectionOffset = true;
-	bool UseFirstPersonAutoPlayerDirection = false;
-	bool UseFirstPersonAutoPlayerDirectionAngleOffset = false;
+    bool UseFirstPersonAutoPlayerDirection = true;
 	float FirstPersonAutoPlayerDirectionAngleOffset = 0.0f;
+    vector LastFirstPersonPosition = { 0.0f, 0.0f, 0.0f };
+    bool FirstPersonSmoothingEnabled = true;
+    bool UseMidpointSmoothing = false;
+    float LerpParameter = 0.5f;
+    float MinAngleDifferenceForRotation = 1.0f;
+
+    bool UseXRot = false;
+    bool UseYRot = true;
+    bool UseZRot = false;
 
 	rfg_camera* GameData = nullptr;
 
