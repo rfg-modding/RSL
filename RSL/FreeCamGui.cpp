@@ -221,6 +221,7 @@ void FreeCamGui::Draw()
 	ImGui::Checkbox("Use auto player direction", &Globals::Camera->UseFirstPersonAutoPlayerDirection);
     ImGui::SetNextItemWidth(230.0f);
     ImGui::InputFloat("Min angle difference for autorotation (degrees)", &Globals::Camera->MinAngleDifferenceForRotation);
+    ImGui::Checkbox("Use third person view for vehicles", &Globals::Camera->UseThirdPersonForVehicles);
 
 	//static bool FirstPersonSmooth = false;
 	//ImGui::Checkbox("First person smooth", &FirstPersonSmooth);

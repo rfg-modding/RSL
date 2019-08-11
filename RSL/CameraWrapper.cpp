@@ -124,6 +124,11 @@ void CameraWrapper::MoveFreeCamera(CameraDirection Direction)
 
 void CameraWrapper::ActivateFreeCamera()
 {
+    if(FirstPersonCameraActive)
+    {
+        Logger::LogError("Failed to activate free camera. First person cam already active.\n");
+        return;
+    }
 	Logger::Log("Activating free camera\n");
 	FreeCameraActive = true;
 	DisableCameraCode(CameraYWriteAddress, CameraZWriteAddress);
@@ -258,6 +263,11 @@ void CameraWrapper::UpdateFreeView()
 
 void CameraWrapper::ActivateFirstPersonCamera()
 {
+    if(FreeCameraActive)
+    {
+        Logger::LogWarning("Failed to activate the first person camera since free camera is already active!.\n");
+        return;
+    }
 	Logger::Log("Activating first person camera\n");
 	FirstPersonCameraActive = true;
 	DisableCameraCode(CameraYWriteAddress, CameraZWriteAddress);
@@ -295,6 +305,10 @@ void CameraWrapper::ToggleFirstPersonCamera()
 
 void CameraWrapper::UpdateFirstPersonView()
 {
+    if(FirstPersonCameraPaused)
+    {
+        return;
+    }
     vector HeadVector(0.0f);
     matrix HeadMatrix(0.0f);
 
@@ -359,6 +373,45 @@ bool CameraWrapper::IsFreeCameraActive() const
 bool CameraWrapper::IsFirstPersonCameraActive() const
 {
 	return FirstPersonCameraActive;
+}
+
+bool CameraWrapper::IsFirstPersonCameraPaused() const
+{
+    return FirstPersonCameraPaused;
+}
+
+void CameraWrapper::PauseFirstPersonCamera()
+{
+    if(FirstPersonCameraActive)
+    {
+        if(!FirstPersonCameraPaused)
+        {
+            Logger::Log("Pausing first person camera.\n");
+            RestoreCameraCode();
+            FirstPersonCameraPaused = true;
+        }
+    }
+    else
+    {
+        Logger::LogWarning("Failed to pause the first person camera because it is not active!\n");
+    }
+}
+
+void CameraWrapper::UnpauseFirstPersonCamera()
+{
+    if(FirstPersonCameraActive)
+    {
+        if(FirstPersonCameraPaused)
+        {
+            Logger::Log("Unpausing first person camera.\n");
+            DisableCameraCode(CameraYWriteAddress, CameraZWriteAddress);
+            FirstPersonCameraPaused = false;
+        }
+    }
+    else
+    {
+        Logger::LogWarning("Failed to unpause the first person camera because it is not active!\n");
+    }
 }
 
 float CameraWrapper::GetCurrentSpeed() const

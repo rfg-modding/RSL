@@ -74,7 +74,26 @@ void __fastcall Hooks::PlayerDoFrameHook(Player* PlayerPtr)
     {
         if (Globals::Camera->IsFirstPersonCameraActive())
         {
-            Globals::Camera->UpdateFirstPersonView();
+            if(Globals::Camera->UseThirdPersonForVehicles)
+            {
+                if(PlayerPtr->VehicleHandle != 0xFFFFFFFF)
+                {
+                    Globals::Camera->PauseFirstPersonCamera();
+                }
+                else
+                {
+                    Globals::Camera->UnpauseFirstPersonCamera();
+                    Globals::Camera->UpdateFirstPersonView();
+                }
+            }
+            else
+            {
+                if(Globals::Camera->IsFirstPersonCameraPaused())
+                {
+                    Globals::Camera->UnpauseFirstPersonCamera();
+                }
+                Globals::Camera->UpdateFirstPersonView();
+            }
         }
     }
 

@@ -36,6 +36,10 @@ public:
 
 	bool IsFreeCameraActive() const;
 	bool IsFirstPersonCameraActive() const;
+    bool IsFirstPersonCameraPaused() const;
+
+    void PauseFirstPersonCamera();
+    void UnpauseFirstPersonCamera();
 
 	float GetCurrentSpeed() const;
 	vector GetRealPosition() const;
@@ -53,6 +57,7 @@ public:
 	float FirstPersonDirectionOffsetMultiplier = 0.3f;
 	bool UseFirstPersonDirectionOffset = true;
     bool UseFirstPersonAutoPlayerDirection = true;
+    bool UseThirdPersonForVehicles = true;
 	float FirstPersonAutoPlayerDirectionAngleOffset = 0.0f;
     vector LastFirstPersonPosition = { 0.0f, 0.0f, 0.0f };
     bool FirstPersonSmoothingEnabled = true;
@@ -98,6 +103,7 @@ public:
 private:
 	bool FreeCameraActive = false;
 	bool FirstPersonCameraActive = false;
+    bool FirstPersonCameraPaused = false;
 
 	float CurrentSpeed = 2.0f;
 
