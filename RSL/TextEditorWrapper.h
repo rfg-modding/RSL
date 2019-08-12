@@ -69,7 +69,7 @@ public:
     void DrawSaveAsScriptPopup();
     void DrawConfirmSaveChangesPopup();
 
-    std::string GetCurrentScriptString();
+    std::string GetCurrentScriptString() const;
     void LoadLanguageDefinitions();
 
     std::string ScriptName = "NewScript.lua";

@@ -778,17 +778,25 @@ void TextEditorWrapper::DrawConfirmSaveChangesPopup()
         ImGui::Text("Would you like to save your current script?");
         if(ImGui::Button("Yes"))
         {
-            SaveScript();
-            LoadScript(PendingOpenNode->Path.string(), PendingOpenNode->Path.stem().string());
-            PendingOpenNode = nullptr;
-            ImGui::CloseCurrentPopup();
+            auto& Path = PendingOpenNode->Path;
+            if(Path.has_stem())
+            {
+                SaveScript();
+                LoadScript(PendingOpenNode->Path.string(), PendingOpenNode->Path.stem().string());
+                PendingOpenNode = nullptr;
+                ImGui::CloseCurrentPopup();
+            }
         }
         ImGui::SameLine();
         if(ImGui::Button("No"))
         {
-            LoadScript(PendingOpenNode->Path.string(), PendingOpenNode->Path.stem().string());
-            PendingOpenNode = nullptr;
-            ImGui::CloseCurrentPopup();
+            auto& Path = PendingOpenNode->Path;
+            if(Path.has_stem())
+            {
+                LoadScript(PendingOpenNode->Path.string(), PendingOpenNode->Path.stem().string());
+                PendingOpenNode = nullptr;
+                ImGui::CloseCurrentPopup();
+            }
         }
         ImGui::SameLine();
         if(ImGui::Button("Cancel"))
@@ -801,7 +809,7 @@ void TextEditorWrapper::DrawConfirmSaveChangesPopup()
     }
 }
 
-std::string TextEditorWrapper::GetCurrentScriptString()
+std::string TextEditorWrapper::GetCurrentScriptString() const
 {
     return Editor.GetText();
 }
