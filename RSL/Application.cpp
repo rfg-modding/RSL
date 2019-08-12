@@ -154,6 +154,7 @@ void Application::WaitForValidGameState() const
     while (RFGRState < 0 || RFGRState > 63);
 }
 
+//Note: This function is an over-redundant hack to make sure that a few memory offsets are properly set since they kept not being set and causing bugs. Will improve later on.
 //Todo: Simplify this function by instead hooking explosion_parse_table (for explosions) and the relevant functions for other values, and setting their values after those functions are called
 //Todo: (continued) ... that way it will be guaranteed that if the explosion presets were loaded by the game, that the script loader will have them.
 void Application::TrySetMemoryLocations()
@@ -167,6 +168,9 @@ void Application::TrySetMemoryLocations()
             SetMemoryLocations();
             if (*Globals::NumExplosionInfos == 0)
             {
+                Logger::Log("NumExplosionInfos = {}\n", *Globals::NumExplosionInfos);
+                Logger::Log("Num material effect infos = {}\n", *Globals::NumMaterialEffectInfos);
+                Logger::Log("Num effect infos = {}\n", *Globals::NumEffectInfos);
                 Logger::LogWarning("Still not set... waiting 0.5 seconds\n");
                 Sleep(500);
             }
@@ -179,16 +183,16 @@ void Application::TrySetMemoryLocations()
         {
             Logger::LogWarning("Successfully set memory locations! NumExplosionInfos: {}, {}\n", *Globals::NumExplosionInfos, Globals::ExplosionInfos.Initialized() ? "Exp list initialized" : "Exp list not initialized");
 
-            Globals::NumExplosionInfos = reinterpret_cast<uint*>(Globals::ModuleBase + 0x19EE490);
-            auto ExplosionInfosPtr = reinterpret_cast<explosion_info*>(reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x19E6CD8));
+            Globals::NumExplosionInfos = OffsetPtr<uint*>(0x19EE490);
+            auto ExplosionInfosPtr = OffsetPtr<explosion_info*>(0x19E6CD8);
             Globals::ExplosionInfos.Init(ExplosionInfosPtr, 80, *Globals::NumExplosionInfos);
 
-            Globals::NumMaterialEffectInfos = reinterpret_cast<uint*>(reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x19EE4C4));
-            auto MaterialEffectInfosPtr = reinterpret_cast<material_effect_info*>(reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x19EB6F0));
+            Globals::NumMaterialEffectInfos = OffsetPtr<uint*>(0x19EE4C4);
+            auto MaterialEffectInfosPtr = OffsetPtr<material_effect_info*>(0x19EB6F0);
             Globals::MaterialEffectInfos.Init(MaterialEffectInfosPtr, *Globals::NumMaterialEffectInfos, *Globals::NumMaterialEffectInfos);
 
-            Globals::NumEffectInfos = reinterpret_cast<uint*>(reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x1D82DF0));
-            auto EffectInfosPtr = reinterpret_cast<effect_info*>(reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x1D82E60));
+            Globals::NumEffectInfos = OffsetPtr<uint*>(0x1D82DF0);
+            auto EffectInfosPtr = OffsetPtr<effect_info*>(0x1D82E60);
             Globals::EffectInfos.Init(EffectInfosPtr, *Globals::NumEffectInfos, *Globals::NumEffectInfos);
             break;
         }
@@ -197,10 +201,10 @@ void Application::TrySetMemoryLocations()
     {
         Logger::LogFatalError("Failed to set memory locations! Attempting to dump explosion info to log...\n");
 
-        Globals::NumExplosionInfos = reinterpret_cast<uint*>(Globals::ModuleBase + 0x19EE490);
+        Globals::NumExplosionInfos = OffsetPtr<uint*>(0x19EE490);
         Logger::Log("Alternative Address of NumExplosionInfos: {:#x}\n", (DWORD)Globals::NumExplosionInfos);
         Logger::Log("AltNumExplosionInfos = {}\n", *Globals::NumExplosionInfos);
-        auto ExplosionInfosPtr = reinterpret_cast<explosion_info*>(reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x19E6CD8));
+        auto ExplosionInfosPtr = OffsetPtr<explosion_info*>(0x19E6CD8);
         Logger::Log("ExplosionInfos address: {:#x}\n", (DWORD)ExplosionInfosPtr);
         Globals::ExplosionInfos.Init(ExplosionInfosPtr, 80, 72);
 
@@ -435,46 +439,36 @@ void Application::SetMemoryLocations()
 {
     Logger::Log("Setting memory locations. ModuleBase value: {:#x}\n", (DWORD)Globals::ModuleBase);
     Globals::ModuleBase = reinterpret_cast<uintptr_t>(GetModuleHandle(nullptr));
-    Logger::Log("New ModuleBase value: {:#x}\n", (DWORD)Globals::ModuleBase);
-    Globals::InMultiplayer = reinterpret_cast<bool*>(*reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x002CA210));
+    Globals::InMultiplayer = reinterpret_cast<bool*>(*reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x002CA210)); //For some reason need to do this casting nonsense for this var.
     if (*Globals::InMultiplayer)
     {
         MessageBoxA(Globals::FindRfgTopWindow(), "MP usage detected, shutting down!", "Multiplayer mode detected", MB_OK);
         std::cout << "MP detected. Shutting down!\n";
     }
-    //Todo: See if I can simplify this cast by removing the DWORD* bit. 
-    //Todo: Make helpers for stuff like this so theres less casting fuckery and guess work.
-    Globals::NumExplosionInfos = reinterpret_cast<uint*>(reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x19EE490));
-    Logger::Log("Address of NumExplosionInfos: {:#x}\n", (DWORD)Globals::NumExplosionInfos);
-    Logger::Log("NumExplosionInfos = {}\n", *Globals::NumExplosionInfos);
-    auto ExplosionInfosPtr = reinterpret_cast<explosion_info*>(reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x19E6CD8));
-    Logger::Log("ExplosionInfos address: {:#x}\n", (DWORD)ExplosionInfosPtr);
+
+
+    Globals::NumExplosionInfos = OffsetPtr<uint*>(0x19EE490);
+    auto ExplosionInfosPtr = OffsetPtr<explosion_info*>(0x19E6CD8);
     Globals::ExplosionInfos.Init(ExplosionInfosPtr, 80, *Globals::NumExplosionInfos);
 
-    Globals::NumMaterialEffectInfos = reinterpret_cast<uint*>(reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x19EE4C4));
-    Logger::Log("Address of NumMaterialEffectInfos: {:#x}\n", (DWORD)Globals::NumMaterialEffectInfos);
-    Logger::Log("Num material effect infos = {}\n", *Globals::NumMaterialEffectInfos);
-    auto MaterialEffectInfosPtr = reinterpret_cast<material_effect_info*>(reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x19EB6F0));
-    Logger::Log("MaterialEffectInfos address: {:#x}\n", (DWORD)MaterialEffectInfosPtr);
+    Globals::NumMaterialEffectInfos = OffsetPtr<uint*>(0x19EE4C4);
+    auto MaterialEffectInfosPtr = OffsetPtr<material_effect_info*>(0x19EB6F0);
     Globals::MaterialEffectInfos.Init(MaterialEffectInfosPtr, *Globals::NumMaterialEffectInfos, *Globals::NumMaterialEffectInfos);
 
-    Globals::NumEffectInfos = reinterpret_cast<uint*>(reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x1D82DF0));
-    Logger::Log("Address of NumEffectInfos: {:#x}\n", (DWORD)Globals::NumEffectInfos);
-    Logger::Log("Num effect infos = {}\n", *Globals::NumEffectInfos);
-    auto EffectInfosPtr = reinterpret_cast<effect_info*>(reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x1D82E60));
-    Logger::Log("EffectInfos address: {:#x}\n", (DWORD)EffectInfosPtr);
+    Globals::NumEffectInfos = OffsetPtr<uint*>(0x1D82DF0);
+    auto EffectInfosPtr = OffsetPtr<effect_info*>(0x1D82E60);
     Globals::EffectInfos.Init(EffectInfosPtr, *Globals::NumEffectInfos, *Globals::NumEffectInfos);
 
-    Globals::VehicleInfos = reinterpret_cast<rfg::farray<vehicle_info, 163>*>(reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x12BA5F8));
-
-    Globals::UnlimitedAmmo = reinterpret_cast<bool*>(Globals::ModuleBase + 0x3482CB6);
-    Globals::UnlimitedMagazineAmmo = reinterpret_cast<bool*>(Globals::ModuleBase + 0x3482CBC);
-    Globals::UnlimitedAiThrownWeapons = reinterpret_cast<bool*>(Globals::ModuleBase + 0x3482CB7);
-    Globals::VehicleMaxSpeed = reinterpret_cast<float*>(Globals::ModuleBase + 0x12BA434);
-    Globals::SsaoVisionEnabled = reinterpret_cast<bool*>(Globals::ModuleBase + 0x177BD1E);
-    Globals::RfgMaxCharges = reinterpret_cast<int*>(Globals::ModuleBase + 0x1251568);
-    Globals::TodEnabled = reinterpret_cast<bool*>(Globals::ModuleBase + 0x125CCA7);
-    Globals::CurrentTimeOfDay = reinterpret_cast<float*>(Globals::ModuleBase + 0x125CC80);
+    Globals::VehicleInfos = OffsetPtr<rfg::farray<vehicle_info, 163>*>(0x12BA5F8);
+    
+    Globals::UnlimitedAmmo = OffsetPtr<bool*>(0x3482CB6);
+    Globals::UnlimitedMagazineAmmo = OffsetPtr<bool*>(0x3482CBC);
+    Globals::UnlimitedAiThrownWeapons = OffsetPtr<bool*>(0x3482CB7);
+    Globals::VehicleMaxSpeed = OffsetPtr<float*>(0x12BA434);
+    Globals::SsaoVisionEnabled = OffsetPtr<bool*>(0x177BD1E);
+    Globals::RfgMaxCharges = OffsetPtr<int*>(0x1251568);
+    Globals::TodEnabled = OffsetPtr<bool*>(0x125CCA7);
+    Globals::CurrentTimeOfDay = OffsetPtr<float*>(0x125CC80);
 
     Scripts.UpdateRfgPointers();
 } 
