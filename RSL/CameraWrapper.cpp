@@ -422,5 +422,5 @@ float CameraWrapper::GetCurrentSpeed() const
 
 vector CameraWrapper::GetRealPosition() const
 {
-	return vector(*RealX, *RealY, *RealZ);
+    return vector(GameData->real_pos);
 }

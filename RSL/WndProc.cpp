@@ -49,34 +49,69 @@ LRESULT Hooks::ProcessInput(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
     case WM_KEYDOWN:
         if (Globals::Camera->IsFreeCameraActive())
         {
-            switch (wParam)
+            if(Globals::Camera->FreeCamUseWasdMovement)
             {
-            case 0x51: //q
-                Globals::Camera->MaxSpeed -= 0.02f;
-                break;
-            case 0x45: //e
-                Globals::Camera->MaxSpeed += 0.02f;
-                break;
-            case 0x5A: //z
-                Globals::Camera->MoveFreeCamera(DOWN);
-                break;
-            case 0x58: //x
-                Globals::Camera->MoveFreeCamera(UP);
-                break;
-            case VK_UP: //Up arrow key
-                Globals::Camera->MoveFreeCamera(FORWARD);
-                break;
-            case VK_DOWN: //Down arrow key
-                Globals::Camera->MoveFreeCamera(BACKWARD);
-                break;
-            case VK_RIGHT: //Right arrow key
-                Globals::Camera->MoveFreeCamera(RIGHT);
-                break;
-            case VK_LEFT: //Left arrow key
-                Globals::Camera->MoveFreeCamera(LEFT);
-                break;
-            default:
-                break;
+                switch (wParam)
+                {
+                case 0x51: //q
+                    Globals::Camera->MaxSpeed -= 0.02f;
+                    break;
+                case 0x45: //e
+                    Globals::Camera->MaxSpeed += 0.02f;
+                    break;
+                case 0x5A: //z
+                    Globals::Camera->MoveFreeCamera(DOWN);
+                    break;
+                case 0x58: //x
+                    Globals::Camera->MoveFreeCamera(UP);
+                    break;
+                case 0x57: //w key
+                    Globals::Camera->MoveFreeCamera(FORWARD);
+                    break;
+                case 0x53: //s key
+                    Globals::Camera->MoveFreeCamera(BACKWARD);
+                    break;
+                case 0x44: //d key
+                    Globals::Camera->MoveFreeCamera(RIGHT);
+                    break;
+                case 0x41: //a key
+                    Globals::Camera->MoveFreeCamera(LEFT);
+                    break;
+                default:
+                    break;
+                }
+            }
+            else
+            {
+                switch (wParam)
+                {
+                case 0x51: //q
+                    Globals::Camera->MaxSpeed -= 0.02f;
+                    break;
+                case 0x45: //e
+                    Globals::Camera->MaxSpeed += 0.02f;
+                    break;
+                case 0x5A: //z
+                    Globals::Camera->MoveFreeCamera(DOWN);
+                    break;
+                case 0x58: //x
+                    Globals::Camera->MoveFreeCamera(UP);
+                    break;
+                case VK_UP: //Up arrow key
+                    Globals::Camera->MoveFreeCamera(FORWARD);
+                    break;
+                case VK_DOWN: //Down arrow key
+                    Globals::Camera->MoveFreeCamera(BACKWARD);
+                    break;
+                case VK_RIGHT: //Right arrow key
+                    Globals::Camera->MoveFreeCamera(RIGHT);
+                    break;
+                case VK_LEFT: //Left arrow key
+                    Globals::Camera->MoveFreeCamera(LEFT);
+                    break;
+                default:
+                    break;
+                }
             }
         }
 
