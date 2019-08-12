@@ -292,11 +292,19 @@ void ScriptManager::UpdateRfgPointers()
     sol::state& LuaStateRef = *LuaState;
 	auto RfgTable = LuaStateRef["rfg"].get_or_create<sol::table>();
 
-	RfgTable["ActivePlayer"] = Globals::PlayerPtr;
-	RfgTable["ActiveWorld"] = Globals::RfgWorldPtr;
-	RfgTable["ActivePhysicsWorld"] = Globals::hkpWorldPtr;
+    RfgTable["ActivePlayer"] = Globals::PlayerPtr;//sol::property([]() { throw std::exception("`rfg.ActivePlayer` has been deprecated. Use `Player` instead."); });
+	RfgTable["ActiveWorld"] = Globals::RfgWorldPtr; //sol::property([]() { throw std::exception("`rfg.ActiveWorld` has been deprecated. Use `World` instead."); });
+	RfgTable["ActivePhysicsWorld"] = Globals::hkpWorldPtr; //sol::property([]() { throw std::exception("`rfg.ActivePhysicsWorld` has been deprecated. Use `PhysicsWorld` instead."); });
+    //RfgTable["PhysicsSolver"] = []() { throw std::exception("`rfg.PhysicsSolver` has been deprecated. Use `PhysicsSolver` instead."); };
+    //RfgTable["ExplosionInfos"] = []() { throw std::exception("`rfg.ExplosionInfos` has been deprecated. Use `ExplosionInfos` instead."); };
     RfgTable["PhysicsSolver"] = &Globals::hkpWorldPtr->m_dynamicsStepInfo.m_solverInfo;
     RfgTable["ExplosionInfos"] = &Globals::ExplosionInfos;
+    
+    LuaStateRef["Player"] = Globals::PlayerPtr;
+	LuaStateRef["World"] = Globals::RfgWorldPtr;
+	LuaStateRef["PhysicsWorld"] = Globals::hkpWorldPtr;
+    //LuaStateRef["PhysicsSolver"] = &Globals::hkpWorldPtr->m_dynamicsStepInfo.m_solverInfo;
+    //LuaStateRef["ExplosionInfos"] = &Globals::ExplosionInfos;
 }
 
 /* Scans all files in the Scripts folder. Creates a new script object and adds it to

@@ -247,6 +247,7 @@ void Lua::BindWorld(sol::state& LuaState)
 	Utype.set("LastLoadedTerritory", sol::property([](World& Self) { return std::ref(Self.last_loaded_territory); })); //Size 64 array of chars
 	Utype.set("MaxWorldObjects", &World::max_world_objects);
 	Utype.set("AllObjects", &World::all_objects); //rfg::base_array<Object*>
+	Utype.set("Objects", &World::all_objects); //rfg::base_array<Object*>
 	///Utype.set("TypeObjects", &World::type_objects); //rfg::base_array<ushort> array size 53
 	///Utype.set("SubTypeObjects", &World::subtype_objects); //rfg::base_array<ushort> array size 11
 	Utype.set("TechLevel", &World::tech_level);
