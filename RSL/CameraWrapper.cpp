@@ -346,6 +346,7 @@ void CameraWrapper::UpdateFirstPersonView()
         float DotProduct = CamFvec * PlayerFvec;
         float MagProduct = CamFvec.Magnitude() * PlayerFvec.Magnitude();
         float AngleRadians = acos(DotProduct / MagProduct);
+        //CamFvec = CamFvec.Rotate(FirstPersonAutoPlayerDirectionAngleOffset);
 
         float Angle2 = atan2((PlayerFvec.x * CamFvec.y) - (PlayerFvec.y * CamFvec.x), (PlayerFvec.x * CamFvec.x) - (PlayerFvec.y * CamFvec.y));
 

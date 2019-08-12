@@ -405,6 +405,15 @@ public:
 		y = Value;
 		return *this;
 	}
+    vector2 Rotate(float Radians)
+	{
+        vector2 NewVec;
+        float NewX = cos(Radians);
+        float NewY = sin(Radians);
+        NewVec.x = (NewX * x) - (NewY * y);
+        NewVec.y = (NewY * x) - (NewX * y);
+        return NewVec;
+	}
 	std::string GetDataString(bool Parentheses, bool Labels)
 	{
 		std::string String;
