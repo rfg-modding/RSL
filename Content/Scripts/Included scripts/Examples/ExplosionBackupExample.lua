@@ -1,8 +1,12 @@
+
+-- This is a script that shows how you could backup an explosions values
+-- Edit them, and then later restore them.
+
 -- Script starts
 -- Backup default values
-DefaultExplosionValues = {} --Make any empty table to store the values
+local DefaultExplosionValues = {} --Make any empty table to store the values
 for i = 0, rfg.ExplosionInfos:Size(), 1 do
-	IndexExp = rfg.ExplosionInfos[i]
+	local IndexExp = rfg.ExplosionInfos[i]
 	DefaultExplosionValues[i] = {}
 	DefaultExplosionValues[i].Name = IndexExp.Name
 	DefaultExplosionValues[i].Radius = IndexExp.Radius
@@ -14,8 +18,8 @@ end
 
 -- Now restore the defaults
 for i = 0, rfg.ExplosionInfos:Size(), 1 do
-	IndexExp = rfg.ExplosionInfos[i]
-	DefaultValue = DefaultExplosionValues[i]
+	local IndexExp = rfg.ExplosionInfos[i]
+	local DefaultValue = DefaultExplosionValues[i]
 	
 	IndexExp.Radius = DefaultValue.Radius
 	IndexExp.SecondaryRadius = DefaultValue.SecondaryRadius
@@ -23,7 +27,7 @@ for i = 0, rfg.ExplosionInfos:Size(), 1 do
 end
 
 for i = 0, rfg.ExplosionInfos:Size(), 1 do
-	DefaultValue = DefaultExplosionValues[i]
+	local DefaultValue = DefaultExplosionValues[i]
 	rsl.Log("Index: {}, Name: {}\n", i, DefaultValue.Name)
 	rsl.Log("\tRadius: {}\n", tostring(DefaultValue.Radius)) -- Need to fix this needing tostring
 	rsl.Log("\tSecondaryRadius: {}\n", tostring(DefaultValue.SecondaryRadius))

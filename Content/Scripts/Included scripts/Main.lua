@@ -1,14 +1,15 @@
 
--- Note that since this script is called main.lua (case doesn't matter), 
--- it's run on script loader startup, right after the 3 activation beeps.
--- Once event driven functions are in this will be the way to go for having
--- a mod that runs when the game starts, where you'll setup all your event hooks
--- For now this is mainly useful for setting up console commands, like what this 
--- example does. By having a function defined here the function becomes available 
--- for use by the lua state at RSL startup, meaning you can use it in the console
--- as it's simply a lua interpreter.
+--[[ Note that since this script is called main.lua (case doesn't matter), 
+ it's run on script loader startup, right after the 3 activation beeps.
+ Once event driven functions are in this will be the way to go for having
+ a mod that runs when the game starts, where you'll setup all your event hooks
+ For now this is mainly useful for setting up console commands, like what this 
+ example does. By having a function defined here the function becomes available 
+ for use by the lua state at RSL startup, meaning you can use it in the console
+ as it's simply a lua interpreter.]]
 
--- Takes an object name or handle and reports back on if an object with that name/handle exists and what it's position is.
+-- Takes an object name or handle and reports back on if an object 
+-- with that name/handle exists and what it's position is.
 function ObjectExists(TargetName)
 
 	TargetObject = rfg.GetObject(TargetName)
@@ -57,5 +58,7 @@ function PartyTime()
 		end
 	end
 end
+
+
 
 
