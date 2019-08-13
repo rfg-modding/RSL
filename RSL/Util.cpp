@@ -279,3 +279,8 @@ std::string Util::RFG::GetObjectSubTypeString(char ObjectSubType)
         return "Invalid object subtype";
     }
 }
+
+ImVec4 Util::NormalizeColor(float red, float green, float blue, float alpha)
+{
+    return ImVec4(red / 255.0f, green / 255.0f, blue / 255.0f, alpha / 255.0f);
+}

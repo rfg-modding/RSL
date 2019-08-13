@@ -29,3 +29,8 @@ namespace Util::RFG
     std::string GetObjectTypeString(char ObjectType);
     std::string GetObjectSubTypeString(char ObjectSubType);
 }
+
+namespace Util
+{
+    ImVec4 NormalizeColor(float red, float green, float blue, float alpha = 255.0f);
+}
