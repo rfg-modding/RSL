@@ -9,6 +9,9 @@ public:
 
 	void Draw() override;
 	void ConfirmScriptLoaderDeactivation() const;
+	void ConfirmLockoutModeActivation();
+
+    void ActivateLockoutMode();
 	void ShowAboutWindow(bool* p_open) const;
 
 	ImGuiWindowFlags WindowFlags = 0;

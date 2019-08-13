@@ -8,6 +8,10 @@ void ProcessNumpadInputs(const HWND hwnd, const UINT msg, const WPARAM wParam, c
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 LRESULT __stdcall Hooks::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
+    if(Globals::LockoutModeEnabled)
+    {
+        return CallWindowProc(Globals::OriginalWndProc, Globals::GameWindowHandle, msg, wParam, lParam);
+    }
     ProcessInput(hWnd, msg, wParam, lParam);
     if (Globals::OverlayActive || Globals::Gui->IsLuaConsoleActive())
     {

@@ -147,6 +147,8 @@ namespace Globals
     //extern float* TodOverride; //.rdata:01AAEB60 rfg.exe:$EEEB60 #EED760 <__real@41c00000>
     extern float* CurrentTimeOfDay; //.data:01E1CC80 rfg.exe:$125CC80 #125B680 <Current_time_of_day>
 
+    extern bool LockoutModeEnabled;
+
     namespace Launcher
     {
         extern bool ShouldRunRsl; //Used by the launcher WndProc to track if the launcher should launch the main RSL code after it closes or start a vanilla game.

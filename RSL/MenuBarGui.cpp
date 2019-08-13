@@ -19,6 +19,7 @@ MenuBarGui::MenuBarGui(std::string Title_)
 void MenuBarGui::Draw()
 {
 	static bool ShowDeactivationConfirmationPopup = false;
+    static bool ShowLockoutModeConfirmationPopup = false;
 	if (!Visible)
 	{
 		return;
@@ -41,24 +42,40 @@ void MenuBarGui::Draw()
 	{
 		if (ImGui::BeginMenu("System"))
 		{
-			ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.952f, 0.545f, 0.462f, 1.0f)); //Push red color for deactivation button
+            static ImVec4 DeactivateScriptLoaderButtonColor = Util::NormalizeColor(204.0f, 0.0f, 0.0f);
+			ImGui::PushStyleColor(ImGuiCol_Text, DeactivateScriptLoaderButtonColor); //Push red color for deactivation button
 			if (ImGui::MenuItem(std::string(std::string(ICON_FA_POWER_OFF) + u8" Deactivate script loader").c_str(), "Hold F3")) 
 			{
 				ShowDeactivationConfirmationPopup = true;
 			}
 			ImGui::PopStyleColor(); //Pop deactivation button color
-            ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.0f, 0.4784f, 0.8f, 1.0f)); //Push light blue color for the reset button
+
+            static ImVec4 ResetLuaStateButtonColor = Util::NormalizeColor(0.0f, 122.0f, 204.0f); //Light blue color
+            ImGui::PushStyleColor(ImGuiCol_Text, ResetLuaStateButtonColor);
             if(ImGui::MenuItem(std::string(std::string(ICON_FA_SYNC) + u8" Reset core lua state").c_str()))
             {
                 Globals::Scripts->Reset();
             }
             ImGui::PopStyleColor(); //Pop reset button color
-            ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.0f, 0.8f, 0.106f, 1.0f)); //Light green color
+
+            static ImVec4 ReloadSettingsButtonColor = Util::NormalizeColor(0.0f, 204.0f, 27.0f); //Light green color
+            ImGui::PushStyleColor(ImGuiCol_Text, ReloadSettingsButtonColor); 
             if (ImGui::MenuItem(std::string(std::string(ICON_FA_SYNC) + u8" Reload settings.json").c_str()))
             {
                 Globals::Program->LoadDataFromConfig();
             }
-            ImGui::PopStyleColor(); 
+            ImGui::PopStyleColor();
+
+            static ImVec4 LockoutButtonColor = Util::NormalizeColor(204.0f, 119.0f, 0.0f); //Orange color
+            ImGui::PushStyleColor(ImGuiCol_Text, LockoutButtonColor); 
+            if (ImGui::MenuItem(std::string(std::string(ICON_FA_LOCK) + u8" Activate lockout mode").c_str()))
+            {
+                ShowLockoutModeConfirmationPopup = true;
+            }
+            ImGui::PopStyleColor();
+            ImGui::SameLine();
+            Util::Gui::ShowHelpMarker("Disables the overlay and all keybinds until the game is restarted.");
+
 			ImGui::EndMenu();
 		}
 		if (ImGui::BeginMenu("Tweaks"))
@@ -99,7 +116,13 @@ void MenuBarGui::Draw()
 		ImGui::OpenPopup("Confirm Deactivation");
 		ShowDeactivationConfirmationPopup = false;
 	}
+    if(ShowLockoutModeConfirmationPopup)
+    {
+        ImGui::OpenPopup("Confirm lockout mode activation");
+        ShowLockoutModeConfirmationPopup = false;
+    }
 	ConfirmScriptLoaderDeactivation();
+    ConfirmLockoutModeActivation();
 
 	if (Globals::Gui->ShowAppMetrics)
 	{
@@ -130,6 +153,38 @@ void MenuBarGui::ConfirmScriptLoaderDeactivation() const
 		}
 		ImGui::EndPopup();
 	}
+}
+
+void MenuBarGui::ConfirmLockoutModeActivation()
+{
+    ImGui::SetNextWindowSize(ImVec2(575.0f, 140.0f));
+    if (ImGui::BeginPopupModal("Confirm lockout mode activation"))
+    {
+        ImGui::SetNextItemWidth(400.0f);
+        ImGui::TextWrapped("Are you sure you'd like to activate lockout mode? Doing so will prevent you from accessing any keybinds or script loader overlays until you restart the game. There is absolutely no way to go back from activating this other than restarting the game.");
+        ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.952f, 0.545f, 0.462f, 1.0f));
+        if (ImGui::Button("Activate lockout mode"))
+        {
+            ActivateLockoutMode();
+            ImGui::CloseCurrentPopup();
+        }
+        ImGui::PopStyleColor();
+        ImGui::SameLine();
+        if (ImGui::Button("Cancel"))
+        {
+            ImGui::CloseCurrentPopup();
+        }
+        ImGui::EndPopup();
+    }
+}
+
+void MenuBarGui::ActivateLockoutMode()
+{
+    Globals::OverlayActive = false;
+    Globals::Gui->DeactivateLuaConsole();
+    SnippetManager::RestoreSnippet("MouseGenericPollMouseVisible", true);
+    SnippetManager::RestoreSnippet("CenterMouseCursorCall", true);
+    Globals::LockoutModeEnabled = true;
 }
 
 void MenuBarGui::ShowAboutWindow(bool* p_open) const

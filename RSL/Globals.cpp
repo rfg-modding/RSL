@@ -128,6 +128,8 @@ namespace Globals
     //float* TodOverride = nullptr;
     float* CurrentTimeOfDay = nullptr;
 
+    bool LockoutModeEnabled = false;
+
     namespace Launcher
     {
         bool ShouldRunRsl = false;
