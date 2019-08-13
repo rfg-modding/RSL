@@ -18,6 +18,7 @@ class GuiSystem;
 class ScriptManager;
 class CameraWrapper;
 class RenderInterfaceD3D11;
+class GraphicsStateWrapper;
 
 namespace Globals
 {
@@ -41,6 +42,7 @@ namespace Globals
 	extern hkpRigidBody* PlayerRigidBody;
     extern keen::GraphicsSystem* KeenGraphicsSystemPtr;
     extern stream_grid* MainStreamGrid;
+    extern GraphicsStateWrapper GraphicsState;
 
     extern FixedArrayWrapper<explosion_info> ExplosionInfos;
     extern uint* NumExplosionInfos;
@@ -52,6 +54,8 @@ namespace Globals
     extern uint* NumEffectInfos; //.data:02602DF0 rfg.exe:$1D82DF0 #0 <Num_effect_types>
 
     extern rfg::farray<vehicle_info, 163>* VehicleInfos; //.data:012FA5F8 rfg.exe:$12BA5F8 #12B8FF8 <Vehicle_info_pool>
+
+    extern FixedArrayWrapper<int> ShadowMapSizes; //.rdata:01A81BB4 rfg.exe:$EC1BB4 #EC07B4 <shadow_map_resolutions> int[4]
 
 	extern DWORD MouseGenericPollMouseVisible;
 	extern DWORD CenterMouseCursorCall;

@@ -243,6 +243,7 @@ void Application::InitOverlays()
     Gui.AddChildGui(new TeleportGui("Teleport"));
     Gui.AddChildGui(new IntrospectionGui("Object introspection"));
     Gui.AddChildGui(new ExplosionSpawnerGui("Explosion spawner"));
+    Gui.AddChildGui(new GraphicsTweaksGui("Graphics tweaks"));
 }
 
 void Application::OpenDefaultLogs()
@@ -469,6 +470,11 @@ void Application::SetMemoryLocations()
     Globals::RfgMaxCharges = OffsetPtr<int*>(0x1251568);
     Globals::TodEnabled = OffsetPtr<bool*>(0x125CCA7);
     Globals::CurrentTimeOfDay = OffsetPtr<float*>(0x125CC80);
+
+    auto ShadowMapSizesPtr = OffsetPtr<int*>(0xEC1BB4);
+    Globals::ShadowMapSizes.Init(ShadowMapSizesPtr, 4, 4);
+
+    Globals::GraphicsState.Init();
 
     Scripts.UpdateRfgPointers();
 } 

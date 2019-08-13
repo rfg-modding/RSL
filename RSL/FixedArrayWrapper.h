@@ -26,6 +26,7 @@ public:
     [[nodiscard]] int Length() const { return NumberOfElements; }
     [[nodiscard]] int Capacity() const { return ArraySize; }
     [[nodiscard]] bool Initialized() const { return _Initialized; }
+    [[nodiscard]] T* GetRawPointer() const { return Elements; };
 
 private:
     T* Elements = nullptr;

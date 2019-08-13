@@ -23,6 +23,7 @@ namespace Globals
 	hkpRigidBody* PlayerRigidBody = nullptr;
     keen::GraphicsSystem* KeenGraphicsSystemPtr = nullptr;
     stream_grid* MainStreamGrid = nullptr;
+    GraphicsStateWrapper GraphicsState;
     
     FixedArrayWrapper<explosion_info> ExplosionInfos;
     uint* NumExplosionInfos = nullptr;
@@ -34,6 +35,8 @@ namespace Globals
     uint* NumEffectInfos;
 
     rfg::farray<vehicle_info, 163> * VehicleInfos;
+
+    FixedArrayWrapper<int> ShadowMapSizes; 
 
 	DWORD MouseGenericPollMouseVisible = 0;
 	DWORD CenterMouseCursorCall = 0;

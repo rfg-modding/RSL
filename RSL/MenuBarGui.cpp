@@ -37,6 +37,7 @@ void MenuBarGui::Draw()
     static auto TeleportGuiRef = Globals::Gui->GetGuiReference<TeleportGui>("Teleport").value();
     static auto IntrospectionGuiRef = Globals::Gui->GetGuiReference<IntrospectionGui>("Object introspection").value();
     static auto ExplosionSpawnerGuiRef = Globals::Gui->GetGuiReference<ExplosionSpawnerGui>("Explosion spawner").value();
+    static auto GraphicsTweaksGuiRef = Globals::Gui->GetGuiReference<GraphicsTweaksGui>("Graphics tweaks").value();
 
 	if (ImGui::BeginMainMenuBar())
 	{
@@ -81,6 +82,7 @@ void MenuBarGui::Draw()
 		if (ImGui::BeginMenu("Tweaks"))
 		{
 			if (ImGui::MenuItem(std::string(std::string(ICON_FA_SLIDERS_H) + u8" General Tweaks").c_str(), NULL, &GeneralTweaksGuiRef.Get().Visible)) {}
+            if (ImGui::MenuItem(std::string(std::string(ICON_FA_EYE) + u8" Graphics tweaks").c_str(), NULL, &GraphicsTweaksGuiRef.Get().Visible)) {}
 			if (ImGui::MenuItem(std::string(std::string(ICON_FA_MAP_MARKED) + u8" Teleport").c_str(), NULL, &TeleportGuiRef.Get().Visible)) {}
 			if (ImGui::MenuItem(std::string(std::string(ICON_FA_CAMERA) + u8" Camera settings").c_str(), NULL, &CameraSettingsRef.Get().Visible)) {}
 			if (ImGui::MenuItem(std::string(std::string(ICON_FA_VIAL) + u8" Physics settings").c_str(), NULL, &PhysicsSettingsRef.Get().Visible)) {}
