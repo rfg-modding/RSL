@@ -6,7 +6,7 @@
 trigger:
 - master
 
-name: latest-$(BuildID)
+name: 'latest-$(BuildID)'
 
 pool:
   vmImage: 'windows-2019'
@@ -16,7 +16,7 @@ steps:
   inputs:
     filePath: '.\Tools\AzurePreBuild.ps1'
   env: 
-    RSL_VERSION: latest-$(BuildID)
+    RSL_VERSION: 'latest-$(BuildID)'
 
 - task: VSBuild@1
   inputs:
@@ -42,4 +42,4 @@ steps:
 - task: PublishPipelineArtifact@1
   inputs:
     targetPath: '$(Build.ArtifactStagingDirectory)/$(BuildID).zip'
-    artifact: latest-$(BuildID)
+    artifact: 'latest-$(BuildID)'
