@@ -23,7 +23,7 @@ steps:
     solution: '.\RSL.sln'
     vsVersion: '16.0'
     platform: 'x86'
-    configuration: 'Appveyor'
+    configuration: 'Release'
     maximumCpuCount: true
     msbuildArchitecture: 'x64'
 
