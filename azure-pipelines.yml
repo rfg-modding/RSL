@@ -21,7 +21,7 @@ steps:
     solution: '.\RSL.sln'
     vsVersion: '16.0'
     platform: 'x86'
-    configuration: 'Release'
+    configuration: 'Appveyor'
     maximumCpuCount: true
     msbuildArchitecture: 'x64'
 
@@ -34,10 +34,10 @@ steps:
     rootFolderOrFile: '$(Build.BinariesDirectory)\Red Faction Guerrilla Re-Mars-tered'
     includeRootFolder: true
     archiveType: 'zip'
-    archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/$(BuildID).zip'
     replaceExistingArchive: true
 
 - task: PublishPipelineArtifact@1
   inputs:
-    targetPath: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+    targetPath: '$(Build.ArtifactStagingDirectory)/$(BuildID).zip'
     artifact: '$(Build.BuildId)'
