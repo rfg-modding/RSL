@@ -1,6 +1,5 @@
 
-Write-Host $env:BuildID
-Write-Host $env:Build.BuildID
+Write-Host $BuildID
 
-Set-Content -Path '.\RSL\Version.h' -Value "#pragma once`n`nconstexpr auto RSL_VERSION = `"$env:Build.BuildID`";"
+Set-Content -Path '.\RSL\Version.h' -Value "#pragma once`n`nconstexpr auto RSL_VERSION = `"$env:BuildID`";"
 Get-Content '.\RSL\Version.h'
