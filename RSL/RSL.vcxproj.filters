@@ -302,6 +302,9 @@
     <ClCompile Include="keen_ImmediateRenderer_beginRenderPass_hook.cpp">
       <Filter>Hooks</Filter>
     </ClCompile>
+    <ClCompile Include="Timer.cpp">
+      <Filter>General Files\Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CameraWrapper.h">
@@ -545,6 +548,9 @@
       <Filter>Overlay Gui\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ShaderSetD3D11.h">
+      <Filter>General Files\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Timer.h">
       <Filter>General Files\Header Files</Filter>
     </ClInclude>
   </ItemGroup>

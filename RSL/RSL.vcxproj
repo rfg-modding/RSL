@@ -229,6 +229,7 @@
     <ClCompile Include="RlCamera_RenderBegin.cpp" />
     <ClCompile Include="StreamGrid_DoFrame.cpp" />
     <ClCompile Include="TextEditorWrapper.cpp" />
+    <ClCompile Include="Timer.cpp" />
     <ClCompile Include="VectorLua.cpp" />
     <ClCompile Include="VehicleSpawnerGui.cpp" />
     <ClCompile Include="WelcomeGui.cpp" />
@@ -301,6 +302,7 @@
     <ClInclude Include="RFGR_Types_Vehicle_Spawn_Params.h" />
     <ClInclude Include="ShaderSetD3D11.h" />
     <ClInclude Include="TextEditorWrapper.h" />
+    <ClInclude Include="Timer.h" />
     <ClInclude Include="VehicleSpawnerGui.h" />
     <ClInclude Include="Version.h" />
     <ClInclude Include="WorldLua.h" />

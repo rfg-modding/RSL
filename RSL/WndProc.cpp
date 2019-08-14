@@ -37,8 +37,7 @@ LRESULT __stdcall Hooks::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lPar
 
 LRESULT Hooks::ProcessInput(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-    static std::chrono::steady_clock::time_point ExplosionTimerBegin;
-    static std::chrono::steady_clock::time_point ExplosionTimerEnd;
+    static Timer ExplosionSpawnTimer(true);
     static bool MiddleMouseDown = false;
     if (!Globals::Gui->Ready())
     {
@@ -139,7 +138,6 @@ LRESULT Hooks::ProcessInput(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
                 SnippetManager::RestoreSnippet("MouseGenericPollMouseVisible", true);
                 SnippetManager::RestoreSnippet("CenterMouseCursorCall", true);
             }
-            //Sleep(150);
             break;
         case VK_F2:
             ScriptEditorGuiRef.Get().Toggle();
@@ -147,7 +145,7 @@ LRESULT Hooks::ProcessInput(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         case VK_F3:
             Globals::Program->ExitKeysPressCount++;
             break;
-        case VK_F4: //Tilde
+        case VK_F4:
             Globals::Gui->ToggleLuaConsole();
             if (Globals::Gui->IsLuaConsoleActive())
             {
@@ -186,13 +184,11 @@ LRESULT Hooks::ProcessInput(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
     if (MiddleMouseDown && ExplosionSpawnerGuiRef.Get().MiddleMouseBoomActive)
     {
-        ExplosionTimerEnd = std::chrono::steady_clock::now();
-        //std::cout << "Time since last explosion spawn: " << std::chrono::duration_cast<std::chrono::milliseconds>(ExplosionTimerEnd - ExplosionTimerBegin).count() << "\n";
-        if (std::chrono::duration_cast<std::chrono::milliseconds>(ExplosionTimerEnd - ExplosionTimerBegin).count() > 1000 / ExplosionSpawnerGuiRef.Get().MiddleMouseExplosionsPerSecond)
+        if (ExplosionSpawnTimer.ElapsedMilliseconds() > 1000 / ExplosionSpawnerGuiRef.Get().MiddleMouseExplosionsPerSecond)
         {
             ExplosionCreate(&ExplosionSpawnerGuiRef.Get().CustomExplosionInfo, Globals::PlayerPtr, Globals::PlayerPtr,
                 &Globals::PlayerPtr->aim_pos, &Globals::PlayerPtr->mp_camera_orient, &Globals::PlayerPtr->aim_pos, nullptr, false);
-            ExplosionTimerBegin = std::chrono::steady_clock::now();
+            ExplosionSpawnTimer.Reset();
         }
     }
     //For whatever reason this causes a crash. Might need to call at a specific time to not piss off havok or something.
@@ -215,7 +211,8 @@ LRESULT Hooks::ProcessInput(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         }
     }*/
 
-    if (ScriptEditorGuiRef.Get().IsVisible())
+    static Timer RunScriptButtonTimer(true);
+    if (ScriptEditorGuiRef.Get().IsVisible() && Globals::OverlayActive)
     {
         try
         {
@@ -240,14 +237,18 @@ LRESULT Hooks::ProcessInput(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         {
             ScriptEditorGuiRef.Get().ShowNewScriptPopup = true;
         }
+
+    }
+    if (GetAsyncKeyState(VK_F5)) //Let people use this shortcut even when the ui isn't visible, for convenience.
+    {
         try
         {
-            if (GetAsyncKeyState(VK_F5))
+            if (ScriptEditorGuiRef.IsReady())
             {
-                if (ScriptEditorGuiRef.IsReady())
+                if (RunScriptButtonTimer.ElapsedMilliseconds() > 175)
                 {
                     ScriptEditorGuiRef.Get().RunCurrentScript();
-                    Sleep(175);
+                    RunScriptButtonTimer.Reset();
                 }
             }
         }
@@ -256,6 +257,7 @@ LRESULT Hooks::ProcessInput(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
             Logger::LogFatalError("Exception when using F5 run script shortcut. Message: {}\n", Ex.what());
         }
     }
+    
     return 0;
 }
 

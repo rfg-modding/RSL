@@ -1,5 +1,5 @@
 #pragma once
-#include "RenderInterfaceD3D11.h"
+#include "Timer.h"
 
 class HdrStateBlock
 {
