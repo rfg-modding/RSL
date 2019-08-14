@@ -15,8 +15,8 @@ steps:
 - task: PowerShell@2
   inputs:
     filePath: '.\Tools\AzurePreBuild.ps1'
-    env: 
-      RSL_VERSION: latest-$(BuildID)
+  env: 
+    RSL_VERSION: latest-$(BuildID)
 
 - task: VSBuild@1
   inputs:
