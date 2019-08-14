@@ -691,3 +691,7 @@ extern F_human_set_opacity_plus_child_items human_set_opacity_plus_child_items;
 //.text:00D64370 rfg.exe:$1A4370 #1A3770 <matrix::rotate_around_local_vector> //void __thiscall matrix::rotate_around_local_vector(matrix *this, vector *axis, float ang_rad)
 using F_matrix_rotate_around_local_vector = void(__fastcall*)(matrix* this_ptr, void* edx, vector& axis, float angle_radians); //2nd arg is edx, needed for __thiscall functions.
 extern F_matrix_rotate_around_local_vector matrix_rotate_around_local_vector;
+
+//.text:008AC810 rfg.exe:$86C810 #86BC10 <keen::ImmediateRenderer::beginRenderPass> //void __thiscall keen::ImmediateRenderer::beginRenderPass(keen::ImmediateRenderer *this, keen::RenderTarget *pRenderTarget, keen::Camera *pCamera)
+using F_keen_ImmediateRenderer_beginRenderPass = void(__fastcall*)(keen::ImmediateRenderer* this_ptr, void* edx, keen::RenderTarget* pRenderTarget, keen::Camera* pCamera); //2nd arg is edx, needed for __thiscall functions.
+extern F_keen_ImmediateRenderer_beginRenderPass keen_ImmediateRenderer_beginRenderPass;

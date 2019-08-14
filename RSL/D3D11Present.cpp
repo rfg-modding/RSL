@@ -18,7 +18,6 @@ HRESULT __stdcall Hooks::D3D11PresentHook(IDXGISwapChain* pSwapChain, UINT SyncI
                 UpdateDebugDrawRenderInterfaceValues();
                 if (Globals::PlayerPtr)
                 {
-
                     const ddVec3 boxColor = { 0.0f, 0.8f, 0.8f };
                     const ddVec3 boxCenter = { Globals::PlayerPtr->Position.x, Globals::PlayerPtr->Position.y, Globals::PlayerPtr->Position.z };
                     const ddVec3 UpVector = { 0.0f, 1.0f, 0.0f };

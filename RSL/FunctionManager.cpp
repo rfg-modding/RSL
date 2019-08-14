@@ -164,4 +164,6 @@ void FunctionManager::Initialize()
     RegisterFunction(human_set_opacity_plus_child_items, 0x67E1D0);
 
     RegisterFunction(matrix_rotate_around_local_vector, 0x1A4370);
+
+    RegisterFunction(keen_ImmediateRenderer_beginRenderPass, 0x86C810);
 }

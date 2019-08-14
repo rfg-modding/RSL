@@ -396,6 +396,8 @@ void Application::CreateHooks()
 
     Hooks.CreateHook("object_spawn_vehicle_hook", Globals::ModuleBase + 0x757F40, Hooks::object_spawn_vehicle_hook, object_spawn_vehicle);
 
+    Hooks.CreateHook("keen_ImmediateRenderer_beginRenderPass_hook", Globals::ModuleBase + 0x86C810, Hooks::keen_ImmediateRenderer_beginRenderPass_hook, keen_ImmediateRenderer_beginRenderPass);
+
     //Disabling for now since stream grid tests had issues.
     //Hooks.CreateHook("StreamGridDoFrame", reinterpret_cast<LPVOID>(Globals::ModuleBase + 0x530FB0), StreamGridDoFrameHook, reinterpret_cast<LPVOID*>(&StreamGridDoFrame));
     //Hooks.CreateHook("ObjectSpawnVehicle", reinterpret_cast<LPVOID>(Globals::ModuleBase + 0x757F40), ObjectSpawnVehicleHook, reinterpret_cast<LPVOID*>(&ObjectSpawnVehicle));

@@ -296,6 +296,12 @@
     <ClCompile Include="GraphicsTweaksGui.cpp">
       <Filter>Overlay Gui\Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="RenderInterfaceD3D11.cpp">
+      <Filter>General Files\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="keen_ImmediateRenderer_beginRenderPass_hook.cpp">
+      <Filter>Hooks</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CameraWrapper.h">
@@ -537,6 +543,9 @@
     </ClInclude>
     <ClInclude Include="GraphicsTweaksGui.h">
       <Filter>Overlay Gui\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderSetD3D11.h">
+      <Filter>General Files\Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

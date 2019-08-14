@@ -1331,3 +1331,171 @@ struct vehicle_spawn_params
     vehicle_spawn_params_flags veh_spawn_flags;
     vehicle* vp;
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+namespace keen
+{
+    enum ImmediateCullMode
+    {
+        ImmediateCullMode_None = 0x0,
+        ImmediateCullMode_Back = 0x1,
+        ImmediateCullMode_Front = 0x2,
+        ImmediateCullMode_Count = 0x3,
+    };
+
+    enum ImmediateFillMode
+    {
+        ImmediateFillMode_Solid = 0x0,
+        ImmediateFillMode_Wireframe = 0x1,
+        ImmediateFillMode_Count = 0x2,
+    };
+
+    enum ProjectionType
+    {
+        ProjectionType_Perspective = 0x0,
+        ProjectionType_Orthographic = 0x1,
+        ProjectionType_Count = 0x2,
+    };
+
+    struct Vector3 : public keen::float3
+    {
+
+    };
+
+    struct Vector2 : public keen::float2
+    {
+
+    };
+
+    class Vector4 : public keen::float4
+    {
+
+    };
+
+    struct Matrix33
+    {
+        keen::Vector3 x;
+        keen::Vector3 y;
+        keen::Vector3 z;
+    };
+
+    struct Matrix43
+    {
+        keen::Matrix33 rot;
+        keen::Vector3 pos;
+    };
+
+    struct Matrix44
+    {
+        keen::Vector4 x;
+        keen::Vector4 y;
+        keen::Vector4 z;
+        keen::Vector4 w;
+    };
+
+    struct PerspectiveProjection
+    {
+        float aspectRatio;
+        float nearClip;
+        float farClip;
+        float fovY;
+    };
+
+    struct OrthographicProjection
+    {
+        float x0;
+        float x1;
+        float y0;
+        float y1;
+        float z0;
+        float z1;
+    };
+
+    union Projection_data//$EB565B4EEB10713CE92675F66F76F40C
+    {
+        keen::PerspectiveProjection perspective;
+        keen::OrthographicProjection orthographic;
+    };
+
+    /* 2435 */
+    struct  __declspec(align(4)) Projection
+    {
+        Projection_data data;
+        keen::ProjectionType type;
+        bool rightHanded;
+    };
+
+    struct Plane
+    {
+        keen::Vector4 data;
+    };
+
+    struct Frustum
+    {
+        keen::Plane m_planes[6];
+    };
+
+    struct  __declspec(align(4)) Camera
+    {
+        keen::Matrix43 m_worldMatrix;
+        keen::Projection m_projection;
+        keen::Matrix43 m_viewMatrix;
+        keen::Frustum m_frustum;
+        bool m_viewDirty;
+        bool m_frustumDirty;
+    };
+
+    struct ImmediateRenderer
+    {
+        void* m_pCommandWriter;//keen::GraphicsCommandWriter* m_pCommandWriter;
+        void* m_pVertexData;
+        keen::GraphicsSystem* m_pGraphicsSystem;
+        keen::RasterizerState* m_pRasterizerStates[3][2];
+        keen::BlendState* m_pBlendStates[2][6];
+        keen::DepthStencilState* m_pDepthStencilState[8][2];
+        keen::SamplerState* m_pSamplerState[3][3];
+        keen::DynamicConstantBuffer* m_pShaderParameterBuffer;
+        keen::DynamicConstantBuffer* m_pFragmentParameterBuffer;
+        keen::ShaderPipeline* m_pShaderPipeline;
+        keen::ShaderPipeline* m_pShaderPipelineVolumeSlice;
+        keen::VertexFormat* m_pVertexFormat;
+        keen::VertexInputBinding* m_pVertexInputBinding;
+        keen::VertexInputBinding* m_pVolumeSliceInputBinding;
+        keen::TextureData* m_pWhiteTexture;
+        keen::Matrix44 m_viewProjectionMatrix;
+        keen::Matrix43 m_worldMatrix;
+        unsigned int m_screenWidth;
+        unsigned int m_screenHeight;
+        bool m_mvpMatrixDirty;
+        bool m_endFinalRenderPass;
+        keen::ImmediateCullMode m_cullMode;
+        keen::ImmediateFillMode m_fillMode;
+        keen::Camera m_renderPassCameraData[4];
+        keen::Camera* m_renderPassCameras[4];
+        unsigned int m_currentRenderPassStackSize;
+    };
+}
+

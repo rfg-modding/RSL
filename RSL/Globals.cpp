@@ -24,6 +24,8 @@ namespace Globals
     keen::GraphicsSystem* KeenGraphicsSystemPtr = nullptr;
     stream_grid* MainStreamGrid = nullptr;
     GraphicsStateWrapper GraphicsState;
+
+    keen::ImmediateRenderer* ImmediateRenderer = nullptr;
     
     FixedArrayWrapper<explosion_info> ExplosionInfos;
     uint* NumExplosionInfos = nullptr;

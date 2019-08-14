@@ -44,6 +44,8 @@ namespace Globals
     extern stream_grid* MainStreamGrid;
     extern GraphicsStateWrapper GraphicsState;
 
+    extern keen::ImmediateRenderer* ImmediateRenderer;
+
     extern FixedArrayWrapper<explosion_info> ExplosionInfos;
     extern uint* NumExplosionInfos;
 

@@ -3,30 +3,37 @@
 
 void Hooks::UpdateDebugDrawRenderInterfaceValues()
 {
-    if (Globals::RlCameraPtr)
+    if (Globals::RlCameraPtr && Globals::ImmediateRenderer)
     {
+        //Globals::vpMatrix = (matrix44*)&Globals::ImmediateRenderer->m_viewProjectionMatrix;
+        memcpy(&Globals::vpMatrix, &Globals::ImmediateRenderer->m_viewProjectionMatrix, 64);
+        matrix44 MvpMatrix = Globals::vpMatrix.GetTransposed();
+        Globals::DebugDrawRenderInterface->setMvpMatrixPtr(reinterpret_cast<float*>(&MvpMatrix));
+
         //matrix44& ViewMatrix = Globals::RlCameraPtr->m_view_transform;
         //matrix44& ProjectionMatrix = Globals::RlCameraPtr->m_projection_transform;
         //matrix44 ViewProjectionMatrix = ProjectionMatrix * ViewMatrix;
         //matrix44 TransposedViewProjectionMatrix = ViewProjectionMatrix.GetTransposed();
         //Globals::DebugDrawRenderInterface->setMvpMatrixPtr(reinterpret_cast<float*>(&TransposedViewProjectionMatrix));
 
-        matrix44 ModelMatrix;
-        ModelMatrix.SetToIdentity();
-        rfg_camera& GameData = *Globals::Camera->GameData;
-        matrix44 ViewMatrix(GameData.real_orient.rvec, GameData.real_orient.uvec, GameData.real_orient.fvec, GameData.real_pos);
+        //matrix44 ModelMatrix;
+        //ModelMatrix.SetToIdentity();
+        //rfg_camera& GameData = *Globals::Camera->GameData;
+        //matrix44 ViewMatrix(GameData.real_orient.rvec, GameData.real_orient.uvec, GameData.real_orient.fvec, GameData.real_pos);
 
-        float f = tanf((Globals::pi / 2.0f) - (0.5f - GameData.real_fov));
-        float RangeInv = (1.0f / (GameData.m_near_clip_dist - GameData.m_far_clip_dist));
-        float Aspect = (Globals::WindowRect.right - Globals::WindowRect.left) / (Globals::WindowRect.bottom - Globals::WindowRect.top);
-        vector4 Col1((f / Aspect), 0.0f, 0.0f, 0.0f);
-        vector4 Col2(0.0f, f, 0.0f, 0.0f);
-        vector4 Col3(0.0f, 0.0f, ((GameData.m_near_clip_dist + GameData.m_far_clip_dist) * RangeInv), -1.0f);
-        vector4 Col4(0.0f, 0.0f, (((GameData.m_near_clip_dist - GameData.m_far_clip_dist) * RangeInv) * 2.0f), 0.0f);
-        matrix44 ProjectionMatrix(Col1, Col2, Col3, Col4);
-        Globals::vpMatrix = ProjectionMatrix * ViewMatrix;
-        matrix44 MvpMatrix = ProjectionMatrix * ViewMatrix * ModelMatrix;
-        Globals::DebugDrawRenderInterface->setMvpMatrixPtr(reinterpret_cast<float*>(&MvpMatrix));
+        //float f = tanf((Globals::pi / 2.0f) - (0.5f - GameData.real_fov));
+        //float RangeInv = (1.0f / (GameData.m_near_clip_dist - GameData.m_far_clip_dist));
+        //float Aspect = (Globals::WindowRect.right - Globals::WindowRect.left) / (Globals::WindowRect.bottom - Globals::WindowRect.top);
+        //vector4 Col1((f / Aspect), 0.0f, 0.0f, 0.0f);
+        //vector4 Col2(0.0f, f, 0.0f, 0.0f);
+        //vector4 Col3(0.0f, 0.0f, ((GameData.m_near_clip_dist + GameData.m_far_clip_dist) * RangeInv), -1.0f);
+        //vector4 Col4(0.0f, 0.0f, (((GameData.m_near_clip_dist - GameData.m_far_clip_dist) * RangeInv) * 2.0f), 0.0f);
+        //matrix44 ProjectionMatrix(Col1, Col2, Col3, Col4);
+        //Globals::vpMatrix = ProjectionMatrix * ViewMatrix;
+        //matrix44 MvpMatrix = ProjectionMatrix * ViewMatrix * ModelMatrix;
+        //Globals::DebugDrawRenderInterface->setMvpMatrixPtr(reinterpret_cast<float*>(&MvpMatrix));
+
+
         //matrix44 TransposedvpMatrix = Globals::vpMatrix.GetTransposed();
         //Globals::DebugDrawRenderInterface->setMvpMatrixPtr(reinterpret_cast<float*>(&TransposedvpMatrix));
     }
