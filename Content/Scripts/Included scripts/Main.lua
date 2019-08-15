@@ -24,14 +24,11 @@ end
 
 -- Destroys all humans ;) (kills them).
 function DestroyAllHumans()
-
-	ObjectList = rfg.ActiveWorld.AllObjects -- Alias the games global object list for convenience
-
-	for i=0, ObjectList:Size(), 1 do -- Iterate through the world object list
-		Object = ObjectList[i] -- Alias the object at index i for convenience
+	for i=0, World.Objects:Size(), 1 do -- Iterate through the world object list
+		Object = World.Objects[i] -- Alias the object at index i for convenience
 		
 		if Object.Type == rfg.ObjectTypes.Human then -- Filter each object by checking if they are human objects 
-			if Object.AllIndex ~= rfg.ActivePlayer.AllIndex then --Don't want to kill the player
+			if Object.AllIndex ~= Player.AllIndex then --Don't want to kill the player
 				Human = Object:CastToHuman() -- By default objects on the object lists are just objects, once you know they're a human, 
 											 -- cast them to be human objects to access human specific variables.
 				Human.HitPoints = 0 --Kill them by setting their hit points = 0
@@ -43,22 +40,15 @@ end
 
 -- Teleports all humans except the player to where the player is pointing.
 function PartyTime()
-
-	ObjectList = rfg.ActiveWorld.AllObjects -- Alias the games global object list for convenience
-
-	for i=0, ObjectList:Size(), 1 do -- Iterate through the world object list
-		Object = ObjectList[i] -- Alias the object at index i for convenience
+	for i=0, World.Objects:Size(), 1 do -- Iterate through the world object list
+		Object = World.Objects[i] -- Alias the object at index i for convenience
 		
 		if Object.Type == rfg.ObjectTypes.Human then -- Filter each object by checking if they are human objects 
-			if Object.AllIndex ~= rfg.ActivePlayer.AllIndex then --Don't want to kill the player
+			if Object.AllIndex ~= Player.AllIndex then --Don't want to kill the player
 				Human = Object:CastToHuman() -- By default objects on the object lists are just objects, once you know they're a human, 
 											 -- cast them to be human objects to access human specific variables.
-				rfg.TeleportHuman(Human, rfg.ActivePlayer.AimPos)
+				rfg.TeleportHuman(Human, Player.AimPos)
 			end
 		end
 	end
 end
-
-
-
-
