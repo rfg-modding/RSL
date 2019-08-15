@@ -150,8 +150,11 @@ void OverlayConsole::Draw()
 				{
 					HistoryPosition--;
 				}
-				CallbackData->DeleteChars(0, CallbackData->BufTextLen);
-				CallbackData->InsertChars(0, CommandHistory[HistoryPosition].c_str());
+                if (HistoryPosition < CommandHistory.size())
+                {
+                    CallbackData->DeleteChars(0, CallbackData->BufTextLen);
+                    CallbackData->InsertChars(0, CommandHistory[HistoryPosition].c_str());
+                }
 			}
 			else if (CallbackData->EventKey == ImGuiKey_DownArrow)
 			{
@@ -159,8 +162,11 @@ void OverlayConsole::Draw()
 				{
 					HistoryPosition++;
 				}
-				CallbackData->DeleteChars(0, CallbackData->BufTextLen);
-				CallbackData->InsertChars(0, CommandHistory[HistoryPosition].c_str());
+                if(HistoryPosition < CommandHistory.size())
+                {
+                    CallbackData->DeleteChars(0, CallbackData->BufTextLen);
+                    CallbackData->InsertChars(0, CommandHistory[HistoryPosition].c_str());
+                }
 			}
 		}
 		return 0;
