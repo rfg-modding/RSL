@@ -1,7 +1,6 @@
 #pragma once
 #include "RFGR_Types_Player.h"
 
-/* 3866 */
 struct $59F8883BC9B599DCF3E2EDB95DC2BDBD
 {
 	unsigned __int32 m_alpha_mode : 5;
@@ -17,20 +16,17 @@ struct $59F8883BC9B599DCF3E2EDB95DC2BDBD
 	unsigned __int32 m_valid : 1;
 };
 
-/* 3867 */
 union $51A79B7A66E5C28407BD75AAA2D6EED8
 {
 	unsigned int m_bits;
 	$59F8883BC9B599DCF3E2EDB95DC2BDBD v;
 };
 
-/* 3868 */
 struct rl_primitive_state
 {
 	$51A79B7A66E5C28407BD75AAA2D6EED8 d;
 };
 
-/* 1081 */
 enum dcf_type
 {
 	DCF_TYPE_NONE = 0xFFFFFFFF,
@@ -41,7 +37,6 @@ enum dcf_type
 	DCF_TYPE_VECTOR3 = 0x4,
 };
 
-/* 1631 */
 enum dcf_search_mode
 {
 	DCF_SM_AND = 0x0,
@@ -50,7 +45,6 @@ enum dcf_search_mode
 	DCF_SM_OR_NOT = 0x3,
 };
 
-/* 1632 */
 enum vconsole_mode
 {
 	VCM_NORMAL = 0x0,
@@ -91,7 +85,6 @@ public:
 	char alpha;
 };
 
-/* 8725 */
 union $04AA5955D090ADAEDDBF970246D4F262
 {
 	void(__cdecl *vfunc)();
@@ -101,7 +94,6 @@ union $04AA5955D090ADAEDDBF970246D4F262
 	vector *(__cdecl *v3func)(vector *result);
 };
 
-/* 8726 */
 struct __declspec(align(4)) console_command
 {
 	const char *name;
@@ -111,7 +103,6 @@ struct __declspec(align(4)) console_command
 	bool enabled;
 };
 
-/* 4064 */
 struct __declspec(align(4)) vconsole_config
 {
 	void(__cdecl *draw_rect)(int, int, int, int, color *);
@@ -123,7 +114,6 @@ struct __declspec(align(4)) vconsole_config
 	bool save_history;
 };
 
-/* 566 */
 enum control_button_action
 {
 	CBA_BUTTON_INVALID = 0xFFFFFFFF,
@@ -239,7 +229,6 @@ enum control_button_action
 	RESERVED_NUM_CONTROL_BUTTON_ACTIONS = 0xC8,
 };
 
-/* 1393 */
 enum hint_type
 {
 	HT_SELECTION = 0x0,
@@ -249,7 +238,6 @@ enum hint_type
 	HT_LAST = 0x4,
 };
 
-/* 1394 */
 enum control_action_type
 {
 	CAT_INVALID = 0xFFFFFFFF,
@@ -258,7 +246,6 @@ enum control_action_type
 	NUM_CONTROL_ACTION_TYPES = 0x2,
 };
 
-/* 9305 */
 struct __declspec(align(4)) hint_info
 {
 	hint_type type;
@@ -268,29 +255,6 @@ struct __declspec(align(4)) hint_info
 	bool is_visible;
 };
 
-struct base_array_hint_info_Vtbl;
-/* 9303 */
-struct base_array_hint_info
-{
-	base_array_hint_info_Vtbl *vfptr;
-	hint_info *elt;
-	int array_size;
-	int num;
-};
-
-/* 9304 */
-struct base_array_hint_info_Vtbl
-{
-	void *(__thiscall *__vecDelDtor)(base_array_hint_info *This, unsigned int);
-};
-
-/* 9306 */
-struct farray_hint_info_4 : base_array_hint_info
-{
-	hint_info data[4];
-};
-
-/* 1380 */
 enum menu_item_type
 {
 	MI_INVALID = 0xFFFFFFFF,
@@ -301,7 +265,6 @@ enum menu_item_type
 	MI_LAST = 0x4,
 };
 
-/* 9302 */
 struct document_info
 {
 	int needs_cleanup;
@@ -311,13 +274,12 @@ struct document_info
 	int data_handle_populate_group;
 	int data_handle_hint_group;
 	char event_surtag[8];
-	farray_int_4 data_handle_hints;
-	farray_int_16 data_handle_populate_items;
+	rfg::farray<int, 4> data_handle_hints;
+	rfg::farray<int, 16> data_handle_populate_items;
 };
 
 struct ui_menuVtbl;
 struct ui_menu_item_base;
-/* 9298 */
 struct ui_menu
 {
 	ui_menuVtbl *vfptr;
@@ -332,22 +294,20 @@ struct ui_menu
 	int m_input_id;
 	int m_selected;
 	unsigned int m_num_items;
-	ui_menu_item_base *m_items[16];
+	ui_menu_item_base* m_items[16];
 	char m_title[192];
-	void(__cdecl *m_selection_hint_cb)(hint_type);
-	void(__cdecl *m_selection_change_cb)(int);
-	document_info *m_doc_info;
-	farray_hint_info_4 m_hint_info;
+	void(__cdecl* m_selection_hint_cb)(hint_type);
+	void(__cdecl* m_selection_change_cb)(int);
+	document_info* m_doc_info;
+    rfg::farray<hint_info, 4> m_hint_info;
 };
 
-/* 9299 */
 struct ui_menuVtbl
 {
-	void *(__thiscall *__vecDelDtor)(ui_menu *This, unsigned int);
+	void *(__thiscall *__vecDelDtor)(ui_menu* ThisPtr, unsigned int);
 };
 
 struct ui_menu_item_baseVtbl;
-/* 9300 */
 struct ui_menu_item_base
 {
 	ui_menu_item_baseVtbl *vfptr;
@@ -361,31 +321,8 @@ struct ui_menu_item_base
 	ui_menu *m_parent;
 };
 
-/* 9301 */
 struct ui_menu_item_baseVtbl
 {
 	void *(__thiscall *__vecDelDtor)(ui_menu_item_base *This, unsigned int);
 	void(__thiscall *get_text_value)(ui_menu_item_base *This, char *, int);
-};
-
-struct base_array_ui_menu_pointer_Vtbl;
-/* 9325 */
-struct base_array_ui_menu_pointer
-{
-	base_array_ui_menu_pointer_Vtbl *vfptr;
-	ui_menu **elt;
-	int array_size;
-	int num;
-};
-
-/* 9326 */
-struct base_array_ui_menu_pointer_Vtbl
-{
-	void *(__thiscall *__vecDelDtor)(base_array_ui_menu_pointer *This, unsigned int);
-};
-
-/* 9327 */
-struct farray_ui_menu_pointer_8 : base_array_ui_menu_pointer
-{
-	ui_menu *data[8];
 };

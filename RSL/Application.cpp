@@ -478,6 +478,8 @@ void Application::SetMemoryLocations()
 
     Globals::ChargeExplosionDelay = OffsetPtr<int*>(0x1294728);
 
+    Globals::RfgMenusList = OffsetPtr<rfg::farray<ui_menu*, 8>*>(0x1267698); //farray<ui_menu *,8> RfgMenusList //.data:015A7698 rfg.exe:$1267698 #1266098 <RfgMenusList>
+
     Globals::GraphicsState.Init();
 
     Scripts.UpdateRfgPointers();

@@ -137,6 +137,8 @@ namespace Globals
 
     int* ChargeExplosionDelay = nullptr;
 
+    rfg::farray<ui_menu*, 8>* RfgMenusList = nullptr;
+
     namespace Launcher
     {
         bool ShouldRunRsl = false;
