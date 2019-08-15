@@ -695,3 +695,7 @@ extern F_matrix_rotate_around_local_vector matrix_rotate_around_local_vector;
 //.text:008AC810 rfg.exe:$86C810 #86BC10 <keen::ImmediateRenderer::beginRenderPass> //void __thiscall keen::ImmediateRenderer::beginRenderPass(keen::ImmediateRenderer *this, keen::RenderTarget *pRenderTarget, keen::Camera *pCamera)
 using F_keen_ImmediateRenderer_beginRenderPass = void(__fastcall*)(keen::ImmediateRenderer* this_ptr, void* edx, keen::RenderTarget* pRenderTarget, keen::Camera* pCamera); //2nd arg is edx, needed for __thiscall functions.
 extern F_keen_ImmediateRenderer_beginRenderPass keen_ImmediateRenderer_beginRenderPass;
+
+//.text:00818270 rfg.exe:$4D8270 #4D7670 <ui_add_secondary_message> //hud_message_handle __cdecl ui_add_secondary_message(const wchar_t *text, float display_time, bool use_secondary_anim, bool force_redisplay)
+using F_ui_add_secondary_message = void(__cdecl*)(const wchar_t* text, float display_time, bool use_secondary_anim, bool force_redisplay);
+extern F_ui_add_secondary_message ui_add_secondary_message;

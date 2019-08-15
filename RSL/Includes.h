@@ -85,3 +85,5 @@
 
 #define FMT_HEADER_ONLY 1
 #include <fmt/core.h>
+
+#include <locale>

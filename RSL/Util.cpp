@@ -284,3 +284,14 @@ ImVec4 Util::NormalizeColor(float red, float green, float blue, float alpha)
 {
     return ImVec4(red / 255.0f, green / 255.0f, blue / 255.0f, alpha / 255.0f);
 }
+
+std::wstring Util::Widen(const std::string& str)
+{
+    std::wostringstream wstm;
+    const std::ctype<wchar_t>& ctfacet = std::use_facet<std::ctype<wchar_t> >(wstm.getloc());
+    for (size_t i = 0; i < str.size(); ++i)
+    {
+        wstm << ctfacet.widen(str[i]);
+    }
+    return wstm.str();
+}

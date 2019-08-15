@@ -166,4 +166,6 @@ void FunctionManager::Initialize()
     RegisterFunction(matrix_rotate_around_local_vector, 0x1A4370);
 
     RegisterFunction(keen_ImmediateRenderer_beginRenderPass, 0x86C810);
+
+    RegisterFunction(ui_add_secondary_message, 0x4D8270);
 }

@@ -204,6 +204,24 @@ void ScriptManager::SetupLua()
     ));
     RfgTable["GetExplosionInfo"] = Lua::GetExplosionInfo;
 
+    RfgTable.set_function("AddUiMessage", sol::overload(
+        [](const char* Message, float DisplayTime, bool UseSecondaryAnim, bool ForceRedisplay)
+        {
+            ui_add_secondary_message(Util::Widen(Message).c_str(), DisplayTime, UseSecondaryAnim, ForceRedisplay);
+        },
+        [](const char* Message, float DisplayTime, bool UseSecondaryAnim)
+        {
+            ui_add_secondary_message(Util::Widen(Message).c_str(), DisplayTime, UseSecondaryAnim, false);
+        },
+        [](const char* Message, float DisplayTime)
+        {
+            ui_add_secondary_message(Util::Widen(Message).c_str(), DisplayTime, false, false);
+        },
+        [](const char* Message)
+        {
+            ui_add_secondary_message(Util::Widen(Message).c_str(), 3.0f, false, false);
+        }));
+
     //explosion_info* ExplosionInfo, void* Source, void* Owner, vector* Position, matrix* Orientation, vector* Direction, void* WeaponInfo, bool FromServer
 	//This warning appears hundreds of times in a row during binding unless disabled. Is harmless due to some lambdas used to grab usertype variables.
 	#pragma warning(push)

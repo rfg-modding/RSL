@@ -300,3 +300,5 @@ F_human_set_opacity_plus_child_items human_set_opacity_plus_child_items;
 F_matrix_rotate_around_local_vector matrix_rotate_around_local_vector;
 
 F_keen_ImmediateRenderer_beginRenderPass keen_ImmediateRenderer_beginRenderPass;
+
+F_ui_add_secondary_message ui_add_secondary_message;
