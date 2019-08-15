@@ -274,7 +274,8 @@ void Application::MainLoop()
     while (!ShouldClose()) //Todo: Change to respond to PostQuitMessage(0) in WndProc
     {
         std::chrono::steady_clock::time_point Begin = std::chrono::steady_clock::now();
-        switch (GameseqGetState())
+        const GameState State = GameseqGetState();
+        switch (State)
         {
         case GS_WRECKING_CREW_MAIN_MENU:
             Logger::LogFatalError("Wrecking crew is disabled while the RSL is active. Exiting.\n");
@@ -303,6 +304,9 @@ void Application::MainLoop()
         case GS_MULTIPLAYER_LIVE_FIND_SERVERS:
             Logger::LogFatalError("MP is disabled while the RSL is active. Exiting.\n");
             FreeLibraryAndExitThread(Globals::ScriptLoaderModule, 0);
+            break;
+        case GS_MAINMENU:
+            Globals::TryHideInvalidMainMenuOptions();
             break;
         default:
             break;
@@ -479,6 +483,7 @@ void Application::SetMemoryLocations()
     Globals::ChargeExplosionDelay = OffsetPtr<int*>(0x1294728);
 
     Globals::RfgMenusList = OffsetPtr<rfg::farray<ui_menu*, 8>*>(0x1267698); //farray<ui_menu *,8> RfgMenusList //.data:015A7698 rfg.exe:$1267698 #1266098 <RfgMenusList>
+    Globals::TryHideInvalidMainMenuOptions();
 
     Globals::GraphicsState.Init();
 

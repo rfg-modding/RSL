@@ -187,6 +187,9 @@ namespace Globals
     std::string CharArrayToString(char* Array, int Size);
     std::string CharArrayToString(const char* Array, int Size);
 
+    void TryHideInvalidMainMenuOptions();
+    void LogGameMenuInfo();
+
     std::string GetLastWin32ErrorAsString();
 
     std::string RemoveFileExtension(const std::string& Filename);

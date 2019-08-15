@@ -161,6 +161,13 @@ void GuiSystem::DrawPreInitWindow()
     ImGui::SetNextItemWidth(250.0f);
     ImGui::TextWrapped("RSL initialization currently requires a save game to be loaded to complete. Please load a save game to access the rest of the overlay.");
 
+    if(ImGui::Button("Log RFG menu info"))
+    {
+        Globals::LogGameMenuInfo();
+    }
+    ImGui::SameLine();
+    Util::Gui::ShowHelpMarker("Logs information about the currently loaded game menus. Does not have much use currently. Mainly a debug feature I decided to leave in. Check the logger window or the master log for the output. I've included it in this preload menu so you could still access this feature before loading a save.");
+
     ImGui::End();
 }
 

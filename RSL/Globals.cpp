@@ -435,6 +435,104 @@ namespace Globals
         return CharArrayToString(const_cast<char*>(Array), Size);
 	}
 
+    //Attempts to disable the main menu buttons for disabled features such as MP, LAN, and Wrecking Crew.
+    void TryHideInvalidMainMenuOptions()
+    {
+        if(RfgMenusList)
+        {
+            if((*RfgMenusList)[0])
+            {
+                ui_menu& Menu = *(*RfgMenusList)[0];
+                if(Menu.m_num_items == 9)
+                {
+                    if(Menu.m_items[0])
+                    {
+                        if(CharArrayToString(Menu.m_items[0]->m_caption, 128) == "MENU_NEW_GAME") //The main menu doesn't have a title, so we have to look for it's buttons
+                        {                   
+                            ui_menu_item_base& WreckingCrewButton = *Menu.m_items[2];
+                            WreckingCrewButton.m_enabled = false;
+                            WreckingCrewButton.m_visible = false;
+
+                            ui_menu_item_base& MultiplayerButton = *Menu.m_items[3];
+                            MultiplayerButton.m_enabled = false;
+                            MultiplayerButton.m_visible = false;
+
+                            ui_menu_item_base& LanCrewButton = *Menu.m_items[5];
+                            LanCrewButton.m_enabled = false;
+                            LanCrewButton.m_visible = false;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    //Logs information about the currently loaded native game menus
+    void LogGameMenuInfo()
+    {
+        if (!RfgMenusList)
+        {
+            Logger::LogWarning("RfgMenusList is a nullptr, cannot log it's values.\n");
+        }
+        Logger::Log("\n\nLogging rfg menu info:\n");
+        for (int i = 0; i < Globals::RfgMenusList->Capacity(); i++)
+        {
+            if ((*Globals::RfgMenusList)[i])
+            {
+                ui_menu& Menu = *(*Globals::RfgMenusList)[i];
+                Logger::Log("\n\n\tLogging menu info at index {}:\n", i);
+                Logger::Log("\t\tTitle: {}\n", Globals::CharArrayToString(Menu.m_title, 192));
+                Logger::Log("\t\tSupress accept sounds?: {}\n", Menu.m_surpress_accept_sounds);
+                Logger::Log("\t\tShould tween out?: {}\n", Menu.m_should_tween_out);
+                Logger::Log("\t\tAwaiting tween on select end?: {}\n", Menu.m_awaiting_tween_on_select_end);
+                Logger::Log("\t\tAwaiting tween fade in end?: {}\n", Menu.m_awaiting_tween_fade_in_end);
+                Logger::Log("\t\tForce update?: {}\n", Menu.m_force_update);
+                Logger::Log("\t\tChoose on enter: {}\n", Menu.m_choose_on_enter);
+                Logger::Log("\t\tHandle: {}\n", Menu.m_handle);
+                Logger::Log("\t\tDoc handle: {}\n", Menu.m_doc_handle);
+                Logger::Log("\t\tInput id: {}\n", Menu.m_input_id);
+                Logger::Log("\t\tSelected?: {}\n", Menu.m_selected);
+                Logger::Log("\t\tNum items: {}\n", Menu.m_num_items);
+
+                Logger::Log("\t\tLogging ui_menu_items:\n");
+                for (int j = 0; j < 15; j++)
+                {
+                    if (Menu.m_items[j])
+                    {
+                        Logger::Log("\n\t\t\tLogging menu item at index {}\n", j);
+                        //Todo: Check the type of each item, and cast to it's derived type such as ui_menu_item_func or ui_menu_item_bool
+                        ui_menu_item_base& Item = *Menu.m_items[j];
+                        Logger::Log("\t\t\tCaption: {}\n", Globals::CharArrayToString(Item.m_caption, 128));
+                        Logger::Log("\t\t\tPlay change sound?: {}\n", Item.m_play_change_sound);
+                        Logger::Log("\t\t\tSelected?: {}\n", Item.m_selected);
+                        Logger::Log("\t\t\tEnabled?: {}\n", Item.m_enabled);
+                        Logger::Log("\t\t\tVisible?: {}\n", Item.m_visible);
+                        Logger::Log("\t\t\tHandle: {}\n", Item.m_handle);
+                        Logger::Log("\t\t\tType: {}\n", Item.m_type);
+                        //Logger::Log("\t\t\t: {}", Item.m_parent);
+                    }
+                    else
+                    {
+                        Logger::Log("ui_menu_item at index {} is a nullptr, reached end of menu items list.\n", j);
+                        break;
+                    }
+                }
+
+                //Log document_info
+                //Log hint_info
+
+                //Logger::Log("\t\t: {}\n", Menu.m_num_items);
+                //Logger::Log("\t\t: {}\n", Menu.m_num_items);
+                //Logger::Log("\t\t: {}\n", Menu.m_num_items);
+            }
+            else
+            {
+                Logger::Log("ui_menu at index {} is a nullptr, reached end of menus list.\n", i);
+                break;
+            }
+        }
+    }
+
     std::string GetLastWin32ErrorAsString()
     {
         //Get the error message, if any.

@@ -104,6 +104,16 @@ void MenuBarGui::Draw()
             if (ImGui::MenuItem(std::string(std::string(ICON_FA_EDIT) + u8" Script editor").c_str(), "F2", &ScriptEditorRef.Get().Visible)) {}
             ImGui::EndMenu();
         }
+        if(ImGui::BeginMenu("Misc options"))
+        {
+            if (ImGui::MenuItem("Log game menu info"))
+            {
+                Globals::LogGameMenuInfo();
+            }
+            ImGui::SameLine();
+            Util::Gui::ShowHelpMarker("Logs information about the currently loaded game menus. Does not have much use currently. Mainly a debug feature I decided to leave in. Check the logger window or the master log for the output.");
+            ImGui::EndMenu();
+        }
 		if (ImGui::BeginMenu("Help"))
 		{
 			if (ImGui::MenuItem(std::string(std::string(ICON_FA_HOME) + u8" Welcome").c_str(), NULL, &WelcomeRef.Get().Visible)) {}
