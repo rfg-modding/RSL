@@ -168,6 +168,8 @@ F_HookDoFrame HookDoFrame;
 
 F_KeenGraphicsResizeRenderSwapchain KeenGraphicsResizeRenderSwapchain;
 F_GameseqGetState GameseqGetState;
+F_GameseqSetState GameseqSetState;
+F_GameseqPushState GameseqPushState;
 
 F_ObjectEnableOutline ObjectEnableOutline;
 F_ObjectDisableOutline ObjectDisableOutline;

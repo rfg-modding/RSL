@@ -44,6 +44,8 @@ void FunctionManager::Initialize()
     RegisterFunction(KeenGraphicsResizeRenderSwapchain, 0x86AB20);
 
     RegisterFunction(GameseqGetState, 0x3BFCF0);
+    RegisterFunction(GameseqSetState, 0x3D8710);
+    RegisterFunction(GameseqPushState, 0x3D87C0);
 
     RegisterFunction(ObjectEnableOutline, 0x310C50);
     RegisterFunction(ObjectDisableOutline, 0x310C60);

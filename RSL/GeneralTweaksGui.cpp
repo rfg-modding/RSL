@@ -38,6 +38,18 @@ void GeneralTweaksGui::Draw()
     //    ui_add_secondary_message(L"Meow meow", DisplayTime, UseSecondaryAnim, ForceRedisplay);
     //}
     
+    static bool Transparent = true;
+    static bool PauseBeneath = false;
+    //ImGui::Checkbox("Transparent", &Transparent);
+    //ImGui::Checkbox("Pause beneath", &PauseBeneath);
+    if(ImGui::Button("Open weapons locker menu"))
+    {
+        GameseqPushState(GS_INGAME_WEAPON_CABINET, Transparent, PauseBeneath);
+    }
+    if (ImGui::Button("Open upgrades menu"))
+    {
+        GameseqPushState(GS_INGAME_UPGRADES_HUD, Transparent, PauseBeneath);
+    }
 	if (ImGui::Button("Toggle Hud"))
 	{
 		ToggleHud();

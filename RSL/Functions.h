@@ -238,6 +238,14 @@ extern F_KeenGraphicsResizeRenderSwapchain KeenGraphicsResizeRenderSwapchain;
 using F_GameseqGetState = GameState(__cdecl*)();
 extern F_GameseqGetState GameseqGetState;
 
+//.text:00718710 rfg.exe:$3D8710 #3D7B10 <gameseq_set_state> //void __cdecl gameseq_set_state(game_state state, bool uninterruptible)
+using F_GameseqSetState = void(__cdecl*)(GameState state, bool uninterruptible);
+extern F_GameseqSetState GameseqSetState;
+
+//.text:007187C0 rfg.exe:$3D87C0 #3D7BC0 <gameseq_push_state> //void __cdecl gameseq_push_state(game_state new_state, bool transparent, bool pause_beneath)
+using F_GameseqPushState = void(__cdecl*)(GameState new_state, bool transparent, bool pause_beneath);
+extern F_GameseqPushState GameseqPushState;
+
 //.text:01270C50 rfg.exe:$310C50 #310050 <object::enable_object_outline>
 using F_ObjectEnableOutline = void(__thiscall*)(Object* This, int Layer);
 extern F_ObjectEnableOutline ObjectEnableOutline;
