@@ -170,4 +170,7 @@ void FunctionManager::Initialize()
     RegisterFunction(keen_ImmediateRenderer_beginRenderPass, 0x86C810);
 
     RegisterFunction(ui_add_secondary_message, 0x4D8270);
+
+    RegisterFunction(rfgl_find_and_delete_object_mover, 0x324A60);
+    RegisterFunction(rfgl_find_and_delete_debris_object, 0x324B90);
 }

@@ -305,6 +305,9 @@
     <ClCompile Include="Timer.cpp">
       <Filter>General Files\Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="rfgl_hooks.cpp">
+      <Filter>Hooks</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CameraWrapper.h">

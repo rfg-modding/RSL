@@ -226,6 +226,7 @@
     <ClCompile Include="PlayerLua.cpp" />
     <ClCompile Include="RenderHelpers.cpp" />
     <ClCompile Include="RenderInterfaceD3D11.cpp" />
+    <ClCompile Include="rfgl_hooks.cpp" />
     <ClCompile Include="RlCamera_RenderBegin.cpp" />
     <ClCompile Include="StreamGrid_DoFrame.cpp" />
     <ClCompile Include="TextEditorWrapper.cpp" />

@@ -707,3 +707,11 @@ extern F_keen_ImmediateRenderer_beginRenderPass keen_ImmediateRenderer_beginRend
 //.text:00818270 rfg.exe:$4D8270 #4D7670 <ui_add_secondary_message> //hud_message_handle __cdecl ui_add_secondary_message(const wchar_t *text, float display_time, bool use_secondary_anim, bool force_redisplay)
 using F_ui_add_secondary_message = void(__cdecl*)(const wchar_t* text, float display_time, bool use_secondary_anim, bool force_redisplay);
 extern F_ui_add_secondary_message ui_add_secondary_message;
+
+//.text:00664A60 rfg.exe:$324A60 #323E60 <rfgl_find_and_delete_object_mover> //int __cdecl rfgl_find_and_delete_object_mover(int objects_to_delete, bool find_gm)
+using F_rfgl_find_and_delete_object_mover = int(__cdecl*)(int objects_to_delete, bool find_gm);
+extern F_rfgl_find_and_delete_object_mover rfgl_find_and_delete_object_mover;
+
+//.text:00664B90 rfg.exe:$324B90 #323F90 <rfgl_find_and_delete_debris_object> //int __cdecl rfgl_find_and_delete_debris_object(int objects_to_delete)
+using F_rfgl_find_and_delete_debris_object = int(__cdecl*)(int objects_to_delete);
+extern F_rfgl_find_and_delete_debris_object rfgl_find_and_delete_debris_object;

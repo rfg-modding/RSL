@@ -53,5 +53,11 @@ namespace Hooks
 
     //.text:008AC810 rfg.exe:$86C810 #86BC10 <keen::ImmediateRenderer::beginRenderPass> //void __thiscall keen::ImmediateRenderer::beginRenderPass(keen::ImmediateRenderer *this, keen::RenderTarget *pRenderTarget, keen::Camera *pCamera)
     void __fastcall keen_ImmediateRenderer_beginRenderPass_hook(keen::ImmediateRenderer* this_ptr, void* edx, keen::RenderTarget* pRenderTarget, keen::Camera* pCamera);
+
+
+    //.text:00664A60 rfg.exe:$324A60 #323E60 <rfgl_find_and_delete_object_mover> //int __cdecl rfgl_find_and_delete_object_mover(int objects_to_delete, bool find_gm)
+    int __cdecl rfgl_find_and_delete_object_mover_hook(int objects_to_delete, bool find_gm);
+    //.text:00664B90 rfg.exe:$324B90 #323F90 <rfgl_find_and_delete_debris_object> //int __cdecl rfgl_find_and_delete_debris_object(int objects_to_delete)
+    int __cdecl rfgl_find_and_delete_debris_object_hook(int objects_to_delete);
 }
 

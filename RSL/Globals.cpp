@@ -139,6 +139,10 @@ namespace Globals
 
     rfg::farray<ui_menu*, 8>* RfgMenusList = nullptr;
 
+    bool DisableDebrisDeletion = false;
+    bool FindGmOverride = false;
+    bool UseFindGmOverride = false;
+
     namespace Launcher
     {
         bool ShouldRunRsl = false;

@@ -159,6 +159,10 @@ namespace Globals
 
     extern rfg::farray<ui_menu*, 8>* RfgMenusList; //farray<ui_menu *,8> RfgMenusList //.data:015A7698 rfg.exe:$1267698 #1266098 <RfgMenusList>
 
+    extern bool DisableDebrisDeletion;
+    extern bool FindGmOverride;
+    extern bool UseFindGmOverride;
+
     namespace Launcher
     {
         extern bool ShouldRunRsl; //Used by the launcher WndProc to track if the launcher should launch the main RSL code after it closes or start a vanilla game.

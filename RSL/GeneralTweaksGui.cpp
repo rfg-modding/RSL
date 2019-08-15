@@ -242,5 +242,19 @@ void GeneralTweaksGui::Draw()
 	ImGui::SameLine();
 	ImGui::Checkbox("##ToggleLevelBackgroundAmbientLight", &UseCustomLevelBackgroundAmbientLight);
 
+    ImGui::PushFont(Globals::FontBig);
+    ImGui::Text("Experimental tweaks:");
+    ImGui::PopFont();
+    ImGui::Separator();
+
+    ImGui::Checkbox("Disable debris deletion", &Globals::DisableDebrisDeletion);
+    ImGui::SameLine();
+    Util::Gui::ShowHelpMarker("Disables the deleting of debris. Doesn't work 100% of the time. When it does you'll note that at some point, additional debris will stop spawning. This is due to some internal limit of debris being hit (believed to be ~500 pieces of debris). This likely won't be easy to raise. Note that this may have other unintended effects which are currently not known, which is why this is marked as experimental.");
+    ImGui::Checkbox("find_gm override", &Globals::FindGmOverride);
+    ImGui::SameLine();
+    ImGui::Checkbox("Use override", &Globals::UseFindGmOverride);
+    ImGui::SameLine();
+    Util::Gui::ShowHelpMarker("NOTE: DOES NOT DO ANYTHING IF DEBRIS DELETION IS DISABLED. Specify an override to the find_gm value passed to rfgl_find_and_delete_object_mover. The effect of this is unknown, and this has been included in case anyone finds a specific effect of it.");
+
 	ImGui::End();
 }

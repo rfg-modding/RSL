@@ -401,6 +401,9 @@ void Application::CreateHooks()
     Hooks.CreateHook("object_spawn_vehicle_hook", Globals::ModuleBase + 0x757F40, Hooks::object_spawn_vehicle_hook, object_spawn_vehicle);
 
     Hooks.CreateHook("keen_ImmediateRenderer_beginRenderPass_hook", Globals::ModuleBase + 0x86C810, Hooks::keen_ImmediateRenderer_beginRenderPass_hook, keen_ImmediateRenderer_beginRenderPass);
+    
+    Hooks.CreateHook("rfgl_find_and_delete_object_mover_hook", Globals::ModuleBase + 0x324A60, Hooks::rfgl_find_and_delete_object_mover_hook, rfgl_find_and_delete_object_mover);
+    Hooks.CreateHook("rfgl_find_and_delete_debris_object_hook", Globals::ModuleBase + 0x324B90, Hooks::rfgl_find_and_delete_debris_object_hook, rfgl_find_and_delete_debris_object);
 
     //Disabling for now since stream grid tests had issues.
     //Hooks.CreateHook("StreamGridDoFrame", reinterpret_cast<LPVOID>(Globals::ModuleBase + 0x530FB0), StreamGridDoFrameHook, reinterpret_cast<LPVOID*>(&StreamGridDoFrame));
