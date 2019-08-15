@@ -476,6 +476,8 @@ void Application::SetMemoryLocations()
     auto ShadowMapSizesPtr = OffsetPtr<int*>(0xEC1BB4);
     Globals::ShadowMapSizes.Init(ShadowMapSizesPtr, 4, 4);
 
+    Globals::ChargeExplosionDelay = OffsetPtr<int*>(0x1294728);
+
     Globals::GraphicsState.Init();
 
     Scripts.UpdateRfgPointers();

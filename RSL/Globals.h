@@ -155,6 +155,8 @@ namespace Globals
 
     extern bool LockoutModeEnabled;
 
+    extern int* ChargeExplosionDelay; //.data:015D4728 rfg.exe:$1294728 #1293128 <RFG_charge_delay>
+
     namespace Launcher
     {
         extern bool ShouldRunRsl; //Used by the launcher WndProc to track if the launcher should launch the main RSL code after it closes or start a vanilla game.

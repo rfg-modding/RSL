@@ -135,6 +135,8 @@ namespace Globals
 
     bool LockoutModeEnabled = false;
 
+    int* ChargeExplosionDelay = nullptr;
+
     namespace Launcher
     {
         bool ShouldRunRsl = false;

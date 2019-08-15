@@ -167,6 +167,10 @@ void GeneralTweaksGui::Draw()
     {
         *Globals::VehicleMaxSpeed = 40.233601f;
     }
+    ImGui::SetNextItemWidth(230.0f);
+    ImGui::InputInt("Charge explosion delay", Globals::ChargeExplosionDelay);
+    ImGui::SameLine();
+    Util::Gui::ShowHelpMarker("Delay between each remote charge being detonated, in milliseconds (1000ms = 1s). Default is 250ms.");
     ImGui::Checkbox("SSAO Vision", Globals::SsaoVisionEnabled);
     ImGui::SetNextItemWidth(230.0f);
     ImGui::InputInt("Max remote charges placed", Globals::RfgMaxCharges);
