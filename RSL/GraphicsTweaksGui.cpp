@@ -78,20 +78,20 @@ void GraphicsTweaksGui::Draw()
         }
     }
 
-    //if(ImGui::CollapsingHeader("Shadows"))
-    //{
-    //    if(Globals::ShadowMapSizes.Initialized() || !Globals::ShadowMapSizes.GetRawPointer())
-    //    {
-    //        ImGui::SetNextItemWidth(300.0f);
-    //        ImGui::InputInt4("Shadow map sizes", Globals::ShadowMapSizes.GetRawPointer());
-    //        ImGui::SameLine();
-    //        Util::Gui::ShowHelpMarker("The quickest way to get the shadow res to update is to go in the display settings and toggle something like depth of field, apply it, and unpause the game. Then you can change it back if you want.");
-    //    }
-    //    else
-    //    {
-    //        ImGui::Text("Globals::ShadowMapSizes has not been initialized! Cannot display shadow state.");
-    //    }
-    //}
+    if(ImGui::CollapsingHeader("Shadows"))
+    {
+        if(Globals::ShadowMapSizes.Initialized() || !Globals::ShadowMapSizes.GetRawPointer())
+        {
+            ImGui::SetNextItemWidth(300.0f);
+            ImGui::InputInt4("Shadow map sizes", Globals::ShadowMapSizes.GetRawPointer());
+            ImGui::SameLine();
+            Util::Gui::ShowHelpMarker("The quickest way to get the shadow res to update is to go in the display settings and toggle something like depth of field, apply it, and unpause the game. Then you can change it back if you want.");
+        }
+        else
+        {
+            ImGui::Text("Globals::ShadowMapSizes has not been initialized! Cannot display shadow state.");
+        }
+    }
 
     //Todo: Add AO settings, values such as g_Intensity and g_edgeSharpness
     //Todo: Add glass settings, values like g_fresnelBias (not sure what this even does)

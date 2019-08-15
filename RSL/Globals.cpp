@@ -375,6 +375,12 @@ namespace Globals
         VirtualProtect(Address, sizeof(float), OriginalProtectionPermissions, &Backup);
     }
 
+    void EnableMemoryRegionReadWrite(void* RegionAddress, ulong RegionSize)
+    {
+        DWORD OriginalProtectionPermissions;
+        VirtualProtect(RegionAddress, RegionSize, PAGE_READWRITE, &OriginalProtectionPermissions);
+    }
+
     //Get all module related info, this will include the base DLL and the size of the module
 	MODULEINFO GetModuleInfo(const char* ModuleName)
 	{

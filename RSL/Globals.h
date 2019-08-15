@@ -182,6 +182,7 @@ namespace Globals
 	std::string GetEXEPath(bool IncludeExeInPath = false);
 	void PlaceNOP(BYTE* Address, DWORD Length = 1);
     void SetFloat(float* Address, float NewValue);
+    void EnableMemoryRegionReadWrite(void* RegionAddress, ulong RegionSize);
 	MODULEINFO GetModuleInfo(const char* ModuleName);
 	DWORD FindPattern(const char* ModuleName, const char* PatternString, const char* MaskString);
     std::string CharArrayToString(char* Array, int Size);
