@@ -25,15 +25,15 @@ void ExplosionSpawnerGui::Draw()
         
         Globals::NumExplosionInfos = reinterpret_cast<uint*>(Globals::ModuleBase + 0x19EE490);
         auto ExplosionInfosPtr = reinterpret_cast<explosion_info*>(reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x19E6CD8));
-        Globals::ExplosionInfos.Init(ExplosionInfosPtr, 80, *Globals::NumExplosionInfos);
+        Globals::ExplosionInfos.Init(ExplosionInfosPtr, 80, *Globals::NumExplosionInfos, "ExplosionInfos");
 
         Globals::NumMaterialEffectInfos = reinterpret_cast<uint*>(reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x19EE4C4));
         auto MaterialEffectInfosPtr = reinterpret_cast<material_effect_info*>(reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x19EB6F0));
-        Globals::MaterialEffectInfos.Init(MaterialEffectInfosPtr, *Globals::NumMaterialEffectInfos, *Globals::NumMaterialEffectInfos);
+        Globals::MaterialEffectInfos.Init(MaterialEffectInfosPtr, *Globals::NumMaterialEffectInfos, *Globals::NumMaterialEffectInfos, "MaterialEffectInfos");
 
         Globals::NumEffectInfos = reinterpret_cast<uint*>(reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x1D82DF0));
         auto EffectInfosPtr = reinterpret_cast<effect_info*>(reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x1D82E60));
-        Globals::EffectInfos.Init(EffectInfosPtr, *Globals::NumEffectInfos, *Globals::NumEffectInfos);
+        Globals::EffectInfos.Init(EffectInfosPtr, *Globals::NumEffectInfos, *Globals::NumEffectInfos, "EffectInfos");
         std::optional<explosion_info*> NewInfo = Globals::GetExplosionInfo("mine"); //Set default values to the land mine
         if(NewInfo)
         {
@@ -51,15 +51,15 @@ void ExplosionSpawnerGui::Draw()
     {
         Globals::NumExplosionInfos = reinterpret_cast<uint*>(Globals::ModuleBase + 0x19EE490);
         auto ExplosionInfosPtr = reinterpret_cast<explosion_info*>(reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x19E6CD8));
-        Globals::ExplosionInfos.Init(ExplosionInfosPtr, 80, *Globals::NumExplosionInfos);
+        Globals::ExplosionInfos.Init(ExplosionInfosPtr, 80, *Globals::NumExplosionInfos, "ExplosionInfos");
 
         Globals::NumMaterialEffectInfos = reinterpret_cast<uint*>(reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x19EE4C4));
         auto MaterialEffectInfosPtr = reinterpret_cast<material_effect_info*>(reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x19EB6F0));
-        Globals::MaterialEffectInfos.Init(MaterialEffectInfosPtr, *Globals::NumMaterialEffectInfos, *Globals::NumMaterialEffectInfos);
+        Globals::MaterialEffectInfos.Init(MaterialEffectInfosPtr, *Globals::NumMaterialEffectInfos, *Globals::NumMaterialEffectInfos, "MaterialEffectInfos");
 
         Globals::NumEffectInfos = reinterpret_cast<uint*>(reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x1D82DF0));
         auto EffectInfosPtr = reinterpret_cast<effect_info*>(reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x1D82E60));
-        Globals::EffectInfos.Init(EffectInfosPtr, *Globals::NumEffectInfos, *Globals::NumEffectInfos);
+        Globals::EffectInfos.Init(EffectInfosPtr, *Globals::NumEffectInfos, *Globals::NumEffectInfos, "EffectInfos");
         std::optional<explosion_info*> NewInfo = Globals::GetExplosionInfo("mine"); //Set default values to the land mine
         if (NewInfo)
         {

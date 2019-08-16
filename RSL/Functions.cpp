@@ -307,3 +307,5 @@ F_ui_add_secondary_message ui_add_secondary_message;
 
 F_rfgl_find_and_delete_object_mover rfgl_find_and_delete_object_mover;
 F_rfgl_find_and_delete_debris_object rfgl_find_and_delete_debris_object;
+
+F_game_clock_get game_clock_get;

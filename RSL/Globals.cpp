@@ -143,6 +143,9 @@ namespace Globals
     bool FindGmOverride = false;
     bool UseFindGmOverride = false;
 
+    FixedArrayWrapper<weapon_info> WeaponInfos;
+    uint* NumWeaponInfos = nullptr;
+
     namespace Launcher
     {
         bool ShouldRunRsl = false;

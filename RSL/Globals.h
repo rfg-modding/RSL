@@ -1,6 +1,6 @@
 #pragma once
 #include "Includes.h"
-#include "RFGR_Types_Vehicle_Spawn_Params.h"
+#include "RFGR_Types_weapon_info.h"
 #include "FixedArrayWrapper.h"
 #include "Version.h"
 
@@ -162,6 +162,9 @@ namespace Globals
     extern bool DisableDebrisDeletion;
     extern bool FindGmOverride;
     extern bool UseFindGmOverride;
+
+    extern FixedArrayWrapper<weapon_info> WeaponInfos; //.data:037C2C9C rfg.exe:$3482C9C #0 <Weapon_infos>
+    extern uint* NumWeaponInfos; //.data:037C2C94 rfg.exe:$3482C94 #0 <Num_weapon_infos>
 
     namespace Launcher
     {

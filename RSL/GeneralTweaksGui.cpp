@@ -24,11 +24,52 @@ void GeneralTweaksGui::Draw()
 		ImGui::End();
 		return;
 	}
+    if(!GameClock)
+    {
+        Logger::LogWarning("Updating GeneralTweaksGui::GameClock!\n");
+        GameClock = game_clock_get();
+    }
 
 	ImGui::PushFont(Globals::FontBig);
 	ImGui::Text("General tweaks:");
 	ImGui::PopFont();
 	ImGui::Separator();
+
+    //if(ImGui::Button("Enable penetration on all weapons"))
+    //{
+    //    if(Globals::WeaponInfos.Initialized())
+    //    {
+    //        Logger::Log("WeaponInfos:: Capacity: {}, Length: {}, Size: {}\n", Globals::WeaponInfos.Capacity(), Globals::WeaponInfos.Length(), Globals::WeaponInfos.Size());
+    //        Logger::Log("Applying edits on all weapons (weapon_info test1)\n");
+    //        for(int i = 0; i < Globals::WeaponInfos.Length(); i++)
+    //        {
+    //            weapon_info& Info = Globals::WeaponInfos[i];
+    //            if(Info.name) Logger::Log("\n\nEditing {}, alternative {}\n", Info.name, std::string(Info.name));
+    //            if(Info.icon_name) Logger::Log("icon_name: {}\n", Info.icon_name);
+    //            if(Info.small_icon_name) Logger::Log("small_icon_name: {}\n", Info.small_icon_name);
+    //            if(Info.reticule_name) Logger::Log("reticule_name: {}\n", Info.reticule_name);
+    //            if(Info.fine_aim_reticule_name) Logger::Log("fine_aim_reticule_name: {}\n", Info.fine_aim_reticule_name);
+    //            if(Info.mp_kill_phrase) Logger::Log("mp_kill_phrase: {}\n", Info.mp_kill_phrase);
+    //            Logger::Log("muzzle_flash_effect: {}\n", Info.muzzle_flash_effect);
+    //            Logger::Log("muzzle_smoke_effect: {}\n", Info.muzzle_smoke_effect);
+    //            Logger::Log("special_hit_effect: {}\n", Info.special_hit_effect);
+    //            Logger::Log("special_effect: {}\n", Info.special_effect);
+    //            Logger::Log("secondary_special_effect: {}\n", Info.secondary_special_effect);
+    //            Logger::Log("overheated_effect: {}\n", Info.overheated_effect);
+    //            Logger::Log("tracer_effect: {}\n", Info.tracer_effect);
+    //            Logger::Log("max_range: {}\n", Info.max_range);
+    //            Logger::Log("red_range: {}\n", Info.red_range);
+    //            Logger::Log("aim_assist: {}\n", Info.aim_assist);
+    //            Logger::Log("alert_multiplier: {}\n", Info.alert_multiplier);
+    //            Logger::Log("fire_sound: {}\n", Info.fire_sound);
+    //            Logger::Log("reload_sound: {}\n", Info.reload_sound);
+    //            Info.flags.never_in_cabinet = false;
+    //            Info.flags.armor_piercing = true;
+    //            Info.flags.shatter = true;
+    //            Info.flags.penetrating_bullets = true;
+    //        }
+    //    }
+    //}
 
     //static float DisplayTime = 10.0f;
     //static bool UseSecondaryAnim = false;
@@ -232,6 +273,29 @@ void GeneralTweaksGui::Draw()
 		CustomTimeOfDayLightColor.blue = Globals::TODLightPtr->m_color.blue;
 		CustomTimeOfDayLightColor.alpha = Globals::TODLightPtr->m_color.alpha;
 	}
+    ImGui::Separator();
+
+    ImGui::PushFont(Globals::FontBig);
+    ImGui::Text("Game clock:");
+    ImGui::PopFont();
+    ImGui::Separator();
+    if(GameClock)
+    {
+        ImGui::InputScalar("Year", ImGuiDataType_U16, &GameClock->m_year);
+        ImGui::InputScalar("Month", ImGuiDataType_U8, &GameClock->m_month);
+        ImGui::InputScalar("Day", ImGuiDataType_U8, &GameClock->m_day);
+        ImGui::InputScalar("Hour", ImGuiDataType_U8, &GameClock->m_hour);
+        ImGui::InputScalar("Minutes", ImGuiDataType_U8, &GameClock->m_minutes);
+        ImGui::InputScalar("Seconds", ImGuiDataType_U8, &GameClock->m_seconds);
+        ImGui::InputScalar("Day of the week", ImGuiDataType_U8, &GameClock->m_day_of_week);
+        ImGui::InputFloat("Time scale", &GameClock->m_time_scale);
+        ImGui::InputScalar("Current day ticks", ImGuiDataType_U32, &GameClock->m_curr_day_ticks);
+    }
+    else
+    {
+        ImGui::Text("GameClock == nullptr, cannot display settings");
+    }
+    ImGui::Separator();
 
     ImGui::SetNextItemWidth(230.0f);
 	ImGui::InputFloat3("Level ambient light", (float*)&CustomLevelAmbientLight, 3);
@@ -242,6 +306,8 @@ void GeneralTweaksGui::Draw()
 	ImGui::SameLine();
 	ImGui::Checkbox("##ToggleLevelBackgroundAmbientLight", &UseCustomLevelBackgroundAmbientLight);
 
+
+    //Experimental settings
     ImGui::PushFont(Globals::FontBig);
     ImGui::Text("Experimental tweaks:");
     ImGui::PopFont();

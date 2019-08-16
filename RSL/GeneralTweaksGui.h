@@ -39,5 +39,7 @@ public:
 
     float CustomTodOverride = 12.0f;
     bool UseCustomTodOverride = false;
+
+    game_clock* GameClock = nullptr;
 };
 

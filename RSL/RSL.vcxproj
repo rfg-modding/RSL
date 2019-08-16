@@ -301,6 +301,7 @@
     <ClInclude Include="Launcher.h" />
     <ClInclude Include="RenderInterfaceD3D11.h" />
     <ClInclude Include="RFGR_Types_Vehicle_Spawn_Params.h" />
+    <ClInclude Include="RFGR_Types_weapon_info.h" />
     <ClInclude Include="ShaderSetD3D11.h" />
     <ClInclude Include="TextEditorWrapper.h" />
     <ClInclude Include="Timer.h" />

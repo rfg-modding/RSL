@@ -173,4 +173,6 @@ void FunctionManager::Initialize()
 
     RegisterFunction(rfgl_find_and_delete_object_mover, 0x324A60);
     RegisterFunction(rfgl_find_and_delete_debris_object, 0x324B90);
+
+    RegisterFunction(game_clock_get, 0x3C1480);
 }

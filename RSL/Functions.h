@@ -715,3 +715,7 @@ extern F_rfgl_find_and_delete_object_mover rfgl_find_and_delete_object_mover;
 //.text:00664B90 rfg.exe:$324B90 #323F90 <rfgl_find_and_delete_debris_object> //int __cdecl rfgl_find_and_delete_debris_object(int objects_to_delete)
 using F_rfgl_find_and_delete_debris_object = int(__cdecl*)(int objects_to_delete);
 extern F_rfgl_find_and_delete_debris_object rfgl_find_and_delete_debris_object;
+
+//.text:00701480 rfg.exe:$3C1480 #3C0880 <game_clock_get> //game_clock *__cdecl fav::game_clock_get()
+using F_game_clock_get = game_clock*(__cdecl*)();
+extern F_game_clock_get game_clock_get;

@@ -556,5 +556,8 @@
     <ClInclude Include="Timer.h">
       <Filter>General Files\Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="RFGR_Types_weapon_info.h">
+      <Filter>RFGR Structs</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

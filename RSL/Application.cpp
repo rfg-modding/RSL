@@ -185,15 +185,15 @@ void Application::TrySetMemoryLocations()
 
             Globals::NumExplosionInfos = OffsetPtr<uint*>(0x19EE490);
             auto ExplosionInfosPtr = OffsetPtr<explosion_info*>(0x19E6CD8);
-            Globals::ExplosionInfos.Init(ExplosionInfosPtr, 80, *Globals::NumExplosionInfos);
+            Globals::ExplosionInfos.Init(ExplosionInfosPtr, 80, *Globals::NumExplosionInfos, "ExplosionInfos");
 
             Globals::NumMaterialEffectInfos = OffsetPtr<uint*>(0x19EE4C4);
             auto MaterialEffectInfosPtr = OffsetPtr<material_effect_info*>(0x19EB6F0);
-            Globals::MaterialEffectInfos.Init(MaterialEffectInfosPtr, *Globals::NumMaterialEffectInfos, *Globals::NumMaterialEffectInfos);
+            Globals::MaterialEffectInfos.Init(MaterialEffectInfosPtr, *Globals::NumMaterialEffectInfos, *Globals::NumMaterialEffectInfos, "MaterialEffectInfos");
 
             Globals::NumEffectInfos = OffsetPtr<uint*>(0x1D82DF0);
             auto EffectInfosPtr = OffsetPtr<effect_info*>(0x1D82E60);
-            Globals::EffectInfos.Init(EffectInfosPtr, *Globals::NumEffectInfos, *Globals::NumEffectInfos);
+            Globals::EffectInfos.Init(EffectInfosPtr, *Globals::NumEffectInfos, *Globals::NumEffectInfos, "EffectInfos");
             break;
         }
     }
@@ -206,7 +206,7 @@ void Application::TrySetMemoryLocations()
         Logger::Log("AltNumExplosionInfos = {}\n", *Globals::NumExplosionInfos);
         auto ExplosionInfosPtr = OffsetPtr<explosion_info*>(0x19E6CD8);
         Logger::Log("ExplosionInfos address: {:#x}\n", (DWORD)ExplosionInfosPtr);
-        Globals::ExplosionInfos.Init(ExplosionInfosPtr, 80, 72);
+        Globals::ExplosionInfos.Init(ExplosionInfosPtr, 80, 72, "ExplosionInfos");
 
         if (ExplosionInfosPtr)
         {
@@ -459,15 +459,19 @@ void Application::SetMemoryLocations()
 
     Globals::NumExplosionInfos = OffsetPtr<uint*>(0x19EE490);
     auto ExplosionInfosPtr = OffsetPtr<explosion_info*>(0x19E6CD8);
-    Globals::ExplosionInfos.Init(ExplosionInfosPtr, 80, *Globals::NumExplosionInfos);
+    Globals::ExplosionInfos.Init(ExplosionInfosPtr, 80, *Globals::NumExplosionInfos, "ExplosionInfos");
 
     Globals::NumMaterialEffectInfos = OffsetPtr<uint*>(0x19EE4C4);
     auto MaterialEffectInfosPtr = OffsetPtr<material_effect_info*>(0x19EB6F0);
-    Globals::MaterialEffectInfos.Init(MaterialEffectInfosPtr, *Globals::NumMaterialEffectInfos, *Globals::NumMaterialEffectInfos);
+    Globals::MaterialEffectInfos.Init(MaterialEffectInfosPtr, *Globals::NumMaterialEffectInfos, *Globals::NumMaterialEffectInfos, "MaterialEffectInfos");
 
     Globals::NumEffectInfos = OffsetPtr<uint*>(0x1D82DF0);
     auto EffectInfosPtr = OffsetPtr<effect_info*>(0x1D82E60);
-    Globals::EffectInfos.Init(EffectInfosPtr, *Globals::NumEffectInfos, *Globals::NumEffectInfos);
+    Globals::EffectInfos.Init(EffectInfosPtr, *Globals::NumEffectInfos, *Globals::NumEffectInfos, "EffectInfos");
+
+    Globals::NumWeaponInfos = OffsetPtr<uint*>(0x3482C94);
+    auto WeaponInfosPtr = OffsetPtr<weapon_info*>(0x3482C9C);
+    Globals::WeaponInfos.Init(WeaponInfosPtr, *Globals::NumWeaponInfos, *Globals::NumWeaponInfos, "WeaponInfos");
 
     Globals::VehicleInfos = OffsetPtr<rfg::farray<vehicle_info, 163>*>(0x12BA5F8);
     
@@ -481,7 +485,7 @@ void Application::SetMemoryLocations()
     Globals::CurrentTimeOfDay = OffsetPtr<float*>(0x125CC80);
 
     auto ShadowMapSizesPtr = OffsetPtr<int*>(0xEC1BB4);
-    Globals::ShadowMapSizes.Init(ShadowMapSizesPtr, 4, 4);
+    Globals::ShadowMapSizes.Init(ShadowMapSizesPtr, 4, 4, "ShadowMapSizes");
     Globals::EnableMemoryRegionReadWrite((void*)ShadowMapSizesPtr, 4 * sizeof(int));
 
     Globals::ChargeExplosionDelay = OffsetPtr<int*>(0x1294728);
