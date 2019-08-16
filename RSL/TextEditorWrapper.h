@@ -12,7 +12,29 @@ public:
     //Sort children so that folders are before files
     void SortChildren()
     {
-        std::partition(std::begin(Children), std::end(Children), [](FileBrowserNode& Child) { return Child.IsFolder; });
+        std::vector<FileBrowserNode> Folders;
+        std::vector<FileBrowserNode> Files;
+        for(auto& i : Children)
+        {
+            if(i.IsFolder)
+            {
+                Folders.push_back(i);
+            }
+            else
+            {
+                Files.push_back(i);
+            }
+        }
+        Children.clear();
+
+        for(auto& i : Folders)
+        {
+            Children.push_back(i);
+        }
+        for (auto& i : Files)
+        {
+            Children.push_back(i);
+        }
     }
 
     std::vector<FileBrowserNode> Children;
@@ -26,7 +48,7 @@ public:
 
     int Index = 0;
 
-    std::string Label = {};
+    std::string Label;
 
     ImGuiTreeNodeFlags Flags = 0;
 };
