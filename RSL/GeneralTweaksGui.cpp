@@ -254,33 +254,14 @@ void GeneralTweaksGui::Draw()
     ImGui::Checkbox("Use custom value (Locks time change)", &UseCustomTodOverride);
     ImGui::Separator();
 
-	if (!UseCustomLevelAmbientLight)
-	{
-		CustomLevelAmbientLight.x = Globals::RfgWorldPtr->level_ambient.x;
-		CustomLevelAmbientLight.y = Globals::RfgWorldPtr->level_ambient.y;
-		CustomLevelAmbientLight.z = Globals::RfgWorldPtr->level_ambient.z;
-	}
-	if (!UseCustomLevelBackgroundAmbientLight)
-	{
-		CustomLevelBackgroundAmbientLight.x = Globals::RfgWorldPtr->level_back_ambient.x;
-		CustomLevelBackgroundAmbientLight.y = Globals::RfgWorldPtr->level_back_ambient.y;
-		CustomLevelBackgroundAmbientLight.z = Globals::RfgWorldPtr->level_back_ambient.z;
-	}
-	if (!UseCustomTimeOfDayLight)
-	{
-		CustomTimeOfDayLightColor.red = Globals::TODLightPtr->m_color.red;
-		CustomTimeOfDayLightColor.green = Globals::TODLightPtr->m_color.green;
-		CustomTimeOfDayLightColor.blue = Globals::TODLightPtr->m_color.blue;
-		CustomTimeOfDayLightColor.alpha = Globals::TODLightPtr->m_color.alpha;
-	}
-    ImGui::Separator();
-
     ImGui::PushFont(Globals::FontBig);
     ImGui::Text("Game clock:");
     ImGui::PopFont();
     ImGui::Separator();
     if(GameClock)
     {
+        static uint CurrentTicksMin = 0;
+        static uint CurrentTicksMax = std::numeric_limits<uint>().max();
         ImGui::InputScalar("Year", ImGuiDataType_U16, &GameClock->m_year);
         ImGui::InputScalar("Month", ImGuiDataType_U8, &GameClock->m_month);
         ImGui::InputScalar("Day", ImGuiDataType_U8, &GameClock->m_day);
@@ -290,12 +271,34 @@ void GeneralTweaksGui::Draw()
         ImGui::InputScalar("Day of the week", ImGuiDataType_U8, &GameClock->m_day_of_week);
         ImGui::InputFloat("Time scale", &GameClock->m_time_scale);
         ImGui::InputScalar("Current day ticks", ImGuiDataType_U32, &GameClock->m_curr_day_ticks);
+        ImGui::SliderScalar("Current day ticks", ImGuiDataType_U32, &GameClock->m_curr_day_ticks, &CurrentTicksMin, &CurrentTicksMax);
     }
     else
     {
         ImGui::Text("GameClock == nullptr, cannot display settings");
     }
     ImGui::Separator();
+
+
+    if (!UseCustomLevelAmbientLight)
+    {
+        CustomLevelAmbientLight.x = Globals::RfgWorldPtr->level_ambient.x;
+        CustomLevelAmbientLight.y = Globals::RfgWorldPtr->level_ambient.y;
+        CustomLevelAmbientLight.z = Globals::RfgWorldPtr->level_ambient.z;
+    }
+    if (!UseCustomLevelBackgroundAmbientLight)
+    {
+        CustomLevelBackgroundAmbientLight.x = Globals::RfgWorldPtr->level_back_ambient.x;
+        CustomLevelBackgroundAmbientLight.y = Globals::RfgWorldPtr->level_back_ambient.y;
+        CustomLevelBackgroundAmbientLight.z = Globals::RfgWorldPtr->level_back_ambient.z;
+    }
+    if (!UseCustomTimeOfDayLight)
+    {
+        CustomTimeOfDayLightColor.red = Globals::TODLightPtr->m_color.red;
+        CustomTimeOfDayLightColor.green = Globals::TODLightPtr->m_color.green;
+        CustomTimeOfDayLightColor.blue = Globals::TODLightPtr->m_color.blue;
+        CustomTimeOfDayLightColor.alpha = Globals::TODLightPtr->m_color.alpha;
+    }
 
     ImGui::SetNextItemWidth(230.0f);
 	ImGui::InputFloat3("Level ambient light", (float*)&CustomLevelAmbientLight, 3);
