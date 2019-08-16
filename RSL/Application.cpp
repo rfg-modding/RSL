@@ -470,8 +470,8 @@ void Application::SetMemoryLocations()
     Globals::EffectInfos.Init(EffectInfosPtr, *Globals::NumEffectInfos, *Globals::NumEffectInfos, "EffectInfos");
 
     Globals::NumWeaponInfos = OffsetPtr<uint*>(0x3482C94);
-    auto WeaponInfosPtr = OffsetPtr<weapon_info*>(0x3482C9C);
-    Globals::WeaponInfos.Init(WeaponInfosPtr, *Globals::NumWeaponInfos, *Globals::NumWeaponInfos, "WeaponInfos");
+    auto WeaponInfosPtr = OffsetPtr<weapon_info**>(0x3482C9C);
+    Globals::WeaponInfos.Init(*WeaponInfosPtr, *Globals::NumWeaponInfos, *Globals::NumWeaponInfos, "WeaponInfos");
 
     Globals::VehicleInfos = OffsetPtr<rfg::farray<vehicle_info, 163>*>(0x12BA5F8);
     

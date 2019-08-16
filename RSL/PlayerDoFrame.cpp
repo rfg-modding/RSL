@@ -97,11 +97,6 @@ void __fastcall Hooks::PlayerDoFrameHook(Player* PlayerPtr)
         }
     }
 
-    if(TweaksMenuRef.Get().UseCustomTodOverride)
-    {
-        *Globals::CurrentTimeOfDay = TweaksMenuRef.Get().CustomTodOverride;
-    }
-
     return PlayerDoFrame(PlayerPtr);
 }
 

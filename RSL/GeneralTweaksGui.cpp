@@ -234,7 +234,6 @@ void GeneralTweaksGui::Draw()
     ImGui::InputInt("Max remote charges placed", Globals::RfgMaxCharges);
     ImGui::SameLine();
     Util::Gui::ShowHelpMarker("The default value might be lower than your current amount. Just set it to whatever value you want, and it'll override your upgrade level.");
-    ImGui::Checkbox("Time of day change enabled", Globals::TodEnabled);
 
     ImGui::Separator();
 
@@ -245,14 +244,6 @@ void GeneralTweaksGui::Draw()
     ImGui::SetNextItemWidth(230.0f);
     ImGui::InputInt("Supply crate count", &Globals::PlayerPtr->Metadata.SupplyCrateCount);
     ImGui::Separator();
-    ImGui::Text("Current time of day:");
-    ImGui::SameLine();
-    ImGui::TextColored(Globals::SecondaryTextColor, std::to_string(*Globals::CurrentTimeOfDay));
-    ImGui::SetNextItemWidth(230.0f);
-    ImGui::SliderFloat("Custom time of day", &CustomTodOverride, 0.00f, 23.99f);
-    ImGui::SameLine();
-    ImGui::Checkbox("Use custom value (Locks time change)", &UseCustomTodOverride);
-    ImGui::Separator();
 
     ImGui::PushFont(Globals::FontBig);
     ImGui::Text("Game clock:");
@@ -261,7 +252,8 @@ void GeneralTweaksGui::Draw()
     if(GameClock)
     {
         static uint CurrentTicksMin = 0;
-        static uint CurrentTicksMax = std::numeric_limits<uint>().max();
+        static uint CurrentTicksMax = std::numeric_limits<uint>::max();
+        ImGui::PushItemWidth(230.0f);
         ImGui::InputScalar("Year", ImGuiDataType_U16, &GameClock->m_year);
         ImGui::InputScalar("Month", ImGuiDataType_U8, &GameClock->m_month);
         ImGui::InputScalar("Day", ImGuiDataType_U8, &GameClock->m_day);
@@ -270,15 +262,32 @@ void GeneralTweaksGui::Draw()
         ImGui::InputScalar("Seconds", ImGuiDataType_U8, &GameClock->m_seconds);
         ImGui::InputScalar("Day of the week", ImGuiDataType_U8, &GameClock->m_day_of_week);
         ImGui::InputFloat("Time scale", &GameClock->m_time_scale);
+        ImGui::SameLine();
+        if(ImGui::Button("Reset##GameClockTimeScale"))
+        {
+            GameClock->m_time_scale = 48.0f;
+        }
         ImGui::InputScalar("Current day ticks", ImGuiDataType_U32, &GameClock->m_curr_day_ticks);
+        ImGui::PopItemWidth();
         ImGui::SliderScalar("Current day ticks", ImGuiDataType_U32, &GameClock->m_curr_day_ticks, &CurrentTicksMin, &CurrentTicksMax);
+        if(ImGui::Checkbox("Lock time of day change", &LockTodTicksChange))
+        {
+            if(LockTodTicksChange)
+            {
+                PreTodPauseTimescale = GameClock->m_time_scale;
+                GameClock->m_time_scale = 0.0f;
+            }
+            else
+            {
+                GameClock->m_time_scale = PreTodPauseTimescale;
+            }
+        }
     }
     else
     {
         ImGui::Text("GameClock == nullptr, cannot display settings");
     }
     ImGui::Separator();
-
 
     if (!UseCustomLevelAmbientLight)
     {
@@ -308,7 +317,7 @@ void GeneralTweaksGui::Draw()
 	ImGui::InputFloat3("Level background ambient light", (float*)&CustomLevelBackgroundAmbientLight, 3);
 	ImGui::SameLine();
 	ImGui::Checkbox("##ToggleLevelBackgroundAmbientLight", &UseCustomLevelBackgroundAmbientLight);
-
+    ImGui::Separator();
 
     //Experimental settings
     ImGui::PushFont(Globals::FontBig);

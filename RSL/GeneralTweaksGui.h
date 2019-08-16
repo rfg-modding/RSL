@@ -37,8 +37,8 @@ public:
 	bool AiIgnore = false;
 	bool DisablePlayerRagdoll = false;
 
-    float CustomTodOverride = 12.0f;
-    bool UseCustomTodOverride = false;
+    bool LockTodTicksChange = false;
+    float PreTodPauseTimescale = 0.0f;
 
     game_clock* GameClock = nullptr;
 };
