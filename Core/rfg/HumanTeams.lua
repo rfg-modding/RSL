@@ -3,8 +3,8 @@ return {
     ["Guerrilla"] = 0,
     ["EDF"] = 1,
     ["Civilian"] = 2,
-    ["MPNeutral"] = 3,
-    ["Marauder"] = 4,
-    ["MPSpectator"] = 5,
-    ["NumHumanTeams"] = 6,
+    ["MPNeutral"] = 2,
+    ["Marauder"] = 3,
+    ["MPSpectator"] = 3,
+    ["NumHumanTeams"] = 4,
 }
