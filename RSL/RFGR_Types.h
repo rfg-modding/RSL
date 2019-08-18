@@ -691,6 +691,10 @@ public:
 		fvec.SetAll(Value);
 		return *this;
 	}
+    std::string ToString(bool Parentheses, bool Labels)
+	{
+        return fmt::format("rvec: {}\nuvec: {}\nfvec: {}", rvec.GetDataString(Parentheses, Labels), uvec.GetDataString(Parentheses, Labels), fvec.GetDataString(Parentheses, Labels));
+	}
 
 	vector rvec;
 	vector uvec;

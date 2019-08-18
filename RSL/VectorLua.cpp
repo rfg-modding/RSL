@@ -20,6 +20,10 @@ void Lua::BindVector2(sol::state& LuaState)
         [](vector2& Self) {return Self.GetDataString(false, true); },
         [](vector2& Self, bool Parentheses) {return Self.GetDataString(Parentheses, true); },
         [](vector2& Self, bool Parentheses, bool Labels) {return Self.GetDataString(Parentheses, Labels); }));
+    Utype.set("ToString", sol::overload(
+        [](vector2& Self) {return Self.GetDataString(false, true); },
+        [](vector2& Self, bool Parentheses) {return Self.GetDataString(Parentheses, true); },
+        [](vector2& Self, bool Parentheses, bool Labels) {return Self.GetDataString(Parentheses, Labels); }));
 	RfgTable.set_usertype("Vector2", Utype);
 }
 
@@ -42,6 +46,10 @@ void Lua::BindVector(sol::state& LuaState)
     Utype.set("UnitVector", &vector::UnitVector);
 	Utype.set("Print", [](vector& Self) { Logger::LogNone("x: {}, y: {}, z: {}", Self.x, Self.y, Self.z); });
 	Utype.set("GetDataString", sol::overload(
+        [](vector& Self) {return Self.GetDataString(false, true); },
+        [](vector& Self, bool Parentheses) {return Self.GetDataString(Parentheses, true); },
+        [](vector& Self, bool Parentheses, bool Labels) {return Self.GetDataString(Parentheses, Labels); }));
+    Utype.set("ToString", sol::overload(
         [](vector& Self) {return Self.GetDataString(false, true); },
         [](vector& Self, bool Parentheses) {return Self.GetDataString(Parentheses, true); },
         [](vector& Self, bool Parentheses, bool Labels) {return Self.GetDataString(Parentheses, Labels); }));
