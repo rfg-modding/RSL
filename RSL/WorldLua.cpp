@@ -244,7 +244,7 @@ void Lua::BindWorld(sol::state& LuaState)
 	Utype.set("MissionObjectCreationMode", &World::mission_object_creation_mode);
 	Utype.set("LevelAmbient", &World::level_ambient);
 	Utype.set("LevelBackAmbient", &World::level_back_ambient);
-	Utype.set("LastLoadedTerritory", sol::property([](World& Self) { return std::ref(Self.last_loaded_territory); })); //Size 64 array of chars
+	Utype.set("LastLoadedTerritory", sol::property([](World& Self) { return Globals::CharArrayToString(Self.last_loaded_territory, 64); })); //Size 64 array of chars
 	Utype.set("MaxWorldObjects", &World::max_world_objects);
 	Utype.set("AllObjects", &World::all_objects); //rfg::base_array<Object*>
 	Utype.set("Objects", &World::all_objects); //rfg::base_array<Object*>
@@ -269,7 +269,7 @@ void Lua::BindWorld(sol::state& LuaState)
 	Utype.set("SaveLoadFlags", &World::sl_flags);
 	Utype.set("PendingGameSaveSlot", &World::pending_game_save_slot);
 	Utype.set("DlcBundleID", &World::dlc_bundle_id);
-	Utype.set("PendingFilename", sol::property([](World& Self) { return std::ref(Self.pending_filename); })); //Size 64 char array
+	Utype.set("PendingFilename", sol::property([](World& Self) { return Globals::CharArrayToString(Self.pending_filename, 64); })); //Size 64 char array
 	Utype.set("PendingGameLoadWarpToPos", &World::pending_game_load_warp_to_pos);
 	Utype.set("PendingGameLoadWarpToOrient", &World::pending_game_load_warp_to_orient);
 	//Utype.set("LoadAborted", &World::load_aborted); //Volatile - unbound for now
@@ -279,7 +279,7 @@ void Lua::BindWorld(sol::state& LuaState)
 	//Utype.set("AllZones", &World::all_zones); //Double pointer
 	Utype.set("GlobalZoneGrid", sol::property([](World& Self) { return std::ref(Self.global_zone_grid); })); //world_zone*[257]
 	Utype.set("IsTerritory", &World::is_territory);
-	Utype.set("TerritoryName", sol::property([](World& Self) { return std::ref(Self.territory_name); })); //Size 128 char array
+	Utype.set("TerritoryName", sol::property([](World& Self) { return Globals::CharArrayToString(Self.territory_name, 128); })); //Size 128 char array
 	Utype.set("NumStreamingObjects", &World::num_streaming_objects);
 	Utype.set("StubSerializationInProgress", &World::stub_serialization_in_progress);
 	RfgTable.set_usertype("World", Utype);
