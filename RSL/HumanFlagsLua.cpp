@@ -24,7 +24,7 @@ void Lua::BindHumanFlags(sol::state & LuaState)
 	Utype.set("RadioOperator", sol::property([](HumanFlags& Self) -> const bool& {return Self.radio_operator; }, [](HumanFlags& Self, bool Value) {Self.radio_operator = Value; })); //bool - 1
 	Utype.set("ActivityRaidRequired", sol::property([](HumanFlags& Self) -> const bool&{return Self.activity_raid_required; }, [](HumanFlags& Self, bool Value) {Self.activity_raid_required = Value; })); //bool - 1
 	Utype.set("ActivityRaidOptional", sol::property([](HumanFlags& Self) -> const bool&{return Self.activity_raid_optional; }, [](HumanFlags& Self, bool Value) {Self.activity_raid_optional = Value; })); //bool - 1
-	Utype.set("ActivateHouseArrestHostage", sol::property([](HumanFlags& Self) -> const bool& {return Self.activity_ha_hostage; }, [](HumanFlags& Self, bool Value) {Self.activity_ha_hostage = Value; })); //bool - 1
+	Utype.set("ActivityHouseArrestHostage", sol::property([](HumanFlags& Self) -> const bool& {return Self.activity_ha_hostage; }, [](HumanFlags& Self, bool Value) {Self.activity_ha_hostage = Value; })); //bool - 1
 	Utype.set("RaidIntroductionLines", sol::property([](HumanFlags& Self) -> const bool& {return Self.raid_introduction_lines; }, [](HumanFlags& Self, bool Value) {Self.raid_introduction_lines = Value; })); //bool - 1
 	Utype.set("MinerPersonaLines", sol::property([](HumanFlags& Self) -> const bool& {return Self.miner_persona_lines; }, [](HumanFlags& Self, bool Value) {Self.miner_persona_lines = Value; })); //bool - 1
 	Utype.set("DamagedByPlayer", sol::property([](HumanFlags& Self) -> const bool& {return Self.damaged_by_player; }, [](HumanFlags& Self, bool Value) {Self.damaged_by_player = Value; })); //bool - 1
