@@ -21,6 +21,7 @@
 #include "PlayerLua.h"
 #include "WorldLua.h"
 #include "ExplosionInfoLua.h"
+#include "TimerLua.h"
 
 ScriptManager::~ScriptManager()
 {
@@ -292,6 +293,8 @@ void ScriptManager::SetupLua()
 
     Lua::BindFixedArrayWrapperExplosionInfo(LuaStateRef);
     Lua::BindExplosionInfo(LuaStateRef);
+
+    Lua::BindTimer(LuaStateRef);
 	#pragma warning(pop) 
 
     UpdateRfgPointers();

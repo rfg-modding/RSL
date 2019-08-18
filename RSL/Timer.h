@@ -26,13 +26,17 @@ public:
         EndTime = other.EndTime;
         return *this;
     }
-    Timer(bool StartNow = false)
+    Timer(bool StartNow)
     {
         if(StartNow)
         {
             Start();
         }
     };
+    Timer()
+    {
+        
+    }
     ~Timer() = default;
 
     void Start();
