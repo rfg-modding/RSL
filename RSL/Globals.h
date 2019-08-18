@@ -1,6 +1,6 @@
 #pragma once
 #include "Includes.h"
-#include "RFGR_Types_weapon_info.h"
+#include "RFGR_Types_Keen_InputEvent.h"
 #include "FixedArrayWrapper.h"
 #include "Version.h"
 

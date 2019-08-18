@@ -308,6 +308,12 @@
     <ClCompile Include="rfgl_hooks.cpp">
       <Filter>Hooks</Filter>
     </ClCompile>
+    <ClCompile Include="EventViewerGui.cpp">
+      <Filter>Overlay Gui\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TimerLua.cpp">
+      <Filter>Lua Binding</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CameraWrapper.h">
@@ -558,6 +564,15 @@
     </ClInclude>
     <ClInclude Include="RFGR_Types_weapon_info.h">
       <Filter>RFGR Structs</Filter>
+    </ClInclude>
+    <ClInclude Include="RFGR_Types_Keen_InputEvent.h">
+      <Filter>RFGR Structs</Filter>
+    </ClInclude>
+    <ClInclude Include="EventViewerGui.h">
+      <Filter>Overlay Gui\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TimerLua.h">
+      <Filter>Lua Binding</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

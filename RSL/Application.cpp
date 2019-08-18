@@ -244,6 +244,7 @@ void Application::InitOverlays()
     Gui.AddChildGui(new IntrospectionGui("Object introspection"));
     Gui.AddChildGui(new ExplosionSpawnerGui("Explosion spawner"));
     Gui.AddChildGui(new GraphicsTweaksGui("Graphics tweaks"));
+    Gui.AddChildGui(new EventViewerGui("Event viewer"));
 }
 
 void Application::OpenDefaultLogs()

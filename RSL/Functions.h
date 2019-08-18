@@ -719,3 +719,20 @@ extern F_rfgl_find_and_delete_debris_object rfgl_find_and_delete_debris_object;
 //.text:00701480 rfg.exe:$3C1480 #3C0880 <game_clock_get> //game_clock *__cdecl fav::game_clock_get()
 using F_game_clock_get = game_clock*(__cdecl*)();
 extern F_game_clock_get game_clock_get;
+
+
+//int dc_play_sound_foley_info //Todo: Get this and pass it as caller_cue_id maybe?
+
+//Todo: Double check that these don't takes references
+//.text:003CDC50 rfg.exe:$8DC50 #8D050 <audiolib_cue_get_id> //audiolib_result __cdecl audiolib_cue_get_id(const char *cue_name, int *caller_cue_id)
+
+//.text:003DF0F0 rfg.exe:$9F0F0 #9E4F0 <audiolib_cue_is_id_valid> //bool __cdecl audiolib_cue_is_id_valid(int caller_cue_id)
+
+//.text:003DF120 rfg.exe:$9F120 #9E520 <audiolib_cue_play> //int __cdecl audiolib_cue_play(int cue_id, audiolib_params *passed_params, audiolib_result *error)
+
+
+//3D sounds shit
+
+//.text:003C3460 rfg.exe:$83460 #82860 <audiolib_get_listener_pos> //audiolib_result __cdecl audiolib_get_listener_pos(vector *position, vector *orient, vector *velocity)
+
+//.text:003DFD60 rfg.exe:$9FD60 #9F160 <audiolib_cue_play_3d> //int __cdecl audiolib_cue_play_3d(int cue_id, vector *pos, vector *orient, vector *velocity, audiolib_result *error)

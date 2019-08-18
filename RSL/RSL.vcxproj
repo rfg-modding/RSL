@@ -166,6 +166,7 @@
     <ClCompile Include="BaseTypeLua.cpp" />
     <ClCompile Include="D3D11Present.cpp" />
     <ClCompile Include="D3D11_ResizeBuffers.cpp" />
+    <ClCompile Include="EventViewerGui.cpp" />
     <ClCompile Include="ExplosionCreate.cpp" />
     <ClCompile Include="ExplosionInfoLua.cpp" />
     <ClCompile Include="ExplosionSpawnerGui.cpp" />
@@ -231,6 +232,7 @@
     <ClCompile Include="StreamGrid_DoFrame.cpp" />
     <ClCompile Include="TextEditorWrapper.cpp" />
     <ClCompile Include="Timer.cpp" />
+    <ClCompile Include="TimerLua.cpp" />
     <ClCompile Include="VectorLua.cpp" />
     <ClCompile Include="VehicleSpawnerGui.cpp" />
     <ClCompile Include="WelcomeGui.cpp" />
@@ -256,6 +258,7 @@
     <ClInclude Include="AttachInfoDataLua.h" />
     <ClInclude Include="BaseGui.h" />
     <ClInclude Include="BaseTypeLua.h" />
+    <ClInclude Include="EventViewerGui.h" />
     <ClInclude Include="ExplosionInfoLua.h" />
     <ClInclude Include="ExplosionSpawnerGui.h" />
     <ClInclude Include="FixedArrayWrapper.h" />
@@ -300,11 +303,13 @@
     <ClInclude Include="IntrospectionGui.h" />
     <ClInclude Include="Launcher.h" />
     <ClInclude Include="RenderInterfaceD3D11.h" />
+    <ClInclude Include="RFGR_Types_Keen_InputEvent.h" />
     <ClInclude Include="RFGR_Types_Vehicle_Spawn_Params.h" />
     <ClInclude Include="RFGR_Types_weapon_info.h" />
     <ClInclude Include="ShaderSetD3D11.h" />
     <ClInclude Include="TextEditorWrapper.h" />
     <ClInclude Include="Timer.h" />
+    <ClInclude Include="TimerLua.h" />
     <ClInclude Include="VehicleSpawnerGui.h" />
     <ClInclude Include="Version.h" />
     <ClInclude Include="WorldLua.h" />

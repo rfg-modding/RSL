@@ -8,6 +8,17 @@ void ProcessNumpadInputs(const HWND hwnd, const UINT msg, const WPARAM wParam, c
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 LRESULT __stdcall Hooks::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
+    switch (msg)
+    {
+    case WM_KEYDOWN:
+        Globals::Scripts->TriggerInputEvent(msg, wParam);
+        break;
+    case WM_KEYUP:
+        Globals::Scripts->TriggerInputEvent(msg, wParam);
+        break;
+    default:
+        break;
+    }
     if(Globals::LockoutModeEnabled)
     {
         return CallWindowProc(Globals::OriginalWndProc, Globals::GameWindowHandle, msg, wParam, lParam);

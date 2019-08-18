@@ -33,7 +33,10 @@ ScriptManager::~ScriptManager()
  */
 void ScriptManager::Reset()
 {
+    std::lock_guard<std::recursive_mutex> Lock(Mutex);
     delete LuaState;
+    InputEvents.Reset(); //Todo: See if there's a cleaner way to do this while also being thread safe. This is a bit obtuse.
+
     Initialize();
     UpdateRfgPointers();
     RunStartupScripts();
@@ -45,6 +48,7 @@ void ScriptManager::Reset()
  */
 void ScriptManager::Initialize()
 {
+    std::lock_guard<std::recursive_mutex> Lock(Mutex);
     LuaState = new sol::state();
     /* Opens the listed lua core libraries
 	 * See here: https://sol2.readthedocs.io/en/stable/api/state.html#lib-enum
@@ -77,10 +81,13 @@ void ScriptManager::Initialize()
  */
 void ScriptManager::SetupLua()
 {
+    std::lock_guard<std::recursive_mutex> Lock(Mutex);
+
 	RunScript(Globals::GetEXEPath(false) + "RSL/Core/CoreInit.lua");
     sol::state& LuaStateRef = *LuaState; //Used for easier access instead of doing weird ass pointer syntax.
 
     LuaStateRef["print"] = sol::nil;
+    LuaStateRef["ToString"] = LuaStateRef.get<sol::function>("tostring");
     //LuaStateRef.set_function("tostring", sol::overload(
     //    [](int Value) {return std::to_string(Value); },
     //    [](long Value) {return std::to_string(Value); },
@@ -100,7 +107,7 @@ void ScriptManager::SetupLua()
 	auto RslTable = LuaStateRef["rsl"].get_or_create<sol::table>();
 	RslTable["GetVersion"] = Globals::GetScriptLoaderVersion;
 	RslTable["LogModuleBase"] = Lua::LogModuleBase;
-
+    
     //LogType enums defined in lua
     //auto LoggerTable = LuaStateRef["Logger"].get_or_create<sol::table>();
     RslTable["OpenLogFile"] = Logger::OpenLogFile;
@@ -223,8 +230,18 @@ void ScriptManager::SetupLua()
             ui_add_secondary_message(Util::Widen(Message).c_str(), 3.0f, false, false);
         }));
 
-    //explosion_info* ExplosionInfo, void* Source, void* Owner, vector* Position, matrix* Orientation, vector* Direction, void* WeaponInfo, bool FromServer
-	//This warning appears hundreds of times in a row during binding unless disabled. Is harmless due to some lambdas used to grab usertype variables.
+    RfgTable.set_function("RegisterEvent", sol::overload(
+        [&](std::string EventTypeName, sol::function EventFunction, std::string EventName)
+        {
+            RegisterEvent(EventTypeName, EventFunction, EventName);
+        },
+        [&](std::string EventTypeName, sol::function EventFunction)
+        {
+            RegisterEvent(EventTypeName, EventFunction);
+        }
+    ));
+
+	//This warning appears hundreds of times in a row during binding unless disabled. Is harmless, due to some lambdas used to grab usertype variables.
 	#pragma warning(push)
 	#pragma warning(disable : C4172)
 	//Use separate files for these so that if one is edited they don't all need to be recompiled.
@@ -301,6 +318,18 @@ void ScriptManager::SetupLua()
     //Todo: Add binding func for rfg lua state and see if I can't add other functions to it to use in rfg scripts. Might be complicated by the fact that it uses a different lua version
 }
 
+void ScriptManager::RegisterEvent(const std::string& EventTypeName, sol::function EventFunction, std::string EventName)
+{
+    if (EventTypeName == "Keypress")
+    {
+        InputEvents.Hooks.emplace_back(EventName, EventFunction);
+    }
+    else
+    {
+        throw std::exception(fmt::format("\"{}\" is not a valid event name!", EventTypeName).c_str());
+    }
+}
+
 /* Used to ensure a few important game pointers are always up to date.
  * Since these can sometimes change when doing things like loading a save
  * it's necessary to update them in the lua state. This function is called
@@ -310,6 +339,7 @@ void ScriptManager::SetupLua()
  */
 void ScriptManager::UpdateRfgPointers()
 {
+    std::lock_guard<std::recursive_mutex> Lock(Mutex);
     sol::state& LuaStateRef = *LuaState;
 	auto RfgTable = LuaStateRef["rfg"].get_or_create<sol::table>();
 
@@ -377,6 +407,7 @@ void ScriptManager::ScanScriptsFolder()
 
 void ScriptManager::RunStartupScripts()
 {
+    std::lock_guard<std::recursive_mutex> Lock(Mutex);
     for(auto& Folder : SubFolders)
     {
         for(auto& Script : Folder.Scripts)
@@ -396,6 +427,8 @@ void ScriptManager::RunStartupScripts()
  */
 bool ScriptManager::RunScript(const std::string& FullPath)                     
 {
+    std::lock_guard<std::recursive_mutex> Lock(Mutex);
+
     sol::load_result LoadResult = LuaState->load(Util::General::LoadFileToString(FullPath));
     std::string Name = GetScriptNameFromPath(FullPath);
 
@@ -426,6 +459,8 @@ bool ScriptManager::RunScript(const std::string& FullPath)
  */
 bool ScriptManager::RunScript(const size_t Index)
 {
+    std::lock_guard<std::recursive_mutex> Lock(Mutex);
+
     auto& Script = SubFolders[Index];
     sol::load_result LoadResult = LuaState->load(Util::General::LoadFileToString(Script.FullPath));
 
@@ -456,8 +491,9 @@ bool ScriptManager::RunScript(const size_t Index)
  */
 ScriptResult ScriptManager::RunStringAsScript(std::string Buffer, std::string Name)
 {
-    sol::load_result LoadResult = LuaState->load(Buffer);
+    std::lock_guard<std::recursive_mutex> Lock(Mutex);
 
+    sol::load_result LoadResult = LuaState->load(Buffer);
     if(!LoadResult.valid()) //Check script syntax but don't execute
     {
         sol::error Error = LoadResult;
@@ -516,11 +552,54 @@ bool ScriptManager::CharIsDigit(const char& Character) const
     return Character >= '0' && Character <= '9';
 }
 
+void ScriptManager::TriggerInputEvent(uint Message, uint KeyCode)
+{
+    std::lock_guard<std::recursive_mutex> Lock(Mutex);
+
+    if (!LuaState) return;
+
+    if(InputEvents.MarkedForReset())
+    {
+        InputEvents.Reset();
+    }
+
+    //Remove hooks that were marked for deletion. Can't delete immediately since it might not be thread safe. Do it this way for safety
+    InputEvents.Hooks.erase(std::remove_if(InputEvents.Hooks.begin(), InputEvents.Hooks.end(), 
+    [](ScriptEventHook& Hook)
+    {
+        return Hook.DeleteOnNextUpdate;
+    }), 
+    InputEvents.Hooks.end());
+
+    if (InputEvents.Enabled())
+    {
+        for (auto& EventHook : InputEvents.Hooks)
+        {
+            if (EventHook.Enabled)
+            {
+                sol::table EventData = LuaState->create_table();
+                EventData["KeyDown"] = static_cast<bool>(Message == WM_KEYDOWN);
+                EventData["KeyUp"] = static_cast<bool>(Message == WM_KEYUP);
+                EventData["KeyCode"] = KeyCode;
+
+                //Todo: Make a function that safely calls sol::functions like this.
+                sol::protected_function_result Result = EventHook.Hook(EventData);
+                if (!Result.valid())
+                {
+                    sol::error Error = Result;
+                    std::string What(Error.what());
+                    Logger::LogError("{} encountered an error! Message: {}", EventHook.HookName, What);
+                }
+            }
+        }
+    }
+}
+
 /* Gets the name of a file given a path as an input. 
  * Includes file extension in name. Returns an empty
  * string if no forward or backslashes are found.
  */
-std::string ScriptManager::GetScriptNameFromPath(std::string FullPath) const
+std::string ScriptManager::GetScriptNameFromPath(const std::string& FullPath) const
 {
 	for (int i = FullPath.length() - 1; i > 0; i--)
 	{
@@ -573,13 +652,9 @@ std::string ScriptManager::GetScriptExtensionFromPath(const std::string& FullPat
 /* Checks if the file at the provided path has a valid script
  * file extension. Returns true if so, and false if not.
  */
-bool ScriptManager::IsValidScriptExtensionFromPath(std::string FullPath) const
+bool ScriptManager::IsValidScriptExtensionFromPath(const std::string& FullPath) const
 {
-	if (IsValidScriptExtension(GetScriptExtensionFromPath(FullPath)))
-	{
-		return true;
-	}
-	return false;
+    return IsValidScriptExtension(GetScriptExtensionFromPath(FullPath));
 }
 
 /* Checks if the provided string is a valid script file extension.

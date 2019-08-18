@@ -41,6 +41,47 @@ public:
     std::vector<Script> Scripts;
 };
 
+class ScriptEventHook
+{
+public:
+    ScriptEventHook(std::string _HookName, sol::function _Hook) : HookName(_HookName), Hook(_Hook) {}
+    ScriptEventHook() = default;
+    ~ScriptEventHook() = default;
+
+    std::string HookName; //Todo: Figure out if this is really needed
+    sol::function Hook;
+    bool Enabled = true;
+    bool DeleteOnNextUpdate = false;
+};
+
+class ScriptEvent
+{
+public:
+    ScriptEvent() = default;
+    ~ScriptEvent() = default;
+
+    void Enable() { _Enabled = true; };
+    void Disable() { _Enabled = false; }
+    [[nodiscard]] bool Enabled() const { return _Enabled; }
+
+    void MarkForReset() { _ResetOnNextUpdate = true; };
+    [[nodiscard]] bool MarkedForReset() const { return _ResetOnNextUpdate; };
+    void Reset()
+    {
+        Hooks.clear();
+        _ResetOnNextUpdate = false;
+    }
+
+    std::string Name;
+    std::vector<ScriptEventHook> Hooks;
+
+    bool ResetOnNextUpdate = false;
+
+private:
+    bool _Enabled = true;
+    bool _ResetOnNextUpdate = false;
+};
+
 /* This class manages the script loader lua state and scripting. This includes binding
  * rfg structures and functions to lua, and finding and running lua scripts. It contains
  * functions for detecting valid scripts in folders, and safely running scripts without 
@@ -50,7 +91,7 @@ public:
 class ScriptManager
 {
 public:
-	ScriptManager() = default;
+    ScriptManager() = default;
     ~ScriptManager();
 
     void Reset();
@@ -64,18 +105,27 @@ public:
 	bool RunScript(const size_t Index);
 
 	ScriptResult RunStringAsScript(std::string Buffer, std::string Name);
-    std::optional<uint> GetLineFromErrorString(const std::string& ErrorString) const;
+    [[nodiscard]] std::optional<uint> GetLineFromErrorString(const std::string& ErrorString) const;
     [[nodiscard]] bool CharIsDigit(const char& Character) const;
+
+    void TriggerInputEvent(uint Message, uint KeyCode);
 
 	sol::state* LuaState = nullptr; //Uses a pointer for easy LuaState resets.
 	std::vector <ScriptFolder> SubFolders; //List of scripts detected in SubFolders folder on the last scan.
 
+    ScriptEvent InputEvents;
+
 private:
-    [[nodiscard]] std::string GetScriptNameFromPath(std::string FullPath) const;
+    [[nodiscard]] std::string GetScriptNameFromPath(const std::string& FullPath) const;
     [[nodiscard]] std::string GetScriptFolderFromPath(const std::string& FullPath) const;
     [[nodiscard]] std::string GetScriptExtensionFromPath(const std::string& FullPath) const;
-	[[nodiscard]] bool IsValidScriptExtensionFromPath(std::string FullPath) const;
+	[[nodiscard]] bool IsValidScriptExtensionFromPath(const std::string& FullPath) const;
     [[nodiscard]] bool IsValidScriptExtension(std::string Extension) const;
 
 	void SetupLua();
+    void RegisterEvent(const std::string& EventTypeName, sol::function EventFunction, std::string EventName = "GenericEvent");
+
+    //std::vector<ScriptEvent> Events;
+
+    std::recursive_mutex Mutex;
 };
