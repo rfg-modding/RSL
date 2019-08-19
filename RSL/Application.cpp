@@ -245,6 +245,7 @@ void Application::InitOverlays()
     Gui.AddChildGui(new ExplosionSpawnerGui("Explosion spawner"));
     Gui.AddChildGui(new GraphicsTweaksGui("Graphics tweaks"));
     Gui.AddChildGui(new EventViewerGui("Event viewer"));
+    //Gui.AddChildGui(new VehicleSpawnerGui("Vehicle spawner"));
 }
 
 void Application::OpenDefaultLogs()
@@ -399,7 +400,9 @@ void Application::CreateHooks()
 
     Hooks.CreateHook("peg_load_wrapper", Globals::ModuleBase + 0x1D1F10, Hooks::peg_load_wrapper_hook, peg_load_wrapper);
 
+    Logger::LogWarning("Pre hook object_spawn_vehicle address: {:#x}\n", reinterpret_cast<DWORD>(object_spawn_vehicle));
     Hooks.CreateHook("object_spawn_vehicle_hook", Globals::ModuleBase + 0x757F40, Hooks::object_spawn_vehicle_hook, object_spawn_vehicle);
+    Logger::LogWarning("Post hook object_spawn_vehicle address: {:#x}\n", reinterpret_cast<DWORD>(object_spawn_vehicle));
 
     Hooks.CreateHook("keen_ImmediateRenderer_beginRenderPass_hook", Globals::ModuleBase + 0x86C810, Hooks::keen_ImmediateRenderer_beginRenderPass_hook, keen_ImmediateRenderer_beginRenderPass);
     

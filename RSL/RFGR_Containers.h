@@ -26,7 +26,7 @@ namespace rfg
 	class base_array
 	{
 	public:
-		const T& operator[](int Index)
+		T& operator[](int Index)
 		{
 			return Elements[Index];
 		}

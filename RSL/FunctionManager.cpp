@@ -145,7 +145,7 @@ void FunctionManager::Initialize()
     RegisterFunction(StreamGridDoFrame, 0x530FB0);
 
     RegisterFunction(CutsceneSpawnVehicle, 0x305D70);
-    //RegisterFunction(ObjectSpawnVehicle, 0x757F40);
+    RegisterFunction(object_spawn_vehicle, 0x757F40);
     RegisterFunction(VehicleInfoGetMasterList, 0x768E40);
     RegisterFunction(SpSpawnVehicle, 0x756420);
 
@@ -157,8 +157,6 @@ void FunctionManager::Initialize()
     RegisterFunction(peg_load_wrapper, 0x1D1F10);
 
     RegisterFunction(string_hash, 0x18FE90);
-
-    RegisterFunction(object_spawn_vehicle, 0x757F40);
 
     RegisterFunction(human_get_head_pos_orient, 0x69B5D0);
     RegisterFunction(human_set_render, 0x69B8C0);

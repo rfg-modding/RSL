@@ -9,10 +9,13 @@ VehicleSpawnerGui::VehicleSpawnerGui(std::string Title_)
     CustomVehicleSpawnParams.osrp = nullptr;
     //CustomVehicleSpawnParams.osrp = ;
     CustomVehicleSpawnParams.zone_id_xy = 0;
-    CustomVehicleSpawnParams.spawn_orient = matrix(0.0f);
+    vector rvec = { 0.896f, 0.0f, 0.445f };
+    vector uvec = { 0.0f, 1.0f, 0.0f };
+    vector fvec = { -0.445f, 0.0f, 0.896f };
+    CustomVehicleSpawnParams.spawn_orient = matrix(rvec, uvec, fvec);
     CustomVehicleSpawnParams.forward_speed = 0.0f;
     CustomVehicleSpawnParams.parent_handle = 0xFFFFFFFF;
-    CustomVehicleSpawnParams.building_handle = 0xFFFFFFFF;
+    CustomVehicleSpawnParams.building_handle = 3435973836;
     CustomVehicleSpawnParams.spawn_priority = SPAWN_PRIORITY_HIGH;
     //CustomVehicleSpawnParams.vflags = ;
     //CustomVehicleSpawnParams.veh_spawn_flags = ;
@@ -52,6 +55,19 @@ void VehicleSpawnerGui::Draw()
     ImGui::SetNextItemWidth(250.0f);
     ImGui::InputFloat("Forward speed", &CustomVehicleSpawnParams.forward_speed);
 
+    ImGui::SetNextItemWidth(250.0f);
+    ImGui::InputScalar("Building handle", ImGuiDataType_U32, &CustomVehicleSpawnParams.building_handle);
+    ImGui::SameLine();
+    if(ImGui::Button("Reset##BuildingHandleReset"))
+    {
+        CustomVehicleSpawnParams.building_handle = 3435973836;
+    }
+    ImGui::SameLine();
+    if(ImGui::Button("Max##BuildingHandleReset"))
+    {
+        CustomVehicleSpawnParams.building_handle = 0xFFFFFFFF;
+    }
+
     //Can't take an address of bitfield so need to use secondary bool for this.
     static bool ForceToGround = false;
     ImGui::Checkbox("ForceToGround", &ForceToGround);
@@ -59,6 +75,25 @@ void VehicleSpawnerGui::Draw()
     ImGui::Checkbox("ImmediateSpawn", &ImmediateSpawn);
     static bool IsPlayerCar = false;
     ImGui::Checkbox("IsPlayerCar", &IsPlayerCar);
+    static bool InteriorSpawn = false;
+    ImGui::Checkbox("InteriorSpawn", &InteriorSpawn);
+    static bool RoadSpawn = false;
+    ImGui::Checkbox("RoadSpawn", &RoadSpawn);
+    static bool AmbientSpawn = false;
+    ImGui::Checkbox("AmbientSpawn", &AmbientSpawn);
+    static bool MobileVehicleSpawn = false;
+    ImGui::Checkbox("MobileVehicleSpawn", &MobileVehicleSpawn);
+
+    ImGui::Text("Spawn priority:");
+    ImGui::SameLine();
+    ImGui::RadioButton("Low", reinterpret_cast<int*>(&CustomVehicleSpawnParams.spawn_priority), SPAWN_PRIORITY_LOW);
+    ImGui::SameLine();
+    ImGui::RadioButton("Medium", reinterpret_cast<int*>(&CustomVehicleSpawnParams.spawn_priority), SPAWN_PRIORITY_MEDIUM);
+    ImGui::SameLine();
+    ImGui::RadioButton("High", reinterpret_cast<int*>(&CustomVehicleSpawnParams.spawn_priority), SPAWN_PRIORITY_HIGH);
+    ImGui::SameLine();
+    ImGui::RadioButton("Special", reinterpret_cast<int*>(&CustomVehicleSpawnParams.spawn_priority), SPAWN_PRIORITY_SPECIAL);
+    
 
     if(CustomVehicleSpawnParams.veh_info)
     {
@@ -81,15 +116,15 @@ void VehicleSpawnerGui::Draw()
                 ImGui::SetColumnWidth(1, 120.0f);
                 if(ImGui::Button(std::string("Spawn##" + std::to_string(i)).c_str()))
                 {
-                    //Todo: Print custom params address (with adn without modulebase) as hex and compare with x32dbg values
-                    std::cout << "ModuleBase, decimal: " << Globals::ModuleBase << "\n";
-                    std::cout << "ModuleBase, hex: " << std::hex << Globals::ModuleBase << "\n";
-                    std::cout << "&CustomVehicleSpawnParams, decimal: " << &CustomVehicleSpawnParams << "\n";
-                    std::cout << "&CustomVehicleSpawnParams, hex: " << std::hex << &CustomVehicleSpawnParams << "\n";
-                    std::cout << "ModuleBase + &CustomVehicleSpawnParams, decimal: " << Globals::ModuleBase + (DWORD)&CustomVehicleSpawnParams << "\n";
-                    std::cout << "ModuleBase + &CustomVehicleSpawnParams, hex: " << std::hex << Globals::ModuleBase + (DWORD)&CustomVehicleSpawnParams << "\n";
-                    auto a = 1;
-                    auto b = 2;
+                    ////Todo: Print custom params address (with adn without modulebase) as hex and compare with x32dbg values
+                    //std::cout << "ModuleBase, decimal: " << Globals::ModuleBase << "\n";
+                    //std::cout << "ModuleBase, hex: " << std::hex << Globals::ModuleBase << "\n";
+                    //std::cout << "&CustomVehicleSpawnParams, decimal: " << &CustomVehicleSpawnParams << "\n";
+                    //std::cout << "&CustomVehicleSpawnParams, hex: " << std::hex << &CustomVehicleSpawnParams << "\n";
+                    //std::cout << "ModuleBase + &CustomVehicleSpawnParams, decimal: " << Globals::ModuleBase + (DWORD)&CustomVehicleSpawnParams << "\n";
+                    //std::cout << "ModuleBase + &CustomVehicleSpawnParams, hex: " << std::hex << Globals::ModuleBase + (DWORD)&CustomVehicleSpawnParams << "\n";
+                    //auto a = 1;
+                    //auto b = 2;
                     CustomVehicleSpawnParams.vp = nullptr;
                     CustomVehicleSpawnParams.osrp = nullptr;
                     //CustomVehicleSpawnParams.vp = new vehicle();
@@ -118,9 +153,44 @@ void VehicleSpawnerGui::Draw()
                     {
                         CustomVehicleSpawnParams.vflags.m_is_player_car = 0;
                     }
-                    CustomVehicleSpawnParams.veh_info = const_cast<vehicle_info*>(&(*Globals::VehicleInfos)[i]);
+                    if(InteriorSpawn)
+                    {
+                        CustomVehicleSpawnParams.veh_spawn_flags.interior_spawn = 1;
+                    }
+                    else
+                    {
+                        CustomVehicleSpawnParams.veh_spawn_flags.interior_spawn = 0;
+                    }
+                    if(RoadSpawn)
+                    {
+                        CustomVehicleSpawnParams.veh_spawn_flags.road_spawn = 1;
+                    }
+                    else
+                    {
+                        CustomVehicleSpawnParams.veh_spawn_flags.road_spawn = 0;
+                    }
+                    if(AmbientSpawn)
+                    {
+                        CustomVehicleSpawnParams.vflags.ambient_spawn = 1;
+                    }
+                    else
+                    {
+                        CustomVehicleSpawnParams.vflags.ambient_spawn = 0;
+                    }
+                    if(MobileVehicleSpawn)
+                    {
+                        CustomVehicleSpawnParams.veh_spawn_flags.mobile_vehicle_spawn = 1;
+                    }
+                    else
+                    {
+                        CustomVehicleSpawnParams.veh_spawn_flags.mobile_vehicle_spawn = 0;
+                    }
 
-                    bool Result = CreateNewVehicle(&CustomVehicleSpawnParams);
+                    CustomVehicleSpawnParams.veh_info = &(*Globals::VehicleInfos)[i];
+
+                    spawn_status_result Result = object_spawn_vehicle(CustomVehicleSpawnParams);
+                    Logger::Log("object_spawn_vehicle result: {}\n", (int)Result);
+                    //bool Result = CreateNewVehicle(&CustomVehicleSpawnParams);
                     //bool Result = SpSpawnVehicle(&CustomVehicleSpawnParams);
                     //auto Result = ObjectSpawnVehicle(&CustomVehicleSpawnParams);
                     auto c = 2;

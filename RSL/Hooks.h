@@ -49,7 +49,7 @@ namespace Hooks
     bool __fastcall IsValidEigenGradientHook(void* This);
     
     //.text:01317F40 rfg.exe:$757F40 #757340 <object_spawn_vehicle> //spawn_status_result __cdecl object_spawn_vehicle(vehicle_spawn_params *spawn_param)
-    spawn_status_result __cdecl object_spawn_vehicle_hook(vehicle_spawn_params* spawn_param);
+    spawn_status_result __cdecl object_spawn_vehicle_hook(vehicle_spawn_params& spawn_param);
 
     //.text:008AC810 rfg.exe:$86C810 #86BC10 <keen::ImmediateRenderer::beginRenderPass> //void __thiscall keen::ImmediateRenderer::beginRenderPass(keen::ImmediateRenderer *this, keen::RenderTarget *pRenderTarget, keen::Camera *pCamera)
     void __fastcall keen_ImmediateRenderer_beginRenderPass_hook(keen::ImmediateRenderer* this_ptr, void* edx, keen::RenderTarget* pRenderTarget, keen::Camera* pCamera);

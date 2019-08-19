@@ -677,7 +677,7 @@ using F_string_hash = uint(__cdecl*)(const char* key, unsigned int hash_size);
 extern F_string_hash string_hash;
 
 //.text:01317F40 rfg.exe:$757F40 #757340 <object_spawn_vehicle> //spawn_status_result __cdecl object_spawn_vehicle(vehicle_spawn_params *spawn_param)
-using F_object_spawn_vehicle = spawn_status_result(__cdecl*)(vehicle_spawn_params* spawn_param);
+using F_object_spawn_vehicle = spawn_status_result(__cdecl*)(vehicle_spawn_params& spawn_param);
 extern F_object_spawn_vehicle object_spawn_vehicle;
 
 //.text:0125B5D0 rfg.exe:$69B5D0 #69A9D0 <human_get_head_pos_orient> //void __cdecl human_get_head_pos_orient(human *hp, vector& head_pos, matrix& head_orient)

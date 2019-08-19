@@ -39,6 +39,7 @@ void MenuBarGui::Draw()
     static auto ExplosionSpawnerGuiRef = Globals::Gui->GetGuiReference<ExplosionSpawnerGui>("Explosion spawner").value();
     static auto GraphicsTweaksGuiRef = Globals::Gui->GetGuiReference<GraphicsTweaksGui>("Graphics tweaks").value();
     static auto EventViewerGuiRef = Globals::Gui->GetGuiReference<EventViewerGui>("Event viewer").value();
+    //static auto VehicleSpawnerGuiRef = Globals::Gui->GetGuiReference<VehicleSpawnerGui>("Vehicle spawner").value();
 
 	if (ImGui::BeginMainMenuBar())
 	{
@@ -87,7 +88,7 @@ void MenuBarGui::Draw()
 			if (ImGui::MenuItem(std::string(std::string(ICON_FA_MAP_MARKED) + u8" Teleport").c_str(), nullptr, &TeleportGuiRef.Get().Visible)) {}
 			if (ImGui::MenuItem(std::string(std::string(ICON_FA_CAMERA) + u8" Camera settings").c_str(), nullptr, &CameraSettingsRef.Get().Visible)) {}
 			if (ImGui::MenuItem(std::string(std::string(ICON_FA_VIAL) + u8" Physics settings").c_str(), nullptr, &PhysicsSettingsRef.Get().Visible)) {}
-			//if (ImGui::MenuItem(std::string(std::string(ICON_FA_CAR) + u8" Vehicle spawner").c_str(), NULL, &Gui->ShowAppVehicleSpawner)) {}
+			//if (ImGui::MenuItem(std::string(std::string(ICON_FA_CAR) + u8" Vehicle spawner").c_str(), nullptr, &VehicleSpawnerGuiRef.Get().Visible)) {}
 			ImGui::EndMenu();
 		}
         if(ImGui::BeginMenu("Tools"))
