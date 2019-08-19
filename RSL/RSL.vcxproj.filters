@@ -574,5 +574,8 @@
     <ClInclude Include="TimerLua.h">
       <Filter>Lua Binding</Filter>
     </ClInclude>
+    <ClInclude Include="BuildDate.h">
+      <Filter>General Files\Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

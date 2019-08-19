@@ -107,7 +107,8 @@ void ScriptManager::SetupLua()
 	auto RslTable = LuaStateRef["rsl"].get_or_create<sol::table>();
 	RslTable["GetVersion"] = Globals::GetScriptLoaderVersion;
 	RslTable["LogModuleBase"] = Lua::LogModuleBase;
-    
+    RslTable["BuildDate"] = RSL_BUILD_DATE;
+
     //LogType enums defined in lua
     //auto LoggerTable = LuaStateRef["Logger"].get_or_create<sol::table>();
     RslTable["OpenLogFile"] = Logger::OpenLogFile;

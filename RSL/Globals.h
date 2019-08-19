@@ -3,6 +3,7 @@
 #include "RFGR_Types_Keen_InputEvent.h"
 #include "FixedArrayWrapper.h"
 #include "Version.h"
+#include "BuildDate.h"
 
 //Todo: Move as many of these as possible into classes instead of having them be global
 
