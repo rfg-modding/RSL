@@ -4,6 +4,8 @@
 #include "FixedArrayWrapper.h"
 #include "Version.h"
 
+//Todo: Move as many of these as possible into classes instead of having them be global
+
 /*RSL*/
 #define UseLauncher true
 
@@ -230,3 +232,12 @@ T OffsetPtr(unsigned long Offset)
     }
     return reinterpret_cast<T>(Globals::ModuleBase + Offset);
 }
+
+class KeyState
+{
+public:
+    bool ControlDown = false;
+    bool ShiftDown = false;
+    bool AltDown = false;
+    bool WindowsDown = false;
+};

@@ -4,17 +4,20 @@
 class TextEditorWrapper;
 
 void ProcessNumpadInputs(const HWND hwnd, const UINT msg, const WPARAM wParam, const LPARAM lParam);
+void UpdateKeydownStates(const HWND hwnd, const UINT msg, const WPARAM wParam, const LPARAM lParam, KeyState& Keys);
 
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 LRESULT __stdcall Hooks::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
+    static KeyState Keys;
+    UpdateKeydownStates(hWnd, msg, wParam, lParam, Keys);
     switch (msg)
     {
     case WM_KEYDOWN:
-        Globals::Scripts->TriggerInputEvent(msg, wParam);
+        Globals::Scripts->TriggerInputEvent(msg, wParam, Keys);
         break;
     case WM_KEYUP:
-        Globals::Scripts->TriggerInputEvent(msg, wParam);
+        Globals::Scripts->TriggerInputEvent(msg, wParam, Keys);
         break;
     default:
         break;
@@ -44,6 +47,56 @@ LRESULT __stdcall Hooks::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lPar
     }
 
     return CallWindowProc(Globals::OriginalWndProc, Globals::GameWindowHandle, msg, wParam, lParam);
+}
+
+void UpdateKeydownStates(const HWND hwnd, const UINT msg, const WPARAM wParam, const LPARAM lParam, KeyState& Keys)
+{
+    if(msg == WM_KEYDOWN)
+    {
+        switch(wParam)
+        {
+        case VK_CONTROL:
+            Keys.ControlDown = true;
+            break;
+        case VK_SHIFT:
+            Keys.ShiftDown = true;
+            break;
+        case VK_MENU: //alt
+            Keys.AltDown = true;
+            break;
+        case VK_LWIN:
+            Keys.WindowsDown = true;
+            break;
+        case VK_RWIN:
+            Keys.WindowsDown = true;
+            break;
+        default:
+            break;
+        }
+    }
+    else if(msg == WM_KEYUP)
+    {
+        switch (wParam)
+        {
+        case VK_CONTROL:
+            Keys.ControlDown = false;
+            break;
+        case VK_SHIFT:
+            Keys.ShiftDown = false;
+            break;
+        case VK_MENU: //alt
+            Keys.AltDown = false;
+            break;
+        case VK_LWIN:
+            Keys.WindowsDown = false;
+            break;
+        case VK_RWIN:
+            Keys.WindowsDown = false;
+            break;
+        default:
+            break;
+        }
+    }
 }
 
 LRESULT Hooks::ProcessInput(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)

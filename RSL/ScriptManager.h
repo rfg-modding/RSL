@@ -108,7 +108,7 @@ public:
     [[nodiscard]] std::optional<uint> GetLineFromErrorString(const std::string& ErrorString) const;
     [[nodiscard]] bool CharIsDigit(const char& Character) const;
 
-    void TriggerInputEvent(uint Message, uint KeyCode);
+    void TriggerInputEvent(uint Message, uint KeyCode, KeyState& Keys);
 
 	sol::state* LuaState = nullptr; //Uses a pointer for easy LuaState resets.
 	std::vector <ScriptFolder> SubFolders; //List of scripts detected in SubFolders folder on the last scan.

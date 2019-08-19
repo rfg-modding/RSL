@@ -552,7 +552,7 @@ bool ScriptManager::CharIsDigit(const char& Character) const
     return Character >= '0' && Character <= '9';
 }
 
-void ScriptManager::TriggerInputEvent(uint Message, uint KeyCode)
+void ScriptManager::TriggerInputEvent(uint Message, uint KeyCode, KeyState& Keys)
 {
     std::lock_guard<std::recursive_mutex> Lock(Mutex);
 
@@ -581,8 +581,12 @@ void ScriptManager::TriggerInputEvent(uint Message, uint KeyCode)
                 EventData["KeyDown"] = static_cast<bool>(Message == WM_KEYDOWN);
                 EventData["KeyUp"] = static_cast<bool>(Message == WM_KEYUP);
                 EventData["KeyCode"] = KeyCode;
+                EventData["ControlDown"] = Keys.ControlDown;
+                EventData["ShiftDown"] = Keys.ShiftDown;
+                EventData["AltDown"] = Keys.AltDown;
+                EventData["WindowsDown"] = Keys.WindowsDown;
 
-                //Todo: Make a function that safely calls sol::functions like this.
+                //Todo: Make a function that safely calls sol::functions like this, and wraps it in logging and error reporting code
                 sol::protected_function_result Result = EventHook.Hook(EventData);
                 if (!Result.valid())
                 {
