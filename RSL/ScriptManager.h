@@ -115,6 +115,8 @@ public:
 
     ScriptEvent InputEvents;
 
+    std::unordered_map<int, sol::function> MessageBoxCallbacks;
+
 private:
     [[nodiscard]] std::string GetScriptNameFromPath(const std::string& FullPath) const;
     [[nodiscard]] std::string GetScriptFolderFromPath(const std::string& FullPath) const;

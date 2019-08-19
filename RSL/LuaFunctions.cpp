@@ -1,4 +1,5 @@
 #include "LuaFunctions.h"
+#include "ScriptManager.h"
 
 namespace Lua
 {
@@ -218,5 +219,28 @@ namespace Lua
     uint RfgStringHashWrapper(std::string Key)
     {
         return string_hash(Key.c_str(), Key.length());
+    }
+
+    bool RfgMessageBoxCallbackFunction(int mbox_handle, int selection_index, msgbox_choice choice)
+    {
+        if(Globals::Scripts)
+        {
+            if(Globals::Scripts->MessageBoxCallbacks.count(mbox_handle) == 1)
+            {
+                sol::function& Callback = Globals::Scripts->MessageBoxCallbacks.at(mbox_handle);
+                sol::table CallbackInfo = Globals::Scripts->LuaState->create_table();
+                CallbackInfo["SelectionIndex"] = selection_index;
+                CallbackInfo["Choice"] = choice;
+                sol::protected_function_result Result = Callback(CallbackInfo);
+                if (!Result.valid())
+                {
+                    sol::error Error = Result;
+                    std::string What(Error.what());
+                    Logger::LogError("MessageBox callback encountered an error! Message: {}", What);
+                }
+                Globals::Scripts->MessageBoxCallbacks.erase(mbox_handle);
+            }
+        }
+        return true;
     }
 }

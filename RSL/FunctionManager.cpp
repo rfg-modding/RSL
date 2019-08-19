@@ -168,6 +168,11 @@ void FunctionManager::Initialize()
     RegisterFunction(keen_ImmediateRenderer_beginRenderPass, 0x86C810);
 
     RegisterFunction(ui_add_secondary_message, 0x4D8270);
+    RegisterFunction(ui_add_user_message, 0x4D83D0);
+    RegisterFunction(ui_add_msgbox, 0x4F6C70);
+    RegisterFunction(hud_message_change_minor_message, 0x455EE0);
+    RegisterFunction(hud_message_change_user, 0x455F50);
+    RegisterFunction(hud_message_remove_user, 0x444BB0);
 
     RegisterFunction(rfgl_find_and_delete_object_mover, 0x324A60);
     RegisterFunction(rfgl_find_and_delete_debris_object, 0x324B90);

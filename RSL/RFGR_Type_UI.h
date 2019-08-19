@@ -52,6 +52,42 @@ enum vconsole_mode
 	VCM_TEAMCHAT = 0x2,
 };
 
+using hud_message_handle = HudMessageHandle;
+
+enum hud_user_message_types
+{
+    HUMT_SWAP = 0x0,
+    HUMT_MP_KILL = 0x1,
+    HUMT_MP_KILL_SHADOW = 0x2,
+    HUMT_OTHER = 0x3,
+    NUM_HUD_USER_MESSAGE_TYPES = 0x4,
+};
+
+enum msgbox_choice
+{
+    MBC_OK = 0x0,
+    MBC_YES = 0x0,
+    MBC_ABORT = 0x1,
+    MBC_FORCED_EXIT = 0x2,
+    MBC_INVALID = 0x3,
+};
+
+enum msgbox_type
+{
+  MBT_INVALID = 0xFFFFFFFF,
+  MBT_OK = 0x0,
+  MBT_ACCEPT_CANCEL = 0x1,
+  MBT_YES_NO = 0x2,
+  MBT_SAVE = 0x3,
+  MBT_SAVE_PROFILE = 0x4,
+  MBT_LOADING = 0x5,
+  MBT_LOADING_CANCEL = 0x6,
+  MBT_ACCEPT_CANCEL_SELECT = 0x7,
+  MBT_ACCEPT_SELECT = 0x8,
+  MBT_CONFIG_CONTROL = 0x9,
+  NUM_MESSAGE_BOX_TYPES = 0xA,
+};
+
 class color
 {
 public:

@@ -37,5 +37,8 @@ rfg.WorldZoneStates = require("rfg.WorldZoneStates")
 rfg.WorldStateModes = require("rfg.WorldStateModes")
 rfg.SalvageMaterialTypes = require("rfg.SalvageMaterialTypes")
 rfg.KeyCodes = require("rfg.KeyCodes")
+rfg.MessageTypes = require("rfg.MessageTypes")
+rfg.MessageBoxTypes = require("rfg.MessageBoxTypes")
+rfg.MessageBoxChoices = require("rfg.MessageBoxChoices")
 
 return rfg

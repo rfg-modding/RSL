@@ -31,4 +31,6 @@ namespace Lua
     extern void LogJson(std::string Fmt, sol::variadic_args Args);
 
     extern uint RfgStringHashWrapper(std::string Key);
+
+    extern bool RfgMessageBoxCallbackFunction(int mbox_handle, int selection_index, msgbox_choice choice);
 }

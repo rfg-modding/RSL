@@ -47,7 +47,9 @@ function PartyTime()
 			if Object.AllIndex ~= Player.AllIndex then --Don't want to kill the player
 				Human = Object:CastToHuman() -- By default objects on the object lists are just objects, once you know they're a human, 
 											 -- cast them to be human objects to access human specific variables.
-				rfg.TeleportHuman(Human, Player.AimPos)
+				NewPosition = rfg.Vector:new(Player.AimPos)
+				NewPosition.y = NewPosition.y + 5
+				rfg.TeleportHuman(Human, NewPosition)
 			end
 		end
 	end

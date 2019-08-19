@@ -6,6 +6,180 @@ experimental stuff that was removed for better code clarity.*/
 
 
 
+/*Msgbox testing code for gui*/
+/*
+ *
+ *          
+ 
+ bool callback_fn(int mbox_handle, int selection_index, msgbox_choice choice)
+{
+    Logger::Log("MessageBox callback function called! mbox_handle: {}, selection_index: {}, choice: {}\n", mbox_handle, selection_index, choice);
+    return true;
+}
+    
+ImGui::Separator();
+
+    static bool Outlined = false;
+    static float PosX = 0.0f;
+    static float PosY = 0.0f;
+    static float Lifetime = 5.0f;
+    ImGui::Checkbox("Outlined", &Outlined);
+    ImGui::PushItemWidth(230.0f);
+    ImGui::InputFloat("PosX", &PosX);
+    ImGui::InputFloat("PosY", &PosY);
+    ImGui::InputFloat("Lifetime", &Lifetime);
+    ImGui::PopItemWidth();
+    if(ImGui::Button("User message test1"))
+    {
+        ui_add_user_message(Util::Widen("User message test1").c_str(), HUMT_SWAP, PosX, PosY, Outlined, Lifetime);
+    }
+    if (ImGui::Button("User message test2"))
+    {
+        ui_add_user_message(Util::Widen("User message test2").c_str(), HUMT_MP_KILL, PosX, PosY, Outlined, Lifetime);
+    }
+    if (ImGui::Button("User message test3"))
+    {
+        ui_add_user_message(Util::Widen("User message test3").c_str(), HUMT_MP_KILL_SHADOW, PosX, PosY, Outlined, Lifetime);
+    }
+    if (ImGui::Button("User message test4"))
+    {
+        ui_add_user_message(Util::Widen("User message test4").c_str(), HUMT_OTHER, PosX, PosY, Outlined, Lifetime);
+    }
+
+    ImGui::Separator();
+
+    static std::string Title = "Custom message box title";
+    static std::string Description = "Custom message box description";
+    static bool SuppressAcceptSounds = false;
+    static bool IgnoreSaveLoadStatus = false;
+    static bool UseButton1Override = false;
+    static bool UseButton2Override = false;
+    static bool PauseMusic = false;
+    static std::string Button1Override = "Button1 override";
+    static std::string Button2Override = "Button2 override";
+    static msgbox_type MessageBoxType = MBT_OK;
+
+    ImGui::InputText("Title", &Title);
+    ImGui::InputText("Description", &Description);
+    ImGui::InputText("Button1 override", &Button1Override);
+    ImGui::SameLine();
+    ImGui::Checkbox("Use?##Button1OverrideCheckbox", &UseButton1Override);
+    ImGui::InputText("Button2 override", &Button2Override);
+    ImGui::SameLine();
+    ImGui::Checkbox("Use?##Button2OverrideCheckbox", &UseButton2Override);
+    ImGui::Checkbox("Supress accept sounds", &SuppressAcceptSounds);
+    ImGui::Checkbox("Ignore save load status", &IgnoreSaveLoadStatus);
+    ImGui::Checkbox("Pause music", &PauseMusic);
+
+    ImGui::Text("Message box type:");
+    ImGui::RadioButton("MBT_OK", reinterpret_cast<int*>(&MessageBoxType), MBT_OK);
+    ImGui::SameLine();
+    ImGui::RadioButton("MBT_ACCEPT_CANCEL", reinterpret_cast<int*>(&MessageBoxType), MBT_ACCEPT_CANCEL);
+    ImGui::SameLine();
+    ImGui::RadioButton("MBT_YES_NO", reinterpret_cast<int*>(&MessageBoxType), MBT_YES_NO);
+
+    ImGui::RadioButton("MBT_SAVE", reinterpret_cast<int*>(&MessageBoxType), MBT_SAVE);
+    ImGui::SameLine();
+    ImGui::RadioButton("MBT_SAVE_PROFILE", reinterpret_cast<int*>(&MessageBoxType), MBT_SAVE_PROFILE);
+    ImGui::SameLine();
+    ImGui::RadioButton("MBT_LOADING", reinterpret_cast<int*>(&MessageBoxType), MBT_LOADING);
+
+    ImGui::RadioButton("MBT_LOADING_CANCEL", reinterpret_cast<int*>(&MessageBoxType), MBT_LOADING_CANCEL);
+    ImGui::SameLine();
+    ImGui::RadioButton("MBT_ACCEPT_CANCEL_SELECT", reinterpret_cast<int*>(&MessageBoxType), MBT_ACCEPT_CANCEL_SELECT);
+    ImGui::SameLine();
+    ImGui::RadioButton("MBT_ACCEPT_SELECT", reinterpret_cast<int*>(&MessageBoxType), MBT_ACCEPT_SELECT);
+
+    ImGui::RadioButton("MBT_CONFIG_CONTROL", reinterpret_cast<int*>(&MessageBoxType), MBT_CONFIG_CONTROL);
+
+    int result = 0;
+    if (ImGui::Button("Message box test1"))
+    {
+        if(UseButton1Override && UseButton2Override)
+        {
+            result = ui_add_msgbox(MessageBoxType, Title.c_str(), Description.c_str(), callback_fn, SuppressAcceptSounds, IgnoreSaveLoadStatus, Button1Override.c_str(), Button2Override.c_str(), PauseMusic);
+        }
+        else if(UseButton1Override && !UseButton2Override)
+        {
+            result = ui_add_msgbox(MessageBoxType, Title.c_str(), Description.c_str(), callback_fn, SuppressAcceptSounds, IgnoreSaveLoadStatus, Button1Override.c_str(), nullptr, PauseMusic);
+        }
+        else if(!UseButton1Override && UseButton2Override)
+        {
+            result = ui_add_msgbox(MessageBoxType, Title.c_str(), Description.c_str(), callback_fn, SuppressAcceptSounds, IgnoreSaveLoadStatus, nullptr, Button2Override.c_str(), PauseMusic);
+        }
+        else
+        {
+            result = ui_add_msgbox(MessageBoxType, Title.c_str(), Description.c_str(), callback_fn, SuppressAcceptSounds, IgnoreSaveLoadStatus, nullptr, nullptr, PauseMusic);
+        }
+        Logger::Log("Msgbox result: {}\n", result);
+    }
+
+    if (ImGui::Button("Message box test2 (nullptr callback func)"))
+    {
+        if (UseButton1Override && UseButton2Override)
+        {
+            result = ui_add_msgbox(MessageBoxType, Title.c_str(), Description.c_str(), nullptr, SuppressAcceptSounds, IgnoreSaveLoadStatus, Button1Override.c_str(), Button2Override.c_str(), PauseMusic);
+        }
+        else if (UseButton1Override && !UseButton2Override)
+        {
+            result = ui_add_msgbox(MessageBoxType, Title.c_str(), Description.c_str(), nullptr, SuppressAcceptSounds, IgnoreSaveLoadStatus, Button1Override.c_str(), nullptr, PauseMusic);
+        }
+        else if (!UseButton1Override && UseButton2Override)
+        {
+            result = ui_add_msgbox(MessageBoxType, Title.c_str(), Description.c_str(), nullptr, SuppressAcceptSounds, IgnoreSaveLoadStatus, nullptr, Button2Override.c_str(), PauseMusic);
+        }
+        else
+        {
+            result = ui_add_msgbox(MessageBoxType, Title.c_str(), Description.c_str(), nullptr, SuppressAcceptSounds, IgnoreSaveLoadStatus, nullptr, nullptr, PauseMusic);
+        }
+        Logger::Log("Msgbox result (nullptr callback): {}\n", result);
+    }
+
+    //Types that work:
+    //- MBT_OK
+    //-MBT_ACCEPT_CANCEL
+    //-MBT_YES_NO
+    //-MBT_LOADING_CANCEL
+    //-MBT_ACCEPT_CANCEL_SELECT
+    //-MBT_LOADING_CANCEL
+
+    
+     * enum msgbox_type
+{
+  MBT_INVALID = 0xFFFFFFFF,
+  MBT_OK = 0x0,
+  MBT_ACCEPT_CANCEL = 0x1,
+  MBT_YES_NO = 0x2,
+  MBT_SAVE = 0x3,
+  MBT_SAVE_PROFILE = 0x4,
+  MBT_LOADING = 0x5,
+  MBT_LOADING_CANCEL = 0x6,
+  MBT_ACCEPT_CANCEL_SELECT = 0x7,
+  MBT_ACCEPT_SELECT = 0x8,
+  MBT_CONFIG_CONTROL = 0x9,
+  NUM_MESSAGE_BOX_TYPES = 0xA,
+};
+     
+
+     //enum hud_user_message_types
+     //{
+     //    HUMT_SWAP = 0x0,
+     //    HUMT_MP_KILL = 0x1,
+     //    HUMT_MP_KILL_SHADOW = 0x2,
+     //    HUMT_OTHER = 0x3,
+     //    NUM_HUD_USER_MESSAGE_TYPES = 0x4,
+     //};
+
+     //hud_message_handle __cdecl ui_add_user_message(const wchar_t *text, hud_user_message_types type, float position_x, float position_y, bool outlined, float lifespan)
+
+     //int __cdecl ui_add_msgbox(msgbox_type type, const char *title, const char *description, bool (__cdecl *callback_fn)(int, int, msgbox_choice), 
+     //bool surpress_accept_sounds, bool ignore_save_load_status, const char *button1_override, const char *button2_override, bool pause_music)
+ */
+
+
+
+
+
 
 /*Stuff from the free cam gui that was removed (may not be related to the free cam)*/
 

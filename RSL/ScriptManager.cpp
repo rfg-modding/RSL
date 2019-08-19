@@ -242,6 +242,43 @@ void ScriptManager::SetupLua()
         }
     ));
 
+    RfgTable.set_function("AddUserMessage", sol::overload(
+        [](std::string Text, float PosX, float PosY, bool Outlined, float Lifespan, hud_user_message_types Type)->hud_message_handle
+        {
+            return ui_add_user_message(Util::Widen(Text).c_str(), Type, PosX, PosY, Outlined, Lifespan);
+        }
+    ));
+    RfgTable.set_function("ChangeUserMessage", sol::overload(
+        [](hud_message_handle Handle, const char* NewText)->hud_message_handle
+        {
+            return hud_message_change_user(Handle, NewText);
+        }
+    ));
+    RfgTable.set_function("RemoveUserMessage", sol::overload(
+        [](hud_message_handle Handle)
+        {
+            hud_message_remove_user(Handle);
+        }
+    ));
+    RfgTable.set_function("AddMessageBox", sol::overload(
+        [](msgbox_type Type, const char* Title, const char* Description)->int
+        {
+            return ui_add_msgbox(Type, Title, Description, nullptr, false, false, nullptr, nullptr, false);
+        },
+        [&](msgbox_type Type, const char* Title, const char* Description, sol::function CallbackFunc)->int
+        {
+            int Handle = ui_add_msgbox(Type, Title, Description, Lua::RfgMessageBoxCallbackFunction, false, false, nullptr, nullptr, false);
+            MessageBoxCallbacks.insert_or_assign(Handle, CallbackFunc);
+            return Handle;
+        },
+        [&](msgbox_type Type, const char* Title, const char* Description, sol::function CallbackFunc, const char* Button1Override, const char* Button2Override)->int
+        {
+            int Handle = ui_add_msgbox(Type, Title, Description, Lua::RfgMessageBoxCallbackFunction, false, false, Button1Override, Button2Override, false);
+            MessageBoxCallbacks.insert_or_assign(Handle, CallbackFunc);
+            return Handle;
+        }
+    ));
+
 	//This warning appears hundreds of times in a row during binding unless disabled. Is harmless, due to some lambdas used to grab usertype variables.
 	#pragma warning(push)
 	#pragma warning(disable : C4172)

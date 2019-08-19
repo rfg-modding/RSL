@@ -708,6 +708,26 @@ extern F_keen_ImmediateRenderer_beginRenderPass keen_ImmediateRenderer_beginRend
 using F_ui_add_secondary_message = void(__cdecl*)(const wchar_t* text, float display_time, bool use_secondary_anim, bool force_redisplay);
 extern F_ui_add_secondary_message ui_add_secondary_message;
 
+//.text:00DD83D0 rfg.exe:$4D83D0 #4D77D0 <ui_add_user_message> //hud_message_handle __cdecl ui_add_user_message(const wchar_t *text, hud_user_message_types type, float position_x, float position_y, bool outlined, float lifespan)
+using F_ui_add_user_message = hud_message_handle(__cdecl*)(const wchar_t* text, hud_user_message_types type, float position_x, float position_y, bool outlined, float lifespan);
+extern F_ui_add_user_message ui_add_user_message;
+
+//.text:00DF6C70 rfg.exe:$4F6C70 #4F6070 <ui_add_msgbox> //int __cdecl ui_add_msgbox(msgbox_type type, const char *title, const char *description, bool (__cdecl *callback_fn)(int, int, msgbox_choice), bool surpress_accept_sounds, bool ignore_save_load_status, const char *button1_override, const char *button2_override, bool pause_music)
+using F_ui_add_msgbox = int(__cdecl*)(msgbox_type type, const char* title, const char* description, bool(__cdecl* callback_fn)(int, int, msgbox_choice), bool surpress_accept_sounds, bool ignore_save_load_status, const char* button1_override, const char* button2_override, bool pause_music);
+extern F_ui_add_msgbox ui_add_msgbox;
+
+//.text:00D55EE0 rfg.exe:$455EE0 #4552E0 <hud_message_change_minor_message> hud_message_handle __cdecl hud_message_change_minor_message(hud_message_handle handle, const char *str, float duration)
+using F_hud_message_change_minor_message = hud_message_handle(__cdecl*)(hud_message_handle handle, const char* str, float duration);
+extern F_hud_message_change_minor_message hud_message_change_minor_message;
+
+//.text:00D55F50 rfg.exe:$455F50 #455350 <hud_message_change_user> //hud_message_handle __cdecl hud_message_change_user(hud_message_handle handle, const char *str)
+using F_hud_message_change_user = hud_message_handle(__cdecl*)(hud_message_handle handle, const char* str);
+extern F_hud_message_change_user hud_message_change_user;
+
+//.text:00D44BB0 rfg.exe:$444BB0 #443FB0 <hud_message_remove_user> //void __cdecl hud_message_remove_user(hud_message_handle handle)
+using F_hud_message_remove_user = void(__cdecl*)(hud_message_handle handle);
+extern F_hud_message_remove_user hud_message_remove_user;
+
 //.text:00664A60 rfg.exe:$324A60 #323E60 <rfgl_find_and_delete_object_mover> //int __cdecl rfgl_find_and_delete_object_mover(int objects_to_delete, bool find_gm)
 using F_rfgl_find_and_delete_object_mover = int(__cdecl*)(int objects_to_delete, bool find_gm);
 extern F_rfgl_find_and_delete_object_mover rfgl_find_and_delete_object_mover;
