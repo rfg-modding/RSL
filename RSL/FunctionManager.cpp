@@ -173,4 +173,10 @@ void FunctionManager::Initialize()
     RegisterFunction(rfgl_find_and_delete_debris_object, 0x324B90);
 
     RegisterFunction(game_clock_get, 0x3C1480);
+
+    RegisterFunction(audiolib_cue_get_id, 0x8DC50);
+    RegisterFunction(audiolib_cue_is_id_valid, 0x9F0F0);
+    RegisterFunction(audiolib_cue_play, 0x9F120);
+    RegisterFunction(audiolib_get_listener_pos, 0x83460);
+    RegisterFunction(audiolib_cue_play_3d, 0x9FD60);
 }

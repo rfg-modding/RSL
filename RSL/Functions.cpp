@@ -309,3 +309,9 @@ F_rfgl_find_and_delete_object_mover rfgl_find_and_delete_object_mover;
 F_rfgl_find_and_delete_debris_object rfgl_find_and_delete_debris_object;
 
 F_game_clock_get game_clock_get;
+
+F_audiolib_cue_get_id audiolib_cue_get_id;
+F_audiolib_cue_is_id_valid audiolib_cue_is_id_valid;
+F_audiolib_cue_play audiolib_cue_play;
+F_audiolib_get_listener_pos audiolib_get_listener_pos;
+F_audiolib_cue_play_3d audiolib_cue_play_3d;

@@ -722,17 +722,24 @@ extern F_game_clock_get game_clock_get;
 
 
 //int dc_play_sound_foley_info //Todo: Get this and pass it as caller_cue_id maybe?
-
-//Todo: Double check that these don't takes references
 //.text:003CDC50 rfg.exe:$8DC50 #8D050 <audiolib_cue_get_id> //audiolib_result __cdecl audiolib_cue_get_id(const char *cue_name, int *caller_cue_id)
+using F_audiolib_cue_get_id = audiolib_result(__cdecl*)(const char* cue_name, int* caller_cue_id);
+extern F_audiolib_cue_get_id audiolib_cue_get_id;
 
 //.text:003DF0F0 rfg.exe:$9F0F0 #9E4F0 <audiolib_cue_is_id_valid> //bool __cdecl audiolib_cue_is_id_valid(int caller_cue_id)
+using F_audiolib_cue_is_id_valid = bool(__cdecl*)(int caller_cue_id);
+extern F_audiolib_cue_is_id_valid audiolib_cue_is_id_valid;
 
 //.text:003DF120 rfg.exe:$9F120 #9E520 <audiolib_cue_play> //int __cdecl audiolib_cue_play(int cue_id, audiolib_params *passed_params, audiolib_result *error)
-
+using F_audiolib_cue_play = int(__cdecl*)(int cue_id, audiolib_params* passed_params, audiolib_result* error);
+extern F_audiolib_cue_play audiolib_cue_play;
 
 //3D sounds shit
 
-//.text:003C3460 rfg.exe:$83460 #82860 <audiolib_get_listener_pos> //audiolib_result __cdecl audiolib_get_listener_pos(vector *position, vector *orient, vector *velocity)
+//.text:003C3460 rfg.exe:$83460 #82860 <audiolib_get_listener_pos> //audiolib_result __cdecl audiolib_get_listener_pos(vector* position, vector* orient, vector* velocity)
+using F_audiolib_get_listener_pos = audiolib_result(__cdecl*)(vector* position, vector* orient, vector* velocity);
+extern F_audiolib_get_listener_pos audiolib_get_listener_pos;
 
 //.text:003DFD60 rfg.exe:$9FD60 #9F160 <audiolib_cue_play_3d> //int __cdecl audiolib_cue_play_3d(int cue_id, vector *pos, vector *orient, vector *velocity, audiolib_result *error)
+using F_audiolib_cue_play_3d = int(__cdecl*)(int cue_id, vector* pos, vector* orient, vector* velocity, audiolib_result* error);
+extern F_audiolib_cue_play_3d audiolib_cue_play_3d;
