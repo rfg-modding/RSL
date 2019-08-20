@@ -26,7 +26,7 @@ void OverlayConsole::Draw()
 	}
 
 	ImGui::SetNextWindowSizeConstraints(ImVec2(-1, 0), ImVec2(-1, FLT_MAX));
-	ImGui::SetNextWindowSize(ImVec2(static_cast<float>(Globals::WindowRect.right - Globals::WindowRect.left) - 10.0f, 400.0f), ImGuiCond_Once);
+	ImGui::SetNextWindowSize(ImVec2(static_cast<float>(Globals::WindowRect.right - Globals::WindowRect.left), 200.0f), ImGuiCond_Once);
 	if (Globals::OverlayActive)
 	{
 		ImGui::SetNextWindowPos(ImVec2(0.0f, 22.0f)); //FontSize + 5.0f seems to work for menu bar alignment.
@@ -139,7 +139,8 @@ void OverlayConsole::Draw()
 	article here gave a solution: https://eliasdaler.github.io/using-imgui-with-sfml-pt2/ This method is preferred to having a separate callback function since it keeps the code in one place,
 	and cleaner. He also described a general method of doing this for any widget which may be useful later on. Keep this in mind for future gui additions which might use it.*/
 	//ReclaimFocus = false;
-	if (InputTextLambdaWrapper("##LuaConsoleInput", &InputBuffer, ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_CallbackHistory, [&](ImGuiInputTextCallbackData* CallbackData)
+	if (InputTextLambdaWrapper("##LuaConsoleInput", &InputBuffer, ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_CallbackHistory, 
+    [&](ImGuiInputTextCallbackData* CallbackData)
 	{
 		//Callback lambda which handles up/down key presses
 		if (CallbackData->EventFlag == ImGuiInputTextFlags_CallbackHistory)

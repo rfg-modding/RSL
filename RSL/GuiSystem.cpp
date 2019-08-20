@@ -62,13 +62,7 @@ void GuiSystem::Draw()
 		//Very duct-tapey solution, but it works. Put in place since the values in menus are sometimes not being set properly, causing crashes.
 		std::call_once(InitialDrawCheck, [&]()
 		{
-			for (const auto& i : GuiList)
-			{
-				//This is used to prevent the spamming of failure messages from invalid pointers before they've been set.
-				//So, error messages from invalid pointers will only show up after they've all been set properly once.
-				//Need to consider if this could obscure bugs in some instances, but for now I've got no better way of doing this.
-				DrawPassedOnce = true;
-			}
+            DrawPassedOnce = true;
 		});
 
 		if (Globals::OverlayActive)

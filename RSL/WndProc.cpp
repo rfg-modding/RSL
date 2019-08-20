@@ -198,9 +198,11 @@ LRESULT Hooks::ProcessInput(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
             }
             else
             {
-                Globals::Gui->DeactivateLuaConsole();
-                SnippetManager::RestoreSnippet("MouseGenericPollMouseVisible", true);
-                SnippetManager::RestoreSnippet("CenterMouseCursorCall", true);
+                if (!Globals::Gui->IsLuaConsoleActive())
+                {
+                    SnippetManager::RestoreSnippet("MouseGenericPollMouseVisible", true);
+                    SnippetManager::RestoreSnippet("CenterMouseCursorCall", true);
+                }
             }
             break;
         case VK_F2:

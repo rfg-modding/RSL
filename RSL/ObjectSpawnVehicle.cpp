@@ -14,14 +14,13 @@ spawn_status_result __cdecl Hooks::object_spawn_vehicle_hook(vehicle_spawn_param
     }
 
 #if DEBUG
-    Logger::Log("object_spawn_vehicle called!");
     if(spawn_param.veh_info->name)
     {
-        Logger::Log(" Vehicle name: {}\n", spawn_param.veh_info->name);
+        Logger::Log("object_spawn_vehicle called! Vehicle name: {}\n", spawn_param.veh_info->name);
     }
     else
     {
-        Logger::Log("\n");
+        Logger::Log("object_spawn_vehicle called!\n");
     }
 #endif
 
