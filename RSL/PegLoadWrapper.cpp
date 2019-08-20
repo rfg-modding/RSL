@@ -9,6 +9,7 @@ bool __cdecl Hooks::peg_load_wrapper_hook(const char* filename, unsigned srid, c
 
     if (Globals::DumpTexturesWhenLoading)
     {
+        fs::create_directory("RSL/Dumps/");
         fs::create_directory("RSL/Dumps/Textures/");
         auto SplitName = Globals::SplitFilename(filename);
         if (std::get<1>(SplitName) == ".cpeg_pc")
