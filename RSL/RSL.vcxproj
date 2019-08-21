@@ -191,6 +191,7 @@ echo #define RSL_BUILD_DATE %buildTime:~0,8% &gt;&gt; $(ProjectDir)/BuildDate.h<
     <ClCompile Include="ExplosionCreate.cpp" />
     <ClCompile Include="ExplosionInfoLua.cpp" />
     <ClCompile Include="ExplosionSpawnerGui.cpp" />
+    <ClCompile Include="gamestate_gp_process.cpp" />
     <ClCompile Include="GraphicsStateWrapper.cpp" />
     <ClCompile Include="GraphicsTweaksGui.cpp" />
     <ClCompile Include="HkpRigidBodyLua.cpp" />
@@ -249,6 +250,7 @@ echo #define RSL_BUILD_DATE %buildTime:~0,8% &gt;&gt; $(ProjectDir)/BuildDate.h<
     <ClCompile Include="RenderHelpers.cpp" />
     <ClCompile Include="RenderInterfaceD3D11.cpp" />
     <ClCompile Include="rfgl_hooks.cpp" />
+    <ClCompile Include="rfg_init_stage_2.cpp" />
     <ClCompile Include="RlCamera_RenderBegin.cpp" />
     <ClCompile Include="StreamGrid_DoFrame.cpp" />
     <ClCompile Include="TextEditorWrapper.cpp" />
@@ -256,6 +258,7 @@ echo #define RSL_BUILD_DATE %buildTime:~0,8% &gt;&gt; $(ProjectDir)/BuildDate.h<
     <ClCompile Include="TimerLua.cpp" />
     <ClCompile Include="VectorLua.cpp" />
     <ClCompile Include="VehicleSpawnerGui.cpp" />
+    <ClCompile Include="verify_gamesave_exit_notify.cpp" />
     <ClCompile Include="WelcomeGui.cpp" />
     <ClCompile Include="Includes.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>

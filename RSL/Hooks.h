@@ -59,5 +59,13 @@ namespace Hooks
     int __cdecl rfgl_find_and_delete_object_mover_hook(int objects_to_delete, bool find_gm);
     //.text:00664B90 rfg.exe:$324B90 #323F90 <rfgl_find_and_delete_debris_object> //int __cdecl rfgl_find_and_delete_debris_object(int objects_to_delete)
     int __cdecl rfgl_find_and_delete_debris_object_hook(int objects_to_delete);
+
+    //.text:00CEE450 rfg.exe:$3EE450 #3ED850 <gamestate_gp_process> //void __cdecl gamestate_gp_process()
+    void __cdecl gamestate_gp_process_hook();
+
+    void __cdecl rfg_init_stage_2_done_hook(void* pSoundSystem);
+    void __cdecl rfg_init_stage_2_done_2_hook();
+
+    bool __cdecl verify_gamesave_exit_notify_hook(GameState new_state);
 }
 

@@ -254,6 +254,7 @@ F_lua_dobuffer LuaDoBuffer;
 F_havok_body_get_pointer HavokBodyGetPointer;
 F_havok_body_apply_linear_impulse_A HavokBodyApplyLinearImpulseA;
 F_havok_body_apply_linear_impulse_B HavokBodyApplyLinearImpulseB;
+F_havok_body_apply_point_impulse havok_body_apply_point_impulse;
 
 F_keen_graphics_beginFrame KeenGraphicsBeginFrame;
 
@@ -320,3 +321,14 @@ F_audiolib_cue_is_id_valid audiolib_cue_is_id_valid;
 F_audiolib_cue_play audiolib_cue_play;
 F_audiolib_get_listener_pos audiolib_get_listener_pos;
 F_audiolib_cue_play_3d audiolib_cue_play_3d;
+
+F_gamestate_gp_process gamestate_gp_process;
+F_game_is_paused game_is_paused;
+
+F_human_fire_ignite human_fire_ignite;
+F_human_fire_stop human_fire_stop;
+
+F_rfg_init_stage_2_done rfg_init_stage_2_done;
+F_rfg_init_stage_2_done_2 rfg_init_stage_2_done_2;
+
+F_verify_gamesave_exit_notify verify_gamesave_exit_notify;

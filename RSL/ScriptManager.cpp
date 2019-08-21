@@ -35,7 +35,11 @@ void ScriptManager::Reset()
 {
     std::lock_guard<std::recursive_mutex> Lock(Mutex);
     delete LuaState;
-    InputEvents.Reset(); //Todo: See if there's a cleaner way to do this while also being thread safe. This is a bit obtuse.
+
+    for(auto& Event : Events)
+    {
+        Event.Reset(); //Todo: See if there's a cleaner way to do this while also being thread safe. This is a bit obtuse.
+    }
 
     Initialize();
     UpdateRfgPointers();
@@ -278,6 +282,20 @@ void ScriptManager::SetupLua()
             return Handle;
         }
     ));
+    RfgTable.set_function("HumanFireIgnite", sol::overload(
+    [](Human* Target, Human* Killer)
+    {
+        //if (!Target) { throw std::exception("Target is nil!"); }
+        //if (!Killer) { throw std::exception("Killer is nil!"); }
+        human_fire_ignite(Target, Killer);
+    }));
+    RfgTable.set_function("HumanFireStop", human_fire_stop);
+
+    RfgTable.set_function("HavokBodyApplyLinearImpulse", sol::overload(
+    [](uint Handle, vector& Impulse)
+    {
+        HavokBodyApplyLinearImpulseB(Handle, Impulse);
+    }));
 
 	//This warning appears hundreds of times in a row during binding unless disabled. Is harmless, due to some lambdas used to grab usertype variables.
 	#pragma warning(push)
@@ -356,16 +374,18 @@ void ScriptManager::SetupLua()
     //Todo: Add binding func for rfg lua state and see if I can't add other functions to it to use in rfg scripts. Might be complicated by the fact that it uses a different lua version
 }
 
-void ScriptManager::RegisterEvent(const std::string& EventTypeName, sol::function EventFunction, std::string EventName)
+void ScriptManager::RegisterEvent(std::string EventTypeName, sol::function EventFunction, std::string EventName)
 {
-    if (EventTypeName == "Keypress")
+    const std::string TypeNameLower = Util::General::ToLower(EventTypeName); //Don't want case to matter for event names
+    for(auto& Event : Events)
     {
-        InputEvents.Hooks.emplace_back(EventName, EventFunction);
+        if(TypeNameLower == Event.Name)
+        {
+            Event.Hooks.emplace_back(EventName, EventFunction);
+            return;
+        }
     }
-    else
-    {
-        throw std::exception(fmt::format("\"{}\" is not a valid event name!", EventTypeName).c_str());
-    }
+    throw std::exception(fmt::format("\"{}\" is not a valid event name!", EventTypeName).c_str());
 }
 
 /* Used to ensure a few important game pointers are always up to date.
@@ -595,19 +615,8 @@ void ScriptManager::TriggerInputEvent(uint Message, uint KeyCode, KeyState& Keys
     std::lock_guard<std::recursive_mutex> Lock(Mutex);
 
     if (!LuaState) return;
-
-    if(InputEvents.MarkedForReset())
-    {
-        InputEvents.Reset();
-    }
-
-    //Remove hooks that were marked for deletion. Can't delete immediately since it might not be thread safe. Do it this way for safety
-    InputEvents.Hooks.erase(std::remove_if(InputEvents.Hooks.begin(), InputEvents.Hooks.end(), 
-    [](ScriptEventHook& Hook)
-    {
-        return Hook.DeleteOnNextUpdate;
-    }), 
-    InputEvents.Hooks.end());
+    ScriptEvent& InputEvents = Events[0];
+    InputEvents.Update();
 
     if (InputEvents.Enabled())
     {
@@ -626,6 +635,35 @@ void ScriptManager::TriggerInputEvent(uint Message, uint KeyCode, KeyState& Keys
 
                 //Todo: Make a function that safely calls sol::functions like this, and wraps it in logging and error reporting code
                 sol::protected_function_result Result = EventHook.Hook(EventData);
+                if (!Result.valid())
+                {
+                    sol::error Error = Result;
+                    std::string What(Error.what());
+                    Logger::LogError("{} encountered an error! Message: {}", EventHook.HookName, What);
+                }
+            }
+        }
+    }
+}
+
+void ScriptManager::TriggerDoFrameEvent()
+{
+    std::lock_guard<std::recursive_mutex> Lock(Mutex);
+
+    if (game_is_paused()) return;
+    if (!LuaState) return;
+
+    ScriptEvent& DoFrameEvents = Events[1];
+    DoFrameEvents.Update();
+
+    if (DoFrameEvents.Enabled())
+    {
+        for (auto& EventHook : DoFrameEvents.Hooks)
+        {
+            if (EventHook.Enabled)
+            {
+                //Todo: Make a function that safely calls sol::functions like this, and wraps it in logging and error reporting code
+                sol::protected_function_result Result = EventHook.Hook();
                 if (!Result.valid())
                 {
                     sol::error Error = Result;

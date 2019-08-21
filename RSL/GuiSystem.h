@@ -33,10 +33,7 @@ public:
     }
     T& Get()
     {
-        if(Ready)
-        {
-            return *reinterpret_cast<T*>(List->at(Index));
-        }
+        return *reinterpret_cast<T*>(List->at(Index));
     }
     void Clear()
     {
@@ -44,7 +41,7 @@ public:
         List = nullptr;
         Ready = false;
     }
-    bool IsReady() const
+    [[nodiscard]] bool IsReady() const
     {
         return Ready;
     }

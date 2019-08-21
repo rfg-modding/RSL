@@ -25,32 +25,36 @@ void EventViewerGui::Draw()
     ImGui::PopFont();
     ImGui::Separator();
 
-    if (ImGui::TreeNode("Input event hooks"))
+    for(auto& Event : Scripts.Events)
     {
-        ImGui::Columns(2);
-        ImGui::SetColumnWidth(0, 350.0f);
-        ImGui::SetColumnWidth(1, 200.0f);
-        int i = 0;
-        for (auto& Hook : Scripts.InputEvents.Hooks)
+        if (ImGui::TreeNode(Event.Name.c_str()))
         {
-            if(Hook.DeleteOnNextUpdate)
-            {
-                continue;
-            }
-            ImGui::Text(Hook.HookName.c_str());
-            ImGui::SameLine();
-            ImGui::NextColumn();
+            ImGui::Columns(2);
+            ImGui::SetColumnWidth(0, 350.0f);
+            ImGui::SetColumnWidth(1, 200.0f);
 
-            ImGui::Checkbox(fmt::format("Enabled##{}{}", Hook.HookName, i).c_str(), &Hook.Enabled);
-            ImGui::SameLine();
-            if(ImGui::Button(fmt::format("Disable##{}{}", Hook.HookName, i).c_str()))
+            int i = 0;
+            for (auto& Hook : Event.Hooks)
             {
-                Hook.DeleteOnNextUpdate = true;
+                if (Hook.DeleteOnNextUpdate)
+                {
+                    continue;
+                }
+                ImGui::Text(Hook.HookName.c_str());
+                ImGui::SameLine();
+                ImGui::NextColumn();
+
+                ImGui::Checkbox(fmt::format("Enabled##{}{}", Event.Name, i).c_str(), &Hook.Enabled);
+                ImGui::SameLine();
+                if (ImGui::Button(fmt::format("Disable##{}{}", Event.Name, i).c_str()))
+                {
+                    Hook.DeleteOnNextUpdate = true;
+                }
+                ImGui::NextColumn();
+                i++;
             }
-            ImGui::NextColumn();
-            i++;
+            ImGui::TreePop();
         }
-        ImGui::TreePop();
     }
 
     ImGui::End();

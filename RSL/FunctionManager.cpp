@@ -131,7 +131,8 @@ void FunctionManager::Initialize()
     RegisterFunction(HavokBodyGetPointer, 0x40E870);
     RegisterFunction(HavokBodyApplyLinearImpulseA, 0x4177A0);
     RegisterFunction(HavokBodyApplyLinearImpulseB, 0x423C20);
-    
+    RegisterFunction(havok_body_apply_point_impulse, 0x423CA0);
+
     RegisterFunction(KeenGraphicsBeginFrame, 0x86DD00);
     
     RegisterFunction(KeenGetBuildVersionString, 0x58740);
@@ -184,4 +185,15 @@ void FunctionManager::Initialize()
     RegisterFunction(audiolib_cue_play, 0x9F120);
     RegisterFunction(audiolib_get_listener_pos, 0x83460);
     RegisterFunction(audiolib_cue_play_3d, 0x9FD60);
+
+    RegisterFunction(gamestate_gp_process, 0x3EE450);
+    RegisterFunction(game_is_paused, 0x3C1690);
+
+    RegisterFunction(human_fire_ignite, 0x6D46F0);
+    RegisterFunction(human_fire_stop, 0x655B20);
+
+    RegisterFunction(rfg_init_stage_2_done, 0x1D56A0);
+    RegisterFunction(rfg_init_stage_2_done_2, 0x1D2480);
+
+    RegisterFunction(verify_gamesave_exit_notify, 0x3C9430);
 }

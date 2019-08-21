@@ -408,6 +408,13 @@ void Application::CreateHooks()
     
     Hooks.CreateHook("rfgl_find_and_delete_object_mover_hook", Globals::ModuleBase + 0x324A60, Hooks::rfgl_find_and_delete_object_mover_hook, rfgl_find_and_delete_object_mover);
     Hooks.CreateHook("rfgl_find_and_delete_debris_object_hook", Globals::ModuleBase + 0x324B90, Hooks::rfgl_find_and_delete_debris_object_hook, rfgl_find_and_delete_debris_object);
+    
+    Hooks.CreateHook("gamestate_gp_process", Globals::ModuleBase + 0x3EE450, Hooks::gamestate_gp_process_hook, gamestate_gp_process);
+
+    //Hooks.CreateHook("rfg_init_stage_2_done", Globals::ModuleBase + 0x1D56A0, Hooks::rfg_init_stage_2_done_hook, rfg_init_stage_2_done);
+    //Hooks.CreateHook("rfg_init_stage_2_done_2", Globals::ModuleBase + 0x1D2480, Hooks::rfg_init_stage_2_done_2_hook, rfg_init_stage_2_done_2);
+
+    //Hooks.CreateHook("verify_gamesave_exit_notify", Globals::ModuleBase + 0x3C9430, Hooks::verify_gamesave_exit_notify_hook, verify_gamesave_exit_notify);
 
     //Disabling for now since stream grid tests had issues.
     //Hooks.CreateHook("StreamGridDoFrame", reinterpret_cast<LPVOID>(Globals::ModuleBase + 0x530FB0), StreamGridDoFrameHook, reinterpret_cast<LPVOID*>(&StreamGridDoFrame));

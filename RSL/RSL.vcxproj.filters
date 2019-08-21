@@ -314,6 +314,15 @@
     <ClCompile Include="TimerLua.cpp">
       <Filter>Lua Binding</Filter>
     </ClCompile>
+    <ClCompile Include="gamestate_gp_process.cpp">
+      <Filter>Hooks</Filter>
+    </ClCompile>
+    <ClCompile Include="rfg_init_stage_2.cpp">
+      <Filter>Hooks</Filter>
+    </ClCompile>
+    <ClCompile Include="verify_gamesave_exit_notify.cpp">
+      <Filter>Hooks</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CameraWrapper.h">

@@ -57,6 +57,7 @@ public:
 class ScriptEvent
 {
 public:
+    ScriptEvent(std::string _Name) : Name(Util::General::ToLower(_Name)) {}
     ScriptEvent() = default;
     ~ScriptEvent() = default;
 
@@ -70,6 +71,21 @@ public:
     {
         Hooks.clear();
         _ResetOnNextUpdate = false;
+    }
+    void Update()
+    {
+        if (MarkedForReset())
+        {
+            Reset();
+        }
+
+        //Remove hooks that were marked for deletion. Can't delete immediately since it might not be thread safe. Do it this way for safety
+        Hooks.erase(std::remove_if(Hooks.begin(), Hooks.end(),
+            [](ScriptEventHook& Hook)
+            {
+                return Hook.DeleteOnNextUpdate;
+            }),
+            Hooks.end());
     }
 
     std::string Name;
@@ -109,11 +125,12 @@ public:
     [[nodiscard]] bool CharIsDigit(const char& Character) const;
 
     void TriggerInputEvent(uint Message, uint KeyCode, KeyState& Keys);
+    void TriggerDoFrameEvent();
 
 	sol::state* LuaState = nullptr; //Uses a pointer for easy LuaState resets.
 	std::vector <ScriptFolder> SubFolders; //List of scripts detected in SubFolders folder on the last scan.
 
-    ScriptEvent InputEvents;
+    std::array<ScriptEvent, 2> Events = { {ScriptEvent("Keypress"), ScriptEvent("FrameUpdate")} };
 
     std::unordered_map<int, sol::function> MessageBoxCallbacks;
 
@@ -125,7 +142,7 @@ private:
     [[nodiscard]] bool IsValidScriptExtension(std::string Extension) const;
 
 	void SetupLua();
-    void RegisterEvent(const std::string& EventTypeName, sol::function EventFunction, std::string EventName = "GenericEvent");
+    void RegisterEvent(std::string EventTypeName, sol::function EventFunction, std::string EventName = "GenericEvent");
 
     //std::vector<ScriptEvent> Events;
 

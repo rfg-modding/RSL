@@ -592,12 +592,16 @@ using F_havok_body_get_pointer = hkpRigidBody*(__cdecl*)(unsigned int handle);
 extern F_havok_body_get_pointer HavokBodyGetPointer;
 
 //.text:012677A0 rfg.exe:$4177A0 #416BA0 <havok_body_apply_linear_impulse> //void __cdecl havok_body_apply_linear_impulse(hkpRigidBody *rb, vector *linear_impulse)
-using F_havok_body_apply_linear_impulse_A = void(__cdecl*)(hkpRigidBody* rb, vector* linear_impulse);
+using F_havok_body_apply_linear_impulse_A = void(__cdecl*)(hkpRigidBody* rb, vector& linear_impulse);
 extern F_havok_body_apply_linear_impulse_A HavokBodyApplyLinearImpulseA;
 
 //.text:01273C20 rfg.exe:$423C20 #423020 <havok_body_apply_linear_impulse> //void __cdecl havok_body_apply_linear_impulse(unsigned int handle, vector *linear_impulse)
-using F_havok_body_apply_linear_impulse_B = void(__cdecl*)(uint handle, vector* linear_impulse);
+using F_havok_body_apply_linear_impulse_B = void(__cdecl*)(uint handle, vector& linear_impulse);
 extern F_havok_body_apply_linear_impulse_B HavokBodyApplyLinearImpulseB;
+
+//.text:015C3CA0 rfg.exe:$423CA0 #4230A0 <havok_body_apply_point_impulse> //void __cdecl havok_body_apply_point_impulse(unsigned int handle, vector *point_impulse, vector *pos)
+using F_havok_body_apply_point_impulse = void(__cdecl*)(unsigned int handle, vector& point_impulse, vector& pos);
+extern F_havok_body_apply_point_impulse havok_body_apply_point_impulse;
 
 //.text:0181DD00 rfg.exe:$86DD00 #86D100 <keen::graphics::beginFrame> //keen::GraphicsCommandBuffer *__cdecl keen::graphics::beginFrame(keen::GraphicsSystem *pGraphicsSystem, keen::RenderSwapChain *pSwapChain)
 using F_keen_graphics_beginFrame = keen::GraphicsCommandBuffer*(__cdecl*)(keen::GraphicsSystem* pGraphicsSystem, keen::RenderSwapChain* pSwapChain);
@@ -763,3 +767,37 @@ extern F_audiolib_get_listener_pos audiolib_get_listener_pos;
 //.text:003DFD60 rfg.exe:$9FD60 #9F160 <audiolib_cue_play_3d> //int __cdecl audiolib_cue_play_3d(int cue_id, vector *pos, vector *orient, vector *velocity, audiolib_result *error)
 using F_audiolib_cue_play_3d = int(__cdecl*)(int cue_id, vector* pos, vector* orient, vector* velocity, audiolib_result* error);
 extern F_audiolib_cue_play_3d audiolib_cue_play_3d;
+
+//.text:00CEE450 rfg.exe:$3EE450 #3ED850 <gamestate_gp_process> //void __cdecl gamestate_gp_process()
+using F_gamestate_gp_process = void(__cdecl*)();
+extern F_gamestate_gp_process gamestate_gp_process;
+
+//.text:00CC1690 rfg.exe:$3C1690 #3C0A90 <game_is_paused> //bool __cdecl game_is_paused()
+using F_game_is_paused = bool(__cdecl*)();
+extern F_game_is_paused game_is_paused;
+
+//.text:018746F0 rfg.exe:$6D46F0 #6D3AF0 <human_fire_ignite> //bool __cdecl human_fire_ignite(human *hp_to_ignite, human *killer_hp)
+using F_human_fire_ignite = bool(__cdecl*)(Human* hp_to_ignite, Human* killer_hp);
+extern F_human_fire_ignite human_fire_ignite;
+
+//.text:017F5B20 rfg.exe:$655B20 #654F20 <human_fire_stop> //void __cdecl human_fire_stop(unsigned int object_handle)
+using F_human_fire_stop = void(__cdecl*)(unsigned int object_handle);
+extern F_human_fire_stop human_fire_stop;
+
+//unsigned int __cdecl effects_play(unsigned int effect_handle, vector *pos, matrix *orient, bool looping, unsigned int host_handle, int host_tag, 
+//unsigned int source_handle, float effect_volume, bool attach_to_camera, object_effect_category category)
+
+//unsigned int __cdecl effects_play(effect_info *info, vector *pos, matrix *orient, bool looping, unsigned int host_handle, int host_tag,
+//unsigned int source_handle, float effect_volume, bool attach_to_camera, object_effect_category category)
+
+//.text:013756A0 rfg.exe:$1D56A0 #1D4AA0 <rfg_init_stage_2_done> //void __cdecl rfg_init_stage_2_done(keen::SoundSystem::System *pSoundSystem)
+using F_rfg_init_stage_2_done = void(__cdecl*)(void* pSoundSystem); //keen::SoundSystem::System
+extern F_rfg_init_stage_2_done rfg_init_stage_2_done;
+
+//.text:01372480 rfg.exe:$1D2480 #1D1880 <rfg_init_stage_2_done_2> //void __cdecl rfg_init_stage_2_done_2()
+using F_rfg_init_stage_2_done_2 = void(__cdecl*)();
+extern F_rfg_init_stage_2_done_2 rfg_init_stage_2_done_2;
+
+//.text:01569430 rfg.exe:$3C9430 #3C8830 <verify_gamesave_exit_notify> //bool __cdecl verify_gamesave_exit_notify(game_state new_state)
+using F_verify_gamesave_exit_notify = bool(__cdecl*)(GameState new_state);
+extern F_verify_gamesave_exit_notify verify_gamesave_exit_notify;

@@ -39,7 +39,7 @@ void Lua::BindHkpRigidBody(sol::state& LuaState)
 	auto Utype = RfgTable.create_simple_usertype<hkpRigidBody>();
 	Utype.set("new", sol::no_constructor);
 	Utype.set(sol::base_classes, sol::bases<hkpEntity>());
-	Utype.set("ApplyLinearImpulse", [](hkpRigidBody& Self, vector& Impulse) {HavokBodyApplyLinearImpulseA(&Self, &Impulse); });
+	Utype.set("ApplyLinearImpulse", [](hkpRigidBody& Self, vector& Impulse) {HavokBodyApplyLinearImpulseA(&Self, Impulse); });
 	//Utype.set("", &hkpRigidBody::);
 	//Utype.set("", &hkpRigidBody::);
 	//Utype.set("", &hkpRigidBody::);
