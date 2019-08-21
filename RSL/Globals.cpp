@@ -146,6 +146,8 @@ namespace Globals
     FixedArrayWrapper<weapon_info> WeaponInfos;
     uint* NumWeaponInfos = nullptr;
 
+    float* SpeedScale = nullptr;
+
     namespace Launcher
     {
         bool ShouldRunRsl = false;

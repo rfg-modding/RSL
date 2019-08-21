@@ -169,6 +169,8 @@ namespace Globals
     extern FixedArrayWrapper<weapon_info> WeaponInfos; //.data:037C2C9C rfg.exe:$3482C9C #0 <Weapon_infos>
     extern uint* NumWeaponInfos; //.data:037C2C94 rfg.exe:$3482C94 #0 <Num_weapon_infos>
 
+    extern float* SpeedScale;
+
     namespace Launcher
     {
         extern bool ShouldRunRsl; //Used by the launcher WndProc to track if the launcher should launch the main RSL code after it closes or start a vanilla game.

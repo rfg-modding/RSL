@@ -213,6 +213,19 @@ void GeneralTweaksGui::Draw()
 	ImGui::Checkbox("##Player max move speed checkbox", &NeedCustomMaxMoveSpeedSet);
 	ImGui::Separator();
 
+    if (Globals::SpeedScale)
+    {
+        ImGui::SetNextItemWidth(230.0f);
+        ImGui::InputFloat("Game speed scale", Globals::SpeedScale);
+        ImGui::SameLine();
+        if (ImGui::Button("Reset##ResetButtonSpeedScale"))
+        {
+            *Globals::SpeedScale = 1.0f;
+        }
+        ImGui::SameLine();
+        Util::Gui::ShowHelpMarker("1.0 = vanilla, # < 1.0 = slo-mo, # > 1.0 = \"fast-mo\"");
+    }
+
     ImGui::Checkbox("Unlimited ammo", Globals::UnlimitedAmmo);
     ImGui::Checkbox("Unlimited magazine ammo", Globals::UnlimitedMagazineAmmo);
     ImGui::Checkbox("Unlimited AI thrown weapons", Globals::UnlimitedAiThrownWeapons); 

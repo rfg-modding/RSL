@@ -108,7 +108,7 @@ with the top menu bar above.");
 	ImGui::Text("\nUseful shortcuts:");
     Util::Gui::LabelAndValue("Toggle overlay: ", "F1");
     Util::Gui::LabelAndValue("Toggle script editor: ", "F2");
-    Util::Gui::LabelAndValue("Toggle lua console: ", "F4");
+    Util::Gui::LabelAndValue("Toggle lua console: ", "F4 (works any time)");
     Util::Gui::LabelAndValue("Run current script in editor: ", "F5");
     Util::Gui::LabelAndValue("Toggle hud: ", "Numpad 1");
     Util::Gui::LabelAndValue("Toggle fog: ", "Numpad 2");

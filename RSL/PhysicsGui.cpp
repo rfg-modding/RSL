@@ -25,13 +25,13 @@ void PhysicsGui::Draw()
 		ImGui::PopStyleColor();
 		ImGui::Separator();
 
-		ImGui::SetNextItemWidth(230.0f);
-		ImGui::InputFloat("Custom physics timestep multiplier", &CustomPhysicsTimeStepMultiplier, 0.01, 0.5, 3);
-		ImGui::SameLine();
-		ImGui::Checkbox("Use", &UseCustomPhysicsTimestepMultiplier);
-		ImGui::SameLine();
-		Util::Gui::ShowHelpMarker("1.0 = Normal speed. Less than 1.0 = Slow motion physics. More than 1.0 = High speed physics");
-		ImGui::Separator();
+		//ImGui::SetNextItemWidth(230.0f);
+		//ImGui::InputFloat("Custom physics timestep multiplier", &CustomPhysicsTimeStepMultiplier, 0.01, 0.5, 3);
+		//ImGui::SameLine();
+		//ImGui::Checkbox("Use", &UseCustomPhysicsTimestepMultiplier);
+		//ImGui::SameLine();
+		//Util::Gui::ShowHelpMarker("1.0 = Normal speed. Less than 1.0 = Slow motion physics. More than 1.0 = High speed physics");
+		//ImGui::Separator();
 
 		if (!CurrentGravity)
 		{

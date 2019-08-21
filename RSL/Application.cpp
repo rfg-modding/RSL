@@ -499,6 +499,8 @@ void Application::SetMemoryLocations()
 
     Globals::GraphicsState.Init();
 
+    Globals::SpeedScale = OffsetPtr<float*>(0x125CBD4); //.data:01B5CBD4 rfg.exe:$125CBD4 #125B5D4 <s_speedScale>
+
     Scripts.UpdateRfgPointers();
 } 
 
