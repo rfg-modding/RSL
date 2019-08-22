@@ -478,6 +478,7 @@ void ScriptManager::RunStartupScripts()
     }
 }
 
+//Todo: Try to combine all the RunScript variants into one to avoid duplicate code.
 /* Tries to run the file at the given path as a lua script. Includes error 
  * detection and handling code for convenience. If an exception occurs an the 
  * script should be stopped and the exception should be safely contained and
@@ -675,6 +676,35 @@ void ScriptManager::TriggerDoFrameEvent()
     }
 }
 
+void ScriptManager::TriggerInitializedEvent()
+{
+    std::lock_guard<std::recursive_mutex> Lock(Mutex);
+
+    if (!LuaState) return;
+
+    ScriptEvent& InitializedEvents = Events[2];
+    InitializedEvents.Update();
+
+    if (InitializedEvents.Enabled())
+    {
+        for (auto& EventHook : InitializedEvents.Hooks)
+        {
+            if (EventHook.Enabled)
+            {
+                //Todo: Make a function that safely calls sol::functions like this, and wraps it in logging and error reporting code
+                sol::protected_function_result Result = EventHook.Hook();
+                if (!Result.valid())
+                {
+                    sol::error Error = Result;
+                    std::string What(Error.what());
+                    Logger::LogError("{} encountered an error! Message: {}", EventHook.HookName, What);
+                }
+            }
+        }
+    }
+}
+
+//Todo: Replace with Globals::SplitFilename
 /* Gets the name of a file given a path as an input. 
  * Includes file extension in name. Returns an empty
  * string if no forward or backslashes are found.
@@ -694,6 +724,7 @@ std::string ScriptManager::GetScriptNameFromPath(const std::string& FullPath) co
 	return std::string();
 }
 
+//Todo: See if this can be replaced by some std::filesystem::path func
 /* Gets the path of the folder for a file. Takes the full path
  * of a file as input. Basically just cuts the file name off 
  * the end of it's path. Returns an empty string if no forward
@@ -714,6 +745,7 @@ std::string ScriptManager::GetScriptFolderFromPath(const std::string& FullPath) 
 	return std::string();
 }
 
+//Todo: Replace with Globals::SplitFilename
 /* Gets the extension of a file given it's full path. Returns
  * an empty string if no period is found in the name.
  */

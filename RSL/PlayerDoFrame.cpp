@@ -3,6 +3,21 @@
 
 void __fastcall Hooks::PlayerDoFrameHook(Player* PlayerPtr)
 {
+    static int TimesCalled = 0;
+    static bool InitEventTriggered = false;
+    if(!InitEventTriggered)
+    {
+        if(TimesCalled >= 200) //Wait 200 frames to ensure everything is initialized
+        {
+            Globals::Scripts->TriggerInitializedEvent();
+            InitEventTriggered = true;
+        }
+        else
+        {
+            TimesCalled++;
+        }
+    }
+
     if (Globals::PlayerPtr != PlayerPtr)
     {
         Globals::PlayerPtr = PlayerPtr;
