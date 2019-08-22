@@ -200,17 +200,17 @@ extern F_ObjectUpdatePosAndOrient ObjectUpdatePosAndOrient;
 //.text:009A4D00 rfg.exe:$614D00 #614100 <object::update_streaming_box> //void __thiscall object::update_streaming_box(object *this)
 
 //.text:007E9530 rfg.exe:$429530 #428930 <havok_body_get_pos_orient>
-using F_HavokBodyGetPositionAndOrient = void(__cdecl*)(unsigned int Handle, vector* Position, matrix* Orient);
+using F_HavokBodyGetPositionAndOrient = void(__cdecl*)(unsigned int Handle, vector& Position, matrix& Orient);
 extern F_HavokBodyGetPositionAndOrient HavokBodyGetPositionAndOrient;
 
 //.text:007D6EA0 rfg.exe:$416EA0 #4162A0 <havok_body_set_position> //void __cdecl havok_body_set_position(unsigned int handle, vector *pos)
-using F_HavokBodySetPosition = void(__cdecl*)(unsigned int Handle, vector* Position);
+using F_HavokBodySetPosition = void(__cdecl*)(unsigned int Handle, vector& Position);
 extern F_HavokBodySetPosition HavokBodySetPosition;
 
 //.text:007D6E10 rfg.exe:$416E10 #416210 <havok_body_set_pos_orient>
 
 //.text:007E3700 rfg.exe:$423700 #422B00 <havok_body_set_pos_orient>
-using F_HavokBodySetPositionAndOrient = void(__cdecl*)(unsigned int Handle, vector* Position, matrix* Orient);
+using F_HavokBodySetPositionAndOrient = void(__cdecl*)(unsigned int Handle, vector& Position, matrix& Orient);
 extern F_HavokBodySetPositionAndOrient HavokBodySetPositionAndOrient;
 
 //.text:00A5AF70 rfg.exe:$69AF70 #69A370 <human::update_pos_and_orient> //void __thiscall human::update_pos_and_orient(human *this, vector *update_pos, matrix *update_orient, bool set_havok_data)
@@ -801,3 +801,11 @@ extern F_rfg_init_stage_2_done_2 rfg_init_stage_2_done_2;
 //.text:01569430 rfg.exe:$3C9430 #3C8830 <verify_gamesave_exit_notify> //bool __cdecl verify_gamesave_exit_notify(game_state new_state)
 using F_verify_gamesave_exit_notify = bool(__cdecl*)(GameState new_state);
 extern F_verify_gamesave_exit_notify verify_gamesave_exit_notify;
+
+//.text:015B7730 rfg.exe:$417730 #416B30 <havok_body_force_activate> //void __cdecl havok_body_force_activate(unsigned int handle)
+using F_havok_body_force_activate = void(__cdecl*)(uint handle);
+extern F_havok_body_force_activate havok_body_force_activate;
+
+//.text:015C3DA0 rfg.exe:$423DA0 #4231A0 <havok_body_set_movable> //void __cdecl havok_body_set_movable(unsigned int handle, bool movable)
+using F_havok_body_set_movable = void(__cdecl*)(uint handle, bool movable);
+extern F_havok_body_set_movable havok_body_set_movable;

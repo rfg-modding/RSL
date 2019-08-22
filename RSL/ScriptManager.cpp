@@ -267,16 +267,24 @@ void ScriptManager::SetupLua()
     RfgTable.set_function("AddMessageBox", sol::overload(
         [](msgbox_type Type, const char* Title, const char* Description)->int
         {
+            if (Util::ContainsChar(Title, { '[', ']' })) { throw std::exception("The game does not allow the use '[' or ']' in message box titles."); }
+            if (Util::ContainsChar(Description, { '[', ']' })) { throw std::exception("The game does not allow the use '[' or ']' in message box descriptions."); }
             return ui_add_msgbox(Type, Title, Description, nullptr, false, false, nullptr, nullptr, false);
         },
         [&](msgbox_type Type, const char* Title, const char* Description, sol::function CallbackFunc)->int
         {
+            if (Util::ContainsChar(Title, { '[', ']' })) { throw std::exception("The game does not allow the use '[' or ']' in message box titles."); }
+            if (Util::ContainsChar(Description, { '[', ']' })) { throw std::exception("The game does not allow the use '[' or ']' in message box descriptions."); }
+
             int Handle = ui_add_msgbox(Type, Title, Description, Lua::RfgMessageBoxCallbackFunction, false, false, nullptr, nullptr, false);
             MessageBoxCallbacks.insert_or_assign(Handle, CallbackFunc);
             return Handle;
         },
         [&](msgbox_type Type, const char* Title, const char* Description, sol::function CallbackFunc, const char* Button1Override, const char* Button2Override)->int
         {
+            if (Util::ContainsChar(Title, { '[', ']' })) { throw std::exception("The game does not allow the use '[' or ']' in message box titles."); }
+            if (Util::ContainsChar(Description, { '[', ']' })) { throw std::exception("The game does not allow the use '[' or ']' in message box descriptions."); }
+
             int Handle = ui_add_msgbox(Type, Title, Description, Lua::RfgMessageBoxCallbackFunction, false, false, Button1Override, Button2Override, false);
             MessageBoxCallbacks.insert_or_assign(Handle, CallbackFunc);
             return Handle;
@@ -296,6 +304,20 @@ void ScriptManager::SetupLua()
     {
         HavokBodyApplyLinearImpulseB(Handle, Impulse);
     }));
+
+    RfgTable.set_function("HavokBodyApplyPointImpulse", sol::overload(
+    [](uint Handle, vector& Impulse, vector& Position)
+    {
+        havok_body_apply_point_impulse(Handle, Impulse, Position);
+    }));
+
+    RfgTable.set_function("HavokBodySetPos", HavokBodySetPosition);
+    RfgTable.set_function("HavokBodySetPosOrient", HavokBodySetPositionAndOrient);
+
+    RfgTable.set_function("HavokBodyGetPosOrient", HavokBodyGetPositionAndOrient);
+
+    RfgTable.set_function("HavokBodyForceActivate", havok_body_force_activate);
+    RfgTable.set_function("HavokBodySetMovable", havok_body_set_movable);
 
 	//This warning appears hundreds of times in a row during binding unless disabled. Is harmless, due to some lambdas used to grab usertype variables.
 	#pragma warning(push)

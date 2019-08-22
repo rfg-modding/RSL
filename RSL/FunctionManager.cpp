@@ -196,4 +196,8 @@ void FunctionManager::Initialize()
     RegisterFunction(rfg_init_stage_2_done_2, 0x1D2480);
 
     RegisterFunction(verify_gamesave_exit_notify, 0x3C9430);
+
+
+    RegisterFunction(havok_body_force_activate, 0x417730);
+    RegisterFunction(havok_body_set_movable, 0x423DA0);
 }

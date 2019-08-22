@@ -332,3 +332,6 @@ F_rfg_init_stage_2_done rfg_init_stage_2_done;
 F_rfg_init_stage_2_done_2 rfg_init_stage_2_done_2;
 
 F_verify_gamesave_exit_notify verify_gamesave_exit_notify;
+
+F_havok_body_force_activate havok_body_force_activate;
+F_havok_body_set_movable havok_body_set_movable;

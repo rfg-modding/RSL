@@ -295,3 +295,18 @@ std::wstring Util::Widen(const std::string& str)
     }
     return wstm.str();
 }
+
+bool Util::ContainsChar(const std::string& str, std::initializer_list<char> Filter)
+{
+    for(auto& Char : str)
+    {
+        for(auto& FilterChar : Filter)
+        {
+            if(Char == FilterChar)
+            {
+                return true;
+            }
+        }
+    }
+    return false;
+}
