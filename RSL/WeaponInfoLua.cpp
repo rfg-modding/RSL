@@ -225,5 +225,5 @@ void Lua::BindWeaponInfo(sol::state& LuaState)
     Utype.set("CrouchingPrimaryMeleeAttack", &weapon_info::crouching_primary_melee_attack);
     Utype.set("CrouchingSecondaryMeleeAttack", &weapon_info::crouching_secondary_melee_attack);
     Utype.set("CrouchingTertiaryMeleeAttack", &weapon_info::crouching_tertiary_melee_attack);
-    RfgTable.set_usertype("WeaponInfo", Utype);
+    RfgTable.set_usertype("WeaponInfo", Utype); 
 }
