@@ -162,11 +162,11 @@ void Application::TrySetMemoryLocations()
     SetMemoryLocations();
     for (int i = 0; i < 30; i++)
     {
-        if (*Globals::NumExplosionInfos == 0)
+        if (*Globals::NumExplosionInfos == 0 || *Globals::NumWeaponInfos == 0 || !Globals::WeaponInfos.Initialized() || Globals::WeaponInfos.Length() == 0)
         {
             Logger::LogWarning("Trying to set memory locations...\n");
             SetMemoryLocations();
-            if (*Globals::NumExplosionInfos == 0)
+            if (*Globals::NumExplosionInfos == 0 || *Globals::NumWeaponInfos == 0 || !Globals::WeaponInfos.Initialized() || Globals::WeaponInfos.Length() == 0)
             {
                 Logger::Log("NumExplosionInfos = {}\n", *Globals::NumExplosionInfos);
                 Logger::Log("Num material effect infos = {}\n", *Globals::NumMaterialEffectInfos);
@@ -181,7 +181,9 @@ void Application::TrySetMemoryLocations()
         }
         else
         {
-            Logger::LogWarning("Successfully set memory locations! NumExplosionInfos: {}, {}\n", *Globals::NumExplosionInfos, Globals::ExplosionInfos.Initialized() ? "Exp list initialized" : "Exp list not initialized");
+            Logger::LogWarning("Successfully set memory locations! NumExplosionInfos: {}, {}, NumWeaponInfos: {}, WeaponInfosLength: {}\n", 
+                *Globals::NumExplosionInfos, Globals::ExplosionInfos.Initialized() ? "Exp list initialized" : "Exp list not initialized",
+                *Globals::NumWeaponInfos, Globals::WeaponInfos.Length());
 
             Globals::NumExplosionInfos = OffsetPtr<uint*>(0x19EE490);
             auto ExplosionInfosPtr = OffsetPtr<explosion_info*>(0x19E6CD8);
@@ -194,6 +196,10 @@ void Application::TrySetMemoryLocations()
             Globals::NumEffectInfos = OffsetPtr<uint*>(0x1D82DF0);
             auto EffectInfosPtr = OffsetPtr<effect_info*>(0x1D82E60);
             Globals::EffectInfos.Init(EffectInfosPtr, *Globals::NumEffectInfos, *Globals::NumEffectInfos, "EffectInfos");
+
+            Globals::NumWeaponInfos = OffsetPtr<uint*>(0x3482C94);
+            auto WeaponInfosPtr = OffsetPtr<weapon_info**>(0x3482C9C);
+            Globals::WeaponInfos.Init(*WeaponInfosPtr, *Globals::NumWeaponInfos, *Globals::NumWeaponInfos, "WeaponInfos");
             break;
         }
     }

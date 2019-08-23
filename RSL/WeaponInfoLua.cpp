@@ -190,7 +190,7 @@ void Lua::BindWeaponInfo(sol::state& LuaState)
     Utype.set("DefaultReloadDelay", &weapon_info::default_reload_delay);
     Utype.set("LowScaleDamage", &weapon_info::low_scale_damage);
     Utype.set("HighScaleDamage", &weapon_info::high_scale_damage);
-    Utype.set("PlayerExplosionInfo", &weapon_info::m_explosion_info);
+    Utype.set("ExplosionInfo", &weapon_info::m_explosion_info);
     Utype.set("AiExplosionInfo", &weapon_info::m_ai_explosion_info);
     Utype.set("FireConeDot", &weapon_info::fire_cone_dot);
     Utype.set("EvenSpreadAccuracyDot", &weapon_info::even_spread_accuracy_dot);
