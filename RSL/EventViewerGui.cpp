@@ -55,6 +55,7 @@ void EventViewerGui::Draw()
             }
             ImGui::TreePop();
         }
+        ImGui::Columns(1);
     }
 
     ImGui::End();
