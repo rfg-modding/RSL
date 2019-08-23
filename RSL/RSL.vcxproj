@@ -259,6 +259,7 @@ echo #define RSL_BUILD_DATE %buildTime:~0,8% &gt;&gt; $(ProjectDir)/BuildDate.h<
     <ClCompile Include="VectorLua.cpp" />
     <ClCompile Include="VehicleSpawnerGui.cpp" />
     <ClCompile Include="verify_gamesave_exit_notify.cpp" />
+    <ClCompile Include="WeaponInfoLua.cpp" />
     <ClCompile Include="WelcomeGui.cpp" />
     <ClCompile Include="Includes.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
@@ -337,6 +338,7 @@ echo #define RSL_BUILD_DATE %buildTime:~0,8% &gt;&gt; $(ProjectDir)/BuildDate.h<
     <ClInclude Include="TimerLua.h" />
     <ClInclude Include="VehicleSpawnerGui.h" />
     <ClInclude Include="Version.h" />
+    <ClInclude Include="WeaponInfoLua.h" />
     <ClInclude Include="WorldLua.h" />
     <ClInclude Include="InvItemInfoLua.h" />
     <ClInclude Include="ItsyBitsy.h" />

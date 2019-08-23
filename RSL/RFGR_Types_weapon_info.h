@@ -1,6 +1,22 @@
 #pragma once
 #include "RFGR_Types_Vehicle_Spawn_Params.h"
 
+enum electricity_hit_rating
+{
+    ELECTRICITY_HIT_RATING_NONE = 0x0,
+    ELECTRICITY_HIT_RATING_ALLIED_HUMAN = 0x1,
+    ELECTRICITY_HIT_RATING_WORLD = 0x2,
+    ELECTRICITY_HIT_RATING_FRIENDLY_HUMAN = 0x3,
+    ELECTRICITY_HIT_RATING_OBJECT = 0x4,
+    ELECTRICITY_HIT_RATING_DEAD_HUMAN = 0x5,
+    ELECTRICITY_HIT_RATING_HUMAN = 0x6,
+    ELECTRICITY_HIT_RATING_ELECTRIFIABLE_OBJECT = 0x7,
+    ELECTRICITY_HIT_RATING_VEHICLE = 0x8,
+    ELECTRICITY_HIT_RATING_UNFRIENDLY_HUMAN = 0x9,
+    ELECTRICITY_HIT_RATING_HOSTILE_HUMAN = 0xA,
+    NUM_ELECTRICITY_HIT_RATINGS = 0xB,
+};
+
 enum weapon_class_type
 {
     WEAPON_CLASS_NONE = 0xFFFFFFFF,
@@ -181,14 +197,252 @@ struct item_info
     explosion_info* m_explosion_info;
 };
 
+struct  arc_welder_cache_info
+{
+    vector hit_pos;
+    vector hit_normal;
+    unsigned int hit_handle;
+    unsigned int hit_shape_key;
+    electricity_hit_rating hit_rating;
+};
+
 struct damage_scaling_info
 {
+    damage_scaling_info(const damage_scaling_info& other)
+        : scale_value(other.scale_value)
+    {
+    }
+
+    damage_scaling_info& operator=(const damage_scaling_info& other)
+    {
+        if (this == &other)
+            return *this;
+        scale_value = other.scale_value;
+        return *this;
+    }
+
     float scale_value;
     float damage[4];
 };
 
+enum weapon_callback_idx
+{
+    INVALID_WEAPON_CB_IDX = 0xFFFFFFFF,
+    WEAPON_CB_IDX_PRESS_TRIGGER = 0x0,
+    WEAPON_CB_IDX_RELEASE_TRIGGER = 0x1,
+    WEAPON_CB_IDX_READY_TO_FIRE = 0x2,
+    WEAPON_CB_IDX_CAN_FIRE = 0x3,
+    WEAPON_CB_IDX_POST_FIRE = 0x4,
+    NUM_WEAPON_CB_IDX = 0x5,
+};
+
+struct  obj_item_flags
+{
+    unsigned __int32 respawn : 1;
+    unsigned __int32 no_physics : 1;
+    unsigned __int32 simulate : 1;
+    unsigned __int32 props_created : 1;
+    unsigned __int32 item_held : 1;
+    unsigned __int32 no_save : 1;
+    unsigned __int32 preplaced : 1;
+    unsigned __int32 update_attach_point : 1;
+    unsigned __int32 dropped_by_player : 1;
+    unsigned __int32 touched_last_frame : 1;
+    unsigned __int32 character_prop : 1;
+    unsigned __int32 attached_cloth_sim : 1;
+    unsigned __int32 doing_errode : 1;
+    unsigned __int32 cast_shadows : 1;
+    unsigned __int32 cast_drop_shadows : 1;
+    unsigned __int32 xray_visible : 1;
+    unsigned __int32 dont_dampen_impulse : 1;
+    unsigned __int32 shield_initialized : 1;
+};
+
+struct special_purpose_flags
+{
+    unsigned __int32 is_ammo_box : 1;
+    unsigned __int32 use_enabled : 1;
+    unsigned __int32 arc_welder_is_arcing : 1;
+    unsigned __int32 fading_from_nano : 1;
+    unsigned __int32 using_high_res_texture : 1;
+};
+
+struct item_damage_info_flags//$9EB7C499D053FB1827280F3CE5C38DFD
+{
+    unsigned __int32 can_explode : 1;
+    unsigned __int32 damaged_by_bullets : 1;
+    unsigned __int32 damaged_by_collisions : 1;
+    unsigned __int32 damaged_by_explosions : 1;
+    unsigned __int32 damaged_by_melee : 1;
+    unsigned __int32 damaged_by_vehicles : 1;
+};
+
+struct item_damage_info
+{
+    int hitpoints;
+    item_damage_info_flags flags; //$9EB7C499D053FB1827280F3CE5C38DFD
+};
+
+struct item__resource_dependent_data //16
+{
+    void* smesh; //static_mesh* smesh; //4
+    void* smesh_instance_p; //rl_mesh_instance* smesh_instance_p; //4
+    void* pickup_smesh; //static_mesh* pickup_smesh; //4
+    void* pickup_smesh_instance_p; //rl_mesh_instance* pickup_smesh_instance_p; //4
+};
+
+/* 5100 */
+struct __declspec(align(4)) object_stream_resource__item__resource_dependent_data //17 -> 20 with alignment
+{
+    item__resource_dependent_data m_data; //16
+    bool m_loaded; //1
+};
+
+using salvage_material_type = SalvageMaterialType;
+using object_render_distance = ObjectRenderDistance;
+using character_instance = CharacterInstance;
+using object = Object;
+
+struct item : object
+{
+    item* prev;
+    item* next;
+    item_info* info;
+    object_stream_resource__item__resource_dependent_data rdd; //object_stream_resource<item::resource_dependent_data> rdd;
+    character_instance* char_inst;
+    float render_alpha;
+    float m_stealth_percent;
+    bool casts_transparent_shadows;
+    object_render_distance render_distance;
+    float touch_arg1_override;
+    float touch_arg2_override;
+    float mass_override;
+    unsigned int collision_type;
+    prop_type m_prop_type;
+    timestamp deletion_timer;
+    timestamp respawn_timer;
+    timestamp touch_delay_timer;
+    timestamp cloth_deletion_timer;
+    timestamp dropped_timer;
+    unsigned int m_nav_cell_detour_request_handle;
+    obj_item_flags item_flags;
+    vector last_pos;
+    unsigned int srid;
+    void* cloth_sim; //cloth_simulation* cloth_sim; //Todo: Bind this
+    salvage_material_type salvage_material;
+    unsigned int salvage_effect;
+    int m_foley_collision_instance;
+    void* mp_sim_state; //multi_sim_state<multi_item_state>* mp_sim_state;
+    float pickup_value;
+    special_purpose_flags special_flags;
+    item_damage_info damage_info;
+    bool default_batchable_setting;
+    char xray_material;
+    char xray_render_alpha;
+    unsigned int owner_handle;
+};
+
+struct weapon;
+struct weapon_callbacks
+{
+    bool(__cdecl* func)(weapon_callback_idx, weapon*, unsigned int);
+    unsigned int user_handle;
+};
+
+struct $38737281F511CDB066E9B5C23F0F4E63
+{
+    __int8 local_fire : 1;
+    __int8 trigger_single : 1;
+    __int8 hit_player : 1;
+    __int8 from_server : 1;
+    __int8 sim_bullet : 1;
+    __int8 send_packet : 1;
+};
+
+union $E89E83DC7B0A3B57C1E8BDC492E17C6D
+{
+    $38737281F511CDB066E9B5C23F0F4E63 __s0;
+    char flag_data;
+};
+
+struct mp_fire_info_flags
+{
+    $E89E83DC7B0A3B57C1E8BDC492E17C6D ___u0;
+};
+
+using object_hit_location = ObjectHitLocation;
+struct weapon_info;
+const struct  __declspec(align(4)) weapon_fire_info
+{
+    vector start_pos;
+    vector end_pos;
+    unsigned int hit_handle;
+    vector hit_pos;
+    vector hit_normal;
+    unsigned int hit_shape_key;
+    unsigned int hit_alt_body_idx;
+    int hit_bone;
+    unsigned int nearest_human;
+    weapon_info* w_info;
+    char hit_physical_material;
+    char hit_effect_material;
+    object_hit_location hit_location;
+    mp_fire_info_flags mp_flags;
+};
+
 struct weapon_projectile_info //$4CC5F1CDA5212CF270796B525117DA23
 {
+    weapon_projectile_info(const weapon_projectile_info& other)
+        : obj_item_info(other.obj_item_info),
+          start_speed(other.start_speed),
+          max_speed(other.max_speed),
+          acceleration(other.acceleration),
+          fuse_time(other.fuse_time),
+          max_throw_dist(other.max_throw_dist),
+          gravity(other.gravity),
+          sound(other.sound),
+          effect1(other.effect1),
+          effect2(other.effect2),
+          effect3(other.effect3),
+          effect4(other.effect4),
+          flags(other.flags),
+          inaccurate_flight(other.inaccurate_flight),
+          time_until_propelled(other.time_until_propelled),
+          time_until_prop_expire(other.time_until_prop_expire),
+          time_until_drop(other.time_until_drop),
+          damage_effect(other.damage_effect),
+          hit_camera_shake(other.hit_camera_shake)
+    {
+    }
+
+    weapon_projectile_info& operator=(const weapon_projectile_info& other)
+    {
+        if (this == &other)
+            return *this;
+        obj_item_info = other.obj_item_info;
+        start_speed = other.start_speed;
+        max_speed = other.max_speed;
+        acceleration = other.acceleration;
+        fuse_time = other.fuse_time;
+        max_throw_dist = other.max_throw_dist;
+        gravity = other.gravity;
+        sound = other.sound;
+        effect1 = other.effect1;
+        effect2 = other.effect2;
+        effect3 = other.effect3;
+        effect4 = other.effect4;
+        flags = other.flags;
+        inaccurate_flight = other.inaccurate_flight;
+        time_until_propelled = other.time_until_propelled;
+        time_until_prop_expire = other.time_until_prop_expire;
+        time_until_drop = other.time_until_drop;
+        damage_effect = other.damage_effect;
+        hit_camera_shake = other.hit_camera_shake;
+        return *this;
+    }
+
+    weapon_projectile_info() = default;
+
     item_info* obj_item_info;
     float start_speed;
     float max_speed;
@@ -213,6 +467,53 @@ struct weapon_projectile_info //$4CC5F1CDA5212CF270796B525117DA23
 //Todo: Try changing these all to bools. Should work since they're all __int8 values
 struct weapon_info_flags 
 {
+    weapon_info_flags(const weapon_info_flags& other)
+        : armor_piercing(other.armor_piercing),
+          can_fine_aim(other.can_fine_aim),
+          can_scope(other.can_scope),
+          shatter(other.shatter),
+          held_in_left_hand(other.held_in_left_hand),
+          draw_proj_in_opposite_hand(other.draw_proj_in_opposite_hand),
+          silent_bullets(other.silent_bullets),
+          penetrating_bullets(other.penetrating_bullets),
+          non_inventory(other.non_inventory),
+          use_even_spread(other.use_even_spread),
+          disable_player_cover(other.disable_player_cover),
+          mp_selectable(other.mp_selectable),
+          is_obvious_weapon(other.is_obvious_weapon),
+          auto_aim_curved_trail(other.auto_aim_curved_trail),
+          looping_effects(other.looping_effects),
+          never_in_cabinet(other.never_in_cabinet),
+          use_secondary_weapon_heat(other.use_secondary_weapon_heat),
+          dont_drop_on_death(other.dont_drop_on_death)
+    {
+    }
+
+    weapon_info_flags& operator=(const weapon_info_flags& other)
+    {
+        if (this == &other)
+            return *this;
+        armor_piercing = other.armor_piercing;
+        can_fine_aim = other.can_fine_aim;
+        can_scope = other.can_scope;
+        shatter = other.shatter;
+        held_in_left_hand = other.held_in_left_hand;
+        draw_proj_in_opposite_hand = other.draw_proj_in_opposite_hand;
+        silent_bullets = other.silent_bullets;
+        penetrating_bullets = other.penetrating_bullets;
+        non_inventory = other.non_inventory;
+        use_even_spread = other.use_even_spread;
+        disable_player_cover = other.disable_player_cover;
+        mp_selectable = other.mp_selectable;
+        is_obvious_weapon = other.is_obvious_weapon;
+        auto_aim_curved_trail = other.auto_aim_curved_trail;
+        looping_effects = other.looping_effects;
+        never_in_cabinet = other.never_in_cabinet;
+        use_secondary_weapon_heat = other.use_secondary_weapon_heat;
+        dont_drop_on_death = other.dont_drop_on_death;
+        return *this;
+    }
+
     __int8 armor_piercing : 1;
     __int8 can_fine_aim : 1;
     __int8 can_scope : 1;
@@ -233,8 +534,218 @@ struct weapon_info_flags
     __int8 dont_drop_on_death : 1;
 };
 
-const struct weapon_info
+struct weapon_info
 {
+    weapon_info(const weapon_info& other)
+        : name(other.name),
+          name_crc(other.name_crc),
+          unique_id(other.unique_id),
+          flags(other.flags),
+          weapon_class(other.weapon_class),
+          weapon_obj_item_info(other.weapon_obj_item_info),
+          weapon_inv_item_info(other.weapon_inv_item_info),
+          default_team(other.default_team),
+          icon_name(other.icon_name),
+          small_icon_name(other.small_icon_name),
+          reticule_name(other.reticule_name),
+          fine_aim_reticule_name(other.fine_aim_reticule_name),
+          mp_kill_phrase(other.mp_kill_phrase),
+          weapon_anim_group(other.weapon_anim_group),
+          muzzle_flash_effect(other.muzzle_flash_effect),
+          muzzle_smoke_effect(other.muzzle_smoke_effect),
+          special_hit_effect(other.special_hit_effect),
+          special_effect(other.special_effect),
+          secondary_special_effect(other.secondary_special_effect),
+          overheated_effect(other.overheated_effect),
+          tracer_effect(other.tracer_effect),
+          fire_camera_shake(other.fire_camera_shake),
+          fire_camera_shake_ignore_disabled(other.fire_camera_shake_ignore_disabled),
+          secondary_camera_shake(other.secondary_camera_shake),
+          player_hit_camera_shake(other.player_hit_camera_shake),
+          fire_sound(other.fire_sound),
+          secondary_sound(other.secondary_sound),
+          upgrade_sound(other.upgrade_sound),
+          reload_sound(other.reload_sound),
+          reload_sound_delay(other.reload_sound_delay),
+          no_ammo_sound(other.no_ammo_sound),
+          special_sound(other.special_sound),
+          flyby_sound(other.flyby_sound),
+          num_weapon_personas(other.num_weapon_personas),
+          max_range(other.max_range),
+          red_range(other.red_range),
+          max_engagement_dist(other.max_engagement_dist),
+          min_engagement_dist(other.min_engagement_dist),
+          max_ai_penetrating_dist(other.max_ai_penetrating_dist),
+          npc_firing_pattern(other.npc_firing_pattern),
+          npc_aim_drift_profile(other.npc_aim_drift_profile),
+          trigger_type(other.trigger_type),
+          ammo_type(other.ammo_type),
+          magazine_size(other.magazine_size),
+          magazine_start_num(other.magazine_start_num),
+          max_rounds(other.max_rounds),
+          max_rounds_upgrade(other.max_rounds_upgrade),
+          ammo_box_restock(other.ammo_box_restock),
+          to_min_spread(other.to_min_spread),
+          to_max_spread(other.to_max_spread),
+          melee_group_index(other.melee_group_index),
+          bullet_group_index(other.bullet_group_index),
+          tracer_frequency(other.tracer_frequency),
+          shots_per_round(other.shots_per_round),
+          firing_sound_radius(other.firing_sound_radius),
+          npc_refire_delay(other.npc_refire_delay),
+          default_refire_delay(other.default_refire_delay),
+          prefire_delay(other.prefire_delay),
+          default_reload_delay(other.default_reload_delay),
+          low_scale_damage(other.low_scale_damage),
+          high_scale_damage(other.high_scale_damage),
+          m_explosion_info(other.m_explosion_info),
+          m_ai_explosion_info(other.m_ai_explosion_info),
+          fire_cone_dot(other.fire_cone_dot),
+          even_spread_accuracy_dot(other.even_spread_accuracy_dot),
+          max_spread(other.max_spread),
+          min_spread(other.min_spread),
+          fine_aim_max_spread(other.fine_aim_max_spread),
+          fine_aim_min_spread(other.fine_aim_min_spread),
+          npc_max_spread(other.npc_max_spread),
+          npc_min_spread(other.npc_min_spread),
+          spread_multiplier_run(other.spread_multiplier_run),
+          ragdoll_force_shoot(other.ragdoll_force_shoot),
+          ragdoll_chance(other.ragdoll_chance),
+          recoil_camera_kick(other.recoil_camera_kick),
+          recoil_impulse(other.recoil_impulse),
+          out_of_ammo_reload_delay(other.out_of_ammo_reload_delay),
+          overheat_cool_down_time(other.overheat_cool_down_time),
+          overheat_percent_per_shot(other.overheat_percent_per_shot),
+          dropped_ammo_scale(other.dropped_ammo_scale),
+          bullet_hole_scale(other.bullet_hole_scale),
+          headshot_multiplier(other.headshot_multiplier),
+          zoom_magnification(other.zoom_magnification),
+          autoaim_override(other.autoaim_override),
+          npc_autoaim(other.npc_autoaim),
+          aim_assist(other.aim_assist),
+          player_move_speed_multiplier(other.player_move_speed_multiplier),
+          npc_move_speed_multiplier(other.npc_move_speed_multiplier),
+          alert_multiplier(other.alert_multiplier),
+          projectile_info(other.projectile_info),
+          standing_primary_melee_attack(other.standing_primary_melee_attack),
+          standing_secondary_melee_attack(other.standing_secondary_melee_attack),
+          standing_tertiary_melee_attack(other.standing_tertiary_melee_attack),
+          crouching_primary_melee_attack(other.crouching_primary_melee_attack),
+          crouching_secondary_melee_attack(other.crouching_secondary_melee_attack),
+          crouching_tertiary_melee_attack(other.crouching_tertiary_melee_attack)
+    {
+        std::copy(std::begin(other.attachment_point), std::end(other.attachment_point), std::begin(attachment_point));
+        std::copy(std::begin(other.npc_fire_sounds), std::end(other.npc_fire_sounds), std::begin(npc_fire_sounds));
+    }
+
+    weapon_info& operator=(const weapon_info& other)
+    {
+        if (this == &other)
+            return *this;
+        name = other.name;
+        name_crc = other.name_crc;
+        unique_id = other.unique_id;
+        flags = other.flags;
+        weapon_class = other.weapon_class;
+        weapon_obj_item_info = other.weapon_obj_item_info;
+        weapon_inv_item_info = other.weapon_inv_item_info;
+        default_team = other.default_team;
+        icon_name = other.icon_name;
+        small_icon_name = other.small_icon_name;
+        reticule_name = other.reticule_name;
+        fine_aim_reticule_name = other.fine_aim_reticule_name;
+        mp_kill_phrase = other.mp_kill_phrase;
+        weapon_anim_group = other.weapon_anim_group;
+        muzzle_flash_effect = other.muzzle_flash_effect;
+        muzzle_smoke_effect = other.muzzle_smoke_effect;
+        special_hit_effect = other.special_hit_effect;
+        special_effect = other.special_effect;
+        secondary_special_effect = other.secondary_special_effect;
+        overheated_effect = other.overheated_effect;
+        tracer_effect = other.tracer_effect;
+        fire_camera_shake = other.fire_camera_shake;
+        fire_camera_shake_ignore_disabled = other.fire_camera_shake_ignore_disabled;
+        secondary_camera_shake = other.secondary_camera_shake;
+        player_hit_camera_shake = other.player_hit_camera_shake;
+        fire_sound = other.fire_sound;
+        secondary_sound = other.secondary_sound;
+        upgrade_sound = other.upgrade_sound;
+        reload_sound = other.reload_sound;
+        reload_sound_delay = other.reload_sound_delay;
+        no_ammo_sound = other.no_ammo_sound;
+        special_sound = other.special_sound;
+        flyby_sound = other.flyby_sound;
+        num_weapon_personas = other.num_weapon_personas;
+        max_range = other.max_range;
+        red_range = other.red_range;
+        max_engagement_dist = other.max_engagement_dist;
+        min_engagement_dist = other.min_engagement_dist;
+        max_ai_penetrating_dist = other.max_ai_penetrating_dist;
+        npc_firing_pattern = other.npc_firing_pattern;
+        npc_aim_drift_profile = other.npc_aim_drift_profile;
+        trigger_type = other.trigger_type;
+        ammo_type = other.ammo_type;
+        magazine_size = other.magazine_size;
+        magazine_start_num = other.magazine_start_num;
+        max_rounds = other.max_rounds;
+        max_rounds_upgrade = other.max_rounds_upgrade;
+        ammo_box_restock = other.ammo_box_restock;
+        to_min_spread = other.to_min_spread;
+        to_max_spread = other.to_max_spread;
+        melee_group_index = other.melee_group_index;
+        bullet_group_index = other.bullet_group_index;
+        tracer_frequency = other.tracer_frequency;
+        shots_per_round = other.shots_per_round;
+        firing_sound_radius = other.firing_sound_radius;
+        npc_refire_delay = other.npc_refire_delay;
+        default_refire_delay = other.default_refire_delay;
+        prefire_delay = other.prefire_delay;
+        default_reload_delay = other.default_reload_delay;
+        low_scale_damage = other.low_scale_damage;
+        high_scale_damage = other.high_scale_damage;
+        m_explosion_info = other.m_explosion_info;
+        m_ai_explosion_info = other.m_ai_explosion_info;
+        fire_cone_dot = other.fire_cone_dot;
+        even_spread_accuracy_dot = other.even_spread_accuracy_dot;
+        max_spread = other.max_spread;
+        min_spread = other.min_spread;
+        fine_aim_max_spread = other.fine_aim_max_spread;
+        fine_aim_min_spread = other.fine_aim_min_spread;
+        npc_max_spread = other.npc_max_spread;
+        npc_min_spread = other.npc_min_spread;
+        spread_multiplier_run = other.spread_multiplier_run;
+        ragdoll_force_shoot = other.ragdoll_force_shoot;
+        ragdoll_chance = other.ragdoll_chance;
+        recoil_camera_kick = other.recoil_camera_kick;
+        recoil_impulse = other.recoil_impulse;
+        out_of_ammo_reload_delay = other.out_of_ammo_reload_delay;
+        overheat_cool_down_time = other.overheat_cool_down_time;
+        overheat_percent_per_shot = other.overheat_percent_per_shot;
+        dropped_ammo_scale = other.dropped_ammo_scale;
+        bullet_hole_scale = other.bullet_hole_scale;
+        headshot_multiplier = other.headshot_multiplier;
+        zoom_magnification = other.zoom_magnification;
+        autoaim_override = other.autoaim_override;
+        npc_autoaim = other.npc_autoaim;
+        aim_assist = other.aim_assist;
+        player_move_speed_multiplier = other.player_move_speed_multiplier;
+        npc_move_speed_multiplier = other.npc_move_speed_multiplier;
+        alert_multiplier = other.alert_multiplier;
+        projectile_info = other.projectile_info;
+        standing_primary_melee_attack = other.standing_primary_melee_attack;
+        standing_secondary_melee_attack = other.standing_secondary_melee_attack;
+        standing_tertiary_melee_attack = other.standing_tertiary_melee_attack;
+        crouching_primary_melee_attack = other.crouching_primary_melee_attack;
+        crouching_secondary_melee_attack = other.crouching_secondary_melee_attack;
+        crouching_tertiary_melee_attack = other.crouching_tertiary_melee_attack;
+
+        std::copy(std::begin(other.attachment_point), std::end(other.attachment_point), std::begin(attachment_point));
+        std::copy(std::begin(other.npc_fire_sounds), std::end(other.npc_fire_sounds), std::begin(npc_fire_sounds));
+
+        return *this;
+    }
+
+    weapon_info() = default;
     char* name;
     checksum_stri name_crc;
     int unique_id;
@@ -334,6 +845,161 @@ const struct weapon_info
     human_melee_combat_move_id crouching_secondary_melee_attack;
     human_melee_combat_move_id crouching_tertiary_melee_attack;
 };
+
+struct weapon_flags//weapon::weapon_flags
+{
+    __int8 fire_info_is_new : 1;
+    __int8 trigger_down : 1;
+    __int8 is_linked : 1;
+    __int8 delay_fire : 1;
+    __int8 processed_since_last_trigger_pull : 1;
+    __int8 played_dry_fire : 1;
+    __int8 playing_pickup_effect : 1;
+};
+
+struct weapon : item
+{
+    weapon* prev;
+    weapon* next;
+    weapon_info* w_info;
+    unsigned int turret_handle;
+    timestamp weapon_fire_sound_timestamp;
+    timestamp weapon_hit_sound_timestamp;
+    timestamp one_shot_delay_timestamp;
+    int melee_combat_move_past;
+    bool melee_combat_in_combo;
+    timestamp arc_welder_post_arc_timer;
+    timestamp multi_rocket_trigger_down_timer;
+    int secondary_rockets_to_fire;
+    unsigned int mat_fx_handle[4];
+    unsigned int current_mat_fx;
+    unsigned int mat_fx_clip_handle;
+    unsigned int mat_fx_handle_for_clip;
+    weapon_flags flags;
+    weapon_callbacks cb[5];
+    weapon_fire_info fire_info;
+    int rounds_in_magazine;
+    int rounds_in_reserve;
+    float current_spread;
+    char tracer_count;
+    float refire_delay_time;
+    float overheat_percent;
+    bool overheated;
+    unsigned int overheated_effect_handle;
+    timestamp reload_delay_timer;
+    timestamp last_fired_timer;
+    float muzzle_flash_intensity;
+    unsigned int muzzle_flash_effect_handle;
+    unsigned int muzzle_smoke_effect_handle;
+    timestamp muzzle_smoke_timestamp;
+    int grip_tag_index;
+    int secondary_grip_tag_index;
+    int destruction_tag_index;
+    int secondary_destruction_tag_index;
+    int muzzle_tag_index;
+    int melee_blood_effect_tag_index;
+    int num_rounds_fired;
+    int fire_sound_alr_id;
+    int secondary_sound_id;
+    int special_sound_id;
+    int weapon_persona;
+    float grinder_speed_percent;
+    float grinder_heat_effect;
+    unsigned int special_effect_handle;
+    unsigned int secondary_special_effect_handle;
+    rfg::farray<arc_welder_cache_info, 3> arc_welder_best_point;
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 struct game_clock
 {

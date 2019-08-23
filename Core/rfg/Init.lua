@@ -40,5 +40,9 @@ rfg.KeyCodes = require("rfg.KeyCodes")
 rfg.MessageTypes = require("rfg.MessageTypes")
 rfg.MessageBoxTypes = require("rfg.MessageBoxTypes")
 rfg.MessageBoxChoices = require("rfg.MessageBoxChoices")
+rfg.WeaponClasses = require("rfg.WeaponClasses")
+rfg.AnimationGroups = require("rfg.AnimationGroups")
+rfg.TriggerTypes = require("rfg.TriggerTypes")
+rfg.AmmoTypes = require("rfg.AmmoTypes")
 
 return rfg

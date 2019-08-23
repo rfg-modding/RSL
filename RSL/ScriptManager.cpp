@@ -22,6 +22,7 @@
 #include "WorldLua.h"
 #include "ExplosionInfoLua.h"
 #include "TimerLua.h"
+#include "WeaponInfoLua.h"
 
 ScriptManager::~ScriptManager()
 {
@@ -390,6 +391,13 @@ void ScriptManager::SetupLua()
     Lua::BindExplosionInfo(LuaStateRef);
 
     Lua::BindTimer(LuaStateRef);
+
+    Lua::BindFixedArrayWrapperWeaponInfo(LuaStateRef);
+    Lua::BindWeaponProjectileInfo(LuaStateRef);
+    Lua::BindDamageScalingInfo(LuaStateRef);
+    Lua::BindWeaponInfoFlags(LuaStateRef);
+    Lua::BindWeaponInfo(LuaStateRef);
+
 	#pragma warning(pop) 
 
     UpdateRfgPointers();
@@ -430,6 +438,7 @@ void ScriptManager::UpdateRfgPointers()
     //RfgTable["ExplosionInfos"] = []() { throw std::exception("`rfg.ExplosionInfos` has been deprecated. Use `ExplosionInfos` instead."); };
     RfgTable["PhysicsSolver"] = &Globals::hkpWorldPtr->m_dynamicsStepInfo.m_solverInfo;
     RfgTable["ExplosionInfos"] = &Globals::ExplosionInfos;
+    RfgTable["WeaponInfos"] = Globals::WeaponInfos;
     
     LuaStateRef["Player"] = Globals::PlayerPtr;
 	LuaStateRef["World"] = Globals::RfgWorldPtr;

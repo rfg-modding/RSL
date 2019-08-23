@@ -11,7 +11,7 @@ void Lua::BindFixedArrayWrapperExplosionInfo(sol::state& LuaState)
     Utype.set("Capacity", &FixedArrayWrapper<explosion_info>::Capacity);
     Utype.set("Initialized", &FixedArrayWrapper<explosion_info>::Initialized);
     Utype.set(sol::meta_function::index, &FixedArrayWrapper<explosion_info>::operator[]);
-    RfgTable.set_usertype("FixedArrayWrapper", Utype);
+    RfgTable.set_usertype("FixedArrayWrapperExplosionInfo", Utype);
 }
 
 void Lua::BindExplosionInfo(sol::state& LuaState)
