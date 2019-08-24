@@ -809,3 +809,9 @@ extern F_havok_body_force_activate havok_body_force_activate;
 //.text:015C3DA0 rfg.exe:$423DA0 #4231A0 <havok_body_set_movable> //void __cdecl havok_body_set_movable(unsigned int handle, bool movable)
 using F_havok_body_set_movable = void(__cdecl*)(uint handle, bool movable);
 extern F_havok_body_set_movable havok_body_set_movable;
+
+//.text:015C3DD0 rfg.exe:$423DD0 #4231D0 <havok_body_get_mass> //float __cdecl havok_body_get_mass(unsigned int handle)
+using F_havok_body_get_mass = float(__cdecl*)(uint handle);
+extern F_havok_body_get_mass havok_body_get_mass;
+
+//.text:018DA790 rfg.exe:$73A790 #739B90 <objective_highlight_add> //void __cdecl objective_highlight_add(unsigned int handle, highlight_purpose color_hint, highlight_style style)
