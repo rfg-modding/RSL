@@ -310,3 +310,8 @@ bool Util::ContainsChar(const std::string& str, std::initializer_list<char> Filt
     }
     return false;
 }
+
+bool Util::CharIsDigit(const char Character)
+{
+    return Character >= '0' && Character <= '9';
+}

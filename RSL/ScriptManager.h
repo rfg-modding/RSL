@@ -122,9 +122,8 @@ public:
 	bool RunScript(const std::string& FullPath);
 	bool RunScript(const size_t Index);
 
-	ScriptResult RunStringAsScript(std::string Buffer, std::string Name);
+	ScriptResult RunStringAsScript(std::string Buffer, const std::string& Name);
     [[nodiscard]] std::optional<uint> GetLineFromErrorString(const std::string& ErrorString) const;
-    [[nodiscard]] bool CharIsDigit(const char& Character) const;
 
     //Todo: Consider moving these out of this class into the Lua namespace to keep things clean
     void TriggerInputEvent(uint Message, uint KeyCode, KeyState& Keys);
@@ -146,7 +145,7 @@ private:
     [[nodiscard]] bool IsValidScriptExtension(std::string Extension) const;
 
 	void SetupLua();
-    void RegisterEvent(std::string EventTypeName, sol::function EventFunction, std::string EventName = "GenericEvent");
+    void RegisterEvent(std::string EventTypeName, const sol::function& EventFunction, const std::string& EventName = "GenericEvent");
 
     //std::vector<ScriptEvent> Events;
 

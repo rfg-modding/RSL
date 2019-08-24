@@ -34,5 +34,6 @@ namespace Util
 {
     ImVec4 NormalizeColor(float red, float green, float blue, float alpha = 255.0f);
     std::wstring Widen(const std::string& str);
-    bool ContainsChar(const std::string& str, std::initializer_list<char> Filter);
+    [[nodiscard]] bool ContainsChar(const std::string& str, std::initializer_list<char> Filter);
+    [[nodiscard]] bool CharIsDigit(const char Character);
 }
