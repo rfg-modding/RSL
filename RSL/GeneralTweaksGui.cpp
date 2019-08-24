@@ -203,14 +203,22 @@ void GeneralTweaksGui::Draw()
 	ImGui::Checkbox("##Custom Player Jump Height", &NeedCustomJumpHeightSet);
 
     ImGui::SetNextItemWidth(230.0f);
-	ImGui::InputFloat("Player move speed", &CustomPlayerMoveSpeed, 1.0f, 5.0f, 3);
+	ImGui::InputFloat("Player move speed override", Globals::PlayerMaxMovementSpeedOverride, 1.0f, 5.0f, 3);
 	ImGui::SameLine();
-	ImGui::Checkbox("##Player move speed checkbox", &NeedCustomMoveSpeedSet);
+    if(ImGui::Button("Reset##ResetPlayerMaxMoveSpeedOverride"))
+    {
+        *Globals::PlayerMaxMovementSpeedOverride = 0.0f;
+    }
+    ImGui::SameLine();
+    Util::Gui::ShowHelpMarker("If this is set to 0.0, you'll move at the vanilla speed. If you set it to any other value, you'll move at that speed.");
 	
     ImGui::SetNextItemWidth(230.0f);
-	ImGui::InputFloat("Player max speed", &CustomPlayerMaxSpeed, 1.0f, 5.0f, 3);
+	ImGui::InputFloat("Player max speed", &Globals::PlayerPtr->MaxSpeed, 1.0f, 5.0f, 3);
 	ImGui::SameLine();
-	ImGui::Checkbox("##Player max move speed checkbox", &NeedCustomMaxMoveSpeedSet);
+	if(ImGui::Button("Reset##PlayerMaxSpeedCustomReset"))
+	{
+        Globals::PlayerPtr->MaxSpeed = 0.0f;
+	}
 	ImGui::Separator();
 
     if (Globals::SpeedScale)

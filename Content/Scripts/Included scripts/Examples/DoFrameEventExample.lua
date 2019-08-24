@@ -1,5 +1,5 @@
 
-local function MyEvent()
+local function MyEvent(EventData)
         rsl.Log("Per frame event triggered!\n")
 end
 

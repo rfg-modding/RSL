@@ -412,6 +412,7 @@ void ScriptManager::UpdateRfgPointers()
     RfgTable["PhysicsSolver"] = &Globals::hkpWorldPtr->m_dynamicsStepInfo.m_solverInfo;
     RfgTable["ExplosionInfos"] = &Globals::ExplosionInfos;
     RfgTable["WeaponInfos"] = Globals::WeaponInfos;
+    RfgTable["PlayerMaxMovementSpeedOverride"] = Globals::PlayerMaxMovementSpeedOverride;
     
     LuaStateRef["Player"] = Globals::PlayerPtr;
 	LuaStateRef["World"] = Globals::RfgWorldPtr;

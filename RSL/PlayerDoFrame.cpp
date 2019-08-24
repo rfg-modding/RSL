@@ -57,14 +57,6 @@ void __fastcall Hooks::PlayerDoFrameHook(Player* PlayerPtr)
     {
         PlayerPtr->CodeDrivenJumpHeight = TweaksMenuRef.Get().CustomJumpHeight;
     }
-    if (TweaksMenuRef.Get().NeedCustomMoveSpeedSet)
-    {
-        PlayerPtr->MoveSpeed = TweaksMenuRef.Get().CustomPlayerMoveSpeed;
-    }
-    if (TweaksMenuRef.Get().NeedCustomMaxMoveSpeedSet)
-    {
-        PlayerPtr->MaxSpeed = TweaksMenuRef.Get().CustomPlayerMaxSpeed;
-    }
     if (TweaksMenuRef.Get().LockAlertLevel)
     {
         GsmSetAlertLevel(TweaksMenuRef.Get().CustomAlertLevel);

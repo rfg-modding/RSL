@@ -513,6 +513,8 @@ void Application::SetMemoryLocations()
     Globals::GraphicsState.Init();
 
     Globals::SpeedScale = OffsetPtr<float*>(0x125CBD4); //.data:01B5CBD4 rfg.exe:$125CBD4 #125B5D4 <s_speedScale>
+    Globals::Frametime = OffsetPtr<float*>(0x1119560); //.data:022B9560 rfg.exe:$1119560 #1117F60 <Frametime>
+    Globals::PlayerMaxMovementSpeedOverride = OffsetPtr<float*>(0x2C2F0B4); //.data:03DCF0B4 rfg.exe:$2C2F0B4 #0 <Player_max_movement_speed_override>
 
     Scripts.UpdateRfgPointers();
 } 

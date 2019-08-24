@@ -147,6 +147,8 @@ namespace Globals
     uint* NumWeaponInfos = nullptr;
 
     float* SpeedScale = nullptr;
+    float* Frametime;
+    float* PlayerMaxMovementSpeedOverride; 
 
     namespace Launcher
     {

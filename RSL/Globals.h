@@ -170,6 +170,8 @@ namespace Globals
     extern uint* NumWeaponInfos; //.data:037C2C94 rfg.exe:$3482C94 #0 <Num_weapon_infos>
 
     extern float* SpeedScale;
+    extern float* Frametime; //.data:022B9560 rfg.exe:$1119560 #1117F60 <Frametime>
+    extern float* PlayerMaxMovementSpeedOverride; //.data:03DCF0B4 rfg.exe:$2C2F0B4 #0 <Player_max_movement_speed_override>
 
     namespace Launcher
     {
