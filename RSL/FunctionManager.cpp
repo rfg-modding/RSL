@@ -200,4 +200,9 @@ void FunctionManager::Initialize()
     RegisterFunction(havok_body_force_activate, 0x417730);
     RegisterFunction(havok_body_set_movable, 0x423DA0);
     RegisterFunction(havok_body_get_mass, 0x423DD0);
+
+    RegisterFunction(objective_highlight_add, 0x73A790);
+    RegisterFunction(objective_highlight_remove, 0x73A840);
+    RegisterFunction(objective_highlight_remove_all, 0x73A8B0);
+
 }

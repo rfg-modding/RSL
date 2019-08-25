@@ -180,6 +180,7 @@ echo #define RSL_BUILD_DATE %buildTime:~0,8% &gt;&gt; $(ProjectDir)/BuildDate.h<
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ApiTables.cpp" />
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="Application_UpdateTime.cpp" />
     <ClCompile Include="AttachInfoDataLua.cpp" />
@@ -277,8 +278,10 @@ echo #define RSL_BUILD_DATE %buildTime:~0,8% &gt;&gt; $(ProjectDir)/BuildDate.h<
     <ClCompile Include="WndProc.cpp" />
     <ClCompile Include="WorldLua.cpp" />
     <ClCompile Include="World_DoFrame.cpp" />
+    <ClCompile Include="world_load_territory.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ApiTables.h" />
     <ClInclude Include="Application.h" />
     <ClInclude Include="AttachInfoDataLua.h" />
     <ClInclude Include="BaseGui.h" />

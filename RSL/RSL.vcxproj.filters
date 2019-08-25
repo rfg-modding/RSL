@@ -326,6 +326,12 @@
     <ClCompile Include="WeaponInfoLua.cpp">
       <Filter>Lua Binding</Filter>
     </ClCompile>
+    <ClCompile Include="ApiTables.cpp">
+      <Filter>Lua Binding</Filter>
+    </ClCompile>
+    <ClCompile Include="world_load_territory.cpp">
+      <Filter>Hooks</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CameraWrapper.h">
@@ -590,6 +596,9 @@
       <Filter>General Files\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="WeaponInfoLua.h">
+      <Filter>Lua Binding</Filter>
+    </ClInclude>
+    <ClInclude Include="ApiTables.h">
       <Filter>Lua Binding</Filter>
     </ClInclude>
   </ItemGroup>

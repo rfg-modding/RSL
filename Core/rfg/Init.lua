@@ -44,5 +44,7 @@ rfg.WeaponClasses = require("rfg.WeaponClasses")
 rfg.AnimationGroups = require("rfg.AnimationGroups")
 rfg.TriggerTypes = require("rfg.TriggerTypes")
 rfg.AmmoTypes = require("rfg.AmmoTypes")
+rfg.HighlightPurposes = require("rfg.HighlightPurposes")
+rfg.HighlightStyles = require("rfg.HighlightStyles")
 
 return rfg

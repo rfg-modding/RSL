@@ -1177,3 +1177,24 @@ struct audiolib_params
     __int16 num_positions;
     vector position_list[16];
 };
+
+enum highlight_purpose
+{
+    HIGHLIGHT_PURPOSE_DESTROY = 0x0,
+    HIGHLIGHT_PURPOSE_NEUTRAL = 0x1,
+    HIGHLIGHT_PURPOSE_EDF = 0x2,
+    HIGHLIGHT_PURPOSE_ACTIVITY = 0x3,
+    NUM_HIGHLIGHT_PURPOSES = 0x4,
+};
+
+enum highlight_style
+{
+    HIGHLIGHT_STYLE_DEFAULT = 0xFFFFFFFF,
+    HIGHLIGHT_STYLE_NONE = 0x0,
+    HIGHLIGHT_STYLE_GLOW = 0x1,
+    HIGHLIGHT_STYLE_FRAME = 0x2,
+    HIGHLIGHT_STYLE_ARROW = 0x3,
+    HIGHLIGHT_STYLE_ARROW_FOR_PASSENGER = 0x4,
+    HIGHLIGHT_STYLE_CYLINDER = 0x5,
+    NUM_HIGHLIGHT_STYLES = 0x6,
+};

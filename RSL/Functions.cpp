@@ -336,3 +336,7 @@ F_verify_gamesave_exit_notify verify_gamesave_exit_notify;
 F_havok_body_force_activate havok_body_force_activate;
 F_havok_body_set_movable havok_body_set_movable;
 F_havok_body_get_mass havok_body_get_mass;
+
+F_objective_highlight_add objective_highlight_add;
+F_objective_highlight_remove objective_highlight_remove;
+F_objective_highlight_remove_all objective_highlight_remove_all;

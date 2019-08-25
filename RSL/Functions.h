@@ -815,3 +815,13 @@ using F_havok_body_get_mass = float(__cdecl*)(uint handle);
 extern F_havok_body_get_mass havok_body_get_mass;
 
 //.text:018DA790 rfg.exe:$73A790 #739B90 <objective_highlight_add> //void __cdecl objective_highlight_add(unsigned int handle, highlight_purpose color_hint, highlight_style style)
+using F_objective_highlight_add = void(__cdecl*)(unsigned int handle, highlight_purpose color_hint, highlight_style style);
+extern F_objective_highlight_add objective_highlight_add;
+
+//.text:018DA840 rfg.exe:$73A840 #739C40 <objective_highlight_remove> //void __cdecl objective_highlight_remove(unsigned int handle)
+using F_objective_highlight_remove = void(__cdecl*)(unsigned int handle);
+extern F_objective_highlight_remove objective_highlight_remove;
+
+//.text:018DA8B0 rfg.exe:$73A8B0 #739CB0 <objective_highlight_remove_all> //void __cdecl objective_highlight_remove_all()
+using F_objective_highlight_remove_all = void(__cdecl*)();
+extern F_objective_highlight_remove_all objective_highlight_remove_all;
