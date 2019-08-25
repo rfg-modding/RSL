@@ -126,4 +126,9 @@ private:
     float DefaultFileBrowserColumnWidthPercentage = 0.3f;
 
     std::string PathBuffer; //Used as buffer for path input in save as popup
+
+    bool FileTreeLocked = false;
+
+    void LockFileTree() { FileTreeLocked = true; }
+    void UnlockFileTree() { FileTreeLocked = false; }
 };

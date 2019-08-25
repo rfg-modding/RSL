@@ -194,8 +194,11 @@ void TextEditorWrapper::UpdateFileBrowser()
     long long TimeElapsed = std::chrono::duration_cast<std::chrono::milliseconds>(CurrentTime - LastFileBrowserGeneration).count();
     if (TimeElapsed > BrowserUpdatePeriodMs)
     {
-        GenerateFileBrowserNodes();
-        LastFileBrowserGeneration = std::chrono::steady_clock::now();
+        if(!FileTreeLocked)
+        {
+            GenerateFileBrowserNodes();
+            LastFileBrowserGeneration = std::chrono::steady_clock::now();
+        }
     }
 }
 
@@ -285,12 +288,15 @@ void TextEditorWrapper::TryOpenBrowserNode(FileBrowserNode& Node)
     }
     if(ScriptBeenEdited())
     {
+        LockFileTree();
         PendingOpenNode = &Node;
         ShowConfirmSaveChangesPopup = true;
     }
     else
     {
+        LockFileTree();
         LoadScript(Node.Path.string(), Node.Path.stem().string());
+        UnlockFileTree();
     }
 }
 
@@ -779,29 +785,26 @@ void TextEditorWrapper::DrawConfirmSaveChangesPopup()
         if(ImGui::Button("Yes"))
         {
             auto& Path = PendingOpenNode->Path;
-            if(Path.has_stem())
-            {
-                SaveScript();
-                LoadScript(PendingOpenNode->Path.string(), PendingOpenNode->Path.stem().string());
-                PendingOpenNode = nullptr;
-                ImGui::CloseCurrentPopup();
-            }
+            SaveScript();
+            LoadScript(PendingOpenNode->Path.string(), PendingOpenNode->Path.stem().string());
+            PendingOpenNode = nullptr;
+            UnlockFileTree();
+            ImGui::CloseCurrentPopup();
         }
         ImGui::SameLine();
         if(ImGui::Button("No"))
         {
             auto& Path = PendingOpenNode->Path;
-            if(Path.has_stem())
-            {
-                LoadScript(PendingOpenNode->Path.string(), PendingOpenNode->Path.stem().string());
-                PendingOpenNode = nullptr;
-                ImGui::CloseCurrentPopup();
-            }
+            LoadScript(PendingOpenNode->Path.string(), PendingOpenNode->Path.stem().string());
+            PendingOpenNode = nullptr;
+            UnlockFileTree();
+            ImGui::CloseCurrentPopup();
         }
         ImGui::SameLine();
         if(ImGui::Button("Cancel"))
         {
             PendingOpenNode = nullptr;
+            UnlockFileTree();
             ImGui::CloseCurrentPopup();
         }
 
