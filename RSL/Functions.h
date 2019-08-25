@@ -825,3 +825,7 @@ extern F_objective_highlight_remove objective_highlight_remove;
 //.text:018DA8B0 rfg.exe:$73A8B0 #739CB0 <objective_highlight_remove_all> //void __cdecl objective_highlight_remove_all()
 using F_objective_highlight_remove_all = void(__cdecl*)();
 extern F_objective_highlight_remove_all objective_highlight_remove_all;
+
+//.text:016E1430 rfg.exe:$541430 #540830 <world::load_territory> //bool __thiscall world::load_territory(world *this)
+using F_world_load_territory = bool(__fastcall*)(World* this_ptr, void* edx); //2nd arg is edx, needed for __thiscall functions.
+extern F_world_load_territory world_load_territory;

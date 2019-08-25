@@ -9,6 +9,7 @@
 
 #include <sstream>
 #include <windows.h>
+#include <windowsx.h>
 #include <cstdio>
 #include <cstdlib>
 #include <fstream>

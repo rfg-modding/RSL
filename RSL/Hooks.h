@@ -67,5 +67,8 @@ namespace Hooks
     void __cdecl rfg_init_stage_2_done_2_hook();
 
     bool __cdecl verify_gamesave_exit_notify_hook(GameState new_state);
+
+    //.text:016E1430 rfg.exe:$541430 #540830 <world::load_territory> //bool __thiscall world::load_territory(world *this)
+    bool __fastcall world_load_territory_hook(World* this_ptr, void* edx);
 }
 

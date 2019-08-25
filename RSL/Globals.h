@@ -173,6 +173,8 @@ namespace Globals
     extern float* Frametime; //.data:022B9560 rfg.exe:$1119560 #1117F60 <Frametime>
     extern float* PlayerMaxMovementSpeedOverride; //.data:03DCF0B4 rfg.exe:$2C2F0B4 #0 <Player_max_movement_speed_override>
 
+    extern bool CanTriggerOnLoadEvent;
+
     namespace Launcher
     {
         extern bool ShouldRunRsl; //Used by the launcher WndProc to track if the launcher should launch the main RSL code after it closes or start a vanilla game.

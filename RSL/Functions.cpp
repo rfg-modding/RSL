@@ -340,3 +340,5 @@ F_havok_body_get_mass havok_body_get_mass;
 F_objective_highlight_add objective_highlight_add;
 F_objective_highlight_remove objective_highlight_remove;
 F_objective_highlight_remove_all objective_highlight_remove_all;
+
+F_world_load_territory world_load_territory;

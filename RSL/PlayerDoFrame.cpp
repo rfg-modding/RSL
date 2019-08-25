@@ -3,6 +3,7 @@
 
 void __fastcall Hooks::PlayerDoFrameHook(Player* PlayerPtr)
 {
+    static int OnLoadCounter = 0;
     static int TimesCalled = 0;
     static bool InitEventTriggered = false;
     if(!InitEventTriggered)
@@ -15,6 +16,19 @@ void __fastcall Hooks::PlayerDoFrameHook(Player* PlayerPtr)
         else
         {
             TimesCalled++;
+        }
+    }
+    if(Globals::CanTriggerOnLoadEvent)
+    {
+        if(OnLoadCounter >= 200) //Wait 200 frames to ensure everything is initialized
+        {
+            Globals::Scripts->TriggerLoadEvent();
+            Globals::CanTriggerOnLoadEvent = false;
+            OnLoadCounter = 0;
+        }
+        else
+        {
+            OnLoadCounter++;
         }
     }
 

@@ -417,6 +417,8 @@ void Application::CreateHooks()
     
     Hooks.CreateHook("gamestate_gp_process", Globals::ModuleBase + 0x3EE450, Hooks::gamestate_gp_process_hook, gamestate_gp_process);
 
+    Hooks.CreateHook("world::load_territory", Globals::ModuleBase + 0x541430, Hooks::world_load_territory_hook, world_load_territory);
+
     //Hooks.CreateHook("rfg_init_stage_2_done", Globals::ModuleBase + 0x1D56A0, Hooks::rfg_init_stage_2_done_hook, rfg_init_stage_2_done);
     //Hooks.CreateHook("rfg_init_stage_2_done_2", Globals::ModuleBase + 0x1D2480, Hooks::rfg_init_stage_2_done_2_hook, rfg_init_stage_2_done_2);
 

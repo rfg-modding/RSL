@@ -148,7 +148,9 @@ namespace Globals
 
     float* SpeedScale = nullptr;
     float* Frametime;
-    float* PlayerMaxMovementSpeedOverride; 
+    float* PlayerMaxMovementSpeedOverride;
+
+    bool CanTriggerOnLoadEvent = true;
 
     namespace Launcher
     {

@@ -440,6 +440,91 @@ void ScriptManager::TriggerInitializedEvent()
     }
 }
 
+void ScriptManager::TriggerMouseEvent(uint Message, uint wParam, uint lParam, KeyState& Keys)
+{
+    std::lock_guard<std::recursive_mutex> Lock(Mutex);
+
+    if (game_is_paused()) return;
+    if (!LuaState) return;
+
+    ScriptEvent& MouseEvent = Events[3];
+    MouseEvent.Update();
+
+    if (MouseEvent.Enabled())
+    {
+        for (auto& EventHook : MouseEvent.Hooks)
+        {
+            if (EventHook.Enabled)
+            {
+                sol::table EventData = LuaState->create_table();
+                if(Message == WM_MOUSEWHEEL)
+                {
+                    EventData["Scrolled"] = true;
+                    EventData["ScrollDelta"] = GET_WHEEL_DELTA_WPARAM(wParam);
+                }
+                else
+                {
+                    EventData["Scrolled"] = false;
+                    EventData["ScrollDelta"] = 0;
+                }
+                if(Message == WM_MOUSEMOVE)
+                {
+                    EventData["MouseMove"] = true;
+                    EventData["MouseX"] = GET_X_LPARAM(lParam);
+                    EventData["MouseY"] = GET_Y_LPARAM(lParam);
+                }
+                else
+                {
+                    EventData["MouseMove"] = false;
+                    EventData["MouseX"] = 0;
+                    EventData["MouseY"] = 0;
+                }
+
+                EventData["ControlDown"] = Keys.ControlDown;
+                EventData["ShiftDown"] = Keys.ShiftDown;
+                EventData["AltDown"] = Keys.AltDown;
+                EventData["WindowsDown"] = Keys.WindowsDown;
+
+                //Todo: Make a function that safely calls sol::functions like this, and wraps it in logging and error reporting code
+                sol::protected_function_result Result = EventHook.Hook(EventData);
+                if (!Result.valid())
+                {
+                    sol::error Error = Result;
+                    std::string What(Error.what());
+                    Logger::LogError("{} encountered an error! Message: {}", EventHook.HookName, What);
+                }
+            }
+        }
+    }
+}
+
+void ScriptManager::TriggerLoadEvent()
+{
+    std::lock_guard<std::recursive_mutex> Lock(Mutex);
+
+    if (!LuaState) return;
+
+    ScriptEvent& MouseEvent = Events[4];
+    MouseEvent.Update();
+
+    if (MouseEvent.Enabled())
+    {
+        for (auto& EventHook : MouseEvent.Hooks)
+        {
+            if (EventHook.Enabled)
+            {
+                sol::protected_function_result Result = EventHook.Hook();
+                if (!Result.valid())
+                {
+                    sol::error Error = Result;
+                    std::string What(Error.what());
+                    Logger::LogError("{} encountered an error! Message: {}", EventHook.HookName, What);
+                }
+            }
+        }
+    }
+}
+
 std::string ScriptManager::GetScriptNameFromPath(const std::string& FullPath) const
 {
     if (!std::filesystem::path(FullPath).has_filename()) return {};

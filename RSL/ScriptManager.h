@@ -129,13 +129,21 @@ public:
     void TriggerInputEvent(uint Message, uint KeyCode, KeyState& Keys);
     void TriggerDoFrameEvent();
     void TriggerInitializedEvent();
+    void TriggerMouseEvent(uint Message, uint wParam, uint lParam, KeyState& Keys);
+    void TriggerLoadEvent();
 
 	sol::state* LuaState = nullptr; //Uses a pointer for easy LuaState resets.
 	std::vector <ScriptFolder> SubFolders; //List of scripts detected in SubFolders folder on the last scan.
 
-    std::array<ScriptEvent, 3> Events = { {ScriptEvent("Keypress"), ScriptEvent("FrameUpdate"), ScriptEvent("Initialized")} };
+    std::array<ScriptEvent, 5> Events = {
+        {
+            ScriptEvent("Keypress"), ScriptEvent("FrameUpdate"), ScriptEvent("Initialized"),
+            ScriptEvent("Mouse"), ScriptEvent("Load")
+        }};
 
     std::unordered_map<int, sol::function> MessageBoxCallbacks;
+
+    void RegisterEvent(std::string EventTypeName, const sol::function& EventFunction, const std::string& EventName = "GenericEvent");
 
 private:
     [[nodiscard]] std::string GetScriptNameFromPath(const std::string& FullPath) const;
@@ -145,7 +153,6 @@ private:
     [[nodiscard]] bool IsValidScriptExtension(std::string Extension) const;
 
 	void SetupLua();
-    void RegisterEvent(std::string EventTypeName, const sol::function& EventFunction, const std::string& EventName = "GenericEvent");
 
     //std::vector<ScriptEvent> Events;
 

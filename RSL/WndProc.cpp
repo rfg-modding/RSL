@@ -19,6 +19,11 @@ LRESULT __stdcall Hooks::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lPar
     case WM_KEYUP:
         Globals::Scripts->TriggerInputEvent(msg, wParam, Keys);
         break;
+    case WM_MOUSEWHEEL:
+        Globals::Scripts->TriggerMouseEvent(msg, wParam, lParam, Keys);
+        break;
+    case WM_MOUSEMOVE:
+        Globals::Scripts->TriggerMouseEvent(msg, wParam, lParam, Keys);
     default:
         break;
     }

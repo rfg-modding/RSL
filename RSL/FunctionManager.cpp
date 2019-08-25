@@ -205,4 +205,5 @@ void FunctionManager::Initialize()
     RegisterFunction(objective_highlight_remove, 0x73A840);
     RegisterFunction(objective_highlight_remove_all, 0x73A8B0);
 
+    RegisterFunction(world_load_territory, 0x541430);
 }
