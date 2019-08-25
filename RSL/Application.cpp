@@ -419,6 +419,8 @@ void Application::CreateHooks()
 
     Hooks.CreateHook("world::load_territory", Globals::ModuleBase + 0x541430, Hooks::world_load_territory_hook, world_load_territory);
 
+    //Hooks.CreateHook("can_drop_vehicle", Globals::ModuleBase + 0x756000, Hooks::can_drop_vehicle_hook, can_drop_vehicle);
+
     //Hooks.CreateHook("rfg_init_stage_2_done", Globals::ModuleBase + 0x1D56A0, Hooks::rfg_init_stage_2_done_hook, rfg_init_stage_2_done);
     //Hooks.CreateHook("rfg_init_stage_2_done_2", Globals::ModuleBase + 0x1D2480, Hooks::rfg_init_stage_2_done_2_hook, rfg_init_stage_2_done_2);
 

@@ -186,6 +186,7 @@ echo #define RSL_BUILD_DATE %buildTime:~0,8% &gt;&gt; $(ProjectDir)/BuildDate.h<
     <ClCompile Include="AttachInfoDataLua.cpp" />
     <ClCompile Include="BaseGui.cpp" />
     <ClCompile Include="BaseTypeLua.cpp" />
+    <ClCompile Include="CanDropVehicle.cpp" />
     <ClCompile Include="D3D11Present.cpp" />
     <ClCompile Include="D3D11_ResizeBuffers.cpp" />
     <ClCompile Include="EventViewerGui.cpp" />

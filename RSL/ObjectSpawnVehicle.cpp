@@ -6,6 +6,7 @@ spawn_status_result __cdecl Hooks::object_spawn_vehicle_hook(vehicle_spawn_param
     //Note: I was getting a crash only when x32dbg was attached which was due to a nullptr being pass to this function
     //Not sure if this is something caused by the debugger or also indicative of an issue with the RSL somewhere.
     //For now this fixes the issue. 
+
     vehicle_spawn_params* ptr = &spawn_param;
     if(!ptr)
     {
@@ -14,6 +15,9 @@ spawn_status_result __cdecl Hooks::object_spawn_vehicle_hook(vehicle_spawn_param
     }
 
 #if DEBUG
+    Globals::VehicleSpawnCache = spawn_param;
+    Logger::Log("Caching vehicle spawn params");
+
     if(spawn_param.veh_info->name)
     {
         Logger::Log("object_spawn_vehicle called! Vehicle name: {}\n", spawn_param.veh_info->name);
@@ -23,7 +27,6 @@ spawn_status_result __cdecl Hooks::object_spawn_vehicle_hook(vehicle_spawn_param
         Logger::Log("object_spawn_vehicle called!\n");
     }
 #endif
-
 
     return object_spawn_vehicle(spawn_param);
 }

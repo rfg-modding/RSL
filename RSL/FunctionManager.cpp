@@ -206,4 +206,6 @@ void FunctionManager::Initialize()
     RegisterFunction(objective_highlight_remove_all, 0x73A8B0);
 
     RegisterFunction(world_load_territory, 0x541430);
+
+    RegisterFunction(can_drop_vehicle, 0x756000);
 }

@@ -175,6 +175,10 @@ namespace Globals
 
     extern bool CanTriggerOnLoadEvent;
 
+    extern bool ForceVehicleDrops;
+
+    extern vehicle_spawn_params VehicleSpawnCache;
+
     namespace Launcher
     {
         extern bool ShouldRunRsl; //Used by the launcher WndProc to track if the launcher should launch the main RSL code after it closes or start a vanilla game.

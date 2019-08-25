@@ -41,6 +41,27 @@ void VehicleSpawnerGui::Draw()
     ImGui::PopFont();
     ImGui::Separator();
 
+    ImGui::Checkbox("Force vehicle drops", &Globals::ForceVehicleDrops);
+
+    if(ImGui::Button("Copy vehicle spawn cache"))
+    {
+        CustomVehicleSpawnParams = Globals::VehicleSpawnCache;
+    }
+    if(ImGui::Button("Spawn with current params (SpSpawnVehicle)"))
+    {
+        CustomVehicleSpawnParams.vp = nullptr;
+        CustomVehicleSpawnParams.osrp = nullptr;
+        bool Result = SpSpawnVehicle(CustomVehicleSpawnParams);
+        Logger::Log("SpSpawnVehicle result: {}\n", Result);
+    }
+    if (ImGui::Button("Spawn with current params(ObjectSpawnVehicle)"))
+    {
+        CustomVehicleSpawnParams.vp = nullptr;
+        CustomVehicleSpawnParams.osrp = nullptr;
+        spawn_status_result Result = object_spawn_vehicle(CustomVehicleSpawnParams);
+        Logger::Log("object_spawn_vehicle result: {}\n", (int)Result);
+    }
+
     ImGui::SetNextItemWidth(250.0f);
     ImGui::InputFloat3("Spawn pos", (float*)& CustomVehicleSpawnParams.spawn_pos);
     ImGui::SameLine();
@@ -188,8 +209,12 @@ void VehicleSpawnerGui::Draw()
 
                     CustomVehicleSpawnParams.veh_info = &(*Globals::VehicleInfos)[i];
 
-                    spawn_status_result Result = object_spawn_vehicle(CustomVehicleSpawnParams);
-                    Logger::Log("object_spawn_vehicle result: {}\n", (int)Result);
+                    //spawn_status_result Result = object_spawn_vehicle(CustomVehicleSpawnParams);
+                    //Logger::Log("object_spawn_vehicle result: {}\n", (int)Result);
+
+                    bool Result = SpSpawnVehicle(CustomVehicleSpawnParams);
+                    Logger::Log("SpSpawnVehicle result: {}\n", Result);
+
                     //bool Result = CreateNewVehicle(&CustomVehicleSpawnParams);
                     //bool Result = SpSpawnVehicle(&CustomVehicleSpawnParams);
                     //auto Result = ObjectSpawnVehicle(&CustomVehicleSpawnParams);

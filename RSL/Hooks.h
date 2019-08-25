@@ -70,5 +70,7 @@ namespace Hooks
 
     //.text:016E1430 rfg.exe:$541430 #540830 <world::load_territory> //bool __thiscall world::load_territory(world *this)
     bool __fastcall world_load_territory_hook(World* this_ptr, void* edx);
+
+    bool __cdecl can_drop_vehicle_hook(vehicle_info* v_info, rfg::farray<object*, 256> * delete_object_list, vector* position, matrix* orient, unsigned int ignore_object, bool high_priority);
 }
 

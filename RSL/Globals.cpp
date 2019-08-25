@@ -151,6 +151,9 @@ namespace Globals
     float* PlayerMaxMovementSpeedOverride;
 
     bool CanTriggerOnLoadEvent = true;
+    bool ForceVehicleDrops = false;
+
+    vehicle_spawn_params VehicleSpawnCache;
 
     namespace Launcher
     {

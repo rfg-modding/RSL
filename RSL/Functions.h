@@ -644,15 +644,15 @@ extern F_cutscene_spawn_vehicle CutsceneSpawnVehicle;
 using F_vehicle_info_get_master_list =  rfg::farray<vehicle_info, 163>*(__cdecl*)();
 extern F_vehicle_info_get_master_list VehicleInfoGetMasterList;
 
-//.text:00796420 rfg.exe:$756420 #755820 <sp_spawn_vehicle> //bool __cdecl sp_spawn_vehicle(vehicle_spawn_params *spawn_param)
-using F_sp_spawn_vehicle = bool(__cdecl*)(vehicle_spawn_params* spawn_param);
+//.text:00796420 rfg.exe:$756420 #755820 <sp_spawn_vehicle> //bool __cdecl sp_spawn_vehicle(vehicle_spawn_params& spawn_param)
+using F_sp_spawn_vehicle = bool(__cdecl*)(vehicle_spawn_params& spawn_param);
 extern F_sp_spawn_vehicle SpSpawnVehicle;
 
 //.text:00788960 rfg.exe:$748960 #747D60 <create_new_vehicle> //bool __usercall create_new_vehicle@<al>(vehicle_spawn_params *spawn_param@<eax>)
 using F_create_new_vehicle = bool(__cdecl*)();//(vehicle_spawn_params* spawn_param);
 extern F_create_new_vehicle create_new_vehicle_raw;
 
-inline bool CreateNewVehicle(vehicle_spawn_params* spawn_params)
+inline bool CreateNewVehicle(vehicle_spawn_params& spawn_params)
 {
     __asm
     {
@@ -829,3 +829,7 @@ extern F_objective_highlight_remove_all objective_highlight_remove_all;
 //.text:016E1430 rfg.exe:$541430 #540830 <world::load_territory> //bool __thiscall world::load_territory(world *this)
 using F_world_load_territory = bool(__fastcall*)(World* this_ptr, void* edx); //2nd arg is edx, needed for __thiscall functions.
 extern F_world_load_territory world_load_territory;
+
+//.text:018F6000 rfg.exe:$756000 #755400 <can_drop_vehicle> //bool __cdecl can_drop_vehicle(vehicle_info *v_info, farray<object *,256> *delete_object_list, vector *position, matrix *orient, unsigned int ignore_object, bool high_priority)
+using F_can_drop_vehicle = bool(__cdecl*)(vehicle_info* v_info, rfg::farray<object*, 256>* delete_object_list, vector* position, matrix* orient, unsigned int ignore_object, bool high_priority);
+extern F_can_drop_vehicle can_drop_vehicle;
