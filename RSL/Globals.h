@@ -1,7 +1,7 @@
 #pragma once
 #include "Includes.h"
-#include "RFGR_Types_Keen_InputEvent.h"
 #include "FixedArrayWrapper.h"
+#include "RFGR_Types_Vehicle.h"
 #include "Version.h"
 #include "BuildDate.h"
 

@@ -41,6 +41,8 @@ namespace rfg
 		int NumberOfElements;
 	};
 
+    //Todo: Reverse the constructor for this to make sure this is correct.
+    //Todo: Make sure that the index operator [] is working for this.
 	template <class T, unsigned int InitialSize>
 	class farray : public base_array<T>
 	{
@@ -74,6 +76,22 @@ namespace rfg
 	{
 		rl_sampling_vector Values[T];
 	};
+
+    //Todo: Take a look at the constructor/initializer for this and double check what each value is set to
+    template <class T, unsigned int U>
+    class circ_array
+    {
+        T data[U];
+        int num = U;
+        int offset = 0;
+    };
+
+    template<class T>
+    class object_stream_resource
+    {
+        T m_data;
+        bool m_loaded = false;
+    };
 }
 
 namespace keen

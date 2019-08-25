@@ -24,6 +24,7 @@
 #include "WeaponInfoLua.h"
 #include "CameraWrapper.h"
 #include "ApiTables.h"
+#include "VehicleInfoLua.h"
 
 ScriptManager::~ScriptManager()
 {
@@ -81,7 +82,7 @@ void ScriptManager::SetupLua()
 
 	#pragma warning(push)
 	#pragma warning(disable : C4172)
-	Lua::BindRfgBaseArray(LuaStateRef);
+	Lua::BindRfgBaseArrayObjectPtr(LuaStateRef);
 	Lua::BindRfgFArray(LuaStateRef);
 	Lua::BindTimestamp(LuaStateRef);
 	Lua::BindTimestampPercent(LuaStateRef);
@@ -150,6 +151,14 @@ void ScriptManager::SetupLua()
     Lua::BindWeaponInfoFlags(LuaStateRef);
     Lua::BindWeaponInfo(LuaStateRef);
 
+    Lua::BindBbox(LuaStateRef);
+    Lua::BindVehicleInfoAxleWheelInfo(LuaStateRef);
+    Lua::BindRfgFarrayVehicleInfo163(LuaStateRef);
+    Lua::BindVehicleInfoTransmissionInfo(LuaStateRef);
+    Lua::BindVehicleCameraSettings(LuaStateRef);
+    Lua::BindAnimlibBonesUsedInfo(LuaStateRef);
+    Lua::BindVehicleInfo(LuaStateRef);
+
 	#pragma warning(pop) 
 
     UpdateRfgPointers();
@@ -188,6 +197,7 @@ void ScriptManager::UpdateRfgPointers()
     RfgTable["ExplosionInfos"] = &Globals::ExplosionInfos;
     RfgTable["WeaponInfos"] = Globals::WeaponInfos;
     RfgTable["PlayerMaxMovementSpeedOverride"] = Globals::PlayerMaxMovementSpeedOverride;
+    RfgTable["VehicleInfos"] = Globals::VehicleInfos;
     
     LuaStateRef["Player"] = Globals::PlayerPtr;
 	LuaStateRef["World"] = Globals::RfgWorldPtr;

@@ -177,8 +177,326 @@ struct lod_info
     float dist;
 };
 
-const struct  __declspec(align(4)) vehicle_info
+struct  __declspec(align(4)) vehicle_info
 {
+    vehicle_info(const vehicle_info& other)
+        : name(other.name),
+          display_name(other.display_name),
+          mesh_name(other.mesh_name),
+          vehicle_class(other.vehicle_class),
+          spawn_size(other.spawn_size),
+          spawn_box(other.spawn_box),
+          cover_info(other.cover_info),
+          slot_id(other.slot_id),
+          srid(other.srid),
+          variant_family(other.variant_family),
+          vehicle_classification(other.vehicle_classification),
+          default_team(other.default_team),
+          vi_info(other.vi_info),
+          m_max_hitpoints(other.m_max_hitpoints),
+          m_abandon_hitpoints(other.m_abandon_hitpoints),
+          chassis_mass(other.chassis_mass),
+          m_value(other.m_value),
+          m_chop_shop_props(other.m_chop_shop_props),
+          m_num_lods(other.m_num_lods),
+          num_turret_mounts(other.num_turret_mounts),
+          m_road_preference(other.m_road_preference),
+          engine_torque(other.engine_torque),
+          ai_engine_torque(other.ai_engine_torque),
+          min_rpm(other.min_rpm),
+          optimal_rpm(other.optimal_rpm),
+          max_rpm(other.max_rpm),
+          min_rpm_torque_factor(other.min_rpm_torque_factor),
+          max_rpm_torque_factor(other.max_rpm_torque_factor),
+          min_rpm_resistance(other.min_rpm_resistance),
+          opt_rpm_resistance(other.opt_rpm_resistance),
+          max_rpm_resistance(other.max_rpm_resistance),
+          reverse_torque_multiplier(other.reverse_torque_multiplier),
+          clutch_slip_rpm(other.clutch_slip_rpm),
+          enlarged_wheel_radius(other.enlarged_wheel_radius),
+          autobrake_speed(other.autobrake_speed),
+          enforced_max_speed(other.enforced_max_speed),
+          ai_enforced_max_speed(other.ai_enforced_max_speed),
+          enforced_max_rspeed(other.enforced_max_rspeed),
+          powerslide_friction(other.powerslide_friction),
+          powerslide_power(other.powerslide_power),
+          force_assist(other.force_assist),
+          m_num_axles(other.m_num_axles),
+          trans_info(other.trans_info),
+          max_steering_angle(other.max_steering_angle),
+          max_speed_steering_angle(other.max_speed_steering_angle),
+          ai_max_speed_steering_angle(other.ai_max_speed_steering_angle),
+          m_steering_wheel_max_speed(other.m_steering_wheel_max_speed),
+          m_steering_wheel_max_return_speed(other.m_steering_wheel_max_return_speed),
+          m_steering_wheel_damp_angle(other.m_steering_wheel_damp_angle),
+          m_steering_wheel_return_damp_angle(other.m_steering_wheel_return_damp_angle),
+          counter_steer_min_speed(other.counter_steer_min_speed),
+          counter_steer_max_speed(other.counter_steer_max_speed),
+          air_steer_roll_max_vel(other.air_steer_roll_max_vel),
+          air_steer_roll_max_angle_rad(other.air_steer_roll_max_angle_rad),
+          air_steer_pitch_max_vel(other.air_steer_pitch_max_vel),
+          air_steer_pitch_max_angle_rad(other.air_steer_pitch_max_angle_rad),
+          min_pedal_input_to_block(other.min_pedal_input_to_block),
+          min_time_to_block(other.min_time_to_block),
+          ai_min_time_to_block(other.ai_min_time_to_block),
+          air_density(other.air_density),
+          frontal_area(other.frontal_area),
+          drag_coefficient(other.drag_coefficient),
+          lift_coefficient(other.lift_coefficient),
+          extra_gravity(other.extra_gravity),
+          center_of_mass_y(other.center_of_mass_y),
+          center_of_mass_z(other.center_of_mass_z),
+          camera_settings_count(other.camera_settings_count),
+          m_energy_scale(other.m_energy_scale),
+          m_collision_mass_scalar(other.m_collision_mass_scalar),
+          m_collision_damage_scale(other.m_collision_damage_scale),
+          m_terrain_damage_scale(other.m_terrain_damage_scale),
+          m_bullet_damage_scale(other.m_bullet_damage_scale),
+          m_vehicle_damage_scale(other.m_vehicle_damage_scale),
+          m_friction_equalizer(other.m_friction_equalizer),
+          m_ai_friction_equalizer(other.m_ai_friction_equalizer),
+          m_torque_roll_factor(other.m_torque_roll_factor),
+          m_torque_pitch_factor(other.m_torque_pitch_factor),
+          m_torque_yaw_factor(other.m_torque_yaw_factor),
+          m_torque_yaw_scalar(other.m_torque_yaw_scalar),
+          m_extra_torque_factor(other.m_extra_torque_factor),
+          m_chassis_unit_inertia_roll(other.m_chassis_unit_inertia_roll),
+          m_chassis_unit_inertia_pitch(other.m_chassis_unit_inertia_pitch),
+          m_chassis_unit_inertia_yaw(other.m_chassis_unit_inertia_yaw),
+          m_ai_chassis_unit_inertia_yaw(other.m_ai_chassis_unit_inertia_yaw),
+          m_viscosity_friction(other.m_viscosity_friction),
+          m_ai_max_braking_decel(other.m_ai_max_braking_decel),
+          m_ai_max_radial_accel(other.m_ai_max_radial_accel),
+          m_alert_multiplier(other.m_alert_multiplier),
+          foley_start(other.foley_start),
+          engine_id(other.engine_id),
+          engine_wavebank_id(other.engine_wavebank_id),
+          foley_off(other.foley_off),
+          foley_engine_peel(other.foley_engine_peel),
+          foley_shift(other.foley_shift),
+          foley_grind(other.foley_grind),
+          foley_honk(other.foley_honk),
+          m_foley_scraping_id(other.m_foley_scraping_id),
+          m_foley_corpse_impact_id(other.m_foley_corpse_impact_id),
+          m_foley_component_impact_id(other.m_foley_component_impact_id),
+          m_foley_wheel_impact_id(other.m_foley_wheel_impact_id),
+          m_foley_pass_by(other.m_foley_pass_by),
+          m_foley_door_open_id(other.m_foley_door_open_id),
+          m_foley_door_close_id(other.m_foley_door_close_id),
+          m_effect_engine_fire(other.m_effect_engine_fire),
+          m_effect_engine_smoke(other.m_effect_engine_smoke),
+          m_effect_corpse_smoke(other.m_effect_corpse_smoke),
+          m_effect_component_fire(other.m_effect_component_fire),
+          m_effect_exhaust_normal(other.m_effect_exhaust_normal),
+          m_effect_exhaust_burst(other.m_effect_exhaust_burst),
+          m_effect_collision(other.m_effect_collision),
+          m_effect_scrape(other.m_effect_scrape),
+          m_effect_component_detach(other.m_effect_component_detach),
+          m_effect_head_light_primary(other.m_effect_head_light_primary),
+          m_effect_head_light_secondary(other.m_effect_head_light_secondary),
+          m_effect_fog_light(other.m_effect_fog_light),
+          m_effect_tail_light(other.m_effect_tail_light),
+          m_effect_brake_light(other.m_effect_brake_light),
+          m_effect_reverse_light(other.m_effect_reverse_light),
+          m_effect_emergency_light(other.m_effect_emergency_light),
+          m_effect_strobe_light(other.m_effect_strobe_light),
+          m_explosion_info(other.m_explosion_info),
+          m_bomb_explosion_info(other.m_bomb_explosion_info),
+          m_num_variants(other.m_num_variants),
+          m_normal_spin_damping(other.m_normal_spin_damping),
+          m_normal_spin_damping_ai(other.m_normal_spin_damping_ai),
+          m_collision_spin_damping(other.m_collision_spin_damping),
+          m_collision_spin_threshold(other.m_collision_spin_threshold),
+          m_camera_fov_multiplier(other.m_camera_fov_multiplier),
+          m_camera_fov_min_speed(other.m_camera_fov_min_speed),
+          m_camera_shake_min_speed(other.m_camera_shake_min_speed),
+          m_radial_blur_max(other.m_radial_blur_max),
+          m_radial_blur_min_speed(other.m_radial_blur_min_speed),
+          m_trailer_chance(other.m_trailer_chance),
+          rig_name(other.rig_name),
+          anim_set_name(other.anim_set_name),
+          footstep_effects(other.footstep_effects),
+          bones_used_info(other.bones_used_info),
+          flyer_max_up_thrust(other.flyer_max_up_thrust),
+          flyer_max_turn_angvel(other.flyer_max_turn_angvel),
+          flyer_max_turn_angaccl(other.flyer_max_turn_angaccl),
+          flyer_max_thrust_offset_x(other.flyer_max_thrust_offset_x),
+          flyer_max_thrust_offset_z(other.flyer_max_thrust_offset_z),
+          flyer_max_tilt_angvel(other.flyer_max_tilt_angvel),
+          flyer_max_tilt_angaccl(other.flyer_max_tilt_angaccl),
+          flyer_spin_bank_scalar(other.flyer_spin_bank_scalar),
+          flyer_thrust_tilt_scalar(other.flyer_thrust_tilt_scalar),
+          flyer_bank_tilt_scalar(other.flyer_bank_tilt_scalar),
+          flyer_def_lookat_y_scalar(other.flyer_def_lookat_y_scalar),
+          flyer_wingtip_effect(other.flyer_wingtip_effect),
+          flyer_thruster_effect(other.flyer_thruster_effect),
+          flyer_mainengine_effect(other.flyer_mainengine_effect),
+          flyer_jetwash_effect(other.flyer_jetwash_effect),
+          flags(other.flags)
+    {
+    }
+
+    vehicle_info& operator=(const vehicle_info& other)
+    {
+        if (this == &other)
+            return *this;
+        name = other.name;
+        display_name = other.display_name;
+        mesh_name = other.mesh_name;
+        vehicle_class = other.vehicle_class;
+        spawn_size = other.spawn_size;
+        spawn_box = other.spawn_box;
+        cover_info = other.cover_info;
+        slot_id = other.slot_id;
+        srid = other.srid;
+        variant_family = other.variant_family;
+        vehicle_classification = other.vehicle_classification;
+        default_team = other.default_team;
+        vi_info = other.vi_info;
+        m_max_hitpoints = other.m_max_hitpoints;
+        m_abandon_hitpoints = other.m_abandon_hitpoints;
+        chassis_mass = other.chassis_mass;
+        m_value = other.m_value;
+        m_chop_shop_props = other.m_chop_shop_props;
+        m_num_lods = other.m_num_lods;
+        num_turret_mounts = other.num_turret_mounts;
+        m_road_preference = other.m_road_preference;
+        engine_torque = other.engine_torque;
+        ai_engine_torque = other.ai_engine_torque;
+        min_rpm = other.min_rpm;
+        optimal_rpm = other.optimal_rpm;
+        max_rpm = other.max_rpm;
+        min_rpm_torque_factor = other.min_rpm_torque_factor;
+        max_rpm_torque_factor = other.max_rpm_torque_factor;
+        min_rpm_resistance = other.min_rpm_resistance;
+        opt_rpm_resistance = other.opt_rpm_resistance;
+        max_rpm_resistance = other.max_rpm_resistance;
+        reverse_torque_multiplier = other.reverse_torque_multiplier;
+        clutch_slip_rpm = other.clutch_slip_rpm;
+        enlarged_wheel_radius = other.enlarged_wheel_radius;
+        autobrake_speed = other.autobrake_speed;
+        enforced_max_speed = other.enforced_max_speed;
+        ai_enforced_max_speed = other.ai_enforced_max_speed;
+        enforced_max_rspeed = other.enforced_max_rspeed;
+        powerslide_friction = other.powerslide_friction;
+        powerslide_power = other.powerslide_power;
+        force_assist = other.force_assist;
+        m_num_axles = other.m_num_axles;
+        trans_info = other.trans_info;
+        max_steering_angle = other.max_steering_angle;
+        max_speed_steering_angle = other.max_speed_steering_angle;
+        ai_max_speed_steering_angle = other.ai_max_speed_steering_angle;
+        m_steering_wheel_max_speed = other.m_steering_wheel_max_speed;
+        m_steering_wheel_max_return_speed = other.m_steering_wheel_max_return_speed;
+        m_steering_wheel_damp_angle = other.m_steering_wheel_damp_angle;
+        m_steering_wheel_return_damp_angle = other.m_steering_wheel_return_damp_angle;
+        counter_steer_min_speed = other.counter_steer_min_speed;
+        counter_steer_max_speed = other.counter_steer_max_speed;
+        air_steer_roll_max_vel = other.air_steer_roll_max_vel;
+        air_steer_roll_max_angle_rad = other.air_steer_roll_max_angle_rad;
+        air_steer_pitch_max_vel = other.air_steer_pitch_max_vel;
+        air_steer_pitch_max_angle_rad = other.air_steer_pitch_max_angle_rad;
+        min_pedal_input_to_block = other.min_pedal_input_to_block;
+        min_time_to_block = other.min_time_to_block;
+        ai_min_time_to_block = other.ai_min_time_to_block;
+        air_density = other.air_density;
+        frontal_area = other.frontal_area;
+        drag_coefficient = other.drag_coefficient;
+        lift_coefficient = other.lift_coefficient;
+        extra_gravity = other.extra_gravity;
+        center_of_mass_y = other.center_of_mass_y;
+        center_of_mass_z = other.center_of_mass_z;
+        camera_settings_count = other.camera_settings_count;
+        m_energy_scale = other.m_energy_scale;
+        m_collision_mass_scalar = other.m_collision_mass_scalar;
+        m_collision_damage_scale = other.m_collision_damage_scale;
+        m_terrain_damage_scale = other.m_terrain_damage_scale;
+        m_bullet_damage_scale = other.m_bullet_damage_scale;
+        m_vehicle_damage_scale = other.m_vehicle_damage_scale;
+        m_friction_equalizer = other.m_friction_equalizer;
+        m_ai_friction_equalizer = other.m_ai_friction_equalizer;
+        m_torque_roll_factor = other.m_torque_roll_factor;
+        m_torque_pitch_factor = other.m_torque_pitch_factor;
+        m_torque_yaw_factor = other.m_torque_yaw_factor;
+        m_torque_yaw_scalar = other.m_torque_yaw_scalar;
+        m_extra_torque_factor = other.m_extra_torque_factor;
+        m_chassis_unit_inertia_roll = other.m_chassis_unit_inertia_roll;
+        m_chassis_unit_inertia_pitch = other.m_chassis_unit_inertia_pitch;
+        m_chassis_unit_inertia_yaw = other.m_chassis_unit_inertia_yaw;
+        m_ai_chassis_unit_inertia_yaw = other.m_ai_chassis_unit_inertia_yaw;
+        m_viscosity_friction = other.m_viscosity_friction;
+        m_ai_max_braking_decel = other.m_ai_max_braking_decel;
+        m_ai_max_radial_accel = other.m_ai_max_radial_accel;
+        m_alert_multiplier = other.m_alert_multiplier;
+        foley_start = other.foley_start;
+        engine_id = other.engine_id;
+        engine_wavebank_id = other.engine_wavebank_id;
+        foley_off = other.foley_off;
+        foley_engine_peel = other.foley_engine_peel;
+        foley_shift = other.foley_shift;
+        foley_grind = other.foley_grind;
+        foley_honk = other.foley_honk;
+        m_foley_scraping_id = other.m_foley_scraping_id;
+        m_foley_corpse_impact_id = other.m_foley_corpse_impact_id;
+        m_foley_component_impact_id = other.m_foley_component_impact_id;
+        m_foley_wheel_impact_id = other.m_foley_wheel_impact_id;
+        m_foley_pass_by = other.m_foley_pass_by;
+        m_foley_door_open_id = other.m_foley_door_open_id;
+        m_foley_door_close_id = other.m_foley_door_close_id;
+        m_effect_engine_fire = other.m_effect_engine_fire;
+        m_effect_engine_smoke = other.m_effect_engine_smoke;
+        m_effect_corpse_smoke = other.m_effect_corpse_smoke;
+        m_effect_component_fire = other.m_effect_component_fire;
+        m_effect_exhaust_normal = other.m_effect_exhaust_normal;
+        m_effect_exhaust_burst = other.m_effect_exhaust_burst;
+        m_effect_collision = other.m_effect_collision;
+        m_effect_scrape = other.m_effect_scrape;
+        m_effect_component_detach = other.m_effect_component_detach;
+        m_effect_head_light_primary = other.m_effect_head_light_primary;
+        m_effect_head_light_secondary = other.m_effect_head_light_secondary;
+        m_effect_fog_light = other.m_effect_fog_light;
+        m_effect_tail_light = other.m_effect_tail_light;
+        m_effect_brake_light = other.m_effect_brake_light;
+        m_effect_reverse_light = other.m_effect_reverse_light;
+        m_effect_emergency_light = other.m_effect_emergency_light;
+        m_effect_strobe_light = other.m_effect_strobe_light;
+        m_explosion_info = other.m_explosion_info;
+        m_bomb_explosion_info = other.m_bomb_explosion_info;
+        m_num_variants = other.m_num_variants;
+        m_normal_spin_damping = other.m_normal_spin_damping;
+        m_normal_spin_damping_ai = other.m_normal_spin_damping_ai;
+        m_collision_spin_damping = other.m_collision_spin_damping;
+        m_collision_spin_threshold = other.m_collision_spin_threshold;
+        m_camera_fov_multiplier = other.m_camera_fov_multiplier;
+        m_camera_fov_min_speed = other.m_camera_fov_min_speed;
+        m_camera_shake_min_speed = other.m_camera_shake_min_speed;
+        m_radial_blur_max = other.m_radial_blur_max;
+        m_radial_blur_min_speed = other.m_radial_blur_min_speed;
+        m_trailer_chance = other.m_trailer_chance;
+        rig_name = other.rig_name;
+        anim_set_name = other.anim_set_name;
+        footstep_effects = other.footstep_effects;
+        bones_used_info = other.bones_used_info;
+        flyer_max_up_thrust = other.flyer_max_up_thrust;
+        flyer_max_turn_angvel = other.flyer_max_turn_angvel;
+        flyer_max_turn_angaccl = other.flyer_max_turn_angaccl;
+        flyer_max_thrust_offset_x = other.flyer_max_thrust_offset_x;
+        flyer_max_thrust_offset_z = other.flyer_max_thrust_offset_z;
+        flyer_max_tilt_angvel = other.flyer_max_tilt_angvel;
+        flyer_max_tilt_angaccl = other.flyer_max_tilt_angaccl;
+        flyer_spin_bank_scalar = other.flyer_spin_bank_scalar;
+        flyer_thrust_tilt_scalar = other.flyer_thrust_tilt_scalar;
+        flyer_bank_tilt_scalar = other.flyer_bank_tilt_scalar;
+        flyer_def_lookat_y_scalar = other.flyer_def_lookat_y_scalar;
+        flyer_wingtip_effect = other.flyer_wingtip_effect;
+        flyer_thruster_effect = other.flyer_thruster_effect;
+        flyer_mainengine_effect = other.flyer_mainengine_effect;
+        flyer_jetwash_effect = other.flyer_jetwash_effect;
+        flags = other.flags;
+        return *this;
+    }
+
+
     friend std::ostream& operator<<(std::ostream& os, const vehicle_info& obj)
     {
         return os
@@ -337,6 +655,8 @@ const struct  __declspec(align(4)) vehicle_info
             << "\nflags: " << obj.flags;
     }
 
+    vehicle_info() = default;
+
     const char* name;
     const char* display_name;
     const char* mesh_name;
@@ -356,9 +676,9 @@ const struct  __declspec(align(4)) vehicle_info
     float m_value;
     unsigned int m_chop_shop_props;
     unsigned int m_num_lods;
-    lod_info m_lod_info[4];
+    float m_lod_info[4]{}; //lod_info
     int num_turret_mounts;
-    vehicle_info_turret_mount_info turret_mounts[2];
+    vehicle_info_turret_mount_info turret_mounts[2]{};
     vehicle_road_preference m_road_preference;
     float engine_torque;
     float ai_engine_torque;
@@ -381,8 +701,8 @@ const struct  __declspec(align(4)) vehicle_info
     float powerslide_power;
     float force_assist;
     unsigned int m_num_axles;
-    vehicle_info_axle_wheel_info m_axle_wheel_infos[4];
-    int m_exhaust_tag_id[4];
+    vehicle_info_axle_wheel_info m_axle_wheel_infos[4]{};
+    int m_exhaust_tag_id[4]{};
     vehicle_info_transmission_info trans_info;
     float max_steering_angle;
     float max_speed_steering_angle;
@@ -438,12 +758,12 @@ const struct  __declspec(align(4)) vehicle_info
     int foley_shift;
     int foley_grind;
     int foley_honk;
-    int m_foley_impact_id[2];
+    int m_foley_impact_id[2]{};
     int m_foley_scraping_id;
     int m_foley_corpse_impact_id;
     int m_foley_component_impact_id;
     int m_foley_wheel_impact_id;
-    int m_foley_chassis_land_id[2];
+    int m_foley_chassis_land_id[2]{};
     int m_foley_pass_by;
     int m_foley_door_open_id;
     int m_foley_door_close_id;

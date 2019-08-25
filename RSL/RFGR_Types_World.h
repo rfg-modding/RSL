@@ -681,6 +681,27 @@ struct rl_outline_state
 
 struct bbox
 {
+    bbox(const bbox& other)
+        : min(other.min),
+          max(other.max)
+    {
+    }
+
+    bbox& operator=(const bbox& other)
+    {
+        if (this == &other)
+            return *this;
+        min = other.min;
+        max = other.max;
+        return *this;
+    }
+
+    bbox(const vector& min, const vector& max)
+        : min(min),
+          max(max)
+    {
+    }
+
     friend std::ostream& operator<<(std::ostream& os, const bbox& obj)
     {
         return os

@@ -258,6 +258,7 @@ echo #define RSL_BUILD_DATE %buildTime:~0,8% &gt;&gt; $(ProjectDir)/BuildDate.h<
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="TimerLua.cpp" />
     <ClCompile Include="VectorLua.cpp" />
+    <ClCompile Include="VehicleInfoLua.cpp" />
     <ClCompile Include="VehicleSpawnerGui.cpp" />
     <ClCompile Include="verify_gamesave_exit_notify.cpp" />
     <ClCompile Include="WeaponInfoLua.cpp" />
@@ -332,6 +333,7 @@ echo #define RSL_BUILD_DATE %buildTime:~0,8% &gt;&gt; $(ProjectDir)/BuildDate.h<
     <ClInclude Include="IntrospectionGui.h" />
     <ClInclude Include="Launcher.h" />
     <ClInclude Include="RenderInterfaceD3D11.h" />
+    <ClInclude Include="RFGR_Types_Vehicle.h" />
     <ClInclude Include="RFGR_Types_Keen_InputEvent.h" />
     <ClInclude Include="RFGR_Types_Vehicle_Spawn_Params.h" />
     <ClInclude Include="RFGR_Types_weapon_info.h" />
@@ -339,6 +341,7 @@ echo #define RSL_BUILD_DATE %buildTime:~0,8% &gt;&gt; $(ProjectDir)/BuildDate.h<
     <ClInclude Include="TextEditorWrapper.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="TimerLua.h" />
+    <ClInclude Include="VehicleInfoLua.h" />
     <ClInclude Include="VehicleSpawnerGui.h" />
     <ClInclude Include="Version.h" />
     <ClInclude Include="WeaponInfoLua.h" />

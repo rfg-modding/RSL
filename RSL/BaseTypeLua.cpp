@@ -1,7 +1,7 @@
 #include "BaseTypeLua.h"
 #include "Functions.h"
 
-void Lua::BindRfgBaseArray(sol::state& LuaState)
+void Lua::BindRfgBaseArrayObjectPtr(sol::state& LuaState)
 {
 	auto RfgTable = LuaState["rfg"].get_or_create<sol::table>();
 	auto Utype = RfgTable.create_simple_usertype<rfg::base_array<Object*>>();
@@ -10,7 +10,7 @@ void Lua::BindRfgBaseArray(sol::state& LuaState)
 	Utype.set("Length", &rfg::base_array<Object*>::Length);
 	Utype.set("Capacity", &rfg::base_array<Object*>::Capacity);
 	Utype.set(sol::meta_function::index, &rfg::base_array<Object*>::operator[]);
-	RfgTable.set_usertype("RfgBaseArray", Utype);
+	RfgTable.set_usertype("RfgBaseArrayObjectPtr", Utype);
 }
 
 void Lua::BindRfgFArray(sol::state& LuaState)

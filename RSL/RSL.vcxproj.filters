@@ -332,6 +332,9 @@
     <ClCompile Include="world_load_territory.cpp">
       <Filter>Hooks</Filter>
     </ClCompile>
+    <ClCompile Include="VehicleInfoLua.cpp">
+      <Filter>Lua Binding</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CameraWrapper.h">
@@ -599,6 +602,12 @@
       <Filter>Lua Binding</Filter>
     </ClInclude>
     <ClInclude Include="ApiTables.h">
+      <Filter>Lua Binding</Filter>
+    </ClInclude>
+    <ClInclude Include="RFGR_Types_Vehicle.h">
+      <Filter>RFGR Structs</Filter>
+    </ClInclude>
+    <ClInclude Include="VehicleInfoLua.h">
       <Filter>Lua Binding</Filter>
     </ClInclude>
   </ItemGroup>

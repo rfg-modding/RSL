@@ -46,5 +46,8 @@ rfg.TriggerTypes = require("rfg.TriggerTypes")
 rfg.AmmoTypes = require("rfg.AmmoTypes")
 rfg.HighlightPurposes = require("rfg.HighlightPurposes")
 rfg.HighlightStyles = require("rfg.HighlightStyles")
+rfg.VehicleClasses = require("rfg.VehicleClasses")
+rfg.VehicleTypes = require("rfg.VehicleTypes")
+rfg.VehicleRoadPreferences = require("rfg.VehicleRoadPreferences")
 
 return rfg
