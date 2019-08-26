@@ -282,7 +282,7 @@ void GeneralTweaksGui::Draw()
         ImGui::InputScalar("Minutes", ImGuiDataType_U8, &GameClock->m_minutes);
         ImGui::InputScalar("Seconds", ImGuiDataType_U8, &GameClock->m_seconds);
         ImGui::InputScalar("Day of the week", ImGuiDataType_U8, &GameClock->m_day_of_week);
-        ImGui::InputFloat("Time scale", &GameClock->m_time_scale);
+        ImGui::SliderFloat("Time scale", &GameClock->m_time_scale, 0.0f, 1000.0f);
         ImGui::SameLine();
         if(ImGui::Button("Reset##GameClockTimeScale"))
         {
