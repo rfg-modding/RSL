@@ -208,4 +208,7 @@ void FunctionManager::Initialize()
     RegisterFunction(world_load_territory, 0x541430);
 
     RegisterFunction(can_drop_vehicle, 0x756000);
+
+    RegisterFunction(mission_get_name, 0x39DA30);
+    RegisterFunction(mission_get_description, 0x39DA60);
 }

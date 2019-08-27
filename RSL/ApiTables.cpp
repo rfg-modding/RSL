@@ -213,4 +213,28 @@ void Lua::BindApiFunctions(sol::state& LuaStateRef)
             Globals::Scripts->RegisterEvent(EventTypeName, EventFunction);
         }
     ));
+
+    RfgTable["GetMissionName"] = mission_get_name;
+    RfgTable["GetMissionDescription"] = mission_get_description;
+    RfgTable.set_function("LogCurrentMission", []()
+    {
+        const char* Name = mission_get_name();
+        const char* Description = mission_get_description();
+        if(Name)
+        {
+            Logger::Log("Mission name: {}\n", Name);
+        }
+        else
+        {
+            Logger::Log("No mission name found!\n");
+        }
+        if(Description)
+        {
+            Logger::Log("Mission description: {}\n", Description);
+        }
+        else
+        {
+            Logger::Log("No mission description found!\n");
+        }
+    });
 }

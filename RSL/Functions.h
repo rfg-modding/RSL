@@ -768,6 +768,8 @@ extern F_audiolib_get_listener_pos audiolib_get_listener_pos;
 using F_audiolib_cue_play_3d = int(__cdecl*)(int cue_id, vector* pos, vector* orient, vector* velocity, audiolib_result* error);
 extern F_audiolib_cue_play_3d audiolib_cue_play_3d;
 
+
+
 //.text:00CEE450 rfg.exe:$3EE450 #3ED850 <gamestate_gp_process> //void __cdecl gamestate_gp_process()
 using F_gamestate_gp_process = void(__cdecl*)();
 extern F_gamestate_gp_process gamestate_gp_process;
@@ -833,3 +835,11 @@ extern F_world_load_territory world_load_territory;
 //.text:018F6000 rfg.exe:$756000 #755400 <can_drop_vehicle> //bool __cdecl can_drop_vehicle(vehicle_info *v_info, farray<object *,256> *delete_object_list, vector *position, matrix *orient, unsigned int ignore_object, bool high_priority)
 using F_can_drop_vehicle = bool(__cdecl*)(vehicle_info* v_info, rfg::farray<object*, 256>* delete_object_list, vector* position, matrix* orient, unsigned int ignore_object, bool high_priority);
 extern F_can_drop_vehicle can_drop_vehicle;
+
+//.text:005BDA30 rfg.exe:$39DA30 #39CE30 <mission_get_name> //const char *__cdecl mission_get_name()
+using F_mission_get_name = const char*(__cdecl*)();
+extern F_mission_get_name mission_get_name;
+
+//.text:005BDA60 rfg.exe:$39DA60 #39CE60 <mission_get_description> //const char *__cdecl mission_get_description()
+using F_mission_get_description = const char*(__cdecl*)();
+extern F_mission_get_description mission_get_description;

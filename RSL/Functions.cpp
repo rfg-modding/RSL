@@ -344,3 +344,6 @@ F_objective_highlight_remove_all objective_highlight_remove_all;
 F_world_load_territory world_load_territory;
 
 F_can_drop_vehicle can_drop_vehicle;
+
+F_mission_get_name mission_get_name;
+F_mission_get_description mission_get_description;
