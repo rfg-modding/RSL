@@ -282,8 +282,8 @@ void Application::MainLoop()
     while (!ShouldClose()) //Todo: Change to respond to PostQuitMessage(0) in WndProc
     {
         std::chrono::steady_clock::time_point Begin = std::chrono::steady_clock::now();
-        const GameState State = GameseqGetState();
-        switch (State)
+        
+        switch (const GameState State = GameseqGetState(); State)
         {
         case GS_WRECKING_CREW_MAIN_MENU:
             Logger::LogFatalError("Wrecking crew is disabled while the RSL is active. Exiting.\n");

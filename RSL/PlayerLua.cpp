@@ -266,5 +266,13 @@ void Lua::BindPlayer(sol::state& LuaState)
 	Utype.set("NextRecord", &Player::NextRecord);
 	Utype.set("PositionalRecords", sol::property([](Player& Self) { return std::ref(Self.PositionalRecords); })); //Size 8 array of PlayerPositionalRecord
 	Utype.set("TrackingPeriod", &Player::TrackingPeriod);
+    Utype.set("CastToHuman", [](Player& Self) ->Human*
+    {
+        return static_cast<Human*>(&Self);
+    });
+    Utype.set("CastToObject", [](Player& Self) ->Object*
+    {
+        return static_cast<Object*>(&Self);
+    });
 	RfgTable.set_usertype("Player", Utype);
 }

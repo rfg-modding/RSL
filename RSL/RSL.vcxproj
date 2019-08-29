@@ -193,6 +193,7 @@ echo #define RSL_BUILD_DATE %buildTime:~0,8% &gt;&gt; $(ProjectDir)/BuildDate.h<
     <ClCompile Include="ExplosionCreate.cpp" />
     <ClCompile Include="ExplosionInfoLua.cpp" />
     <ClCompile Include="ExplosionSpawnerGui.cpp" />
+    <ClCompile Include="FlyerLua.cpp" />
     <ClCompile Include="gamestate_gp_process.cpp" />
     <ClCompile Include="GraphicsStateWrapper.cpp" />
     <ClCompile Include="GraphicsTweaksGui.cpp" />
@@ -260,6 +261,7 @@ echo #define RSL_BUILD_DATE %buildTime:~0,8% &gt;&gt; $(ProjectDir)/BuildDate.h<
     <ClCompile Include="TimerLua.cpp" />
     <ClCompile Include="VectorLua.cpp" />
     <ClCompile Include="VehicleInfoLua.cpp" />
+    <ClCompile Include="VehicleLua.cpp" />
     <ClCompile Include="VehicleSpawnerGui.cpp" />
     <ClCompile Include="verify_gamesave_exit_notify.cpp" />
     <ClCompile Include="WeaponInfoLua.cpp" />
@@ -293,6 +295,7 @@ echo #define RSL_BUILD_DATE %buildTime:~0,8% &gt;&gt; $(ProjectDir)/BuildDate.h<
     <ClInclude Include="ExplosionInfoLua.h" />
     <ClInclude Include="ExplosionSpawnerGui.h" />
     <ClInclude Include="FixedArrayWrapper.h" />
+    <ClInclude Include="FlyerLua.h" />
     <ClInclude Include="GraphicsStateWrapper.h" />
     <ClInclude Include="GraphicsTweaksGui.h" />
     <ClInclude Include="HkpRigidBodyLua.h" />
@@ -343,6 +346,7 @@ echo #define RSL_BUILD_DATE %buildTime:~0,8% &gt;&gt; $(ProjectDir)/BuildDate.h<
     <ClInclude Include="Timer.h" />
     <ClInclude Include="TimerLua.h" />
     <ClInclude Include="VehicleInfoLua.h" />
+    <ClInclude Include="VehicleLua.h" />
     <ClInclude Include="VehicleSpawnerGui.h" />
     <ClInclude Include="Version.h" />
     <ClInclude Include="WeaponInfoLua.h" />

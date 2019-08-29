@@ -25,6 +25,8 @@
 #include "CameraWrapper.h"
 #include "ApiTables.h"
 #include "VehicleInfoLua.h"
+#include "VehicleLua.h"
+#include "FlyerLua.h"
 
 ScriptManager::~ScriptManager()
 {
@@ -158,6 +160,14 @@ void ScriptManager::SetupLua()
     Lua::BindVehicleCameraSettings(LuaStateRef);
     Lua::BindAnimlibBonesUsedInfo(LuaStateRef);
     Lua::BindVehicleInfo(LuaStateRef);
+
+    Lua::BindVehicleFlags(LuaStateRef);
+    Lua::BindVehicleSpawnFlags(LuaStateRef);
+    Lua::BindVehicleRddFlags(LuaStateRef);
+    Lua::BindVehicle(LuaStateRef);
+
+    Lua::BindFlyerFlags(LuaStateRef);
+    Lua::BindFlyer(LuaStateRef);
 
 	#pragma warning(pop) 
 

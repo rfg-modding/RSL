@@ -1154,6 +1154,8 @@ struct audiolib_dsp_info
 
 struct audiolib_params
 {
+    audiolib_params() = default;
+
     unsigned __int16 flags;
     unsigned __int16 callback_flags;
     void* callback_func;//void(__cdecl* callback_func)(AUDIOLIB_CUE_CALLBACK_DATA*);

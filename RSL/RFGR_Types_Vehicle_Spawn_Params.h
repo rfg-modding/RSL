@@ -1441,6 +1441,8 @@ struct  __declspec(align(4)) object_stream_resource__vehicle_resource_dependent_
     bool m_loaded;
 };
 
+using uint = unsigned int;
+struct weapon_info;
 struct  __declspec(align(8)) vehicle : Object
 {
     object_stream_resource__vehicle_resource_dependent_data rdd;
@@ -1461,7 +1463,7 @@ struct  __declspec(align(8)) vehicle : Object
     Timestamp disable_for_npc_drivers_timer;
     Timestamp no_npc_entry_timer;
     ObjectRenderDistance render_distance;
-    vehicle_seat_info m_seat_info[11];
+    uint m_seat_info[11]; //vehicle_seat_info
     vehicle_damage_area m_damage_areas[1];
     int m_num_turret_mounts;
     vehicle_turret_mount m_turret_mounts[2];
@@ -1492,7 +1494,7 @@ struct  __declspec(align(8)) vehicle : Object
     HumanTeams team_of_most_recent_driver;
     Timestamp most_recent_driver_exit_time;
     Timestamp damage_sound_propagate_timer;
-    void* m_killer_weapon; //weapon_info* m_killer_weapon;
+    weapon_info* m_killer_weapon;
     int ramming_damage_taken;
     float m_electrical_damage_percent;
     float damage_percent;

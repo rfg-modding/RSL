@@ -166,6 +166,95 @@ struct flyer_flags
 
 struct  __declspec(align(4)) flyer : vehicle
 {
+    flyer(const flyer& other)
+        : vehicle(other),
+          f_rdd(other.f_rdd),
+          ctl_action(other.ctl_action),
+          req_urgency(other.req_urgency),
+          req_max_vel(other.req_max_vel),
+          req_point(other.req_point),
+          req_vel(other.req_vel),
+          req_lookat(other.req_lookat),
+          req_point_isvalid(other.req_point_isvalid),
+          req_vel_isvalid(other.req_vel_isvalid),
+          req_lookat_isvalid(other.req_lookat_isvalid),
+          req_stop_at_point(other.req_stop_at_point),
+          req_halt(other.req_halt),
+          wing_is_detached(other.wing_is_detached),
+          vehicle_mass(other.vehicle_mass),
+          chassis_com_cs(other.chassis_com_cs),
+          chassis_com_ws(other.chassis_com_ws),
+          thrust_mat_cs(other.thrust_mat_cs),
+          thrust_mat_ws(other.thrust_mat_ws),
+          thrust_up_target(other.thrust_up_target),
+          hover_noise_vec(other.hover_noise_vec),
+          hover_noise_vec_new(other.hover_noise_vec_new),
+          hover_noise_vec_old(other.hover_noise_vec_old),
+          hover_noise_timer(other.hover_noise_timer),
+          hover_noise_dur(other.hover_noise_dur),
+          engine_off_suspension_period(other.engine_off_suspension_period),
+          turbine_rpm_target(other.turbine_rpm_target),
+          turbine_rpm(other.turbine_rpm),
+          turbine_load(other.turbine_load),
+          l_wing(other.l_wing),
+          r_wing(other.r_wing),
+          l_canard(other.l_canard),
+          r_canard(other.r_canard),
+          jetwash(other.jetwash),
+          engine_force(other.engine_force),
+          startup_timer(other.startup_timer),
+          last_player_damage(other.last_player_damage),
+          catch_fire_timer(other.catch_fire_timer),
+          flyer_flags(other.flyer_flags)
+    {
+    }
+
+    flyer& operator=(const flyer& other)
+    {
+        if (this == &other)
+            return *this;
+        vehicle::operator =(other);
+        f_rdd = other.f_rdd;
+        ctl_action = other.ctl_action;
+        req_urgency = other.req_urgency;
+        req_max_vel = other.req_max_vel;
+        req_point = other.req_point;
+        req_vel = other.req_vel;
+        req_lookat = other.req_lookat;
+        req_point_isvalid = other.req_point_isvalid;
+        req_vel_isvalid = other.req_vel_isvalid;
+        req_lookat_isvalid = other.req_lookat_isvalid;
+        req_stop_at_point = other.req_stop_at_point;
+        req_halt = other.req_halt;
+        wing_is_detached = other.wing_is_detached;
+        vehicle_mass = other.vehicle_mass;
+        chassis_com_cs = other.chassis_com_cs;
+        chassis_com_ws = other.chassis_com_ws;
+        thrust_mat_cs = other.thrust_mat_cs;
+        thrust_mat_ws = other.thrust_mat_ws;
+        thrust_up_target = other.thrust_up_target;
+        hover_noise_vec = other.hover_noise_vec;
+        hover_noise_vec_new = other.hover_noise_vec_new;
+        hover_noise_vec_old = other.hover_noise_vec_old;
+        hover_noise_timer = other.hover_noise_timer;
+        hover_noise_dur = other.hover_noise_dur;
+        engine_off_suspension_period = other.engine_off_suspension_period;
+        turbine_rpm_target = other.turbine_rpm_target;
+        turbine_rpm = other.turbine_rpm;
+        turbine_load = other.turbine_load;
+        l_wing = other.l_wing;
+        r_wing = other.r_wing;
+        l_canard = other.l_canard;
+        r_canard = other.r_canard;
+        jetwash = other.jetwash;
+        engine_force = other.engine_force;
+        startup_timer = other.startup_timer;
+        last_player_damage = other.last_player_damage;
+        catch_fire_timer = other.catch_fire_timer;
+        flyer_flags = other.flyer_flags;
+        return *this;
+    }
+
     rfg::object_stream_resource<flyer_resource_dependent_data> f_rdd;
     flyer_control_action* ctl_action;
     float req_urgency;

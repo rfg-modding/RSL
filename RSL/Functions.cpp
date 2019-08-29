@@ -347,3 +347,10 @@ F_can_drop_vehicle can_drop_vehicle;
 
 F_mission_get_name mission_get_name;
 F_mission_get_description mission_get_description;
+
+F_vehicle_interaction_request_enter vehicle_interaction_request_enter;
+F_vehicle_interaction_request_exit vehicle_interaction_request_exit;
+F_vehicle_engine_start vehicle_engine_start;
+F_vehicle_engine_stop vehicle_engine_stop;
+F_flyer_engine_start flyer_engine_start;
+F_flyer_engine_stop flyer_engine_stop;

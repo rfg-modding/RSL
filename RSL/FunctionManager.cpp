@@ -211,4 +211,11 @@ void FunctionManager::Initialize()
 
     RegisterFunction(mission_get_name, 0x39DA30);
     RegisterFunction(mission_get_description, 0x39DA60);
+
+    RegisterFunction(vehicle_interaction_request_enter, 0x7B81F0);
+    RegisterFunction(vehicle_interaction_request_exit, 0x7B6060);
+    RegisterFunction(vehicle_engine_start, 0x777540);
+    RegisterFunction(vehicle_engine_stop, 0x777690);
+    RegisterFunction(flyer_engine_start, 0x77E4B0);
+    RegisterFunction(flyer_engine_stop, 0x77E4F0);
 }

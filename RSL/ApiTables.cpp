@@ -193,10 +193,16 @@ void Lua::BindApiFunctions(sol::state& LuaStateRef)
     RfgTable.set_function("HavokBodyGetMass", havok_body_get_mass);
 
     RfgTable.set_function("GetLookDirection", []()->vector
-        {
+    {
             if (!Globals::Camera) return vector(0.0f);
             if (!Globals::Camera->GameData) return vector(0.0f);
             return vector(Globals::Camera->GameData->real_orient.fvec);
+    });
+    RfgTable.set_function("GetLookDirectionRightVector", []()->vector
+    {
+            if (!Globals::Camera) return vector(0.0f);
+            if (!Globals::Camera->GameData) return vector(0.0f);
+            return vector(Globals::Camera->GameData->real_orient.rvec);
     });
 
     RfgTable["ObjectiveHighlightAdd"] = objective_highlight_add;
@@ -237,4 +243,39 @@ void Lua::BindApiFunctions(sol::state& LuaStateRef)
             Logger::Log("No mission description found!\n");
         }
     });
+
+    RfgTable["TeleportPlayerIntoVehicle"] = [](vehicle* veh)
+    {
+        vi_enter_data EnterData{};
+        EnterData.specified_seat = VSI_DRIVER;
+        EnterData.seat_selection_method = VI_SEAT_SELECTION_METHOD_SPECIFIED;
+        EnterData.destination_seat = VSI_DRIVER;
+        EnterData.flags.teleport = true;
+        vehicle_interaction_request_enter(Globals::PlayerPtr, veh, &EnterData);
+    };
+    RfgTable["PlayerExitVehicle"] = [](bool Dive)
+    {
+        vi_exit_data ExitData = { true, false, false, false, Dive };
+        vehicle_interaction_request_exit(Globals::PlayerPtr, &ExitData);
+    };
+    RfgTable["VehicleEngineStart"] = [](vehicle* Veh, bool IsPlayer)
+    {
+        if (!Veh) throw std::exception("Target vehicle is nullptr!");
+        vehicle_engine_start(Veh, nullptr, IsPlayer);
+    };
+    RfgTable["VehicleEngineStop"] = [](vehicle* Veh, bool IsPlayer, bool Streamout)
+    {
+        if (!Veh) throw std::exception("Target vehicle is nullptr!");
+        vehicle_engine_stop(Veh, nullptr, IsPlayer, Streamout);
+    };
+    RfgTable["FlyerEngineStart"] = [](flyer* Veh, bool IsPlayer)
+    {
+        if (!Veh) throw std::exception("Target flyer is nullptr!");
+        flyer_engine_start(Veh, nullptr, IsPlayer);
+    };
+    RfgTable["FlyerEngineStop"] = [](flyer* Veh, bool Unused)
+    {
+        if (!Veh) throw std::exception("Target flyer is nullptr!");
+        flyer_engine_stop(Veh, nullptr, Unused);
+    };
 }

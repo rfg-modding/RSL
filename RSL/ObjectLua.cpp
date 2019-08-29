@@ -57,6 +57,16 @@ void Lua::BindObject(sol::state& LuaState)
     //Utype.set("CastToItem", [](Object& Self) ->Human* {return static_cast<Item*>(&Self); });
     //Utype.set("CastToMover", [](Object& Self) ->Human* {return static_cast<Human*>(&Self); });
     //Utype.set("CastToVehicle", [](Object& Self) ->Human* {return static_cast<vehicle*>(&Self); });
+    Utype.set("CastToVehicle", [](Object& Self) ->vehicle*
+        {
+            if (Self.ObjectType != OT_VEHICLE) throw std::exception("Cannot cast to a vehicle, since the object is not a vehicle object. Check that YourObject.Type == rfg.ObjectTypes.Vehicle before casting.");
+            return static_cast<vehicle*>(&Self);
+        });
+    Utype.set("CastToFlyer", [](Object& Self)->flyer*
+        {
+            if (Self.ObjectType != OT_VEHICLE || Self.SubType != OT_SUB_VEHICLE_FLYER) throw std::exception("Cannot cast to a flyer, since the object is not a flyer object. Check that YourObject.Type == rfg.ObjectTypes.Vehicle and YourObject.type == rfg.ObjectSubTypes.Flyer before casting.");
+            return static_cast<flyer*>(&Self);
+        });
     //Utype.set("CastToEffect", [](Object& Self) ->Human* {return static_cast<Human*>(&Self); });
     //Utype.set("CastToDebris", [](Object& Self) ->Human* {return static_cast<Human*>(&Self); });
     //Utype.set("CastToTurret", [](Object& Self) ->Human* {return static_cast<Human*>(&Self); });

@@ -335,6 +335,15 @@
     <ClCompile Include="VehicleInfoLua.cpp">
       <Filter>Lua Binding</Filter>
     </ClCompile>
+    <ClCompile Include="VehicleLua.cpp">
+      <Filter>Lua Binding</Filter>
+    </ClCompile>
+    <ClCompile Include="CanDropVehicle.cpp">
+      <Filter>Hooks</Filter>
+    </ClCompile>
+    <ClCompile Include="FlyerLua.cpp">
+      <Filter>Lua Binding</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CameraWrapper.h">
@@ -608,6 +617,12 @@
       <Filter>RFGR Structs</Filter>
     </ClInclude>
     <ClInclude Include="VehicleInfoLua.h">
+      <Filter>Lua Binding</Filter>
+    </ClInclude>
+    <ClInclude Include="VehicleLua.h">
+      <Filter>Lua Binding</Filter>
+    </ClInclude>
+    <ClInclude Include="FlyerLua.h">
       <Filter>Lua Binding</Filter>
     </ClInclude>
   </ItemGroup>

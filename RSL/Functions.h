@@ -843,3 +843,37 @@ extern F_mission_get_name mission_get_name;
 //.text:005BDA60 rfg.exe:$39DA60 #39CE60 <mission_get_description> //const char *__cdecl mission_get_description()
 using F_mission_get_description = const char*(__cdecl*)();
 extern F_mission_get_description mission_get_description;
+
+
+
+//.text:019D81F0 rfg.exe:$7B81F0 #7B75F0 <vehicle_interaction_request_enter> //bool __cdecl vehicle_interaction_request_enter(human *hp, vehicle *vp, vi_enter_data *parameters)
+using F_vehicle_interaction_request_enter = bool(__cdecl*)(Human* hp, vehicle* vp, vi_enter_data* parameters);
+extern F_vehicle_interaction_request_enter vehicle_interaction_request_enter;
+
+//.text:019D6060 rfg.exe:$7B6060 #7B5460 <vehicle_interaction_request_exit> //void __cdecl vehicle_interaction_request_exit(human *hp, vi_exit_data *parameters)
+using F_vehicle_interaction_request_exit = void(__cdecl*)(Human* hp, vi_exit_data* parameters);
+extern F_vehicle_interaction_request_exit vehicle_interaction_request_exit;
+
+//.text:01997540 rfg.exe:$777540 #776940 <vehicle::engine_start> //void __thiscall vehicle::engine_start(vehicle *this, bool player)
+using F_vehicle_engine_start = void(__fastcall*)(vehicle* this_ptr, void* edx, bool player); //2nd arg is edx, needed for __thiscall functions.
+extern F_vehicle_engine_start vehicle_engine_start;
+
+//.text:01997690 rfg.exe:$777690 #776A90 <vehicle::engine_stop> //void __thiscall vehicle::engine_stop(vehicle *this, bool player, bool streamout)
+using F_vehicle_engine_stop = bool(__fastcall*)(vehicle* this_ptr, void* edx, bool player, bool streamout); //2nd arg is edx, needed for __thiscall functions.
+extern F_vehicle_engine_stop vehicle_engine_stop;
+
+//.text:0199E4B0 rfg.exe:$77E4B0 #77D8B0 <flyer::engine_start> //void __thiscall flyer::engine_start(flyer *this, bool is_player)
+using F_flyer_engine_start = bool(__fastcall*)(flyer* this_ptr, void* edx, bool is_player); //2nd arg is edx, needed for __thiscall functions.
+extern F_flyer_engine_start flyer_engine_start;
+
+//.text:0199E4F0 rfg.exe:$77E4F0 #77D8F0 <flyer::engine_stop> //void __thiscall flyer::engine_stop(flyer *this, bool is_player, bool unused)
+using F_flyer_engine_stop = bool(__fastcall*)(flyer* this_ptr, void* edx, bool unused); //2nd arg is edx, needed for __thiscall functions.
+extern F_flyer_engine_stop flyer_engine_stop;
+
+////.text:019A8B50 rfg.exe:$788B50 #787F50 <automobile::engine_start> //void __thiscall automobile::engine_start(automobile *this, bool player)
+//using F_world_load_territory = bool(__fastcall*)(World* this_ptr, void* edx); //2nd arg is edx, needed for __thiscall functions.
+//extern F_world_load_territory world_load_territory;
+//
+////.text:019A8BC0 rfg.exe:$788BC0 #787FC0 <automobile::engine_stop> //void __thiscall automobile::engine_stop(automobile *this, bool player, bool unused)
+//using F_world_load_territory = bool(__fastcall*)(World* this_ptr, void* edx); //2nd arg is edx, needed for __thiscall functions.
+//extern F_world_load_territory world_load_territory;
