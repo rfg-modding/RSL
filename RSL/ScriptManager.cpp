@@ -9,8 +9,8 @@
 #include "HavokBPOLua.h"
 #include "HkpRigidBodyLua.h"
 #include "HkpSolverInfoLua.h"
-#include "HumanFlagsLua.h"
-#include "HumanMPFlagsLua.h"
+//#include "HumanFlagsLua.h"
+//#include "HumanMPFlagsLua.h"
 #include "InvItemInfoLua.h"
 #include "ObjectRenderDistanceLua.h"
 #include "HumanRaycastHitInfoLua.h"
@@ -265,7 +265,7 @@ void ScriptManager::SetupLua()
 	Lua::BindHkpEntity(LuaStateRef);
 	Lua::BindHkpRigidBody(LuaStateRef);
     Lua::BindHkpSolverInfo(LuaStateRef);
-	Lua::BindHumanFlags(LuaStateRef); 
+	///Lua::BindHumanFlags(LuaStateRef); 
 	//Lua::BindHumanMPFlags(LuaStateRef);
 	Lua::BindHumanInfoFlags(LuaStateRef);
 	Lua::BindHumanPropGeneralInfo(LuaStateRef);
@@ -289,7 +289,7 @@ void ScriptManager::SetupLua()
 	Lua::BindUpgradeItem(LuaStateRef);
 	Lua::BindPlayerMetadata(LuaStateRef);
 	Lua::BindObject(LuaStateRef);
-	Lua::BindHuman(LuaStateRef);
+	///Lua::BindHuman(LuaStateRef);
 	Lua::BindPlayer(LuaStateRef);
 
 	//World & dependent types
