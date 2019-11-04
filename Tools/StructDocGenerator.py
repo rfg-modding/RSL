@@ -32,7 +32,7 @@ class StructInfo:
             "unsigned char", "signed char", "short", "unsigned short",
             "string", "std::string", "unsigned int16", "int16", "bool",
             "unsigned int8", "int8", "void*", "String", "unsigned __int32",
-            "char*"
+            "char*", "unsigned __int16"
         ]
 
     def Print(self):
