@@ -877,3 +877,36 @@ extern F_flyer_engine_stop flyer_engine_stop;
 ////.text:019A8BC0 rfg.exe:$788BC0 #787FC0 <automobile::engine_stop> //void __thiscall automobile::engine_stop(automobile *this, bool player, bool unused)
 //using F_world_load_territory = bool(__fastcall*)(World* this_ptr, void* edx); //2nd arg is edx, needed for __thiscall functions.
 //extern F_world_load_territory world_load_territory;
+
+
+//.text:017237A0 rfg.exe:$4237A0 #422BA0 <havok_body_get_linear_velocity> //void __cdecl havok_body_get_linear_velocity(unsigned int handle, vector& vel)
+using F_havok_body_get_linear_velocity = void(__cdecl*)(uint handle, vector& vel);
+extern F_havok_body_get_linear_velocity havok_body_get_linear_velocity;
+
+//.text:01723990 rfg.exe:$423990 #422D90 <havok_body_get_linear_dampening> //float __cdecl havok_body_get_linear_dampening(unsigned int handle)
+using F_havok_body_get_linear_dampening = float(__cdecl*)(uint handle);
+extern F_havok_body_get_linear_dampening havok_body_get_linear_dampening;
+
+//.text:017237E0 rfg.exe:$4237E0 #422BE0 <havok_body_set_linear_velocity> //void __cdecl havok_body_set_linear_velocity(unsigned int handle, vector& velocity)
+using F_havok_body_set_linear_velocity = void(__cdecl*)(uint handle, vector& velocity);
+extern F_havok_body_set_linear_velocity havok_body_set_linear_velocity;
+
+//.text:01723890 rfg.exe:$423890 #422C90 <havok_body_set_linear_dampening> //void __cdecl havok_body_set_linear_dampening(unsigned int handle, float linear_dampening)
+using F_havok_body_set_linear_dampening = void(__cdecl*)(uint handle, float linear_dampening);
+extern F_havok_body_set_linear_dampening havok_body_set_linear_dampening;
+
+//.text:017238D0 rfg.exe:$4238D0 #422CD0 <havok_body_set_angular_dampening> //void __cdecl havok_body_set_angular_dampening(unsigned int handle, float angular_dampening)
+using F_havok_body_set_angular_dampening = void(__cdecl*)(uint handle, float angular_dampening);
+extern F_havok_body_set_angular_dampening havok_body_set_angular_dampening;
+
+//.text:01723910 rfg.exe:$423910 #422D10 <havok_body_set_angular_velocity> //void __cdecl havok_body_set_angular_velocity(unsigned int handle, vector& ang_velocity)
+using F_havok_body_set_angular_velocity = void(__cdecl*)(uint handle, vector& ang_velocity);
+extern F_havok_body_set_angular_velocity havok_body_set_angular_velocity;
+
+//.text:01717510 rfg.exe:$417510 #416910 <havok_body_get_angular_velocity> //void __cdecl havok_body_get_angular_velocity(unsigned int handle, vector& vel)
+using F_havok_body_get_angular_velocity = void(__cdecl*)(uint handle, vector& vel);
+extern F_havok_body_get_angular_velocity havok_body_get_angular_velocity;
+
+//.text:017239D0 rfg.exe:$4239D0 #422DD0 <havok_body_get_angular_dampening> //float __cdecl havok_body_get_angular_dampening(unsigned int handle)
+using F_havok_body_get_angular_dampening = float(__cdecl*)(uint handle);
+extern F_havok_body_get_angular_dampening havok_body_get_angular_dampening;

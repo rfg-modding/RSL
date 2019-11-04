@@ -1,3 +1,3 @@
 #pragma once 
  
-#define RSL_BUILD_DATE 20190819 
+#define RSL_BUILD_DATE 20191102 

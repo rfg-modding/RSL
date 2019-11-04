@@ -171,7 +171,7 @@ void Lua::BindPlayer(sol::state& LuaState)
 	Utype.set("PlayerFlags", &Player::PFlags);
 	Utype.set("HoldObjectAvailable", &Player::hold_object_available);
 	Utype.set("HoldObjectHandle", &Player::hold_object_handle);
-	//Utype.set("AbandonedVehicles", &Player::); //Size 3 array of uint
+	//Utype.set("AbandonedVehicles", &Player::abandoned_vehicles); //Size 3 array of uint
 	Utype.set("NumAbandonedVehicles", &Player::num_abandoned_vehicles);
 	//Utype.set("CustomVehicles", &Player::custom_vehicles); //Size 50 array of CustomVehicle
 	//Utype.set("CustomVehicleList", &Player::custom_vehicle_list);

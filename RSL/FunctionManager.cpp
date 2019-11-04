@@ -218,4 +218,13 @@ void FunctionManager::Initialize()
     RegisterFunction(vehicle_engine_stop, 0x777690);
     RegisterFunction(flyer_engine_start, 0x77E4B0);
     RegisterFunction(flyer_engine_stop, 0x77E4F0);
+
+    RegisterFunction(havok_body_get_linear_velocity, 0x4237A0);
+    RegisterFunction(havok_body_get_linear_dampening, 0x423990);
+    RegisterFunction(havok_body_set_linear_velocity, 0x4237E0);
+    RegisterFunction(havok_body_set_linear_dampening, 0x423890);
+    RegisterFunction(havok_body_set_angular_dampening, 0x4238D0);
+    RegisterFunction(havok_body_set_angular_velocity, 0x423910);
+    RegisterFunction(havok_body_get_angular_velocity, 0x417510);
+    RegisterFunction(havok_body_get_angular_dampening, 0x4239D0);
 }

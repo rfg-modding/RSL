@@ -38,6 +38,7 @@ void Lua::BindFlyer(sol::state& LuaState)
     auto Utype = RfgTable.create_simple_usertype<flyer>();
     Utype.set("new", sol::constructors<flyer(const flyer&)>());
     Utype.set(sol::base_classes, sol::bases<vehicle, object>());
+    //rdd
     //Utype.set("CtlAction", &flyer::ctl_action);
     Utype.set("ReqUrgency", &flyer::req_urgency);
     Utype.set("ReqMaxVel", &flyer::req_max_vel);

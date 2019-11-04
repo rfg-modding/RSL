@@ -278,4 +278,42 @@ void Lua::BindApiFunctions(sol::state& LuaStateRef)
         if (!Veh) throw std::exception("Target flyer is nullptr!");
         flyer_engine_stop(Veh, nullptr, Unused);
     };
+
+
+    RfgTable["HavokBodyGetLinearVelocity"] = [](uint Handle)->vector
+    {
+        vector Velocity;
+        havok_body_get_linear_velocity(Handle, Velocity);
+        return Velocity;
+    };
+    RfgTable["HavokBodyGetLinearDampening"] = [](uint Handle)
+    {
+        return havok_body_get_linear_dampening(Handle);
+    };
+    RfgTable["HavokBodyGetAngularDampening"] = [](uint Handle)
+    {
+        return havok_body_get_angular_dampening(Handle);
+    };
+    RfgTable["HavokBodyGetAngularVelocity"] = [](uint Handle)->vector
+    {
+        vector AngVel;
+        havok_body_get_angular_velocity(Handle, AngVel);
+        return AngVel;
+    };
+    RfgTable["HavokBodySetLinearVelocity"] = [](uint Handle, vector& Velocity)
+    {
+        havok_body_set_linear_velocity(Handle, Velocity);
+    };
+    RfgTable["HavokBodySetLinearDampening"] = [](uint Handle, float LinearDampening)
+    {
+        havok_body_set_linear_dampening(Handle, LinearDampening);
+    };
+    RfgTable["HavokBodySetAngularDampening"] = [](uint Handle, float AngularDampening)
+    {
+        havok_body_set_angular_dampening(Handle, AngularDampening);
+    };
+    RfgTable["HavokBodySetAngularVelocity"] = [](uint Handle, vector& AngularVelocity)
+    {
+        havok_body_set_angular_velocity(Handle, AngularVelocity);
+    };
 }

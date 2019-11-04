@@ -159,6 +159,8 @@ void ScriptManager::SetupLua()
     Lua::BindVehicleInfoTransmissionInfo(LuaStateRef);
     Lua::BindVehicleCameraSettings(LuaStateRef);
     Lua::BindAnimlibBonesUsedInfo(LuaStateRef);
+    Lua::BindVehicleInfoFlags(LuaStateRef);
+    Lua::BindLodInfo(LuaStateRef);
     Lua::BindVehicleInfo(LuaStateRef);
 
     Lua::BindVehicleFlags(LuaStateRef);
@@ -524,12 +526,12 @@ void ScriptManager::TriggerLoadEvent()
 
     if (!LuaState) return;
 
-    ScriptEvent& MouseEvent = Events[4];
-    MouseEvent.Update();
+    ScriptEvent& LoadEvent = Events[4];
+    LoadEvent.Update();
 
-    if (MouseEvent.Enabled())
+    if (LoadEvent.Enabled())
     {
-        for (auto& EventHook : MouseEvent.Hooks)
+        for (auto& EventHook : LoadEvent.Hooks)
         {
             if (EventHook.Enabled)
             {

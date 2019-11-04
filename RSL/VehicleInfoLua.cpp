@@ -93,6 +93,41 @@ void Lua::BindAnimlibBonesUsedInfo(sol::state& LuaState)
     RfgTable.set_usertype("AnimlibBonesUsedInfo", Utype);
 }
 
+void Lua::BindVehicleInfoFlags(sol::state& LuaState)
+{
+    auto RfgTable = LuaState["rfg"].get_or_create<sol::table>();
+    auto Utype = RfgTable.create_simple_usertype<vehicle_info_flags>();
+    Utype.set("Preload", sol::property(
+        [](vehicle_info_flags& Self)->bool {return Self.preload; },
+        [](vehicle_info_flags& Self, bool Value) {Self.preload = Value; }
+    ));
+    Utype.set("CanBlockRoads", sol::property(
+        [](vehicle_info_flags& Self)->bool {return Self.can_block_roads; },
+        [](vehicle_info_flags& Self, bool Value) {Self.can_block_roads = Value; }
+    ));
+    Utype.set("ForceBreakLinks", sol::property(
+        [](vehicle_info_flags& Self)->bool {return Self.force_break_links; },
+        [](vehicle_info_flags& Self, bool Value) {Self.force_break_links = Value; }
+    ));
+    Utype.set("SeatCountWarning", sol::property(
+        [](vehicle_info_flags& Self)->bool {return Self.seat_count_warning; },
+        [](vehicle_info_flags& Self, bool Value) {Self.seat_count_warning = Value; }
+    ));
+    Utype.set("IsWalkerFlamer", sol::property(
+        [](vehicle_info_flags& Self)->bool {return Self.is_walker_flamer; },
+        [](vehicle_info_flags& Self, bool Value) {Self.is_walker_flamer = Value; }
+    ));
+    RfgTable.set_usertype("VehicleInfoFlags", Utype);
+}
+
+void Lua::BindLodInfo(sol::state& LuaState)
+{
+    auto RfgTable = LuaState["rfg"].get_or_create<sol::table>();
+    auto Utype = RfgTable.create_simple_usertype<lod_info>();
+    Utype.set("Min", &lod_info::dist);
+    RfgTable.set_usertype("LodInfo", Utype);
+}
+
 void Lua::BindVehicleInfo(sol::state& LuaState)
 {
     auto RfgTable = LuaState["rfg"].get_or_create<sol::table>();
@@ -109,6 +144,7 @@ void Lua::BindVehicleInfo(sol::state& LuaState)
     Utype.set("VariantFamily", &vehicle_info::variant_family);
     Utype.set("VehicleClassification", &vehicle_info::vehicle_classification);
     Utype.set("DefaultTeam", &vehicle_info::default_team);
+    //vi_info
     Utype.set("MaxHitpoints", &vehicle_info::m_max_hitpoints);
     Utype.set("AbandonHitpoints", &vehicle_info::m_abandon_hitpoints);
     Utype.set("ChassisMass", &vehicle_info::chassis_mass);
@@ -239,10 +275,10 @@ void Lua::BindVehicleInfo(sol::state& LuaState)
     Utype.set("RigName", &vehicle_info::rig_name);
     Utype.set("AnimSetName", &vehicle_info::anim_set_name);
     Utype.set("FootstepEffects", &vehicle_info::footstep_effects);
-    Utype.set("BonesUsedInfo", &vehicle_info::bones_used_info);
+    //Utype.set("BonesUsedInfo", &vehicle_info::bones_used_info); //Has ptr array, need wrapper to handle those
     Utype.set("FlyerMaxUpThrust", &vehicle_info::flyer_max_up_thrust);
-    Utype.set("FlyerMaxTurnAngvel", &vehicle_info::flyer_max_turn_angvel);
-    Utype.set("FlyerMaxTurnAngaccl", &vehicle_info::flyer_max_turn_angaccl);
+    Utype.set("FlyerMaxTurnAngVel", &vehicle_info::flyer_max_turn_angvel);
+    Utype.set("FlyerMaxTurnAngAccel", &vehicle_info::flyer_max_turn_angaccl);
     Utype.set("FlyerMaxThrustOffsetX", &vehicle_info::flyer_max_thrust_offset_x);
     Utype.set("FlyerMaxThrustOffsetZ", &vehicle_info::flyer_max_thrust_offset_z);
     Utype.set("FlyerMaxTiltAngvel", &vehicle_info::flyer_max_tilt_angvel);
@@ -253,7 +289,7 @@ void Lua::BindVehicleInfo(sol::state& LuaState)
     Utype.set("FlyerDefLookatYScalar", &vehicle_info::flyer_def_lookat_y_scalar);
     Utype.set("FlyerWingtipEffect", &vehicle_info::flyer_wingtip_effect);
     Utype.set("FlyerThrusterEffect", &vehicle_info::flyer_thruster_effect);
-    Utype.set("FlyerMainengineEffect", &vehicle_info::flyer_mainengine_effect);
+    Utype.set("FlyerMainEngineEffect", &vehicle_info::flyer_mainengine_effect);
     Utype.set("FlyerJetwashEffect", &vehicle_info::flyer_jetwash_effect);
     Utype.set("Flags", &vehicle_info::flags);
     RfgTable.set_usertype("VehicleInfo", Utype);

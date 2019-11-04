@@ -9,5 +9,7 @@ namespace Lua
     void BindVehicleInfoTransmissionInfo(sol::state& LuaState);
     void BindVehicleCameraSettings(sol::state& LuaState);
     void BindAnimlibBonesUsedInfo(sol::state& LuaState);
+    void BindVehicleInfoFlags(sol::state& LuaState);
+    void BindLodInfo(sol::state& LuaState);
     void BindVehicleInfo(sol::state& LuaState);
 }
