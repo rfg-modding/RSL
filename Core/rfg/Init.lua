@@ -48,8 +48,10 @@ rfg.HighlightPurposes = require("rfg.HighlightPurposes")
 rfg.HighlightStyles = require("rfg.HighlightStyles")
 rfg.VehicleClasses = require("rfg.VehicleClasses")
 rfg.VehicleTypes = require("rfg.VehicleTypes")
-rfg.VehicleRoadPreferences = require("rfg.VehicleRoadPreferences")
 rfg.ObjectSpawnPriorities = require("rfg.ObjectSpawnPriorities")
 rfg.VehicleBombStatuses = require("rfg.VehicleBombStatuses")
+rfg.BaseVehicleTypes = require("rfg.BaseVehicleTypes")
+rfg.VehicleRoadPreferences = require("rfg.VehicleRoadPreferences")
+rfg.VehicleClassTypes = require("rfg.VehicleClassTypes")
 
 return rfg
