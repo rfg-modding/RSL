@@ -76,14 +76,14 @@ public:
 	~GuiSystem();
 
 	void Initialize();
-	bool Ready() const;
+    [[nodiscard]] bool Ready() const;
 
 	void Draw();
 
     void DrawPreInitWindow();
 
 	void ToggleLuaConsole();
-	bool IsLuaConsoleActive() const;
+    [[nodiscard]] bool IsLuaConsoleActive() const;
 	void DeactivateLuaConsole();
 	void ActivateLuaConsole();
 

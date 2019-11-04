@@ -69,48 +69,12 @@ void GuiSystem::Draw()
 		{
 			for (const auto& i : GuiList)
 			{
-				try
-				{
-					i->Draw();
-				}
-				catch (const std::exception& Ex)
-				{
-					std::string ExceptionInfo = Ex.what();
-					ExceptionInfo += " \nstd::exception caught when drawing overlay sub-gui! ";
-					ExceptionInfo += ", Additional info: ";
-					ExceptionInfo += "Sub-gui: ";
-					ExceptionInfo += i->Title;
-					ExceptionInfo += ", File: ";
-					ExceptionInfo += __FILE__;
-					ExceptionInfo += ", Function: ";
-					ExceptionInfo += __func__;
-					ExceptionInfo += ", Line: ";
-					ExceptionInfo += __LINE__;
-					//Logger::Log(ExceptionInfo, LogError, true, true);
-					throw std::exception(ExceptionInfo.c_str());
-				}
+		        i->Draw();
 			}
 		}
 		if (LuaConsoleActive && !Globals::OverlayActive)
 		{
-			try
-			{
-                LuaConsole.Get().Draw();
-			}
-			catch (const std::exception& Ex)
-			{
-				std::string ExceptionInfo = Ex.what();
-				ExceptionInfo += " \nstd::exception caught when drawing lone console! ";
-				ExceptionInfo += ", Additional info: ";
-				ExceptionInfo += "File: ";
-				ExceptionInfo += __FILE__;
-				ExceptionInfo += ", Function: ";
-				ExceptionInfo += __func__;
-				ExceptionInfo += ", Line: ";
-				ExceptionInfo += __LINE__;
-				//Logger::Log(ExceptionInfo, LogError, true, true);
-				throw std::exception(ExceptionInfo.c_str());
-			}
+            LuaConsole.Get().Draw();
 		}
 	}
 	catch (const std::exception& Ex)
@@ -123,7 +87,6 @@ void GuiSystem::Draw()
 		ExceptionInfo += ", Function: ";
 		ExceptionInfo += __func__;
 		Logger::LogError("{}\n", ExceptionInfo);
-		//MessageBoxA(FindTopWindow(GetProcessID("rfg.exe")), ExceptionInfo.c_str(), "Failed to draw overlay gui!", MB_OK);
 	}
 	catch (...)
 	{
@@ -134,7 +97,6 @@ void GuiSystem::Draw()
 		ExceptionInfo += ", Function: ";
 		ExceptionInfo += __func__;
 		Logger::LogError("{}\n", ExceptionInfo);
-		//MessageBoxA(FindTopWindow(GetProcessID("rfg.exe")), ExceptionInfo.c_str(), "Failed to draw overlay gui!", MB_OK);
 	}
     if(*reinterpret_cast<bool*>(*reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x002CA210)))
     {
