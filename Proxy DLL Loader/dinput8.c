@@ -14,7 +14,7 @@ BOOL WINAPI DllMain(HINSTANCE hInst, DWORD reason,LPVOID v)
         
         AllocConsole();
         freopen_s(&pFile, "CONOUT$", "r+", stdout);
-        printf("dinput8 proxy dll test console\n");
+        //printf("dinput8 proxy dll test console\n");
 
 		char szPath[MAX_PATH];
 

@@ -10,7 +10,7 @@
 #endif
 
 using json = nlohmann::json;
-namespace fs = std::experimental::filesystem;
+namespace fs = std::filesystem;
 
 extern json InjectorConfig;
 extern bool ForceInjectorConsoleToTop;
