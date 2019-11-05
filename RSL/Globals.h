@@ -179,6 +179,9 @@ namespace Globals
 
     extern vehicle_spawn_params VehicleSpawnCache;
 
+    extern bool PlayerNeedsTeleport;
+    extern vector PlayerTeleportPos;
+
     namespace Launcher
     {
         extern bool ShouldRunRsl; //Used by the launcher WndProc to track if the launcher should launch the main RSL code after it closes or start a vanilla game.

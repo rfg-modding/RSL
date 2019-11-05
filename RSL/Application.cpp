@@ -1,4 +1,5 @@
 #include "Application.h"
+#include "IpcManager.h"
 
 void Application::Run()
 {
@@ -53,16 +54,24 @@ void Application::InitRSL()
         OpenConsole();
 
         Globals::ModuleBase = reinterpret_cast<uintptr_t>(GetModuleHandle(nullptr));
+        Logger::Log("Initializing function pointers.\n");
         Functions.Initialize();
 
+        Logger::Log("Initializing hooking system.\n");
         InitHookingSystem();
+        Logger::Log("Creating and enabling hooks.\n");
         CreateHooks(); //Creates and enables all function hooks.
 
 #if UseLauncher
-        Globals::ResumeAllThreads();
+        Logger::Log("Unpatching rfg main.\n");
         Globals::UnlockGameMain();
+        Logger::Log("Resuming game threads.\n");
+        Globals::ResumeAllThreads();
+        Logger::Log("Rfg should now resume, unpatched main and resumed it's threads.\n");
 #endif
+        Logger::Log("Waiting for rfg startup to finish.\n");
         WaitForValidGameState();
+        Logger::Log("Rfg startup finished, continuing RSL setup.\n");
 
         //Set global values which are frequently used in hooks.
         Globals::GameWindowHandle = Globals::FindRfgTopWindow();
@@ -73,7 +82,9 @@ void Application::InitRSL()
         Globals::Scripts = &this->Scripts;
         Globals::Camera = &this->Camera;
 
+        Logger::Log("Initializing camera wrapper.\n");
         Camera.Initialize(Globals::DefaultFreeCameraSpeed, 5.0);
+        Logger::Log("Initializing lua scripting system.\n");
         Scripts.Initialize();
         
         Globals::OriginalWndProc = reinterpret_cast<WNDPROC>(SetWindowLongPtr(Globals::GameWindowHandle, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(Hooks::WndProc)));
@@ -88,10 +99,14 @@ void Application::InitRSL()
         /*Waits for ImGui init to complete before continuing to GuiSystem (The overlay) init.*/
         while (!Globals::ImGuiInitialized) //ImGui Initialization occurs in KeenGraphicsBeginFrameHook 
         {
+            Logger::Log("Waiting for ImGui initialization.\n");
             Sleep(100);
         }
+        Logger::Log("ImGui init complete.\n");
 
+        Logger::Log("Initializing overlays.\n");
         InitOverlays();
+        Logger::Log("Initializing gui system.\n");
         Gui.Initialize(); //Todo: Change gui so it can be initialized before imgui is initialized
 
         //Update global lua pointers after init just to be sure. Can't hurt.
@@ -105,6 +120,7 @@ void Application::InitRSL()
         Beep(700, 100);
         Beep(900, 200);
 
+        Logger::Log("Running lua startup scripts.\n");
         Scripts.RunStartupScripts();
     }
     catch (std::exception& Ex)
@@ -275,15 +291,26 @@ void Application::OpenDefaultLogs()
     }
 }
 
+void Application::PipesThread()
+{
+    Logger::Log("In pipes thread, starting IpcManager instance.\n");
+
+    IpcManager ipc_manager;
+    ipc_manager.Run();
+
+    Logger::Log("IpcManager exited.\n");
+}
+
 void Application::MainLoop()
 {
+    Logger::Log("Starting pipes thread.\n");
+    std::thread PipesThread(&Application::PipesThread, this);
+
     const ulong UpdatesPerSecond = 1;
     const ulong MillisecondsPerUpdate = 1000 / UpdatesPerSecond;
     while (!ShouldClose()) //Todo: Change to respond to PostQuitMessage(0) in WndProc
     {
         std::chrono::steady_clock::time_point Begin = std::chrono::steady_clock::now();
-        
-        switch (const GameState State = GameseqGetState(); State)
         switch (const GameState State = rfg::GameseqGetState(); State)
         {
         case GS_WRECKING_CREW_MAIN_MENU:

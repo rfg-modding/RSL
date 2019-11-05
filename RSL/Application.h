@@ -27,6 +27,7 @@ private:
     void TrySetMemoryLocations();
     void InitOverlays();
     void OpenDefaultLogs();
+    void PipesThread();
     void MainLoop();
     void Exit();
     void CreateHooks();
@@ -37,7 +38,6 @@ private:
     void SetMemoryLocations();
     bool IsFolderPlacementError() const;
     
-
     CameraWrapper Camera;
     FunctionManager Functions;
     ScriptManager Scripts;

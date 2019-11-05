@@ -155,6 +155,9 @@ namespace Globals
 
     vehicle_spawn_params VehicleSpawnCache;
 
+    bool PlayerNeedsTeleport = false;
+    vector PlayerTeleportPos {0.0f};
+
     namespace Launcher
     {
         bool ShouldRunRsl = false;

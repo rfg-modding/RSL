@@ -230,6 +230,7 @@ echo #define RSL_BUILD_DATE %buildTime:~0,8% &gt;&gt; $(ProjectDir)/BuildDate.h<
     <ClCompile Include="include\kiero\kiero.cpp" />
     <ClCompile Include="IntrospectionGui.cpp" />
     <ClCompile Include="InvItemInfoLua.cpp" />
+    <ClCompile Include="IpcManager.cpp" />
     <ClCompile Include="KeenGraphicsBeginFrame.cpp" />
     <ClCompile Include="KeenGraphicsResizeRenderSwapchain.cpp" />
     <ClCompile Include="keen_ImmediateRenderer_beginRenderPass_hook.cpp" />
@@ -335,6 +336,7 @@ echo #define RSL_BUILD_DATE %buildTime:~0,8% &gt;&gt; $(ProjectDir)/BuildDate.h<
     <ClInclude Include="include\kiero\kiero.h" />
     <ClInclude Include="include\MinHook\MinHook.h" />
     <ClInclude Include="IntrospectionGui.h" />
+    <ClInclude Include="IpcManager.h" />
     <ClInclude Include="Launcher.h" />
     <ClInclude Include="RenderInterfaceD3D11.h" />
     <ClInclude Include="RFGR_Types_Vehicle.h" />

@@ -4,237 +4,175 @@
     <Filter Include="RFGR Structs">
       <UniqueIdentifier>{ac7bae05-808c-43c4-8c08-ddc078f44eb2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Overlay Gui">
-      <UniqueIdentifier>{a6d8a793-b545-460c-a878-f5b9f6e89230}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Overlay Gui\Header Files">
-      <UniqueIdentifier>{4213c34b-ed34-4d0e-997b-e49465ec1935}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Overlay Gui\Source Files">
-      <UniqueIdentifier>{8cf5668e-7dab-4a97-b150-32b57f0c4179}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Lua Binding">
       <UniqueIdentifier>{a6816808-2e5b-4a81-85a5-515bcf4d5ea4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="General Files">
-      <UniqueIdentifier>{cd855315-0781-47b5-9928-aca0d85bb56c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="General Files\Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="General Files\Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
-    <Filter Include="General Files\Libraries">
-      <UniqueIdentifier>{6621adfc-d1d4-4299-aa02-2cb64da01534}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="General Files\Libraries\fmt">
-      <UniqueIdentifier>{17b8a0fa-c3b4-4855-8110-8f692d260b5c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Kiero + ImGui">
-      <UniqueIdentifier>{7dc8ed92-9f36-4fd6-ad03-7b3b12238419}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Kiero + ImGui\Source Files">
-      <UniqueIdentifier>{c9164e90-fb84-4cc1-8355-f60110ece66e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Kiero + ImGui\Header Files">
-      <UniqueIdentifier>{6edcbbe3-b2c8-44d0-80ec-0c107fb48a24}</UniqueIdentifier>
     </Filter>
     <Filter Include="Hooks">
       <UniqueIdentifier>{71a6441f-ef7e-492d-ae68-6a06e4f846c1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Lua Binding\Functions">
+      <UniqueIdentifier>{1284103c-9bb8-478b-b4aa-bdde3f4526de}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Lua Binding\Usertypes">
+      <UniqueIdentifier>{560be5b7-3345-4ded-91e0-497e99978dee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Lua Binding\Usertypes\Physics">
+      <UniqueIdentifier>{70814c7d-57fe-421c-a094-667f90ee7301}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Lua Binding\Usertypes\Objects">
+      <UniqueIdentifier>{f78254f3-9bfd-4ebf-a05c-1ff9b4df8448}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Lua Binding\Usertypes\Misc">
+      <UniqueIdentifier>{a3b2abb0-55c2-4489-8a31-f122d6a45ffc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Lua Binding\Usertypes\Objects\Human">
+      <UniqueIdentifier>{83b7462f-4746-42d0-84c5-fa8a1facce87}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Lua Binding\Usertypes\Objects\Player">
+      <UniqueIdentifier>{2b857091-4412-45ac-a15a-d0abca4de401}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Lua Binding\Usertypes\Objects\Object">
+      <UniqueIdentifier>{887c0088-d62d-4585-a402-06809caab12b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Lua Binding\Usertypes\Objects\Vehicle">
+      <UniqueIdentifier>{998698db-d813-4ff0-b55a-7c040003a19e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Lua Binding\Usertypes\Objects\Flyer">
+      <UniqueIdentifier>{d10ff4d9-027d-4e4e-8159-01d7fcdac547}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Lua Binding\Usertypes\Objects\Weapon">
+      <UniqueIdentifier>{52e0c18b-77a8-44c5-95f5-9c3f97585435}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Lua Binding\Usertypes\World">
+      <UniqueIdentifier>{c4e744a3-b135-4af8-92e6-12481c2ef914}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Main">
+      <UniqueIdentifier>{cd855315-0781-47b5-9928-aca0d85bb56c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Main\Libraries">
+      <UniqueIdentifier>{6621adfc-d1d4-4299-aa02-2cb64da01534}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Main\Libraries\fmt">
+      <UniqueIdentifier>{17b8a0fa-c3b4-4855-8110-8f692d260b5c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Main\Libraries\Kiero + ImGui">
+      <UniqueIdentifier>{7dc8ed92-9f36-4fd6-ad03-7b3b12238419}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Main\Libraries\Kiero + ImGui\Source Files">
+      <UniqueIdentifier>{c9164e90-fb84-4cc1-8355-f60110ece66e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Main\Libraries\Kiero + ImGui\Header Files">
+      <UniqueIdentifier>{6edcbbe3-b2c8-44d0-80ec-0c107fb48a24}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Main\Utils">
+      <UniqueIdentifier>{a11cf198-61fa-44fc-935b-f402b5945c29}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Main\Globals &amp; includes">
+      <UniqueIdentifier>{21ed13b5-afbd-40a9-bd41-613a3cbee407}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Main\Misc">
+      <UniqueIdentifier>{1c0d1b75-d19a-41ea-8ffd-9607b0a7e607}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Main\Functions">
+      <UniqueIdentifier>{2c404ce3-6554-4f85-a3bf-f05582bffa4b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Main\Systems">
+      <UniqueIdentifier>{3dbd3252-dd00-4f30-b0c6-2a7b9220a98a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Gui">
+      <UniqueIdentifier>{a6d8a793-b545-460c-a878-f5b9f6e89230}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Gui\Spawners">
+      <UniqueIdentifier>{e690b47a-a662-4ffe-8c3c-f0c0b55c74a9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Gui\Spawners\Vehicle spawner">
+      <UniqueIdentifier>{4dd39f22-68bd-44e9-9183-459276ac34f4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Gui\Spawners\Explosion spawner">
+      <UniqueIdentifier>{efbd7876-b599-49b1-b4a6-7481c969eef6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Gui\Tweaks and settings">
+      <UniqueIdentifier>{0fc44d6f-933d-4915-a818-db138b494fd6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Gui\Tweaks and settings\Graphics tweaks">
+      <UniqueIdentifier>{34697b2c-e44d-4c4d-9653-98691ca2898c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Gui\Tweaks and settings\Camera settings">
+      <UniqueIdentifier>{62c3a6e7-2bfa-415b-9ed7-e9436d562d39}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Gui\Tweaks and settings\General tweaks gui">
+      <UniqueIdentifier>{7328f843-5923-48cf-9391-b0445f48df43}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Gui\Tweaks and settings\Physics gui">
+      <UniqueIdentifier>{83e311e2-6c79-4ed1-b893-6dbd844355a9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Gui\Data viewers">
+      <UniqueIdentifier>{2d70f33c-b6ac-46c7-91c2-7cc2ad01785c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Gui\Data viewers\Logger">
+      <UniqueIdentifier>{0e86e7fe-7e44-4592-9392-fba6b62d98c9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Gui\Data viewers\Introspection gui">
+      <UniqueIdentifier>{a9446c9c-d824-4b3f-9ee3-2982cb8de2a8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Gui\Data viewers\Event viewer">
+      <UniqueIdentifier>{68c4fa7a-8b7e-4c32-b6f7-3a61e8b32f1f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Gui\Misc">
+      <UniqueIdentifier>{6fc5c572-db40-4a0a-b770-f5ff41c75179}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Gui\Misc\Console">
+      <UniqueIdentifier>{bfe5e377-793e-4f4a-a004-912c7fe69a87}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Gui\Misc\Main menu bar">
+      <UniqueIdentifier>{44eb8161-a008-4962-a097-090b4f904f4f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Gui\Misc\Welcome gui">
+      <UniqueIdentifier>{a03a4175-acc5-4b00-8e52-499f2b4721dc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Gui\Misc\Script selector">
+      <UniqueIdentifier>{a88102d2-78ec-4098-befa-5d5aec1fdb6d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Gui\Misc\Teleporter">
+      <UniqueIdentifier>{15ed214d-7c49-4d60-84a4-539ccad5436d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Gui\Misc\Theme editor">
+      <UniqueIdentifier>{2cc10f8b-7f7b-4124-85d2-753dae000c16}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Gui\Misc\Script editor">
+      <UniqueIdentifier>{4137cd07-ad5f-4425-b06e-e45b8719c670}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="CameraWrapper.cpp">
-      <Filter>General Files\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Main.cpp">
-      <Filter>General Files\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SnippetManager.cpp">
-      <Filter>General Files\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="FunctionManager.cpp">
-      <Filter>General Files\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ScriptManager.cpp">
-      <Filter>General Files\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Functions.cpp">
-      <Filter>General Files\Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="include\kiero\kiero.cpp">
-      <Filter>Kiero + ImGui\Source Files</Filter>
+      <Filter>Main\Libraries\Kiero + ImGui\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="include\ImGui\imgui.cpp">
-      <Filter>Kiero + ImGui\Source Files</Filter>
+      <Filter>Main\Libraries\Kiero + ImGui\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="include\ImGui\imgui_demo.cpp">
-      <Filter>Kiero + ImGui\Source Files</Filter>
+      <Filter>Main\Libraries\Kiero + ImGui\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="include\ImGui\imgui_draw.cpp">
-      <Filter>Kiero + ImGui\Source Files</Filter>
+      <Filter>Main\Libraries\Kiero + ImGui\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="include\ImGui\imgui_widgets.cpp">
-      <Filter>Kiero + ImGui\Source Files</Filter>
+      <Filter>Main\Libraries\Kiero + ImGui\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="imgui_impl_dx11.cpp">
-      <Filter>Kiero + ImGui\Source Files</Filter>
+      <Filter>Main\Libraries\Kiero + ImGui\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="imgui_impl_win32.cpp">
-      <Filter>Kiero + ImGui\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Globals.cpp">
-      <Filter>General Files\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Includes.cpp">
-      <Filter>General Files\Source Files</Filter>
+      <Filter>Main\Libraries\Kiero + ImGui\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="imgui_stdlib.cpp">
-      <Filter>Kiero + ImGui\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Logger.cpp">
-      <Filter>General Files\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="HookManager.cpp">
-      <Filter>General Files\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GuiSystem.cpp">
-      <Filter>Overlay Gui\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="OverlayConsole.cpp">
-      <Filter>Overlay Gui\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="TeleportGui.cpp">
-      <Filter>Overlay Gui\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ThemeEditorGui.cpp">
-      <Filter>Overlay Gui\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="IntrospectionGui.cpp">
-      <Filter>Overlay Gui\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneralTweaksGui.cpp">
-      <Filter>Overlay Gui\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ScriptSelectGui.cpp">
-      <Filter>Overlay Gui\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="MenuBarGui.cpp">
-      <Filter>Overlay Gui\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="LogWindow.cpp">
-      <Filter>Overlay Gui\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="WelcomeGui.cpp">
-      <Filter>Overlay Gui\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="LuaFunctions.cpp">
-      <Filter>General Files\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="FreeCamGui.cpp">
-      <Filter>Overlay Gui\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="BaseGui.cpp">
-      <Filter>Overlay Gui\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PhysicsGui.cpp">
-      <Filter>Overlay Gui\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="VectorLua.cpp">
-      <Filter>Lua Binding</Filter>
-    </ClCompile>
-    <ClCompile Include="MatrixLua.cpp">
-      <Filter>Lua Binding</Filter>
-    </ClCompile>
-    <ClCompile Include="Matrix43Lua.cpp">
-      <Filter>Lua Binding</Filter>
-    </ClCompile>
-    <ClCompile Include="AttachInfoDataLua.cpp">
-      <Filter>Lua Binding</Filter>
-    </ClCompile>
-    <ClCompile Include="ContactNodeLua.cpp">
-      <Filter>Lua Binding</Filter>
-    </ClCompile>
-    <ClCompile Include="ObjectFlagsLua.cpp">
-      <Filter>Lua Binding</Filter>
-    </ClCompile>
-    <ClCompile Include="HavokBPOLua.cpp">
-      <Filter>Lua Binding</Filter>
-    </ClCompile>
-    <ClCompile Include="HumanFlagsLua.cpp">
-      <Filter>Lua Binding</Filter>
-    </ClCompile>
-    <ClCompile Include="HumanMPFlagsLua.cpp">
-      <Filter>Lua Binding</Filter>
-    </ClCompile>
-    <ClCompile Include="ObjectLua.cpp">
-      <Filter>Lua Binding</Filter>
-    </ClCompile>
-    <ClCompile Include="HumanLua.cpp">
-      <Filter>Lua Binding</Filter>
-    </ClCompile>
-    <ClCompile Include="HumanInfoLua.cpp">
-      <Filter>Lua Binding</Filter>
-    </ClCompile>
-    <ClCompile Include="ObjectRenderDistanceLua.cpp">
-      <Filter>Lua Binding</Filter>
-    </ClCompile>
-    <ClCompile Include="InvItemInfoLua.cpp">
-      <Filter>Lua Binding</Filter>
-    </ClCompile>
-    <ClCompile Include="HumanRaycastHitInfoLua.cpp">
-      <Filter>Lua Binding</Filter>
-    </ClCompile>
-    <ClCompile Include="BaseTypeLua.cpp">
-      <Filter>Lua Binding</Filter>
-    </ClCompile>
-    <ClCompile Include="CharacterInstanceLua.cpp">
-      <Filter>Lua Binding</Filter>
-    </ClCompile>
-    <ClCompile Include="PlayerLua.cpp">
-      <Filter>Lua Binding</Filter>
-    </ClCompile>
-    <ClCompile Include="WorldLua.cpp">
-      <Filter>Lua Binding</Filter>
-    </ClCompile>
-    <ClCompile Include="HkpRigidBodyLua.cpp">
-      <Filter>Lua Binding</Filter>
-    </ClCompile>
-    <ClCompile Include="HkpSolverInfoLua.cpp">
-      <Filter>Lua Binding</Filter>
-    </ClCompile>
-    <ClCompile Include="Application.cpp">
-      <Filter>General Files\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="TextEditorWrapper.cpp">
-      <Filter>Overlay Gui\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="include\ImGuiColorTextEdit\TextEditor.cpp">
-      <Filter>Overlay Gui\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ExplosionSpawnerGui.cpp">
-      <Filter>Overlay Gui\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Util.cpp">
-      <Filter>General Files\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="VehicleSpawnerGui.cpp">
-      <Filter>Overlay Gui\Source Files</Filter>
+      <Filter>Main\Libraries\Kiero + ImGui\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="include\fmt\format.cc">
-      <Filter>General Files\Libraries\fmt</Filter>
+      <Filter>Main\Libraries\fmt</Filter>
     </ClCompile>
     <ClCompile Include="include\fmt\posix.cc">
-      <Filter>General Files\Libraries\fmt</Filter>
-    </ClCompile>
-    <ClCompile Include="ExplosionInfoLua.cpp">
-      <Filter>Lua Binding</Filter>
-    </ClCompile>
-    <ClCompile Include="Launcher.cpp">
-      <Filter>General Files\Source Files</Filter>
+      <Filter>Main\Libraries\fmt</Filter>
     </ClCompile>
     <ClCompile Include="Hooks.cpp">
       <Filter>Hooks</Filter>
@@ -290,29 +228,11 @@
     <ClCompile Include="D3D11_ResizeBuffers.cpp">
       <Filter>Hooks</Filter>
     </ClCompile>
-    <ClCompile Include="GraphicsStateWrapper.cpp">
-      <Filter>General Files\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GraphicsTweaksGui.cpp">
-      <Filter>Overlay Gui\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="RenderInterfaceD3D11.cpp">
-      <Filter>General Files\Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="keen_ImmediateRenderer_beginRenderPass_hook.cpp">
       <Filter>Hooks</Filter>
     </ClCompile>
-    <ClCompile Include="Timer.cpp">
-      <Filter>General Files\Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="rfgl_hooks.cpp">
       <Filter>Hooks</Filter>
-    </ClCompile>
-    <ClCompile Include="EventViewerGui.cpp">
-      <Filter>Overlay Gui\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="TimerLua.cpp">
-      <Filter>Lua Binding</Filter>
     </ClCompile>
     <ClCompile Include="gamestate_gp_process.cpp">
       <Filter>Hooks</Filter>
@@ -323,121 +243,238 @@
     <ClCompile Include="verify_gamesave_exit_notify.cpp">
       <Filter>Hooks</Filter>
     </ClCompile>
-    <ClCompile Include="WeaponInfoLua.cpp">
-      <Filter>Lua Binding</Filter>
-    </ClCompile>
-    <ClCompile Include="ApiTables.cpp">
-      <Filter>Lua Binding</Filter>
-    </ClCompile>
     <ClCompile Include="world_load_territory.cpp">
       <Filter>Hooks</Filter>
-    </ClCompile>
-    <ClCompile Include="VehicleInfoLua.cpp">
-      <Filter>Lua Binding</Filter>
-    </ClCompile>
-    <ClCompile Include="VehicleLua.cpp">
-      <Filter>Lua Binding</Filter>
     </ClCompile>
     <ClCompile Include="CanDropVehicle.cpp">
       <Filter>Hooks</Filter>
     </ClCompile>
+    <ClCompile Include="ApiTables.cpp">
+      <Filter>Lua Binding\Functions</Filter>
+    </ClCompile>
+    <ClCompile Include="HavokBPOLua.cpp">
+      <Filter>Lua Binding\Usertypes\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="HkpRigidBodyLua.cpp">
+      <Filter>Lua Binding\Usertypes\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="HkpSolverInfoLua.cpp">
+      <Filter>Lua Binding\Usertypes\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="HumanFlagsLua.cpp">
+      <Filter>Lua Binding\Usertypes\Objects\Human</Filter>
+    </ClCompile>
+    <ClCompile Include="HumanInfoLua.cpp">
+      <Filter>Lua Binding\Usertypes\Objects\Human</Filter>
+    </ClCompile>
+    <ClCompile Include="HumanLua.cpp">
+      <Filter>Lua Binding\Usertypes\Objects\Human</Filter>
+    </ClCompile>
+    <ClCompile Include="HumanMPFlagsLua.cpp">
+      <Filter>Lua Binding\Usertypes\Objects\Human</Filter>
+    </ClCompile>
+    <ClCompile Include="HumanRaycastHitInfoLua.cpp">
+      <Filter>Lua Binding\Usertypes\Objects\Human</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectFlagsLua.cpp">
+      <Filter>Lua Binding\Usertypes\Objects\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectLua.cpp">
+      <Filter>Lua Binding\Usertypes\Objects\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerLua.cpp">
+      <Filter>Lua Binding\Usertypes\Objects\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="VehicleInfoLua.cpp">
+      <Filter>Lua Binding\Usertypes\Objects\Vehicle</Filter>
+    </ClCompile>
+    <ClCompile Include="VehicleLua.cpp">
+      <Filter>Lua Binding\Usertypes\Objects\Vehicle</Filter>
+    </ClCompile>
     <ClCompile Include="FlyerLua.cpp">
+      <Filter>Lua Binding\Usertypes\Objects\Flyer</Filter>
+    </ClCompile>
+    <ClCompile Include="VectorLua.cpp">
+      <Filter>Lua Binding\Usertypes\Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="Matrix43Lua.cpp">
+      <Filter>Lua Binding\Usertypes\Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="MatrixLua.cpp">
+      <Filter>Lua Binding\Usertypes\Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="CharacterInstanceLua.cpp">
+      <Filter>Lua Binding\Usertypes\Objects\Human</Filter>
+    </ClCompile>
+    <ClCompile Include="AttachInfoDataLua.cpp">
+      <Filter>Lua Binding\Usertypes\Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="ContactNodeLua.cpp">
+      <Filter>Lua Binding\Usertypes\Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="InvItemInfoLua.cpp">
+      <Filter>Lua Binding\Usertypes\Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="ExplosionInfoLua.cpp">
+      <Filter>Lua Binding\Usertypes\Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseTypeLua.cpp">
+      <Filter>Lua Binding\Usertypes\Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectRenderDistanceLua.cpp">
+      <Filter>Lua Binding\Usertypes\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="TimerLua.cpp">
+      <Filter>Lua Binding\Usertypes\Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="WeaponInfoLua.cpp">
+      <Filter>Lua Binding\Usertypes\Objects\Weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="WorldLua.cpp">
+      <Filter>Lua Binding\Usertypes\World</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneralTweaksGui.cpp">
+      <Filter>Gui\Tweaks and settings\General tweaks gui</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseGui.cpp">
+      <Filter>Gui</Filter>
+    </ClCompile>
+    <ClCompile Include="GuiSystem.cpp">
+      <Filter>Gui</Filter>
+    </ClCompile>
+    <ClCompile Include="EventViewerGui.cpp">
+      <Filter>Gui\Data viewers\Event viewer</Filter>
+    </ClCompile>
+    <ClCompile Include="TextEditorWrapper.cpp">
+      <Filter>Gui\Misc\Script editor</Filter>
+    </ClCompile>
+    <ClCompile Include="include\ImGuiColorTextEdit\TextEditor.cpp">
+      <Filter>Gui\Misc\Script editor</Filter>
+    </ClCompile>
+    <ClCompile Include="ThemeEditorGui.cpp">
+      <Filter>Gui\Misc\Theme editor</Filter>
+    </ClCompile>
+    <ClCompile Include="TeleportGui.cpp">
+      <Filter>Gui\Misc\Teleporter</Filter>
+    </ClCompile>
+    <ClCompile Include="ScriptSelectGui.cpp">
+      <Filter>Gui\Misc\Script selector</Filter>
+    </ClCompile>
+    <ClCompile Include="ExplosionSpawnerGui.cpp">
+      <Filter>Gui\Spawners\Explosion spawner</Filter>
+    </ClCompile>
+    <ClCompile Include="FreeCamGui.cpp">
+      <Filter>Gui\Tweaks and settings\Camera settings</Filter>
+    </ClCompile>
+    <ClCompile Include="GraphicsTweaksGui.cpp">
+      <Filter>Gui\Tweaks and settings\Graphics tweaks</Filter>
+    </ClCompile>
+    <ClCompile Include="IntrospectionGui.cpp">
+      <Filter>Gui\Data viewers\Introspection gui</Filter>
+    </ClCompile>
+    <ClCompile Include="LogWindow.cpp">
+      <Filter>Gui\Data viewers\Logger</Filter>
+    </ClCompile>
+    <ClCompile Include="OverlayConsole.cpp">
+      <Filter>Gui\Misc\Console</Filter>
+    </ClCompile>
+    <ClCompile Include="PhysicsGui.cpp">
+      <Filter>Gui\Tweaks and settings\Physics gui</Filter>
+    </ClCompile>
+    <ClCompile Include="VehicleSpawnerGui.cpp">
+      <Filter>Gui\Spawners\Vehicle spawner</Filter>
+    </ClCompile>
+    <ClCompile Include="WelcomeGui.cpp">
+      <Filter>Gui\Misc\Welcome gui</Filter>
+    </ClCompile>
+    <ClCompile Include="MenuBarGui.cpp">
+      <Filter>Gui\Misc\Main menu bar</Filter>
+    </ClCompile>
+    <ClCompile Include="GraphicsStateWrapper.cpp">
+      <Filter>Main\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Timer.cpp">
+      <Filter>Main\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Util.cpp">
+      <Filter>Main\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Includes.cpp">
+      <Filter>Main\Globals &amp; includes</Filter>
+    </ClCompile>
+    <ClCompile Include="Globals.cpp">
+      <Filter>Main\Globals &amp; includes</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderInterfaceD3D11.cpp">
+      <Filter>Main\Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="Functions.cpp">
+      <Filter>Main\Functions</Filter>
+    </ClCompile>
+    <ClCompile Include="CameraWrapper.cpp">
+      <Filter>Main\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="FunctionManager.cpp">
+      <Filter>Main\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="HookManager.cpp">
+      <Filter>Main\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="IpcManager.cpp">
+      <Filter>Main\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="Logger.cpp">
+      <Filter>Main\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="ScriptManager.cpp">
+      <Filter>Main\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="SnippetManager.cpp">
+      <Filter>Main\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="Application.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
+    <ClCompile Include="Launcher.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
+    <ClCompile Include="Main.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
+    <ClCompile Include="LuaFunctions.cpp">
       <Filter>Lua Binding</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="CameraWrapper.h">
-      <Filter>General Files\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Functions.h">
-      <Filter>General Files\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="FunctionManager.h">
-      <Filter>General Files\Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\kiero\kiero.h">
-      <Filter>Kiero + ImGui\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\MinHook\MinHook.h">
-      <Filter>General Files\Header Files</Filter>
+      <Filter>Main\Libraries\Kiero + ImGui\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\ImGui\imconfig.h">
-      <Filter>Kiero + ImGui\Header Files</Filter>
+      <Filter>Main\Libraries\Kiero + ImGui\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\ImGui\imgui.h">
-      <Filter>Kiero + ImGui\Header Files</Filter>
+      <Filter>Main\Libraries\Kiero + ImGui\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\ImGui\imgui_internal.h">
-      <Filter>Kiero + ImGui\Header Files</Filter>
+      <Filter>Main\Libraries\Kiero + ImGui\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\ImGui\imstb_rectpack.h">
-      <Filter>Kiero + ImGui\Header Files</Filter>
+      <Filter>Main\Libraries\Kiero + ImGui\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\ImGui\imstb_textedit.h">
-      <Filter>Kiero + ImGui\Header Files</Filter>
+      <Filter>Main\Libraries\Kiero + ImGui\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\ImGui\imstb_truetype.h">
-      <Filter>Kiero + ImGui\Header Files</Filter>
+      <Filter>Main\Libraries\Kiero + ImGui\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="imgui_impl_dx11.h">
-      <Filter>Kiero + ImGui\Header Files</Filter>
+      <Filter>Main\Libraries\Kiero + ImGui\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="imgui_impl_win32.h">
-      <Filter>Kiero + ImGui\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="DeepCodeStorage.h">
-      <Filter>General Files\Header Files</Filter>
+      <Filter>Main\Libraries\Kiero + ImGui\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="imgui_stdlib.h">
-      <Filter>Kiero + ImGui\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ScriptManager.h">
-      <Filter>General Files\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SnippetManager.h">
-      <Filter>General Files\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Includes.h">
-      <Filter>General Files\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Logger.h">
-      <Filter>General Files\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Globals.h">
-      <Filter>General Files\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="HookManager.h">
-      <Filter>General Files\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GuiSystem.h">
-      <Filter>Overlay Gui\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="OverlayConsole.h">
-      <Filter>Overlay Gui\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TeleportGui.h">
-      <Filter>Overlay Gui\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ThemeEditorGui.h">
-      <Filter>Overlay Gui\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="IntrospectionGui.h">
-      <Filter>Overlay Gui\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GeneralTweaksGui.h">
-      <Filter>Overlay Gui\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ScriptSelectGui.h">
-      <Filter>Overlay Gui\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MenuBarGui.h">
-      <Filter>Overlay Gui\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="LogWindow.h">
-      <Filter>Overlay Gui\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="WelcomeGui.h">
-      <Filter>Overlay Gui\Header Files</Filter>
+      <Filter>Main\Libraries\Kiero + ImGui\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="RFGR_Type_UI.h">
       <Filter>RFGR Structs</Filter>
@@ -451,15 +488,6 @@
     <ClInclude Include="RFGR_Types_Player.h">
       <Filter>RFGR Structs</Filter>
     </ClInclude>
-    <ClInclude Include="LuaFunctions.h">
-      <Filter>General Files\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ItsyBitsy.h">
-      <Filter>General Files\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="FreeCamGui.h">
-      <Filter>Overlay Gui\Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="RFGR_Containers.h">
       <Filter>RFGR Structs</Filter>
     </ClInclude>
@@ -469,128 +497,14 @@
     <ClInclude Include="RFGR_Types_Havok.h">
       <Filter>RFGR Structs</Filter>
     </ClInclude>
-    <ClInclude Include="BaseGui.h">
-      <Filter>Overlay Gui\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="PhysicsGui.h">
-      <Filter>Overlay Gui\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="VectorLua.h">
-      <Filter>Lua Binding</Filter>
-    </ClInclude>
-    <ClInclude Include="MatrixLua.h">
-      <Filter>Lua Binding</Filter>
-    </ClInclude>
-    <ClInclude Include="Matrix43Lua.h">
-      <Filter>Lua Binding</Filter>
-    </ClInclude>
-    <ClInclude Include="AttachInfoDataLua.h">
-      <Filter>Lua Binding</Filter>
-    </ClInclude>
-    <ClInclude Include="ContactNodeLua.h">
-      <Filter>Lua Binding</Filter>
-    </ClInclude>
-    <ClInclude Include="ObjectFlagsLua.h">
-      <Filter>Lua Binding</Filter>
-    </ClInclude>
     <ClInclude Include="SolStateForward.h">
       <Filter>Lua Binding</Filter>
-    </ClInclude>
-    <ClInclude Include="HavokBPOLua.h">
-      <Filter>Lua Binding</Filter>
-    </ClInclude>
-    <ClInclude Include="HumanFlagsLua.h">
-      <Filter>Lua Binding</Filter>
-    </ClInclude>
-    <ClInclude Include="HumanMPFlagsLua.h">
-      <Filter>Lua Binding</Filter>
-    </ClInclude>
-    <ClInclude Include="ObjectLua.h">
-      <Filter>Lua Binding</Filter>
-    </ClInclude>
-    <ClInclude Include="HumanLua.h">
-      <Filter>Lua Binding</Filter>
-    </ClInclude>
-    <ClInclude Include="HumanInfoLua.h">
-      <Filter>Lua Binding</Filter>
-    </ClInclude>
-    <ClInclude Include="InvItemInfoLua.h">
-      <Filter>Lua Binding</Filter>
-    </ClInclude>
-    <ClInclude Include="ObjectRenderDistanceLua.h">
-      <Filter>Lua Binding</Filter>
-    </ClInclude>
-    <ClInclude Include="HumanRaycastHitInfoLua.h">
-      <Filter>Lua Binding</Filter>
-    </ClInclude>
-    <ClInclude Include="BaseTypeLua.h">
-      <Filter>Lua Binding</Filter>
-    </ClInclude>
-    <ClInclude Include="CharacterInstanceLua.h">
-      <Filter>Lua Binding</Filter>
-    </ClInclude>
-    <ClInclude Include="PlayerLua.h">
-      <Filter>Lua Binding</Filter>
-    </ClInclude>
-    <ClInclude Include="WorldLua.h">
-      <Filter>Lua Binding</Filter>
-    </ClInclude>
-    <ClInclude Include="RenderInterfaceD3D11.h">
-      <Filter>General Files\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="HkpRigidBodyLua.h">
-      <Filter>Lua Binding</Filter>
-    </ClInclude>
-    <ClInclude Include="HkpSolverInfoLua.h">
-      <Filter>Lua Binding</Filter>
-    </ClInclude>
-    <ClInclude Include="Application.h">
-      <Filter>General Files\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TextEditorWrapper.h">
-      <Filter>Overlay Gui\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ImGuiColorTextEdit\TextEditor.h">
-      <Filter>Overlay Gui\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="FixedArrayWrapper.h">
-      <Filter>General Files\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ExplosionSpawnerGui.h">
-      <Filter>Overlay Gui\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Util.h">
-      <Filter>General Files\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="RFGR_Types_Vehicle_Spawn_Params.h">
       <Filter>RFGR Structs</Filter>
     </ClInclude>
-    <ClInclude Include="VehicleSpawnerGui.h">
-      <Filter>Overlay Gui\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ExplosionInfoLua.h">
-      <Filter>Lua Binding</Filter>
-    </ClInclude>
-    <ClInclude Include="Launcher.h">
-      <Filter>General Files\Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Hooks.h">
       <Filter>Hooks</Filter>
-    </ClInclude>
-    <ClInclude Include="Version.h">
-      <Filter>General Files\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GraphicsStateWrapper.h">
-      <Filter>General Files\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GraphicsTweaksGui.h">
-      <Filter>Overlay Gui\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ShaderSetD3D11.h">
-      <Filter>General Files\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Timer.h">
-      <Filter>General Files\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="RFGR_Types_weapon_info.h">
       <Filter>RFGR Structs</Filter>
@@ -598,31 +512,220 @@
     <ClInclude Include="RFGR_Types_Keen_InputEvent.h">
       <Filter>RFGR Structs</Filter>
     </ClInclude>
-    <ClInclude Include="EventViewerGui.h">
-      <Filter>Overlay Gui\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TimerLua.h">
-      <Filter>Lua Binding</Filter>
-    </ClInclude>
-    <ClInclude Include="BuildDate.h">
-      <Filter>General Files\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="WeaponInfoLua.h">
-      <Filter>Lua Binding</Filter>
-    </ClInclude>
-    <ClInclude Include="ApiTables.h">
-      <Filter>Lua Binding</Filter>
-    </ClInclude>
     <ClInclude Include="RFGR_Types_Vehicle.h">
       <Filter>RFGR Structs</Filter>
     </ClInclude>
+    <ClInclude Include="ApiTables.h">
+      <Filter>Lua Binding\Functions</Filter>
+    </ClInclude>
+    <ClInclude Include="HavokBPOLua.h">
+      <Filter>Lua Binding\Usertypes\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="HkpRigidBodyLua.h">
+      <Filter>Lua Binding\Usertypes\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="HkpSolverInfoLua.h">
+      <Filter>Lua Binding\Usertypes\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="HumanFlagsLua.h">
+      <Filter>Lua Binding\Usertypes\Objects\Human</Filter>
+    </ClInclude>
+    <ClInclude Include="HumanInfoLua.h">
+      <Filter>Lua Binding\Usertypes\Objects\Human</Filter>
+    </ClInclude>
+    <ClInclude Include="HumanLua.h">
+      <Filter>Lua Binding\Usertypes\Objects\Human</Filter>
+    </ClInclude>
+    <ClInclude Include="HumanMPFlagsLua.h">
+      <Filter>Lua Binding\Usertypes\Objects\Human</Filter>
+    </ClInclude>
+    <ClInclude Include="HumanRaycastHitInfoLua.h">
+      <Filter>Lua Binding\Usertypes\Objects\Human</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectFlagsLua.h">
+      <Filter>Lua Binding\Usertypes\Objects\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectLua.h">
+      <Filter>Lua Binding\Usertypes\Objects\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerLua.h">
+      <Filter>Lua Binding\Usertypes\Objects\Player</Filter>
+    </ClInclude>
     <ClInclude Include="VehicleInfoLua.h">
-      <Filter>Lua Binding</Filter>
+      <Filter>Lua Binding\Usertypes\Objects\Vehicle</Filter>
     </ClInclude>
     <ClInclude Include="VehicleLua.h">
-      <Filter>Lua Binding</Filter>
+      <Filter>Lua Binding\Usertypes\Objects\Vehicle</Filter>
     </ClInclude>
     <ClInclude Include="FlyerLua.h">
+      <Filter>Lua Binding\Usertypes\Objects\Flyer</Filter>
+    </ClInclude>
+    <ClInclude Include="VectorLua.h">
+      <Filter>Lua Binding\Usertypes\Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="Matrix43Lua.h">
+      <Filter>Lua Binding\Usertypes\Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="MatrixLua.h">
+      <Filter>Lua Binding\Usertypes\Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="CharacterInstanceLua.h">
+      <Filter>Lua Binding\Usertypes\Objects\Human</Filter>
+    </ClInclude>
+    <ClInclude Include="AttachInfoDataLua.h">
+      <Filter>Lua Binding\Usertypes\Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="ContactNodeLua.h">
+      <Filter>Lua Binding\Usertypes\Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="InvItemInfoLua.h">
+      <Filter>Lua Binding\Usertypes\Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="ExplosionInfoLua.h">
+      <Filter>Lua Binding\Usertypes\Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseTypeLua.h">
+      <Filter>Lua Binding\Usertypes\Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectRenderDistanceLua.h">
+      <Filter>Lua Binding\Usertypes\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="TimerLua.h">
+      <Filter>Lua Binding\Usertypes\Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="WeaponInfoLua.h">
+      <Filter>Lua Binding\Usertypes\Objects\Weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="WorldLua.h">
+      <Filter>Lua Binding\Usertypes\World</Filter>
+    </ClInclude>
+    <ClInclude Include="GeneralTweaksGui.h">
+      <Filter>Gui\Tweaks and settings\General tweaks gui</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseGui.h">
+      <Filter>Gui</Filter>
+    </ClInclude>
+    <ClInclude Include="GuiSystem.h">
+      <Filter>Gui</Filter>
+    </ClInclude>
+    <ClInclude Include="EventViewerGui.h">
+      <Filter>Gui\Data viewers\Event viewer</Filter>
+    </ClInclude>
+    <ClInclude Include="TextEditorWrapper.h">
+      <Filter>Gui\Misc\Script editor</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGuiColorTextEdit\TextEditor.h">
+      <Filter>Gui\Misc\Script editor</Filter>
+    </ClInclude>
+    <ClInclude Include="ThemeEditorGui.h">
+      <Filter>Gui\Misc\Theme editor</Filter>
+    </ClInclude>
+    <ClInclude Include="TeleportGui.h">
+      <Filter>Gui\Misc\Teleporter</Filter>
+    </ClInclude>
+    <ClInclude Include="ScriptSelectGui.h">
+      <Filter>Gui\Misc\Script selector</Filter>
+    </ClInclude>
+    <ClInclude Include="ExplosionSpawnerGui.h">
+      <Filter>Gui\Spawners\Explosion spawner</Filter>
+    </ClInclude>
+    <ClInclude Include="FreeCamGui.h">
+      <Filter>Gui\Tweaks and settings\Camera settings</Filter>
+    </ClInclude>
+    <ClInclude Include="GraphicsTweaksGui.h">
+      <Filter>Gui\Tweaks and settings\Graphics tweaks</Filter>
+    </ClInclude>
+    <ClInclude Include="IntrospectionGui.h">
+      <Filter>Gui\Data viewers\Introspection gui</Filter>
+    </ClInclude>
+    <ClInclude Include="LogWindow.h">
+      <Filter>Gui\Data viewers\Logger</Filter>
+    </ClInclude>
+    <ClInclude Include="OverlayConsole.h">
+      <Filter>Gui\Misc\Console</Filter>
+    </ClInclude>
+    <ClInclude Include="PhysicsGui.h">
+      <Filter>Gui\Tweaks and settings\Physics gui</Filter>
+    </ClInclude>
+    <ClInclude Include="VehicleSpawnerGui.h">
+      <Filter>Gui\Spawners\Vehicle spawner</Filter>
+    </ClInclude>
+    <ClInclude Include="WelcomeGui.h">
+      <Filter>Gui\Misc\Welcome gui</Filter>
+    </ClInclude>
+    <ClInclude Include="MenuBarGui.h">
+      <Filter>Gui\Misc\Main menu bar</Filter>
+    </ClInclude>
+    <ClInclude Include="Util.h">
+      <Filter>Main\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Timer.h">
+      <Filter>Main\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="ItsyBitsy.h">
+      <Filter>Main\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="GraphicsStateWrapper.h">
+      <Filter>Main\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="FixedArrayWrapper.h">
+      <Filter>Main\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="BuildDate.h">
+      <Filter>Main\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Version.h">
+      <Filter>Main\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="include\MinHook\MinHook.h">
+      <Filter>Main\Libraries</Filter>
+    </ClInclude>
+    <ClInclude Include="Includes.h">
+      <Filter>Main\Globals &amp; includes</Filter>
+    </ClInclude>
+    <ClInclude Include="Globals.h">
+      <Filter>Main\Globals &amp; includes</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderSetD3D11.h">
+      <Filter>Main\Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderInterfaceD3D11.h">
+      <Filter>Main\Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="DeepCodeStorage.h">
+      <Filter>Main\Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="Functions.h">
+      <Filter>Main\Functions</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraWrapper.h">
+      <Filter>Main\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="FunctionManager.h">
+      <Filter>Main\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="HookManager.h">
+      <Filter>Main\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="IpcManager.h">
+      <Filter>Main\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="Logger.h">
+      <Filter>Main\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="ScriptManager.h">
+      <Filter>Main\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="SnippetManager.h">
+      <Filter>Main\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="Application.h">
+      <Filter>Main</Filter>
+    </ClInclude>
+    <ClInclude Include="Launcher.h">
+      <Filter>Main</Filter>
+    </ClInclude>
+    <ClInclude Include="LuaFunctions.h">
       <Filter>Lua Binding</Filter>
     </ClInclude>
   </ItemGroup>

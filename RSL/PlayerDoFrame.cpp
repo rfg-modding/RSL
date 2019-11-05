@@ -6,9 +6,9 @@ void __fastcall Hooks::PlayerDoFrameHook(Player* PlayerPtr)
     static int OnLoadCounter = 0;
     static int TimesCalled = 0;
     static bool InitEventTriggered = false;
-    if(!InitEventTriggered)
+    if (!InitEventTriggered)
     {
-        if(TimesCalled >= 200) //Wait 200 frames to ensure everything is initialized
+        if (TimesCalled >= 200) //Wait 200 frames to ensure everything is initialized
         {
             Globals::Scripts->TriggerInitializedEvent();
             InitEventTriggered = true;
@@ -18,9 +18,9 @@ void __fastcall Hooks::PlayerDoFrameHook(Player* PlayerPtr)
             TimesCalled++;
         }
     }
-    if(Globals::CanTriggerOnLoadEvent)
+    if (Globals::CanTriggerOnLoadEvent)
     {
-        if(OnLoadCounter >= 200) //Wait 200 frames to ensure everything is initialized
+        if (OnLoadCounter >= 200) //Wait 200 frames to ensure everything is initialized
         {
             Globals::Scripts->TriggerLoadEvent();
             Globals::CanTriggerOnLoadEvent = false;
@@ -95,9 +95,9 @@ void __fastcall Hooks::PlayerDoFrameHook(Player* PlayerPtr)
     {
         if (Globals::Camera->IsFirstPersonCameraActive())
         {
-            if(Globals::Camera->UseThirdPersonForVehicles)
+            if (Globals::Camera->UseThirdPersonForVehicles)
             {
-                if(PlayerPtr->VehicleHandle != 0xFFFFFFFF)
+                if (PlayerPtr->VehicleHandle != 0xFFFFFFFF)
                 {
                     Globals::Camera->PauseFirstPersonCamera();
                 }
@@ -109,13 +109,21 @@ void __fastcall Hooks::PlayerDoFrameHook(Player* PlayerPtr)
             }
             else
             {
-                if(Globals::Camera->IsFirstPersonCameraPaused())
+                if (Globals::Camera->IsFirstPersonCameraPaused())
                 {
                     Globals::Camera->UnpauseFirstPersonCamera();
                 }
                 Globals::Camera->UpdateFirstPersonView();
             }
         }
+    }
+
+    //Todo: Make some kind of event system/class to avoid needing to do this and having tons of globals laying around
+    //This is done to avoid problems when a thread spawned by the RSL tries teleporting the player at an unsafe time for doing so.
+    if (Globals::PlayerNeedsTeleport)
+    {
+        rfg::HumanTeleportUnsafe(PlayerPtr, Globals::PlayerTeleportPos, PlayerPtr->Orientation);
+        Globals::PlayerNeedsTeleport = false;
     }
 
     return rfg::PlayerDoFrame(PlayerPtr);
