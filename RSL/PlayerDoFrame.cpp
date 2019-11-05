@@ -118,7 +118,6 @@ void __fastcall Hooks::PlayerDoFrameHook(Player* PlayerPtr)
         }
     }
 
-    return PlayerDoFrame(PlayerPtr);
     return rfg::PlayerDoFrame(PlayerPtr);
 }
 
