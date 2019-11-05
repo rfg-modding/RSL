@@ -13,7 +13,7 @@ You can find the installation guide [here](https://rsl.readthedocs.io/en/latest/
 - [Libraries used](https://github.com/rsl-dev/RSL#libraries-used)
 
 ## Project goals
-Normally, modding RFGR involves editing xml files included in the game which define things such as AI behavior, the properties of vehicles, weapons, and more. This allows modders to change the game in many ways. Even so, there are many hardcoded values and behaviors that cannot be changed, ultimately limited what modders can do. This tool aims to bypass some of these limitations by allowing modders to change many hardcoded values and giving them access to the power and flexibility which a scripting languages allow for.
+Normally, modding RFGR involves editing xml files included in the game which define things such as AI behavior, the properties of vehicles, weapons, and more. This allows modders to change the game in many ways. Even so, there are many hardcoded values and behaviors that cannot be changed, ultimately limiting what modders can do. This tool aims to bypass some of these limitations by allowing modders to change many hardcoded values and giving them access to the power and flexibility which a scripting languages allow for.
 
 Since this involves manipulating many parts of the games code and memory, this will likely expand to other modding features over time, such as replacing textures and other files without unpacking any vpp_pc files.
 
