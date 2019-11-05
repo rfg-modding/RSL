@@ -8,5 +8,5 @@ void __cdecl Hooks::gamestate_gp_process_hook()
     {
         Globals::Scripts->TriggerDoFrameEvent();
     }
-    gamestate_gp_process();
+    rfg::gamestate_gp_process();
 }

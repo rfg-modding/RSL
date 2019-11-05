@@ -14,7 +14,7 @@ void __fastcall Hooks::world_do_frame_hook(World* This, void* edx, bool HardLoad
     }
     if (!Globals::TODLightPtr)
     {
-        Globals::TODLightPtr = GameRenderGetTodLight();
+        Globals::TODLightPtr = rfg::GameRenderGetTodLight();
         if (Globals::Scripts)
         {
             Globals::Scripts->UpdateRfgPointers();
@@ -22,7 +22,7 @@ void __fastcall Hooks::world_do_frame_hook(World* This, void* edx, bool HardLoad
     }
     if (!Globals::Gui)
     {
-        return WorldDoFrame(This, edx, HardLoad);
+        return rfg::WorldDoFrame(This, edx, HardLoad);
     }
 
     static GuiReference<GeneralTweaksGui> TweaksMenuRef = Globals::Gui->GetGuiReference<GeneralTweaksGui>("General tweaks").value();
@@ -46,5 +46,5 @@ void __fastcall Hooks::world_do_frame_hook(World* This, void* edx, bool HardLoad
         Globals::TODLightPtr->m_color.alpha = TweaksMenuRef.Get().CustomTimeOfDayLightColor.alpha;
     }
 
-    return WorldDoFrame(This, edx, HardLoad);
+    return rfg::WorldDoFrame(This, edx, HardLoad);
 }

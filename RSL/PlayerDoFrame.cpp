@@ -35,7 +35,7 @@ void __fastcall Hooks::PlayerDoFrameHook(Player* PlayerPtr)
     if (Globals::PlayerPtr != PlayerPtr)
     {
         Globals::PlayerPtr = PlayerPtr;
-        Globals::PlayerRigidBody = HavokBodyGetPointer(PlayerPtr->HavokHandle);
+        Globals::PlayerRigidBody = rfg::HavokBodyGetPointer(PlayerPtr->HavokHandle);
         if (Globals::Scripts)
         {
             Globals::Scripts->UpdateRfgPointers();
@@ -44,14 +44,14 @@ void __fastcall Hooks::PlayerDoFrameHook(Player* PlayerPtr)
 
     if (!Globals::Gui)
     {
-        return PlayerDoFrame(PlayerPtr);
+        return rfg::PlayerDoFrame(PlayerPtr);
     }
     static GuiReference<GeneralTweaksGui> TweaksMenuRef = Globals::Gui->GetGuiReference<GeneralTweaksGui>("General tweaks").value();
     static GuiReference<FreeCamGui> FreeCamMenuRef = Globals::Gui->GetGuiReference<FreeCamGui>("Camera settings").value();
 
     if (!Globals::Camera)
     {
-        return PlayerDoFrame(PlayerPtr);
+        return rfg::PlayerDoFrame(PlayerPtr);
     }
 
     if (Globals::InfiniteJetpack)
@@ -73,20 +73,20 @@ void __fastcall Hooks::PlayerDoFrameHook(Player* PlayerPtr)
     }
     if (TweaksMenuRef.Get().LockAlertLevel)
     {
-        GsmSetAlertLevel(TweaksMenuRef.Get().CustomAlertLevel);
+        rfg::GsmSetAlertLevel(TweaksMenuRef.Get().CustomAlertLevel);
     }
 
     if (Globals::Camera->IsFreeCameraActive() && FreeCamMenuRef.Get().PlayerFollowCam)
     {
         Globals::Camera->UpdateFreeView();
         vector CameraPos(*Globals::Camera->RealX, *Globals::Camera->RealY + 1.5f, *Globals::Camera->RealZ);
-        HumanTeleportUnsafe(PlayerPtr, CameraPos, PlayerPtr->Orientation);
+        rfg::HumanTeleportUnsafe(PlayerPtr, CameraPos, PlayerPtr->Orientation);
     }
     if (!Globals::Camera->IsFreeCameraActive() && Globals::Camera->NeedPostDeactivationCleanup)
     {
         if (FreeCamMenuRef.Get().ReturnPlayerToOriginalPosition)
         {
-            HumanTeleportUnsafe(PlayerPtr, Globals::Camera->OriginalCameraPosition, PlayerPtr->Orientation);
+            rfg::HumanTeleportUnsafe(PlayerPtr, Globals::Camera->OriginalCameraPosition, PlayerPtr->Orientation);
         }
         Globals::Camera->NeedPostDeactivationCleanup = false;
     }
@@ -119,10 +119,11 @@ void __fastcall Hooks::PlayerDoFrameHook(Player* PlayerPtr)
     }
 
     return PlayerDoFrame(PlayerPtr);
+    return rfg::PlayerDoFrame(PlayerPtr);
 }
 
 void __cdecl Hooks::HookDoFrameHook()
 {
     Globals::HookDidFrame = true;
-    return HookDoFrame();
+    return rfg::HookDoFrame();
 }

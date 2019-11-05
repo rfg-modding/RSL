@@ -76,7 +76,7 @@ void ExplosionSpawnerGui::Draw()
     Util::Gui::ShowHelpMarker("Used to prevent lag from 100s of explosions per second since the script loader thread is currently uncapped.");
     if (ImGui::Button("Boom"))
     {
-        ExplosionCreate(&CustomExplosionInfo, Globals::PlayerPtr, Globals::PlayerPtr, &Globals::PlayerPtr->aim_pos, &Globals::PlayerPtr->Orientation, &Globals::PlayerPtr->aim_pos, NULL, false);
+        rfg::ExplosionCreate(&CustomExplosionInfo, Globals::PlayerPtr, Globals::PlayerPtr, &Globals::PlayerPtr->aim_pos, &Globals::PlayerPtr->Orientation, &Globals::PlayerPtr->aim_pos, NULL, false);
     }
     ImGui::SameLine();
     Util::Gui::ShowHelpMarker("Spawns an explosion with the values entered below where the player is aiming. The middle mouse button option is much more convenient.");

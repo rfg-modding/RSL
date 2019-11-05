@@ -50,7 +50,7 @@ bool __cdecl Hooks::peg_load_wrapper_hook(const char* filename, unsigned srid, c
 
                 std::ifstream("RSL/Overrides/Textures/" + std::get<0>(SplitName) + ".gpeg_pc", std::ios::binary).read(TempGpuBuffer, gpu_file_size);
 
-                return peg_load_wrapper(filename, srid, TempCpuBuffer, cpu_file_size, TempGpuBuffer, gpu_file_size);
+                return rfg::peg_load_wrapper(filename, srid, TempCpuBuffer, cpu_file_size, TempGpuBuffer, gpu_file_size);
             }
             else
             {
@@ -66,7 +66,7 @@ bool __cdecl Hooks::peg_load_wrapper_hook(const char* filename, unsigned srid, c
 
                 std::ifstream("RSL/Overrides/Textures/" + std::get<0>(SplitName) + ".gvbm_pc", std::ios::binary).read(TempGpuBuffer, gpu_file_size);
 
-                return peg_load_wrapper(filename, srid, TempCpuBuffer, cpu_file_size, TempGpuBuffer, gpu_file_size);
+                return rfg::peg_load_wrapper(filename, srid, TempCpuBuffer, cpu_file_size, TempGpuBuffer, gpu_file_size);
             }
             else
             {
@@ -75,5 +75,5 @@ bool __cdecl Hooks::peg_load_wrapper_hook(const char* filename, unsigned srid, c
         }
     }
 
-    return peg_load_wrapper(filename, srid, cpu_preload, cpu_size, gpu_preload, gpu_size);
+    return rfg::peg_load_wrapper(filename, srid, cpu_preload, cpu_size, gpu_preload, gpu_size);
 }

@@ -7,7 +7,7 @@ void __cdecl Hooks::rfg_init_stage_2_done_hook(void* pSoundSystem)
     CallCount++;
     Logger::LogWarning("rfg_init_stage2_done_hook called! Times called: {}\n", CallCount);
 
-    return rfg_init_stage_2_done(pSoundSystem);
+    return rfg::rfg_init_stage_2_done(pSoundSystem);
 }
 
 void __cdecl Hooks::rfg_init_stage_2_done_2_hook()
@@ -16,5 +16,5 @@ void __cdecl Hooks::rfg_init_stage_2_done_2_hook()
     CallCount++;
     Logger::LogWarning("rfg_init_stage2_done_2_hook called! Times called: {}\n", CallCount);
 
-    return rfg_init_stage_2_done_2();
+    return rfg::rfg_init_stage_2_done_2();
 }

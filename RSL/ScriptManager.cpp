@@ -361,7 +361,7 @@ void ScriptManager::TriggerInputEvent(uint Message, uint KeyCode, KeyState& Keys
 {
     std::lock_guard<std::recursive_mutex> Lock(Mutex);
 
-    if (game_is_paused()) return;
+    if (rfg::game_is_paused()) return;
     if (!LuaState) return;
 
     ScriptEvent& InputEvents = Events[0];
@@ -399,7 +399,7 @@ void ScriptManager::TriggerDoFrameEvent()
 {
     std::lock_guard<std::recursive_mutex> Lock(Mutex);
 
-    if (game_is_paused()) return;
+    if (rfg::game_is_paused()) return;
     if (!LuaState) return;
 
     ScriptEvent& DoFrameEvents = Events[1];
@@ -466,7 +466,7 @@ void ScriptManager::TriggerMouseEvent(uint Message, uint wParam, uint lParam, Ke
 {
     std::lock_guard<std::recursive_mutex> Lock(Mutex);
 
-    if (game_is_paused()) return;
+    if (rfg::game_is_paused()) return;
     if (!LuaState) return;
 
     ScriptEvent& MouseEvent = Events[3];

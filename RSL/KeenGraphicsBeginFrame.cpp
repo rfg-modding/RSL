@@ -48,7 +48,7 @@ keen::GraphicsCommandBuffer* Hooks::KeenGraphicsBeginFrameHook(keen::GraphicsSys
         }
     }
 
-    return KeenGraphicsBeginFrame(pGraphicsSystem, pSwapChain);
+    return rfg::KeenGraphicsBeginFrame(pGraphicsSystem, pSwapChain);
 }
 
 

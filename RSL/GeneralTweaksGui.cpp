@@ -27,7 +27,7 @@ void GeneralTweaksGui::Draw()
     if(!GameClock)
     {
         Logger::LogWarning("Updating GeneralTweaksGui::GameClock!\n");
-        GameClock = game_clock_get();
+        GameClock = rfg::game_clock_get();
     }
 
 	ImGui::PushFont(Globals::FontBig);
@@ -85,25 +85,25 @@ void GeneralTweaksGui::Draw()
     //ImGui::Checkbox("Pause beneath", &PauseBeneath);
     if(ImGui::Button("Open weapons locker menu"))
     {
-        GameseqPushState(GS_INGAME_WEAPON_CABINET, Transparent, PauseBeneath);
+        rfg::GameseqPushState(GS_INGAME_WEAPON_CABINET, Transparent, PauseBeneath);
     }
     if (ImGui::Button("Open upgrades menu"))
     {
-        GameseqPushState(GS_INGAME_UPGRADES_HUD, Transparent, PauseBeneath);
+        rfg::GameseqPushState(GS_INGAME_UPGRADES_HUD, Transparent, PauseBeneath);
     }
 	if (ImGui::Button("Toggle Hud"))
 	{
-		ToggleHud();
+        rfg::ToggleHud();
 	}
 	if (ImGui::Button("Toggle Fog"))
 	{
-		ToggleFog();
+        rfg::ToggleFog();
 	}
 	ImGui::Separator();
 	
 	ImGui::Text("Alert level: ");
 	ImGui::SameLine();
-	gfm_alert_levels AlertCheck = GsmGetAlertLevel();
+	gfm_alert_levels AlertCheck = rfg::GsmGetAlertLevel();
 	if (AlertCheck == ALERT_LEVEL_GREEN)
 	{
 		ImGui::TextColored(Globals::ColorGreen, std::string(std::string(ICON_FA_SMILE_BEAM) + u8" Green").c_str());
@@ -134,7 +134,7 @@ void GeneralTweaksGui::Draw()
 	ImGui::SameLine();
 	if (ImGui::Button("Set alert level"))
 	{
-		GsmSetAlertLevel(CustomAlertLevel);
+        rfg::GsmSetAlertLevel(CustomAlertLevel);
 	}
 	ImGui::SameLine();
 	ImGui::Checkbox("Lock", &LockAlertLevel);
@@ -151,12 +151,12 @@ void GeneralTweaksGui::Draw()
 		{
 			if (XrayModeOn)
 			{
-				XrayEffectStop(XET_VISION_BACKPACK);
+                rfg::XrayEffectStop(XET_VISION_BACKPACK);
 				XrayModeOn = false;
 			}
 			else
 			{
-				XrayEffectStart(XET_VISION_BACKPACK);
+                rfg::XrayEffectStart(XET_VISION_BACKPACK);
 				XrayModeOn = true;
 			}
 		}
@@ -164,12 +164,12 @@ void GeneralTweaksGui::Draw()
 		{
 			if (XrayModeOn)
 			{
-				XrayEffectStop(XET_RAIL_DRIVER);
+                rfg::XrayEffectStop(XET_RAIL_DRIVER);
 				XrayModeOn = false;
 			}
 			else
 			{
-				XrayEffectStart(XET_RAIL_DRIVER);
+                rfg::XrayEffectStart(XET_RAIL_DRIVER);
 				XrayModeOn = true;
 			}
 		}

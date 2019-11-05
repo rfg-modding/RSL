@@ -55,10 +55,6 @@ void Lua::BindVector(sol::state& LuaState)
         [](vector& Self, bool Parentheses, bool Labels) {return Self.GetDataString(Parentheses, Labels); }));
 	RfgTable.set_usertype("Vector", Utype);
 
-    RfgTable.set_function("TeleportPlayer", sol::overload(
-        [](vector Position, matrix Orientation) {HumanTeleportUnsafe(Globals::PlayerPtr, Position, Orientation); },
-        [](vector Position) {HumanTeleportUnsafe(Globals::PlayerPtr, Position, Globals::PlayerPtr->Orientation); }));
-
 	/*RfgTable.new_usertype<vector>
 	(
 		"vector",

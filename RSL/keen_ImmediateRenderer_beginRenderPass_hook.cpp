@@ -10,5 +10,5 @@ void __fastcall Hooks::keen_ImmediateRenderer_beginRenderPass_hook(keen::Immedia
     }
 
 
-    return keen_ImmediateRenderer_beginRenderPass(this_ptr, edx, pRenderTarget, pCamera);
+    return rfg::keen_ImmediateRenderer_beginRenderPass(this_ptr, edx, pRenderTarget, pCamera);
 }

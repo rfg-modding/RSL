@@ -51,14 +51,14 @@ void VehicleSpawnerGui::Draw()
     {
         CustomVehicleSpawnParams.vp = nullptr;
         CustomVehicleSpawnParams.osrp = nullptr;
-        bool Result = SpSpawnVehicle(CustomVehicleSpawnParams);
+        bool Result = rfg::SpSpawnVehicle(CustomVehicleSpawnParams);
         Logger::Log("SpSpawnVehicle result: {}\n", Result);
     }
     if (ImGui::Button("Spawn with current params(ObjectSpawnVehicle)"))
     {
         CustomVehicleSpawnParams.vp = nullptr;
         CustomVehicleSpawnParams.osrp = nullptr;
-        spawn_status_result Result = object_spawn_vehicle(CustomVehicleSpawnParams);
+        spawn_status_result Result = rfg::object_spawn_vehicle(CustomVehicleSpawnParams);
         Logger::Log("object_spawn_vehicle result: {}\n", (int)Result);
     }
 
@@ -212,7 +212,7 @@ void VehicleSpawnerGui::Draw()
                     //spawn_status_result Result = object_spawn_vehicle(CustomVehicleSpawnParams);
                     //Logger::Log("object_spawn_vehicle result: {}\n", (int)Result);
 
-                    bool Result = SpSpawnVehicle(CustomVehicleSpawnParams);
+                    bool Result = rfg::SpSpawnVehicle(CustomVehicleSpawnParams);
                     Logger::Log("SpSpawnVehicle result: {}\n", Result);
 
                     //bool Result = CreateNewVehicle(&CustomVehicleSpawnParams);

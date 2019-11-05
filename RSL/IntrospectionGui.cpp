@@ -47,7 +47,7 @@ void IntrospectionGui::DrawPlayerIntrospectionGui(const char* Title)
     ImGui::InputScalar("##ObjectHandleSearchInput", ImGuiDataType_U32, &HandleSearchBuffer); ImGui::SameLine(); //Todo: Need to update imgui to get stuff like ImGui::InputUint
     if (ImGui::Button("Search##ObjectHandleSearchButton"))
     {
-        if(WorldObjectFromHandle(Globals::RfgWorldPtr, NULL, HandleSearchBuffer))
+        if(rfg::WorldObjectFromHandle(Globals::RfgWorldPtr, NULL, HandleSearchBuffer))
         {
             SavedTargetObjectHandle = HandleSearchBuffer;
         }
@@ -76,11 +76,11 @@ void IntrospectionGui::DrawPlayerIntrospectionGui(const char* Title)
 
     if(Globals::RfgWorldPtr)
     {
-        Object* TargetObject = WorldObjectFromHandle(Globals::RfgWorldPtr, NULL, SavedTargetObjectHandle);
+        Object* TargetObject = rfg::WorldObjectFromHandle(Globals::RfgWorldPtr, NULL, SavedTargetObjectHandle);
         if(TargetObject)
         {
             ImGui::Text("Name:"); ImGui::SameLine();
-            ImGui::TextColored(Globals::SecondaryTextColor, WorldGetObjectName(Globals::RfgWorldPtr, NULL, TargetObject));
+            ImGui::TextColored(Globals::SecondaryTextColor, rfg::WorldGetObjectName(Globals::RfgWorldPtr, NULL, TargetObject));
             ImGui::Text("Position:"); ImGui::SameLine();
             ImGui::TextColored(Globals::SecondaryTextColor, TargetObject->Position.GetDataString(false, false).c_str());
 

@@ -7,5 +7,5 @@ bool __cdecl Hooks::can_drop_vehicle_hook(vehicle_info* v_info, rfg::farray<obje
     {
         return true;
     }
-    return can_drop_vehicle(v_info, delete_object_list, position, orient, ignore_object, high_priority);
+    return rfg::can_drop_vehicle(v_info, delete_object_list, position, orient, ignore_object, high_priority);
 }

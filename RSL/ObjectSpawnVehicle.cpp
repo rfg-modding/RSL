@@ -28,5 +28,5 @@ spawn_status_result __cdecl Hooks::object_spawn_vehicle_hook(vehicle_spawn_param
     }
 #endif
 
-    return object_spawn_vehicle(spawn_param);
+    return rfg::object_spawn_vehicle(spawn_param);
 }

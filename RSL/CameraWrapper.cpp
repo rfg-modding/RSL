@@ -131,7 +131,7 @@ void CameraWrapper::ActivateFreeCamera()
     }
 	Logger::Log("Activating free camera\n");
 	FreeCameraActive = true;
-	DisableCameraCode(CameraYWriteAddress, CameraZWriteAddress);
+    rfg::DisableCameraCode(CameraYWriteAddress, CameraZWriteAddress);
 
 	//Slight adjustments so the player ends up roughly in their original position.
 	OriginalCameraPosition.x = *RealX + 2.171509;
@@ -142,7 +142,7 @@ void CameraWrapper::ActivateFreeCamera()
 void CameraWrapper::DeactivateFreeCamera(bool Shutdown)
 {
 	Logger::Log("Deactivating free camera\n");
-	RestoreCameraCode();
+    rfg::RestoreCameraCode();
 
 	FreeCameraActive = false;
 	if (!Shutdown) //Don't want the player thrown in the air when they deactivate the script loader.
@@ -270,14 +270,14 @@ void CameraWrapper::ActivateFirstPersonCamera()
     }
 	Logger::Log("Activating first person camera\n");
 	FirstPersonCameraActive = true;
-	DisableCameraCode(CameraYWriteAddress, CameraZWriteAddress);
+    rfg::DisableCameraCode(CameraYWriteAddress, CameraZWriteAddress);
     LastFirstPersonPosition = Globals::PlayerPtr->Position;
 }
 
 void CameraWrapper::DeactivateFirstPersonCamera()
 {
 	Logger::Log("Deactivating first person camera\n");
-	RestoreCameraCode();
+    rfg::RestoreCameraCode();
 
 	FirstPersonCameraActive = false;
 	FreeCameraActive = false;
@@ -312,7 +312,7 @@ void CameraWrapper::UpdateFirstPersonView()
     vector HeadVector(0.0f);
     matrix HeadMatrix(0.0f);
 
-    human_get_head_pos_orient(Globals::PlayerPtr, HeadVector, HeadMatrix);
+    rfg::human_get_head_pos_orient(Globals::PlayerPtr, HeadVector, HeadMatrix);
 
     vector NewPos = GameData->real_pos;
 
@@ -358,7 +358,7 @@ void CameraWrapper::UpdateFirstPersonView()
             {
                 AngleRadians *= -1.0f;
             }
-            matrix_rotate_around_local_vector(&Globals::PlayerPtr->Orientation, nullptr, YAxis, AngleRadians);
+            rfg::matrix_rotate_around_local_vector(&Globals::PlayerPtr->Orientation, nullptr, YAxis, AngleRadians);
         }
     }
 
@@ -388,7 +388,7 @@ void CameraWrapper::PauseFirstPersonCamera()
         if(!FirstPersonCameraPaused)
         {
             Logger::Log("Pausing first person camera.\n");
-            RestoreCameraCode();
+            rfg::RestoreCameraCode();
             FirstPersonCameraPaused = true;
         }
     }
@@ -405,7 +405,7 @@ void CameraWrapper::UnpauseFirstPersonCamera()
         if(FirstPersonCameraPaused)
         {
             Logger::Log("Unpausing first person camera.\n");
-            DisableCameraCode(CameraYWriteAddress, CameraZWriteAddress);
+            rfg::DisableCameraCode(CameraYWriteAddress, CameraZWriteAddress);
             FirstPersonCameraPaused = false;
         }
     }

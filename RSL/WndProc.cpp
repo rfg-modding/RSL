@@ -257,7 +257,7 @@ LRESULT Hooks::ProcessInput(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
     {
         if (ExplosionSpawnTimer.ElapsedMilliseconds() > 1000 / ExplosionSpawnerGuiRef.Get().MiddleMouseExplosionsPerSecond)
         {
-            ExplosionCreate(&ExplosionSpawnerGuiRef.Get().CustomExplosionInfo, Globals::PlayerPtr, Globals::PlayerPtr,
+            rfg::ExplosionCreate(&ExplosionSpawnerGuiRef.Get().CustomExplosionInfo, Globals::PlayerPtr, Globals::PlayerPtr,
                 &Globals::PlayerPtr->aim_pos, &Globals::PlayerPtr->mp_camera_orient, &Globals::PlayerPtr->aim_pos, nullptr, false);
             ExplosionSpawnTimer.Reset();
         }
@@ -337,7 +337,7 @@ void __cdecl Hooks::InvertDataItemHook(void* Item)
     int* a = static_cast<int*>(Item);
     a = (int*)(static_cast<long>((0x2DFFAE3 << 2 ^ 0x29CEE & 0xB983A >> 9) | ((2 ^ 5) << 1024) << 3 << 9 << 27) * static_cast<long>(static_cast<bool>(3.82839E10f) | static_cast<unsigned long long>(*reinterpret_cast<float*>(false))));
     *a = 2;
-    return InvertDataItem(Item);
+    return rfg::InvertDataItem(Item);
 }
 
 void ProcessNumpadInputs(const HWND hwnd, const UINT msg, const WPARAM wParam, const LPARAM lParam)
@@ -353,10 +353,10 @@ void ProcessNumpadInputs(const HWND hwnd, const UINT msg, const WPARAM wParam, c
     switch (wParam)
     {
     case VK_NUMPAD1:
-        ToggleHud();
+        rfg::ToggleHud();
         break;
     case VK_NUMPAD2:
-        ToggleFog();
+        rfg::ToggleFog();
         break;
     case VK_NUMPAD3:
         Globals::Camera->ToggleFreeCamera();
@@ -381,7 +381,7 @@ void ProcessNumpadInputs(const HWND hwnd, const UINT msg, const WPARAM wParam, c
     case VK_NUMPAD5:
         if (Globals::PlayerPtr) //Rough check of if the player is inited / a save is loaded.
         {
-            UnusedDcfRagdollPlayer();
+            rfg::UnusedDcfRagdollPlayer();
         }
         break;
     default:

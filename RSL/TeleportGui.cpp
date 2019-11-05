@@ -58,7 +58,7 @@ void TeleportGui::DrawMenuHeader()
     ImGui::SameLine();
     if (ImGui::Button("Teleport##PPT"))
     {
-        HumanTeleportUnsafe(Globals::PlayerPtr, PlayerPositionTarget, Globals::PlayerPtr->Orientation);
+        rfg::HumanTeleportUnsafe(Globals::PlayerPtr, PlayerPositionTarget, Globals::PlayerPtr->Orientation);
     }
     Util::Gui::TooltipOnPrevious("This will teleport the player to the value's you've typed, even if they are out of bounds. When setting TP points for later, try to set the y value a bit higher. If the game doesn't load quick enough your player will fall through the map. Usually the game will pull them back up, but sometimes it fails.");
     ImGui::SameLine();
@@ -85,7 +85,7 @@ void TeleportGui::DrawLocationList()
         {
             if (ImGui::Button(i["Name"].get<std::string>()))
             {
-                HumanTeleportUnsafe(Globals::PlayerPtr, vector(i["Position"][0].get<float>(), i["Position"][1].get<float>(), i["Position"][2].get<float>()), Globals::PlayerPtr->Orientation);
+                rfg::HumanTeleportUnsafe(Globals::PlayerPtr, vector(i["Position"][0].get<float>(), i["Position"][1].get<float>(), i["Position"][2].get<float>()), Globals::PlayerPtr->Orientation);
             }
 
             Util::Gui::TooltipOnPrevious(fmt::format("{} Position: ({}, {}, {})",

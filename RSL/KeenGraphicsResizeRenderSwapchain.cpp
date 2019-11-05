@@ -17,12 +17,12 @@ bool __cdecl Hooks::KeenGraphicsResizeRenderSwapchainHook(keen::RenderSwapChain*
     //pBackBuffer->Release();
 
 
-    return KeenGraphicsResizeRenderSwapchain(KeenSwapchain, NewWidth, NewHeight);
+    return rfg::KeenGraphicsResizeRenderSwapchain(KeenSwapchain, NewWidth, NewHeight);
     //return nullptr;
 }
 
 void __cdecl Hooks::CsWrapSliceHook()
 {
     Globals::HookDidFrame = true;
-    return CsWrapSlice();
+    return rfg::CsWrapSlice();
 }

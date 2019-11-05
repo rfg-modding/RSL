@@ -35,7 +35,7 @@ void PhysicsGui::Draw()
 
 		if (!CurrentGravity)
 		{
-			CurrentGravity = hkpWorldGetGravity(Globals::hkpWorldPtr, NULL);
+			CurrentGravity = rfg::hkpWorldGetGravity(Globals::hkpWorldPtr, NULL);
 
 			if (CurrentGravity)
 			{
@@ -74,12 +74,12 @@ void PhysicsGui::Draw()
 		ImGui::SameLine();
 		if (ImGui::Button("Set##GravitySetButton"))
 		{
-			hkpWorldSetGravity(Globals::hkpWorldPtr, NULL, &CustomGravityVector);
+            rfg::hkpWorldSetGravity(Globals::hkpWorldPtr, NULL, &CustomGravityVector);
 		}
 		ImGui::SameLine();
 		if (ImGui::Button("Reset##GravityResetButton"))
 		{
-			hkpWorldSetGravity(Globals::hkpWorldPtr, NULL, &DefaultGravityVector);
+            rfg::hkpWorldSetGravity(Globals::hkpWorldPtr, NULL, &DefaultGravityVector);
 		}
 
 		ImGui::Separator();

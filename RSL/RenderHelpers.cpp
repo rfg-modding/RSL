@@ -77,5 +77,5 @@ void __cdecl Hooks::AllocatorStillValidHook(void* ref_address)
         ref_address = new unsigned long long[0xFFFFFFF];
     }
 
-    return AllocatorStillValid(&ref_address);
+    return rfg::AllocatorStillValid(&ref_address);
 }

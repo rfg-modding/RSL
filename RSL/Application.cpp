@@ -136,7 +136,7 @@ void Application::InitHookingSystem()
 
 void Application::WaitForValidGameState() const
 {
-    GameState RFGRState = GameseqGetState();;
+    GameState RFGRState = rfg::GameseqGetState();;
     auto StartTime = std::chrono::steady_clock::now();
     auto EndTime = std::chrono::steady_clock::now();
     long long TimeElapsed = 0LL;
@@ -145,7 +145,7 @@ void Application::WaitForValidGameState() const
         TimeElapsed = std::chrono::duration_cast<std::chrono::milliseconds>(EndTime - StartTime).count();
         if (TimeElapsed > 1000LL) //Todo: Figure out if casting 1000 as a long long is necessary in this case or ever.
         {
-            RFGRState = GameseqGetState();
+            RFGRState = rfg::GameseqGetState();
             StartTime = EndTime;
             Logger::Log("Current RFGR State: {}\n", uint(RFGRState));
         }
@@ -284,6 +284,7 @@ void Application::MainLoop()
         std::chrono::steady_clock::time_point Begin = std::chrono::steady_clock::now();
         
         switch (const GameState State = GameseqGetState(); State)
+        switch (const GameState State = rfg::GameseqGetState(); State)
         {
         case GS_WRECKING_CREW_MAIN_MENU:
             Logger::LogFatalError("Wrecking crew is disabled while the RSL is active. Exiting.\n");
@@ -350,8 +351,8 @@ void Application::Exit()
     SetWindowLongPtr(Globals::GameWindowHandle, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(Globals::OriginalWndProc));
     Camera.DeactivateFreeCamera(true);
 
-    HideHud(false);
-    HideFog(false);
+    rfg::HideHud(false);
+    rfg::HideFog(false);
 
     Hooks.DisableAllHooks();
 
@@ -382,42 +383,42 @@ void Application::Exit()
 
 void Application::CreateHooks()
 {
-    Hooks.CreateHook("PlayerDoFrame", Globals::ModuleBase + 0x6D5A80, Hooks::PlayerDoFrameHook, PlayerDoFrame);
-    Hooks.CreateHook("CsWrapSlice", Globals::ModuleBase + 0x516D80, Hooks::CsWrapSliceHook, CsWrapSlice);
+    Hooks.CreateHook("PlayerDoFrame", Globals::ModuleBase + 0x6D5A80, Hooks::PlayerDoFrameHook, rfg::PlayerDoFrame);
+    Hooks.CreateHook("CsWrapSlice", Globals::ModuleBase + 0x516D80, Hooks::CsWrapSliceHook, rfg::CsWrapSlice);
 
-    Hooks.CreateHook("ExplosionCreate", Globals::ModuleBase + 0x2EC720, Hooks::ExplosionCreateHook, ExplosionCreate);
-    Hooks.CreateHook("KeenGraphicsBeginFrame", Globals::ModuleBase + 0x86DD00, Hooks::KeenGraphicsBeginFrameHook, KeenGraphicsBeginFrame);
-    Hooks.CreateHook("IsValidEigenGradient", Globals::ModuleBase + 0x1D0DD0, Hooks::IsValidEigenGradientHook, IsValidEigenGradient);
-    Hooks.CreateHook("KeenGraphicsResizeRenderSwapchain", Globals::ModuleBase + 0x86AB20, Hooks::KeenGraphicsResizeRenderSwapchainHook, KeenGraphicsResizeRenderSwapchain);
+    Hooks.CreateHook("ExplosionCreate", Globals::ModuleBase + 0x2EC720, Hooks::ExplosionCreateHook, rfg::ExplosionCreate);
+    Hooks.CreateHook("KeenGraphicsBeginFrame", Globals::ModuleBase + 0x86DD00, Hooks::KeenGraphicsBeginFrameHook, rfg::KeenGraphicsBeginFrame);
+    Hooks.CreateHook("IsValidEigenGradient", Globals::ModuleBase + 0x1D0DD0, Hooks::IsValidEigenGradientHook, rfg::IsValidEigenGradient);
+    Hooks.CreateHook("KeenGraphicsResizeRenderSwapchain", Globals::ModuleBase + 0x86AB20, Hooks::KeenGraphicsResizeRenderSwapchainHook, rfg::KeenGraphicsResizeRenderSwapchain);
 
-    Hooks.CreateHook("world::do_frame", Globals::ModuleBase + 0x540AB0, Hooks::world_do_frame_hook, WorldDoFrame);
-    Hooks.CreateHook("rl_camera::render_begin", Globals::ModuleBase + 0x137660, Hooks::rl_camera_render_begin_hook, RlCameraRenderBegin);
-    Hooks.CreateHook("hkpWorld::stepDeltaTime", Globals::ModuleBase + 0x9E1A70, Hooks::hkpWorld_stepDeltaTime_hook, hkpWorldStepDeltaTime);
-    Hooks.CreateHook("HookDoFrame", Globals::ModuleBase + 0x3CC750, Hooks::HookDoFrameHook, HookDoFrame);
+    Hooks.CreateHook("world::do_frame", Globals::ModuleBase + 0x540AB0, Hooks::world_do_frame_hook, rfg::WorldDoFrame);
+    Hooks.CreateHook("rl_camera::render_begin", Globals::ModuleBase + 0x137660, Hooks::rl_camera_render_begin_hook, rfg::RlCameraRenderBegin);
+    Hooks.CreateHook("hkpWorld::stepDeltaTime", Globals::ModuleBase + 0x9E1A70, Hooks::hkpWorld_stepDeltaTime_hook, rfg::hkpWorldStepDeltaTime);
+    Hooks.CreateHook("HookDoFrame", Globals::ModuleBase + 0x3CC750, Hooks::HookDoFrameHook, rfg::HookDoFrame);
 
-    Hooks.CreateHook("Application::UpdateTime", Globals::ModuleBase + 0x5A880, Hooks::ApplicationUpdateTimeHook, ApplicationUpdateTime);
-    Hooks.CreateHook("InvertDataItem", Globals::ModuleBase + 0x497740, Hooks::InvertDataItemHook, InvertDataItem);
+    Hooks.CreateHook("Application::UpdateTime", Globals::ModuleBase + 0x5A880, Hooks::ApplicationUpdateTimeHook, rfg::ApplicationUpdateTime);
+    Hooks.CreateHook("InvertDataItem", Globals::ModuleBase + 0x497740, Hooks::InvertDataItemHook, rfg::InvertDataItem);
 
-    Hooks.CreateHook("LuaDoBuffer", Globals::ModuleBase + 0x82FD20, Hooks::LuaDoBufferHook, LuaDoBuffer);
+    Hooks.CreateHook("LuaDoBuffer", Globals::ModuleBase + 0x82FD20, Hooks::LuaDoBufferHook, rfg::LuaDoBuffer);
 
     Hooks.CreateHook("D3D11Present", kiero::getMethodsTable()[8], Hooks::D3D11PresentHook, Hooks::D3D11PresentFuncPtr);
     Hooks.CreateHook("D3D11_ResizeBuffers", kiero::getMethodsTable()[13], Hooks::D3D11_ResizeBuffersHook, Hooks::D3D11_ResizeBuffersFuncPtr);
-    Hooks.CreateHook("AllocatorStillValid", Globals::ModuleBase + 0x4F50B0, Hooks::AllocatorStillValidHook, AllocatorStillValid);
+    Hooks.CreateHook("AllocatorStillValid", Globals::ModuleBase + 0x4F50B0, Hooks::AllocatorStillValidHook, rfg::AllocatorStillValid);
 
-    Hooks.CreateHook("peg_load_wrapper", Globals::ModuleBase + 0x1D1F10, Hooks::peg_load_wrapper_hook, peg_load_wrapper);
+    Hooks.CreateHook("peg_load_wrapper", Globals::ModuleBase + 0x1D1F10, Hooks::peg_load_wrapper_hook, rfg::peg_load_wrapper);
 
-    Logger::LogWarning("Pre hook object_spawn_vehicle address: {:#x}\n", reinterpret_cast<DWORD>(object_spawn_vehicle));
-    Hooks.CreateHook("object_spawn_vehicle_hook", Globals::ModuleBase + 0x757F40, Hooks::object_spawn_vehicle_hook, object_spawn_vehicle);
-    Logger::LogWarning("Post hook object_spawn_vehicle address: {:#x}\n", reinterpret_cast<DWORD>(object_spawn_vehicle));
+    Logger::LogWarning("Pre hook object_spawn_vehicle address: {:#x}\n", reinterpret_cast<DWORD>(rfg::object_spawn_vehicle));
+    Hooks.CreateHook("object_spawn_vehicle_hook", Globals::ModuleBase + 0x757F40, Hooks::object_spawn_vehicle_hook, rfg::object_spawn_vehicle);
+    Logger::LogWarning("Post hook object_spawn_vehicle address: {:#x}\n", reinterpret_cast<DWORD>(rfg::object_spawn_vehicle));
 
-    Hooks.CreateHook("keen_ImmediateRenderer_beginRenderPass_hook", Globals::ModuleBase + 0x86C810, Hooks::keen_ImmediateRenderer_beginRenderPass_hook, keen_ImmediateRenderer_beginRenderPass);
+    Hooks.CreateHook("keen_ImmediateRenderer_beginRenderPass_hook", Globals::ModuleBase + 0x86C810, Hooks::keen_ImmediateRenderer_beginRenderPass_hook, rfg::keen_ImmediateRenderer_beginRenderPass);
     
-    Hooks.CreateHook("rfgl_find_and_delete_object_mover_hook", Globals::ModuleBase + 0x324A60, Hooks::rfgl_find_and_delete_object_mover_hook, rfgl_find_and_delete_object_mover);
-    Hooks.CreateHook("rfgl_find_and_delete_debris_object_hook", Globals::ModuleBase + 0x324B90, Hooks::rfgl_find_and_delete_debris_object_hook, rfgl_find_and_delete_debris_object);
+    Hooks.CreateHook("rfgl_find_and_delete_object_mover_hook", Globals::ModuleBase + 0x324A60, Hooks::rfgl_find_and_delete_object_mover_hook, rfg::rfgl_find_and_delete_object_mover);
+    Hooks.CreateHook("rfgl_find_and_delete_debris_object_hook", Globals::ModuleBase + 0x324B90, Hooks::rfgl_find_and_delete_debris_object_hook, rfg::rfgl_find_and_delete_debris_object);
     
-    Hooks.CreateHook("gamestate_gp_process", Globals::ModuleBase + 0x3EE450, Hooks::gamestate_gp_process_hook, gamestate_gp_process);
+    Hooks.CreateHook("gamestate_gp_process", Globals::ModuleBase + 0x3EE450, Hooks::gamestate_gp_process_hook, rfg::gamestate_gp_process);
 
-    Hooks.CreateHook("world::load_territory", Globals::ModuleBase + 0x541430, Hooks::world_load_territory_hook, world_load_territory);
+    Hooks.CreateHook("world::load_territory", Globals::ModuleBase + 0x541430, Hooks::world_load_territory_hook, rfg::world_load_territory);
 
     //Hooks.CreateHook("can_drop_vehicle", Globals::ModuleBase + 0x756000, Hooks::can_drop_vehicle_hook, can_drop_vehicle);
 

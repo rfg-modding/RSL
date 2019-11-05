@@ -18,25 +18,25 @@ void Lua::BindMatrix(sol::state& LuaState)
         [](matrix& Self, bool Parentheses) {return Self.ToString(Parentheses, true); },
         [](matrix& Self, bool Parentheses, bool Labels) {return Self.ToString(Parentheses, Labels); }));
     Utype.set("RotateAboutLocalVector", sol::overload(
-        [](matrix& Self, vector& Axis, float AngleRadians) {matrix_rotate_around_local_vector(&Self, nullptr, Axis, AngleRadians); }
+        [](matrix& Self, vector& Axis, float AngleRadians) { rfg::matrix_rotate_around_local_vector(&Self, nullptr, Axis, AngleRadians); }
     ));
     Utype.set("RotateAboutXAxis", sol::overload(
     [](matrix& Self, float AngleRadians)
     {
         vector XAxis = {1.0f, 0.0f, 0.0f};
-        matrix_rotate_around_local_vector(&Self, nullptr, XAxis, AngleRadians);
+        rfg::matrix_rotate_around_local_vector(&Self, nullptr, XAxis, AngleRadians);
     }));
     Utype.set("RotateAboutYAxis", sol::overload(
     [](matrix& Self, float AngleRadians)
     {
         vector YAxis = {0.0f, 1.0f, 0.0f};
-        matrix_rotate_around_local_vector(&Self, nullptr, YAxis, AngleRadians);
+        rfg::matrix_rotate_around_local_vector(&Self, nullptr, YAxis, AngleRadians);
     }));
     Utype.set("RotateAboutZAxis", sol::overload(
     [](matrix& Self, float AngleRadians)
     {
         vector ZAxis = {0.0f, 0.0f, 1.0f};
-        matrix_rotate_around_local_vector(&Self, nullptr, ZAxis, AngleRadians);
+        rfg::matrix_rotate_around_local_vector(&Self, nullptr, ZAxis, AngleRadians);
     }));
 	RfgTable.set_usertype("Matrix", Utype);
 

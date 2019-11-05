@@ -11,7 +11,7 @@ int __cdecl Hooks::LuaDoBufferHook(lua_State* L, const char* buff, unsigned int 
     if (!L)
     {
         Logger::LogWarning("RFG lua_state pointer null\n");
-        return LuaDoBuffer(L, buff, size, name);
+        return rfg::LuaDoBuffer(L, buff, size, name);
     }
 
     //Dump current script file
@@ -39,7 +39,7 @@ int __cdecl Hooks::LuaDoBufferHook(lua_State* L, const char* buff, unsigned int 
 
         TempBuffer.clear();
         TempBuffer = OverrideBuffer;
-        return LuaDoBuffer(L, TempBuffer.c_str(), TempBuffer.length(), name);
+        return rfg::LuaDoBuffer(L, TempBuffer.c_str(), TempBuffer.length(), name);
     }
-    return LuaDoBuffer(L, buff, size, name);
+    return rfg::LuaDoBuffer(L, buff, size, name);
 }

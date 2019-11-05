@@ -11,5 +11,5 @@ bool __cdecl Hooks::verify_gamesave_exit_notify_hook(GameState new_state)
     CallCount++;
     Logger::LogWarning("verify_gamesave_exit_notify_hook! Times called: {}\n", CallCount);
 
-    return verify_gamesave_exit_notify(new_state);
+    return rfg::verify_gamesave_exit_notify(new_state);
 }

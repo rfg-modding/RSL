@@ -15,7 +15,7 @@ void __fastcall Hooks::rl_camera_render_begin_hook(rl_camera* This, void* edx, r
                 Globals::RlStateManagerPtr = Renderer->m_state_p;
             }
 
-            Globals::MainScenePtr = GameRenderGetMainScene();
+            Globals::MainScenePtr = rfg::GameRenderGetMainScene();
             if (Globals::MainScenePtr)
             {
                 Globals::MainSceneRendererPtr = Globals::MainScenePtr->m_scene_renderer_p;
@@ -31,5 +31,5 @@ void __fastcall Hooks::rl_camera_render_begin_hook(rl_camera* This, void* edx, r
         Globals::RlCameraPtr = This;
     }
 
-    return RlCameraRenderBegin(This, edx, Renderer);
+    return rfg::RlCameraRenderBegin(This, edx, Renderer);
 }

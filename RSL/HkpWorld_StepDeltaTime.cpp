@@ -15,13 +15,13 @@ void __fastcall Hooks::hkpWorld_stepDeltaTime_hook(hkpWorld* This, void* edx, fl
     static bool InitCustomGravityVector = false;
     if (!Globals::Gui)
     {
-        return hkpWorldStepDeltaTime(This, edx, PhysicsDeltaTime);
+        return rfg::hkpWorldStepDeltaTime(This, edx, PhysicsDeltaTime);
     }
     static GuiReference<PhysicsGui> PhysicsMenuRef = Globals::Gui->GetGuiReference<PhysicsGui>("Physics settings").value();
 
     if (!InitCustomGravityVector)
     {
-        PhysicsMenuRef.Get().CurrentGravity = hkpWorldGetGravity(Globals::hkpWorldPtr, nullptr);
+        PhysicsMenuRef.Get().CurrentGravity = rfg::hkpWorldGetGravity(Globals::hkpWorldPtr, nullptr);
 
         PhysicsMenuRef.Get().CustomGravityVector.m_quad.m128_f32[0] = PhysicsMenuRef.Get().CurrentGravity->m_quad.m128_f32[0];
         PhysicsMenuRef.Get().CustomGravityVector.m_quad.m128_f32[1] = PhysicsMenuRef.Get().CurrentGravity->m_quad.m128_f32[1];
@@ -53,11 +53,11 @@ void __fastcall Hooks::hkpWorld_stepDeltaTime_hook(hkpWorld* This, void* edx, fl
         }
     }
 
-    return hkpWorldStepDeltaTime(This, edx, PhysicsDeltaTime);
+    return rfg::hkpWorldStepDeltaTime(This, edx, PhysicsDeltaTime);
 }
 
 bool __fastcall Hooks::IsValidEigenGradientHook(void* This)
 {
     throw std::exception();
-    return IsValidEigenGradient(&This);
+    return rfg::IsValidEigenGradient(&This);
 }

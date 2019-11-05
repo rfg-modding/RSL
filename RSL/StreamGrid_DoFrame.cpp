@@ -8,5 +8,5 @@ void __fastcall Hooks::StreamGridDoFrameHook(stream_grid* This, void* edx, vecto
         Globals::MainStreamGrid = This;
         Logger::Log("StreamGridPtr changed, new address: {}\n", std::to_string(*reinterpret_cast<DWORD*>(This)));
     }
-    return StreamGridDoFrame(This, edx, StreamPos, SingleZoneMode);
+    return rfg::StreamGridDoFrame(This, edx, StreamPos, SingleZoneMode);
 }
