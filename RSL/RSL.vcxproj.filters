@@ -55,15 +55,6 @@
     <Filter Include="Main\Libraries\fmt">
       <UniqueIdentifier>{17b8a0fa-c3b4-4855-8110-8f692d260b5c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Main\Libraries\Kiero + ImGui">
-      <UniqueIdentifier>{7dc8ed92-9f36-4fd6-ad03-7b3b12238419}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Main\Libraries\Kiero + ImGui\Source Files">
-      <UniqueIdentifier>{c9164e90-fb84-4cc1-8355-f60110ece66e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Main\Libraries\Kiero + ImGui\Header Files">
-      <UniqueIdentifier>{6edcbbe3-b2c8-44d0-80ec-0c107fb48a24}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Main\Utils">
       <UniqueIdentifier>{a11cf198-61fa-44fc-935b-f402b5945c29}</UniqueIdentifier>
     </Filter>
@@ -142,32 +133,17 @@
     <Filter Include="Gui\Misc\Script editor">
       <UniqueIdentifier>{4137cd07-ad5f-4425-b06e-e45b8719c670}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Main\Libraries\Kiero">
+      <UniqueIdentifier>{7dc8ed92-9f36-4fd6-ad03-7b3b12238419}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Main\Libraries\Dear ImGui">
+      <UniqueIdentifier>{3317ac21-918c-4512-8ccf-d55859b4d1fd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Main\Libraries\MinHook">
+      <UniqueIdentifier>{394d03a5-a48d-4a67-8592-ec243b45acbe}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="include\kiero\kiero.cpp">
-      <Filter>Main\Libraries\Kiero + ImGui\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="include\ImGui\imgui.cpp">
-      <Filter>Main\Libraries\Kiero + ImGui\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="include\ImGui\imgui_demo.cpp">
-      <Filter>Main\Libraries\Kiero + ImGui\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="include\ImGui\imgui_draw.cpp">
-      <Filter>Main\Libraries\Kiero + ImGui\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="include\ImGui\imgui_widgets.cpp">
-      <Filter>Main\Libraries\Kiero + ImGui\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="imgui_impl_dx11.cpp">
-      <Filter>Main\Libraries\Kiero + ImGui\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="imgui_impl_win32.cpp">
-      <Filter>Main\Libraries\Kiero + ImGui\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="imgui_stdlib.cpp">
-      <Filter>Main\Libraries\Kiero + ImGui\Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="include\fmt\format.cc">
       <Filter>Main\Libraries\fmt</Filter>
     </ClCompile>
@@ -447,38 +423,32 @@
     <ClCompile Include="cf_open.cpp">
       <Filter>Hooks</Filter>
     </ClCompile>
+    <ClCompile Include="include\ImGui\imgui_widgets.cpp">
+      <Filter>Main\Libraries\Dear ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="include\ImGui\imgui.cpp">
+      <Filter>Main\Libraries\Dear ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="include\ImGui\imgui_demo.cpp">
+      <Filter>Main\Libraries\Dear ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="include\ImGui\imgui_draw.cpp">
+      <Filter>Main\Libraries\Dear ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_impl_dx11.cpp">
+      <Filter>Main\Libraries\Dear ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_impl_win32.cpp">
+      <Filter>Main\Libraries\Dear ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_stdlib.cpp">
+      <Filter>Main\Libraries\Dear ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="include\kiero\kiero.cpp">
+      <Filter>Main\Libraries\Kiero</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\kiero\kiero.h">
-      <Filter>Main\Libraries\Kiero + ImGui\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\ImGui\imconfig.h">
-      <Filter>Main\Libraries\Kiero + ImGui\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\ImGui\imgui.h">
-      <Filter>Main\Libraries\Kiero + ImGui\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\ImGui\imgui_internal.h">
-      <Filter>Main\Libraries\Kiero + ImGui\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\ImGui\imstb_rectpack.h">
-      <Filter>Main\Libraries\Kiero + ImGui\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\ImGui\imstb_textedit.h">
-      <Filter>Main\Libraries\Kiero + ImGui\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\ImGui\imstb_truetype.h">
-      <Filter>Main\Libraries\Kiero + ImGui\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="imgui_impl_dx11.h">
-      <Filter>Main\Libraries\Kiero + ImGui\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="imgui_impl_win32.h">
-      <Filter>Main\Libraries\Kiero + ImGui\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="imgui_stdlib.h">
-      <Filter>Main\Libraries\Kiero + ImGui\Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="RFGR_Type_UI.h">
       <Filter>RFGR Structs</Filter>
     </ClInclude>
@@ -680,9 +650,6 @@
     <ClInclude Include="Version.h">
       <Filter>Main\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="include\MinHook\MinHook.h">
-      <Filter>Main\Libraries</Filter>
-    </ClInclude>
     <ClInclude Include="Includes.h">
       <Filter>Main\Globals &amp; includes</Filter>
     </ClInclude>
@@ -733,6 +700,39 @@
     </ClInclude>
     <ClInclude Include="RFGR_Types_Cfile.h">
       <Filter>RFGR Structs</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ImGui\imconfig.h">
+      <Filter>Main\Libraries\Dear ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ImGui\imgui.h">
+      <Filter>Main\Libraries\Dear ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui_impl_dx11.h">
+      <Filter>Main\Libraries\Dear ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui_impl_win32.h">
+      <Filter>Main\Libraries\Dear ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ImGui\imgui_internal.h">
+      <Filter>Main\Libraries\Dear ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui_stdlib.h">
+      <Filter>Main\Libraries\Dear ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ImGui\imstb_rectpack.h">
+      <Filter>Main\Libraries\Dear ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ImGui\imstb_textedit.h">
+      <Filter>Main\Libraries\Dear ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ImGui\imstb_truetype.h">
+      <Filter>Main\Libraries\Dear ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="include\kiero\kiero.h">
+      <Filter>Main\Libraries\Kiero</Filter>
+    </ClInclude>
+    <ClInclude Include="include\MinHook\MinHook.h">
+      <Filter>Main\Libraries\MinHook</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
