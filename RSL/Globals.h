@@ -5,6 +5,8 @@
 #include "Version.h"
 #include "BuildDate.h"
 #include <magic_enum/magic_enum.hpp>
+#include <boost/di.hpp>
+namespace di = boost::di;
 
 //Todo: Move as many of these as possible into classes instead of having them be global
 

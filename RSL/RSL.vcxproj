@@ -324,6 +324,10 @@ echo #define RSL_BUILD_DATE %buildTime:~0,8% &gt;&gt; $(ProjectDir)/BuildDate.h<
     <ClInclude Include="HumanLua.h" />
     <ClInclude Include="HumanMPFlagsLua.h" />
     <ClInclude Include="HumanRaycastHitInfoLua.h" />
+    <ClInclude Include="ICameraManager.h" />
+    <ClInclude Include="IFunctionManager.h" />
+    <ClInclude Include="IHookManager.h" />
+    <ClInclude Include="IIPCManager.h" />
     <ClInclude Include="ImGuiColorTextEdit\TextEditor.h" />
     <ClInclude Include="imgui_impl_dx11.h" />
     <ClInclude Include="imgui_impl_win32.h" />
@@ -338,6 +342,8 @@ echo #define RSL_BUILD_DATE %buildTime:~0,8% &gt;&gt; $(ProjectDir)/BuildDate.h<
     <ClInclude Include="include\MinHook\MinHook.h" />
     <ClInclude Include="IntrospectionGui.h" />
     <ClInclude Include="IpcManager.h" />
+    <ClInclude Include="IScriptManager.h" />
+    <ClInclude Include="ISnippetManager.h" />
     <ClInclude Include="Launcher.h" />
     <ClInclude Include="RenderInterfaceD3D11.h" />
     <ClInclude Include="RFGR_Types_Cfile.h" />

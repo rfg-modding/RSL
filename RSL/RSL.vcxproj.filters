@@ -142,6 +142,9 @@
     <Filter Include="Main\Libraries\MinHook">
       <UniqueIdentifier>{394d03a5-a48d-4a67-8592-ec243b45acbe}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Main\Systems\Interfaces">
+      <UniqueIdentifier>{aad75ac0-471e-4217-a060-0f7a9eda0351}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="include\fmt\format.cc">
@@ -733,6 +736,24 @@
     </ClInclude>
     <ClInclude Include="include\MinHook\MinHook.h">
       <Filter>Main\Libraries\MinHook</Filter>
+    </ClInclude>
+    <ClInclude Include="ICameraManager.h">
+      <Filter>Main\Systems\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="IFunctionManager.h">
+      <Filter>Main\Systems\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="IHookManager.h">
+      <Filter>Main\Systems\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="IIPCManager.h">
+      <Filter>Main\Systems\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="IScriptManager.h">
+      <Filter>Main\Systems\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="ISnippetManager.h">
+      <Filter>Main\Systems\Interfaces</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
