@@ -229,4 +229,6 @@ void FunctionManager::Initialize()
     RegisterFunction(rfg::havok_body_set_angular_velocity, 0x423910);
     RegisterFunction(rfg::havok_body_get_angular_velocity, 0x417510);
     RegisterFunction(rfg::havok_body_get_angular_dampening, 0x4239D0);
+
+    RegisterFunction(rfg::cf_open, 0x1C27F0);
 }

@@ -72,5 +72,7 @@ namespace Hooks
     bool __fastcall world_load_territory_hook(World* this_ptr, void* edx);
 
     bool __cdecl can_drop_vehicle_hook(vehicle_info* v_info, rfg::farray<object*, 256> * delete_object_list, vector* position, matrix* orient, unsigned int ignore_object, bool high_priority);
+
+    cfile* __cdecl cf_open_hook(const char* filename_in, const char* mode, vlib_platform disk_platform, bool async);
 }
 

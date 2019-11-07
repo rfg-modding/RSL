@@ -781,4 +781,9 @@ extern F_HumanTeleport HumanTeleport;*/
     //.text:017239D0 rfg.exe:$4239D0 #422DD0 <havok_body_get_angular_dampening> //float __cdecl havok_body_get_angular_dampening(unsigned int handle)
     using F_havok_body_get_angular_dampening = float(__cdecl*)(uint handle);
     extern F_havok_body_get_angular_dampening havok_body_get_angular_dampening;
+
+
+    //.text:00B727F0 rfg.exe:$1C27F0 #1C1BF0 <cf_open> cfile* __cdecl cf_open(const char *filename_in, const char *mode, vlib_platform disk_platform, bool async)
+    using F_cf_open = cfile*(__cdecl*)(const char* filename_in, const char* mode, vlib_platform disk_platform, bool async);
+    extern F_cf_open cf_open;
 }

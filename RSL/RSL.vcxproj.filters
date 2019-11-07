@@ -444,6 +444,9 @@
     <ClCompile Include="LuaFunctions.cpp">
       <Filter>Lua Binding</Filter>
     </ClCompile>
+    <ClCompile Include="cf_open.cpp">
+      <Filter>Hooks</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\kiero\kiero.h">
@@ -727,6 +730,9 @@
     </ClInclude>
     <ClInclude Include="LuaFunctions.h">
       <Filter>Lua Binding</Filter>
+    </ClInclude>
+    <ClInclude Include="RFGR_Types_Cfile.h">
+      <Filter>RFGR Structs</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

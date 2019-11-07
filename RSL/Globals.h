@@ -1,14 +1,16 @@
 #pragma once
 #include "Includes.h"
 #include "FixedArrayWrapper.h"
-#include "RFGR_Types_Vehicle.h"
+#include "RFGR_Types_Cfile.h"
 #include "Version.h"
 #include "BuildDate.h"
+#include <magic_enum/magic_enum.hpp>
 
 //Todo: Move as many of these as possible into classes instead of having them be global
 
 /*RSL*/
 #define UseLauncher true
+#define LogCfOpenCalls false //If true logs hooks to cf_open via it's hook. This function is called a majority of the games files so it's disabled by default for performance.
 
 //using json = nlohmann::json;
 namespace fs = std::filesystem;

@@ -365,4 +365,6 @@ namespace rfg
     F_havok_body_set_angular_velocity havok_body_set_angular_velocity;
     F_havok_body_get_angular_velocity havok_body_get_angular_velocity;
     F_havok_body_get_angular_dampening havok_body_get_angular_dampening;
+
+    F_cf_open cf_open;
 }

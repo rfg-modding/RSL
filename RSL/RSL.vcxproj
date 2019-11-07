@@ -187,6 +187,7 @@ echo #define RSL_BUILD_DATE %buildTime:~0,8% &gt;&gt; $(ProjectDir)/BuildDate.h<
     <ClCompile Include="BaseGui.cpp" />
     <ClCompile Include="BaseTypeLua.cpp" />
     <ClCompile Include="CanDropVehicle.cpp" />
+    <ClCompile Include="cf_open.cpp" />
     <ClCompile Include="D3D11Present.cpp" />
     <ClCompile Include="D3D11_ResizeBuffers.cpp" />
     <ClCompile Include="EventViewerGui.cpp" />
@@ -339,6 +340,7 @@ echo #define RSL_BUILD_DATE %buildTime:~0,8% &gt;&gt; $(ProjectDir)/BuildDate.h<
     <ClInclude Include="IpcManager.h" />
     <ClInclude Include="Launcher.h" />
     <ClInclude Include="RenderInterfaceD3D11.h" />
+    <ClInclude Include="RFGR_Types_Cfile.h" />
     <ClInclude Include="RFGR_Types_Vehicle.h" />
     <ClInclude Include="RFGR_Types_Keen_InputEvent.h" />
     <ClInclude Include="RFGR_Types_Vehicle_Spawn_Params.h" />
