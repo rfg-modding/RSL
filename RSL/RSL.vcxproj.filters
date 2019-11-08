@@ -746,9 +746,6 @@
     <ClInclude Include="IHookManager.h">
       <Filter>Main\Systems\Interfaces</Filter>
     </ClInclude>
-    <ClInclude Include="IIPCManager.h">
-      <Filter>Main\Systems\Interfaces</Filter>
-    </ClInclude>
     <ClInclude Include="IScriptManager.h">
       <Filter>Main\Systems\Interfaces</Filter>
     </ClInclude>
@@ -757,6 +754,9 @@
     </ClInclude>
     <ClInclude Include="RFGR_Types_Vfx_Template.h">
       <Filter>RFGR Structs</Filter>
+    </ClInclude>
+    <ClInclude Include="IIpcManager.h">
+      <Filter>Main\Systems\Interfaces</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
