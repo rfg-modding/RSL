@@ -81,7 +81,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>false</ConformanceMode>
-      <AdditionalIncludeDirectories>.\include\debug-draw\vectormath;.\include\sol;.\include\IconFontCppHeaders;.\include\LuaJIT-2.0.5;.\include\sol3;.\include\ImGui;.\include\nlohmann;.\include\glm;.\chaiscript;.\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\moneyl\source\repos\RSL\RSL\include\Hypodermic;C:\local\boost_1_71_0;.\include\debug-draw\vectormath;.\include\sol;.\include\IconFontCppHeaders;.\include\LuaJIT-2.0.5;.\include\sol3;.\include\ImGui;.\include\nlohmann;.\include\glm;.\chaiscript;.\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>PCH.hpp</PrecompiledHeaderFile>
@@ -96,7 +96,7 @@
     <Link>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
       <AdditionalDependencies>lua51.lib;luajit.lib;libMinHook.x86.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>.\lib\Minhook\x86;.\lib\LuaJIT-2.0.5;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\local\boost_1_71_0\lib32-msvc-14.2;.\lib\Minhook\x86;.\lib\LuaJIT-2.0.5;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>/NODEFAULTLIB:LIBCMT %(AdditionalOptions)</AdditionalOptions>
     </Link>
     <PreBuildEvent>
@@ -115,7 +115,7 @@ echo #define RSL_BUILD_DATE %buildTime:~0,8% &gt;&gt; $(ProjectDir)/BuildDate.h<
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>.\include\debug-draw\vectormath;.\include\sol;.\include\IconFontCppHeaders;.\include\LuaJIT-2.0.5;.\include\sol3;.\include\ImGui;.\include\nlohmann;.\include\glm;.\chaiscript;.\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\moneyl\source\repos\RSL\RSL\include\Hypodermic;C:\local\boost_1_71_0;.\include\debug-draw\vectormath;.\include\sol;.\include\IconFontCppHeaders;.\include\LuaJIT-2.0.5;.\include\sol3;.\include\ImGui;.\include\nlohmann;.\include\glm;.\chaiscript;.\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>PCH.hpp</PrecompiledHeaderFile>
@@ -132,7 +132,7 @@ echo #define RSL_BUILD_DATE %buildTime:~0,8% &gt;&gt; $(ProjectDir)/BuildDate.h<
       <OptimizeReferences>true</OptimizeReferences>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
       <AdditionalDependencies>lua51.lib;luajit.lib;libMinHook.x86.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>.\lib\Minhook\x86;.\lib\LuaJIT-2.0.5;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\local\boost_1_71_0\lib32-msvc-14.2;.\lib\Minhook\x86;.\lib\LuaJIT-2.0.5;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>/NODEFAULTLIB:LIBCMT %(AdditionalOptions)</AdditionalOptions>
     </Link>
     <PreBuildEvent>
@@ -151,7 +151,7 @@ echo #define RSL_BUILD_DATE %buildTime:~0,8% &gt;&gt; $(ProjectDir)/BuildDate.h<
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>.\include\debug-draw\vectormath;.\include\sol;.\include\IconFontCppHeaders;.\include\LuaJIT-2.0.5;.\include\sol3;.\include\ImGui;.\include\nlohmann;.\include\glm;.\chaiscript;.\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\moneyl\source\repos\RSL\RSL\include\Hypodermic;C:\local\boost_1_71_0;.\include\debug-draw\vectormath;.\include\sol;.\include\IconFontCppHeaders;.\include\LuaJIT-2.0.5;.\include\sol3;.\include\ImGui;.\include\nlohmann;.\include\glm;.\chaiscript;.\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>PCH.hpp</PrecompiledHeaderFile>
@@ -168,7 +168,7 @@ echo #define RSL_BUILD_DATE %buildTime:~0,8% &gt;&gt; $(ProjectDir)/BuildDate.h<
       <OptimizeReferences>true</OptimizeReferences>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
       <AdditionalDependencies>lua51.lib;luajit.lib;libMinHook.x86.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>.\lib\Minhook\x86;.\lib\LuaJIT-2.0.5;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\local\boost_1_71_0\lib32-msvc-14.2;.\lib\Minhook\x86;.\lib\LuaJIT-2.0.5;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>/NODEFAULTLIB:LIBCMT %(AdditionalOptions)</AdditionalOptions>
     </Link>
     <PreBuildEvent>

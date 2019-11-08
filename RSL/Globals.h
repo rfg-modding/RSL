@@ -5,8 +5,7 @@
 #include "Version.h"
 #include "BuildDate.h"
 #include <magic_enum/magic_enum.hpp>
-#include <boost/di.hpp>
-namespace di = boost::di;
+#include <Hypodermic/Hypodermic.h>
 
 //Todo: Move as many of these as possible into classes instead of having them be global
 
@@ -26,6 +25,8 @@ class ScriptManager;
 class CameraWrapper;
 class RenderInterfaceD3D11;
 class GraphicsStateWrapper;
+
+extern std::shared_ptr<Hypodermic::Container> IocContainer;
 
 namespace Globals
 {

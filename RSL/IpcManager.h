@@ -1,14 +1,16 @@
 #pragma once
 #include "Functions.h"
+#include "IIPCManager.h"
 
-class IpcManager
+class IpcManager : public IIpcManager
 {
 public:
     IpcManager();
     ~IpcManager();
 
-    void Run();
+    void StartIpcThread() override;
 
 private:
+    void Run();
     SECURITY_ATTRIBUTES CreateEveryoneSecurityAttribute();
 };

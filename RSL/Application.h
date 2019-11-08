@@ -4,11 +4,12 @@
 #include "HookManager.h"
 #include "FunctionManager.h"
 #include "GuiSystem.h"
+#include "IIPCManager.h"
 
 class Application
 {
 public:
-    Application() = default;
+    Application();
     ~Application() = default;
 
     void Run();
@@ -27,7 +28,6 @@ private:
     void TrySetMemoryLocations();
     void InitOverlays();
     void OpenDefaultLogs();
-    void PipesThread();
     void MainLoop();
     void Exit();
     void CreateHooks();
@@ -37,7 +37,8 @@ private:
     void CloseConsole() const;
     void SetMemoryLocations();
     bool IsFolderPlacementError() const;
-    
+
+    std::shared_ptr<IIpcManager> IpcManager = nullptr;
     CameraWrapper Camera;
     FunctionManager Functions;
     ScriptManager Scripts;

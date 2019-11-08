@@ -11,10 +11,23 @@ IpcManager::~IpcManager()
 
 }
 
+void IpcManager::StartIpcThread()
+{
+    static uint PipesThreadCount = 0;
+    if (PipesThreadCount > 0)
+    {
+        Logger::LogWarning("Attempted to start more than one IPC thread!\n");
+        return;
+    }
+    PipesThreadCount++;
+
+    std::thread IpcThread(&IpcManager::Run, this);
+}
+
 void IpcManager::Run()
 {
     Logger::Log("\n");
-    Logger::Log("IpcManager instance running\n");
+    Logger::Log("IPC thread started.\n");
 
     Logger::Log("Creating RSLMainPipe\n");
     auto SecurityAttributes = CreateEveryoneSecurityAttribute();
@@ -77,7 +90,7 @@ void IpcManager::Run()
     }
     //Todo: Add exit condition for loop. Though the thread dying when the game closes might be enough for this.
     CloseHandle(RslMainPipe);
-    Logger::Log("IpcManager instance stopping.\n");
+    Logger::Log("IPC thread exited.\n");
 }
 
 //This function is a slightly modified of this SO answer: https://stackoverflow.com/a/48175136

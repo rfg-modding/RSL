@@ -1,4 +1,5 @@
 ﻿#include "Launcher.h"
+#include "IpcManager.h"
 
 DWORD WINAPI MainThread(HMODULE hModule);
 DWORD WINAPI LauncherThread(HMODULE hModule);
@@ -33,6 +34,13 @@ BOOL WINAPI DllMain(HMODULE hModule, DWORD dwReason, LPVOID lpReserved)
 DWORD WINAPI MainThread(HMODULE hModule)
 {
     Globals::ScriptLoaderModule = hModule;
+
+    Hypodermic::ContainerBuilder builder;
+    builder.registerType<IpcManager>()
+           .as<IIpcManager>()
+           .singleInstance();
+    IocContainer = builder.build();
+    
     Application RSL;
 
     try

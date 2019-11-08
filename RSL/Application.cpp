@@ -1,6 +1,11 @@
 #include "Application.h"
 #include "IpcManager.h"
 
+Application::Application()
+{
+    IpcManager = IocContainer->resolve<IIpcManager>();
+}
+
 void Application::Run()
 {
     Init();
@@ -291,20 +296,9 @@ void Application::OpenDefaultLogs()
     }
 }
 
-void Application::PipesThread()
-{
-    Logger::Log("In pipes thread, starting IpcManager instance.\n");
-
-    IpcManager ipc_manager;
-    ipc_manager.Run();
-
-    Logger::Log("IpcManager exited.\n");
-}
-
 void Application::MainLoop()
 {
-    Logger::Log("Starting pipes thread.\n");
-    std::thread PipesThread(&Application::PipesThread, this);
+    IpcManager->StartIpcThread();
 
     const ulong UpdatesPerSecond = 1;
     const ulong MillisecondsPerUpdate = 1000 / UpdatesPerSecond;

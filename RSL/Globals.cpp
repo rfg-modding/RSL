@@ -1,6 +1,8 @@
 #include "Globals.h"
 #include "SnippetManager.h"
 
+std::shared_ptr<Hypodermic::Container> IocContainer = nullptr;
+
 namespace Globals
 {
     Application* Program = nullptr;
