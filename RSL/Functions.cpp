@@ -367,4 +367,16 @@ namespace rfg
     F_havok_body_get_angular_dampening havok_body_get_angular_dampening;
 
     F_cf_open cf_open;
+
+    F_effects_template_find effects_template_find;
+    F_vfx_effect_create vfx_effect_create;
+    F_vfx_effect_enable_emission vfx_effect_enable_emission;
+    F_vfx_effect_enable_coronas vfx_effect_enable_coronas;
+    F_vfx_effect_update vfx_effect_update;
+
+    F_effects_play effects_play;
+
+    F_squad_definition_from_name squad_definition_from_name;
+    F_squad_spawn_parameters_spawn_squad squad_spawn_parameters_spawn_squad;
+    F_find_local_spawn_region find_local_spawn_region;
 }

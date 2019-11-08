@@ -92,6 +92,35 @@ namespace rfg
         T m_data;
         bool m_loaded = false;
     };
+
+    template<class T>
+    class linked_list_p
+    {
+        T* m_head_p;
+        int m_elem_count;
+    };
+
+
+    //et_sized_native_pointer
+    template<class T>
+    class et_sized_native_pointer_storage_type_pointer_type
+    {
+        T* m_pointer;
+        void* m_pointer_padding;
+    };
+
+    template<class T>
+    union et_sized_native_pointer_storage_type
+    {
+        et_sized_native_pointer_storage_type_pointer_type<T> m_pointer_type;
+        unsigned __int64 m_pointer_type_padding;
+    };
+
+    template<class T>
+    class et_sized_native_pointer
+    {
+        et_sized_native_pointer_storage_type<T> m_storage;
+    };
 }
 
 namespace keen

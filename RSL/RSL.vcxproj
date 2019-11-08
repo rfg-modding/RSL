@@ -350,6 +350,7 @@ echo #define RSL_BUILD_DATE %buildTime:~0,8% &gt;&gt; $(ProjectDir)/BuildDate.h<
     <ClInclude Include="RFGR_Types_Vehicle.h" />
     <ClInclude Include="RFGR_Types_Keen_InputEvent.h" />
     <ClInclude Include="RFGR_Types_Vehicle_Spawn_Params.h" />
+    <ClInclude Include="RFGR_Types_Vfx_Template.h" />
     <ClInclude Include="RFGR_Types_weapon_info.h" />
     <ClInclude Include="ShaderSetD3D11.h" />
     <ClInclude Include="TextEditorWrapper.h" />

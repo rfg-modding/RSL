@@ -755,5 +755,8 @@
     <ClInclude Include="ISnippetManager.h">
       <Filter>Main\Systems\Interfaces</Filter>
     </ClInclude>
+    <ClInclude Include="RFGR_Types_Vfx_Template.h">
+      <Filter>RFGR Structs</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

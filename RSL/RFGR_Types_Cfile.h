@@ -1,7 +1,6 @@
 #pragma once
 #include "RFGR_Types_Vehicle.h"
 
-
 enum vlib_platform
 {
     PLATFORM_NONE = 0xFFFFFFFF,

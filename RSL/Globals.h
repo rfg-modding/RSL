@@ -1,7 +1,7 @@
 #pragma once
 #include "Includes.h"
 #include "FixedArrayWrapper.h"
-#include "RFGR_Types_Cfile.h"
+#include "RFGR_Types_Vfx_Template.h"
 #include "Version.h"
 #include "BuildDate.h"
 #include <magic_enum/magic_enum.hpp>
