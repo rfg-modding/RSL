@@ -2,36 +2,6 @@
 
 namespace rfg
 {
-    void DisableCameraCode(DWORD AddressY, DWORD AddressZ) //Takes addresses for instructions affecting y and z. Alternatively x and z may work, since one piece seems to be shared between two coords.
-    {
-        SnippetManager::BackupSnippet("CameraWriteY", AddressY, 8, true);
-        SnippetManager::BackupSnippet("CameraWriteZ", AddressZ, 6, true);
-    }
-
-    void RestoreCameraCode()
-    {
-        SnippetManager::RestoreSnippet("CameraWriteY", true);
-        SnippetManager::RestoreSnippet("CameraWriteZ", true);
-    }
-
-    void DisableCameraDirectionCode(DWORD Address1, DWORD Address2, DWORD Address3, DWORD Address4, DWORD Address5)
-    {
-        SnippetManager::BackupSnippet("CameraRealOrient1", Address1, 8, true);
-        SnippetManager::BackupSnippet("CameraRealOrient2", Address2, 8, true);
-        SnippetManager::BackupSnippet("CameraRealOrient3", Address3, 8, true);
-        SnippetManager::BackupSnippet("CameraRealOrient4", Address4, 8, true);
-        SnippetManager::BackupSnippet("CameraRealOrient5", Address5, 6, true);
-    }
-
-    void RestoreCameraDirectionCode()
-    {
-        SnippetManager::RestoreSnippet("CameraRealOrient1", true);
-        SnippetManager::RestoreSnippet("CameraRealOrient2", true);
-        SnippetManager::RestoreSnippet("CameraRealOrient3", true);
-        SnippetManager::RestoreSnippet("CameraRealOrient4", true);
-        SnippetManager::RestoreSnippet("CameraRealOrient5", true);
-    }
-
     void HideHud(bool Hide)
     {
         //HudVisible = !HudVisible; //This wasn't working for some odd reason so I just set them manually. Same for HideFog.

@@ -13,4 +13,6 @@ public:
 private:
     void Run();
     SECURITY_ATTRIBUTES CreateEveryoneSecurityAttribute();
+
+    std::thread IpcThread;
 };

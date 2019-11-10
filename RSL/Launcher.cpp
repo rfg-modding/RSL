@@ -6,7 +6,7 @@
 
 void Launcher::Run()
 {
-    Globals::LockGameMain();
+    Util::Patching::LockGameMain();
     Globals::SuspendAllThreadsExceptLauncher(LauncherThreadHandle);
 
     MainLoop(); 

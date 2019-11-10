@@ -1,9 +1,15 @@
 ﻿#include "Launcher.h"
 #include "IpcManager.h"
+#include "CameraManager.h"
+#include "FunctionManager.h"
+#include "HookManager.h"
+#include "SnippetManager.h"
+#include "ScriptManager.h"
 
 DWORD WINAPI MainThread(HMODULE hModule);
 DWORD WINAPI LauncherThread(HMODULE hModule);
 HANDLE LauncherThreadHandle;
+void BuildIocContainer();
 
 /* This function is the first thing called when the script loader DLL is loaded into rfgr.
  * All it does is start a new thread which runs MainThread. You shouldn't do anything major
@@ -13,34 +19,39 @@ HANDLE LauncherThreadHandle;
  */
 BOOL WINAPI DllMain(HMODULE hModule, DWORD dwReason, LPVOID lpReserved)
 {
-    switch (dwReason)
-    {
-    case DLL_PROCESS_ATTACH:
-        Globals::PID = GetCurrentProcessId();
-        Globals::ModuleBase = reinterpret_cast<uintptr_t>(GetModuleHandle(nullptr));
-#if UseLauncher
-        LauncherThreadHandle = CreateThread(0, 0, reinterpret_cast<LPTHREAD_START_ROUTINE>(LauncherThread), hModule, 0, 0);
-#else
-        CreateThread(0, 0, reinterpret_cast<LPTHREAD_START_ROUTINE>(MainThread), hModule, 0, 0);
-#endif
+    if (dwReason != DLL_PROCESS_ATTACH)
+        return TRUE;
 
-        break;
-    default:
-        break;
+    Globals::PID = GetCurrentProcessId();
+    Globals::ModuleBase = reinterpret_cast<uintptr_t>(GetModuleHandle(nullptr));
+    BuildIocContainer();
+#if UseLauncher
+
+    //First, check for txt files which skip the launcher. Workaround until bugs with the launcher running can be fixed
+    if(fs::exists(Globals::GetEXEPath() + "\\RSL_No_Launcher.txt")) //Skip launcher, run with RSL
+    {
+        CreateThread(0, 0, reinterpret_cast<LPTHREAD_START_ROUTINE>(MainThread), hModule, 0, 0);
     }
+    else if(fs::exists(Globals::GetEXEPath() + "\\Vanilla_No_Launcher.txt")) //Skip launcher, run vanilla game
+    {
+        return TRUE;
+    }
+    else //If neither file is found, start the launcher like normal
+    {
+        LauncherThreadHandle = CreateThread(0, 0, reinterpret_cast<LPTHREAD_START_ROUTINE>(LauncherThread), hModule, 0, 0);
+    }
+
+#else
+
+    CreateThread(0, 0, reinterpret_cast<LPTHREAD_START_ROUTINE>(MainThread), hModule, 0, 0);
+
+#endif
     return TRUE;
 }
 
 DWORD WINAPI MainThread(HMODULE hModule)
 {
     Globals::ScriptLoaderModule = hModule;
-
-    Hypodermic::ContainerBuilder builder;
-    builder.registerType<IpcManager>()
-           .as<IIpcManager>()
-           .singleInstance();
-    IocContainer = builder.build();
-    
     Application RSL;
 
     try
@@ -72,4 +83,17 @@ DWORD WINAPI LauncherThread(HMODULE hModule)
     }
 
     ExitThread(0);
+}
+
+void BuildIocContainer()
+{
+    Hypodermic::ContainerBuilder builder;
+    builder.registerType<IpcManager>().as<IIpcManager>().singleInstance();
+    builder.registerType<SnippetManager>().as<ISnippetManager>().singleInstance();
+    builder.registerType<CameraManager>().as<ICameraManager>().singleInstance();
+    builder.registerType<FunctionManager>().as<IFunctionManager>().singleInstance();
+    builder.registerType<ScriptManager>().as<IScriptManager>().singleInstance();
+    builder.registerType<HookManager>().as<IHookManager>().singleInstance();
+
+    IocContainer = builder.build();
 }

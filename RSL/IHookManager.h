@@ -10,8 +10,6 @@ public:
     IHookManager& operator=(const IHookManager&) = delete;
     virtual ~IHookManager() noexcept = default;
 
-    virtual bool CreateHook(const std::string& HookName, ulong TargetAddress, void* Detour, void* Original) = 0;
-
     virtual bool EnableHook(const std::string& HookName) = 0;
     virtual bool DisableHook(const std::string& HookName) = 0;
 

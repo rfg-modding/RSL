@@ -12,11 +12,6 @@
 
 namespace rfg
 {
-    extern void DisableCameraCode(DWORD AddressY, DWORD AddressZ); //Takes addresses for instructions affecting y and z. Alternatively x and z may work, since one piece seems to be shared between two coords.
-    extern void RestoreCameraCode();
-    extern void DisableCameraDirectionCode(DWORD Address1, DWORD Address2, DWORD Address3, DWORD Address4, DWORD Address5);
-    extern void RestoreCameraDirectionCode();
-
     extern void HideHud(bool Hide);
     extern void HideFog(bool Hide);
     extern void ToggleHud();

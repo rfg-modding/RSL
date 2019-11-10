@@ -22,7 +22,6 @@ using ulonglong = unsigned long long;
 class Application;
 class GuiSystem;
 class ScriptManager;
-class CameraWrapper;
 class RenderInterfaceD3D11;
 class GraphicsStateWrapper;
 
@@ -32,8 +31,6 @@ namespace Globals
 {
 	extern Application* Program;
 	extern GuiSystem* Gui;
-	extern ScriptManager* Scripts;
-	extern CameraWrapper* Camera;
     
 	extern Player* PlayerPtr;
 	extern World* RfgWorldPtr;
@@ -236,8 +233,6 @@ namespace Globals
 	}
 
     extern std::vector<HANDLE> RfgThreadHandles;
-    extern void LockGameMain();
-    extern void UnlockGameMain();
     extern void SuspendAllThreadsExceptLauncher(HANDLE LauncherThreadHandle);
     extern void ResumeAllThreads();
 }

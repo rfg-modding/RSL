@@ -1,12 +1,14 @@
 #include "ApiTables.h"
 #include "Functions.h"
 #include "LuaFunctions.h"
-#include "CameraWrapper.h"
-#include "ScriptManager.h"
+#include "IScriptManager.h"
+#include "ICameraManager.h"
 
 //Todo: Split this into multiple functions & files, organize by function type / area. This is too large for one function
 void Lua::BindApiFunctions(sol::state& LuaStateRef)
 {
+    auto ScriptManager = IocContainer->resolve<IScriptManager>();
+
     LuaStateRef["print"] = sol::nil;
     LuaStateRef["ToString"] = LuaStateRef.get<sol::function>("tostring");
 
@@ -150,7 +152,7 @@ void Lua::BindApiFunctions(sol::state& LuaStateRef)
             if (Util::ContainsChar(Description, { '[', ']' })) { throw std::exception("The game does not allow the use '[' or ']' in message box descriptions."); }
 
             int Handle = rfg::ui_add_msgbox(Type, Title, Description, Lua::RfgMessageBoxCallbackFunction, false, false, nullptr, nullptr, false);
-            Globals::Scripts->MessageBoxCallbacks.insert_or_assign(Handle, CallbackFunc);
+            ScriptManager->GetMessageBoxCallbacks().insert_or_assign(Handle, CallbackFunc);
             return Handle;
         },
         [&](msgbox_type Type, const char* Title, const char* Description, sol::function CallbackFunc, const char* Button1Override, const char* Button2Override)->int
@@ -159,7 +161,7 @@ void Lua::BindApiFunctions(sol::state& LuaStateRef)
             if (Util::ContainsChar(Description, { '[', ']' })) { throw std::exception("The game does not allow the use '[' or ']' in message box descriptions."); }
 
             int Handle = rfg::ui_add_msgbox(Type, Title, Description, Lua::RfgMessageBoxCallbackFunction, false, false, Button1Override, Button2Override, false);
-            Globals::Scripts->MessageBoxCallbacks.insert_or_assign(Handle, CallbackFunc);
+            ScriptManager->GetMessageBoxCallbacks().insert_or_assign(Handle, CallbackFunc);
             return Handle;
         }
     ));
@@ -193,17 +195,14 @@ void Lua::BindApiFunctions(sol::state& LuaStateRef)
     RfgTable.set_function("HavokBodySetMovable", rfg::havok_body_set_movable);
     RfgTable.set_function("HavokBodyGetMass", rfg::havok_body_get_mass);
 
-    RfgTable.set_function("GetLookDirection", []()->vector
+    auto Camera = IocContainer->resolve<ICameraManager>();
+    RfgTable.set_function("GetLookDirection", [Camera]()->vector
     {
-            if (!Globals::Camera) return vector(0.0f);
-            if (!Globals::Camera->GameData) return vector(0.0f);
-            return vector(Globals::Camera->GameData->real_orient.fvec);
+            return Camera->GetLookDirection();
     });
-    RfgTable.set_function("GetLookDirectionRightVector", []()->vector
+    RfgTable.set_function("GetLookDirectionRightVector", [Camera]()->vector
     {
-            if (!Globals::Camera) return vector(0.0f);
-            if (!Globals::Camera->GameData) return vector(0.0f);
-            return vector(Globals::Camera->GameData->real_orient.rvec);
+            return Camera->GetLookOrient().rvec;
     });
 
     RfgTable["ObjectiveHighlightAdd"] = rfg::objective_highlight_add;
@@ -213,11 +212,13 @@ void Lua::BindApiFunctions(sol::state& LuaStateRef)
     RfgTable.set_function("RegisterEvent", sol::overload(
         [&](std::string EventTypeName, sol::function EventFunction, std::string EventName)
         {
-            Globals::Scripts->RegisterEvent(EventTypeName, EventFunction, EventName);
+            static auto Scripts = IocContainer->resolve<IScriptManager>();
+            Scripts->RegisterEvent(EventTypeName, EventFunction, EventName);
         },
         [&](std::string EventTypeName, sol::function EventFunction)
         {
-            Globals::Scripts->RegisterEvent(EventTypeName, EventFunction);
+            static auto Scripts = IocContainer->resolve<IScriptManager>();
+            Scripts->RegisterEvent(EventTypeName, EventFunction);
         }
     ));
 

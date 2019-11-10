@@ -1,8 +1,13 @@
 #include "HookManager.h"
 
+HookManager::HookManager()
+{
+
+}
+
 HookManager::~HookManager()
 {
-	DisableAllHooks();
+    HookManager::DisableAllHooks();
 }
 
 /* Enables a hook of the provided name if it exists. Returns true if it was successfully

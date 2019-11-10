@@ -2,7 +2,7 @@
 
 //Todo: Split this into multiple functions for organization and to make it easier to find a specific function
 /* Initializes rfg function pointers. */
-void FunctionManager::Initialize()
+void FunctionManager::RegisterFunctions()
 {
     //Todo: Define all of the function offsets in a separate file as macros/constants to make it easier to switch them for different platforms (Steam & GOG)
     RegisterFunction(rfg::CameraStartSlewMode, 0x2D09B0);

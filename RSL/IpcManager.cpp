@@ -21,7 +21,7 @@ void IpcManager::StartIpcThread()
     }
     PipesThreadCount++;
 
-    std::thread IpcThread(&IpcManager::Run, this);
+    IpcThread = std::thread(&IpcManager::Run, this);
 }
 
 void IpcManager::Run()

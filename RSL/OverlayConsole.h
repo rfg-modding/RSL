@@ -1,5 +1,6 @@
 #pragma once
 #include "BaseGui.h"
+#include "IScriptManager.h"
 
 class ScriptManager;
 
@@ -27,6 +28,8 @@ public:
 	bool SimpleOutput = false;
 
 private:
+    std::shared_ptr<IScriptManager> ScriptManager = nullptr;
+
 	int BufferEnd = 0;
 	int BufferCount = 0;
 };

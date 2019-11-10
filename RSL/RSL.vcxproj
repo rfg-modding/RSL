@@ -186,6 +186,7 @@ echo #define RSL_BUILD_DATE %buildTime:~0,8% &gt;&gt; $(ProjectDir)/BuildDate.h<
     <ClCompile Include="AttachInfoDataLua.cpp" />
     <ClCompile Include="BaseGui.cpp" />
     <ClCompile Include="BaseTypeLua.cpp" />
+    <ClCompile Include="CameraManager.cpp" />
     <ClCompile Include="CanDropVehicle.cpp" />
     <ClCompile Include="cf_open.cpp" />
     <ClCompile Include="D3D11Present.cpp" />
@@ -293,6 +294,8 @@ echo #define RSL_BUILD_DATE %buildTime:~0,8% &gt;&gt; $(ProjectDir)/BuildDate.h<
     <ClInclude Include="BaseGui.h" />
     <ClInclude Include="BaseTypeLua.h" />
     <ClInclude Include="BuildDate.h" />
+    <ClInclude Include="CameraDirection.h" />
+    <ClInclude Include="CameraManager.h" />
     <ClInclude Include="EventViewerGui.h" />
     <ClInclude Include="ExplosionInfoLua.h" />
     <ClInclude Include="ExplosionSpawnerGui.h" />
@@ -352,6 +355,11 @@ echo #define RSL_BUILD_DATE %buildTime:~0,8% &gt;&gt; $(ProjectDir)/BuildDate.h<
     <ClInclude Include="RFGR_Types_Vehicle_Spawn_Params.h" />
     <ClInclude Include="RFGR_Types_Vfx_Template.h" />
     <ClInclude Include="RFGR_Types_weapon_info.h" />
+    <ClInclude Include="Script.h" />
+    <ClInclude Include="ScriptEvent.h" />
+    <ClInclude Include="ScriptEventHook.h" />
+    <ClInclude Include="ScriptFolder.h" />
+    <ClInclude Include="ScriptResult.h" />
     <ClInclude Include="ShaderSetD3D11.h" />
     <ClInclude Include="TextEditorWrapper.h" />
     <ClInclude Include="Timer.h" />

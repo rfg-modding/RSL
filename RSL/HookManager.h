@@ -1,8 +1,8 @@
 #pragma once
 #include "Hooks.h"
+#include "IHookManager.h"
 
-
-/* POD class with basic info about a hook that minhook needs to create, enable, disable them.*/
+/*Contains basic info about a hook that minhook needs to create, enable, disable them.*/
 class Hook
 {
 public:
@@ -18,10 +18,10 @@ public:
 /* Handles function hooking. This includes creating, enabling, and disabling hooks. 
  * Makes it simpler, and avoids code duplication.
  */
-class HookManager
+class HookManager : public IHookManager
 {
 public:
-	HookManager() = default;
+    HookManager();
 	~HookManager();
 
     template<typename T, typename U>
@@ -44,15 +44,15 @@ public:
         return true;
     }
 
-	bool EnableHook(const std::string& HookName);
-	bool DisableHook(const std::string& HookName);
+	bool EnableHook(const std::string& HookName) override;
+	bool DisableHook(const std::string& HookName) override;
 
-	void EnableAllHooks();
-	void DisableAllHooks();
+	void EnableAllHooks() override;
+	void DisableAllHooks() override;
 
-	bool HookExists(const std::string& HookName) const;
+    [[nodiscard]] bool HookExists(const std::string& HookName) const override;
 
-	std::unordered_map <std::string, Hook> HookMap;
+	std::unordered_map <std::string, Hook> HookMap {};
 };
 
 //template<typename T>

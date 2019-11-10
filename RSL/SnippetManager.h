@@ -1,5 +1,6 @@
 #pragma once
 #include "Logger.h"
+#include "ISnippetManager.h"
 
 enum Opcodes : int
 {
@@ -21,18 +22,17 @@ public:
 	std::vector <int> Opcodes;
 };
 
-class SnippetManager
+class SnippetManager : public ISnippetManager
 {
 public:
+    SnippetManager() { }
+    ~SnippetManager() { }
 
-	static std::unordered_map <std::string, CodeSnippet> SnippetCache;
+	std::unordered_map <std::string, CodeSnippet> SnippetCache;
 
-	static void BackupSnippet(std::string Name, DWORD Address, DWORD Length, bool NOP);
-	static void RestoreSnippet(std::string Name, bool RemoveFromCache);
-	static void NOPSnippet(std::string Name);
-    static void ReplaceSnippet(std::string Name, DWORD Address, std::vector<int>& NewOpcodes);
-
-private:
-	SnippetManager() { };
+	void BackupSnippet(std::string Name, DWORD Address, DWORD Length, bool NOP);
+	void RestoreSnippet(std::string Name, bool RemoveFromCache);
+	void NOPSnippet(std::string Name);
+    void ReplaceSnippet(std::string Name, DWORD Address, std::vector<int>& NewOpcodes);
 };
 

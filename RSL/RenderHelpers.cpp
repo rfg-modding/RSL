@@ -38,21 +38,21 @@ void Hooks::UpdateDebugDrawRenderInterfaceValues()
         //Globals::DebugDrawRenderInterface->setMvpMatrixPtr(reinterpret_cast<float*>(&TransposedvpMatrix));
     }
 
-    if (Globals::Camera)
-    {
-        if (Globals::Camera->GameData)
-        {
-            vector& RealUpVec = Globals::Camera->GameData->real_orient.uvec;
-            Vector3 CameraUpVector(RealUpVec.x, RealUpVec.y, RealUpVec.z);
+    //if (Globals::Camera)
+    //{
+    //    if (Globals::Camera->GameData)
+    //    {
+    //        vector& RealUpVec = Globals::Camera->GameData->real_orient.uvec;
+    //        Vector3 CameraUpVector(RealUpVec.x, RealUpVec.y, RealUpVec.z);
 
-            vector& RealRightVec = Globals::Camera->GameData->real_orient.rvec;
-            Vector3 CameraRightVector(RealRightVec.x, RealRightVec.y, RealRightVec.z);
+    //        vector& RealRightVec = Globals::Camera->GameData->real_orient.rvec;
+    //        Vector3 CameraRightVector(RealRightVec.x, RealRightVec.y, RealRightVec.z);
 
-            vector& RealForwardVec = Globals::Camera->GameData->real_orient.fvec;
-            Vector3 CameraForwardVector(RealForwardVec.x, RealForwardVec.y, RealForwardVec.z);
-            Globals::DebugDrawRenderInterface->setCameraFrame(CameraUpVector, CameraRightVector, CameraForwardVector);
-        }
-    }
+    //        vector& RealForwardVec = Globals::Camera->GameData->real_orient.fvec;
+    //        Vector3 CameraForwardVector(RealForwardVec.x, RealForwardVec.y, RealForwardVec.z);
+    //        Globals::DebugDrawRenderInterface->setCameraFrame(CameraUpVector, CameraRightVector, CameraForwardVector);
+    //    }
+    //}
 }
 
 HRESULT D3D11_DEVICE_CONTEXT_FROM_SWAPCHAIN(IDXGISwapChain* pSwapChain, ID3D11Device** ppDevice, ID3D11DeviceContext** ppContext)

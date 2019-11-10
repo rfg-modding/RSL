@@ -31,12 +31,12 @@ void WelcomeGui::Draw()
 		return;
 	}
 
-    static auto GeneralTweaksGuiRef = Globals::Gui->GetGuiReference<GeneralTweaksGui>("General tweaks").value();
-    static auto ScriptSelectRef = Globals::Gui->GetGuiReference<ScriptSelectGui>("Scripts").value();
-    static auto CameraSettingsRef = Globals::Gui->GetGuiReference<FreeCamGui>("Camera settings").value();
-    static auto ScriptEditorRef = Globals::Gui->GetGuiReference<TextEditorWrapper>("Script editor").value();
-    static auto TeleportGuiRef = Globals::Gui->GetGuiReference<TeleportGui>("Teleport").value();
-    static auto ExplosionSpawnerGuiRef = Globals::Gui->GetGuiReference<ExplosionSpawnerGui>("Explosion spawner").value();
+    static auto GeneralTweaksGuiRef = Globals::Gui->GetGuiReference<BaseGui>("General tweaks").value();
+    static auto ScriptSelectRef = Globals::Gui->GetGuiReference<BaseGui>("Scripts").value();
+    static auto CameraSettingsRef = Globals::Gui->GetGuiReference<BaseGui>("Camera settings").value();
+    static auto ScriptEditorRef = Globals::Gui->GetGuiReference<BaseGui>("Script editor").value();
+    static auto TeleportGuiRef = Globals::Gui->GetGuiReference<BaseGui>("Teleport").value();
+    static auto ExplosionSpawnerGuiRef = Globals::Gui->GetGuiReference<BaseGui>("Explosion spawner").value();
 
 	ImGui::PushStyleColor(ImGuiCol_Button, ImVec4());
 	ImGui::PushFont(Globals::FontLarge);

@@ -4,9 +4,11 @@
 //.text:00CEE450 rfg.exe:$3EE450 #3ED850 <gamestate_gp_process> //void __cdecl gamestate_gp_process()
 void __cdecl Hooks::gamestate_gp_process_hook()
 {
-    if (Globals::Scripts)
+    static auto ScriptManager = IocContainer->resolve<IScriptManager>();
+
+    if (ScriptManager->Ready())
     {
-        Globals::Scripts->TriggerDoFrameEvent();
+        ScriptManager->TriggerDoFrameEvent();
     }
-    rfg::gamestate_gp_process();
+    return rfg::gamestate_gp_process();
 }

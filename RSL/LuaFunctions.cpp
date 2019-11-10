@@ -1,5 +1,5 @@
 #include "LuaFunctions.h"
-#include "ScriptManager.h"
+#include "IScriptManager.h"
 
 namespace Lua
 {
@@ -223,12 +223,15 @@ namespace Lua
 
     bool RfgMessageBoxCallbackFunction(int mbox_handle, int selection_index, msgbox_choice choice)
     {
-        if(Globals::Scripts)
+        //Script manager should be ready for use by the time this is first called
+        static auto Scripts = IocContainer->resolve<IScriptManager>();
+        if(Scripts)
         {
-            if(Globals::Scripts->MessageBoxCallbacks.count(mbox_handle) == 1)
+            auto& MessageBoxCallbacks = Scripts->GetMessageBoxCallbacks();
+            if(MessageBoxCallbacks.count(mbox_handle) == 1)
             {
-                sol::function& Callback = Globals::Scripts->MessageBoxCallbacks.at(mbox_handle);
-                sol::table CallbackInfo = Globals::Scripts->LuaState->create_table();
+                sol::function& Callback = const_cast<sol::function&>(MessageBoxCallbacks.at(mbox_handle));
+                sol::table CallbackInfo = Scripts->GetLuaState().create_table();
                 CallbackInfo["SelectionIndex"] = selection_index;
                 CallbackInfo["Choice"] = choice;
                 sol::protected_function_result Result = Callback(CallbackInfo);
@@ -238,7 +241,7 @@ namespace Lua
                     std::string What(Error.what());
                     Logger::LogError("MessageBox callback encountered an error! Message: {}", What);
                 }
-                Globals::Scripts->MessageBoxCallbacks.erase(mbox_handle);
+                MessageBoxCallbacks.erase(mbox_handle);
             }
         }
         return true;

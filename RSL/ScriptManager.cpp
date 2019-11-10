@@ -174,6 +174,13 @@ void ScriptManager::SetupLua()
 	#pragma warning(pop) 
 
     UpdateRfgPointers();
+
+    _ready = true;
+}
+
+void ScriptManager::RegisterEvent(std::string EventTypeName, const sol::function& EventFunction)
+{
+    RegisterEvent(EventTypeName, EventFunction, "GenericEvent");
 }
 
 void ScriptManager::RegisterEvent(std::string EventTypeName, const sol::function& EventFunction, const std::string& EventName)
@@ -201,7 +208,7 @@ void ScriptManager::UpdateRfgPointers()
     std::lock_guard<std::recursive_mutex> Lock(Mutex);
     sol::state& LuaStateRef = *LuaState;
 	auto RfgTable = LuaStateRef["rfg"].get_or_create<sol::table>();
-
+    
     RfgTable["ActivePlayer"] = Globals::PlayerPtr;
 	RfgTable["ActiveWorld"] = Globals::RfgWorldPtr; 
 	RfgTable["ActivePhysicsWorld"] = Globals::hkpWorldPtr; 
@@ -276,7 +283,8 @@ bool ScriptManager::RunScript(const std::string& FullPath)
 {
     std::lock_guard<std::recursive_mutex> Lock(Mutex);
 
-    if (!std::filesystem::path(FullPath).has_filename()) return false;
+    if (!std::filesystem::path(FullPath).has_filename()) 
+        return false;
 
     std::string ScriptName = std::filesystem::path(FullPath).filename().string();
     std::string Buffer = Util::General::LoadFileToString(FullPath);
@@ -361,8 +369,10 @@ void ScriptManager::TriggerInputEvent(uint Message, uint KeyCode, KeyState& Keys
 {
     std::lock_guard<std::recursive_mutex> Lock(Mutex);
 
-    if (rfg::game_is_paused()) return;
-    if (!LuaState) return;
+    if (rfg::game_is_paused()) 
+        return;
+    if (!LuaState) 
+        return;
 
     ScriptEvent& InputEvents = Events[0];
     InputEvents.Update();
@@ -399,8 +409,10 @@ void ScriptManager::TriggerDoFrameEvent()
 {
     std::lock_guard<std::recursive_mutex> Lock(Mutex);
 
-    if (rfg::game_is_paused()) return;
-    if (!LuaState) return;
+    if (rfg::game_is_paused()) 
+        return;
+    if (!LuaState) 
+        return;
 
     ScriptEvent& DoFrameEvents = Events[1];
     DoFrameEvents.Update();
@@ -438,7 +450,8 @@ void ScriptManager::TriggerInitializedEvent()
 {
     std::lock_guard<std::recursive_mutex> Lock(Mutex);
 
-    if (!LuaState) return;
+    if (!LuaState) 
+        return;
 
     ScriptEvent& InitializedEvents = Events[2];
     InitializedEvents.Update();
@@ -466,8 +479,10 @@ void ScriptManager::TriggerMouseEvent(uint Message, uint wParam, uint lParam, Ke
 {
     std::lock_guard<std::recursive_mutex> Lock(Mutex);
 
-    if (rfg::game_is_paused()) return;
-    if (!LuaState) return;
+    if (rfg::game_is_paused()) 
+        return;
+    if (!LuaState) 
+        return;
 
     ScriptEvent& MouseEvent = Events[3];
     MouseEvent.Update();
@@ -524,7 +539,8 @@ void ScriptManager::TriggerLoadEvent()
 {
     std::lock_guard<std::recursive_mutex> Lock(Mutex);
 
-    if (!LuaState) return;
+    if (!LuaState) 
+        return;
 
     ScriptEvent& LoadEvent = Events[4];
     LoadEvent.Update();
@@ -549,19 +565,22 @@ void ScriptManager::TriggerLoadEvent()
 
 std::string ScriptManager::GetScriptNameFromPath(const std::string& FullPath) const
 {
-    if (!std::filesystem::path(FullPath).has_filename()) return {};
+    if (!std::filesystem::path(FullPath).has_filename()) 
+        return {};
     return std::filesystem::path(FullPath).filename().string();
 }
 
 std::string ScriptManager::GetScriptFolderFromPath(const std::string& FullPath) const
 {
-    if (!std::filesystem::path(FullPath).has_parent_path()) return {};
+    if (!std::filesystem::path(FullPath).has_parent_path()) 
+        return {};
     return std::filesystem::path(FullPath).parent_path().string() + "\\";
 }
 
 std::string ScriptManager::GetScriptExtensionFromPath(const std::string& FullPath) const
 {
-    if (!std::filesystem::path(FullPath).has_extension()) return {};
+    if (!std::filesystem::path(FullPath).has_extension()) 
+        return {};
     return std::filesystem::path(FullPath).extension().string();
 }
 

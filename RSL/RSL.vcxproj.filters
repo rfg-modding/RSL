@@ -67,9 +67,6 @@
     <Filter Include="Main\Functions">
       <UniqueIdentifier>{2c404ce3-6554-4f85-a3bf-f05582bffa4b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Main\Systems">
-      <UniqueIdentifier>{3dbd3252-dd00-4f30-b0c6-2a7b9220a98a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Gui">
       <UniqueIdentifier>{a6d8a793-b545-460c-a878-f5b9f6e89230}</UniqueIdentifier>
     </Filter>
@@ -142,7 +139,34 @@
     <Filter Include="Main\Libraries\MinHook">
       <UniqueIdentifier>{394d03a5-a48d-4a67-8592-ec243b45acbe}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Main\Systems\Interfaces">
+    <Filter Include="Main\Managers">
+      <UniqueIdentifier>{3dbd3252-dd00-4f30-b0c6-2a7b9220a98a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Main\Managers\CameraManager">
+      <UniqueIdentifier>{7605d74c-dccd-4592-917a-080c5e81f8c4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Main\Managers\IpcManager">
+      <UniqueIdentifier>{25bb1c27-f47a-4d16-88aa-b35912e4eb37}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Main\Managers\FunctionManager">
+      <UniqueIdentifier>{2a11849d-f6e5-4734-aa63-feedb73774cf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Main\Managers\HookManager">
+      <UniqueIdentifier>{158acbf0-b932-4584-a97c-1877018d527e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Main\Managers\Logger">
+      <UniqueIdentifier>{ff92d82f-7d34-4556-9edc-75b941a25c2e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Main\Managers\ScriptManager">
+      <UniqueIdentifier>{f848aa0b-9123-4934-b6eb-7696968a9ffb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Main\Managers\SnippetManager">
+      <UniqueIdentifier>{30e2076f-b189-4452-8080-24943b7bf53e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Main\Managers\ScriptManager\Scripts">
+      <UniqueIdentifier>{181506ea-6ef9-4ea2-a210-bb69bf13e189}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Main\Managers\Interfaces">
       <UniqueIdentifier>{aad75ac0-471e-4217-a060-0f7a9eda0351}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -318,9 +342,6 @@
     <ClCompile Include="BaseGui.cpp">
       <Filter>Gui</Filter>
     </ClCompile>
-    <ClCompile Include="GuiSystem.cpp">
-      <Filter>Gui</Filter>
-    </ClCompile>
     <ClCompile Include="EventViewerGui.cpp">
       <Filter>Gui\Data viewers\Event viewer</Filter>
     </ClCompile>
@@ -391,25 +412,7 @@
       <Filter>Main\Functions</Filter>
     </ClCompile>
     <ClCompile Include="CameraWrapper.cpp">
-      <Filter>Main\Systems</Filter>
-    </ClCompile>
-    <ClCompile Include="FunctionManager.cpp">
-      <Filter>Main\Systems</Filter>
-    </ClCompile>
-    <ClCompile Include="HookManager.cpp">
-      <Filter>Main\Systems</Filter>
-    </ClCompile>
-    <ClCompile Include="IpcManager.cpp">
-      <Filter>Main\Systems</Filter>
-    </ClCompile>
-    <ClCompile Include="Logger.cpp">
-      <Filter>Main\Systems</Filter>
-    </ClCompile>
-    <ClCompile Include="ScriptManager.cpp">
-      <Filter>Main\Systems</Filter>
-    </ClCompile>
-    <ClCompile Include="SnippetManager.cpp">
-      <Filter>Main\Systems</Filter>
+      <Filter>Main\Managers</Filter>
     </ClCompile>
     <ClCompile Include="Application.cpp">
       <Filter>Main</Filter>
@@ -449,6 +452,30 @@
     </ClCompile>
     <ClCompile Include="include\kiero\kiero.cpp">
       <Filter>Main\Libraries\Kiero</Filter>
+    </ClCompile>
+    <ClCompile Include="CameraManager.cpp">
+      <Filter>Main\Managers\CameraManager</Filter>
+    </ClCompile>
+    <ClCompile Include="IpcManager.cpp">
+      <Filter>Main\Managers\IpcManager</Filter>
+    </ClCompile>
+    <ClCompile Include="FunctionManager.cpp">
+      <Filter>Main\Managers\FunctionManager</Filter>
+    </ClCompile>
+    <ClCompile Include="HookManager.cpp">
+      <Filter>Main\Managers\HookManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Logger.cpp">
+      <Filter>Main\Managers\Logger</Filter>
+    </ClCompile>
+    <ClCompile Include="ScriptManager.cpp">
+      <Filter>Main\Managers\ScriptManager</Filter>
+    </ClCompile>
+    <ClCompile Include="SnippetManager.cpp">
+      <Filter>Main\Managers\SnippetManager</Filter>
+    </ClCompile>
+    <ClCompile Include="GuiSystem.cpp">
+      <Filter>Main\Managers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -581,9 +608,6 @@
     <ClInclude Include="BaseGui.h">
       <Filter>Gui</Filter>
     </ClInclude>
-    <ClInclude Include="GuiSystem.h">
-      <Filter>Gui</Filter>
-    </ClInclude>
     <ClInclude Include="EventViewerGui.h">
       <Filter>Gui\Data viewers\Event viewer</Filter>
     </ClInclude>
@@ -672,25 +696,7 @@
       <Filter>Main\Functions</Filter>
     </ClInclude>
     <ClInclude Include="CameraWrapper.h">
-      <Filter>Main\Systems</Filter>
-    </ClInclude>
-    <ClInclude Include="FunctionManager.h">
-      <Filter>Main\Systems</Filter>
-    </ClInclude>
-    <ClInclude Include="HookManager.h">
-      <Filter>Main\Systems</Filter>
-    </ClInclude>
-    <ClInclude Include="IpcManager.h">
-      <Filter>Main\Systems</Filter>
-    </ClInclude>
-    <ClInclude Include="Logger.h">
-      <Filter>Main\Systems</Filter>
-    </ClInclude>
-    <ClInclude Include="ScriptManager.h">
-      <Filter>Main\Systems</Filter>
-    </ClInclude>
-    <ClInclude Include="SnippetManager.h">
-      <Filter>Main\Systems</Filter>
+      <Filter>Main\Managers</Filter>
     </ClInclude>
     <ClInclude Include="Application.h">
       <Filter>Main</Filter>
@@ -738,25 +744,67 @@
       <Filter>Main\Libraries\MinHook</Filter>
     </ClInclude>
     <ClInclude Include="ICameraManager.h">
-      <Filter>Main\Systems\Interfaces</Filter>
+      <Filter>Main\Managers\Interfaces</Filter>
     </ClInclude>
     <ClInclude Include="IFunctionManager.h">
-      <Filter>Main\Systems\Interfaces</Filter>
+      <Filter>Main\Managers\Interfaces</Filter>
     </ClInclude>
     <ClInclude Include="IHookManager.h">
-      <Filter>Main\Systems\Interfaces</Filter>
+      <Filter>Main\Managers\Interfaces</Filter>
     </ClInclude>
     <ClInclude Include="IScriptManager.h">
-      <Filter>Main\Systems\Interfaces</Filter>
+      <Filter>Main\Managers\Interfaces</Filter>
     </ClInclude>
     <ClInclude Include="ISnippetManager.h">
-      <Filter>Main\Systems\Interfaces</Filter>
+      <Filter>Main\Managers\Interfaces</Filter>
     </ClInclude>
     <ClInclude Include="RFGR_Types_Vfx_Template.h">
       <Filter>RFGR Structs</Filter>
     </ClInclude>
     <ClInclude Include="IIpcManager.h">
-      <Filter>Main\Systems\Interfaces</Filter>
+      <Filter>Main\Managers\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraManager.h">
+      <Filter>Main\Managers\CameraManager</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraDirection.h">
+      <Filter>Main\Managers\CameraManager</Filter>
+    </ClInclude>
+    <ClInclude Include="IpcManager.h">
+      <Filter>Main\Managers\IpcManager</Filter>
+    </ClInclude>
+    <ClInclude Include="FunctionManager.h">
+      <Filter>Main\Managers\FunctionManager</Filter>
+    </ClInclude>
+    <ClInclude Include="HookManager.h">
+      <Filter>Main\Managers\HookManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Logger.h">
+      <Filter>Main\Managers\Logger</Filter>
+    </ClInclude>
+    <ClInclude Include="ScriptManager.h">
+      <Filter>Main\Managers\ScriptManager</Filter>
+    </ClInclude>
+    <ClInclude Include="SnippetManager.h">
+      <Filter>Main\Managers\SnippetManager</Filter>
+    </ClInclude>
+    <ClInclude Include="GuiSystem.h">
+      <Filter>Main\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="ScriptResult.h">
+      <Filter>Main\Managers\ScriptManager\Scripts</Filter>
+    </ClInclude>
+    <ClInclude Include="ScriptFolder.h">
+      <Filter>Main\Managers\ScriptManager\Scripts</Filter>
+    </ClInclude>
+    <ClInclude Include="Script.h">
+      <Filter>Main\Managers\ScriptManager\Scripts</Filter>
+    </ClInclude>
+    <ClInclude Include="ScriptEvent.h">
+      <Filter>Main\Managers\ScriptManager\Scripts</Filter>
+    </ClInclude>
+    <ClInclude Include="ScriptEventHook.h">
+      <Filter>Main\Managers\ScriptManager\Scripts</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

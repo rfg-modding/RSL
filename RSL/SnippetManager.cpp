@@ -1,7 +1,5 @@
 #include "SnippetManager.h"
 
-std::unordered_map <std::string, CodeSnippet> SnippetManager::SnippetCache;
-
 void SnippetManager::BackupSnippet(std::string Name, DWORD Address, DWORD Length, bool NOP)
 {
 	BYTE* ByteAddress = reinterpret_cast<BYTE*>(Address);

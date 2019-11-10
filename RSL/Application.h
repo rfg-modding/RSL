@@ -1,10 +1,10 @@
 #pragma once
-#include "ScriptManager.h"
-#include "CameraWrapper.h"
-#include "HookManager.h"
-#include "FunctionManager.h"
 #include "GuiSystem.h"
 #include "IIPCManager.h"
+#include "ICameraManager.h"
+#include "IFunctionManager.h"
+#include "IHookManager.h"
+#include "ISnippetManager.h"
 
 class Application
 {
@@ -32,17 +32,18 @@ private:
     void Exit();
     void CreateHooks();
 
-    bool ShouldClose() const;
+    [[nodiscard]] bool ShouldClose() const;
     void OpenConsole();
     void CloseConsole() const;
     void SetMemoryLocations();
-    bool IsFolderPlacementError() const;
+    [[nodiscard]] bool IsFolderPlacementError() const;
 
     std::shared_ptr<IIpcManager> IpcManager = nullptr;
-    CameraWrapper Camera;
-    FunctionManager Functions;
-    ScriptManager Scripts;
-    HookManager Hooks;
+    std::shared_ptr<ISnippetManager> SnippetManager = nullptr;
+    std::shared_ptr<ICameraManager> CameraManager = nullptr;
+    std::shared_ptr<IFunctionManager> Functions = nullptr;
+    std::shared_ptr<IScriptManager> Scripts = nullptr;
+    std::shared_ptr<IHookManager> Hooks = nullptr;
     GuiSystem Gui;
 
     /* Used to ensure proper opening/closing of the debug console. Mainly used to make sure

@@ -1,7 +1,12 @@
 #include "ScriptSelectGui.h"
 #include "TextEditorWrapper.h"
-#include "ScriptManager.h"
 #include "GuiSystem.h"
+
+ScriptSelectGui::ScriptSelectGui(std::string Title_)
+{
+    Title = Title_;
+    ScriptManager = IocContainer->resolve<IScriptManager>();
+}
 
 void ScriptSelectGui::Draw()
 {
@@ -25,11 +30,11 @@ void ScriptSelectGui::Draw()
 
 	if (ImGui::Button("Rescan"))
 	{
-        Globals::Scripts->ScanScriptsFolder();
+        ScriptManager->ScanScriptsFolder();
 	}
     ImGui::Separator();
 
-	for (const auto& SubFolder : Globals::Scripts->SubFolders)
+	for (const auto& SubFolder : ScriptManager->GetSubFolders())
 	{
         if(ImGui::TreeNode(SubFolder.Name.c_str()))
         {
@@ -49,7 +54,7 @@ void ScriptSelectGui::Draw()
                 ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.556f, 0.823f, 0.541f, 1.0f));
                 if (ImGui::Button(std::string(std::string(ICON_FA_PLAY) + u8"##" + Script.FullPath).c_str()))
                 {
-                    bool Result = Globals::Scripts->RunScript(Script.FullPath);
+                    bool Result = ScriptManager->RunScript(Script.FullPath);
                 }
                 ImGui::PopStyleColor();
                 ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.952f, 0.545f, 0.462f, 1.0f));
