@@ -106,7 +106,6 @@ namespace Globals
 	extern RECT WindowRect;
     extern keen::GraphicsSystem* GraphicsSystemPtr;
     
-	extern RenderInterfaceD3D11* DebugDrawRenderInterface;
     extern matrix44 vpMatrix;
 
 	extern bool ShowMainOverlay;

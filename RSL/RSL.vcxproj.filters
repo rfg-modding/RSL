@@ -405,9 +405,6 @@
     <ClCompile Include="Globals.cpp">
       <Filter>Main\Globals &amp; includes</Filter>
     </ClCompile>
-    <ClCompile Include="RenderInterfaceD3D11.cpp">
-      <Filter>Main\Misc</Filter>
-    </ClCompile>
     <ClCompile Include="Functions.cpp">
       <Filter>Main\Functions</Filter>
     </ClCompile>
@@ -682,12 +679,6 @@
     </ClInclude>
     <ClInclude Include="Globals.h">
       <Filter>Main\Globals &amp; includes</Filter>
-    </ClInclude>
-    <ClInclude Include="ShaderSetD3D11.h">
-      <Filter>Main\Misc</Filter>
-    </ClInclude>
-    <ClInclude Include="RenderInterfaceD3D11.h">
-      <Filter>Main\Misc</Filter>
     </ClInclude>
     <ClInclude Include="DeepCodeStorage.h">
       <Filter>Main\Misc</Filter>

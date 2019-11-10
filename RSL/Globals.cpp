@@ -82,7 +82,6 @@ namespace Globals
 	RECT WindowRect = { 0, 0, 0, 0 };
     keen::GraphicsSystem* GraphicsSystemPtr = nullptr;
 
-	RenderInterfaceD3D11* DebugDrawRenderInterface = nullptr;
     matrix44 vpMatrix;
 
 	bool ShowMainOverlay = true;

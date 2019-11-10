@@ -6,9 +6,9 @@ void Hooks::UpdateDebugDrawRenderInterfaceValues()
     if (Globals::RlCameraPtr && Globals::ImmediateRenderer)
     {
         //Globals::vpMatrix = (matrix44*)&Globals::ImmediateRenderer->m_viewProjectionMatrix;
-        memcpy(&Globals::vpMatrix, &Globals::ImmediateRenderer->m_viewProjectionMatrix, 64);
-        matrix44 MvpMatrix = Globals::vpMatrix.GetTransposed();
-        Globals::DebugDrawRenderInterface->setMvpMatrixPtr(reinterpret_cast<float*>(&MvpMatrix));
+        ////memcpy(&Globals::vpMatrix, &Globals::ImmediateRenderer->m_viewProjectionMatrix, 64);
+        ////matrix44 MvpMatrix = Globals::vpMatrix.GetTransposed();
+        ////Globals::DebugDrawRenderInterface->setMvpMatrixPtr(reinterpret_cast<float*>(&MvpMatrix));
 
         //matrix44& ViewMatrix = Globals::RlCameraPtr->m_view_transform;
         //matrix44& ProjectionMatrix = Globals::RlCameraPtr->m_projection_transform;

@@ -254,7 +254,6 @@ echo #define RSL_BUILD_DATE %buildTime:~0,8% &gt;&gt; $(ProjectDir)/BuildDate.h<
     <ClCompile Include="PlayerDoFrame.cpp" />
     <ClCompile Include="PlayerLua.cpp" />
     <ClCompile Include="RenderHelpers.cpp" />
-    <ClCompile Include="RenderInterfaceD3D11.cpp" />
     <ClCompile Include="rfgl_hooks.cpp" />
     <ClCompile Include="rfg_init_stage_2.cpp" />
     <ClCompile Include="RlCamera_RenderBegin.cpp" />
@@ -348,7 +347,6 @@ echo #define RSL_BUILD_DATE %buildTime:~0,8% &gt;&gt; $(ProjectDir)/BuildDate.h<
     <ClInclude Include="IScriptManager.h" />
     <ClInclude Include="ISnippetManager.h" />
     <ClInclude Include="Launcher.h" />
-    <ClInclude Include="RenderInterfaceD3D11.h" />
     <ClInclude Include="RFGR_Types_Cfile.h" />
     <ClInclude Include="RFGR_Types_Vehicle.h" />
     <ClInclude Include="RFGR_Types_Keen_InputEvent.h" />
@@ -360,7 +358,6 @@ echo #define RSL_BUILD_DATE %buildTime:~0,8% &gt;&gt; $(ProjectDir)/BuildDate.h<
     <ClInclude Include="ScriptEventHook.h" />
     <ClInclude Include="ScriptFolder.h" />
     <ClInclude Include="ScriptResult.h" />
-    <ClInclude Include="ShaderSetD3D11.h" />
     <ClInclude Include="TextEditorWrapper.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="TimerLua.h" />
