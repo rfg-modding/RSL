@@ -1,5 +1,10 @@
 #include "EventViewerGui.h"
-#include "ScriptManager.h"
+
+EventViewerGui::EventViewerGui(std::string Title_)
+{
+    Title = Title_;
+    ScriptManager = IocContainer->resolve<IScriptManager>();
+}
 
 void EventViewerGui::Draw()
 {
@@ -13,19 +18,13 @@ void EventViewerGui::Draw()
         ImGui::End();
         return;
     }
-    if(!Globals::Scripts)
-    {
-        return;
-    }
-
-    static ScriptManager& Scripts = *Globals::Scripts;
 
     ImGui::PushFont(Globals::FontBig);
     ImGui::Text("Event viewer:");
     ImGui::PopFont();
     ImGui::Separator();
 
-    for(auto& Event : Scripts.Events)
+    for(auto& Event : ScriptManager->GetEvents())
     {
         if (ImGui::TreeNode(Event.Name.c_str()))
         {
@@ -36,6 +35,7 @@ void EventViewerGui::Draw()
             int i = 0;
             for (auto& Hook : Event.Hooks)
             {
+                auto& HookNonConst = const_cast<ScriptEventHook&>(Hook);
                 if (Hook.DeleteOnNextUpdate)
                 {
                     continue;
@@ -44,11 +44,11 @@ void EventViewerGui::Draw()
                 ImGui::SameLine();
                 ImGui::NextColumn();
 
-                ImGui::Checkbox(fmt::format("Enabled##{}{}", Event.Name, i).c_str(), &Hook.Enabled);
+                ImGui::Checkbox(fmt::format("Enabled##{}{}", Event.Name, i).c_str(), &HookNonConst.Enabled);
                 ImGui::SameLine();
                 if (ImGui::Button(fmt::format("Disable##{}{}", Event.Name, i).c_str()))
                 {
-                    Hook.DeleteOnNextUpdate = true;
+                    HookNonConst.DeleteOnNextUpdate = true;
                 }
                 ImGui::NextColumn();
                 i++;

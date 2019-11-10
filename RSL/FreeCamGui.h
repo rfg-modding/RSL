@@ -1,12 +1,13 @@
 #pragma once
 #include "BaseGui.h"
+#include "ICameraManager.h"
 
 class CameraWrapper;
 
 class FreeCamGui : public BaseGui
 {
 public:
-	FreeCamGui(std::string Title_) { Title = Title_; }
+    FreeCamGui(std::string Title_);
 	~FreeCamGui() = default;
 
 	void Draw() override;
@@ -29,4 +30,7 @@ public:
     bool PlayerStartAtSafehouse = false;
     uint DlcId = 4294967295; //0xFFFFFFFF (Default one I saw passed in IDA)
     bool ResetDestruction = false;
+
+private:
+    std::shared_ptr<ICameraManager> Camera = nullptr;
 };

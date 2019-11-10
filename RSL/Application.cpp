@@ -1,5 +1,29 @@
 #include "Application.h"
-#include "IpcManager.h"
+#include "HookManager.h"
+#include "GeneralTweaksGui.h"
+#include "ScriptSelectGui.h"
+#include "FreeCamGui.h"
+#include "WelcomeGui.h"
+#include "ThemeEditorGui.h"
+#include "TeleportGui.h"
+#include "ExplosionSpawnerGui.h"
+#include "GraphicsTweaksGui.h"
+#include "EventViewerGui.h"
+#include "MenuBarGui.h"
+#include "LogWindow.h"
+#include "PhysicsGui.h"
+#include "IntrospectionGui.h"
+
+Application::Application()
+{
+    IpcManager = IocContainer->resolve<IIpcManager>();
+    SnippetManager = IocContainer->resolve<ISnippetManager>();
+    CameraManager = IocContainer->resolve<ICameraManager>();
+    Functions = IocContainer->resolve<IFunctionManager>();
+    Scripts = IocContainer->resolve<IScriptManager>();
+    Hooks = IocContainer->resolve<IHookManager>();
+    //Gui
+}
 
 void Application::Run()
 {
@@ -55,7 +79,7 @@ void Application::InitRSL()
 
         Globals::ModuleBase = reinterpret_cast<uintptr_t>(GetModuleHandle(nullptr));
         Logger::Log("Initializing function pointers.\n");
-        Functions.Initialize();
+        Functions->RegisterFunctions();
 
         Logger::Log("Initializing hooking system.\n");
         InitHookingSystem();
@@ -64,7 +88,7 @@ void Application::InitRSL()
 
 #if UseLauncher
         Logger::Log("Unpatching rfg main.\n");
-        Globals::UnlockGameMain();
+        Util::Patching::UnlockGameMain();
         Logger::Log("Resuming game threads.\n");
         Globals::ResumeAllThreads();
         Logger::Log("Rfg should now resume, unpatched main and resumed it's threads.\n");
@@ -79,13 +103,11 @@ void Application::InitRSL()
         Globals::CenterMouseCursorCall = Globals::FindPattern("rfg.exe", "\xE8\x00\x00\x00\x00\x89\x46\x4C\x89\x56\x50", "x????xxxxxx");
         Globals::Program = this;
         Globals::Gui = &this->Gui;
-        Globals::Scripts = &this->Scripts;
-        Globals::Camera = &this->Camera;
 
         Logger::Log("Initializing camera wrapper.\n");
-        Camera.Initialize(Globals::DefaultFreeCameraSpeed, 5.0);
+        CameraManager->Initialize();
         Logger::Log("Initializing lua scripting system.\n");
-        Scripts.Initialize();
+        Scripts->Initialize();
         
         Globals::OriginalWndProc = reinterpret_cast<WNDPROC>(SetWindowLongPtr(Globals::GameWindowHandle, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(Hooks::WndProc)));
         if(!Globals::OriginalWndProc)
@@ -110,8 +132,8 @@ void Application::InitRSL()
         Gui.Initialize(); //Todo: Change gui so it can be initialized before imgui is initialized
 
         //Update global lua pointers after init just to be sure. Can't hurt.
-        Scripts.UpdateRfgPointers();
-        Scripts.ScanScriptsFolder();
+        Scripts->UpdateRfgPointers();
+        Scripts->ScanScriptsFolder();
 
         //Attempts to set important memory values and tries to compensate for varied game loading times by retrying the process if it fails the first time.
         TrySetMemoryLocations(); 
@@ -121,7 +143,7 @@ void Application::InitRSL()
         Beep(900, 200);
 
         Logger::Log("Running lua startup scripts.\n");
-        Scripts.RunStartupScripts();
+        Scripts->RunStartupScripts();
     }
     catch (std::exception& Ex)
     {
@@ -163,7 +185,7 @@ void Application::WaitForValidGameState() const
         {
             RFGRState = rfg::GameseqGetState();
             StartTime = EndTime;
-            Logger::Log("Current RFGR State: {}\n", uint(RFGRState));
+            Logger::Log("Current RFGR State: {}\n", magic_enum::enum_name(RFGRState));
         }
         EndTime = std::chrono::steady_clock::now();
     } 
@@ -291,20 +313,9 @@ void Application::OpenDefaultLogs()
     }
 }
 
-void Application::PipesThread()
-{
-    Logger::Log("In pipes thread, starting IpcManager instance.\n");
-
-    IpcManager ipc_manager;
-    ipc_manager.Run();
-
-    Logger::Log("IpcManager exited.\n");
-}
-
 void Application::MainLoop()
 {
-    Logger::Log("Starting pipes thread.\n");
-    std::thread PipesThread(&Application::PipesThread, this);
+    IpcManager->StartIpcThread();
 
     const ulong UpdatesPerSecond = 1;
     const ulong MillisecondsPerUpdate = 1000 / UpdatesPerSecond;
@@ -372,16 +383,16 @@ void Application::Exit()
 {
     if (Globals::OverlayActive || Gui.IsLuaConsoleActive())
     {
-        SnippetManager::RestoreSnippet("MouseGenericPollMouseVisible", true);
-        SnippetManager::RestoreSnippet("CenterMouseCursorCall", true);
+        SnippetManager->RestoreSnippet("MouseGenericPollMouseVisible", true);
+        SnippetManager->RestoreSnippet("CenterMouseCursorCall", true);
     }
     SetWindowLongPtr(Globals::GameWindowHandle, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(Globals::OriginalWndProc));
-    Camera.DeactivateFreeCamera(true);
+    CameraManager->DeactivateFreeCamera(true);
 
     rfg::HideHud(false);
     rfg::HideFog(false);
 
-    Hooks.DisableAllHooks();
+    Hooks->DisableAllHooks();
 
 #if DebugDrawTestEnabled
     dd::shutdown();
@@ -410,44 +421,47 @@ void Application::Exit()
 
 void Application::CreateHooks()
 {
-    Hooks.CreateHook("PlayerDoFrame", Globals::ModuleBase + 0x6D5A80, Hooks::PlayerDoFrameHook, rfg::PlayerDoFrame);
-    Hooks.CreateHook("CsWrapSlice", Globals::ModuleBase + 0x516D80, Hooks::CsWrapSliceHook, rfg::CsWrapSlice);
+    //Don't know how to override CreateHook<>() so it has to be cast to the concrete type for now
+    auto HookMan = static_cast<HookManager*>(Hooks.get());
 
-    Hooks.CreateHook("ExplosionCreate", Globals::ModuleBase + 0x2EC720, Hooks::ExplosionCreateHook, rfg::ExplosionCreate);
-    Hooks.CreateHook("KeenGraphicsBeginFrame", Globals::ModuleBase + 0x86DD00, Hooks::KeenGraphicsBeginFrameHook, rfg::KeenGraphicsBeginFrame);
-    Hooks.CreateHook("IsValidEigenGradient", Globals::ModuleBase + 0x1D0DD0, Hooks::IsValidEigenGradientHook, rfg::IsValidEigenGradient);
-    Hooks.CreateHook("KeenGraphicsResizeRenderSwapchain", Globals::ModuleBase + 0x86AB20, Hooks::KeenGraphicsResizeRenderSwapchainHook, rfg::KeenGraphicsResizeRenderSwapchain);
+    HookMan->CreateHook("PlayerDoFrame", Globals::ModuleBase + 0x6D5A80, Hooks::PlayerDoFrameHook, rfg::PlayerDoFrame);
+    HookMan->CreateHook("CsWrapSlice", Globals::ModuleBase + 0x516D80, Hooks::CsWrapSliceHook, rfg::CsWrapSlice);
 
-    Hooks.CreateHook("world::do_frame", Globals::ModuleBase + 0x540AB0, Hooks::world_do_frame_hook, rfg::WorldDoFrame);
-    Hooks.CreateHook("rl_camera::render_begin", Globals::ModuleBase + 0x137660, Hooks::rl_camera_render_begin_hook, rfg::RlCameraRenderBegin);
-    Hooks.CreateHook("hkpWorld::stepDeltaTime", Globals::ModuleBase + 0x9E1A70, Hooks::hkpWorld_stepDeltaTime_hook, rfg::hkpWorldStepDeltaTime);
-    Hooks.CreateHook("HookDoFrame", Globals::ModuleBase + 0x3CC750, Hooks::HookDoFrameHook, rfg::HookDoFrame);
+    HookMan->CreateHook("ExplosionCreate", Globals::ModuleBase + 0x2EC720, Hooks::ExplosionCreateHook, rfg::ExplosionCreate);
+    HookMan->CreateHook("KeenGraphicsBeginFrame", Globals::ModuleBase + 0x86DD00, Hooks::KeenGraphicsBeginFrameHook, rfg::KeenGraphicsBeginFrame);
+    HookMan->CreateHook("IsValidEigenGradient", Globals::ModuleBase + 0x1D0DD0, Hooks::IsValidEigenGradientHook, rfg::IsValidEigenGradient);
+    HookMan->CreateHook("KeenGraphicsResizeRenderSwapchain", Globals::ModuleBase + 0x86AB20, Hooks::KeenGraphicsResizeRenderSwapchainHook, rfg::KeenGraphicsResizeRenderSwapchain);
 
-    Hooks.CreateHook("Application::UpdateTime", Globals::ModuleBase + 0x5A880, Hooks::ApplicationUpdateTimeHook, rfg::ApplicationUpdateTime);
-    Hooks.CreateHook("InvertDataItem", Globals::ModuleBase + 0x497740, Hooks::InvertDataItemHook, rfg::InvertDataItem);
+    HookMan->CreateHook("world::do_frame", Globals::ModuleBase + 0x540AB0, Hooks::world_do_frame_hook, rfg::WorldDoFrame);
+    HookMan->CreateHook("rl_camera::render_begin", Globals::ModuleBase + 0x137660, Hooks::rl_camera_render_begin_hook, rfg::RlCameraRenderBegin);
+    HookMan->CreateHook("hkpWorld::stepDeltaTime", Globals::ModuleBase + 0x9E1A70, Hooks::hkpWorld_stepDeltaTime_hook, rfg::hkpWorldStepDeltaTime);
+    HookMan->CreateHook("HookDoFrame", Globals::ModuleBase + 0x3CC750, Hooks::HookDoFrameHook, rfg::HookDoFrame);
 
-    Hooks.CreateHook("LuaDoBuffer", Globals::ModuleBase + 0x82FD20, Hooks::LuaDoBufferHook, rfg::LuaDoBuffer);
+    HookMan->CreateHook("Application::UpdateTime", Globals::ModuleBase + 0x5A880, Hooks::ApplicationUpdateTimeHook, rfg::ApplicationUpdateTime);
+    HookMan->CreateHook("InvertDataItem", Globals::ModuleBase + 0x497740, Hooks::InvertDataItemHook, rfg::InvertDataItem);
 
-    Hooks.CreateHook("D3D11Present", kiero::getMethodsTable()[8], Hooks::D3D11PresentHook, Hooks::D3D11PresentFuncPtr);
-    Hooks.CreateHook("D3D11_ResizeBuffers", kiero::getMethodsTable()[13], Hooks::D3D11_ResizeBuffersHook, Hooks::D3D11_ResizeBuffersFuncPtr);
-    Hooks.CreateHook("AllocatorStillValid", Globals::ModuleBase + 0x4F50B0, Hooks::AllocatorStillValidHook, rfg::AllocatorStillValid);
+    HookMan->CreateHook("LuaDoBuffer", Globals::ModuleBase + 0x82FD20, Hooks::LuaDoBufferHook, rfg::LuaDoBuffer);
 
-    Hooks.CreateHook("peg_load_wrapper", Globals::ModuleBase + 0x1D1F10, Hooks::peg_load_wrapper_hook, rfg::peg_load_wrapper);
+    HookMan->CreateHook("D3D11Present", kiero::getMethodsTable()[8], Hooks::D3D11PresentHook, Hooks::D3D11PresentFuncPtr);
+    HookMan->CreateHook("D3D11_ResizeBuffers", kiero::getMethodsTable()[13], Hooks::D3D11_ResizeBuffersHook, Hooks::D3D11_ResizeBuffersFuncPtr);
+    HookMan->CreateHook("AllocatorStillValid", Globals::ModuleBase + 0x4F50B0, Hooks::AllocatorStillValidHook, rfg::AllocatorStillValid);
+
+    HookMan->CreateHook("peg_load_wrapper", Globals::ModuleBase + 0x1D1F10, Hooks::peg_load_wrapper_hook, rfg::peg_load_wrapper);
 
     Logger::LogWarning("Pre hook object_spawn_vehicle address: {:#x}\n", reinterpret_cast<DWORD>(rfg::object_spawn_vehicle));
-    Hooks.CreateHook("object_spawn_vehicle_hook", Globals::ModuleBase + 0x757F40, Hooks::object_spawn_vehicle_hook, rfg::object_spawn_vehicle);
+    HookMan->CreateHook("object_spawn_vehicle_hook", Globals::ModuleBase + 0x757F40, Hooks::object_spawn_vehicle_hook, rfg::object_spawn_vehicle);
     Logger::LogWarning("Post hook object_spawn_vehicle address: {:#x}\n", reinterpret_cast<DWORD>(rfg::object_spawn_vehicle));
 
-    Hooks.CreateHook("keen_ImmediateRenderer_beginRenderPass_hook", Globals::ModuleBase + 0x86C810, Hooks::keen_ImmediateRenderer_beginRenderPass_hook, rfg::keen_ImmediateRenderer_beginRenderPass);
+    HookMan->CreateHook("keen_ImmediateRenderer_beginRenderPass_hook", Globals::ModuleBase + 0x86C810, Hooks::keen_ImmediateRenderer_beginRenderPass_hook, rfg::keen_ImmediateRenderer_beginRenderPass);
     
-    Hooks.CreateHook("rfgl_find_and_delete_object_mover_hook", Globals::ModuleBase + 0x324A60, Hooks::rfgl_find_and_delete_object_mover_hook, rfg::rfgl_find_and_delete_object_mover);
-    Hooks.CreateHook("rfgl_find_and_delete_debris_object_hook", Globals::ModuleBase + 0x324B90, Hooks::rfgl_find_and_delete_debris_object_hook, rfg::rfgl_find_and_delete_debris_object);
+    HookMan->CreateHook("rfgl_find_and_delete_object_mover_hook", Globals::ModuleBase + 0x324A60, Hooks::rfgl_find_and_delete_object_mover_hook, rfg::rfgl_find_and_delete_object_mover);
+    HookMan->CreateHook("rfgl_find_and_delete_debris_object_hook", Globals::ModuleBase + 0x324B90, Hooks::rfgl_find_and_delete_debris_object_hook, rfg::rfgl_find_and_delete_debris_object);
     
-    Hooks.CreateHook("gamestate_gp_process", Globals::ModuleBase + 0x3EE450, Hooks::gamestate_gp_process_hook, rfg::gamestate_gp_process);
+    HookMan->CreateHook("gamestate_gp_process", Globals::ModuleBase + 0x3EE450, Hooks::gamestate_gp_process_hook, rfg::gamestate_gp_process);
 
-    Hooks.CreateHook("world::load_territory", Globals::ModuleBase + 0x541430, Hooks::world_load_territory_hook, rfg::world_load_territory);
+    HookMan->CreateHook("world::load_territory", Globals::ModuleBase + 0x541430, Hooks::world_load_territory_hook, rfg::world_load_territory);
 
-    Hooks.CreateHook("cf_open", Globals::ModuleBase + 0x1C27F0, Hooks::cf_open_hook, rfg::cf_open);
+    HookMan->CreateHook("cf_open", Globals::ModuleBase + 0x1C27F0, Hooks::cf_open_hook, rfg::cf_open);
 
     //Hooks.CreateHook("can_drop_vehicle", Globals::ModuleBase + 0x756000, Hooks::can_drop_vehicle_hook, can_drop_vehicle);
 
@@ -550,7 +564,7 @@ void Application::SetMemoryLocations()
     Globals::Frametime = OffsetPtr<float*>(0x1119560); //.data:022B9560 rfg.exe:$1119560 #1117F60 <Frametime>
     Globals::PlayerMaxMovementSpeedOverride = OffsetPtr<float*>(0x2C2F0B4); //.data:03DCF0B4 rfg.exe:$2C2F0B4 #0 <Player_max_movement_speed_override>
 
-    Scripts.UpdateRfgPointers();
+    Scripts->UpdateRfgPointers();
 } 
 
 /* Tries to find common installation mistakes such as placing it in the rfg root directory rather than it's own

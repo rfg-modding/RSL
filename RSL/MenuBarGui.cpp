@@ -1,3 +1,4 @@
+#include "MenuBarGui.h"
 #include "Application.h"
 
 MenuBarGui::MenuBarGui(std::string Title_)
@@ -14,6 +15,9 @@ MenuBarGui::MenuBarGui(std::string Title_)
 	//WindowFlags |= ImGuiWindowFlags_NoNav;
 	//WindowFlags |= ImGuiWindowFlags_NoBackground;
 	//WindowFlags |= ImGuiWindowFlags_NoBringToFrontOnFocus;
+
+    SnippetManager = IocContainer->resolve<ISnippetManager>();
+    ScriptManager = IocContainer->resolve<IScriptManager>();
 }
 
 void MenuBarGui::Draw()
@@ -25,20 +29,20 @@ void MenuBarGui::Draw()
 		return;
 	}
 
-    static auto GeneralTweaksGuiRef = Globals::Gui->GetGuiReference<GeneralTweaksGui>("General tweaks").value();
-    static auto LuaConsoleRef = Globals::Gui->GetGuiReference<OverlayConsole>("Lua console").value();
-    static auto ScriptSelectRef = Globals::Gui->GetGuiReference<ScriptSelectGui>("Scripts").value();
-    static auto CameraSettingsRef = Globals::Gui->GetGuiReference<FreeCamGui>("Camera settings").value();
-    static auto ScriptEditorRef = Globals::Gui->GetGuiReference<TextEditorWrapper>("Script editor").value();
-    static auto LoggerRef = Globals::Gui->GetGuiReference<LogWindow>("Logger").value();
-    static auto WelcomeRef = Globals::Gui->GetGuiReference<WelcomeGui>("Welcome").value();
-    static auto ThemeEditorRef = Globals::Gui->GetGuiReference<ThemeEditorGui>("Theme editor").value();
-    static auto PhysicsSettingsRef = Globals::Gui->GetGuiReference<PhysicsGui>("Physics settings").value();
-    static auto TeleportGuiRef = Globals::Gui->GetGuiReference<TeleportGui>("Teleport").value();
-    static auto IntrospectionGuiRef = Globals::Gui->GetGuiReference<IntrospectionGui>("Object introspection").value();
-    static auto ExplosionSpawnerGuiRef = Globals::Gui->GetGuiReference<ExplosionSpawnerGui>("Explosion spawner").value();
-    static auto GraphicsTweaksGuiRef = Globals::Gui->GetGuiReference<GraphicsTweaksGui>("Graphics tweaks").value();
-    static auto EventViewerGuiRef = Globals::Gui->GetGuiReference<EventViewerGui>("Event viewer").value();
+    static auto GeneralTweaksGuiRef = Globals::Gui->GetGuiReference<BaseGui>("General tweaks").value();
+    static auto LuaConsoleRef = Globals::Gui->GetGuiReference<BaseGui>("Lua console").value();
+    static auto ScriptSelectRef = Globals::Gui->GetGuiReference<BaseGui>("Scripts").value();
+    static auto CameraSettingsRef = Globals::Gui->GetGuiReference<BaseGui>("Camera settings").value();
+    static auto ScriptEditorRef = Globals::Gui->GetGuiReference<BaseGui>("Script editor").value();
+    static auto LoggerRef = Globals::Gui->GetGuiReference<BaseGui>("Logger").value();
+    static auto WelcomeRef = Globals::Gui->GetGuiReference<BaseGui>("Welcome").value();
+    static auto ThemeEditorRef = Globals::Gui->GetGuiReference<BaseGui>("Theme editor").value();
+    static auto PhysicsSettingsRef = Globals::Gui->GetGuiReference<BaseGui>("Physics settings").value();
+    static auto TeleportGuiRef = Globals::Gui->GetGuiReference<BaseGui>("Teleport").value();
+    static auto IntrospectionGuiRef = Globals::Gui->GetGuiReference<BaseGui>("Object introspection").value();
+    static auto ExplosionSpawnerGuiRef = Globals::Gui->GetGuiReference<BaseGui>("Explosion spawner").value();
+    static auto GraphicsTweaksGuiRef = Globals::Gui->GetGuiReference<BaseGui>("Graphics tweaks").value();
+    static auto EventViewerGuiRef = Globals::Gui->GetGuiReference<BaseGui>("Event viewer").value();
     //static auto VehicleSpawnerGuiRef = Globals::Gui->GetGuiReference<VehicleSpawnerGui>("Vehicle spawner").value();
 
 	if (ImGui::BeginMainMenuBar())
@@ -57,7 +61,7 @@ void MenuBarGui::Draw()
             ImGui::PushStyleColor(ImGuiCol_Text, ResetLuaStateButtonColor);
             if(ImGui::MenuItem(std::string(std::string(ICON_FA_SYNC) + u8" Reset core lua state").c_str()))
             {
-                Globals::Scripts->Reset();
+                ScriptManager->Reset();
             }
             ImGui::PopStyleColor(); //Pop reset button color
 
@@ -195,10 +199,16 @@ void MenuBarGui::ConfirmLockoutModeActivation()
 
 void MenuBarGui::ActivateLockoutMode()
 {
+    if(!SnippetManager)
+    {
+        Logger::LogWarning("Failed to activate lockout mode! Snippet manager shared_ptr is a nullptr");
+        return;
+    }
+
     Globals::OverlayActive = false;
     Globals::Gui->DeactivateLuaConsole();
-    SnippetManager::RestoreSnippet("MouseGenericPollMouseVisible", true);
-    SnippetManager::RestoreSnippet("CenterMouseCursorCall", true);
+    SnippetManager->RestoreSnippet("MouseGenericPollMouseVisible", true);
+    SnippetManager->RestoreSnippet("CenterMouseCursorCall", true);
     Globals::LockoutModeEnabled = true;
 }
 

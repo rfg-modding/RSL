@@ -1,6 +1,6 @@
 #include "CameraWrapper.h"
 
-void CameraWrapper::Initialize(float InitialCameraSpeed, float InitialCameraRotationSpeed)
+void CameraWrapper_deprecated::Initialize(float InitialCameraSpeed, float InitialCameraRotationSpeed)
 {
 	GameData = reinterpret_cast<rfg_camera*>(*(DWORD*)(Globals::ModuleBase + 0x0023394C));
 
@@ -30,7 +30,7 @@ void CameraWrapper::Initialize(float InitialCameraSpeed, float InitialCameraRota
 	CameraRealOrientWrite5 = Globals::FindPattern("rfg.exe", "\x89\x00\x00\x00\x00\x00\xF3\x00\x00\x00\x00\x00\x00\x00\xF3\x00\x00\x00\x00\x00\x00\x00\xE8\x00\x00\x00\x00\x85\xF6\x74\x52", "x?????x???????x???????x????xxxx");
 }
 
-void CameraWrapper::MoveFreeCamera(CameraDirection Direction)
+void CameraWrapper_deprecated::MoveFreeCamera(CameraDirection Direction)
 {
 	if(FreeCameraActive)
 	{
@@ -122,7 +122,7 @@ void CameraWrapper::MoveFreeCamera(CameraDirection Direction)
 	}
 }
 
-void CameraWrapper::ActivateFreeCamera()
+void CameraWrapper_deprecated::ActivateFreeCamera()
 {
     if(FirstPersonCameraActive)
     {
@@ -131,7 +131,7 @@ void CameraWrapper::ActivateFreeCamera()
     }
 	Logger::Log("Activating free camera\n");
 	FreeCameraActive = true;
-    rfg::DisableCameraCode(CameraYWriteAddress, CameraZWriteAddress);
+    ///rfg::DisableCameraCode(CameraYWriteAddress, CameraZWriteAddress);
 
 	//Slight adjustments so the player ends up roughly in their original position.
 	OriginalCameraPosition.x = *RealX + 2.171509;
@@ -139,10 +139,10 @@ void CameraWrapper::ActivateFreeCamera()
 	OriginalCameraPosition.z = *RealZ + 1.8545898;
 }
 
-void CameraWrapper::DeactivateFreeCamera(bool Shutdown)
+void CameraWrapper_deprecated::DeactivateFreeCamera(bool Shutdown)
 {
 	Logger::Log("Deactivating free camera\n");
-    rfg::RestoreCameraCode();
+    ///rfg::RestoreCameraCode();
 
 	FreeCameraActive = false;
 	if (!Shutdown) //Don't want the player thrown in the air when they deactivate the script loader.
@@ -157,7 +157,7 @@ void CameraWrapper::DeactivateFreeCamera(bool Shutdown)
 	}
 }
 
-void CameraWrapper::ToggleFreeCamera()
+void CameraWrapper_deprecated::ToggleFreeCamera()
 {
 	if (FreeCameraActive)
 	{
@@ -176,7 +176,7 @@ void CameraWrapper::ToggleFreeCamera()
 	}
 }
 
-void CameraWrapper::UpdateFreeView()
+void CameraWrapper_deprecated::UpdateFreeView()
 {
 	if(SmoothCamera)
 	{
@@ -261,7 +261,7 @@ void CameraWrapper::UpdateFreeView()
 	}
 }
 
-void CameraWrapper::ActivateFirstPersonCamera()
+void CameraWrapper_deprecated::ActivateFirstPersonCamera()
 {
     if(FreeCameraActive)
     {
@@ -270,21 +270,21 @@ void CameraWrapper::ActivateFirstPersonCamera()
     }
 	Logger::Log("Activating first person camera\n");
 	FirstPersonCameraActive = true;
-    rfg::DisableCameraCode(CameraYWriteAddress, CameraZWriteAddress);
+    ///rfg::DisableCameraCode(CameraYWriteAddress, CameraZWriteAddress);
     LastFirstPersonPosition = Globals::PlayerPtr->Position;
 }
 
-void CameraWrapper::DeactivateFirstPersonCamera()
+void CameraWrapper_deprecated::DeactivateFirstPersonCamera()
 {
 	Logger::Log("Deactivating first person camera\n");
-    rfg::RestoreCameraCode();
+    ///rfg::RestoreCameraCode();
 
 	FirstPersonCameraActive = false;
 	FreeCameraActive = false;
 	NeedPostDeactivationCleanup = false;
 }
 
-void CameraWrapper::ToggleFirstPersonCamera()
+void CameraWrapper_deprecated::ToggleFirstPersonCamera()
 {
 	if (FirstPersonCameraActive)
 	{
@@ -303,7 +303,7 @@ void CameraWrapper::ToggleFirstPersonCamera()
 	}
 }
 
-void CameraWrapper::UpdateFirstPersonView()
+void CameraWrapper_deprecated::UpdateFirstPersonView()
 {
     if(FirstPersonCameraPaused)
     {
@@ -366,29 +366,29 @@ void CameraWrapper::UpdateFirstPersonView()
     LastFirstPersonPosition = GameData->real_pos;
 }
 
-bool CameraWrapper::IsFreeCameraActive() const
+bool CameraWrapper_deprecated::IsFreeCameraActive() const
 {
 	return FreeCameraActive;
 }
 
-bool CameraWrapper::IsFirstPersonCameraActive() const
+bool CameraWrapper_deprecated::IsFirstPersonCameraActive() const
 {
 	return FirstPersonCameraActive;
 }
 
-bool CameraWrapper::IsFirstPersonCameraPaused() const
+bool CameraWrapper_deprecated::IsFirstPersonCameraPaused() const
 {
     return FirstPersonCameraPaused;
 }
 
-void CameraWrapper::PauseFirstPersonCamera()
+void CameraWrapper_deprecated::PauseFirstPersonCamera()
 {
     if(FirstPersonCameraActive)
     {
         if(!FirstPersonCameraPaused)
         {
             Logger::Log("Pausing first person camera.\n");
-            rfg::RestoreCameraCode();
+            ///rfg::RestoreCameraCode();
             FirstPersonCameraPaused = true;
         }
     }
@@ -398,14 +398,14 @@ void CameraWrapper::PauseFirstPersonCamera()
     }
 }
 
-void CameraWrapper::UnpauseFirstPersonCamera()
+void CameraWrapper_deprecated::UnpauseFirstPersonCamera()
 {
     if(FirstPersonCameraActive)
     {
         if(FirstPersonCameraPaused)
         {
             Logger::Log("Unpausing first person camera.\n");
-            rfg::DisableCameraCode(CameraYWriteAddress, CameraZWriteAddress);
+            ///rfg::DisableCameraCode(CameraYWriteAddress, CameraZWriteAddress);
             FirstPersonCameraPaused = false;
         }
     }
@@ -415,12 +415,12 @@ void CameraWrapper::UnpauseFirstPersonCamera()
     }
 }
 
-float CameraWrapper::GetCurrentSpeed() const
+float CameraWrapper_deprecated::GetCurrentSpeed() const
 {
 	return CurrentSpeed;
 }
 
-vector CameraWrapper::GetRealPosition() const
+vector CameraWrapper_deprecated::GetRealPosition() const
 {
     return vector(GameData->real_pos);
 }

@@ -71,6 +71,7 @@ void ExplosionSpawnerGui::Draw()
     Util::Gui::ShowHelpMarker("If the explosions preset list or the effects list is empty, try pressing this button. If that doesn't fix it, report this issue to the RSL devs. Tell them your RSL version and give them a copy of your RSL master log, in RSL/Logs/Master Log.log");
 
     ImGui::Checkbox("Spawn explosion with middle mouse?", &MiddleMouseBoomActive);
+    ImGui::SetNextItemWidth(230.0f);
     ImGui::InputInt("Middle mouse explosions per second limit", &MiddleMouseExplosionsPerSecond);
     ImGui::SameLine();
     Util::Gui::ShowHelpMarker("Used to prevent lag from 100s of explosions per second since the script loader thread is currently uncapped.");

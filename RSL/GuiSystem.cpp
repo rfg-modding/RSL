@@ -1,5 +1,5 @@
 #include "GuiSystem.h"
-#include "ScriptManager.h"
+#include "IScriptManager.h"
 
 GuiSystem::~GuiSystem()
 {
@@ -50,14 +50,6 @@ void GuiSystem::Draw()
             }
             return;
         }
-		if (!Globals::Scripts)
-		{
-			if (DrawPassedOnce)
-			{
-				throw std::exception("Scripts pointer is null! Failed to draw overlay gui!");
-			}
-			return;
-		}
 		//Used on the first successful draw of the gui to insure that each gui element has valid PlayerPtr*, Scripts*, and Gui* values. 
 		//Very duct-tapey solution, but it works. Put in place since the values in menus are sometimes not being set properly, causing crashes.
 		std::call_once(InitialDrawCheck, [&]()
@@ -85,17 +77,7 @@ void GuiSystem::Draw()
 		ExceptionInfo += "File: ";
 		ExceptionInfo += __FILE__;
 		ExceptionInfo += ", Function: ";
-		ExceptionInfo += __func__;
-		Logger::LogError("{}\n", ExceptionInfo);
-	}
-	catch (...)
-	{
-		std::string ExceptionInfo = "Default exception caught when drawing overlay gui! ";
-		ExceptionInfo += ", Additional info: ";
-		ExceptionInfo += "File: ";
-		ExceptionInfo += __FILE__;
-		ExceptionInfo += ", Function: ";
-		ExceptionInfo += __func__;
+		ExceptionInfo += __FUNCSIG__;
 		Logger::LogError("{}\n", ExceptionInfo);
 	}
     if(*reinterpret_cast<bool*>(*reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x002CA210)))

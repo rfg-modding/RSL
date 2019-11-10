@@ -1,5 +1,7 @@
 #include "Hooks.h"
 #include "Application.h"
+#include "IntrospectionGui.h"
+#include "ExplosionSpawnerGui.h"
 
 class TextEditorWrapper;
 
@@ -10,23 +12,29 @@ extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam
 LRESULT __stdcall Hooks::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     static KeyState Keys;
+    static auto ScriptManager = IocContainer->resolve<IScriptManager>();
     UpdateKeydownStates(hWnd, msg, wParam, lParam, Keys);
-    switch (msg)
+
+    if(ScriptManager->Ready())
     {
-    case WM_KEYDOWN:
-        Globals::Scripts->TriggerInputEvent(msg, wParam, Keys);
-        break;
-    case WM_KEYUP:
-        Globals::Scripts->TriggerInputEvent(msg, wParam, Keys);
-        break;
-    case WM_MOUSEWHEEL:
-        Globals::Scripts->TriggerMouseEvent(msg, wParam, lParam, Keys);
-        break;
-    case WM_MOUSEMOVE:
-        Globals::Scripts->TriggerMouseEvent(msg, wParam, lParam, Keys);
-    default:
-        break;
+        switch (msg)
+        {
+        case WM_KEYDOWN:
+            ScriptManager->TriggerInputEvent(msg, wParam, Keys);
+            break;
+        case WM_KEYUP:
+            ScriptManager->TriggerInputEvent(msg, wParam, Keys);
+            break;
+        case WM_MOUSEWHEEL:
+            ScriptManager->TriggerMouseEvent(msg, wParam, lParam, Keys);
+            break;
+        case WM_MOUSEMOVE:
+            ScriptManager->TriggerMouseEvent(msg, wParam, lParam, Keys);
+        default:
+            break;
+        }
     }
+
     if(Globals::LockoutModeEnabled)
     {
         return CallWindowProc(Globals::OriginalWndProc, Globals::GameWindowHandle, msg, wParam, lParam);
@@ -116,97 +124,110 @@ LRESULT Hooks::ProcessInput(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
     auto ScriptEditorGuiRef = Globals::Gui->GetGuiReference<TextEditorWrapper>("Script editor").value();
     auto ExplosionSpawnerGuiRef = Globals::Gui->GetGuiReference<ExplosionSpawnerGui>("Explosion spawner").value();
 
+    auto Camera = IocContainer->resolve<ICameraManager>();
+    auto SnippetManager = IocContainer->resolve<ISnippetManager>();
+
     switch (msg)
     {
     case WM_KEYDOWN:
-        if (Globals::Camera->IsFreeCameraActive())
+        if(Camera)
         {
-            if(Globals::Camera->FreeCamUseWasdMovement)
+            if (Camera->IsFreeCameraActive())
             {
-                switch (wParam)
+                if (Camera->FreeCamUseWasdMovement)
                 {
-                case 0x51: //q
-                    Globals::Camera->MaxSpeed -= 0.02f;
-                    break;
-                case 0x45: //e
-                    Globals::Camera->MaxSpeed += 0.02f;
-                    break;
-                case 0x5A: //z
-                    Globals::Camera->MoveFreeCamera(DOWN);
-                    break;
-                case 0x58: //x
-                    Globals::Camera->MoveFreeCamera(UP);
-                    break;
-                case 0x57: //w key
-                    Globals::Camera->MoveFreeCamera(FORWARD);
-                    break;
-                case 0x53: //s key
-                    Globals::Camera->MoveFreeCamera(BACKWARD);
-                    break;
-                case 0x44: //d key
-                    Globals::Camera->MoveFreeCamera(RIGHT);
-                    break;
-                case 0x41: //a key
-                    Globals::Camera->MoveFreeCamera(LEFT);
-                    break;
-                default:
-                    break;
+                    switch (wParam)
+                    {
+                    case 0x51: //q
+                        Camera->MaxSpeed -= 0.02f;
+                        break;
+                    case 0x45: //e
+                        Camera->MaxSpeed += 0.02f;
+                        break;
+                    case 0x5A: //z
+                        Camera->MoveFreeCamera(DOWN);
+                        break;
+                    case 0x58: //x
+                        Camera->MoveFreeCamera(UP);
+                        break;
+                    case 0x57: //w key
+                        Camera->MoveFreeCamera(FORWARD);
+                        break;
+                    case 0x53: //s key
+                        Camera->MoveFreeCamera(BACKWARD);
+                        break;
+                    case 0x44: //d key
+                        Camera->MoveFreeCamera(RIGHT);
+                        break;
+                    case 0x41: //a key
+                        Camera->MoveFreeCamera(LEFT);
+                        break;
+                    default:
+                        break;
+                    }
                 }
-            }
-            else
-            {
-                switch (wParam)
+                else
                 {
-                case 0x51: //q
-                    Globals::Camera->MaxSpeed -= 0.02f;
-                    break;
-                case 0x45: //e
-                    Globals::Camera->MaxSpeed += 0.02f;
-                    break;
-                case 0x5A: //z
-                    Globals::Camera->MoveFreeCamera(DOWN);
-                    break;
-                case 0x58: //x
-                    Globals::Camera->MoveFreeCamera(UP);
-                    break;
-                case VK_UP: //Up arrow key
-                    Globals::Camera->MoveFreeCamera(FORWARD);
-                    break;
-                case VK_DOWN: //Down arrow key
-                    Globals::Camera->MoveFreeCamera(BACKWARD);
-                    break;
-                case VK_RIGHT: //Right arrow key
-                    Globals::Camera->MoveFreeCamera(RIGHT);
-                    break;
-                case VK_LEFT: //Left arrow key
-                    Globals::Camera->MoveFreeCamera(LEFT);
-                    break;
-                default:
-                    break;
+                    switch (wParam)
+                    {
+                    case 0x51: //q
+                        Camera->MaxSpeed -= 0.02f;
+                        break;
+                    case 0x45: //e
+                        Camera->MaxSpeed += 0.02f;
+                        break;
+                    case 0x5A: //z
+                        Camera->MoveFreeCamera(DOWN);
+                        break;
+                    case 0x58: //x
+                        Camera->MoveFreeCamera(UP);
+                        break;
+                    case VK_UP: //Up arrow key
+                        Camera->MoveFreeCamera(FORWARD);
+                        break;
+                    case VK_DOWN: //Down arrow key
+                        Camera->MoveFreeCamera(BACKWARD);
+                        break;
+                    case VK_RIGHT: //Right arrow key
+                        Camera->MoveFreeCamera(RIGHT);
+                        break;
+                    case VK_LEFT: //Left arrow key
+                        Camera->MoveFreeCamera(LEFT);
+                        break;
+                    default:
+                        break;
+                    }
                 }
             }
         }
+
 
         ProcessNumpadInputs(hwnd, msg, wParam, lParam);
 
         switch (wParam)
         {
         case VK_F1:
+            if(!SnippetManager)
+            {
+                Logger::LogWarning("Failed to resolve ISnippetManager in WndProc F1 code.\n");
+                break;
+            }
+
             Globals::OverlayActive = !Globals::OverlayActive;
             if (Globals::OverlayActive)
             {
                 if (!Globals::Gui->IsLuaConsoleActive())
                 {
-                    SnippetManager::BackupSnippet("MouseGenericPollMouseVisible", Globals::MouseGenericPollMouseVisible, 12, true);
-                    SnippetManager::BackupSnippet("CenterMouseCursorCall", Globals::CenterMouseCursorCall, 5, true);
+                    SnippetManager->BackupSnippet("MouseGenericPollMouseVisible", Globals::MouseGenericPollMouseVisible, 12, true);
+                    SnippetManager->BackupSnippet("CenterMouseCursorCall", Globals::CenterMouseCursorCall, 5, true);
                 }
             }
             else
             {
                 if (!Globals::Gui->IsLuaConsoleActive())
                 {
-                    SnippetManager::RestoreSnippet("MouseGenericPollMouseVisible", true);
-                    SnippetManager::RestoreSnippet("CenterMouseCursorCall", true);
+                    SnippetManager->RestoreSnippet("MouseGenericPollMouseVisible", true);
+                    SnippetManager->RestoreSnippet("CenterMouseCursorCall", true);
                 }
             }
             break;
@@ -217,6 +238,11 @@ LRESULT Hooks::ProcessInput(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
             Globals::Program->ExitKeysPressCount++;
             break;
         case VK_F4:
+            if (!SnippetManager)
+            {
+                Logger::LogWarning("Failed to resolve ISnippetManager in WndProc F4 code.\n");
+                break;
+            }
             Globals::Gui->ToggleLuaConsole();
             if (Globals::Gui->IsLuaConsoleActive())
             {
@@ -224,8 +250,8 @@ LRESULT Hooks::ProcessInput(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
                 Globals::Gui->LuaConsole.Get().ReclaimFocus = true; //Tell console to set focus to it's text input.
                 if (!Globals::OverlayActive)
                 {
-                    SnippetManager::BackupSnippet("MouseGenericPollMouseVisible", Globals::MouseGenericPollMouseVisible, 12, true);
-                    SnippetManager::BackupSnippet("CenterMouseCursorCall", Globals::CenterMouseCursorCall, 5, true);
+                    SnippetManager->BackupSnippet("MouseGenericPollMouseVisible", Globals::MouseGenericPollMouseVisible, 12, true);
+                    SnippetManager->BackupSnippet("CenterMouseCursorCall", Globals::CenterMouseCursorCall, 5, true);
                 }
             }
             else
@@ -233,8 +259,8 @@ LRESULT Hooks::ProcessInput(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
                 Globals::Gui->LuaConsole.Get().InputBuffer.clear();
                 if (!Globals::OverlayActive)
                 {
-                    SnippetManager::RestoreSnippet("MouseGenericPollMouseVisible", true);
-                    SnippetManager::RestoreSnippet("CenterMouseCursorCall", true);
+                    SnippetManager->RestoreSnippet("MouseGenericPollMouseVisible", true);
+                    SnippetManager->RestoreSnippet("CenterMouseCursorCall", true);
                 }
             }
             break;
@@ -350,6 +376,7 @@ void ProcessNumpadInputs(const HWND hwnd, const UINT msg, const WPARAM wParam, c
         }
     }
 
+    auto Camera = IocContainer->resolve<ICameraManager>();
     switch (wParam)
     {
     case VK_NUMPAD1:
@@ -359,7 +386,12 @@ void ProcessNumpadInputs(const HWND hwnd, const UINT msg, const WPARAM wParam, c
         rfg::ToggleFog();
         break;
     case VK_NUMPAD3:
-        Globals::Camera->ToggleFreeCamera();
+        if (!Camera)
+        {
+            Logger::LogWarning("Failed to resolve ISnippetManager in WndProc F4 code.\n");
+            break;
+        }
+        Camera->ToggleFreeCamera();
         break;
     case VK_NUMPAD4:
         if (Globals::Gui)

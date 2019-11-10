@@ -1,45 +1,49 @@
 #include "Hooks.h"
 #include "Application.h"
+#include "FreeCamGui.h"
+#include "GeneralTweaksGui.h"
 
 void __fastcall Hooks::PlayerDoFrameHook(Player* PlayerPtr)
 {
     static int OnLoadCounter = 0;
     static int TimesCalled = 0;
     static bool InitEventTriggered = false;
-    if (!InitEventTriggered)
-    {
-        if (TimesCalled >= 200) //Wait 200 frames to ensure everything is initialized
-        {
-            Globals::Scripts->TriggerInitializedEvent();
-            InitEventTriggered = true;
-        }
-        else
-        {
-            TimesCalled++;
-        }
-    }
-    if (Globals::CanTriggerOnLoadEvent)
-    {
-        if (OnLoadCounter >= 200) //Wait 200 frames to ensure everything is initialized
-        {
-            Globals::Scripts->TriggerLoadEvent();
-            Globals::CanTriggerOnLoadEvent = false;
-            OnLoadCounter = 0;
-        }
-        else
-        {
-            OnLoadCounter++;
-        }
-    }
 
+    static auto ScriptManager = IocContainer->resolve<IScriptManager>();
+    if(ScriptManager->Ready())
+    {
+        if (!InitEventTriggered)
+        {
+            if (TimesCalled >= 200) //Wait 200 frames to ensure everything is initialized
+            {
+                ScriptManager->TriggerInitializedEvent();
+                InitEventTriggered = true;
+            }
+            else
+            {
+                TimesCalled++;
+            }
+        }
+        if (Globals::CanTriggerOnLoadEvent)
+        {
+            if (OnLoadCounter >= 200) //Wait 200 frames to ensure everything is initialized
+            {
+                ScriptManager->TriggerLoadEvent();
+                Globals::CanTriggerOnLoadEvent = false;
+                OnLoadCounter = 0;
+            }
+            else
+            {
+                OnLoadCounter++;
+            }
+        }
+    }
     if (Globals::PlayerPtr != PlayerPtr)
     {
         Globals::PlayerPtr = PlayerPtr;
         Globals::PlayerRigidBody = rfg::HavokBodyGetPointer(PlayerPtr->HavokHandle);
-        if (Globals::Scripts)
-        {
-            Globals::Scripts->UpdateRfgPointers();
-        }
+        if(ScriptManager->Ready())
+            ScriptManager->UpdateRfgPointers();
     }
 
     if (!Globals::Gui)
@@ -49,23 +53,66 @@ void __fastcall Hooks::PlayerDoFrameHook(Player* PlayerPtr)
     static GuiReference<GeneralTweaksGui> TweaksMenuRef = Globals::Gui->GetGuiReference<GeneralTweaksGui>("General tweaks").value();
     static GuiReference<FreeCamGui> FreeCamMenuRef = Globals::Gui->GetGuiReference<FreeCamGui>("Camera settings").value();
 
-    if (!Globals::Camera)
+    auto Camera = IocContainer->resolve<ICameraManager>();
+    if (Camera)
     {
-        return rfg::PlayerDoFrame(PlayerPtr);
+        if (Camera->IsFreeCameraActive())
+        {
+            PlayerPtr->Flags.ai_ignore = true;
+        }
+        if (Camera->IsFreeCameraActive() && FreeCamMenuRef.Get().PlayerFollowCam)
+        {
+            Camera->UpdateFreeView();
+            vector CameraPos(*Camera->RealX, *Camera->RealY + 1.5f, *Camera->RealZ);
+            rfg::HumanTeleportUnsafe(PlayerPtr, CameraPos, PlayerPtr->Orientation);
+        }
+        if (!Camera->IsFreeCameraActive() && Camera->NeedPostDeactivationCleanup)
+        {
+            if (FreeCamMenuRef.Get().ReturnPlayerToOriginalPosition)
+            {
+                rfg::HumanTeleportUnsafe(PlayerPtr, Camera->OriginalCameraPosition, PlayerPtr->Orientation);
+            }
+            Camera->NeedPostDeactivationCleanup = false;
+        }
+        if (Camera->IsFirstPersonCameraActive())
+        {
+            if (Camera->UseThirdPersonForVehicles)
+            {
+                if (PlayerPtr->VehicleHandle != 0xFFFFFFFF)
+                {
+                    Camera->PauseFirstPersonCamera();
+                }
+                else
+                {
+                    Camera->UnpauseFirstPersonCamera();
+                    Camera->UpdateFirstPersonView();
+                }
+            }
+            else
+            {
+                if (Camera->IsFirstPersonCameraPaused())
+                {
+                    Camera->UnpauseFirstPersonCamera();
+                }
+                Camera->UpdateFirstPersonView();
+            }
+        }
+        if (Camera->IsFreeCameraActive() && FreeCamMenuRef.Get().PlayerFollowCam)
+        {
+            PlayerPtr->Flags.invulnerable = true;
+            PlayerPtr->HitPoints = 2147483647.0f;
+        }
     }
+
 
     if (Globals::InfiniteJetpack)
     {
         PlayerPtr->JetpackFuelPercent = 1.0f;
     }
-    if (TweaksMenuRef.Get().Invulnerable || (Globals::Camera->IsFreeCameraActive() && FreeCamMenuRef.Get().PlayerFollowCam))
+    if (TweaksMenuRef.Get().Invulnerable)
     {
         PlayerPtr->Flags.invulnerable = true;
         PlayerPtr->HitPoints = 2147483647.0f;
-    }
-    if (Globals::Camera->IsFreeCameraActive())
-    {
-        PlayerPtr->Flags.ai_ignore = true;
     }
     if (TweaksMenuRef.Get().NeedCustomJumpHeightSet)
     {
@@ -74,48 +121,6 @@ void __fastcall Hooks::PlayerDoFrameHook(Player* PlayerPtr)
     if (TweaksMenuRef.Get().LockAlertLevel)
     {
         rfg::GsmSetAlertLevel(TweaksMenuRef.Get().CustomAlertLevel);
-    }
-
-    if (Globals::Camera->IsFreeCameraActive() && FreeCamMenuRef.Get().PlayerFollowCam)
-    {
-        Globals::Camera->UpdateFreeView();
-        vector CameraPos(*Globals::Camera->RealX, *Globals::Camera->RealY + 1.5f, *Globals::Camera->RealZ);
-        rfg::HumanTeleportUnsafe(PlayerPtr, CameraPos, PlayerPtr->Orientation);
-    }
-    if (!Globals::Camera->IsFreeCameraActive() && Globals::Camera->NeedPostDeactivationCleanup)
-    {
-        if (FreeCamMenuRef.Get().ReturnPlayerToOriginalPosition)
-        {
-            rfg::HumanTeleportUnsafe(PlayerPtr, Globals::Camera->OriginalCameraPosition, PlayerPtr->Orientation);
-        }
-        Globals::Camera->NeedPostDeactivationCleanup = false;
-    }
-
-    if (Globals::Camera)
-    {
-        if (Globals::Camera->IsFirstPersonCameraActive())
-        {
-            if (Globals::Camera->UseThirdPersonForVehicles)
-            {
-                if (PlayerPtr->VehicleHandle != 0xFFFFFFFF)
-                {
-                    Globals::Camera->PauseFirstPersonCamera();
-                }
-                else
-                {
-                    Globals::Camera->UnpauseFirstPersonCamera();
-                    Globals::Camera->UpdateFirstPersonView();
-                }
-            }
-            else
-            {
-                if (Globals::Camera->IsFirstPersonCameraPaused())
-                {
-                    Globals::Camera->UnpauseFirstPersonCamera();
-                }
-                Globals::Camera->UpdateFirstPersonView();
-            }
-        }
     }
 
     //Todo: Make some kind of event system/class to avoid needing to do this and having tons of globals laying around

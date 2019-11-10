@@ -12,11 +12,6 @@
 
 namespace rfg
 {
-    extern void DisableCameraCode(DWORD AddressY, DWORD AddressZ); //Takes addresses for instructions affecting y and z. Alternatively x and z may work, since one piece seems to be shared between two coords.
-    extern void RestoreCameraCode();
-    extern void DisableCameraDirectionCode(DWORD Address1, DWORD Address2, DWORD Address3, DWORD Address4, DWORD Address5);
-    extern void RestoreCameraDirectionCode();
-
     extern void HideHud(bool Hide);
     extern void HideFog(bool Hide);
     extern void ToggleHud();
@@ -786,4 +781,44 @@ extern F_HumanTeleport HumanTeleport;*/
     //.text:00B727F0 rfg.exe:$1C27F0 #1C1BF0 <cf_open> cfile* __cdecl cf_open(const char *filename_in, const char *mode, vlib_platform disk_platform, bool async)
     using F_cf_open = cfile*(__cdecl*)(const char* filename_in, const char* mode, vlib_platform disk_platform, bool async);
     extern F_cf_open cf_open;
+
+
+    //.text:00CF78B0 rfg.exe:$3478B0 #346CB0 <effects_template_find> //vfx_effect_template *__cdecl effects_template_find(const char *name)
+    using F_effects_template_find = vfx_effect_template*(__cdecl*)(const char* name);
+    extern F_effects_template_find effects_template_find;
+    
+    //.text:0126A700 rfg.exe:$8BA700 #8B9B00 <vfx_effect_create> //vfx_effect *__cdecl vfx_effect_create(vfx_effect_template *effect_template_p)
+    using F_vfx_effect_create = vfx_effect*(__cdecl*)(vfx_effect_template* effect_template_p);
+    extern F_vfx_effect_create vfx_effect_create;
+
+    //.text:01253D80 rfg.exe:$8A3D80 #8A3180 <vfx_effect::enable_emission> //void __thiscall vfx_effect::enable_emission(vfx_effect *this, bool enabled)
+    using F_vfx_effect_enable_emission = void(__fastcall*)(vfx_effect* this_ptr, void* edx, bool enabled);
+    extern F_vfx_effect_enable_emission vfx_effect_enable_emission;
+
+    //.text:0124EE70 rfg.exe:$89EE70 #89E270 <vfx_effect::enable_coronas> //void __thiscall vfx_effect::enable_coronas(vfx_effect *this, bool enabled)
+    using F_vfx_effect_enable_coronas = void(__fastcall*)(vfx_effect* this_ptr, void* edx, bool enabled);
+    extern F_vfx_effect_enable_coronas vfx_effect_enable_coronas;
+
+    //.text:01268210 rfg.exe:$8B8210 #8B7610 <vfx_effect::update> //void __thiscall vfx_effect::update(vfx_effect *this, float delta_time)
+    using F_vfx_effect_update = void(__fastcall*)(vfx_effect* this_ptr, void* edx, float delta_time);
+    extern F_vfx_effect_update vfx_effect_update;
+
+    //.text:00CF7910 rfg.exe:$347910 #346D10 <effects_play>
+    //unsigned int __cdecl effects_play(unsigned int effect_handle, vector *pos, matrix *orient, bool looping, unsigned int host_handle, int host_tag,
+    //unsigned int source_handle, float effect_volume, bool attach_to_camera, object_effect_category category)
+    using F_effects_play = uint(__cdecl*)(uint effect_handle, vector* pos, matrix* orient, bool looping, uint host_handle, int host_tag, uint source_handle, float effect_volume, bool attach_to_camera, object_effect_category category);
+    extern F_effects_play effects_play;
+
+
+    //.text:01020BA0 rfg.exe:$670BA0 #66FFA0 <squad_definition_from_name> squad_definition *__cdecl squad_definition_from_name(const char *name)
+    using F_squad_definition_from_name =  squad_definition*(__cdecl*)(const char* name);
+    extern F_squad_definition_from_name squad_definition_from_name;
+
+    //.text:00D60E00 rfg.exe:$3B0E00 #3B0200 <squad_spawn_parameters::spawn_squad> //object_squad*__thiscall fav::squad_spawn_parameters::spawn_squad(squad_spawn_parameters *this)
+    using F_squad_spawn_parameters_spawn_squad = object_squad*(__fastcall*)(squad_spawn_parameters* this_ptr, void* edx);
+    extern F_squad_spawn_parameters_spawn_squad squad_spawn_parameters_spawn_squad;
+
+    //.text:00D2FED0 rfg.exe:$37FED0 #37F2D0 <find_local_spawn_region> //object_spawn_region *__cdecl find_local_spawn_region(bool ped_only)
+    using F_find_local_spawn_region = object_spawn_region*(__cdecl*)(bool ped_only);
+    extern F_find_local_spawn_region find_local_spawn_region;
 }

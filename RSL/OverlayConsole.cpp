@@ -1,5 +1,4 @@
 #include "OverlayConsole.h"
-#include "ScriptManager.h"
 
 OverlayConsole::OverlayConsole(std::string Title_)
 {
@@ -15,6 +14,8 @@ OverlayConsole::OverlayConsole(std::string Title_)
 	//WindowFlags |= ImGuiWindowFlags_NoNav;
 	//WindowFlags |= ImGuiWindowFlags_NoBackground;
 	//WindowFlags |= ImGuiWindowFlags_NoBringToFrontOnFocus;
+	
+    ScriptManager = IocContainer->resolve<IScriptManager>();
 }
 
 void OverlayConsole::Draw()
@@ -177,7 +178,7 @@ void OverlayConsole::Draw()
 		CommandHistory.push_back(InputBuffer);
         Logger::LogLua("{}\n", InputBuffer);
 		HistoryPosition = CommandHistory.size(); //Since pressing the up arrow key will subtract by one, the subtraction by one is not done here to insure the latest history entry isn't skipped.
-        Globals::Scripts->RunStringAsScript(InputBuffer, "lua console command");
+        ScriptManager->RunStringAsScript(InputBuffer, "lua console command");
 		InputBuffer.clear();
 		ReclaimFocus = true;
 	}

@@ -1,15 +1,16 @@
 #include "Hooks.h"
 #include "Application.h"
+#include "PhysicsGui.h"
 
 void __fastcall Hooks::hkpWorld_stepDeltaTime_hook(hkpWorld* This, void* edx, float PhysicsDeltaTime) //0x9E1A70
 {
+    static auto ScriptManager = IocContainer->resolve<IScriptManager>();
     if (Globals::hkpWorldPtr != This)
     {
+        Logger::LogWarning("GlobalhkpWorldPtr address changed!\n");
         Globals::hkpWorldPtr = This;
-        if (Globals::Scripts)
-        {
-            Globals::Scripts->UpdateRfgPointers();
-        }
+        if(ScriptManager->Ready())
+            ScriptManager->UpdateRfgPointers();
     }
 
     static bool InitCustomGravityVector = false;
@@ -33,16 +34,6 @@ void __fastcall Hooks::hkpWorld_stepDeltaTime_hook(hkpWorld* This, void* edx, fl
         PhysicsMenuRef.Get().DefaultGravityVector.m_quad.m128_f32[2] = PhysicsMenuRef.Get().CurrentGravity->m_quad.m128_f32[2];
         PhysicsMenuRef.Get().DefaultGravityVector.m_quad.m128_f32[3] = PhysicsMenuRef.Get().CurrentGravity->m_quad.m128_f32[3];
         InitCustomGravityVector = true;
-    }
-
-    if (This != Globals::hkpWorldPtr)
-    {
-        Logger::LogWarning("GlobalhkpWorldPtr address changed!\n");
-        Globals::hkpWorldPtr = This;
-        if (Globals::Scripts)
-        {
-            Globals::Scripts->UpdateRfgPointers();
-        }
     }
 
     if (PhysicsMenuRef.IsReady())

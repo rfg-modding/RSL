@@ -21,6 +21,7 @@
 #include <map>
 #include <utility>
 #include <tuple>
+#include <locale>
 
 #include <cctype>
 #include <cmath>
@@ -41,16 +42,6 @@
 
 #include <filesystem>
 #include <nlohmann/json.hpp>
-
-// Include GLM core features
-#include <glm/vec2.hpp>
-#include <glm/vec3.hpp>
-#include <glm/mat4x4.hpp>
-#include <glm/mat3x3.hpp>
-#include <glm/trigonometric.hpp>
-
-// Include GLM extension
-#include <glm/ext/matrix_transform.hpp>
 
 #include <kiero/kiero.h>
 #include <MinHook/MinHook.h>
@@ -80,11 +71,5 @@
 #define SOL_CHECK_ARGUMENTS 1
 #include <sol.hpp>
 
-#define DEBUG_DRAW_CXX11_SUPPORTED true
-#include "debug-draw/debug_draw.hpp"
-#include "vectormath.h"
-
 #define FMT_HEADER_ONLY 1
 #include <fmt/core.h>
-
-#include <locale>

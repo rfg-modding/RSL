@@ -2,7 +2,7 @@
 
 //Todo: Split this into multiple functions for organization and to make it easier to find a specific function
 /* Initializes rfg function pointers. */
-void FunctionManager::Initialize()
+void FunctionManager::RegisterFunctions()
 {
     //Todo: Define all of the function offsets in a separate file as macros/constants to make it easier to switch them for different platforms (Steam & GOG)
     RegisterFunction(rfg::CameraStartSlewMode, 0x2D09B0);
@@ -231,4 +231,16 @@ void FunctionManager::Initialize()
     RegisterFunction(rfg::havok_body_get_angular_dampening, 0x4239D0);
 
     RegisterFunction(rfg::cf_open, 0x1C27F0);
+
+    RegisterFunction(rfg::effects_template_find, 0x3478B0);
+    RegisterFunction(rfg::vfx_effect_create, 0x8BA700);
+    RegisterFunction(rfg::vfx_effect_enable_emission, 0x8A3D80);
+    RegisterFunction(rfg::vfx_effect_enable_coronas, 0x89EE70);
+    RegisterFunction(rfg::vfx_effect_update, 0x8B8210);
+
+    RegisterFunction(rfg::effects_play, 0x347910);
+
+    RegisterFunction(rfg::squad_definition_from_name, 0x670BA0);
+    RegisterFunction(rfg::squad_spawn_parameters_spawn_squad, 0x3B0E00);
+    RegisterFunction(rfg::find_local_spawn_region, 0x37FED0);
 }

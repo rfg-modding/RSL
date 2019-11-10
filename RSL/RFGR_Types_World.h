@@ -2841,6 +2841,61 @@ struct object_squad : Object
     unsigned int squad_leader;
 };
 
+struct object_spawn_region;
+struct  squad_creation_parameters
+{
+    vector squad_pos;
+    object_spawn_region* osrp;
+    matrix squad_orient;
+    squad_definition* squad_def;
+    vehicle_spawn_group_info* veh_spawn_group;
+    unsigned int orders_handle;
+    unsigned int spawn_node_handle;
+    squad_flags_struct squad_flags;
+    npc_flags_struct npc_flags;
+    HumanFlags hflags;
+    vehicle_flags vflags;
+    float vehicle_hp_mult;
+    unsigned int parent_handle;
+    minimap_elements squad_map_icon;
+};
+
+struct  gfm_orders_flags
+{
+    __int8 destroy_on_death : 1;
+    __int8 limited_reassignment : 1;
+    __int8 had_squad_assigned : 1;
+};
+
+struct  gfm_orders
+{
+    unsigned int handle;
+    unsigned int object_target;
+    gfm_orders_types orders_type;
+    human_teams team;
+    gfm_orders_flags orders_flags;
+    vector location_target;
+    timestamp squad_change_period;
+    rfg::farray<unsigned int, 16> building_list;
+};
+
+struct  __declspec(align(4)) gfm_orders_creation_params
+{
+    gfm_orders_types orders_type;
+    human_teams team;
+    vector location_target;
+    unsigned int object_target;
+    gfm_orders_flags ofp;
+};
+
+struct squad_spawn_parameters
+{
+    squad_creation_parameters squad;
+    object_squad* spawned_squad;
+    gfm_orders_creation_params orders;
+    gfm_orders* created_orders;
+};
+
 struct ambush_region_flags
 {
     unsigned __int32 enabled : 1;

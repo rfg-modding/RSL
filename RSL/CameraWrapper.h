@@ -3,22 +3,14 @@
 ///#include "SnippetManager.h"
 //#include "Hooks.h"
 #include "Functions.h"
+#include "CameraDirection.h"
 
-enum CameraDirection
-{
-	FORWARD,
-	BACKWARD,
-	LEFT,
-	RIGHT,
-	UP,
-	DOWN
-};
 
-class CameraWrapper
+class CameraWrapper_deprecated
 {
 public:
-	CameraWrapper() = default;
-	~CameraWrapper() = default;
+    CameraWrapper_deprecated() = default;
+	~CameraWrapper_deprecated() = default;
 	
 	void Initialize(float InitialCameraSpeed, float InitialCameraRotationSpeed);
 

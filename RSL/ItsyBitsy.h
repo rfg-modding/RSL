@@ -1,11 +1,5 @@
 #pragma once
-
-#include "SnippetManager.h"
-
-//#include <cstddef>
-//#include <cstdint>
-//#include <climits>
-//#include <type_traits>
+#include "Logger.h"
 
 namespace itsy_bitsy 
 {

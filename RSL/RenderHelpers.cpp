@@ -6,9 +6,9 @@ void Hooks::UpdateDebugDrawRenderInterfaceValues()
     if (Globals::RlCameraPtr && Globals::ImmediateRenderer)
     {
         //Globals::vpMatrix = (matrix44*)&Globals::ImmediateRenderer->m_viewProjectionMatrix;
-        memcpy(&Globals::vpMatrix, &Globals::ImmediateRenderer->m_viewProjectionMatrix, 64);
-        matrix44 MvpMatrix = Globals::vpMatrix.GetTransposed();
-        Globals::DebugDrawRenderInterface->setMvpMatrixPtr(reinterpret_cast<float*>(&MvpMatrix));
+        ////memcpy(&Globals::vpMatrix, &Globals::ImmediateRenderer->m_viewProjectionMatrix, 64);
+        ////matrix44 MvpMatrix = Globals::vpMatrix.GetTransposed();
+        ////Globals::DebugDrawRenderInterface->setMvpMatrixPtr(reinterpret_cast<float*>(&MvpMatrix));
 
         //matrix44& ViewMatrix = Globals::RlCameraPtr->m_view_transform;
         //matrix44& ProjectionMatrix = Globals::RlCameraPtr->m_projection_transform;
@@ -38,21 +38,21 @@ void Hooks::UpdateDebugDrawRenderInterfaceValues()
         //Globals::DebugDrawRenderInterface->setMvpMatrixPtr(reinterpret_cast<float*>(&TransposedvpMatrix));
     }
 
-    if (Globals::Camera)
-    {
-        if (Globals::Camera->GameData)
-        {
-            vector& RealUpVec = Globals::Camera->GameData->real_orient.uvec;
-            Vector3 CameraUpVector(RealUpVec.x, RealUpVec.y, RealUpVec.z);
+    //if (Globals::Camera)
+    //{
+    //    if (Globals::Camera->GameData)
+    //    {
+    //        vector& RealUpVec = Globals::Camera->GameData->real_orient.uvec;
+    //        Vector3 CameraUpVector(RealUpVec.x, RealUpVec.y, RealUpVec.z);
 
-            vector& RealRightVec = Globals::Camera->GameData->real_orient.rvec;
-            Vector3 CameraRightVector(RealRightVec.x, RealRightVec.y, RealRightVec.z);
+    //        vector& RealRightVec = Globals::Camera->GameData->real_orient.rvec;
+    //        Vector3 CameraRightVector(RealRightVec.x, RealRightVec.y, RealRightVec.z);
 
-            vector& RealForwardVec = Globals::Camera->GameData->real_orient.fvec;
-            Vector3 CameraForwardVector(RealForwardVec.x, RealForwardVec.y, RealForwardVec.z);
-            Globals::DebugDrawRenderInterface->setCameraFrame(CameraUpVector, CameraRightVector, CameraForwardVector);
-        }
-    }
+    //        vector& RealForwardVec = Globals::Camera->GameData->real_orient.fvec;
+    //        Vector3 CameraForwardVector(RealForwardVec.x, RealForwardVec.y, RealForwardVec.z);
+    //        Globals::DebugDrawRenderInterface->setCameraFrame(CameraUpVector, CameraRightVector, CameraForwardVector);
+    //    }
+    //}
 }
 
 HRESULT D3D11_DEVICE_CONTEXT_FROM_SWAPCHAIN(IDXGISwapChain* pSwapChain, ID3D11Device** ppDevice, ID3D11DeviceContext** ppContext)

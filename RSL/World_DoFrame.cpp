@@ -1,24 +1,22 @@
 #include "Hooks.h"
 #include "Application.h"
+#include "GeneralTweaksGui.h"
 
 void __fastcall Hooks::world_do_frame_hook(World* This, void* edx, bool HardLoad)
 {
+    static auto ScriptManager = IocContainer->resolve<IScriptManager>();
     if (Globals::RfgWorldPtr != This)
     {
         Logger::LogWarning("Globals::RfgWorldPtr changed!\n");
         Globals::RfgWorldPtr = This;
-        if (Globals::Scripts)
-        {
-            Globals::Scripts->UpdateRfgPointers();
-        }
+        if (ScriptManager->Ready())
+            ScriptManager->UpdateRfgPointers();
     }
     if (!Globals::TODLightPtr)
     {
         Globals::TODLightPtr = rfg::GameRenderGetTodLight();
-        if (Globals::Scripts)
-        {
-            Globals::Scripts->UpdateRfgPointers();
-        }
+        if (ScriptManager->Ready())
+            ScriptManager->UpdateRfgPointers();
     }
     if (!Globals::Gui)
     {

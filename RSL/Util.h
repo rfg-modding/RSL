@@ -1,6 +1,14 @@
 #pragma once
 #include "GraphicsStateWrapper.h"
 
+namespace Util
+{
+    ImVec4 NormalizeColor(float red, float green, float blue, float alpha = 255.0f);
+    std::wstring Widen(const std::string& str);
+    [[nodiscard]] bool ContainsChar(const std::string& str, std::initializer_list<char> Filter);
+    [[nodiscard]] bool CharIsDigit(const char Character);
+}
+
 namespace Util::Json
 {
     void SetFloat4(nlohmann::json& Json, const char* FirstKey, const char* SecondKey, float r, float g, float b, float a);
@@ -30,10 +38,8 @@ namespace Util::RFG
     std::string GetObjectSubTypeString(char ObjectSubType);
 }
 
-namespace Util
+namespace Util::Patching
 {
-    ImVec4 NormalizeColor(float red, float green, float blue, float alpha = 255.0f);
-    std::wstring Widen(const std::string& str);
-    [[nodiscard]] bool ContainsChar(const std::string& str, std::initializer_list<char> Filter);
-    [[nodiscard]] bool CharIsDigit(const char Character);
+    void LockGameMain();
+    void UnlockGameMain();
 }

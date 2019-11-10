@@ -1,10 +1,11 @@
 #pragma once
 #include "Includes.h"
 #include "FixedArrayWrapper.h"
-#include "RFGR_Types_Cfile.h"
+#include "RFGR_Types_Vfx_Template.h"
 #include "Version.h"
 #include "BuildDate.h"
 #include <magic_enum/magic_enum.hpp>
+#include <Hypodermic/Hypodermic.h>
 
 //Todo: Move as many of these as possible into classes instead of having them be global
 
@@ -21,16 +22,15 @@ using ulonglong = unsigned long long;
 class Application;
 class GuiSystem;
 class ScriptManager;
-class CameraWrapper;
 class RenderInterfaceD3D11;
 class GraphicsStateWrapper;
+
+extern std::shared_ptr<Hypodermic::Container> IocContainer;
 
 namespace Globals
 {
 	extern Application* Program;
 	extern GuiSystem* Gui;
-	extern ScriptManager* Scripts;
-	extern CameraWrapper* Camera;
     
 	extern Player* PlayerPtr;
 	extern World* RfgWorldPtr;
@@ -106,7 +106,6 @@ namespace Globals
 	extern RECT WindowRect;
     extern keen::GraphicsSystem* GraphicsSystemPtr;
     
-	extern RenderInterfaceD3D11* DebugDrawRenderInterface;
     extern matrix44 vpMatrix;
 
 	extern bool ShowMainOverlay;
@@ -219,7 +218,7 @@ namespace Globals
     std::string GetLastWin32ErrorAsString();
 
     std::string RemoveFileExtension(const std::string& Filename);
-    std::tuple<std::string, std::string> SplitFilename(const std::string& Filename);
+    std::array<std::string, 2> SplitFilename(const std::string& Filename);
 
     std::optional<explosion_info*> GetExplosionInfo(std::string Name);
 
@@ -233,8 +232,6 @@ namespace Globals
 	}
 
     extern std::vector<HANDLE> RfgThreadHandles;
-    extern void LockGameMain();
-    extern void UnlockGameMain();
     extern void SuspendAllThreadsExceptLauncher(HANDLE LauncherThreadHandle);
     extern void ResumeAllThreads();
 }

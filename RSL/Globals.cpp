@@ -1,12 +1,12 @@
 #include "Globals.h"
 #include "SnippetManager.h"
 
+std::shared_ptr<Hypodermic::Container> IocContainer = nullptr;
+
 namespace Globals
 {
     Application* Program = nullptr;
 	GuiSystem* Gui = nullptr;
-	ScriptManager* Scripts = nullptr;
-	CameraWrapper* Camera = nullptr;
 
 	Player* PlayerPtr;
 	World* RfgWorldPtr = nullptr;
@@ -82,7 +82,6 @@ namespace Globals
 	RECT WindowRect = { 0, 0, 0, 0 };
     keen::GraphicsSystem* GraphicsSystemPtr = nullptr;
 
-	RenderInterfaceD3D11* DebugDrawRenderInterface = nullptr;
     matrix44 vpMatrix;
 
 	bool ShowMainOverlay = true;
@@ -182,18 +181,6 @@ namespace Globals
 				fs::create_directory(Directory);
 			}
 		}
-		catch (fs::filesystem_error& Ex)
-		{
-			std::string ExceptionInfo = Ex.what();
-			ExceptionInfo += " \nstd::filesystem::filesystem_error, Additional info: ";
-			ExceptionInfo += "File: ";
-			ExceptionInfo += __FILE__;
-			ExceptionInfo += ", Function: ";
-			ExceptionInfo += __func__;
-			ExceptionInfo += ", Line: ";
-			ExceptionInfo += __LINE__;
-			throw(std::exception(ExceptionInfo.c_str()));
-		}
 		catch (std::exception& Ex)
 		{
 			std::string ExceptionInfo = Ex.what();
@@ -201,22 +188,10 @@ namespace Globals
 			ExceptionInfo += "File: ";
 			ExceptionInfo += __FILE__;
 			ExceptionInfo += ", Function: ";
-			ExceptionInfo += __func__;
+			ExceptionInfo += __FUNCSIG__;
 			ExceptionInfo += ", Line: ";
 			ExceptionInfo += __LINE__;
 			throw(std::exception(ExceptionInfo.c_str()));
-		}
-		catch (...)
-		{
-			std::string ExceptionInfo;
-			ExceptionInfo += " \nDefault exception detected caught! Additional info: ";
-			ExceptionInfo += "File: ";
-			ExceptionInfo += __FILE__;
-			ExceptionInfo += ", Function: ";
-			ExceptionInfo += __func__;
-			ExceptionInfo += ", Line: ";
-			ExceptionInfo += __LINE__;
-			throw std::exception(ExceptionInfo.c_str());
 		}
 	}
 
@@ -582,9 +557,13 @@ namespace Globals
         return Filename.substr(0, Filename.find_last_of('.'));
     }
 
-    std::tuple<std::string, std::string> SplitFilename(const std::string& Filename)
+    std::array<std::string, 2> SplitFilename(const std::string& Filename)
     {
-        return { Filename.substr(0, Filename.find_last_of('.')), Filename.substr(Filename.find_last_of('.'), Filename.length() - 1) };
+        return
+        {
+            Filename.substr(0, Filename.find_last_of('.')),
+            Filename.substr(Filename.find_last_of('.'), Filename.length() - 1)
+        };
     }
 
     std::optional<explosion_info*> GetExplosionInfo(std::string Name)
@@ -603,24 +582,6 @@ namespace Globals
     }
 
     std::vector<HANDLE> RfgThreadHandles;
-    void LockGameMain()
-    {
-        //.text:019D0E80 rfg.exe:$810E80 #810280 <WinMain>
-        DWORD RFGWinMainAddress = Globals::FindPattern("rfg.exe", "\x8B\x4C\x24\x3C\x53\x33\xDB\xBA", "xxxxxxxx");
-        printf("RfgWinMain patch target address: %#010x\n", RFGWinMainAddress);
-        printf("RfgWinMain patch target address static casted to int: %#010x\n", static_cast<int>(RFGWinMainAddress));
-        printf("RfgWinMain patch target address static casted to BYTE: %#010x\n", static_cast<BYTE>(RFGWinMainAddress));
-
-        //DWORD RFGWinMainAddress = static_cast<DWORD>(Globals::ModuleBase + static_cast<DWORD>(0x810E80) + static_cast<DWORD>(0x12));
-        //std::vector<int> NewOpcodes{NOP, JMP_REL8, static_cast<int>(RFGWinMainAddress), NOP};
-        std::vector<int> NewOpcodes{ NOP, JMP_REL8, 0xFD, NOP };
-        SnippetManager::ReplaceSnippet("RFG WinMain", RFGWinMainAddress, NewOpcodes);
-    }
-
-    void UnlockGameMain()
-    {
-        SnippetManager::RestoreSnippet("RFG WinMain", true);
-    }
 
     /*Be VERY VERY careful with this function or else you might crash your PC or other programs.
      * Mainly since I don't know if it could pause the threads of all other programs if edited.

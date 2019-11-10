@@ -1,6 +1,7 @@
 #pragma once
 #include "BaseGui.h"
 #include <ImGuiColorTextEdit/TextEditor.h>
+#include "IScriptManager.h"
 
 class FileBrowserNode
 {
@@ -110,6 +111,8 @@ public:
 private:
     TextEditor Editor;
     nlohmann::json LanguageConfig;
+
+    std::shared_ptr<IScriptManager> ScriptManager = nullptr;
 
     int NodeIndex = 0;
     int SelectedIndex = -1;

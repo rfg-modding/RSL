@@ -2,36 +2,6 @@
 
 namespace rfg
 {
-    void DisableCameraCode(DWORD AddressY, DWORD AddressZ) //Takes addresses for instructions affecting y and z. Alternatively x and z may work, since one piece seems to be shared between two coords.
-    {
-        SnippetManager::BackupSnippet("CameraWriteY", AddressY, 8, true);
-        SnippetManager::BackupSnippet("CameraWriteZ", AddressZ, 6, true);
-    }
-
-    void RestoreCameraCode()
-    {
-        SnippetManager::RestoreSnippet("CameraWriteY", true);
-        SnippetManager::RestoreSnippet("CameraWriteZ", true);
-    }
-
-    void DisableCameraDirectionCode(DWORD Address1, DWORD Address2, DWORD Address3, DWORD Address4, DWORD Address5)
-    {
-        SnippetManager::BackupSnippet("CameraRealOrient1", Address1, 8, true);
-        SnippetManager::BackupSnippet("CameraRealOrient2", Address2, 8, true);
-        SnippetManager::BackupSnippet("CameraRealOrient3", Address3, 8, true);
-        SnippetManager::BackupSnippet("CameraRealOrient4", Address4, 8, true);
-        SnippetManager::BackupSnippet("CameraRealOrient5", Address5, 6, true);
-    }
-
-    void RestoreCameraDirectionCode()
-    {
-        SnippetManager::RestoreSnippet("CameraRealOrient1", true);
-        SnippetManager::RestoreSnippet("CameraRealOrient2", true);
-        SnippetManager::RestoreSnippet("CameraRealOrient3", true);
-        SnippetManager::RestoreSnippet("CameraRealOrient4", true);
-        SnippetManager::RestoreSnippet("CameraRealOrient5", true);
-    }
-
     void HideHud(bool Hide)
     {
         //HudVisible = !HudVisible; //This wasn't working for some odd reason so I just set them manually. Same for HideFog.
@@ -367,4 +337,16 @@ namespace rfg
     F_havok_body_get_angular_dampening havok_body_get_angular_dampening;
 
     F_cf_open cf_open;
+
+    F_effects_template_find effects_template_find;
+    F_vfx_effect_create vfx_effect_create;
+    F_vfx_effect_enable_emission vfx_effect_enable_emission;
+    F_vfx_effect_enable_coronas vfx_effect_enable_coronas;
+    F_vfx_effect_update vfx_effect_update;
+
+    F_effects_play effects_play;
+
+    F_squad_definition_from_name squad_definition_from_name;
+    F_squad_spawn_parameters_spawn_squad squad_spawn_parameters_spawn_squad;
+    F_find_local_spawn_region find_local_spawn_region;
 }
