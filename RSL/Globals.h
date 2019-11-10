@@ -218,7 +218,7 @@ namespace Globals
     std::string GetLastWin32ErrorAsString();
 
     std::string RemoveFileExtension(const std::string& Filename);
-    std::tuple<std::string, std::string> SplitFilename(const std::string& Filename);
+    std::array<std::string, 2> SplitFilename(const std::string& Filename);
 
     std::optional<explosion_info*> GetExplosionInfo(std::string Name);
 

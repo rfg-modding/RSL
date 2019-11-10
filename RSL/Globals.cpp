@@ -581,9 +581,13 @@ namespace Globals
         return Filename.substr(0, Filename.find_last_of('.'));
     }
 
-    std::tuple<std::string, std::string> SplitFilename(const std::string& Filename)
+    std::array<std::string, 2> SplitFilename(const std::string& Filename)
     {
-        return { Filename.substr(0, Filename.find_last_of('.')), Filename.substr(Filename.find_last_of('.'), Filename.length() - 1) };
+        return
+        {
+            Filename.substr(0, Filename.find_last_of('.')),
+            Filename.substr(Filename.find_last_of('.'), Filename.length() - 1)
+        };
     }
 
     std::optional<explosion_info*> GetExplosionInfo(std::string Name)
