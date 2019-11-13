@@ -29,8 +29,7 @@ extern std::shared_ptr<Hypodermic::Container> IocContainer;
 
 namespace Globals
 {
-	extern Application* Program;
-	extern GuiSystem* Gui;
+    extern uint ExitKeysPressCount;
     
 	extern Player* PlayerPtr;
 	extern World* RfgWorldPtr;

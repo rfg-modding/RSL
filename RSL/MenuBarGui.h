@@ -2,6 +2,7 @@
 #include "BaseGui.h"
 #include "IScriptManager.h"
 #include "ISnippetManager.h"
+#include "IGuiManager.h"
 
 class MenuBarGui : public BaseGui
 {
@@ -21,5 +22,6 @@ public:
 private:
     std::shared_ptr<ISnippetManager> SnippetManager = nullptr;
     std::shared_ptr<IScriptManager> ScriptManager = nullptr;
+    std::shared_ptr<IGuiManager> GuiManager = nullptr;
 };
 

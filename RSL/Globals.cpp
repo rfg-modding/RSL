@@ -5,8 +5,8 @@ std::shared_ptr<Hypodermic::Container> IocContainer = nullptr;
 
 namespace Globals
 {
-    Application* Program = nullptr;
-	GuiSystem* Gui = nullptr;
+    //Keeps track of how long someone has held down the deactivation key. Currently F3.
+    extern uint ExitKeysPressCount = 0;
 
 	Player* PlayerPtr;
 	World* RfgWorldPtr = nullptr;

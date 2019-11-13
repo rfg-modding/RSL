@@ -5,6 +5,7 @@
 void __fastcall Hooks::hkpWorld_stepDeltaTime_hook(hkpWorld* This, void* edx, float PhysicsDeltaTime) //0x9E1A70
 {
     static auto ScriptManager = IocContainer->resolve<IScriptManager>();
+    static auto Gui = IocContainer->resolve<IGuiManager>();
     if (Globals::hkpWorldPtr != This)
     {
         Logger::LogWarning("GlobalhkpWorldPtr address changed!\n");
@@ -14,11 +15,11 @@ void __fastcall Hooks::hkpWorld_stepDeltaTime_hook(hkpWorld* This, void* edx, fl
     }
 
     static bool InitCustomGravityVector = false;
-    if (!Globals::Gui)
+    if (!Gui)
     {
         return rfg::hkpWorldStepDeltaTime(This, edx, PhysicsDeltaTime);
     }
-    static GuiReference<PhysicsGui> PhysicsMenuRef = Globals::Gui->GetGuiReference<PhysicsGui>("Physics settings").value();
+    static GuiReference<PhysicsGui> PhysicsMenuRef = Gui->GetGuiReference<PhysicsGui>("Physics settings").value();
 
     if (!InitCustomGravityVector)
     {

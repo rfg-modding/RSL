@@ -22,7 +22,6 @@
 #include "ExplosionInfoLua.h"
 #include "TimerLua.h"
 #include "WeaponInfoLua.h"
-#include "CameraWrapper.h"
 #include "ApiTables.h"
 #include "GuiFunctions.h"
 #include "VehicleInfoLua.h"

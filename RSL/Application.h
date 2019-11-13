@@ -1,5 +1,4 @@
 #pragma once
-#include "GuiSystem.h"
 #include "Bootstrapper.h"
 
 class Application
@@ -9,9 +8,6 @@ public:
     ~Application() = default;
 
     void Run();
-
-    //Keeps track of how long someone has held down the deactivation key. Currently F3.
-    unsigned int ExitKeysPressCount = 0;
 
 private:
     void MainLoop();
@@ -26,7 +22,7 @@ private:
     std::shared_ptr<ISnippetManager> SnippetManager = nullptr;
     std::shared_ptr<ICameraManager> CameraManager = nullptr;
     std::shared_ptr<IHookManager> Hooks = nullptr;
-    GuiSystem Gui;
+    std::shared_ptr<IGuiManager> GuiManager = nullptr;
     Bootstrapper RslBootstrapper;
 
     /* Used to ensure proper opening/closing of the debug console. Mainly used to make sure

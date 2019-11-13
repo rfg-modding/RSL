@@ -1,5 +1,4 @@
 #include "WelcomeGui.h"
-#include "GuiSystem.h"
 
 WelcomeGui::WelcomeGui(std::string Title_)
 {
@@ -16,7 +15,8 @@ WelcomeGui::WelcomeGui(std::string Title_)
 	//MainOverlayWindowFlags |= ImGuiWindowFlags_NoNav;
 	//MainOverlayWindowFlags |= ImGuiWindowFlags_NoBackground;
 	//MainOverlayWindowFlags |= ImGuiWindowFlags_NoBringToFrontOnFocus;
-
+	
+    GuiManager = IocContainer->resolve<IGuiManager>();
 }
 
 void WelcomeGui::Draw()
@@ -31,12 +31,12 @@ void WelcomeGui::Draw()
 		return;
 	}
 
-    static auto GeneralTweaksGuiRef = Globals::Gui->GetGuiReference<BaseGui>("General tweaks").value();
-    static auto ScriptSelectRef = Globals::Gui->GetGuiReference<BaseGui>("Scripts").value();
-    static auto CameraSettingsRef = Globals::Gui->GetGuiReference<BaseGui>("Camera settings").value();
-    static auto ScriptEditorRef = Globals::Gui->GetGuiReference<BaseGui>("Script editor").value();
-    static auto TeleportGuiRef = Globals::Gui->GetGuiReference<BaseGui>("Teleport").value();
-    static auto ExplosionSpawnerGuiRef = Globals::Gui->GetGuiReference<BaseGui>("Explosion spawner").value();
+    static auto GeneralTweaksGuiRef = GuiManager->GetGuiReference<BaseGui>("General tweaks").value();
+    static auto ScriptSelectRef = GuiManager->GetGuiReference<BaseGui>("Scripts").value();
+    static auto CameraSettingsRef = GuiManager->GetGuiReference<BaseGui>("Camera settings").value();
+    static auto ScriptEditorRef = GuiManager->GetGuiReference<BaseGui>("Script editor").value();
+    static auto TeleportGuiRef = GuiManager->GetGuiReference<BaseGui>("Teleport").value();
+    static auto ExplosionSpawnerGuiRef = GuiManager->GetGuiReference<BaseGui>("Explosion spawner").value();
 
 	ImGui::PushStyleColor(ImGuiCol_Button, ImVec4());
 	ImGui::PushFont(Globals::FontLarge);
@@ -51,7 +51,7 @@ void WelcomeGui::Draw()
 	ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.357f, 0.659f, 0.863f, 1.0f));
 	if (ImGui::Button(std::string(std::string(ICON_FA_TERMINAL) + u8" Lua console " + u8"##LuaConsoleIcon").c_str()))
 	{
-        Globals::Gui->ToggleLuaConsole();
+        GuiManager->ToggleLuaConsole();
 	}
 	ImGui::PopStyleColor();
 	Util::Gui::TooltipOnPrevious("The console is useful for quickly setting values or calling functions without writing a script. Anything that scripts have access to, the console does too. The console is just running your input into it as a script.", Globals::FontNormal);

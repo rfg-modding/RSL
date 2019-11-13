@@ -1,5 +1,4 @@
 #include "FreeCamGui.h"
-#include "CameraWrapper.h"
 
 FreeCamGui::FreeCamGui(std::string Title_)
 {

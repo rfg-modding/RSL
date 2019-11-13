@@ -9,13 +9,12 @@ Application::Application()
     SnippetManager = IocContainer->resolve<ISnippetManager>();
     CameraManager = IocContainer->resolve<ICameraManager>();
     Hooks = IocContainer->resolve<IHookManager>();
+    GuiManager = IocContainer->resolve<IGuiManager>();
 }
 
 void Application::Run()
 {
     OpenConsole();
-    Globals::Gui = &this->Gui;
-    Globals::Program = this;
 
     RslBootstrapper.Init();
     MainLoop();
@@ -48,7 +47,7 @@ void Application::MainLoop()
         if(State == GS_MAINMENU)
             Globals::TryHideInvalidMainMenuOptions();
         if (Globals::ScriptLoaderCloseRequested)
-            ExitKeysPressCount = 10;
+            Globals::ExitKeysPressCount = 10;
 
         if ((void*)(!Globals::HookDidFrame) == nullptr)
         {
@@ -64,7 +63,7 @@ void Application::MainLoop()
 
 void Application::Exit()
 {
-    if (Globals::OverlayActive || Gui.IsLuaConsoleActive())
+    if (Globals::OverlayActive || GuiManager->IsLuaConsoleActive())
     {
         SnippetManager->RestoreSnippet("MouseGenericPollMouseVisible", true);
         SnippetManager->RestoreSnippet("CenterMouseCursorCall", true);
@@ -110,7 +109,7 @@ bool Application::IsDisabledGameState(GameState State) const
 
 bool Application::ShouldClose() const
 {
-    return ExitKeysPressCount > 5;
+    return Globals::ExitKeysPressCount > 5;
 }
 
 void Application::OpenConsole()

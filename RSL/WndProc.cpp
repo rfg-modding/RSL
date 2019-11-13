@@ -2,6 +2,7 @@
 #include "Application.h"
 #include "IntrospectionGui.h"
 #include "ExplosionSpawnerGui.h"
+#include "TextEditorWrapper.h"
 
 class TextEditorWrapper;
 
@@ -40,7 +41,10 @@ LRESULT __stdcall Hooks::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lPar
         return CallWindowProc(Globals::OriginalWndProc, Globals::GameWindowHandle, msg, wParam, lParam);
     }
     ProcessInput(hWnd, msg, wParam, lParam);
-    if (Globals::OverlayActive || Globals::Gui->IsLuaConsoleActive())
+
+    //Todo: Should probably cache this for performance
+    static auto Gui = IocContainer->resolve<IGuiManager>();
+    if (Globals::OverlayActive || Gui->IsLuaConsoleActive())
     {
         if (msg == WM_SIZE)
         {
@@ -116,14 +120,17 @@ LRESULT Hooks::ProcessInput(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     static Timer ExplosionSpawnTimer(true);
     static bool MiddleMouseDown = false;
-    if (!Globals::Gui->Ready())
+
+    //Todo: Should probably cache this for performance
+    static auto Gui = IocContainer->resolve<IGuiManager>();
+    if (!Gui->Ready())
     {
         return 0;
     }
 
-    auto ScriptEditorGuiRef = Globals::Gui->GetGuiReference<TextEditorWrapper>("Script editor").value();
-    auto ExplosionSpawnerGuiRef = Globals::Gui->GetGuiReference<ExplosionSpawnerGui>("Explosion spawner").value();
-
+    //Todo: Should probably cache this for performance
+    auto ScriptEditorGuiRef = Gui->GetGuiReference<TextEditorWrapper>("Script editor").value();
+    auto ExplosionSpawnerGuiRef = Gui->GetGuiReference<ExplosionSpawnerGui>("Explosion spawner").value();
     auto Camera = IocContainer->resolve<ICameraManager>();
     auto SnippetManager = IocContainer->resolve<ISnippetManager>();
 
@@ -216,7 +223,7 @@ LRESULT Hooks::ProcessInput(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
             Globals::OverlayActive = !Globals::OverlayActive;
             if (Globals::OverlayActive)
             {
-                if (!Globals::Gui->IsLuaConsoleActive())
+                if (!Gui->IsLuaConsoleActive())
                 {
                     SnippetManager->BackupSnippet("MouseGenericPollMouseVisible", Globals::MouseGenericPollMouseVisible, 12, true);
                     SnippetManager->BackupSnippet("CenterMouseCursorCall", Globals::CenterMouseCursorCall, 5, true);
@@ -224,7 +231,7 @@ LRESULT Hooks::ProcessInput(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
             }
             else
             {
-                if (!Globals::Gui->IsLuaConsoleActive())
+                if (!Gui->IsLuaConsoleActive())
                 {
                     SnippetManager->RestoreSnippet("MouseGenericPollMouseVisible", true);
                     SnippetManager->RestoreSnippet("CenterMouseCursorCall", true);
@@ -235,7 +242,7 @@ LRESULT Hooks::ProcessInput(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
             ScriptEditorGuiRef.Get().Toggle();
             break;
         case VK_F3:
-            Globals::Program->ExitKeysPressCount++;
+            Globals::ExitKeysPressCount++;
             break;
         case VK_F4:
             if (!SnippetManager)
@@ -243,11 +250,11 @@ LRESULT Hooks::ProcessInput(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
                 Logger::LogWarning("Failed to resolve ISnippetManager in WndProc F4 code.\n");
                 break;
             }
-            Globals::Gui->ToggleLuaConsole();
-            if (Globals::Gui->IsLuaConsoleActive())
+            Gui->ToggleLuaConsole();
+            if (Gui->IsLuaConsoleActive())
             {
-                Globals::Gui->LuaConsole.Get().InputBuffer.clear();
-                Globals::Gui->LuaConsole.Get().ReclaimFocus = true; //Tell console to set focus to it's text input.
+                Gui->LuaConsole.Get().InputBuffer.clear();
+                Gui->LuaConsole.Get().ReclaimFocus = true; //Tell console to set focus to it's text input.
                 if (!Globals::OverlayActive)
                 {
                     SnippetManager->BackupSnippet("MouseGenericPollMouseVisible", Globals::MouseGenericPollMouseVisible, 12, true);
@@ -256,7 +263,7 @@ LRESULT Hooks::ProcessInput(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
             }
             else
             {
-                Globals::Gui->LuaConsole.Get().InputBuffer.clear();
+                Gui->LuaConsole.Get().InputBuffer.clear();
                 if (!Globals::OverlayActive)
                 {
                     SnippetManager->RestoreSnippet("MouseGenericPollMouseVisible", true);
@@ -368,15 +375,19 @@ void __cdecl Hooks::InvertDataItemHook(void* Item)
 
 void ProcessNumpadInputs(const HWND hwnd, const UINT msg, const WPARAM wParam, const LPARAM lParam)
 {
+    //Todo: Should probably cache this for performance
+    static auto Gui = IocContainer->resolve<IGuiManager>();
     if (Globals::DisableNumpadWhileOverlayVisible)
     {
-        if (Globals::OverlayActive || Globals::Gui->IsLuaConsoleActive())
+        if (Globals::OverlayActive || Gui->IsLuaConsoleActive())
         {
             return;
         }
     }
 
     auto Camera = IocContainer->resolve<ICameraManager>();
+    auto MaybeIntrospectionGuiRef = Gui->GetGuiReference<IntrospectionGui>("Object introspection");
+
     switch (wParam)
     {
     case VK_NUMPAD1:
@@ -394,18 +405,14 @@ void ProcessNumpadInputs(const HWND hwnd, const UINT msg, const WPARAM wParam, c
         Camera->ToggleFreeCamera();
         break;
     case VK_NUMPAD4:
-        if (Globals::Gui)
+        if (MaybeIntrospectionGuiRef.has_value())
         {
-            auto MaybeIntrospectionGuiRef = Globals::Gui->GetGuiReference<IntrospectionGui>("Object introspection");
-            if(MaybeIntrospectionGuiRef.has_value())
+            auto IntrospectionGuiRef = MaybeIntrospectionGuiRef.value();
+            if (IntrospectionGuiRef.IsReady())
             {
-                auto IntrospectionGuiRef = MaybeIntrospectionGuiRef.value();
-                if (IntrospectionGuiRef.IsReady())
+                if (Globals::PlayerPtr)
                 {
-                    if (Globals::PlayerPtr)
-                    {
-                        IntrospectionGuiRef.Get().SavedTargetObjectHandle = Globals::PlayerPtr->aim_target;
-                    }
+                    IntrospectionGuiRef.Get().SavedTargetObjectHandle = Globals::PlayerPtr->aim_target;
                 }
             }
         }

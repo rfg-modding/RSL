@@ -10,6 +10,8 @@ void __fastcall Hooks::PlayerDoFrameHook(Player* PlayerPtr)
     static bool InitEventTriggered = false;
 
     static auto ScriptManager = IocContainer->resolve<IScriptManager>();
+    static auto Gui = IocContainer->resolve<IGuiManager>();
+
     if(ScriptManager->Ready())
     {
         if (!InitEventTriggered)
@@ -46,12 +48,12 @@ void __fastcall Hooks::PlayerDoFrameHook(Player* PlayerPtr)
             ScriptManager->UpdateRfgPointers();
     }
 
-    if (!Globals::Gui)
+    if (!Gui)
     {
         return rfg::PlayerDoFrame(PlayerPtr);
     }
-    static GuiReference<GeneralTweaksGui> TweaksMenuRef = Globals::Gui->GetGuiReference<GeneralTweaksGui>("General tweaks").value();
-    static GuiReference<FreeCamGui> FreeCamMenuRef = Globals::Gui->GetGuiReference<FreeCamGui>("Camera settings").value();
+    static GuiReference<GeneralTweaksGui> TweaksMenuRef = Gui->GetGuiReference<GeneralTweaksGui>("General tweaks").value();
+    static GuiReference<FreeCamGui> FreeCamMenuRef = Gui->GetGuiReference<FreeCamGui>("Camera settings").value();
 
     auto Camera = IocContainer->resolve<ICameraManager>();
     if (Camera)

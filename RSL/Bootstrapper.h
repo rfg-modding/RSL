@@ -5,7 +5,7 @@
 #include "IHookManager.h"
 #include "ISnippetManager.h"
 #include "IScriptManager.h"
-#include "GuiSystem.h"
+#include "IGuiManager.h"
 
 //Handles initialization of RSL hooks / managers / global data
 //Todo: Define interface and have IOC Container handle this
@@ -38,5 +38,6 @@ private:
     std::shared_ptr<IFunctionManager> Functions = nullptr;
     std::shared_ptr<IScriptManager> Scripts = nullptr;
     std::shared_ptr<IHookManager> Hooks = nullptr;
+    std::shared_ptr<IGuiManager> GuiManager = nullptr;
 };
 

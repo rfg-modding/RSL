@@ -1,11 +1,11 @@
 #include "ScriptSelectGui.h"
 #include "TextEditorWrapper.h"
-#include "GuiSystem.h"
 
 ScriptSelectGui::ScriptSelectGui(std::string Title_)
 {
     Title = Title_;
     ScriptManager = IocContainer->resolve<IScriptManager>();
+    GuiManager = IocContainer->resolve<IGuiManager>();
 }
 
 void ScriptSelectGui::Draw()
@@ -21,7 +21,7 @@ void ScriptSelectGui::Draw()
 		return;
 	}
 
-    static auto ScriptEditorRef = Globals::Gui->GetGuiReference<TextEditorWrapper>("Script editor").value();
+    static auto ScriptEditorRef = GuiManager->GetGuiReference<TextEditorWrapper>("Script editor").value();
 
 	ImGui::PushFont(Globals::FontBig);
 	ImGui::Text("Scripts folder:");

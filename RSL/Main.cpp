@@ -5,6 +5,7 @@
 #include "HookManager.h"
 #include "SnippetManager.h"
 #include "ScriptManager.h"
+#include "GuiManager.h"
 
 DWORD WINAPI MainThread(HMODULE hModule);
 DWORD WINAPI LauncherThread(HMODULE hModule);
@@ -94,6 +95,7 @@ void BuildIocContainer()
     builder.registerType<FunctionManager>().as<IFunctionManager>().singleInstance();
     builder.registerType<ScriptManager>().as<IScriptManager>().singleInstance();
     builder.registerType<HookManager>().as<IHookManager>().singleInstance();
+    builder.registerType<GuiManager>().as<IGuiManager>().singleInstance();
 
     IocContainer = builder.build();
 }

@@ -10,11 +10,12 @@
 #include "TeleportGui.h"
 #include "ExplosionSpawnerGui.h"
 #include "GraphicsTweaksGui.h"
-#include "EventViewerGui.h"
 #include "MenuBarGui.h"
 #include "LogWindow.h"
 #include "PhysicsGui.h"
 #include "IntrospectionGui.h"
+#include "TextEditorWrapper.h"
+#include "OverlayConsole.h"
 
 Bootstrapper::Bootstrapper()
 {
@@ -23,6 +24,7 @@ Bootstrapper::Bootstrapper()
     Functions = IocContainer->resolve<IFunctionManager>();
     Scripts = IocContainer->resolve<IScriptManager>();
     Hooks = IocContainer->resolve<IHookManager>();
+    GuiManager = IocContainer->resolve<IGuiManager>();
 }
 
 void Bootstrapper::Init()
@@ -117,7 +119,6 @@ void Bootstrapper::InitRSL()
         Logger::Log("Initializing overlays.\n");
         InitOverlays();
         Logger::Log("Initializing gui system.\n");
-        Globals::Gui->Initialize(); //Todo: Change gui so it can be initialized before imgui is initialized
 
         //Update global lua pointers after init just to be sure. Can't hurt.
         Scripts->UpdateRfgPointers();
@@ -282,33 +283,30 @@ void Bootstrapper::InitHooks()
 
 void Bootstrapper::CreateHooks()
 {
-    //Don't know how to override CreateHook<>() so it has to be cast to the concrete type for now
-    auto HookMan = static_cast<HookManager*>(Hooks.get());
-
-    HookMan->CreateHook("PlayerDoFrame", Globals::ModuleBase + 0x6D5A80, Hooks::PlayerDoFrameHook, rfg::PlayerDoFrame);
-    HookMan->CreateHook("CsWrapSlice", Globals::ModuleBase + 0x516D80, Hooks::CsWrapSliceHook, rfg::CsWrapSlice);
-    HookMan->CreateHook("ExplosionCreate", Globals::ModuleBase + 0x2EC720, Hooks::ExplosionCreateHook, rfg::ExplosionCreate);
-    HookMan->CreateHook("KeenGraphicsBeginFrame", Globals::ModuleBase + 0x86DD00, Hooks::KeenGraphicsBeginFrameHook, rfg::KeenGraphicsBeginFrame);
-    HookMan->CreateHook("IsValidEigenGradient", Globals::ModuleBase + 0x1D0DD0, Hooks::IsValidEigenGradientHook, rfg::IsValidEigenGradient);
-    HookMan->CreateHook("KeenGraphicsResizeRenderSwapchain", Globals::ModuleBase + 0x86AB20, Hooks::KeenGraphicsResizeRenderSwapchainHook, rfg::KeenGraphicsResizeRenderSwapchain);
-    HookMan->CreateHook("world::do_frame", Globals::ModuleBase + 0x540AB0, Hooks::world_do_frame_hook, rfg::WorldDoFrame);
-    HookMan->CreateHook("rl_camera::render_begin", Globals::ModuleBase + 0x137660, Hooks::rl_camera_render_begin_hook, rfg::RlCameraRenderBegin);
-    HookMan->CreateHook("hkpWorld::stepDeltaTime", Globals::ModuleBase + 0x9E1A70, Hooks::hkpWorld_stepDeltaTime_hook, rfg::hkpWorldStepDeltaTime);
-    HookMan->CreateHook("HookDoFrame", Globals::ModuleBase + 0x3CC750, Hooks::HookDoFrameHook, rfg::HookDoFrame);
-    HookMan->CreateHook("Application::UpdateTime", Globals::ModuleBase + 0x5A880, Hooks::ApplicationUpdateTimeHook, rfg::ApplicationUpdateTime);
-    HookMan->CreateHook("InvertDataItem", Globals::ModuleBase + 0x497740, Hooks::InvertDataItemHook, rfg::InvertDataItem);
-    HookMan->CreateHook("LuaDoBuffer", Globals::ModuleBase + 0x82FD20, Hooks::LuaDoBufferHook, rfg::LuaDoBuffer);
-    HookMan->CreateHook("D3D11Present", kiero::getMethodsTable()[8], Hooks::D3D11PresentHook, Hooks::D3D11PresentFuncPtr);
-    HookMan->CreateHook("D3D11_ResizeBuffers", kiero::getMethodsTable()[13], Hooks::D3D11_ResizeBuffersHook, Hooks::D3D11_ResizeBuffersFuncPtr);
-    HookMan->CreateHook("AllocatorStillValid", Globals::ModuleBase + 0x4F50B0, Hooks::AllocatorStillValidHook, rfg::AllocatorStillValid);
-    HookMan->CreateHook("peg_load_wrapper", Globals::ModuleBase + 0x1D1F10, Hooks::peg_load_wrapper_hook, rfg::peg_load_wrapper);
-    HookMan->CreateHook("object_spawn_vehicle_hook", Globals::ModuleBase + 0x757F40, Hooks::object_spawn_vehicle_hook, rfg::object_spawn_vehicle);
-    HookMan->CreateHook("keen_ImmediateRenderer_beginRenderPass_hook", Globals::ModuleBase + 0x86C810, Hooks::keen_ImmediateRenderer_beginRenderPass_hook, rfg::keen_ImmediateRenderer_beginRenderPass);
-    HookMan->CreateHook("rfgl_find_and_delete_object_mover_hook", Globals::ModuleBase + 0x324A60, Hooks::rfgl_find_and_delete_object_mover_hook, rfg::rfgl_find_and_delete_object_mover);
-    HookMan->CreateHook("rfgl_find_and_delete_debris_object_hook", Globals::ModuleBase + 0x324B90, Hooks::rfgl_find_and_delete_debris_object_hook, rfg::rfgl_find_and_delete_debris_object);
-    HookMan->CreateHook("gamestate_gp_process", Globals::ModuleBase + 0x3EE450, Hooks::gamestate_gp_process_hook, rfg::gamestate_gp_process);
-    HookMan->CreateHook("world::load_territory", Globals::ModuleBase + 0x541430, Hooks::world_load_territory_hook, rfg::world_load_territory);
-    HookMan->CreateHook("cf_open", Globals::ModuleBase + 0x1C27F0, Hooks::cf_open_hook, rfg::cf_open);
+    Hooks->CreateHook("PlayerDoFrame", Globals::ModuleBase + 0x6D5A80, Hooks::PlayerDoFrameHook, rfg::PlayerDoFrame);
+    Hooks->CreateHook("CsWrapSlice", Globals::ModuleBase + 0x516D80, Hooks::CsWrapSliceHook, rfg::CsWrapSlice);
+    Hooks->CreateHook("ExplosionCreate", Globals::ModuleBase + 0x2EC720, Hooks::ExplosionCreateHook, rfg::ExplosionCreate);
+    Hooks->CreateHook("KeenGraphicsBeginFrame", Globals::ModuleBase + 0x86DD00, Hooks::KeenGraphicsBeginFrameHook, rfg::KeenGraphicsBeginFrame);
+    Hooks->CreateHook("IsValidEigenGradient", Globals::ModuleBase + 0x1D0DD0, Hooks::IsValidEigenGradientHook, rfg::IsValidEigenGradient);
+    Hooks->CreateHook("KeenGraphicsResizeRenderSwapchain", Globals::ModuleBase + 0x86AB20, Hooks::KeenGraphicsResizeRenderSwapchainHook, rfg::KeenGraphicsResizeRenderSwapchain);
+    Hooks->CreateHook("world::do_frame", Globals::ModuleBase + 0x540AB0, Hooks::world_do_frame_hook, rfg::WorldDoFrame);
+    Hooks->CreateHook("rl_camera::render_begin", Globals::ModuleBase + 0x137660, Hooks::rl_camera_render_begin_hook, rfg::RlCameraRenderBegin);
+    Hooks->CreateHook("hkpWorld::stepDeltaTime", Globals::ModuleBase + 0x9E1A70, Hooks::hkpWorld_stepDeltaTime_hook, rfg::hkpWorldStepDeltaTime);
+    Hooks->CreateHook("HookDoFrame", Globals::ModuleBase + 0x3CC750, Hooks::HookDoFrameHook, rfg::HookDoFrame);
+    Hooks->CreateHook("Application::UpdateTime", Globals::ModuleBase + 0x5A880, Hooks::ApplicationUpdateTimeHook, rfg::ApplicationUpdateTime);
+    Hooks->CreateHook("InvertDataItem", Globals::ModuleBase + 0x497740, Hooks::InvertDataItemHook, rfg::InvertDataItem);
+    Hooks->CreateHook("LuaDoBuffer", Globals::ModuleBase + 0x82FD20, Hooks::LuaDoBufferHook, rfg::LuaDoBuffer);
+    Hooks->CreateHook("D3D11Present", kiero::getMethodsTable()[8], Hooks::D3D11PresentHook, Hooks::D3D11PresentFuncPtr);
+    Hooks->CreateHook("D3D11_ResizeBuffers", kiero::getMethodsTable()[13], Hooks::D3D11_ResizeBuffersHook, Hooks::D3D11_ResizeBuffersFuncPtr);
+    Hooks->CreateHook("AllocatorStillValid", Globals::ModuleBase + 0x4F50B0, Hooks::AllocatorStillValidHook, rfg::AllocatorStillValid);
+    Hooks->CreateHook("peg_load_wrapper", Globals::ModuleBase + 0x1D1F10, Hooks::peg_load_wrapper_hook, rfg::peg_load_wrapper);
+    Hooks->CreateHook("object_spawn_vehicle_hook", Globals::ModuleBase + 0x757F40, Hooks::object_spawn_vehicle_hook, rfg::object_spawn_vehicle);
+    Hooks->CreateHook("keen_ImmediateRenderer_beginRenderPass_hook", Globals::ModuleBase + 0x86C810, Hooks::keen_ImmediateRenderer_beginRenderPass_hook, rfg::keen_ImmediateRenderer_beginRenderPass);
+    Hooks->CreateHook("rfgl_find_and_delete_object_mover_hook", Globals::ModuleBase + 0x324A60, Hooks::rfgl_find_and_delete_object_mover_hook, rfg::rfgl_find_and_delete_object_mover);
+    Hooks->CreateHook("rfgl_find_and_delete_debris_object_hook", Globals::ModuleBase + 0x324B90, Hooks::rfgl_find_and_delete_debris_object_hook, rfg::rfgl_find_and_delete_debris_object);
+    Hooks->CreateHook("gamestate_gp_process", Globals::ModuleBase + 0x3EE450, Hooks::gamestate_gp_process_hook, rfg::gamestate_gp_process);
+    Hooks->CreateHook("world::load_territory", Globals::ModuleBase + 0x541430, Hooks::world_load_territory_hook, rfg::world_load_territory);
+    Hooks->CreateHook("cf_open", Globals::ModuleBase + 0x1C27F0, Hooks::cf_open_hook, rfg::cf_open);
 
     //Hooks.CreateHook("can_drop_vehicle", Globals::ModuleBase + 0x756000, Hooks::can_drop_vehicle_hook, can_drop_vehicle);
     //Hooks.CreateHook("rfg_init_stage_2_done", Globals::ModuleBase + 0x1D56A0, Hooks::rfg_init_stage_2_done_hook, rfg_init_stage_2_done);
@@ -341,22 +339,22 @@ void Bootstrapper::WaitForValidGameState() const
 
 void Bootstrapper::InitOverlays()
 {
-    Globals::Gui->AddChildGui(new MenuBarGui("Top menu bar"), true);
-    Globals::Gui->AddChildGui(new GeneralTweaksGui("General tweaks"));
-    Globals::Gui->AddChildGui(new OverlayConsole("Lua console"));
-    Globals::Gui->LuaConsole = Globals::Gui->GetGuiReference<OverlayConsole>("Lua console").value();
-    Globals::Gui->AddChildGui(new ScriptSelectGui("Scripts"));
-    Globals::Gui->AddChildGui(new FreeCamGui("Camera settings"));
-    Globals::Gui->AddChildGui(new TextEditorWrapper("Script editor"));
-    Globals::Gui->AddChildGui(new LogWindow("Logger"));
-    Globals::Gui->AddChildGui(new WelcomeGui("Welcome"), true);
-    Globals::Gui->AddChildGui(new ThemeEditorGui("Theme editor"));
-    Globals::Gui->AddChildGui(new PhysicsGui("Physics settings"));
-    Globals::Gui->AddChildGui(new TeleportGui("Teleport"));
-    Globals::Gui->AddChildGui(new IntrospectionGui("Object introspection"));
-    Globals::Gui->AddChildGui(new ExplosionSpawnerGui("Explosion spawner"));
-    Globals::Gui->AddChildGui(new GraphicsTweaksGui("Graphics tweaks"));
-    Globals::Gui->AddChildGui(new EventViewerGui("Event viewer"));
+    GuiManager->AddChildGui(new MenuBarGui("Top menu bar"), true);
+    GuiManager->AddChildGui(new GeneralTweaksGui("General tweaks"));
+    GuiManager->AddChildGui(new OverlayConsole("Lua console"));
+    GuiManager->SetLuaConsole("Lua console");
+    GuiManager->AddChildGui(new ScriptSelectGui("Scripts"));
+    GuiManager->AddChildGui(new FreeCamGui("Camera settings"));
+    GuiManager->AddChildGui(new TextEditorWrapper("Script editor"));
+    GuiManager->AddChildGui(new LogWindow("Logger"));
+    GuiManager->AddChildGui(new WelcomeGui("Welcome"), true);
+    GuiManager->AddChildGui(new ThemeEditorGui("Theme editor"));
+    GuiManager->AddChildGui(new PhysicsGui("Physics settings"));
+    GuiManager->AddChildGui(new TeleportGui("Teleport"));
+    GuiManager->AddChildGui(new IntrospectionGui("Object introspection"));
+    GuiManager->AddChildGui(new ExplosionSpawnerGui("Explosion spawner"));
+    GuiManager->AddChildGui(new GraphicsTweaksGui("Graphics tweaks"));
+    GuiManager->AddChildGui(new EventViewerGui("Event viewer"));
     //Gui.AddChildGui(new VehicleSpawnerGui("Vehicle spawner")); //Disabled since it doesn't work
 }
 

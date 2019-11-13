@@ -201,8 +201,8 @@ echo #define RSL_BUILD_DATE %buildTime:~0,8% &gt;&gt; $(ProjectDir)/BuildDate.h<
     <ClCompile Include="GraphicsStateWrapper.cpp" />
     <ClCompile Include="GraphicsTweaksGui.cpp" />
     <ClCompile Include="GuiFunctions.cpp" />
+    <ClCompile Include="GuiManager.cpp" />
     <ClCompile Include="HkpRigidBodyLua.cpp" />
-    <ClCompile Include="CameraWrapper.cpp" />
     <ClCompile Include="CharacterInstanceLua.cpp" />
     <ClCompile Include="ContactNodeLua.cpp" />
     <ClCompile Include="FreeCamGui.cpp" />
@@ -210,7 +210,6 @@ echo #define RSL_BUILD_DATE %buildTime:~0,8% &gt;&gt; $(ProjectDir)/BuildDate.h<
     <ClCompile Include="Functions.cpp" />
     <ClCompile Include="GeneralTweaksGui.cpp" />
     <ClCompile Include="Globals.cpp" />
-    <ClCompile Include="GuiSystem.cpp" />
     <ClCompile Include="HavokBPOLua.cpp" />
     <ClCompile Include="HkpSolverInfoLua.cpp" />
     <ClCompile Include="HkpWorld_StepDeltaTime.cpp" />
@@ -306,8 +305,9 @@ echo #define RSL_BUILD_DATE %buildTime:~0,8% &gt;&gt; $(ProjectDir)/BuildDate.h<
     <ClInclude Include="GraphicsStateWrapper.h" />
     <ClInclude Include="GraphicsTweaksGui.h" />
     <ClInclude Include="GuiFunctions.h" />
+    <ClInclude Include="GuiManager.h" />
+    <ClInclude Include="GuiReference.h" />
     <ClInclude Include="HkpRigidBodyLua.h" />
-    <ClInclude Include="CameraWrapper.h" />
     <ClInclude Include="CharacterInstanceLua.h" />
     <ClInclude Include="ContactNodeLua.h" />
     <ClInclude Include="DeepCodeStorage.h">
@@ -320,9 +320,9 @@ echo #define RSL_BUILD_DATE %buildTime:~0,8% &gt;&gt; $(ProjectDir)/BuildDate.h<
     <ClInclude Include="Functions.h" />
     <ClInclude Include="GeneralTweaksGui.h" />
     <ClInclude Include="Globals.h" />
-    <ClInclude Include="GuiSystem.h" />
     <ClInclude Include="HavokBPOLua.h" />
     <ClInclude Include="HkpSolverInfoLua.h" />
+    <ClInclude Include="Hook.h" />
     <ClInclude Include="HookManager.h" />
     <ClInclude Include="Hooks.h" />
     <ClInclude Include="HumanFlagsLua.h" />
@@ -332,6 +332,7 @@ echo #define RSL_BUILD_DATE %buildTime:~0,8% &gt;&gt; $(ProjectDir)/BuildDate.h<
     <ClInclude Include="HumanRaycastHitInfoLua.h" />
     <ClInclude Include="ICameraManager.h" />
     <ClInclude Include="IFunctionManager.h" />
+    <ClInclude Include="IGuiManager.h" />
     <ClInclude Include="IHookManager.h" />
     <ClInclude Include="IIpcManager.h" />
     <ClInclude Include="ImGuiColorTextEdit\TextEditor.h" />

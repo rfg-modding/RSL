@@ -18,6 +18,7 @@ MenuBarGui::MenuBarGui(std::string Title_)
 
     SnippetManager = IocContainer->resolve<ISnippetManager>();
     ScriptManager = IocContainer->resolve<IScriptManager>();
+    GuiManager = IocContainer->resolve<IGuiManager>();
 }
 
 void MenuBarGui::Draw()
@@ -29,21 +30,21 @@ void MenuBarGui::Draw()
 		return;
 	}
 
-    static auto GeneralTweaksGuiRef = Globals::Gui->GetGuiReference<BaseGui>("General tweaks").value();
-    static auto LuaConsoleRef = Globals::Gui->GetGuiReference<BaseGui>("Lua console").value();
-    static auto ScriptSelectRef = Globals::Gui->GetGuiReference<BaseGui>("Scripts").value();
-    static auto CameraSettingsRef = Globals::Gui->GetGuiReference<BaseGui>("Camera settings").value();
-    static auto ScriptEditorRef = Globals::Gui->GetGuiReference<BaseGui>("Script editor").value();
-    static auto LoggerRef = Globals::Gui->GetGuiReference<BaseGui>("Logger").value();
-    static auto WelcomeRef = Globals::Gui->GetGuiReference<BaseGui>("Welcome").value();
-    static auto ThemeEditorRef = Globals::Gui->GetGuiReference<BaseGui>("Theme editor").value();
-    static auto PhysicsSettingsRef = Globals::Gui->GetGuiReference<BaseGui>("Physics settings").value();
-    static auto TeleportGuiRef = Globals::Gui->GetGuiReference<BaseGui>("Teleport").value();
-    static auto IntrospectionGuiRef = Globals::Gui->GetGuiReference<BaseGui>("Object introspection").value();
-    static auto ExplosionSpawnerGuiRef = Globals::Gui->GetGuiReference<BaseGui>("Explosion spawner").value();
-    static auto GraphicsTweaksGuiRef = Globals::Gui->GetGuiReference<BaseGui>("Graphics tweaks").value();
-    static auto EventViewerGuiRef = Globals::Gui->GetGuiReference<BaseGui>("Event viewer").value();
-    //static auto VehicleSpawnerGuiRef = Globals::Gui->GetGuiReference<VehicleSpawnerGui>("Vehicle spawner").value();
+    static auto GeneralTweaksGuiRef = GuiManager->GetGuiReference<BaseGui>("General tweaks").value();
+    static auto LuaConsoleRef = GuiManager->GetGuiReference<BaseGui>("Lua console").value();
+    static auto ScriptSelectRef = GuiManager->GetGuiReference<BaseGui>("Scripts").value();
+    static auto CameraSettingsRef = GuiManager->GetGuiReference<BaseGui>("Camera settings").value();
+    static auto ScriptEditorRef = GuiManager->GetGuiReference<BaseGui>("Script editor").value();
+    static auto LoggerRef = GuiManager->GetGuiReference<BaseGui>("Logger").value();
+    static auto WelcomeRef = GuiManager->GetGuiReference<BaseGui>("Welcome").value();
+    static auto ThemeEditorRef = GuiManager->GetGuiReference<BaseGui>("Theme editor").value();
+    static auto PhysicsSettingsRef = GuiManager->GetGuiReference<BaseGui>("Physics settings").value();
+    static auto TeleportGuiRef = GuiManager->GetGuiReference<BaseGui>("Teleport").value();
+    static auto IntrospectionGuiRef = GuiManager->GetGuiReference<BaseGui>("Object introspection").value();
+    static auto ExplosionSpawnerGuiRef = GuiManager->GetGuiReference<BaseGui>("Explosion spawner").value();
+    static auto GraphicsTweaksGuiRef = GuiManager->GetGuiReference<BaseGui>("Graphics tweaks").value();
+    static auto EventViewerGuiRef = GuiManager->GetGuiReference<BaseGui>("Event viewer").value();
+    //static auto VehicleSpawnerGuiRef = GuiManager->GetGuiReference<VehicleSpawnerGui>("Vehicle spawner").value();
 
 	if (ImGui::BeginMainMenuBar())
 	{
@@ -116,8 +117,8 @@ void MenuBarGui::Draw()
 		if (ImGui::BeginMenu("Help"))
 		{
 			if (ImGui::MenuItem(std::string(std::string(ICON_FA_HOME) + u8" Welcome").c_str(), nullptr, &WelcomeRef.Get().Visible)) {}
-			if (ImGui::MenuItem(std::string(std::string(ICON_FA_INFO) + u8" Metrics").c_str(), nullptr, &Globals::Gui->ShowAppMetrics)) {}
-			if (ImGui::MenuItem(std::string(std::string(ICON_FA_QUESTION) + u8" About").c_str(), nullptr, &Globals::Gui->ShowAppAbout)) {}
+			if (ImGui::MenuItem(std::string(std::string(ICON_FA_INFO) + u8" Metrics").c_str(), nullptr, &GuiManager->ShowAppMetrics)) {}
+			if (ImGui::MenuItem(std::string(std::string(ICON_FA_QUESTION) + u8" About").c_str(), nullptr, &GuiManager->ShowAppAbout)) {}
 			ImGui::EndMenu();
 		}
 		ImGui::EndMainMenuBar();
@@ -135,13 +136,13 @@ void MenuBarGui::Draw()
 	ConfirmScriptLoaderDeactivation();
     ConfirmLockoutModeActivation();
 
-	if (Globals::Gui->ShowAppMetrics)
+	if (GuiManager->ShowAppMetrics)
 	{
-		ImGui::ShowMetricsWindow(&Globals::Gui->ShowAppMetrics);
+		ImGui::ShowMetricsWindow(&GuiManager->ShowAppMetrics);
 	}
-	if (Globals::Gui->ShowAppAbout)
+	if (GuiManager->ShowAppAbout)
 	{
-		ShowAboutWindow(&Globals::Gui->ShowAppAbout);
+		ShowAboutWindow(&GuiManager->ShowAppAbout);
 	}
 }
 
@@ -198,7 +199,7 @@ void MenuBarGui::ActivateLockoutMode()
     }
 
     Globals::OverlayActive = false;
-    Globals::Gui->DeactivateLuaConsole();
+    GuiManager->DeactivateLuaConsole();
     SnippetManager->RestoreSnippet("MouseGenericPollMouseVisible", true);
     SnippetManager->RestoreSnippet("CenterMouseCursorCall", true);
     Globals::LockoutModeEnabled = true;

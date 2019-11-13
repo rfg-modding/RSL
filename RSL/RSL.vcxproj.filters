@@ -169,6 +169,9 @@
     <Filter Include="Main\Managers\Interfaces">
       <UniqueIdentifier>{aad75ac0-471e-4217-a060-0f7a9eda0351}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Main\Managers\GuiManager">
+      <UniqueIdentifier>{0231f992-3d50-479e-bc62-199615ab0ef1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="include\fmt\format.cc">
@@ -408,9 +411,6 @@
     <ClCompile Include="Functions.cpp">
       <Filter>Main\Functions</Filter>
     </ClCompile>
-    <ClCompile Include="CameraWrapper.cpp">
-      <Filter>Main\Managers</Filter>
-    </ClCompile>
     <ClCompile Include="Application.cpp">
       <Filter>Main</Filter>
     </ClCompile>
@@ -471,14 +471,14 @@
     <ClCompile Include="SnippetManager.cpp">
       <Filter>Main\Managers\SnippetManager</Filter>
     </ClCompile>
-    <ClCompile Include="GuiSystem.cpp">
-      <Filter>Main\Managers</Filter>
-    </ClCompile>
     <ClCompile Include="Bootstrapper.cpp">
       <Filter>Main</Filter>
     </ClCompile>
     <ClCompile Include="GuiFunctions.cpp">
       <Filter>Lua Binding\Functions</Filter>
+    </ClCompile>
+    <ClCompile Include="GuiManager.cpp">
+      <Filter>Main\Managers\GuiManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -692,9 +692,6 @@
     <ClInclude Include="Functions.h">
       <Filter>Main\Functions</Filter>
     </ClInclude>
-    <ClInclude Include="CameraWrapper.h">
-      <Filter>Main\Managers</Filter>
-    </ClInclude>
     <ClInclude Include="Application.h">
       <Filter>Main</Filter>
     </ClInclude>
@@ -785,9 +782,6 @@
     <ClInclude Include="SnippetManager.h">
       <Filter>Main\Managers\SnippetManager</Filter>
     </ClInclude>
-    <ClInclude Include="GuiSystem.h">
-      <Filter>Main\Managers</Filter>
-    </ClInclude>
     <ClInclude Include="ScriptResult.h">
       <Filter>Main\Managers\ScriptManager\Scripts</Filter>
     </ClInclude>
@@ -808,6 +802,18 @@
     </ClInclude>
     <ClInclude Include="Bootstrapper.h">
       <Filter>Main</Filter>
+    </ClInclude>
+    <ClInclude Include="IGuiManager.h">
+      <Filter>Main\Managers\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="GuiReference.h">
+      <Filter>Main\Managers\GuiManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Hook.h">
+      <Filter>Main\Managers\HookManager</Filter>
+    </ClInclude>
+    <ClInclude Include="GuiManager.h">
+      <Filter>Main\Managers\GuiManager</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

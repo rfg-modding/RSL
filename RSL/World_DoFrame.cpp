@@ -5,6 +5,8 @@
 void __fastcall Hooks::world_do_frame_hook(World* This, void* edx, bool HardLoad)
 {
     static auto ScriptManager = IocContainer->resolve<IScriptManager>();
+    static auto Gui = IocContainer->resolve<IGuiManager>();
+
     if (Globals::RfgWorldPtr != This)
     {
         Logger::LogWarning("Globals::RfgWorldPtr changed!\n");
@@ -18,12 +20,12 @@ void __fastcall Hooks::world_do_frame_hook(World* This, void* edx, bool HardLoad
         if (ScriptManager->Ready())
             ScriptManager->UpdateRfgPointers();
     }
-    if (!Globals::Gui)
+    if (!Gui)
     {
         return rfg::WorldDoFrame(This, edx, HardLoad);
     }
 
-    static GuiReference<GeneralTweaksGui> TweaksMenuRef = Globals::Gui->GetGuiReference<GeneralTweaksGui>("General tweaks").value();
+    static GuiReference<GeneralTweaksGui> TweaksMenuRef = Gui->GetGuiReference<GeneralTweaksGui>("General tweaks").value();
     if (TweaksMenuRef.Get().UseCustomLevelAmbientLight)
     {
         Globals::RfgWorldPtr->level_ambient.x = TweaksMenuRef.Get().CustomLevelAmbientLight.x;
