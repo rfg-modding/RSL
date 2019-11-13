@@ -65,14 +65,6 @@ void MenuBarGui::Draw()
             }
             ImGui::PopStyleColor(); //Pop reset button color
 
-            static ImVec4 ReloadSettingsButtonColor = Util::NormalizeColor(0.0f, 204.0f, 27.0f); //Light green color
-            ImGui::PushStyleColor(ImGuiCol_Text, ReloadSettingsButtonColor); 
-            if (ImGui::MenuItem(std::string(std::string(ICON_FA_SYNC) + u8" Reload settings.json").c_str()))
-            {
-                Globals::Program->LoadDataFromConfig();
-            }
-            ImGui::PopStyleColor();
-
             static ImVec4 LockoutButtonColor = Util::NormalizeColor(204.0f, 119.0f, 0.0f); //Orange color
             ImGui::PushStyleColor(ImGuiCol_Text, LockoutButtonColor); 
             if (ImGui::MenuItem(std::string(std::string(ICON_FA_LOCK) + u8" Activate lockout mode").c_str()))

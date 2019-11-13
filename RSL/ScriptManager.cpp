@@ -24,6 +24,7 @@
 #include "WeaponInfoLua.h"
 #include "CameraWrapper.h"
 #include "ApiTables.h"
+#include "GuiFunctions.h"
 #include "VehicleInfoLua.h"
 #include "VehicleLua.h"
 #include "FlyerLua.h"
@@ -77,10 +78,13 @@ void ScriptManager::SetupLua()
 {
     std::lock_guard<std::recursive_mutex> Lock(Mutex);
 
-	RunScript(Globals::GetEXEPath(false) + "RSL/Core/CoreInit.lua");
+    if (!RunScript(Globals::GetEXEPath(false) + "RSL/Core/CoreInit.lua"))
+        Logger::LogFatalError("Error! Failed to run CoreInit.lua!");
+
     sol::state& LuaStateRef = *LuaState;
 
     Lua::BindApiFunctions(LuaStateRef);
+    Lua::BindGuiFunctions(LuaStateRef);
 
 	#pragma warning(push)
 	#pragma warning(disable : C4172)

@@ -474,6 +474,12 @@
     <ClCompile Include="GuiSystem.cpp">
       <Filter>Main\Managers</Filter>
     </ClCompile>
+    <ClCompile Include="Bootstrapper.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
+    <ClCompile Include="GuiFunctions.cpp">
+      <Filter>Lua Binding\Functions</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="RFGR_Type_UI.h">
@@ -796,6 +802,12 @@
     </ClInclude>
     <ClInclude Include="ScriptEventHook.h">
       <Filter>Main\Managers\ScriptManager\Scripts</Filter>
+    </ClInclude>
+    <ClInclude Include="GuiFunctions.h">
+      <Filter>Lua Binding\Functions</Filter>
+    </ClInclude>
+    <ClInclude Include="Bootstrapper.h">
+      <Filter>Main</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
