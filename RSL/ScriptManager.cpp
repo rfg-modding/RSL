@@ -27,6 +27,7 @@
 #include "VehicleInfoLua.h"
 #include "VehicleLua.h"
 #include "FlyerLua.h"
+#include "GuiLua.h"
 
 ScriptManager::~ScriptManager()
 {
@@ -84,6 +85,8 @@ void ScriptManager::SetupLua()
 
     Lua::BindApiFunctions(LuaStateRef);
     Lua::BindGuiFunctions(LuaStateRef);
+    Lua::BindBaseGui(LuaStateRef);
+    Lua::BindLuaGui(LuaStateRef);
 
 	#pragma warning(push)
 	#pragma warning(disable : C4172)
@@ -226,6 +229,7 @@ void ScriptManager::UpdateRfgPointers()
 	LuaStateRef["PhysicsWorld"] = Globals::hkpWorldPtr;
 }
 
+//Todo: Maybe see if this can be modified to be a generic "look for files with these extensions / values, in these locations" function
 //Scans all files in the Scripts folder and places valid script files in the scripts list (this->Scripts)
 void ScriptManager::ScanScriptsFolder()
 {
@@ -333,6 +337,26 @@ ScriptResult ScriptManager::RunStringAsScript(std::string Buffer, const std::str
     }
 
     return ScriptResult(false, {}, {});
+}
+
+/*
+ * Safely runs a sol::function. Logs any errors it encounters.
+ * Can't prevent errors that occur in the games code, so it's not completely foolproof,
+ * but it will catch some errors at least.
+ */
+bool ScriptManager::RunFunctionSafe(sol::function& Func, const std::string& Name, const sol::table& Args)
+{
+    std::lock_guard<std::recursive_mutex> Lock(Mutex);
+
+    const sol::protected_function_result Result = Func(Args);
+    if (!Result.valid())
+    {
+        sol::error Error = Result;
+        std::string What(Error.what());
+        Logger::LogError("Lua function \"{0}\" encountered an error! Message: \"{1}\"",Name, What);
+        return false;
+    }
+    return true;
 }
 
 // Attempts to get the error line number by parsing a lua error string. 

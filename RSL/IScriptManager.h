@@ -28,6 +28,7 @@ public:
     virtual bool RunScript(const size_t Index) = 0;
 
     virtual ScriptResult RunStringAsScript(std::string Buffer, const std::string& Name) = 0;
+    virtual bool RunFunctionSafe(sol::function& Func, const std::string& Name, const sol::table& Args = sol::nil) = 0;
     [[nodiscard]] virtual std::optional<uint> GetLineFromErrorString(const std::string& ErrorString) const = 0;
 
     //Todo: See if this can be done with a single function without using strings

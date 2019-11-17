@@ -48,18 +48,31 @@ void GuiManager::Draw()
         //Used on the first successful draw of the gui to insure that each gui element has valid PlayerPtr*, Scripts*, and Gui* values. 
         //Very duct-tapey solution, but it works. Put in place since the values in menus are sometimes not being set properly, causing crashes.
         std::call_once(InitialDrawCheck, [&]()
-            {
-                DrawPassedOnce = true;
-            });
-
-        if (Globals::OverlayActive)
         {
-            for (const auto& i : GuiList)
+            DrawPassedOnce = true;
+        });
+
+
+        //Remove guis marked for deletion
+        GuiList.erase(std::remove_if(GuiList.begin(), GuiList.end(),
+        [](BaseGui* gui)
+        {
+            return gui->MarkedForDeletion();
+        }),
+        GuiList.end());
+
+        for (const auto& i : GuiList)
+        {
+            if(i->IndependentVisibility)
+            {
+                i->Draw();
+            }
+            else if(Globals::OverlayActive)
             {
                 i->Draw();
             }
         }
-        if (LuaConsoleActive && !Globals::OverlayActive)
+        if (LuaConsoleActive && !Globals::OverlayActive) //Todo: Ideally this should be rewritten in lua with independent visibility if doable
         {
             LuaConsole.Get().Draw();
         }

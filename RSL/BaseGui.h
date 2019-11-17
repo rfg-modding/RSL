@@ -10,15 +10,19 @@ public:
     virtual ~BaseGui() { }
     virtual void Draw() = 0;
 
-    std::string Title;
-
     void Show() { Visible = true; }
     void Hide() { Visible = false; }
     void Toggle() { Visible = !Visible; }
     [[nodiscard]] bool IsVisible() const { return Visible; }
+    void Delete() { _markedForDeletion = true; }
+    [[nodiscard]] bool MarkedForDeletion() const { return _markedForDeletion; }
 
+    std::string Title;
     bool Visible = false;
+    bool IndependentVisibility = false;
 
 protected:
     BaseGui() { }
+
+    bool _markedForDeletion = false;
 };

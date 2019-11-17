@@ -201,6 +201,7 @@ echo #define RSL_BUILD_DATE %buildTime:~0,8% &gt;&gt; $(ProjectDir)/BuildDate.h<
     <ClCompile Include="GraphicsStateWrapper.cpp" />
     <ClCompile Include="GraphicsTweaksGui.cpp" />
     <ClCompile Include="GuiFunctions.cpp" />
+    <ClCompile Include="GuiLua.cpp" />
     <ClCompile Include="GuiManager.cpp" />
     <ClCompile Include="HkpRigidBodyLua.cpp" />
     <ClCompile Include="CharacterInstanceLua.cpp" />
@@ -241,6 +242,7 @@ echo #define RSL_BUILD_DATE %buildTime:~0,8% &gt;&gt; $(ProjectDir)/BuildDate.h<
     <ClCompile Include="Logger.cpp" />
     <ClCompile Include="LogWindow.cpp" />
     <ClCompile Include="LuaFunctions.cpp" />
+    <ClCompile Include="LuaGui.cpp" />
     <ClCompile Include="Lua_DoBuffer.cpp" />
     <ClCompile Include="Matrix43Lua.cpp" />
     <ClCompile Include="MatrixLua.cpp" />
@@ -305,6 +307,7 @@ echo #define RSL_BUILD_DATE %buildTime:~0,8% &gt;&gt; $(ProjectDir)/BuildDate.h<
     <ClInclude Include="GraphicsStateWrapper.h" />
     <ClInclude Include="GraphicsTweaksGui.h" />
     <ClInclude Include="GuiFunctions.h" />
+    <ClInclude Include="GuiLua.h" />
     <ClInclude Include="GuiManager.h" />
     <ClInclude Include="GuiReference.h" />
     <ClInclude Include="HkpRigidBodyLua.h" />
@@ -352,6 +355,7 @@ echo #define RSL_BUILD_DATE %buildTime:~0,8% &gt;&gt; $(ProjectDir)/BuildDate.h<
     <ClInclude Include="IScriptManager.h" />
     <ClInclude Include="ISnippetManager.h" />
     <ClInclude Include="Launcher.h" />
+    <ClInclude Include="LuaGui.h" />
     <ClInclude Include="RFGR_Types_Cfile.h" />
     <ClInclude Include="RFGR_Types_Vehicle.h" />
     <ClInclude Include="RFGR_Types_Keen_InputEvent.h" />

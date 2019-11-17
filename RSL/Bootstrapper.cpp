@@ -119,6 +119,7 @@ void Bootstrapper::InitRSL()
         Logger::Log("Initializing overlays.\n");
         InitOverlays();
         Logger::Log("Initializing gui system.\n");
+        GuiManager->Initialize();
 
         //Update global lua pointers after init just to be sure. Can't hurt.
         Scripts->UpdateRfgPointers();
