@@ -20,8 +20,6 @@ public:
     void SetLuaConsole(std::string Name) override;
 
 private:
-    std::vector <BaseGui*> GuiList;
-
     std::once_flag InitialDrawCheck;
     bool DrawPassedOnce = false;
     bool LuaConsoleActive = false;
