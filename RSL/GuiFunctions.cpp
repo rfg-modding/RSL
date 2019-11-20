@@ -309,52 +309,64 @@ void Lua::BindGuiFunctions(sol::state& LuaStateRef)
         [](std::string& label, vector2& v)
         {
             ImGui::DragFloat2(label.c_str(), (float*)&v);
+            return v;
         },
         [](std::string& label, vector2& v, float v_speed)
         {
             ImGui::DragFloat2(label.c_str(), (float*)&v, v_speed);
+            return v;
         },
         [](std::string& label, vector2& v, float v_speed, float v_min)
         {
             ImGui::DragFloat2(label.c_str(), (float*)&v, v_speed, v_min);
+            return v;
         },
         [](std::string& label, vector2& v, float v_speed, float v_min, float v_max)
         {
             ImGui::DragFloat2(label.c_str(), (float*)&v, v_speed, v_min, v_max);
+            return v;
         },
         [](std::string& label, vector2& v, float v_speed, float v_min, float v_max, const char* format)
         {
             ImGui::DragFloat2(label.c_str(), (float*)&v, v_speed, v_min, v_max, format);
+            return v;
         },
         [](std::string& label, vector2& v, float v_speed, float v_min, float v_max, const char* format, float power)
         {
             ImGui::DragFloat2(label.c_str(), (float*)&v, v_speed, v_min, v_max, format, power);
+            return v;
         }
     );
     GuiTable["DragFloat3"] = sol::overload(
         [](std::string& label, vector& v)
         {
             ImGui::DragFloat3(label.c_str(), (float*)&v);
+            return v;
         },
         [](std::string& label, vector& v, float v_speed)
         {
             ImGui::DragFloat3(label.c_str(), (float*)&v, v_speed);
+            return v;
         },
         [](std::string& label, vector& v, float v_speed, float v_min)
         {
             ImGui::DragFloat3(label.c_str(), (float*)&v, v_speed, v_min);
+            return v;
         },
         [](std::string& label, vector& v, float v_speed, float v_min, float v_max)
         {
             ImGui::DragFloat3(label.c_str(), (float*)&v, v_speed, v_min, v_max);
+            return v;
         },
         [](std::string& label, vector& v, float v_speed, float v_min, float v_max, const char* format)
         {
             ImGui::DragFloat3(label.c_str(), (float*)&v, v_speed, v_min, v_max, format);
+            return v;
         },
         [](std::string& label, vector& v, float v_speed, float v_min, float v_max, const char* format, float power)
         {
             ImGui::DragFloat3(label.c_str(), (float*)&v, v_speed, v_min, v_max, format, power);
+            return v;
         }
     );
     ////DragFloat4
@@ -375,57 +387,89 @@ void Lua::BindGuiFunctions(sol::state& LuaStateRef)
 
 
     GuiTable["SliderFloat"] = sol::overload(
-        [](const char* label, float* v, float v_min, float v_max, const char* format = "%.3f", float power = 1.0f)
-        { ImGui::SliderFloat(label, v, v_min, v_max, format, power); },
-
-        [](std::string& label, float* v, float v_min, float v_max, const char* format = "%.3f", float power = 1.0f)
-        { ImGui::SliderFloat(label.c_str(), v, v_min, v_max, format, power); }//,
-
-        //[](const char* label, float& v, float v_min, float v_max, const char* format = "%.3f", float power = 1.0f)
-        //{ ImGui::SliderFloat(label, &v, v_min, v_max, format, power); },
-
-        //[](std::string& label, float& v, float v_min, float v_max, const char* format = "%.3f", float power = 1.0f)
-        //{ ImGui::SliderFloat(label.c_str(), &v, v_min, v_max, format, power); }
+        [](std::string& label, float v, float v_min, float v_max)
+        {
+            ImGui::SliderFloat(label.c_str(), &v, v_min, v_max);
+            return v;
+        },
+        [](std::string& label, float v, float v_min, float v_max, std::string& format)
+        {
+            ImGui::SliderFloat(label.c_str(), &v, v_min, v_max, format.c_str());
+            return v;
+        },
+        [](std::string& label, float v, float v_min, float v_max, std::string& format, float power)
+        {
+            ImGui::SliderFloat(label.c_str(), &v, v_min, v_max, format.c_str(), power);
+            return v;
+        }
     );
     GuiTable["SliderFloat2"] = sol::overload(
-        [](const char* label, vector2* v, float v_min, float v_max, const char* format = "%.3f", float power = 1.0f)
-        { ImGui::SliderFloat2(label, (float*)v, v_min, v_max, format, power); },
-
-        [](std::string& label, vector2* v, float v_min, float v_max, const char* format = "%.3f", float power = 1.0f)
-        { ImGui::SliderFloat2(label.c_str(), (float*)v, v_min, v_max, format, power); }//,
-
-        //[](const char* label, vector2& v, float v_min, float v_max, const char* format = "%.3f", float power = 1.0f)
-        //{ ImGui::SliderFloat2(label, (float*)&v, v_min, v_max, format, power); },
-
-        //[](std::string& label, vector2& v, float v_min, float v_max, const char* format = "%.3f", float power = 1.0f)
-        //{ ImGui::SliderFloat2(label.c_str(), (float*)&v, v_min, v_max, format, power); }
+        [](std::string& label, vector2& v, float v_min, float v_max)
+        {
+            ImGui::SliderFloat2(label.c_str(), (float*)&v, v_min, v_max);
+            return v;
+        },
+        [](std::string& label, vector2& v, float v_min, float v_max, std::string& format)
+        {
+            ImGui::SliderFloat2(label.c_str(), (float*)&v, v_min, v_max, format.c_str());
+            return v;
+        },
+        [](std::string& label, vector2& v, float v_min, float v_max, std::string& format, float power)
+        {
+            ImGui::SliderFloat2(label.c_str(), (float*)&v, v_min, v_max, format.c_str(), power);
+            return v;
+        }
     );
     GuiTable["SliderFloat3"] = sol::overload(
-        [](const char* label, vector* v, float v_min, float v_max, const char* format = "%.3f", float power = 1.0f)
-        { ImGui::SliderFloat3(label, (float*)v, v_min, v_max, format, power); },
-
-        [](std::string& label, vector* v, float v_min, float v_max, const char* format = "%.3f", float power = 1.0f)
-        { ImGui::SliderFloat3(label.c_str(), (float*)v, v_min, v_max, format, power); }//,
-
-        //[](const char* label, vector& v, float v_min, float v_max, const char* format = "%.3f", float power = 1.0f)
-        //{ ImGui::SliderFloat3(label, (float*)&v, v_min, v_max, format, power); },
-
-        //[](std::string& label, vector& v, float v_min, float v_max, const char* format = "%.3f", float power = 1.0f)
-        //{ ImGui::SliderFloat3(label.c_str(), (float*)&v, v_min, v_max, format, power); }
+        [](std::string& label, vector& v, float v_min, float v_max)
+        {
+            ImGui::SliderFloat3(label.c_str(), (float*)&v, v_min, v_max);
+            return v;
+        },
+        [](std::string& label, vector& v, float v_min, float v_max, std::string& format)
+        {
+            ImGui::SliderFloat3(label.c_str(), (float*)&v, v_min, v_max, format.c_str());
+            return v;
+        },
+        [](std::string& label, vector& v, float v_min, float v_max, std::string& format, float power)
+        {
+            ImGui::SliderFloat3(label.c_str(), (float*)&v, v_min, v_max, format.c_str(), power);
+            return v;
+        }
     );
     GuiTable["SliderAngle"] = sol::overload(
-        [](const char* label, float* v_rad, float v_degrees_min = -360.0f, float v_degrees_max = +360.0f, const char* format = "%.0f deg")
-        { ImGui::SliderAngle(label, v_rad, v_degrees_min, v_degrees_max, format); },
-
-        [](std::string& label, float* v_rad, float v_degrees_min = -360.0f, float v_degrees_max = +360.0f, const char* format = "%.0f deg")
-        { ImGui::SliderAngle(label.c_str(), v_rad, v_degrees_min, v_degrees_max, format); }
+        [](std::string& label, float v_rad)
+        {
+            ImGui::SliderAngle(label.c_str(), &v_rad);
+            return v_rad;
+        },
+        [](std::string& label, float v_rad, float v_degrees_min)
+        {
+            ImGui::SliderAngle(label.c_str(), &v_rad, v_degrees_min);
+            return v_rad;
+        },
+        [](std::string& label, float v_rad, float v_degrees_min, float v_degrees_max)
+        {
+            ImGui::SliderAngle(label.c_str(), &v_rad, v_degrees_min, v_degrees_max);
+            return v_rad;
+        },
+        [](std::string& label, float v_rad, float v_degrees_min, float v_degrees_max, const char* format)
+        {
+            ImGui::SliderAngle(label.c_str(), &v_rad, v_degrees_min, v_degrees_max, format);
+            return v_rad;
+        }
     );
     GuiTable["SliderInt"] = sol::overload(
-        [](const char* label, int* v, int v_min, int v_max, const char* format = "%d")
-        { ImGui::SliderInt(label, v, v_min, v_max, format); },
-
-        [](std::string& label, int* v, int v_min, int v_max, const char* format = "%d")
-        { ImGui::SliderInt(label.c_str(), v, v_min, v_max, format); }
+        [](std::string& label, int v, int v_min, int v_max, std::string& format)
+        {
+            ImGui::SliderInt(label.c_str(), &v, v_min, v_max, format.c_str());
+            return v;
+        },
+        [](std::string& label, int v, int v_min, int v_max)
+        {
+            ImGui::SliderInt(label.c_str(), &v, v_min, v_max);
+            return v;
+        }
     );
     //SliderInt2
     //SliderInt3
