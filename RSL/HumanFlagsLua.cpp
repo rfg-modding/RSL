@@ -3,6 +3,7 @@
 
 void Lua::BindHumanFlags(sol::state & LuaState)
 {
+#if LUA_ENABLED
 #pragma warning(push)
 #pragma warning(disable : 4172)
     //Note: This looks fucking atrocious
@@ -138,5 +139,6 @@ void Lua::BindHumanFlags(sol::state & LuaState)
 	Utype.set("OnlyUseActionNodes", sol::property([](HumanFlags& Self) -> const bool& {return Self.only_use_action_nodes; }, [](HumanFlags& Self, bool Value) {Self.only_use_action_nodes = Value; })); //bool - 1 
 	Utype.set("ComplainWhenShot", sol::property([](HumanFlags& Self) -> const bool& {return Self.complain_when_shot; }, [](HumanFlags& Self, bool Value) {Self.complain_when_shot = Value; })); //bool - 1 
 	RfgTable.set_usertype("HumanFlags", Utype);
-#pragma warning(pop) 
+#pragma warning(pop)
+#endif
 }

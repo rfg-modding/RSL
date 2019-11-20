@@ -3,6 +3,7 @@
 
 void Lua::BindFixedArrayWrapperExplosionInfo(sol::state& LuaState)
 {
+#if LUA_ENABLED
     auto RfgTable = LuaState["rfg"].get_or_create<sol::table>();
     auto Utype = RfgTable.create_simple_usertype<FixedArrayWrapper<explosion_info>>();
     Utype.set("new", sol::no_constructor);
@@ -12,10 +13,12 @@ void Lua::BindFixedArrayWrapperExplosionInfo(sol::state& LuaState)
     Utype.set("Initialized", &FixedArrayWrapper<explosion_info>::Initialized);
     Utype.set(sol::meta_function::index, &FixedArrayWrapper<explosion_info>::operator[]);
     RfgTable.set_usertype("FixedArrayWrapperExplosionInfo", Utype);
+#endif
 }
 
 void Lua::BindExplosionInfo(sol::state& LuaState)
 {
+#if LUA_ENABLED
     auto RfgTable = LuaState["rfg"].get_or_create<sol::table>();
     auto Utype = RfgTable.create_simple_usertype<explosion_info>();
     Utype.set("new", sol::constructors<explosion_info(), explosion_info(const explosion_info&)>());
@@ -56,4 +59,5 @@ void Lua::BindExplosionInfo(sol::state& LuaState)
     Utype.set("IgnoreOrientation", &explosion_info::ignore_orientation);
     Utype.set("AlwaysRagdoll", &explosion_info::always_ragdoll);
     RfgTable.set_usertype("ExplosionInfo", Utype);
+#endif
 }

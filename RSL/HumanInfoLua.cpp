@@ -3,6 +3,7 @@
 
 void Lua::BindHumanInfoFlags(sol::state & LuaState)
 {
+#if LUA_ENABLED
 	auto RfgTable = LuaState["rfg"].get_or_create<sol::table>();
 	auto Utype = RfgTable.create_simple_usertype<human_info_flags>();
 	Utype.set("new", sol::no_constructor);
@@ -26,10 +27,12 @@ void Lua::BindHumanInfoFlags(sol::state & LuaState)
 	Utype.set("Jenkins", sol::property(itsy_bitsy::read<human_info_flags, 17>, itsy_bitsy::write<human_info_flags, 17>)); //int8 - 1*/
 	Utype.set("DriverlessExit", &human_info_flags::driverless_exit_only); //bool*/
 	RfgTable.set_usertype("HumanInfoFlags", Utype);
+#endif
 }
 
 void Lua::BindHumanPropGeneralInfo(sol::state& LuaState)
 {
+#if LUA_ENABLED
 	auto RfgTable = LuaState["rfg"].get_or_create<sol::table>();
 	auto Utype = RfgTable.create_simple_usertype<human_prop_general_info>();
 	Utype.set("new", sol::no_constructor);
@@ -39,10 +42,12 @@ void Lua::BindHumanPropGeneralInfo(sol::state& LuaState)
 	Utype.set("NumProps",& human_prop_general_info::num_props);
 	Utype.set("Props", &human_prop_general_info::props); //Todo: Bind this type
 	RfgTable.set_usertype("HumanPropGeneralInfo", Utype);
+#endif
 }
 
 void Lua::BindCharDefHead(sol::state& LuaState)
 {
+#if LUA_ENABLED
 	auto RfgTable = LuaState["rfg"].get_or_create<sol::table>();
 	auto Utype = RfgTable.create_simple_usertype<char_def_head>();
 	Utype.set("new", sol::no_constructor);
@@ -58,10 +63,12 @@ void Lua::BindCharDefHead(sol::state& LuaState)
 	Utype.set("NumSkinShaderParams", &char_def_head::num_skin_shader_params);
 	///Utype.set("SkinShaderParams", sol::property([](char_def_head& Self) { return std::ref(Self.skin_shader_params); })); //3x5 float array //Todo: Bind this
 	RfgTable.set_usertype("CharDefHead", Utype);
+#endif
 }
 
 void Lua::BindFootGroundEffects(sol::state& LuaState)
 {
+#if LUA_ENABLED
 	auto RfgTable = LuaState["rfg"].get_or_create<sol::table>();
 	auto Utype = RfgTable.create_simple_usertype<foot_ground_effects>();
 	Utype.set("new", sol::no_constructor);
@@ -73,10 +80,12 @@ void Lua::BindFootGroundEffects(sol::state& LuaState)
 	//Utype.set("Footstep", );
 	//Utype.set("Jump", );
 	RfgTable.set_usertype("FootGroundEffects", Utype);
+#endif
 }
 
 void Lua::BindHumanInfo(sol::state& LuaState)
 {
+#if LUA_ENABLED
 	auto RfgTable = LuaState["rfg"].get_or_create<sol::table>();
 	auto Utype = RfgTable.create_simple_usertype<HumanInfo>();
 	Utype.set("new", sol::no_constructor);//("new", sol::constructors<Human(), Human(const Human&)>());
@@ -122,4 +131,5 @@ void Lua::BindHumanInfo(sol::state& LuaState)
 	Utype.set("LightTagNames", sol::property([](HumanInfo& Self) { return std::ref(Self.light_tag_names); })); //char*[2]
 	Utype.set("Flags", &HumanInfo::flags);
 	RfgTable.set_usertype("HumanInfo", Utype);
+#endif
 }

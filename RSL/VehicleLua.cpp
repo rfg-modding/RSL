@@ -3,6 +3,7 @@
 
 void Lua::BindVehicleFlags(sol::state& LuaState)
 {
+#if LUA_ENABLED
     auto RfgTable = LuaState["rfg"].get_or_create<sol::table>();
     auto Utype = RfgTable.create_simple_usertype<vehicle_flags>();
     Utype.set("Activity", sol::property(
@@ -238,10 +239,12 @@ void Lua::BindVehicleFlags(sol::state& LuaState)
         [](vehicle_flags& Self, bool Value) {Self.invisible_driver = Value; }
     ));
     RfgTable.set_usertype("VehicleFlags", Utype);
+#endif
 }
 
 void Lua::BindVehicleSpawnFlags(sol::state& LuaState)
 {
+#if LUA_ENABLED
     auto RfgTable = LuaState["rfg"].get_or_create<sol::table>();
     auto Utype = RfgTable.create_simple_usertype<vehicle_spawn_flags>();
     Utype.set("HighPriority", sol::property(
@@ -265,10 +268,12 @@ void Lua::BindVehicleSpawnFlags(sol::state& LuaState)
         [](vehicle_spawn_flags& Self, bool Value) {Self.road_spawn = Value; }
     ));
     RfgTable.set_usertype("VehicleSpawnFlags", Utype);
+#endif
 }
 
 void Lua::BindVehicleRddFlags(sol::state& LuaState)
 {
+#if LUA_ENABLED
     auto RfgTable = LuaState["rfg"].get_or_create<sol::table>();
     auto Utype = RfgTable.create_simple_usertype<vehicle_rdd_flags>();
     Utype.set("PositionOnGroundForCreate", sol::property(
@@ -280,10 +285,12 @@ void Lua::BindVehicleRddFlags(sol::state& LuaState)
         [](vehicle_rdd_flags& Self, bool Value) {Self.m_hide_vehicle = Value; }
     ));
     RfgTable.set_usertype("VehicleRddFlags", Utype);
+#endif
 }
 
 void Lua::BindVehicle(sol::state& LuaState)
 {
+#if LUA_ENABLED
     auto RfgTable = LuaState["rfg"].get_or_create<sol::table>();
     auto Utype = RfgTable.create_simple_usertype<vehicle>();
     Utype.set("new", sol::no_constructor);
@@ -382,4 +389,5 @@ void Lua::BindVehicle(sol::state& LuaState)
     Utype.set("ExtraMass", &vehicle::extra_mass);
     Utype.set("ExtraMassValue", &vehicle::extra_mass_value);
     RfgTable.set_usertype("Vehicle", Utype);
+#endif
 }

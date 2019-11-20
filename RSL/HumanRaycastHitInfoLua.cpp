@@ -3,6 +3,7 @@
 
 void Lua::BindHumanRaycastHitInfo(sol::state& LuaState)
 {
+#if LUA_ENABLED
 	auto RfgTable = LuaState["rfg"].get_or_create<sol::table>();
 	auto Utype = RfgTable.create_simple_usertype<HumanRaycastHitInfo>();
 	Utype.set("new", sol::no_constructor);
@@ -12,4 +13,5 @@ void Lua::BindHumanRaycastHitInfo(sol::state& LuaState)
 	Utype.set("HitLocation", &HumanRaycastHitInfo::hit_location);
 	Utype.set("HitBone", &HumanRaycastHitInfo::hit_bone);
 	RfgTable.set_usertype("HumanRaycastHitInfo", Utype);
+#endif
 }

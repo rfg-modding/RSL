@@ -3,6 +3,7 @@
 
 void Lua::BindBaseGui(sol::state& LuaStateRef)
 {
+#if LUA_ENABLED
     auto RfgTable = LuaStateRef["gui"].get_or_create<sol::table>();
     auto Utype = RfgTable.create_simple_usertype<BaseGui>();
 
@@ -17,10 +18,12 @@ void Lua::BindBaseGui(sol::state& LuaStateRef)
     Utype.set("Visible", &BaseGui::Visible);
     Utype.set("IndependentVisibility", &BaseGui::IndependentVisibility);
     RfgTable.set_usertype("BaseGui", Utype);
+#endif
 }
 
 void Lua::BindLuaGui(sol::state& LuaStateRef)
 {
+#if LUA_ENABLED
     auto RfgTable = LuaStateRef["gui"].get_or_create<sol::table>();
     auto Utype = RfgTable.create_simple_usertype<LuaGui>();
 
@@ -29,4 +32,5 @@ void Lua::BindLuaGui(sol::state& LuaStateRef)
     Utype.set("Flags", &LuaGui::Flags);
     Utype.set("SetDrawFunction", &LuaGui::SetDrawFunction);
     RfgTable.set_usertype("LuaGui", Utype);
+#endif
 }

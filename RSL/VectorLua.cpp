@@ -3,6 +3,7 @@
 
 void Lua::BindVector2(sol::state& LuaState)
 {
+#if LUA_ENABLED
 	auto RfgTable = LuaState["rfg"].get_or_create<sol::table>();
 	auto Utype = RfgTable.create_simple_usertype<vector2>();
 	Utype.set("new", sol::constructors<vector2(), vector2(const vector2&), vector2(float), vector2(float, float)>());
@@ -25,10 +26,12 @@ void Lua::BindVector2(sol::state& LuaState)
         [](vector2& Self, bool Parentheses) {return Self.GetDataString(Parentheses, true); },
         [](vector2& Self, bool Parentheses, bool Labels) {return Self.GetDataString(Parentheses, Labels); }));
 	RfgTable.set_usertype("Vector2", Utype);
+#endif
 }
 
 void Lua::BindVector(sol::state& LuaState)
 {
+#if LUA_ENABLED
 	auto RfgTable = LuaState["rfg"].get_or_create<sol::table>();
 	auto Utype = RfgTable.create_simple_usertype<vector>();
 	Utype.set("new", sol::constructors<vector(), vector(const vector&), vector(float), vector(float, float, float)>());
@@ -54,20 +57,5 @@ void Lua::BindVector(sol::state& LuaState)
         [](vector& Self, bool Parentheses) {return Self.GetDataString(Parentheses, true); },
         [](vector& Self, bool Parentheses, bool Labels) {return Self.GetDataString(Parentheses, Labels); }));
 	RfgTable.set_usertype("Vector", Utype);
-
-	/*RfgTable.new_usertype<vector>
-	(
-		"vector",
-		"new", sol::constructors<vector(), vector(const vector&), vector(float), vector(float, float, float)>(),
-		sol::meta_function::addition, &vector::operator+,
-		sol::meta_function::subtraction, &vector::operator-,
-		sol::meta_function::multiplication, &vector::operator*,
-		sol::meta_function::equal_to, &vector::operator==,
-		"Cross", &vector::Cross,
-		"Magnitude", &vector::Magnitude,
-		"SetAll", &vector::SetAll,
-		"x", &vector::x,
-		"y", &vector::y,
-		"z", &vector::z
-	);*/
+#endif
 }

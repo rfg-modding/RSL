@@ -3,6 +3,7 @@
 
 void Lua::BindFixedArrayWrapperWeaponInfo(sol::state& LuaState)
 {
+#if LUA_ENABLED
     auto RfgTable = LuaState["rfg"].get_or_create<sol::table>();
     auto Utype = RfgTable.create_simple_usertype<FixedArrayWrapper<weapon_info>>();
     Utype.set("new", sol::no_constructor);
@@ -12,10 +13,12 @@ void Lua::BindFixedArrayWrapperWeaponInfo(sol::state& LuaState)
     Utype.set("Initialized", &FixedArrayWrapper<weapon_info>::Initialized);
     Utype.set(sol::meta_function::index, &FixedArrayWrapper<weapon_info>::operator[]);
     RfgTable.set_usertype("FixedArrayWrapperWeaponInfo", Utype);
+#endif
 }
 
 void Lua::BindWeaponProjectileInfo(sol::state& LuaState)
 {
+#if LUA_ENABLED
     auto RfgTable = LuaState["rfg"].get_or_create<sol::table>();
     auto Utype = RfgTable.create_simple_usertype<weapon_projectile_info>();
     Utype.set("new", sol::constructors<weapon_projectile_info(), weapon_projectile_info(const weapon_projectile_info&)>());
@@ -39,10 +42,12 @@ void Lua::BindWeaponProjectileInfo(sol::state& LuaState)
     Utype.set("DamageEffect", &weapon_projectile_info::damage_effect);
     //Utype.set("HitCameraShake", &weapon_projectile_info::hit_camera_shake); //Todo: camera_shake class, need to bind
     RfgTable.set_usertype("WeaponProjectileInfo", Utype);
+#endif
 }
 
 void Lua::BindDamageScalingInfo(sol::state& LuaState)
 {
+#if LUA_ENABLED
     auto RfgTable = LuaState["rfg"].get_or_create<sol::table>();
     auto Utype = RfgTable.create_simple_usertype<damage_scaling_info>();
     Utype.set("new", sol::constructors<damage_scaling_info(const damage_scaling_info&)>());
@@ -50,10 +55,12 @@ void Lua::BindDamageScalingInfo(sol::state& LuaState)
     Utype.set("Damage", sol::property([](damage_scaling_info& Self) { return std::ref(Self.damage); }));
 
     RfgTable.set_usertype("DamageScalingInfo", Utype);
+#endif
 }
 
 void Lua::BindWeaponInfoFlags(sol::state& LuaState)
 {
+#if LUA_ENABLED
     auto RfgTable = LuaState["rfg"].get_or_create<sol::table>();
     auto Utype = RfgTable.create_simple_usertype<weapon_info_flags>();
     Utype.set("new", sol::constructors<weapon_info_flags(const weapon_info_flags&)>());
@@ -112,10 +119,12 @@ void Lua::BindWeaponInfoFlags(sol::state& LuaState)
         [](weapon_info_flags& Self) -> bool {return Self.dont_drop_on_death; },
         [](weapon_info_flags& Self, bool Value) {Self.dont_drop_on_death = Value; }));
     RfgTable.set_usertype("WeaponInfoFlags", Utype);
+#endif
 }
 
 void Lua::BindWeaponInfo(sol::state& LuaState)
 {
+#if LUA_ENABLED
     auto RfgTable = LuaState["rfg"].get_or_create<sol::table>();
     auto Utype = RfgTable.create_simple_usertype<weapon_info>();
     Utype.set("new", sol::constructors<weapon_info(const weapon_info&)>()); //Todo: Add a constructor so people can edit copies
@@ -225,5 +234,6 @@ void Lua::BindWeaponInfo(sol::state& LuaState)
     Utype.set("CrouchingPrimaryMeleeAttack", &weapon_info::crouching_primary_melee_attack);
     Utype.set("CrouchingSecondaryMeleeAttack", &weapon_info::crouching_secondary_melee_attack);
     Utype.set("CrouchingTertiaryMeleeAttack", &weapon_info::crouching_tertiary_melee_attack);
-    RfgTable.set_usertype("WeaponInfo", Utype); 
+    RfgTable.set_usertype("WeaponInfo", Utype);
+#endif
 }

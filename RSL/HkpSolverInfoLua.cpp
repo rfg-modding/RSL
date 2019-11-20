@@ -3,6 +3,7 @@
 
 void Lua::BindHkpSolverInfo(sol::state& LuaState)
 {
+#if LUA_ENABLED
     auto RfgTable = LuaState["rfg"].get_or_create<sol::table>();
     auto Utype = RfgTable.create_simple_usertype<hkpSolverInfo>();
     Utype.set("new", sol::no_constructor);
@@ -35,4 +36,5 @@ void Lua::BindHkpSolverInfo(sol::state& LuaState)
     //Utype.set("", &hkpSolverInfo::m_deactivationIntegrateCounter);
     //Utype.set("", &hkpSolverInfo::m_maxConstraintViolationSqrd);
     RfgTable.set_usertype("hkpSolverInfo", Utype);
+#endif
 }

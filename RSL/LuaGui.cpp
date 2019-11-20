@@ -10,21 +10,26 @@ LuaGui::LuaGui(std::string Title_, sol::function DrawFunc_)
 
 void LuaGui::Draw()
 {
+    if(NewDrawFunc != sol::nil)
+    {
+        DrawFunc = NewDrawFunc;
+        NewDrawFunc = sol::nil;
+    }
+
     if(DrawFunc == sol::nil)
         return;
 
-    BeingDrawn = true;
     if(ImGui::Begin(Title, &Visible, Flags))
     {
         const sol::table GuiData = Scripts->GetLuaState().create_table();
         Scripts->RunFunctionSafe(DrawFunc, FunctionName, GuiData);
     }
     ImGui::End();
-    BeingDrawn = false;
 }
 
-void LuaGui::SetDrawFunction(sol::function& NewDrawFunc)
+void LuaGui::SetDrawFunction(sol::function& NewDrawFunc_)
 {
-    if (!BeingDrawn)
-        DrawFunc = NewDrawFunc;
+    //Set NewDrawFunc. DrawFunc will be set to this on the next Draw() call.
+    //Done this way to avoid changing the function mid draw and having errors.
+    NewDrawFunc = NewDrawFunc_;
 }

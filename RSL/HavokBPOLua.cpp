@@ -3,6 +3,7 @@
 
 void Lua::BindHavokBPO(sol::state & LuaState)
 {
+#if LUA_ENABLED
 	auto RfgTable = LuaState["rfg"].get_or_create<sol::table>();
 	auto Utype = RfgTable.create_simple_usertype<HavokBPO>();
 	Utype.set("new", sol::constructors<HavokBPO(), HavokBPO(const HavokBPO&)>());
@@ -15,4 +16,5 @@ void Lua::BindHavokBPO(sol::state & LuaState)
 	Utype.set("Prev", &HavokBPO::prev);
 	//Utype.set("Userdata", &HavokBPO::user_data);
 	RfgTable.set_usertype("HavokBPO", Utype);
+#endif
 }

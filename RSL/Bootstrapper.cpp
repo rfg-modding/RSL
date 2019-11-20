@@ -77,7 +77,7 @@ void Bootstrapper::InitRSL()
         Logger::Log("Creating and enabling hooks.\n");
         CreateHooks(); //Creates and enables all function hooks.
 
-#if UseLauncher
+#if USE_LAUNCHER
         Logger::Log("Unpatching rfg main.\n");
         Util::Patching::UnlockGameMain();
         Logger::Log("Resuming game threads.\n");
