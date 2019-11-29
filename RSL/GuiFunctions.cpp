@@ -453,9 +453,9 @@ void Lua::BindGuiFunctions(sol::state& LuaStateRef)
             ImGui::SliderAngle(label.c_str(), &v_rad, v_degrees_min, v_degrees_max);
             return v_rad;
         },
-        [](std::string& label, float v_rad, float v_degrees_min, float v_degrees_max, const char* format)
+        [](std::string& label, float v_rad, float v_degrees_min, float v_degrees_max, std::string& format)
         {
-            ImGui::SliderAngle(label.c_str(), &v_rad, v_degrees_min, v_degrees_max, format);
+            ImGui::SliderAngle(label.c_str(), &v_rad, v_degrees_min, v_degrees_max, format.c_str());
             return v_rad;
         }
     );
@@ -471,6 +471,7 @@ void Lua::BindGuiFunctions(sol::state& LuaStateRef)
             return v;
         }
     );
+    //Todo: Don't need to implement int2/int3 types quite yet since they aren't used much by rfg
     //SliderInt2
     //SliderInt3
     //SliderInt4
@@ -480,14 +481,226 @@ void Lua::BindGuiFunctions(sol::state& LuaStateRef)
     //VSliderInt
     //VSliderScalar
 
+    //Todo: Implement these InputText variants
+    //GuiTable["InputText"] = sol::overload(
+    //    [](std::string& label, char* buf, size_t buf_size, ImGuiInputTextFlags flags = 0, ImGuiInputTextCallback callback = NULL, void* user_data = NULL)
+    //    {
+    //        
+    //    }
+    //);
+    //InputTextMultiline
+    //InputTextWithHint
 
-    //GuiTable[""] = ImGui::;
-    //GuiTable[""] = ImGui::;
-    //GuiTable[""] = ImGui::;
-    //GuiTable[""] = ImGui::;
-    //GuiTable[""] = ImGui::;
-    //GuiTable[""] = ImGui::;
-    //GuiTable[""] = ImGui::;
+    GuiTable["InputFloat"] = sol::overload(
+        [](std::string& label, float v)
+        {
+            ImGui::InputFloat(label.c_str(), &v);
+            return v;
+        },
+        [](std::string& label, float v, float step)
+        {
+            ImGui::InputFloat(label.c_str(), &v, step);
+            return v;
+        },
+        [](std::string& label, float v, float step, float step_fast)
+        {
+            ImGui::InputFloat(label.c_str(), &v, step, step_fast);
+            return v;
+        },
+        [](std::string& label, float v, float step, float step_fast, std::string& format)
+        {
+            ImGui::InputFloat(label.c_str(), &v, step, step_fast, format.c_str());
+            return v;
+        },
+        [](std::string& label, float v, float step = 0.0f, float step_fast = 0.0f, std::string& format, ImGuiInputTextFlags flags)
+        {
+            ImGui::InputFloat(label.c_str(), &v, step, step_fast, format.c_str(), flags);
+            return v;
+        }
+    );
+    GuiTable["InputFloat2"] = sol::overload(
+        [](std::string& label, vector2& v)
+        {
+            ImGui::InputFloat2(label.c_str(), (float*)&v);
+            return v;
+        },
+        [](std::string& label, vector2& v, std::string& format)
+        {
+            ImGui::InputFloat2(label.c_str(), (float*)&v, format.c_str());
+            return v;
+        },
+        [](std::string& label, vector2& v, std::string& format, ImGuiInputTextFlags flags)
+        {
+            ImGui::InputFloat2(label.c_str(), (float*)&v, format.c_str(), flags);
+            return v;
+        }
+    );
+    GuiTable["InputFloat3"] = sol::overload(
+        [](std::string& label, vector& v)
+        {
+            ImGui::InputFloat3(label.c_str(), (float*)&v);
+            return v;
+        },
+        [](std::string& label, vector& v, std::string& format)
+        {
+            ImGui::InputFloat3(label.c_str(), (float*)&v, format.c_str());
+            return v;
+        },
+        [](std::string& label, vector& v, std::string& format, ImGuiInputTextFlags flags)
+        {
+            ImGui::InputFloat3(label.c_str(), (float*)&v, format.c_str(), flags);
+            return v;
+        }
+    );
+    //InputFloat4
+
+    GuiTable["InputInt"] = sol::overload(
+        [](std::string& label, int v)
+        {
+            ImGui::InputInt(label.c_str(), &v);
+            return v;
+        },
+        [](std::string& label, int v, int step)
+        {
+            ImGui::InputInt(label.c_str(), &v, step);
+            return v;
+        },
+        [](std::string& label, int v, int step, int step_fast)
+        {
+            ImGui::InputInt(label.c_str(), &v, step, step_fast);
+            return v;
+        },
+        [](std::string& label, int v, int step, int step_fast, ImGuiInputTextFlags flags)
+        {
+            ImGui::InputInt(label.c_str(), &v, step, step_fast, flags);
+            return v;
+        }
+    );
+    //InputInt2
+    //InputInt3
+    //InputInt4
+    //InputDouble
+    GuiTable["InputDouble"] = sol::overload(
+        [](std::string& label, double v)
+        {
+            ImGui::InputDouble(label.c_str(), &v);
+            return v;
+        },
+        [](std::string& label, double v, float step)
+        {
+            ImGui::InputDouble(label.c_str(), &v, step);
+            return v;
+        },
+        [](std::string& label, double v, float step, float step_fast)
+        {
+            ImGui::InputDouble(label.c_str(), &v, step, step_fast);
+            return v;
+        },
+        [](std::string& label, double v, float step, float step_fast, std::string& format)
+        {
+            ImGui::InputDouble(label.c_str(), &v, step, step_fast, format.c_str());
+            return v;
+        },
+        [](std::string& label, double v, float step = 0.0f, float step_fast = 0.0f, std::string& format, ImGuiInputTextFlags flags)
+        {
+            ImGui::InputDouble(label.c_str(), &v, step, step_fast, format.c_str(), flags);
+            return v;
+        }
+    );
+    //InputScalar
+    //InputScalarN
+    
+    //ColorEdit3  //ColorEdit3(const char* label, float col[3], ImGuiColorEditFlags flags = 0);
+    //ColorEdit4  //ColorEdit4(const char* label, float col[4], ImGuiColorEditFlags flags = 0);
+    //ColorPicker3  //ColorPicker3(const char* label, float col[3], ImGuiColorEditFlags flags = 0);
+    //ColorPicker4  //ColorPicker4(const char* label, float col[4], ImGuiColorEditFlags flags = 0, const float* ref_col = NULL);
+    //ColorButton  //ColorButton(const char* desc_id, const ImVec4& col, ImGuiColorEditFlags flags = 0, ImVec2 size = ImVec2(0,0));
+    //SetColorEditOptions  //SetColorEditOptions(ImGuiColorEditFlags flags); 
+    
+    //TreeNode -- at least 3 overloads
+    //TreeNodeV -- at least 2 overloads
+    //TreeNodeEx -- at least 3 overloads
+    //TreeNodeExV -- at least 2 overloads
+    //TreePush
+    //TreePop
+    //TreeAdvanceToLabelPos
+    //GetTreeNodeToLabelSpacing
+    //CollapsingHeader
+    //CollapsingHeader
+    //SetNextItemOpen
+    
+    //Selectable -- 2 overloads
+    
+    //ListBox -- 2 overloads
+    //ListBoxHeader -- 2 overloads
+    //ListBoxFooter
+    
+    //PlotLines -- 2 overloads
+    //PlotLinesHistogram -- 2 overloads
+    
+    //Value -- 4 overloads, these are shortcuts to calling gui.Text with a format string
+    
+    //BeginMainMenuBar
+    //EndMainMenuBar
+    //BeginMenuBar 
+    //EndMenuBar   
+    //BeginMenu 
+    //EndMenu      
+    //MenuItem
+    //MenuItem
+    
+    //BeginTooltip
+    //EndTooltip
+    //SetTooltip
+    //SetTooltipV
+    
+    //OpenPopup
+    //BeginPopup 
+    //BeginPopupContextItem
+    //BeginPopupContextWindow
+    //BeginPopupContextVoid
+    //BeginPopupModal
+    //EndPopup
+    //OpenPopupOnItemClick
+    //IsPopupOpen
+    //CloseCurrentPopup
+    
+    //Columns
+    //NextColumn
+    //GetColumnIndex
+    //GetColumnWidth
+    //SetColumnWidth
+    //GetColumnOffset
+    //SetColumnOffset
+    //GetColumnsCount
+    
+    //BeginTabBar
+    //EndTabBar
+    //BeginTabItem
+    //EndTabItem
+    //SetTabItemClosed
+    
+    //IsItemHovered
+    //IsItemActive
+    //IsItemFocused
+    //IsItemClicked
+    //IsItemVisible
+    //IsItemEdited
+    //IsItemActivated
+    //IsItemDeactivated
+    //IsItemDeactivatedAfterEdit
+    //IsAnyItemHovered
+    //IsAnyItemActive
+    //IsAnyItemFocused
+    //GetItemRectMin
+    //GetItemRectMax
+    //GetItemRectSize
+    //SetItemAllowOverlap
+    
+    //ColorConvertU32ToFloat4
+    //ColorConvertFloat4ToU32
+    //ColorConvertRGBtoHSV
+    //ColorConvertHSVtoRGB
 
     GuiTable["MakeGui"] = [](std::string& GuiName, const sol::function& DrawFunc)
     {
