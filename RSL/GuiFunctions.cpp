@@ -32,6 +32,7 @@ void Lua::BindGuiFunctions(sol::state& LuaStateRef)
     //StyleColorsLight(ImGuiStyle* dst = NULL);  
 
     //Todo: Bind ImVec2
+    //Todo: Bind ImVec4
     //Todo: Bind all the enums used by bound functions
     //Todo: See if all the std::string overloads are necessary at all
     //Todo: Figure out when to use ptrs and when to use references for edit gui elements
@@ -512,7 +513,7 @@ void Lua::BindGuiFunctions(sol::state& LuaStateRef)
             ImGui::InputFloat(label.c_str(), &v, step, step_fast, format.c_str());
             return v;
         },
-        [](std::string& label, float v, float step = 0.0f, float step_fast = 0.0f, std::string& format, ImGuiInputTextFlags flags)
+        [](std::string& label, float v, float step, float step_fast, std::string& format, ImGuiInputTextFlags flags)
         {
             ImGui::InputFloat(label.c_str(), &v, step, step_fast, format.c_str(), flags);
             return v;
@@ -601,7 +602,7 @@ void Lua::BindGuiFunctions(sol::state& LuaStateRef)
             ImGui::InputDouble(label.c_str(), &v, step, step_fast, format.c_str());
             return v;
         },
-        [](std::string& label, double v, float step = 0.0f, float step_fast = 0.0f, std::string& format, ImGuiInputTextFlags flags)
+        [](std::string& label, double v, float step, float step_fast, std::string& format, ImGuiInputTextFlags flags)
         {
             ImGui::InputDouble(label.c_str(), &v, step, step_fast, format.c_str(), flags);
             return v;
@@ -609,50 +610,234 @@ void Lua::BindGuiFunctions(sol::state& LuaStateRef)
     );
     //InputScalar
     //InputScalarN
-    
-    //ColorEdit3  //ColorEdit3(const char* label, float col[3], ImGuiColorEditFlags flags = 0);
-    //ColorEdit4  //ColorEdit4(const char* label, float col[4], ImGuiColorEditFlags flags = 0);
-    //ColorPicker3  //ColorPicker3(const char* label, float col[3], ImGuiColorEditFlags flags = 0);
-    //ColorPicker4  //ColorPicker4(const char* label, float col[4], ImGuiColorEditFlags flags = 0, const float* ref_col = NULL);
-    //ColorButton  //ColorButton(const char* desc_id, const ImVec4& col, ImGuiColorEditFlags flags = 0, ImVec2 size = ImVec2(0,0));
-    //SetColorEditOptions  //SetColorEditOptions(ImGuiColorEditFlags flags); 
-    
-    //TreeNode -- at least 3 overloads
-    //TreeNodeV -- at least 2 overloads
-    //TreeNodeEx -- at least 3 overloads
-    //TreeNodeExV -- at least 2 overloads
-    //TreePush
-    //TreePop
-    //TreeAdvanceToLabelPos
-    //GetTreeNodeToLabelSpacing
-    //CollapsingHeader
-    //CollapsingHeader
-    //SetNextItemOpen
-    
-    //Selectable -- 2 overloads
-    
+
+    GuiTable["ColorEdit3"] = sol::overload(
+        [](std::string& label, vector& col)
+        {
+            ImGui::ColorEdit3(label.c_str(), (float*)&col);
+            return col;
+        },
+        [](std::string& label, vector& col, ImGuiColorEditFlags flags)
+        {
+            ImGui::ColorEdit3(label.c_str(), (float*)&col, flags);
+            return col;
+        }
+    );
+    GuiTable["ColorEdit4"] = sol::overload(
+        [](std::string& label, ImVec4& col)
+        {
+            ImGui::ColorEdit4(label.c_str(), (float*)&col);
+            return col;
+        },
+        [](std::string& label, ImVec4& col, ImGuiColorEditFlags flags)
+        {
+            ImGui::ColorEdit4(label.c_str(), (float*)&col, flags);
+            return col;
+        }
+    );
+    GuiTable["ColorPicker3"] = sol::overload(
+        [](std::string& label, vector& col)
+        {
+            ImGui::ColorPicker3(label.c_str(), (float*)&col);
+            return col;
+        },
+        [](std::string& label, vector& col, ImGuiColorEditFlags flags)
+        {
+            ImGui::ColorPicker3(label.c_str(), (float*)&col, flags);
+            return col;
+        }
+    );
+    GuiTable["ColorPicker4"] = sol::overload(
+        [](std::string& label, ImVec4& col)
+        {
+            ImGui::ColorPicker4(label.c_str(), (float*)&col);
+            return col;
+        },
+        [](std::string& label, ImVec4& col, ImGuiColorEditFlags flags)
+        {
+            ImGui::ColorPicker4(label.c_str(), (float*)&col, flags);
+            return col;
+        }
+    );
+    GuiTable["ColorButton"] = sol::overload(
+        [](std::string& desc_id, ImVec4& col)
+        {
+            ImGui::ColorButton(desc_id.c_str(), col);
+            return col;
+        },
+        [](std::string& desc_id, ImVec4& col, ImGuiColorEditFlags flags)
+        {
+            ImGui::ColorButton(desc_id.c_str(), col, flags);
+            return col;
+        },
+        [](std::string& desc_id, ImVec4& col, ImGuiColorEditFlags flags, ImVec2 size)
+        {
+            ImGui::ColorButton(desc_id.c_str(), col, flags, size);
+            return col;
+        }
+    );
+    GuiTable["SetColorEditOptions"] = ImGui::SetColorEditOptions;
+
+
+    GuiTable["TreeNode"] = sol::overload(
+        [](std::string& label)
+        {
+            ImGui::TreeNode(label.c_str());
+        }
+    );
+    GuiTable["TreeNodeEx"] = sol::overload(
+        [](std::string& label)
+        {
+            ImGui::TreeNodeEx(label.c_str());
+        },
+        [](std::string& label, ImGuiTreeNodeFlags flags)
+        {
+            ImGui::TreeNodeEx(label.c_str(), flags);
+        }
+    );
+    GuiTable["TreePush"] = sol::overload(
+        [](std::string& label)
+        {
+            ImGui::TreePush(label.c_str());
+        }
+    );
+    GuiTable["TreePop"] = ImGui::TreePop;
+    GuiTable["TreeAdvanceToLabelPos"] = ImGui::TreeAdvanceToLabelPos; 
+    GuiTable["GetTreeNodeToLabelSpacing"] = ImGui::GetTreeNodeToLabelSpacing;
+    GuiTable["CollapsingHeader"] = sol::overload(
+        [](std::string& label)
+        {
+            ImGui::CollapsingHeader(label.c_str());
+        },
+        [](std::string& label, ImGuiTreeNodeFlags flags)
+        {
+            ImGui::CollapsingHeader(label.c_str(), flags);
+        },
+
+        [](std::string& label, bool p_open)
+        {
+            ImGui::CollapsingHeader(label.c_str(), &p_open);
+            return p_open;
+        },
+        [](std::string& label, bool p_open, ImGuiTreeNodeFlags flags)
+        {
+            ImGui::CollapsingHeader(label.c_str(), &p_open, flags);
+            return p_open;
+        }
+    );
+    GuiTable["SetNextItemOpen"] = sol::overload(
+        [](bool is_open)
+        {
+            ImGui::SetNextItemOpen(is_open);
+        },
+        [](bool is_open, ImGuiCond cond)
+        {
+            ImGui::SetNextItemOpen(is_open, cond);
+        }
+    );
+
+
     //ListBox -- 2 overloads
     //ListBoxHeader -- 2 overloads
     //ListBoxFooter
     
     //PlotLines -- 2 overloads
     //PlotLinesHistogram -- 2 overloads
-    
-    //Value -- 4 overloads, these are shortcuts to calling gui.Text with a format string
-    
-    //BeginMainMenuBar
-    //EndMainMenuBar
-    //BeginMenuBar 
-    //EndMenuBar   
-    //BeginMenu 
-    //EndMenu      
-    //MenuItem
-    //MenuItem
-    
-    //BeginTooltip
-    //EndTooltip
-    //SetTooltip
-    //SetTooltipV
+
+    GuiTable["Value"] = sol::overload(
+        [](std::string& prefix, bool val)
+        {
+            ImGui::Value(prefix.c_str(), val);
+        },
+        [](std::string& prefix, int val)
+        {
+            ImGui::Value(prefix.c_str(), val);
+        },
+        [](std::string& prefix, uint val)
+        {
+            ImGui::Value(prefix.c_str(), val);
+        },
+        [](std::string& prefix, float val)
+        {
+            ImGui::Value(prefix.c_str(), val);
+        },
+        [](std::string& prefix, float val, std::string& float_format)
+        {
+            ImGui::Value(prefix.c_str(), val, float_format.c_str());
+        },
+        [](std::string& prefix, vector2& val)
+        {
+            ImGui::Text("%s: x: %.2f, y: %.2f", prefix, val.x, val.y);
+        },
+        [](std::string& prefix, vector& val)
+        {
+            ImGui::Text("%s: x: %.2f, y: %.2f, z: %.2f", prefix, val.x, val.y, val.z);
+        },
+        [](std::string& prefix, ImVec2& val)
+        {
+            ImGui::Text("%s: x: %.2f, y: %.2f", prefix, val.x, val.y);
+        },
+        [](std::string& prefix, ImVec4& val)
+        {
+            ImGui::Text("%s: x: %.2f, y: %.2f, z: %.2f, w: %.2f", prefix, val.x, val.y, val.z, val.w);
+        }
+    );
+
+
+    GuiTable["BeginMainMenuBar"] = ImGui::BeginMainMenuBar;
+    GuiTable["EndMainMenuBar"] = ImGui::EndMainMenuBar; //Only call if begin returns true
+    GuiTable["EndMainMenuBar"] = ImGui::BeginMenuBar;
+    GuiTable["EndMainMenuBar"] = ImGui::EndMenuBar; //Only call if begin returns true
+    GuiTable["BeginMenu"] = sol::overload(
+        [](std::string& label)
+        {
+            ImGui::BeginMenu(label.c_str());
+        },
+        [](std::string& label, bool enabled)
+        {
+            ImGui::BeginMenu(label.c_str(), enabled);
+        }
+    );
+    GuiTable["EndMenu"] = ImGui::EndMenu; //Only call if begin returns true
+    GuiTable["MenuItem"] = sol::overload(
+        [](std::string& label)
+        {
+            ImGui::MenuItem(label.c_str());
+        },
+        [](std::string& label, std::string& shortcut)
+        {
+            ImGui::MenuItem(label.c_str(), shortcut.c_str());
+        },
+        [](std::string& label, std::string& shortcut, bool selected)
+        {
+            ImGui::MenuItem(label.c_str(), shortcut.c_str(), selected);
+        },
+        [](std::string& label, std::string& shortcut, bool selected, bool enabled)
+        {
+            ImGui::MenuItem(label.c_str(), shortcut.c_str(), selected, enabled);
+        }
+    );
+
+    GuiTable["TooltipOnPrevious"] = [](std::string& tooltip)
+    {
+        if (!Globals::FontNormal)
+            return;
+
+        Util::Gui::TooltipOnPrevious(tooltip, Globals::FontNormal);
+    };
+    GuiTable["ShowHelpMarker"] = sol::overload(
+        [](std::string& Description)
+        {
+            Util::Gui::ShowHelpMarker(Description.c_str());
+        },
+        [](std::string& Description, std::string& Label)
+        {
+            Util::Gui::ShowHelpMarker(Description.c_str(), Label.c_str());
+        }
+    );
+    GuiTable["BeginTooltip"] = ImGui::BeginTooltip;
+    GuiTable["EndTooltip"] = ImGui::EndTooltip;
+
     
     //OpenPopup
     //BeginPopup 
