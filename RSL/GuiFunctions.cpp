@@ -5,17 +5,40 @@
 #include "LuaGui.h"
 
 
-//Todo: Bind ImVec2
-//Todo: Bind ImVec4
+void Lua::BindImVec2(sol::state& LuaStateRef)
+{
+#if LUA_ENABLED
+    auto GuiTable = LuaStateRef["gui"].get_or_create<sol::table>();
+
+    auto Utype = GuiTable.create_simple_usertype<ImVec2>();
+    Utype.set("new", sol::constructors <ImVec2(), ImVec2(float, float), ImVec2(const ImVec2&), ImVec2(ImVec2&&)>());
+    Utype.set("x", &ImVec2::x);
+    Utype.set("y", &ImVec2::y);
+    GuiTable.set_usertype("ImVec2", Utype);
+#endif
+}
+
+void Lua::BindImVec4(sol::state& LuaStateRef)
+{
+#if LUA_ENABLED
+    auto GuiTable = LuaStateRef["gui"].get_or_create<sol::table>();
+
+    auto Utype = GuiTable.create_simple_usertype<ImVec4>();
+    Utype.set("new", sol::constructors <ImVec4(), ImVec4(float, float, float, float), ImVec4(const ImVec4&), ImVec4(ImVec4&&)>());
+    Utype.set("x", &ImVec4::x);
+    Utype.set("y", &ImVec4::y);
+    Utype.set("z", &ImVec4::z);
+    Utype.set("w", &ImVec4::w);
+    GuiTable.set_usertype("ImVec4", Utype);
+#endif
+}
+
 //Todo: Bind all the enums used by bound functions
-//Todo: See if all the std::string overloads are necessary at all
-//Todo: Figure out when to use ptrs and when to use references for edit gui elements
 //Todo: Check ImGui bindings return values and make sure they're correct
 void Lua::BindGuiFunctions(sol::state& LuaStateRef)
 {
 #if LUA_ENABLED
     auto ScriptManager = IocContainer->resolve<IScriptManager>();
-
     auto GuiTable = LuaStateRef["gui"].get_or_create<sol::table>();
     //GetIO
     //GetStyle

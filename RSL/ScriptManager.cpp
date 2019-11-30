@@ -90,13 +90,20 @@ void ScriptManager::SetupLua()
 
     sol::state& LuaStateRef = *LuaState;
 
+#pragma warning(push)
+#pragma warning(disable : C4172)
+    //General API functions
     Lua::BindApiFunctions(LuaStateRef);
+    Lua::BindTimer(LuaStateRef);
+
+    //ImGui types and functions
     Lua::BindGuiFunctions(LuaStateRef);
+    Lua::BindImVec2(LuaStateRef);
+    Lua::BindImVec4(LuaStateRef);
     Lua::BindBaseGui(LuaStateRef);
     Lua::BindLuaGui(LuaStateRef);
 
-	#pragma warning(push)
-	#pragma warning(disable : C4172)
+    //Rfg types
 	Lua::BindRfgBaseArrayObjectPtr(LuaStateRef);
 	Lua::BindRfgFArray(LuaStateRef);
 	Lua::BindTimestamp(LuaStateRef);
@@ -138,6 +145,9 @@ void ScriptManager::SetupLua()
 	Lua::BindPathfindNavInfo(LuaStateRef);
 	Lua::BindUpgradeItem(LuaStateRef);
 	Lua::BindPlayerMetadata(LuaStateRef);
+    Lua::BindBbox(LuaStateRef);
+
+    //Rfg objects (many member var types bound in previous funcs)
 	Lua::BindObject(LuaStateRef);
 	Lua::BindHuman(LuaStateRef);
 	Lua::BindPlayer(LuaStateRef);
@@ -158,16 +168,18 @@ void ScriptManager::SetupLua()
 	Lua::BindWorldZone(LuaStateRef);
 	Lua::BindWorld(LuaStateRef);
 
+    //Explosion types
     Lua::BindFixedArrayWrapperExplosionInfo(LuaStateRef);
     Lua::BindExplosionInfo(LuaStateRef);
-    Lua::BindTimer(LuaStateRef);
+
+    //Weapon types
     Lua::BindFixedArrayWrapperWeaponInfo(LuaStateRef);
     Lua::BindWeaponProjectileInfo(LuaStateRef);
     Lua::BindDamageScalingInfo(LuaStateRef);
     Lua::BindWeaponInfoFlags(LuaStateRef);
     Lua::BindWeaponInfo(LuaStateRef);
 
-    Lua::BindBbox(LuaStateRef);
+    //Vehicle types
     Lua::BindVehicleInfoAxleWheelInfo(LuaStateRef);
     Lua::BindRfgFarrayVehicleInfo163(LuaStateRef);
     Lua::BindVehicleInfoTransmissionInfo(LuaStateRef);
@@ -176,12 +188,12 @@ void ScriptManager::SetupLua()
     Lua::BindVehicleInfoFlags(LuaStateRef);
     Lua::BindLodInfo(LuaStateRef);
     Lua::BindVehicleInfo(LuaStateRef);
-
     Lua::BindVehicleFlags(LuaStateRef);
     Lua::BindVehicleSpawnFlags(LuaStateRef);
     Lua::BindVehicleRddFlags(LuaStateRef);
     Lua::BindVehicle(LuaStateRef);
 
+    //Flyer types
     Lua::BindFlyerFlags(LuaStateRef);
     Lua::BindFlyer(LuaStateRef);
 
