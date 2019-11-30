@@ -5,6 +5,12 @@
 #include "LuaGui.h"
 
 
+//Todo: Bind ImVec2
+//Todo: Bind ImVec4
+//Todo: Bind all the enums used by bound functions
+//Todo: See if all the std::string overloads are necessary at all
+//Todo: Figure out when to use ptrs and when to use references for edit gui elements
+//Todo: Check ImGui bindings return values and make sure they're correct
 void Lua::BindGuiFunctions(sol::state& LuaStateRef)
 {
 #if LUA_ENABLED
@@ -30,14 +36,6 @@ void Lua::BindGuiFunctions(sol::state& LuaStateRef)
     //StyleColorsDark(ImGuiStyle* dst = NULL);   
     //StyleColorsClassic(ImGuiStyle* dst = NULL);
     //StyleColorsLight(ImGuiStyle* dst = NULL);  
-
-    //Todo: Bind ImVec2
-    //Todo: Bind ImVec4
-    //Todo: Bind all the enums used by bound functions
-    //Todo: See if all the std::string overloads are necessary at all
-    //Todo: Figure out when to use ptrs and when to use references for edit gui elements
-    //Todo: Check ImGui bindings return values and make sure they're correct
-
 
     //GuiTable["Begin"] = sol::overload(
     //    [](const char* name, bool* p_open = nullptr, ImGuiWindowFlags flags = 0) { ImGui::Begin(name, p_open, flags); },
@@ -1031,7 +1029,6 @@ void Lua::BindGuiFunctions(sol::state& LuaStateRef)
     GuiTable["SetItemAllowOverlap"] = ImGui::SetItemAllowOverlap;
 
 
-    //Todo: Add vec3 overloads
     GuiTable["ColorConvertRGBtoHSV"] = sol::overload(
         [](float r, float g, float b)
         {
