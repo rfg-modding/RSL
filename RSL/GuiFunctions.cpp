@@ -36,6 +36,8 @@ void Lua::BindGuiFunctions(sol::state& LuaStateRef)
     //Todo: Bind all the enums used by bound functions
     //Todo: See if all the std::string overloads are necessary at all
     //Todo: Figure out when to use ptrs and when to use references for edit gui elements
+    //Todo: Check ImGui bindings return values and make sure they're correct
+
 
     //GuiTable["Begin"] = sol::overload(
     //    [](const char* name, bool* p_open = nullptr, ImGuiWindowFlags flags = 0) { ImGui::Begin(name, p_open, flags); },
@@ -838,54 +840,227 @@ void Lua::BindGuiFunctions(sol::state& LuaStateRef)
     GuiTable["BeginTooltip"] = ImGui::BeginTooltip;
     GuiTable["EndTooltip"] = ImGui::EndTooltip;
 
-    
-    //OpenPopup
-    //BeginPopup 
-    //BeginPopupContextItem
-    //BeginPopupContextWindow
-    //BeginPopupContextVoid
-    //BeginPopupModal
-    //EndPopup
-    //OpenPopupOnItemClick
-    //IsPopupOpen
-    //CloseCurrentPopup
-    
-    //Columns
-    //NextColumn
-    //GetColumnIndex
-    //GetColumnWidth
-    //SetColumnWidth
-    //GetColumnOffset
-    //SetColumnOffset
-    //GetColumnsCount
-    
+
+    GuiTable["OpenPopup"] = [](std::string& str_id)
+    {
+        ImGui::OpenPopup(str_id.c_str());
+    };
+    GuiTable["BeginPopup"] = sol::overload(
+        [](std::string& str_id)
+        {
+            return ImGui::BeginPopup(str_id.c_str());
+        },
+        [](std::string& str_id, ImGuiWindowFlags flags)
+        {
+            return ImGui::BeginPopup(str_id.c_str(), flags);
+        }
+    );
+    GuiTable["BeginPopupContextItem"] = sol::overload(
+        []()
+        {
+            return ImGui::BeginPopupContextItem();
+        },
+        [](std::string& str_id)
+        {
+            return ImGui::BeginPopupContextItem(str_id.c_str());
+        },
+        [](std::string& str_id, int mouse_button)
+        {
+            return ImGui::BeginPopupContextItem(str_id.c_str(), mouse_button);
+        }
+    );
+    GuiTable["BeginPopupContextWindow"] = sol::overload(
+        []()
+        {
+            return ImGui::BeginPopupContextWindow();
+        },
+        [](std::string& str_id)
+        {
+            return ImGui::BeginPopupContextWindow(str_id.c_str());
+        },
+        [](std::string& str_id, int mouse_button)
+        {
+            return ImGui::BeginPopupContextWindow(str_id.c_str(), mouse_button);
+        },
+        [](std::string& str_id, int mouse_button, bool also_over_items)
+        {
+            return ImGui::BeginPopupContextWindow(str_id.c_str(), mouse_button, also_over_items);
+        }
+    );
+    GuiTable["BeginPopupContextVoid"] = sol::overload(
+        []()
+        {
+            return ImGui::BeginPopupContextVoid();
+        },
+        [](std::string& str_id)
+        {
+            return ImGui::BeginPopupContextVoid(str_id.c_str());
+        },
+        [](std::string& str_id, int mouse_button)
+        {
+            return ImGui::BeginPopupContextVoid(str_id.c_str(), mouse_button);
+        }
+    );
+    GuiTable["BeginPopupModal"] = sol::overload(
+        [](std::string& name)
+        {
+            return ImGui::BeginPopupModal(name.c_str());
+        },
+        [](std::string& name, bool p_open)
+        {
+            ImGui::BeginPopupModal(name.c_str(), &p_open);
+            return p_open;
+        },
+        [](std::string& name, bool p_open, ImGuiWindowFlags flags)
+        {
+            ImGui::BeginPopupModal(name.c_str(), &p_open, flags);
+            return p_open;
+        }
+    );
+    GuiTable["EndPopup"] = ImGui::EndPopup;
+    GuiTable["OpenPopupOnItemClick"] = sol::overload(
+        []()
+        {
+            return ImGui::OpenPopupOnItemClick();
+        },
+        [](std::string& str_id)
+        {
+            return ImGui::OpenPopupOnItemClick(str_id.c_str());
+        },
+        [](std::string& str_id, int mouse_button)
+        {
+            return ImGui::OpenPopupOnItemClick(str_id.c_str(), mouse_button);
+        }
+    );
+    GuiTable["IsPopupOpen"] = [](std::string& str_id)
+    {
+        return ImGui::IsPopupOpen(str_id.c_str());
+    };
+    GuiTable["CloseCurrentPopup"] = ImGui::CloseCurrentPopup;
+
+
+    GuiTable["Columns"] = sol::overload(
+        []()
+        {
+            ImGui::Columns();
+        },
+        [](int count)
+        {
+            ImGui::Columns(count);
+        },
+        [](int count, std::string& id)
+        {
+            ImGui::Columns(count, id.c_str());
+        },
+        [](int count, std::string& id, bool border)
+        {
+            ImGui::Columns(count, id.c_str(), border);
+        }
+    );
+    GuiTable["NextColumn"] = ImGui::NextColumn;
+    GuiTable["GetColumnIndex"] = ImGui::GetColumnIndex;
+    GuiTable["GetColumnWidth"] = sol::overload(
+        []()
+        {
+            return ImGui::GetColumnWidth();
+        },
+        [](int column_index)
+        {
+            return ImGui::GetColumnWidth(column_index);
+        }
+    );
+    GuiTable["SetColumnWidth"] = [](int column_index, float width)
+    {
+        ImGui::SetColumnWidth(column_index, width);
+    };
+    GuiTable["GetColumnOffset"] = sol::overload(
+        []()
+        {
+            return ImGui::GetColumnOffset();
+        },
+        [](int column_index)
+        {
+            return ImGui::GetColumnOffset(column_index);
+        }
+    );
+    GuiTable["SetColumnOffset"] = [](int column_index, float offset_x)
+    {
+        ImGui::SetColumnOffset(column_index, offset_x);
+    };
+    GuiTable["GetColumnsCount"] = ImGui::GetColumnsCount;
+
     //BeginTabBar
     //EndTabBar
     //BeginTabItem
     //EndTabItem
     //SetTabItemClosed
-    
-    //IsItemHovered
-    //IsItemActive
-    //IsItemFocused
-    //IsItemClicked
-    //IsItemVisible
-    //IsItemEdited
-    //IsItemActivated
-    //IsItemDeactivated
-    //IsItemDeactivatedAfterEdit
-    //IsAnyItemHovered
-    //IsAnyItemActive
-    //IsAnyItemFocused
-    //GetItemRectMin
-    //GetItemRectMax
-    //GetItemRectSize
-    //SetItemAllowOverlap
-    
-    //ColorConvertU32ToFloat4
-    //ColorConvertFloat4ToU32
-    //ColorConvertRGBtoHSV
-    //ColorConvertHSVtoRGB
+
+    GuiTable["IsItemHovered"] = sol::overload(
+        []()
+        {
+            return ImGui::IsItemHovered();
+        },
+        [](ImGuiHoveredFlags flags)
+        {
+            return ImGui::IsItemHovered(flags);
+        }
+    );
+    GuiTable["IsItemActive"] = ImGui::IsItemActive;
+    GuiTable["IsItemFocused"] = ImGui::IsItemFocused;
+    GuiTable["IsItemClicked"] = sol::overload(
+        []()
+        {
+            return ImGui::IsItemClicked();
+        },
+        [](int mouse_button)
+        {
+            return ImGui::IsItemClicked(mouse_button);
+        }
+    );
+    GuiTable["IsItemVisible"] = ImGui::IsItemVisible;
+    GuiTable["IsItemEdited"] = ImGui::IsItemEdited;
+    GuiTable["IsItemActivated"] = ImGui::IsItemActivated;
+    GuiTable["IsItemDeactivated"] = ImGui::IsItemDeactivated;
+    GuiTable["IsItemDeactivatedAfterEdit"] = ImGui::IsItemDeactivatedAfterEdit;
+    GuiTable["IsAnyItemHovered"] = ImGui::IsAnyItemHovered;
+    GuiTable["IsAnyItemActive"] = ImGui::IsAnyItemActive;
+    GuiTable["IsAnyItemFocused"] = ImGui::IsAnyItemFocused;
+    GuiTable["GetItemRectMin"] = ImGui::GetItemRectMin;
+    GuiTable["GetItemRectMax"] = ImGui::GetItemRectMax;
+    GuiTable["GetItemRectSize"] = ImGui::GetItemRectSize;
+    GuiTable["SetItemAllowOverlap"] = ImGui::SetItemAllowOverlap;
+
+
+    //Todo: Add vec3 overloads
+    GuiTable["ColorConvertRGBtoHSV"] = sol::overload(
+        [](float r, float g, float b)
+        {
+            float h, s, v;
+            ImGui::ColorConvertRGBtoHSV(r, g, b, h, s, v);
+            return vector(h, s, v);
+        },
+        [](vector& color)
+        {
+            float h, s, v;
+            ImGui::ColorConvertRGBtoHSV(color.x, color.y, color.z, h, s, v);
+            return vector(h, s, v);
+        }
+    );
+    GuiTable["ColorConvertHSVtoRGB"] = sol::overload(
+        [](float h, float s, float v)
+        {
+            float r, g, b;
+            ImGui::ColorConvertHSVtoRGB(h, s, v, r, g, b);
+            return vector(r, g, b);
+        },
+        [](vector& color)
+        {
+            float r, g, b;
+            ImGui::ColorConvertHSVtoRGB(color.x, color.y, color.z, r, g, b);
+            return vector(r, g, b);
+        }
+    );
+
 
     GuiTable["MakeGui"] = [](std::string& GuiName, const sol::function& DrawFunc)
     {
