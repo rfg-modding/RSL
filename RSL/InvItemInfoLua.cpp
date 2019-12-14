@@ -3,6 +3,7 @@
 
 void Lua::BindInventoryItem(sol::state& LuaState)
 {
+#if LUA_ENABLED
 	auto RfgTable = LuaState["rfg"].get_or_create<sol::table>();
 	auto Utype = RfgTable.create_simple_usertype<InventoryItem>();
 	Utype.set("new", sol::no_constructor);
@@ -14,19 +15,23 @@ void Lua::BindInventoryItem(sol::state& LuaState)
 	Utype.set("AttachmentProp", &InventoryItem::attachment_prop);
 	Utype.set("WeaponHandle", &InventoryItem::weapon_handle);
 	RfgTable.set_usertype("InventoryItem", Utype);
+#endif
 }
 
 void Lua::BindChecksumStri(sol::state& LuaState)
 {
+#if LUA_ENABLED
 	auto RfgTable = LuaState["rfg"].get_or_create<sol::table>();
 	auto Utype = RfgTable.create_simple_usertype<checksum_stri>();
 	Utype.set("new", sol::no_constructor);
 	Utype.set("Checksum", &checksum_stri::checksum);
 	RfgTable.set_usertype("ChecksumStri", Utype);
+#endif
 }
 
 void Lua::BindInvItemInfo(sol::state& LuaState)
 {
+#if LUA_ENABLED
 	auto RfgTable = LuaState["rfg"].get_or_create<sol::table>();
 	auto Utype = RfgTable.create_simple_usertype<inv_item_info>();
 	Utype.set("new", sol::no_constructor);
@@ -41,4 +46,5 @@ void Lua::BindInvItemInfo(sol::state& LuaState)
 	Utype.set("ItemOrder", sol::property([](inv_item_info& Self) -> int {return static_cast<int>(Self.item_order); }, [](inv_item_info& Self, int Value) {Self.item_order = static_cast<char>(Value); }));
 	//Utype.set("UseFunc", &inv_item_info::use); //Todo: Bind this
 	RfgTable.set_usertype("InvItemInfo", Utype);
+#endif
 }

@@ -81,7 +81,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>false</ConformanceMode>
-      <AdditionalIncludeDirectories>.\include\Hypodermic;C:\local\boost_1_71_0;.\include\debug-draw\vectormath;.\include\sol;.\include\IconFontCppHeaders;.\include\LuaJIT-2.0.5;.\include\sol3;.\include\ImGui;.\include\nlohmann;.\include\glm;.\chaiscript;.\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.\include\RSL-Dependencies\;.\include\Hypodermic;.\include\sol;.\include\IconFontCppHeaders;.\include\LuaJIT-2.0.5;.\include\ImGui;.\include\nlohmann;.\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>PCH.hpp</PrecompiledHeaderFile>
@@ -96,7 +96,7 @@
     <Link>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
       <AdditionalDependencies>lua51.lib;luajit.lib;libMinHook.x86.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>C:\local\boost_1_71_0\lib32-msvc-14.2;.\lib\Minhook\x86;.\lib\LuaJIT-2.0.5;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>.\lib\Minhook\x86;.\lib\LuaJIT-2.0.5;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>/NODEFAULTLIB:LIBCMT %(AdditionalOptions)</AdditionalOptions>
     </Link>
     <PreBuildEvent>
@@ -114,8 +114,8 @@ echo #define RSL_BUILD_DATE %buildTime:~0,8% &gt;&gt; $(ProjectDir)/BuildDate.h<
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>.\include\Hypodermic;C:\local\boost_1_71_0;.\include\debug-draw\vectormath;.\include\sol;.\include\IconFontCppHeaders;.\include\LuaJIT-2.0.5;.\include\sol3;.\include\ImGui;.\include\nlohmann;.\include\glm;.\chaiscript;.\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <ConformanceMode>false</ConformanceMode>
+      <AdditionalIncludeDirectories>.\include\RSL-Dependencies\;.\include\Hypodermic;.\include\sol;.\include\IconFontCppHeaders;.\include\LuaJIT-2.0.5;.\include\ImGui;.\include\nlohmann;.\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>PCH.hpp</PrecompiledHeaderFile>
@@ -132,7 +132,7 @@ echo #define RSL_BUILD_DATE %buildTime:~0,8% &gt;&gt; $(ProjectDir)/BuildDate.h<
       <OptimizeReferences>true</OptimizeReferences>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
       <AdditionalDependencies>lua51.lib;luajit.lib;libMinHook.x86.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>C:\local\boost_1_71_0\lib32-msvc-14.2;.\lib\Minhook\x86;.\lib\LuaJIT-2.0.5;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>.\lib\Minhook\x86;.\lib\LuaJIT-2.0.5;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>/NODEFAULTLIB:LIBCMT %(AdditionalOptions)</AdditionalOptions>
     </Link>
     <PreBuildEvent>
@@ -150,8 +150,8 @@ echo #define RSL_BUILD_DATE %buildTime:~0,8% &gt;&gt; $(ProjectDir)/BuildDate.h<
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>.\include\Hypodermic;C:\local\boost_1_71_0;.\include\debug-draw\vectormath;.\include\sol;.\include\IconFontCppHeaders;.\include\LuaJIT-2.0.5;.\include\sol3;.\include\ImGui;.\include\nlohmann;.\include\glm;.\chaiscript;.\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <ConformanceMode>false</ConformanceMode>
+      <AdditionalIncludeDirectories>.\include\RSL-Dependencies\;.\include\Hypodermic;.\include\sol;.\include\IconFontCppHeaders;.\include\LuaJIT-2.0.5;.\include\ImGui;.\include\nlohmann;.\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>PCH.hpp</PrecompiledHeaderFile>
@@ -168,7 +168,7 @@ echo #define RSL_BUILD_DATE %buildTime:~0,8% &gt;&gt; $(ProjectDir)/BuildDate.h<
       <OptimizeReferences>true</OptimizeReferences>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
       <AdditionalDependencies>lua51.lib;luajit.lib;libMinHook.x86.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>C:\local\boost_1_71_0\lib32-msvc-14.2;.\lib\Minhook\x86;.\lib\LuaJIT-2.0.5;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>.\lib\Minhook\x86;.\lib\LuaJIT-2.0.5;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>/NODEFAULTLIB:LIBCMT %(AdditionalOptions)</AdditionalOptions>
     </Link>
     <PreBuildEvent>
@@ -201,6 +201,7 @@ echo #define RSL_BUILD_DATE %buildTime:~0,8% &gt;&gt; $(ProjectDir)/BuildDate.h<
     <ClCompile Include="GraphicsStateWrapper.cpp" />
     <ClCompile Include="GraphicsTweaksGui.cpp" />
     <ClCompile Include="GuiFunctions.cpp" />
+    <ClCompile Include="GuiLua.cpp" />
     <ClCompile Include="GuiManager.cpp" />
     <ClCompile Include="HkpRigidBodyLua.cpp" />
     <ClCompile Include="CharacterInstanceLua.cpp" />
@@ -241,6 +242,7 @@ echo #define RSL_BUILD_DATE %buildTime:~0,8% &gt;&gt; $(ProjectDir)/BuildDate.h<
     <ClCompile Include="Logger.cpp" />
     <ClCompile Include="LogWindow.cpp" />
     <ClCompile Include="LuaFunctions.cpp" />
+    <ClCompile Include="LuaGui.cpp" />
     <ClCompile Include="Lua_DoBuffer.cpp" />
     <ClCompile Include="Matrix43Lua.cpp" />
     <ClCompile Include="MatrixLua.cpp" />
@@ -305,6 +307,7 @@ echo #define RSL_BUILD_DATE %buildTime:~0,8% &gt;&gt; $(ProjectDir)/BuildDate.h<
     <ClInclude Include="GraphicsStateWrapper.h" />
     <ClInclude Include="GraphicsTweaksGui.h" />
     <ClInclude Include="GuiFunctions.h" />
+    <ClInclude Include="GuiLua.h" />
     <ClInclude Include="GuiManager.h" />
     <ClInclude Include="GuiReference.h" />
     <ClInclude Include="HkpRigidBodyLua.h" />
@@ -352,6 +355,7 @@ echo #define RSL_BUILD_DATE %buildTime:~0,8% &gt;&gt; $(ProjectDir)/BuildDate.h<
     <ClInclude Include="IScriptManager.h" />
     <ClInclude Include="ISnippetManager.h" />
     <ClInclude Include="Launcher.h" />
+    <ClInclude Include="LuaGui.h" />
     <ClInclude Include="RFGR_Types_Cfile.h" />
     <ClInclude Include="RFGR_Types_Vehicle.h" />
     <ClInclude Include="RFGR_Types_Keen_InputEvent.h" />

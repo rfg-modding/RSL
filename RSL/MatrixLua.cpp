@@ -3,6 +3,7 @@
 
 void Lua::BindMatrix(sol::state& LuaState)
 {
+#if LUA_ENABLED
 	auto RfgTable = LuaState["rfg"].get_or_create<sol::table>();
 	auto Utype = RfgTable.create_simple_usertype<matrix>();
 	Utype.set("new", sol::constructors<matrix(), matrix(const matrix&), matrix(float), matrix(vector, vector, vector)>());
@@ -39,20 +40,5 @@ void Lua::BindMatrix(sol::state& LuaState)
         rfg::matrix_rotate_around_local_vector(&Self, nullptr, ZAxis, AngleRadians);
     }));
 	RfgTable.set_usertype("Matrix", Utype);
-
-	/*RfgTable.new_usertype<matrix>
-	(
-		"matrix",
-		"new", sol::constructors<matrix(), matrix(const matrix&), matrix(float), matrix(vector, vector, vector)>(),
-		sol::meta_function::addition, &matrix::operator+,
-		sol::meta_function::subtraction, &matrix::operator-,
-		sol::meta_function::equal_to, &matrix::operator==,
-		"SetAll", &matrix::SetAll,
-		"rvec", &matrix::rvec,
-		"uvec", &matrix::uvec,
-		"fvec", &matrix::fvec
-	);*/
+#endif
 }
-//.text:00D64370 rfg.exe:$1A4370 #1A3770 <matrix::rotate_around_local_vector> //void __thiscall matrix::rotate_around_local_vector(matrix *this, vector *axis, float ang_rad)
-using F_matrix_rotate_around_local_vector = void(__fastcall*)(matrix* this_ptr, void* edx, vector& axis, float angle_radians); //2nd arg is edx, needed for __thiscall functions.
-extern F_matrix_rotate_around_local_vector matrix_rotate_around_local_vector;

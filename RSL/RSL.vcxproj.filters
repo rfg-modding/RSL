@@ -172,6 +172,12 @@
     <Filter Include="Main\Managers\GuiManager">
       <UniqueIdentifier>{0231f992-3d50-479e-bc62-199615ab0ef1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Gui\Lua">
+      <UniqueIdentifier>{9632cf8b-686d-4228-ad9b-04f2ccf2f679}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Lua Binding\Usertypes\Gui">
+      <UniqueIdentifier>{3ec82bd1-3a61-4a9d-9eb0-3519668251f2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="include\fmt\format.cc">
@@ -479,6 +485,12 @@
     </ClCompile>
     <ClCompile Include="GuiManager.cpp">
       <Filter>Main\Managers\GuiManager</Filter>
+    </ClCompile>
+    <ClCompile Include="LuaGui.cpp">
+      <Filter>Gui\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="GuiLua.cpp">
+      <Filter>Lua Binding\Usertypes\Gui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -814,6 +826,12 @@
     </ClInclude>
     <ClInclude Include="GuiManager.h">
       <Filter>Main\Managers\GuiManager</Filter>
+    </ClInclude>
+    <ClInclude Include="LuaGui.h">
+      <Filter>Gui\Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="GuiLua.h">
+      <Filter>Lua Binding\Usertypes\Gui</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -26,7 +26,7 @@ BOOL WINAPI DllMain(HMODULE hModule, DWORD dwReason, LPVOID lpReserved)
     Globals::PID = GetCurrentProcessId();
     Globals::ModuleBase = reinterpret_cast<uintptr_t>(GetModuleHandle(nullptr));
     BuildIocContainer();
-#if UseLauncher
+#if USE_LAUNCHER
 
     //First, check for txt files which skip the launcher. Workaround until bugs with the launcher running can be fixed
     if(fs::exists(Globals::GetEXEPath() + "\\RSL_No_Launcher.txt")) //Skip launcher, run with RSL

@@ -3,6 +3,7 @@
 
 void Lua::BindIKJoint(sol::state& LuaState)
 {
+#if LUA_ENABLED
 	auto RfgTable = LuaState["rfg"].get_or_create<sol::table>();
 	auto Utype = RfgTable.create_simple_usertype<IK_Joint>();
 	Utype.set("AnchorTag", &IK_Joint::anchor_tag);
@@ -14,10 +15,12 @@ void Lua::BindIKJoint(sol::state& LuaState)
 	Utype.set("FreezeOffsetPos", &IK_Joint::freeze_offset_pos);
 	Utype.set("Location", &IK_Joint::location);
 	RfgTable.set_usertype("IkJoint", Utype);
+#endif
 }
 
 void Lua::BindWeaponAnimationFlags(sol::state& LuaState)
 {
+#if LUA_ENABLED
 	auto RfgTable = LuaState["rfg"].get_or_create<sol::table>();
 	auto Utype = RfgTable.create_simple_usertype<WeaponAnimationFlags>();
 	Utype.set("new", sol::no_constructor);
@@ -39,10 +42,12 @@ void Lua::BindWeaponAnimationFlags(sol::state& LuaState)
 	Utype.set("Ride", sol::property(itsy_bitsy::read<WeaponAnimationFlags, 15>, itsy_bitsy::write<WeaponAnimationFlags, 15>)); //uint32 - 1
 	Utype.set("RideLeft", sol::property(itsy_bitsy::read<WeaponAnimationFlags, 16>, itsy_bitsy::write<WeaponAnimationFlags, 16>)); //uint32 - 1
 	RfgTable.set_usertype("WeaponAnimationFlags", Utype);
+#endif
 }
 
 void Lua::BindHuman(sol::state& LuaState)
 {
+#if LUA_ENABLED
 	auto RfgTable = LuaState["rfg"].get_or_create<sol::table>();
 	auto Utype = RfgTable.create_simple_usertype<Human>();
 	Utype.set("new", sol::constructors<Human(), Human(const Human&)>());
@@ -236,4 +241,5 @@ void Lua::BindHuman(sol::state& LuaState)
 	Utype.set("ReportedTimer", &Human::ReportedTimer);
 	Utype.set("Lifetime", &Human::Lifetime);
 	RfgTable.set_usertype("Human", Utype);
+#endif
 }

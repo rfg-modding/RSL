@@ -77,7 +77,7 @@ void Bootstrapper::InitRSL()
         Logger::Log("Creating and enabling hooks.\n");
         CreateHooks(); //Creates and enables all function hooks.
 
-#if UseLauncher
+#if USE_LAUNCHER
         Logger::Log("Unpatching rfg main.\n");
         Util::Patching::UnlockGameMain();
         Logger::Log("Resuming game threads.\n");
@@ -119,6 +119,7 @@ void Bootstrapper::InitRSL()
         Logger::Log("Initializing overlays.\n");
         InitOverlays();
         Logger::Log("Initializing gui system.\n");
+        GuiManager->Initialize();
 
         //Update global lua pointers after init just to be sure. Can't hurt.
         Scripts->UpdateRfgPointers();

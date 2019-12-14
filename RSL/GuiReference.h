@@ -2,6 +2,8 @@
 #include <vector>
 #include "BaseGui.h"
 
+
+//Todo: Fix this so it works even when the list is changing. Maybe have a way to invalidate and update these, ideally automatically handled by GuiManager
 //Todo: Add a name var to BaseGui and use that to find refs. That way people can have a constantly changing title and still reference a gui via it's name.
 //Used to reference a Gui without needing to directly access the Gui std::vector and keep track of each guis index.
 template <class T>

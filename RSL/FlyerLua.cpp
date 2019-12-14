@@ -3,6 +3,7 @@
 
 void Lua::BindFlyerFlags(sol::state& LuaState)
 {
+#if LUA_ENABLED
     auto RfgTable = LuaState["rfg"].get_or_create<sol::table>();
     auto Utype = RfgTable.create_simple_usertype<flyer_flags>();
     Utype.set("LandingGearUp", sol::property(
@@ -30,10 +31,12 @@ void Lua::BindFlyerFlags(sol::state& LuaState)
         [](flyer_flags& Self, bool Value) {Self.on_ground = Value; }
     ));
     RfgTable.set_usertype("FlyerFlags", Utype);
+#endif
 }
 
 void Lua::BindFlyer(sol::state& LuaState)
 {
+#if LUA_ENABLED
     auto RfgTable = LuaState["rfg"].get_or_create<sol::table>();
     auto Utype = RfgTable.create_simple_usertype<flyer>();
     Utype.set("new", sol::constructors<flyer(const flyer&)>());
@@ -81,4 +84,5 @@ void Lua::BindFlyer(sol::state& LuaState)
     Utype.set("CatchFireTimer", &flyer::catch_fire_timer);
     Utype.set("FlyerFlags", &flyer::flyer_flags);
     RfgTable.set_usertype("Flyer", Utype);
+#endif
 }

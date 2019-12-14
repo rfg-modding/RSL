@@ -1,3 +1,6 @@
 [submodule "RSL/include/Hypodermic"]
 	path = RSL/include/Hypodermic
 	url = https://github.com/ybainier/Hypodermic.git
+[submodule "RSL/include/RSL-Dependencies"]
+	path = RSL/include/RSL-Dependencies
+	url = https://github.com/rsl-dev/RSL-Dependencies

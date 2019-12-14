@@ -3,6 +3,7 @@
 
 void Lua::BindHumanMPFlags(sol::state & LuaState)
 {
+#if LUA_ENABLED
 	auto RfgTable = LuaState["rfg"].get_or_create<sol::table>();
 
 	//RfgTable.set_usertype("HumanMPFlags", Utype);
@@ -29,4 +30,5 @@ void Lua::BindHumanMPFlags(sol::state & LuaState)
 		"DetonatedCharges", sol::property(itsy_bitsy::read<ObjectFlags, 24>, itsy_bitsy::write<ObjectFlags, 24>), //int32 - 1
 		"Jetpack", sol::property(itsy_bitsy::read<ObjectFlags, 25>, itsy_bitsy::write<ObjectFlags, 25>) //int32 - 1
 	);*/
+#endif
 }

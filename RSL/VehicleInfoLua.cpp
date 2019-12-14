@@ -3,6 +3,7 @@
 
 void Lua::BindVehicleCameraSettings(sol::state& LuaState)
 {
+#if LUA_ENABLED
     auto RfgTable = LuaState["rfg"].get_or_create<sol::table>();
     auto Utype = RfgTable.create_simple_usertype<vehicle_camera_settings>();
     Utype.set("new", sol::no_constructor);
@@ -19,10 +20,12 @@ void Lua::BindVehicleCameraSettings(sol::state& LuaState)
     Utype.set("TurretCamera", &vehicle_camera_settings::turret_camera);
     Utype.set("ForceTurretCam", &vehicle_camera_settings::force_turret_cam);
     RfgTable.set_usertype("VehicleCameraSettings", Utype);
+#endif
 }
 
 void Lua::BindVehicleInfoTransmissionInfo(sol::state& LuaState)
 {
+#if LUA_ENABLED
     auto RfgTable = LuaState["rfg"].get_or_create<sol::table>();
     auto Utype = RfgTable.create_simple_usertype<vehicle_info_transmission_info>();
     Utype.set("new", sol::no_constructor);
@@ -37,10 +40,12 @@ void Lua::BindVehicleInfoTransmissionInfo(sol::state& LuaState)
     Utype.set("ForwardToReverseDelay", &vehicle_info_transmission_info::forward_to_reverse_delay);
     Utype.set("ReverseToForwardDelay", &vehicle_info_transmission_info::reverse_to_forward_delay);
     RfgTable.set_usertype("VehicleInfoTransmissionInfo", Utype);
+#endif
 }
 
 void Lua::BindVehicleInfoAxleWheelInfo(sol::state& LuaState)
 {
+#if LUA_ENABLED
     auto RfgTable = LuaState["rfg"].get_or_create<sol::table>();
     auto Utype = RfgTable.create_simple_usertype<vehicle_info_axle_wheel_info>();
     Utype.set("new", sol::no_constructor);
@@ -58,10 +63,12 @@ void Lua::BindVehicleInfoAxleWheelInfo(sol::state& LuaState)
     Utype.set("CompressionDamping", &vehicle_info_axle_wheel_info::compression_damping);
     Utype.set("ExpansionDamping", &vehicle_info_axle_wheel_info::expansion_damping);
     RfgTable.set_usertype("VehicleInfoAxleWheelInfo", Utype);
+#endif
 }
 
 void Lua::BindRfgFarrayVehicleInfo163(sol::state& LuaState)
 {
+#if LUA_ENABLED
     auto RfgTable = LuaState["rfg"].get_or_create<sol::table>();
     auto Utype = RfgTable.create_simple_usertype<rfg::farray<vehicle_info, 163>>();
     Utype.set("new", sol::no_constructor);
@@ -70,20 +77,24 @@ void Lua::BindRfgFarrayVehicleInfo163(sol::state& LuaState)
     Utype.set("Capacity", &rfg::farray<vehicle_info, 163>::Capacity);
     Utype.set(sol::meta_function::index, &rfg::farray<vehicle_info, 163>::operator[]);
     RfgTable.set_usertype("RfgFarrayVehicleInfo163", Utype);
+#endif
 }
 
 void Lua::BindBbox(sol::state& LuaState)
 {
+#if LUA_ENABLED
     auto RfgTable = LuaState["rfg"].get_or_create<sol::table>();
     auto Utype = RfgTable.create_simple_usertype<bbox>();
     Utype.set("new", sol::constructors<bbox(vector&, vector&), bbox(const bbox&)>());
     Utype.set("Min", &bbox::min);
     Utype.set("Max", &bbox::max);
     RfgTable.set_usertype("Bbox", Utype);
+#endif
 }
 
 void Lua::BindAnimlibBonesUsedInfo(sol::state& LuaState)
 {
+#if LUA_ENABLED
     auto RfgTable = LuaState["rfg"].get_or_create<sol::table>();
     auto Utype = RfgTable.create_simple_usertype<animlib_bones_used_info>();
     Utype.set("new", sol::no_constructor);
@@ -91,10 +102,12 @@ void Lua::BindAnimlibBonesUsedInfo(sol::state& LuaState)
     Utype.set("NumBones", &animlib_bones_used_info::num_bones);
     Utype.set("BoneIndices", &animlib_bones_used_info::bone_indices);
     RfgTable.set_usertype("AnimlibBonesUsedInfo", Utype);
+#endif
 }
 
 void Lua::BindVehicleInfoFlags(sol::state& LuaState)
 {
+#if LUA_ENABLED
     auto RfgTable = LuaState["rfg"].get_or_create<sol::table>();
     auto Utype = RfgTable.create_simple_usertype<vehicle_info_flags>();
     Utype.set("Preload", sol::property(
@@ -118,18 +131,22 @@ void Lua::BindVehicleInfoFlags(sol::state& LuaState)
         [](vehicle_info_flags& Self, bool Value) {Self.is_walker_flamer = Value; }
     ));
     RfgTable.set_usertype("VehicleInfoFlags", Utype);
+#endif
 }
 
 void Lua::BindLodInfo(sol::state& LuaState)
 {
+#if LUA_ENABLED
     auto RfgTable = LuaState["rfg"].get_or_create<sol::table>();
     auto Utype = RfgTable.create_simple_usertype<lod_info>();
     Utype.set("Min", &lod_info::dist);
     RfgTable.set_usertype("LodInfo", Utype);
+#endif
 }
 
 void Lua::BindVehicleInfo(sol::state& LuaState)
 {
+#if LUA_ENABLED
     auto RfgTable = LuaState["rfg"].get_or_create<sol::table>();
     auto Utype = RfgTable.create_simple_usertype<vehicle_info>();
     Utype.set("new", sol::constructors<vehicle_info(const vehicle_info&)>());
@@ -293,4 +310,5 @@ void Lua::BindVehicleInfo(sol::state& LuaState)
     Utype.set("FlyerJetwashEffect", &vehicle_info::flyer_jetwash_effect);
     Utype.set("Flags", &vehicle_info::flags);
     RfgTable.set_usertype("VehicleInfo", Utype);
+#endif
 }

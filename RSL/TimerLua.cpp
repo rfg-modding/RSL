@@ -3,6 +3,7 @@
 
 void Lua::BindTimer(sol::state& LuaState)
 {
+#if LUA_ENABLED
     auto RslTable = LuaState["rsl"].get_or_create<sol::table>();
     auto Utype = RslTable.create_simple_usertype<Timer>();
     Utype.set("new", sol::constructors<Timer(), Timer(bool StartNow), Timer(const Timer&)>());
@@ -15,4 +16,5 @@ void Lua::BindTimer(sol::state& LuaState)
     Utype.set("ElapsedMicroseconds", &Timer::ElapsedMicroseconds);
     Utype.set("ElapsedNanoseconds", &Timer::ElapsedNanoseconds);
     RslTable.set_usertype("Timer", Utype);
+#endif
 }

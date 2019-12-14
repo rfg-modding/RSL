@@ -507,7 +507,7 @@ extern F_HumanTeleport HumanTeleport;*/
     //extern F_object_spawn_vehicle ObjectSpawnVehicle;
 
     //.text:007A8E40 rfg.exe:$768E40 #768240 <vehicle_info_get_master_list> //farray<vehicle_info,163> *__cdecl fav_vehicle_info_get_master_list()
-    using F_vehicle_info_get_master_list =  rfg::farray<vehicle_info, 163>*(__cdecl*)();
+    using F_vehicle_info_get_master_list = rfg::farray<vehicle_info, 163>*(__cdecl*)();
     extern F_vehicle_info_get_master_list VehicleInfoGetMasterList;
 
     //.text:00796420 rfg.exe:$756420 #755820 <sp_spawn_vehicle> //bool __cdecl sp_spawn_vehicle(vehicle_spawn_params& spawn_param)

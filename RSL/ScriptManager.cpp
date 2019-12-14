@@ -27,15 +27,19 @@
 #include "VehicleInfoLua.h"
 #include "VehicleLua.h"
 #include "FlyerLua.h"
+#include "GuiLua.h"
 
 ScriptManager::~ScriptManager()
 {
+#if LUA_ENABLED
     delete LuaState;
+#endif
 }
 
 //Resets the script loader lua state and reloads the core libraries including the scripts in the Core folder.
 void ScriptManager::Reset()
 {
+#if LUA_ENABLED
     std::lock_guard<std::recursive_mutex> Lock(Mutex);
     delete LuaState;
 
@@ -47,11 +51,13 @@ void ScriptManager::Reset()
     Initialize();
     UpdateRfgPointers();
     RunStartupScripts();
+#endif
 }
 
 //Initializes the lua state and calls all necessary functions and scripts needed to setup the scripting system.
 void ScriptManager::Initialize()
 {
+#if LUA_ENABLED
     std::lock_guard<std::recursive_mutex> Lock(Mutex);
     LuaState = new sol::state();
 	LuaState->open_libraries
@@ -70,11 +76,13 @@ void ScriptManager::Initialize()
 		sol::lib::jit
 	);
 	SetupLua();
+#endif
 }
 
 //Contains all of the binding code for rfg types and functions and any helper functions.
 void ScriptManager::SetupLua()
 {
+#if LUA_ENABLED
     std::lock_guard<std::recursive_mutex> Lock(Mutex);
 
     if (!RunScript(Globals::GetEXEPath(false) + "RSL/Core/CoreInit.lua"))
@@ -82,17 +90,27 @@ void ScriptManager::SetupLua()
 
     sol::state& LuaStateRef = *LuaState;
 
+#pragma warning(push)
+#pragma warning(disable : C4172)
+    //General API functions
     Lua::BindApiFunctions(LuaStateRef);
-    Lua::BindGuiFunctions(LuaStateRef);
+    Lua::BindTimer(LuaStateRef);
 
-	#pragma warning(push)
-	#pragma warning(disable : C4172)
+    //ImGui types and functions
+    Lua::BindGuiFunctions(LuaStateRef);
+    Lua::BindImVec2(LuaStateRef);
+    Lua::BindImVec4(LuaStateRef);
+    Lua::BindBaseGui(LuaStateRef);
+    Lua::BindLuaGui(LuaStateRef);
+
+    //Rfg types
 	Lua::BindRfgBaseArrayObjectPtr(LuaStateRef);
 	Lua::BindRfgFArray(LuaStateRef);
 	Lua::BindTimestamp(LuaStateRef);
 	Lua::BindTimestampPercent(LuaStateRef);
 	Lua::BindTimestampRealtime(LuaStateRef);
 	Lua::BindColor(LuaStateRef);
+	Lua::BindVector2(LuaStateRef);
 	Lua::BindVector(LuaStateRef);
 	Lua::BindMatrix(LuaStateRef);
 	Lua::BindMatrix43(LuaStateRef);
@@ -127,6 +145,9 @@ void ScriptManager::SetupLua()
 	Lua::BindPathfindNavInfo(LuaStateRef);
 	Lua::BindUpgradeItem(LuaStateRef);
 	Lua::BindPlayerMetadata(LuaStateRef);
+    Lua::BindBbox(LuaStateRef);
+
+    //Rfg objects (many member var types bound in previous funcs)
 	Lua::BindObject(LuaStateRef);
 	Lua::BindHuman(LuaStateRef);
 	Lua::BindPlayer(LuaStateRef);
@@ -147,16 +168,18 @@ void ScriptManager::SetupLua()
 	Lua::BindWorldZone(LuaStateRef);
 	Lua::BindWorld(LuaStateRef);
 
+    //Explosion types
     Lua::BindFixedArrayWrapperExplosionInfo(LuaStateRef);
     Lua::BindExplosionInfo(LuaStateRef);
-    Lua::BindTimer(LuaStateRef);
+
+    //Weapon types
     Lua::BindFixedArrayWrapperWeaponInfo(LuaStateRef);
     Lua::BindWeaponProjectileInfo(LuaStateRef);
     Lua::BindDamageScalingInfo(LuaStateRef);
     Lua::BindWeaponInfoFlags(LuaStateRef);
     Lua::BindWeaponInfo(LuaStateRef);
 
-    Lua::BindBbox(LuaStateRef);
+    //Vehicle types
     Lua::BindVehicleInfoAxleWheelInfo(LuaStateRef);
     Lua::BindRfgFarrayVehicleInfo163(LuaStateRef);
     Lua::BindVehicleInfoTransmissionInfo(LuaStateRef);
@@ -165,29 +188,33 @@ void ScriptManager::SetupLua()
     Lua::BindVehicleInfoFlags(LuaStateRef);
     Lua::BindLodInfo(LuaStateRef);
     Lua::BindVehicleInfo(LuaStateRef);
-
     Lua::BindVehicleFlags(LuaStateRef);
     Lua::BindVehicleSpawnFlags(LuaStateRef);
     Lua::BindVehicleRddFlags(LuaStateRef);
     Lua::BindVehicle(LuaStateRef);
 
+    //Flyer types
     Lua::BindFlyerFlags(LuaStateRef);
     Lua::BindFlyer(LuaStateRef);
 
 	#pragma warning(pop) 
 
     UpdateRfgPointers();
+#endif
 
     _ready = true;
 }
 
 void ScriptManager::RegisterEvent(std::string EventTypeName, const sol::function& EventFunction)
 {
+#if LUA_ENABLED
     RegisterEvent(EventTypeName, EventFunction, "GenericEvent");
+#endif
 }
 
 void ScriptManager::RegisterEvent(std::string EventTypeName, const sol::function& EventFunction, const std::string& EventName)
 {
+#if LUA_ENABLED
     const std::string TypeNameLower = Util::General::ToLower(EventTypeName); //Don't want case to matter for event names
     for(auto& Event : Events)
     {
@@ -198,6 +225,7 @@ void ScriptManager::RegisterEvent(std::string EventTypeName, const sol::function
         }
     }
     throw std::exception(fmt::format("\"{}\" is not a valid event name!", EventTypeName).c_str());
+#endif
 }
 
 /* Used to ensure a few important game pointers are always up to date. Since these can sometimes change
@@ -208,6 +236,7 @@ void ScriptManager::RegisterEvent(std::string EventTypeName, const sol::function
  */
 void ScriptManager::UpdateRfgPointers()
 {
+#if LUA_ENABLED
     std::lock_guard<std::recursive_mutex> Lock(Mutex);
     sol::state& LuaStateRef = *LuaState;
 	auto RfgTable = LuaStateRef["rfg"].get_or_create<sol::table>();
@@ -224,11 +253,14 @@ void ScriptManager::UpdateRfgPointers()
     LuaStateRef["Player"] = Globals::PlayerPtr;
 	LuaStateRef["World"] = Globals::RfgWorldPtr;
 	LuaStateRef["PhysicsWorld"] = Globals::hkpWorldPtr;
+#endif
 }
 
+//Todo: Maybe see if this can be modified to be a generic "look for files with these extensions / values, in these locations" function
 //Scans all files in the Scripts folder and places valid script files in the scripts list (this->Scripts)
 void ScriptManager::ScanScriptsFolder()
 {
+#if LUA_ENABLED
 	try 
 	{
 		SubFolders.clear();
@@ -265,10 +297,12 @@ void ScriptManager::ScanScriptsFolder()
 		ExceptionInfo += __func__;
 		Logger::LogFatalError("{}\n", ExceptionInfo);
 	}
+#endif
 }
 
 void ScriptManager::RunStartupScripts()
 {
+#if LUA_ENABLED
     std::lock_guard<std::recursive_mutex> Lock(Mutex);
     for(auto& Folder : SubFolders)
     {
@@ -280,10 +314,12 @@ void ScriptManager::RunStartupScripts()
             }
         }
     }
+#endif
 }
 
 bool ScriptManager::RunScript(const std::string& FullPath)                     
 {
+#if LUA_ENABLED
     std::lock_guard<std::recursive_mutex> Lock(Mutex);
 
     if (!std::filesystem::path(FullPath).has_filename()) 
@@ -293,16 +329,23 @@ bool ScriptManager::RunScript(const std::string& FullPath)
     std::string Buffer = Util::General::LoadFileToString(FullPath);
     auto Result = RunStringAsScript(Buffer, ScriptName);
     return !Result.Failed;
+#else
+    return false;
+#endif
 }
 
 bool ScriptManager::RunScript(const size_t Index)
 {
+#if LUA_ENABLED
     std::lock_guard<std::recursive_mutex> Lock(Mutex);
 
     auto& Script = SubFolders[Index];
     std::string Buffer = Util::General::LoadFileToString(Script.FullPath);
     auto Result = RunStringAsScript(Buffer, Script.Name);
     return !Result.Failed;
+#else
+    return false;
+#endif
 }
 
 /* Tries to the provided string as a lua script. Uses the name for 
@@ -312,6 +355,7 @@ bool ScriptManager::RunScript(const size_t Index)
  */
 ScriptResult ScriptManager::RunStringAsScript(std::string Buffer, const std::string& Name)
 {
+#if LUA_ENABLED
     std::lock_guard<std::recursive_mutex> Lock(Mutex);
 
     sol::load_result LoadResult = LuaState->load(Buffer);
@@ -333,6 +377,34 @@ ScriptResult ScriptManager::RunStringAsScript(std::string Buffer, const std::str
     }
 
     return ScriptResult(false, {}, {});
+#else
+    return ScriptResult(false, {},
+        "This RSL build was compiled with lua disabled. Please recompile with the LUA_ENABLED define set to true.");
+#endif
+}
+
+/*
+ * Safely runs a sol::function. Logs any errors it encounters.
+ * Can't prevent errors that occur in the games code, so it's not completely foolproof,
+ * but it will catch some errors at least.
+ */
+bool ScriptManager::RunFunctionSafe(sol::function& Func, const std::string& Name, const sol::table& Args)
+{
+#if LUA_ENABLED
+    std::lock_guard<std::recursive_mutex> Lock(Mutex);
+
+    const sol::protected_function_result Result = Func(Args);
+    if (!Result.valid())
+    {
+        sol::error Error = Result;
+        std::string What(Error.what());
+        Logger::LogError("Lua function \"{0}\" encountered an error! Message: \"{1}\"",Name, What);
+        return false;
+    }
+    return true;
+#else
+    return false;
+#endif
 }
 
 // Attempts to get the error line number by parsing a lua error string. 
@@ -370,6 +442,7 @@ std::optional<uint> ScriptManager::GetLineFromErrorString(const std::string& Err
 
 void ScriptManager::TriggerInputEvent(uint Message, uint KeyCode, KeyState& Keys)
 {
+#if LUA_ENABLED
     std::lock_guard<std::recursive_mutex> Lock(Mutex);
 
     if (rfg::game_is_paused()) 
@@ -406,10 +479,12 @@ void ScriptManager::TriggerInputEvent(uint Message, uint KeyCode, KeyState& Keys
             }
         }
     }
+#endif
 }
 
 void ScriptManager::TriggerDoFrameEvent()
 {
+#if LUA_ENABLED
     std::lock_guard<std::recursive_mutex> Lock(Mutex);
 
     if (rfg::game_is_paused()) 
@@ -447,10 +522,12 @@ void ScriptManager::TriggerDoFrameEvent()
             }
         }
     }
+#endif
 }
 
 void ScriptManager::TriggerInitializedEvent()
 {
+#if LUA_ENABLED
     std::lock_guard<std::recursive_mutex> Lock(Mutex);
 
     if (!LuaState) 
@@ -476,10 +553,12 @@ void ScriptManager::TriggerInitializedEvent()
             }
         }
     }
+#endif
 }
 
 void ScriptManager::TriggerMouseEvent(uint Message, uint wParam, uint lParam, KeyState& Keys)
 {
+#if LUA_ENABLED
     std::lock_guard<std::recursive_mutex> Lock(Mutex);
 
     if (rfg::game_is_paused()) 
@@ -536,10 +615,12 @@ void ScriptManager::TriggerMouseEvent(uint Message, uint wParam, uint lParam, Ke
             }
         }
     }
+#endif
 }
 
 void ScriptManager::TriggerLoadEvent()
 {
+#if LUA_ENABLED
     std::lock_guard<std::recursive_mutex> Lock(Mutex);
 
     if (!LuaState) 
@@ -564,6 +645,7 @@ void ScriptManager::TriggerLoadEvent()
             }
         }
     }
+#endif
 }
 
 std::string ScriptManager::GetScriptNameFromPath(const std::string& FullPath) const

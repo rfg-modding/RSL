@@ -10,8 +10,9 @@
 //Todo: Move as many of these as possible into classes instead of having them be global
 
 /*RSL*/
-#define UseLauncher true
-#define LogCfOpenCalls false //If true logs hooks to cf_open via it's hook. This function is called a majority of the games files so it's disabled by default for performance.
+#define USE_LAUNCHER true
+#define LOG_CF_OPEN_CALLS false //If true logs hooks to cf_open via it's hook. This function is called a majority of the games files so it's disabled by default for performance.
+#define LUA_ENABLED true
 
 //using json = nlohmann::json;
 namespace fs = std::filesystem;

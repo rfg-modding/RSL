@@ -7,6 +7,7 @@
 //Todo: Split this into multiple functions & files, organize by function type / area. This is too large for one function
 void Lua::BindApiFunctions(sol::state& LuaStateRef)
 {
+#if LUA_ENABLED
     auto ScriptManager = IocContainer->resolve<IScriptManager>();
 
     LuaStateRef["print"] = sol::nil;
@@ -318,4 +319,5 @@ void Lua::BindApiFunctions(sol::state& LuaStateRef)
     {
         rfg::havok_body_set_angular_velocity(Handle, AngularVelocity);
     };
+#endif
 }

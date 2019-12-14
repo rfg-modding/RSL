@@ -3,6 +3,7 @@
 
 void Lua::BindCharacterInstance(sol::state& LuaState)
 {
+#if LUA_ENABLED
 	auto RfgTable = LuaState["rfg"].get_or_create<sol::table>();
 	auto Utype = RfgTable.create_simple_usertype<CharacterInstance>();
 	Utype.set("new", sol::no_constructor);
@@ -21,4 +22,5 @@ void Lua::BindCharacterInstance(sol::state& LuaState)
 	Utype.set("BboxMaxDimension", &CharacterInstance::bbox_max_dimension);
 	//Utype.set("Rdd", &CharacterInstance::rdd);
 	RfgTable.set_usertype("CharacterInstance", Utype);
+#endif
 }

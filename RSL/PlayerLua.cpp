@@ -3,6 +3,7 @@
 
 void Lua::BindUpgradeItem(sol::state& LuaState)
 {
+#if LUA_ENABLED
 	auto RfgTable = LuaState["rfg"].get_or_create<sol::table>();
 	auto Utype = RfgTable.create_simple_usertype<UpgradeItem>();
 	Utype.set("new", sol::no_constructor);
@@ -11,10 +12,12 @@ void Lua::BindUpgradeItem(sol::state& LuaState)
 	Utype.set("UnlockedNotifiedBitfield", &UpgradeItem::unlocked_notified_bitfield);
 	Utype.set("NewNotifiedBitfield", &UpgradeItem::new_notified_bitfield);
 	RfgTable.set_usertype("PlayerMetadata", Utype);
+#endif
 }
 
 void Lua::BindPlayerMetadata(sol::state& LuaState)
 {
+#if LUA_ENABLED
 	auto RfgTable = LuaState["rfg"].get_or_create<sol::table>();
 	auto Utype = RfgTable.create_simple_usertype<PlayerMetadata>();
 	Utype.set("new", sol::no_constructor);
@@ -27,39 +30,47 @@ void Lua::BindPlayerMetadata(sol::state& LuaState)
 	Utype.set("PlayTime", &PlayerMetadata::PlayTime);
 	Utype.set("LastDeathTime", &PlayerMetadata::LastDeathTime);
 	RfgTable.set_usertype("PlayerMetadata", Utype);
+#endif
 }
 
 void Lua::BindPathfindNavInfo(sol::state& LuaState)
 {
+#if LUA_ENABLED
 	auto RfgTable = LuaState["rfg"].get_or_create<sol::table>();
 	auto Utype = RfgTable.create_simple_usertype<PathfindNavInfo>();
 	Utype.set("new", sol::no_constructor);
 	Utype.set("LastVisitedVehicleNavCellHandle", &PathfindNavInfo::LastVisitedVehicleNavCellHandle);
 	Utype.set("LastVisitedVehicleNavCellUpdateTimer", &PathfindNavInfo::LastVisitedVehicleNavCellUpdateTimer);
 	RfgTable.set_usertype("PathfindNavInfo", Utype);
+#endif
 }
 
 void Lua::BindVehicleEnterStruct(sol::state& LuaState)
 {
+#if LUA_ENABLED
 	auto RfgTable = LuaState["rfg"].get_or_create<sol::table>();
 	auto Utype = RfgTable.create_simple_usertype<VehicleEnterStruct>();
 	Utype.set("new", sol::no_constructor);
 	Utype.set("VehicleHandle", &VehicleEnterStruct::VehicleHandle);
 	Utype.set("Run", &VehicleEnterStruct::Run);
 	RfgTable.set_usertype("VehicleEnterStruct", Utype);
+#endif
 }
 
 void Lua::BindScriptSpecificData(sol::state& LuaState)
 {
+#if LUA_ENABLED
 	auto RfgTable = LuaState["rfg"].get_or_create<sol::table>();
 	auto Utype = RfgTable.create_simple_usertype<ScriptSpecificData>();
 	Utype.set("new", sol::no_constructor);
 	Utype.set("VehicleEnterData", &ScriptSpecificData::VehicleEnterData);
 	RfgTable.set_usertype("ScriptSpecificData", Utype);
+#endif
 }
 
 void Lua::BindPlayerFlags(sol::state& LuaState)
 {
+#if LUA_ENABLED
 	auto RfgTable = LuaState["rfg"].get_or_create<sol::table>();
 	auto Utype = RfgTable.create_simple_usertype<PlayerFlags>();
 	Utype.set("new", sol::no_constructor);
@@ -108,10 +119,12 @@ void Lua::BindPlayerFlags(sol::state& LuaState)
 	//Utype.set("MpRemovingPlayer", sol::property(itsy_bitsy::read<PlayerFlags, 42>, itsy_bitsy::write<PlayerFlags, 42>)); //uint32 - 1 
 	Utype.set("WaitingForLockerExit", sol::property(itsy_bitsy::read<PlayerFlags, 43>, itsy_bitsy::write<PlayerFlags, 43>)); //uint32 - 1 
 	RfgTable.set_usertype("PlayerFlags", Utype);
+#endif
 }
 
 void Lua::BindUsableObject(sol::state & LuaState)
 {
+#if LUA_ENABLED
 	auto RfgTable = LuaState["rfg"].get_or_create<sol::table>();
 	auto Utype = RfgTable.create_simple_usertype<UseableObject>();
 	Utype.set("new", sol::no_constructor);
@@ -122,10 +135,12 @@ void Lua::BindUsableObject(sol::state & LuaState)
 	Utype.set("DistanceSquared", &UseableObject::dist_squared);
 	//Utype.set("ActionCallback", &UseableObject::action_callback); //Function ptr
 	RfgTable.set_usertype("UseableObject", Utype);
+#endif
 }
 
 void Lua::BindPlayer(sol::state& LuaState)
 {
+#if LUA_ENABLED
 	auto RfgTable = LuaState["rfg"].get_or_create<sol::table>();
 	auto Utype = RfgTable.create_simple_usertype<Player>();
 	Utype.set(sol::base_classes, sol::bases<Human, Object>());
@@ -275,4 +290,5 @@ void Lua::BindPlayer(sol::state& LuaState)
         return static_cast<Object*>(&Self);
     });
 	RfgTable.set_usertype("Player", Utype);
+#endif
 }

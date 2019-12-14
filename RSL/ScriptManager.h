@@ -26,6 +26,7 @@ public:
     [[nodiscard]] bool RunScript(const size_t Index) override;
 
 	ScriptResult RunStringAsScript(std::string Buffer, const std::string& Name) override;
+    bool RunFunctionSafe(sol::function& Func, const std::string& Name, const sol::table& Args) override;
     [[nodiscard]] std::optional<uint> GetLineFromErrorString(const std::string& ErrorString) const override;
 
     //Todo: Consider moving these out of this class into the Lua namespace to keep things clean
