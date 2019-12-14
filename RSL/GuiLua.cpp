@@ -16,7 +16,7 @@ void Lua::BindBaseGui(sol::state& LuaStateRef)
     Utype.set("MarkedForDeletion", &BaseGui::MarkedForDeletion);
     Utype.set("Title", &BaseGui::Title);
     Utype.set("Visible", &BaseGui::Visible);
-    Utype.set("IndependentVisibility", &BaseGui::IndependentVisibility);
+    Utype.set("IndependentVisibility", &BaseGui::IndependentVisibility); //Todo: Make a shorter, better name for this
     RfgTable.set_usertype("BaseGui", Utype);
 #endif
 }
