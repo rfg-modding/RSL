@@ -5,6 +5,8 @@
 
 #include "dinputproxy.h"
 
+LPSTR GetLastWin32ErrorAsString();
+
 BOOL WINAPI DllMain(HINSTANCE hInst, DWORD reason,LPVOID v)
 {
 	if (reason == DLL_PROCESS_ATTACH)
@@ -14,7 +16,10 @@ BOOL WINAPI DllMain(HINSTANCE hInst, DWORD reason,LPVOID v)
         
         AllocConsole();
         freopen_s(&pFile, "CONOUT$", "r+", stdout);
-        //printf("dinput8 proxy dll test console\n");
+
+        char ExePathBuffer[MAX_PATH];
+        GetModuleFileName(0, ExePathBuffer, MAX_PATH);
+        printf("Exe path: %s\n", ExePathBuffer);
 
 		char szPath[MAX_PATH];
 
@@ -22,7 +27,8 @@ BOOL WINAPI DllMain(HINSTANCE hInst, DWORD reason,LPVOID v)
 			return FALSE;
 
 		strcat(szPath, "\\dinput8.dll");
-		
+        printf("Real dinput8.dll path: %s\n", szPath);
+
 		hLThis = hInst;
 		hL = LoadLibrary(szPath);
 
@@ -31,16 +37,10 @@ BOOL WINAPI DllMain(HINSTANCE hInst, DWORD reason,LPVOID v)
             return FALSE;
 		}
 
-        //const HINSTANCE LauncherDLL = LoadLibrary(".\\RFGR Script Loader\\Launcher.dll");
-        //if (!LauncherDLL)
-        //{
-        //    printf("Failed to load Launcher DLL! Exiting!");
-        //    return FALSE;
-        //}
         const HINSTANCE RSLDLL = LoadLibrary(".\\RSL\\RSL.dll");
         if(!RSLDLL)
         {
-            printf("Failed to load RSL DLL! Exiting!");
+            printf("Failed to load RSL DLL! Exiting! Error: %s\n", GetLastWin32ErrorAsString());
             return FALSE;
         }
 
@@ -58,6 +58,20 @@ BOOL WINAPI DllMain(HINSTANCE hInst, DWORD reason,LPVOID v)
 	}
 
 	return TRUE;
+}
+
+LPSTR GetLastWin32ErrorAsString()
+{
+    //Get the error message, if any.
+    DWORD errorMessageID = GetLastError();
+    if (errorMessageID == 0)
+        return NULL; //No error message has been recorded
+
+    LPSTR messageBuffer = NULL;
+    size_t size = FormatMessageA(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
+        NULL, errorMessageID, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPSTR)&messageBuffer, 0, NULL);
+
+    return messageBuffer;
 }
 
 // DirectInput8Create
