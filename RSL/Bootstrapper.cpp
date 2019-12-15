@@ -29,28 +29,9 @@ Bootstrapper::Bootstrapper()
 
 void Bootstrapper::Init()
 {
-    InitLogger();
     CheckForImproperInstallation();
     InitRSL();
     OpenDefaultLogs();
-}
-
-void Bootstrapper::InitLogger()
-{
-    try
-    {
-        Logger::Init(LogAll, Globals::GetEXEPath(false) + "RSL/Logs/", 10000);
-        Logger::OpenLogFile("Load Log.log", LogAll, std::ios_base::trunc);
-        Logger::OpenLogFile("Master Log.log", LogAll, std::ios_base::trunc);
-        Logger::Log("RSL started. Activating.\n");
-    }
-    catch (std::exception & Ex)
-    {
-        std::string MessageBoxString = R"(Exception detected during Logger initialization! Please show this to the current script loader maintainer. It's much harder to fix any further problems which might occur without logs.)";
-        MessageBoxString += Ex.what();
-        MessageBoxA(Globals::FindRfgTopWindow(), MessageBoxString.c_str(), "Logger failed to initialize!", MB_OK);
-        Logger::CloseAllLogFiles();
-    }
 }
 
 void Bootstrapper::CheckForImproperInstallation()

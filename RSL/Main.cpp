@@ -1,4 +1,4 @@
-#include "Launcher.h"
+﻿#include "Launcher.h"
 #include "IpcManager.h"
 #include "CameraManager.h"
 #include "FunctionManager.h"
@@ -11,6 +11,7 @@ DWORD WINAPI MainThread(HMODULE hModule);
 DWORD WINAPI LauncherThread(HMODULE hModule);
 HANDLE LauncherThreadHandle;
 void BuildIocContainer();
+void InitLogger();
 
 /* This function is the first thing called when the script loader DLL is loaded into rfgr.
  * All it does is start a new thread which runs MainThread. You shouldn't do anything major
@@ -23,21 +24,29 @@ BOOL WINAPI DllMain(HMODULE hModule, DWORD dwReason, LPVOID lpReserved)
     if (dwReason != DLL_PROCESS_ATTACH)
         return TRUE;
 
+    InitLogger();
+
+    Logger::Log("Getting PID.\n");
     Globals::PID = GetCurrentProcessId();
+    Logger::Log("Getting module base address.\n");
     Globals::ModuleBase = reinterpret_cast<uintptr_t>(GetModuleHandle(nullptr));
+    Logger::Log("Building IoC container.\n");
     BuildIocContainer();
 
     //First, check for txt files which skip the launcher. Workaround until bugs with the launcher running can be fixed
     if(fs::exists(Globals::GetEXEPath() + "\\RSL_No_Launcher.txt")) //Skip launcher, run with RSL
     {
+        Logger::Log("Found \"RSL_No_Launcher.txt\". Starting RSL main thread without displaying launcher.\n");
         CreateThread(0, 0, reinterpret_cast<LPTHREAD_START_ROUTINE>(MainThread), hModule, 0, 0);
     }
     else if(fs::exists(Globals::GetEXEPath() + "\\Vanilla_No_Launcher.txt")) //Skip launcher, run vanilla game
     {
+        Logger::Log("Found \"Vanilla_No_Launcher.txt\". Starting vanilla game without loading the RSL.\n");
         return TRUE;
     }
     else //If neither file is found, start the launcher like normal
     {
+        Logger::Log("No override files found. Opening launcher.\n");
         LauncherThreadHandle = CreateThread(0, 0, reinterpret_cast<LPTHREAD_START_ROUTINE>(LauncherThread), hModule, 0, 0);
     }
     return TRUE;
@@ -45,6 +54,7 @@ BOOL WINAPI DllMain(HMODULE hModule, DWORD dwReason, LPVOID lpReserved)
 
 DWORD WINAPI MainThread(HMODULE hModule)
 {
+    Logger::Log("Entered RSL main thread.\n");
     Globals::ScriptLoaderModule = hModule;
     Application RSL;
 
@@ -63,6 +73,7 @@ DWORD WINAPI MainThread(HMODULE hModule)
 
 DWORD WINAPI LauncherThread(HMODULE hModule)
 {
+    Logger::Log("Entered launcher thread.\n");
     Launcher RslLauncher(LauncherThreadHandle, hModule);
     RslLauncher.Run();
 
@@ -91,4 +102,22 @@ void BuildIocContainer()
     builder.registerType<GuiManager>().as<IGuiManager>().singleInstance();
 
     IocContainer = builder.build();
+}
+
+void InitLogger()
+{
+    try
+    {
+        Logger::Init(LogAll, Globals::GetEXEPath(false) + "RSL/Logs/", 2500);
+        Logger::OpenLogFile("Load Log.log", LogAll, std::ios_base::trunc);
+        Logger::OpenLogFile("Master Log.log", LogAll, std::ios_base::trunc);
+        Logger::Log("RSL started. Activating.\n");
+    }
+    catch (std::exception& Ex)
+    {
+        std::string MessageBoxString = R"(Exception detected during Logger initialization! Please show this to the current script loader maintainer. It's much harder to fix any further problems which might occur without logs.)";
+        MessageBoxString += Ex.what();
+        MessageBoxA(Globals::FindRfgTopWindow(), MessageBoxString.c_str(), "Logger failed to initialize!", MB_OK);
+        Logger::CloseAllLogFiles();
+    }
 }

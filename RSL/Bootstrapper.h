@@ -18,7 +18,6 @@ public:
     void Init();
 
 private:
-    void InitLogger();
     void CheckForImproperInstallation();
     void InitRSL();
     void OpenDefaultLogs();
