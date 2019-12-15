@@ -160,6 +160,7 @@ namespace Globals
     namespace Launcher
     {
         bool ShouldRunRsl = false;
+        bool LauncherRan = false;
     }
 
 	const char* GetScriptLoaderVersion()

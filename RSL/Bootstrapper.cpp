@@ -77,13 +77,14 @@ void Bootstrapper::InitRSL()
         Logger::Log("Creating and enabling hooks.\n");
         CreateHooks(); //Creates and enables all function hooks.
 
-#if USE_LAUNCHER
-        Logger::Log("Unpatching rfg main.\n");
-        Util::Patching::UnlockGameMain();
-        Logger::Log("Resuming game threads.\n");
-        Globals::ResumeAllThreads();
-        Logger::Log("Rfg should now resume, unpatched main and resumed it's threads.\n");
-#endif
+        if(Globals::Launcher::LauncherRan)
+        {
+            Logger::Log("Unpatching rfg main.\n");
+            Util::Patching::UnlockGameMain();
+            Logger::Log("Resuming game threads.\n");
+            Globals::ResumeAllThreads();
+            Logger::Log("Rfg should now resume, unpatched main and resumed it's threads.\n");
+        }
         Logger::Log("Waiting for rfg startup to finish.\n");
         WaitForValidGameState();
         Logger::Log("Rfg startup finished, continuing RSL setup.\n");

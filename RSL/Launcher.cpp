@@ -9,7 +9,8 @@ void Launcher::Run()
     Util::Patching::LockGameMain();
     Globals::SuspendAllThreadsExceptLauncher(LauncherThreadHandle);
 
-    MainLoop(); 
+    MainLoop();
+    Globals::Launcher::LauncherRan = true;
 }
 
 bool Launcher::MainLoop()

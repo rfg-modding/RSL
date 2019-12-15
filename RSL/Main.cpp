@@ -1,4 +1,4 @@
-﻿#include "Launcher.h"
+#include "Launcher.h"
 #include "IpcManager.h"
 #include "CameraManager.h"
 #include "FunctionManager.h"
@@ -26,7 +26,6 @@ BOOL WINAPI DllMain(HMODULE hModule, DWORD dwReason, LPVOID lpReserved)
     Globals::PID = GetCurrentProcessId();
     Globals::ModuleBase = reinterpret_cast<uintptr_t>(GetModuleHandle(nullptr));
     BuildIocContainer();
-#if USE_LAUNCHER
 
     //First, check for txt files which skip the launcher. Workaround until bugs with the launcher running can be fixed
     if(fs::exists(Globals::GetEXEPath() + "\\RSL_No_Launcher.txt")) //Skip launcher, run with RSL
@@ -41,12 +40,6 @@ BOOL WINAPI DllMain(HMODULE hModule, DWORD dwReason, LPVOID lpReserved)
     {
         LauncherThreadHandle = CreateThread(0, 0, reinterpret_cast<LPTHREAD_START_ROUTINE>(LauncherThread), hModule, 0, 0);
     }
-
-#else
-
-    CreateThread(0, 0, reinterpret_cast<LPTHREAD_START_ROUTINE>(MainThread), hModule, 0, 0);
-
-#endif
     return TRUE;
 }
 
