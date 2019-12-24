@@ -31,11 +31,10 @@ void FreeCamGui::Draw()
     ImGui::PopFont();
     ImGui::Separator();
 
-    ////ImGui::SetNextItemWidth(230.0f);
-    ////ImGui::InputFloat("Far clip distance", &Camera->GameData->m_far_clip_dist, 3);
-    ////ImGui::SetNextItemWidth(230.0f);
-    ////ImGui::InputFloat("High LOD far clip distance", &Camera->GameData->m_high_lod_far_clip_dist, 3);
-
+    ImGui::SetNextItemWidth(230.0f);
+    ImGui::InputFloat("Far clip distance", Camera->FarClipDistance, 3);
+    ImGui::SetNextItemWidth(230.0f);
+	ImGui::InputFloat("High LOD far clip distance", Camera->HighLodFarClipDistance, 3);
 
     ImGui::Separator();
 	ImGui::PushFont(Globals::FontBig);

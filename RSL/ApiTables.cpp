@@ -39,6 +39,17 @@ void Lua::BindApiFunctions(sol::state& LuaStateRef)
     RfgTable["ToggleHud"] = rfg::ToggleHud;
     RfgTable["SetFarClip"] = rfg::GameRenderSetFarClipDistance;
     RfgTable["GetFarClip"] = rfg::GameRenderGetFarClipDistance;
+    RfgTable["SetHighLodFarClip"] = [](float highLodFarClip)
+    {
+        static auto Camera = IocContainer->resolve<ICameraManager>();
+        *Camera->HighLodFarClipDistance = highLodFarClip;
+    };
+    RfgTable["GetHighLodFarClip"] = [](float highLodFarClip)
+    {
+        static auto Camera = IocContainer->resolve<ICameraManager>();
+        return *Camera->HighLodFarClipDistance;
+    };
+
     RfgTable["SetAlertLevel"] = rfg::GsmSetAlertLevel;
     RfgTable["GetAlertLevel"] = rfg::GsmGetAlertLevel;
     RfgTable.set_function("TeleportHuman", sol::overload(
@@ -113,14 +124,15 @@ void Lua::BindApiFunctions(sol::state& LuaStateRef)
         {
             rfg::ui_add_secondary_message(Util::Widen(Message).c_str(), DisplayTime, UseSecondaryAnim, false);
         },
-            [](const char* Message, float DisplayTime)
+        [](const char* Message, float DisplayTime)
         {
             rfg::ui_add_secondary_message(Util::Widen(Message).c_str(), DisplayTime, false, false);
         },
-            [](const char* Message)
+        [](const char* Message)
         {
             rfg::ui_add_secondary_message(Util::Widen(Message).c_str(), 3.0f, false, false);
-    }));
+        }
+    ));
 
     RfgTable.set_function("AddUserMessage", sol::overload(
         [](std::string Text, float PosX, float PosY, bool Outlined, float Lifespan, hud_user_message_types Type)->hud_message_handle

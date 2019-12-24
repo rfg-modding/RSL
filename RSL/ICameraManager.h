@@ -77,6 +77,9 @@ public:
     float* RealDirectionY = nullptr;
     float* RealDirectionZ = nullptr;
 
+    float* FarClipDistance = nullptr;
+    float* HighLodFarClipDistance = nullptr;
+
 protected:
     ICameraManager() = default;
 };
