@@ -198,12 +198,14 @@ echo #define RSL_BUILD_DATE %buildTime:~0,8% &gt;&gt; $(ProjectDir)/BuildDate.h<
     <ClCompile Include="ExplosionSpawnerGui.cpp" />
     <ClCompile Include="FlyerLua.cpp" />
     <ClCompile Include="gamestate_gp_process.cpp" />
+    <ClCompile Include="GraphicsFunctions.cpp" />
     <ClCompile Include="GraphicsStateWrapper.cpp" />
     <ClCompile Include="GraphicsTweaksGui.cpp" />
     <ClCompile Include="GuiConstants.cpp" />
     <ClCompile Include="GuiFunctions.cpp" />
     <ClCompile Include="GuiLua.cpp" />
     <ClCompile Include="GuiManager.cpp" />
+    <ClCompile Include="HdrStateBlockLua.cpp" />
     <ClCompile Include="HkpRigidBodyLua.cpp" />
     <ClCompile Include="CharacterInstanceLua.cpp" />
     <ClCompile Include="ContactNodeLua.cpp" />
@@ -305,6 +307,7 @@ echo #define RSL_BUILD_DATE %buildTime:~0,8% &gt;&gt; $(ProjectDir)/BuildDate.h<
     <ClInclude Include="ExplosionSpawnerGui.h" />
     <ClInclude Include="FixedArrayWrapper.h" />
     <ClInclude Include="FlyerLua.h" />
+    <ClInclude Include="GraphicsFunctions.h" />
     <ClInclude Include="GraphicsStateWrapper.h" />
     <ClInclude Include="GraphicsTweaksGui.h" />
     <ClInclude Include="GuiConstants.h" />
@@ -312,6 +315,7 @@ echo #define RSL_BUILD_DATE %buildTime:~0,8% &gt;&gt; $(ProjectDir)/BuildDate.h<
     <ClInclude Include="GuiLua.h" />
     <ClInclude Include="GuiManager.h" />
     <ClInclude Include="GuiReference.h" />
+    <ClInclude Include="HdrStateBlockLua.h" />
     <ClInclude Include="HkpRigidBodyLua.h" />
     <ClInclude Include="CharacterInstanceLua.h" />
     <ClInclude Include="ContactNodeLua.h" />

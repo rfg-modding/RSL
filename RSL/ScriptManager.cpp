@@ -29,6 +29,8 @@
 #include "FlyerLua.h"
 #include "GuiLua.h"
 #include "GuiConstants.h"
+#include "GraphicsFunctions.h"
+#include "HdrStateBlockLua.h"
 
 ScriptManager::~ScriptManager()
 {
@@ -198,35 +200,16 @@ void ScriptManager::SetupLua()
     Lua::BindFlyerFlags(LuaStateRef);
     Lua::BindFlyer(LuaStateRef);
 
+    //Bind graphics types
+    Lua::BindGraphicsFunctions(LuaStateRef);
+    Lua::BindHdrStateBlock(LuaStateRef);
+
 	#pragma warning(pop) 
 
     UpdateRfgPointers();
 #endif
 
     _ready = true;
-}
-
-void ScriptManager::RegisterEvent(std::string EventTypeName, const sol::function& EventFunction)
-{
-#if LUA_ENABLED
-    RegisterEvent(EventTypeName, EventFunction, "GenericEvent");
-#endif
-}
-
-void ScriptManager::RegisterEvent(std::string EventTypeName, const sol::function& EventFunction, const std::string& EventName)
-{
-#if LUA_ENABLED
-    const std::string TypeNameLower = Util::General::ToLower(EventTypeName); //Don't want case to matter for event names
-    for(auto& Event : Events)
-    {
-        if(TypeNameLower == Event.Name)
-        {
-            Event.Hooks.emplace_back(EventName, EventFunction);
-            return;
-        }
-    }
-    throw std::exception(fmt::format("\"{}\" is not a valid event name!", EventTypeName).c_str());
-#endif
 }
 
 /* Used to ensure a few important game pointers are always up to date. Since these can sometimes change
@@ -250,11 +233,35 @@ void ScriptManager::UpdateRfgPointers()
     RfgTable["WeaponInfos"] = Globals::WeaponInfos;
     RfgTable["PlayerMaxMovementSpeedOverride"] = Globals::PlayerMaxMovementSpeedOverride;
     RfgTable["VehicleInfos"] = Globals::VehicleInfos;
-    
+    RfgTable["Hdr"] = Globals::GraphicsState.HdrState;
+
     LuaStateRef["Player"] = Globals::PlayerPtr;
 	LuaStateRef["World"] = Globals::RfgWorldPtr;
 	LuaStateRef["PhysicsWorld"] = Globals::hkpWorldPtr;
     Lua::BindGuiConstants(LuaStateRef);
+#endif
+}
+
+void ScriptManager::RegisterEvent(std::string EventTypeName, const sol::function& EventFunction)
+{
+#if LUA_ENABLED
+    RegisterEvent(EventTypeName, EventFunction, "GenericEvent");
+#endif
+}
+
+void ScriptManager::RegisterEvent(std::string EventTypeName, const sol::function& EventFunction, const std::string& EventName)
+{
+#if LUA_ENABLED
+    const std::string TypeNameLower = Util::General::ToLower(EventTypeName); //Don't want case to matter for event names
+    for (auto& Event : Events)
+    {
+        if (TypeNameLower == Event.Name)
+        {
+            Event.Hooks.emplace_back(EventName, EventFunction);
+            return;
+        }
+    }
+    throw std::exception(fmt::format("\"{}\" is not a valid event name!", EventTypeName).c_str());
 #endif
 }
 

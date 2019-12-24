@@ -178,6 +178,9 @@
     <Filter Include="Lua Binding\Usertypes\Gui">
       <UniqueIdentifier>{3ec82bd1-3a61-4a9d-9eb0-3519668251f2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Lua Binding\Usertypes\Graphics">
+      <UniqueIdentifier>{e822013d-2d50-4fe0-87a5-62ec4d4708d3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="include\fmt\format.cc">
@@ -494,6 +497,12 @@
     </ClCompile>
     <ClCompile Include="GuiConstants.cpp">
       <Filter>Lua Binding\Usertypes\Gui</Filter>
+    </ClCompile>
+    <ClCompile Include="HdrStateBlockLua.cpp">
+      <Filter>Lua Binding\Usertypes\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="GraphicsFunctions.cpp">
+      <Filter>Lua Binding\Functions</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -838,6 +847,12 @@
     </ClInclude>
     <ClInclude Include="GuiConstants.h">
       <Filter>Lua Binding\Usertypes\Gui</Filter>
+    </ClInclude>
+    <ClInclude Include="HdrStateBlockLua.h">
+      <Filter>Lua Binding\Usertypes\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="GraphicsFunctions.h">
+      <Filter>Lua Binding\Functions</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
