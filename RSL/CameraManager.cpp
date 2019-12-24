@@ -381,7 +381,7 @@ vector CameraManager::GetLookDirection()
     if (!GameData)
         return vector(0.0f);
 
-    return GameData->real_orient.fvec;
+    return GameData->real_orient.fvec.UnitVector();
 }
 
 matrix CameraManager::GetLookOrient()
