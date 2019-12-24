@@ -20,9 +20,7 @@ HRESULT __stdcall Hooks::D3D11PresentHook(IDXGISwapChain* pSwapChain, UINT SyncI
                 ImGui::NewFrame();
 
                 Gui->Draw();
-                //ImGui::ShowDemoWindow(&Globals::OverlayActive);
                 Globals::D3D11Context->OMSetRenderTargets(1, &Globals::MainRenderTargetView, nullptr);
-                //Globals::D3D11Context->ClearRenderTargetView(Globals::MainRenderTargetView, (float*)& clear_color);
                 ImGui::Render();
                 ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
             }

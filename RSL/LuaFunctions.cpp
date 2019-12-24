@@ -120,6 +120,41 @@ namespace Lua
         return nullptr;
     }
 
+    //Tries to find the specified effect_info in
+    //Globals::EffectInfos. Ruturns nullptr if not found.
+    effect_info* GetEffectInfo(string Name)
+	{
+        if (!Globals::EffectInfos.Initialized())
+            return nullptr;
+
+        for(int i = 0; i < Globals::EffectInfos.Size(); i++)
+        {
+            string IndexName(Globals::EffectInfos[i].name);
+            if(IndexName == Name)
+                return &Globals::EffectInfos[i];
+        }
+
+        return nullptr;
+	}
+
+    //Tries to find the specified effect_info handle in
+    //Globals::EffectInfos. Ruturns 0xFFFFFFFF if not found.
+    uint GetEffectHandle(string Name)
+	{
+        if (!Globals::EffectInfos.Initialized())
+            return 0xFFFFFFFF;
+
+        for (int i = 0; i < Globals::EffectInfos.Size(); i++)
+        {
+            string IndexName(Globals::EffectInfos[i].name);
+            if (IndexName == Name)
+            {
+                return i;//return Globals::EffectInfos[i].visual_handle; //return i; //
+            }
+        }
+        return 0xFFFFFFFF;
+	}
+
     std::vector<fmt::basic_format_arg<fmt::format_context>> GenerateFmtListFromSolVariadicArgs(const sol::variadic_args& Args)
     {
         std::vector<fmt::basic_format_arg<fmt::format_context>> FmtArgsList;

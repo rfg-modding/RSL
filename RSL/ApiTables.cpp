@@ -331,5 +331,41 @@ void Lua::BindApiFunctions(sol::state& LuaStateRef)
     {
         rfg::havok_body_set_angular_velocity(Handle, AngularVelocity);
     };
+
+    RfgTable["PlayEffect"] = sol::overload(
+        //[](uint effect_handle, vector& pos, matrix& orient, bool looping)
+        //{
+        //    rfg::effects_play(effect_handle, &pos, &orient, looping, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 1.0f, false, EFFECTS_CATEGORY_NONE);
+        //},
+        //[](string& effect_name, vector& pos, matrix& orient, bool looping)
+        //{
+        //    uint effect_handle = Lua::GetEffectHandle(effect_name);
+        //    if(effect_handle == 0xFFFFFFFF)
+        //    {
+        //        Logger::Log("Could not find valid handle for effect name \"{}\"\n", effect_name);
+        //        return;
+        //    }
+        //    rfg::effects_play(effect_handle, &pos, &orient, looping, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 1.0f, false, EFFECTS_CATEGORY_NONE);
+        //},
+        //[](uint effect_handle, vector pos, matrix orient, bool looping)
+        //{
+        //    rfg::effects_play(effect_handle, &pos, &orient, looping, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 1.0f, false, EFFECTS_CATEGORY_NONE);
+        //},
+        //[](string& effect_name, vector pos, matrix orient, bool looping)
+        //{
+        //    uint effect_handle = Lua::GetEffectHandle(effect_name);
+        //    if (effect_handle == 0xFFFFFFFF)
+        //    {
+        //        Logger::Log("Could not find valid handle for effect name \"{}\"\n", effect_name);
+        //        return;
+        //    }
+        //    rfg::effects_play(effect_handle, &pos, &orient, looping, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 1.0f, false, EFFECTS_CATEGORY_NONE);
+        //},
+        [](uint effect_handle, float x, float y, float z)
+        {
+            vector pos{ x, y, z };
+            rfg::effects_play(effect_handle, &pos, &Globals::PlayerPtr->Orientation, false, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 1.0f, false, EFFECTS_CATEGORY_NONE);
+        }
+    );
 #endif
 }

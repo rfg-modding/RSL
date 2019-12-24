@@ -175,12 +175,30 @@ void Lua::BindGuiFunctions(sol::state& LuaStateRef)
         [](ImGuiCol idx, ImU32 col) { ImGui::PushStyleColor(idx, col); },
         [](ImGuiCol idx, const ImVec4& col) { ImGui::PushStyleColor(idx, col); }
     );
-    GuiTable["PopStyleColor"] = ImGui::PopStyleColor;
+    GuiTable["PopStyleColor"] = sol::overload(
+        []()
+        {
+            ImGui::PopStyleColor(1);
+        },
+        [](int count)
+        {
+            ImGui::PopStyleColor(count);
+        }
+    );
     GuiTable["PushStyleVar"] = sol::overload(
         [](ImGuiStyleVar idx, float val) { ImGui::PushStyleVar(idx, val); },
         [](ImGuiStyleVar idx, const ImVec2& val) { ImGui::PushStyleVar(idx, val); }
     );
-    GuiTable["PopStyleVar"] = ImGui::PopStyleVar;
+    GuiTable["PopStyleVar"] = sol::overload(
+        []()
+        {
+            ImGui::PopStyleVar(1);
+        },
+        [](int count)
+        {
+            ImGui::PopStyleVar(count);
+        }
+    );
     GuiTable["GetStyleColorVec4"] = ImGui::GetStyleColorVec4;
     GuiTable["GetFont"] = ImGui::GetFont;
     GuiTable["GetFontSize"] = ImGui::GetFontSize;
@@ -244,7 +262,7 @@ void Lua::BindGuiFunctions(sol::state& LuaStateRef)
     GuiTable["TextUnformatted"] = ImGui::TextUnformatted;
     GuiTable["Text"] = [](std::string& text) { ImGui::Text(text.c_str()); };
     GuiTable["TextColored"] = sol::overload(
-        [](std::string& text, ImVec4 color) { ImGui::TextColored(color, text.c_str()); },
+        [](std::string& text, ImVec4& color) { ImGui::TextColored(color, text.c_str()); },
         [](std::string& text, float r, float g, float b) { ImGui::TextColored(ImVec4(r, g, b, 1.0f), text.c_str()); }
     );
     GuiTable["TextWrapped"] = [](std::string& text) { ImGui::TextWrapped(text.c_str()); };
@@ -264,7 +282,11 @@ void Lua::BindGuiFunctions(sol::state& LuaStateRef)
     //Todo: Add way to load/manage/select textures with lua. Ideally could use a Image + transparent window for additions to game hud
     GuiTable["Image"] = ImGui::Image;
     GuiTable["ImageButton"] = ImGui::ImageButton;
-    GuiTable["Checkbox"] = [](std::string& label, bool* v) { ImGui::Checkbox(label.c_str(), v); };
+    GuiTable["Checkbox"] = [](std::string& label, bool v)
+    {
+        ImGui::Checkbox(label.c_str(), &v);
+        return v;
+    };
     GuiTable["CheckboxFlags"] = ImGui::CheckboxFlags; //Todo: Make sure this is working
     GuiTable["RadioButton"] = sol::overload(
         [](std::string& label, bool active) { ImGui::RadioButton(label.c_str(), active); },
@@ -518,27 +540,27 @@ void Lua::BindGuiFunctions(sol::state& LuaStateRef)
     GuiTable["InputFloat"] = sol::overload(
         [](std::string& label, float v)
         {
-            ImGui::InputFloat(label.c_str(), &v);
+            ImGui::InputFloat(label.c_str(), &v, 0.01f, 0.1, 3);
             return v;
         },
         [](std::string& label, float v, float step)
         {
-            ImGui::InputFloat(label.c_str(), &v, step);
+            ImGui::InputFloat(label.c_str(), &v, step, 0.1, 3);
             return v;
         },
         [](std::string& label, float v, float step, float step_fast)
         {
-            ImGui::InputFloat(label.c_str(), &v, step, step_fast);
+            ImGui::InputFloat(label.c_str(), &v, step, step_fast, 3);
             return v;
         },
-        [](std::string& label, float v, float step, float step_fast, std::string& format)
+        [](std::string& label, float v, float step, float step_fast, int decimal_precision)
         {
-            ImGui::InputFloat(label.c_str(), &v, step, step_fast, format.c_str());
+            ImGui::InputFloat(label.c_str(), &v, step, step_fast, decimal_precision);
             return v;
         },
-        [](std::string& label, float v, float step, float step_fast, std::string& format, ImGuiInputTextFlags flags)
+        [](std::string& label, float v, float step, float step_fast, int decimal_precision, ImGuiInputTextFlags flags)
         {
-            ImGui::InputFloat(label.c_str(), &v, step, step_fast, format.c_str(), flags);
+            ImGui::InputFloat(label.c_str(), &v, step, step_fast, decimal_precision, flags);
             return v;
         }
     );
@@ -1080,6 +1102,8 @@ void Lua::BindGuiFunctions(sol::state& LuaStateRef)
             return vector(r, g, b);
         }
     );
+
+    GuiTable["LabelAndValue"] = Util::Gui::LabelAndValue;
 
 
     GuiTable["MakeGui"] = [](std::string& GuiName, const sol::function& DrawFunc)

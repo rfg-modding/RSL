@@ -18,6 +18,8 @@ namespace Lua
     extern Object* GetObjectByHandle(uint Handle);
 
     extern explosion_info* GetExplosionInfo(std::string Name);
+    extern effect_info* GetEffectInfo(string Name);
+    extern uint GetEffectHandle(string Name);
 
     extern std::vector<fmt::basic_format_arg<fmt::format_context>> GenerateFmtListFromSolVariadicArgs(const sol::variadic_args& Args);
     //Todo: Profile all these lua logging funcs because they're probably slow as shit the way this is being done.

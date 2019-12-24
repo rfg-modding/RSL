@@ -200,6 +200,7 @@ echo #define RSL_BUILD_DATE %buildTime:~0,8% &gt;&gt; $(ProjectDir)/BuildDate.h<
     <ClCompile Include="gamestate_gp_process.cpp" />
     <ClCompile Include="GraphicsStateWrapper.cpp" />
     <ClCompile Include="GraphicsTweaksGui.cpp" />
+    <ClCompile Include="GuiConstants.cpp" />
     <ClCompile Include="GuiFunctions.cpp" />
     <ClCompile Include="GuiLua.cpp" />
     <ClCompile Include="GuiManager.cpp" />
@@ -306,6 +307,7 @@ echo #define RSL_BUILD_DATE %buildTime:~0,8% &gt;&gt; $(ProjectDir)/BuildDate.h<
     <ClInclude Include="FlyerLua.h" />
     <ClInclude Include="GraphicsStateWrapper.h" />
     <ClInclude Include="GraphicsTweaksGui.h" />
+    <ClInclude Include="GuiConstants.h" />
     <ClInclude Include="GuiFunctions.h" />
     <ClInclude Include="GuiLua.h" />
     <ClInclude Include="GuiManager.h" />

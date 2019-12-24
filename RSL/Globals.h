@@ -19,6 +19,7 @@ namespace fs = std::filesystem;
 using uint = unsigned int;
 using ulong = unsigned long;
 using ulonglong = unsigned long long;
+using string = std::string;
 
 class Application;
 class GuiSystem;

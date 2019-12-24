@@ -28,6 +28,7 @@
 #include "VehicleLua.h"
 #include "FlyerLua.h"
 #include "GuiLua.h"
+#include "GuiConstants.h"
 
 ScriptManager::~ScriptManager()
 {
@@ -253,6 +254,7 @@ void ScriptManager::UpdateRfgPointers()
     LuaStateRef["Player"] = Globals::PlayerPtr;
 	LuaStateRef["World"] = Globals::RfgWorldPtr;
 	LuaStateRef["PhysicsWorld"] = Globals::hkpWorldPtr;
+    Lua::BindGuiConstants(LuaStateRef);
 #endif
 }
 
@@ -304,16 +306,19 @@ void ScriptManager::RunStartupScripts()
 {
 #if LUA_ENABLED
     std::lock_guard<std::recursive_mutex> Lock(Mutex);
+    int failedCount = 0;
     for(auto& Folder : SubFolders)
     {
         for(auto& Script : Folder.Scripts)
         {
             if(Util::General::ToLower(Script.Name) == "main.lua")
             {
-                RunScript(Script.FullPath);
+                if (!RunScript(Script.FullPath))
+                    failedCount++;
             }
         }
     }
+    Logger::LogLua("Done running startup scripts. {} startup scripts encountered an error.\n", failedCount);
 #endif
 }
 
@@ -363,7 +368,7 @@ ScriptResult ScriptManager::RunStringAsScript(std::string Buffer, const std::str
     {
         sol::error Error = LoadResult;
         std::string What(Error.what());
-        Logger::LogError("{} failed the syntax check! Message: {}", Name, What);
+        Logger::LogLua("{} failed the syntax check! Message: {}", Name, What);
         return ScriptResult(true, GetLineFromErrorString(What), What);
     }
 
@@ -372,7 +377,7 @@ ScriptResult ScriptManager::RunStringAsScript(std::string Buffer, const std::str
     {
         sol::error Error = Result;
         std::string What(Error.what());
-        Logger::LogError("{} encountered an error! Message: {}", Name, What);
+        Logger::LogLua("{} encountered an error! Message: {}", Name, What);
         return ScriptResult(true, GetLineFromErrorString(What), What);
     }
 
@@ -398,7 +403,7 @@ bool ScriptManager::RunFunctionSafe(sol::function& Func, const std::string& Name
     {
         sol::error Error = Result;
         std::string What(Error.what());
-        Logger::LogError("Lua function \"{0}\" encountered an error! Message: \"{1}\"",Name, What);
+        Logger::LogLua("Lua function \"{0}\" encountered an error! Message: \"{1}\"",Name, What);
         return false;
     }
     return true;
@@ -474,7 +479,7 @@ void ScriptManager::TriggerInputEvent(uint Message, uint KeyCode, KeyState& Keys
                 {
                     sol::error Error = Result;
                     std::string What(Error.what());
-                    Logger::LogError("{} encountered an error! Message: {}", EventHook.HookName, What);
+                    Logger::LogLua("{} encountered an error! Message: {}", EventHook.HookName, What);
                 }
             }
         }
@@ -517,7 +522,7 @@ void ScriptManager::TriggerDoFrameEvent()
                 {
                     sol::error Error = Result;
                     std::string What(Error.what());
-                    Logger::LogError("{} encountered an error! Message: {}", EventHook.HookName, What);
+                    Logger::LogLua("{} encountered an error! Message: {}", EventHook.HookName, What);
                 }
             }
         }
@@ -548,7 +553,7 @@ void ScriptManager::TriggerInitializedEvent()
                 {
                     sol::error Error = Result;
                     std::string What(Error.what());
-                    Logger::LogError("{} encountered an error! Message: {}", EventHook.HookName, What);
+                    Logger::LogLua("{} encountered an error! Message: {}", EventHook.HookName, What);
                 }
             }
         }
@@ -610,7 +615,7 @@ void ScriptManager::TriggerMouseEvent(uint Message, uint wParam, uint lParam, Ke
                 {
                     sol::error Error = Result;
                     std::string What(Error.what());
-                    Logger::LogError("{} encountered an error! Message: {}", EventHook.HookName, What);
+                    Logger::LogLua("{} encountered an error! Message: {}", EventHook.HookName, What);
                 }
             }
         }
@@ -640,7 +645,7 @@ void ScriptManager::TriggerLoadEvent()
                 {
                     sol::error Error = Result;
                     std::string What(Error.what());
-                    Logger::LogError("{} encountered an error! Message: {}", EventHook.HookName, What);
+                    Logger::LogLua("{} encountered an error! Message: {}", EventHook.HookName, What);
                 }
             }
         }

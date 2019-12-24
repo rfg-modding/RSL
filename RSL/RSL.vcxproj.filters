@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="RFGR Structs">
@@ -492,6 +492,9 @@
     <ClCompile Include="GuiLua.cpp">
       <Filter>Lua Binding\Usertypes\Gui</Filter>
     </ClCompile>
+    <ClCompile Include="GuiConstants.cpp">
+      <Filter>Lua Binding\Usertypes\Gui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="RFGR_Type_UI.h">
@@ -831,6 +834,9 @@
       <Filter>Gui\Lua</Filter>
     </ClInclude>
     <ClInclude Include="GuiLua.h">
+      <Filter>Lua Binding\Usertypes\Gui</Filter>
+    </ClInclude>
+    <ClInclude Include="GuiConstants.h">
       <Filter>Lua Binding\Usertypes\Gui</Filter>
     </ClInclude>
   </ItemGroup>
