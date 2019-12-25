@@ -368,6 +368,78 @@ void Lua::BindApiFunctions(sol::state& LuaStateRef)
         }
     );
 
+    RfgTable["SpawnSquad"] = [](string& squadName)
+    {
+        squad_definition* squadDef = rfg::squad_definition_from_name(squadName.c_str());
+        if(!squadDef)
+        {
+            Logger::LogError("\"{}\" not found in squads.xtbl!", squadName);
+            return;
+        }
+
+        vector startingPos = Globals::PlayerPtr->Position;
+        matrix startingOrient = Globals::PlayerPtr->Orientation;
+        squad_spawn_parameters spawnParams;
+        rfg::squad_spawn_parameters_constructor(&spawnParams, nullptr);
+        spawnParams.squad.squad_def = squadDef;
+        int* squadFlagsValue = reinterpret_cast<int*>(&spawnParams.squad.squad_flags);
+        *squadFlagsValue |= 0x200;
+        spawnParams.orders.orders_type = GFM_ORDERS_TYPE_PATROL;
+
+        rfg_mover* localBuilding = rfg::find_local_building(startingPos);
+        if(localBuilding)
+        {
+            Logger::Log("Found local building at {}. Continuing squad creation.\n", localBuilding->Position.GetDataString(false, true));
+            startingPos.y += 5;
+            spawnParams.squad.squad_pos = startingPos;
+            spawnParams.squad.squad_orient = startingOrient;
+            spawnParams.orders.orders_type = GFM_ORDERS_TYPE_DEFEND;
+            spawnParams.orders.location_target = localBuilding->Position;
+            spawnParams.orders.object_target = localBuilding->Parent;
+            spawnParams.orders.location_target = startingPos;
+
+            object_squad* createdSquadObject = rfg::squad_spawn_parameters_create_squad(&spawnParams, nullptr);
+            if (createdSquadObject)
+            {
+                rfg::object_squad_spawn_members(createdSquadObject, nullptr, true, spawnParams.squad.osrp);
+                Logger::LogError("Created squad and spawned members. Position is {}.\n", createdSquadObject->Position.GetDataString(false, true));
+                int* objFlagsCast = reinterpret_cast<int*>(&createdSquadObject->ObjFlags);
+                *objFlagsCast |= 0x20;
+            }
+            else
+            {
+                Logger::LogError("Failed to create squad.\n");
+            }
+
+            if (spawnParams.created_orders)
+                free(spawnParams.created_orders); //Todo: Look in rfg code for more calls to free to see if RSL or RFG are missing any
+        }
+        else
+        {
+            Logger::LogWarning("Failed to find local building, attempting to continue squad creation near player.\n");
+            startingPos.y += 5;
+            bool result = rfg::rfg_snap_to_ground(startingPos);
+            Logger::Log("Snap to ground result: {}\n", result);
+
+            spawnParams.squad.squad_pos = startingPos;
+            spawnParams.squad.squad_orient = startingOrient;
+            spawnParams.orders.location_target = startingPos;
+
+            object_squad* createdSquadObject = rfg::squad_spawn_parameters_create_squad(&spawnParams, nullptr);
+            if(createdSquadObject)
+            {
+                rfg::object_squad_spawn_members(createdSquadObject, nullptr, true, nullptr);
+                Logger::Log("Created squad and spawned members. Position is {}.\n", createdSquadObject->Position.GetDataString(false, true));
+                int* objFlagsCast = reinterpret_cast<int*>(&createdSquadObject->ObjFlags);
+                *objFlagsCast |= 0x20;
+            }
+            else
+            {
+                Logger::LogError("Failed to create squad.\n");
+            }
+        }
+    };
+
     RfgTable["CreatePlayerSquad"] = [](string& squadDefName)
     {
         if (!Globals::PlayerPtr)

@@ -242,6 +242,9 @@ void FunctionManager::RegisterFunctions()
 
     RegisterFunction(rfg::squad_definition_from_name, 0x670BA0);
     RegisterFunction(rfg::squad_spawn_parameters_spawn_squad, 0x3B0E00);
+    RegisterFunction(rfg::squad_spawn_parameters_constructor, 0x20CCA0);
+    RegisterFunction(rfg::squad_spawn_parameters_create_squad, 0x3755E0);
+
     RegisterFunction(rfg::find_local_spawn_region, 0x37FED0);
     RegisterFunction(rfg::find_local_building, 0x390AE0);
     RegisterFunction(rfg::object_squad_spawn_members, 0x694C20);
@@ -251,4 +254,6 @@ void FunctionManager::RegisterFunctions()
     RegisterFunction(rfg::world_create_object_general_mover, 0x318FF0);
 
     RegisterFunction(rfg::player_create_player_squad, 0x633DD0);
+
+    RegisterFunction(rfg::rfg_snap_to_ground, 0x6EB8D0);
 }

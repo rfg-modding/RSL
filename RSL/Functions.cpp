@@ -348,6 +348,9 @@ namespace rfg
 
     F_squad_definition_from_name squad_definition_from_name;
     F_squad_spawn_parameters_spawn_squad squad_spawn_parameters_spawn_squad;
+    F_squad_spawn_parameters_constructor squad_spawn_parameters_constructor;
+    F_squad_spawn_parameters_create_squad squad_spawn_parameters_create_squad;
+
     F_find_local_spawn_region find_local_spawn_region;
     F_find_local_building find_local_building;
     F_object_squad_spawn_members object_squad_spawn_members;
@@ -357,4 +360,6 @@ namespace rfg
     F_world_create_object_general_mover world_create_object_general_mover;
 
     F_player_create_player_squad player_create_player_squad;
+
+    F_rfg_snap_to_ground rfg_snap_to_ground;
 }

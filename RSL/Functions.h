@@ -818,6 +818,14 @@ extern F_HumanTeleport HumanTeleport;*/
     using F_squad_spawn_parameters_spawn_squad = object_squad*(__fastcall*)(squad_spawn_parameters* this_ptr, void* edx);
     extern F_squad_spawn_parameters_spawn_squad squad_spawn_parameters_spawn_squad;
 
+    //.text:00D9CCA0 rfg.exe:$20CCA0 #20C0A0 <squad_spawn_parameters::squad_spawn_parameters> //void __thiscall squad_spawn_parameters::squad_spawn_parameters(squad_spawn_parameters *this)
+    using F_squad_spawn_parameters_constructor = void(__fastcall*)(squad_spawn_parameters* this_ptr, void* edx);
+    extern F_squad_spawn_parameters_constructor squad_spawn_parameters_constructor;
+
+    //.text:00F055E0 rfg.exe:$3755E0 #3749E0 <squad_creation_parameters::create_squad> //object_squad *__thiscall squad_creation_parameters::create_squad(squad_creation_parameters *this)
+    using F_squad_spawn_parameters_create_squad = object_squad*(__fastcall*)(squad_spawn_parameters* this_ptr, void* edx);
+    extern F_squad_spawn_parameters_create_squad squad_spawn_parameters_create_squad;
+
     //.text:00D2FED0 rfg.exe:$37FED0 #37F2D0 <find_local_spawn_region> //object_spawn_region *__cdecl find_local_spawn_region(bool ped_only)
     using F_find_local_spawn_region = object_spawn_region*(__cdecl*)(bool ped_only);
     extern F_find_local_spawn_region find_local_spawn_region;
@@ -842,4 +850,8 @@ extern F_HumanTeleport HumanTeleport;*/
     //.text:011C3DD0 rfg.exe:$633DD0 #6331D0 <player::create_a_player_squad> //unsigned int __thiscall player::create_a_player_squad(player *this, squad_definition *squad_def)
     using F_player_create_player_squad = uint(__fastcall*)(Player * this_ptr, void* edx, squad_definition * squad_def);
     extern F_player_create_player_squad player_create_player_squad;
+
+    //.text:0127B8D0 rfg.exe:$6EB8D0 #6EACD0 <rfg_snap_to_ground> //bool __cdecl rfg_snap_to_ground(vector& pos)
+    using F_rfg_snap_to_ground = bool(__cdecl*)(vector& data);
+    extern F_rfg_snap_to_ground rfg_snap_to_ground;
 }
