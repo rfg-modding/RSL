@@ -504,6 +504,9 @@
     <ClCompile Include="GraphicsFunctions.cpp">
       <Filter>Lua Binding\Functions</Filter>
     </ClCompile>
+    <ClCompile Include="gem_post_event.cpp">
+      <Filter>Hooks</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="RFGR_Type_UI.h">
@@ -853,6 +856,12 @@
     </ClInclude>
     <ClInclude Include="GraphicsFunctions.h">
       <Filter>Lua Binding\Functions</Filter>
+    </ClInclude>
+    <ClInclude Include="RFGR_Types_EventData.h">
+      <Filter>RFGR Structs</Filter>
+    </ClInclude>
+    <ClInclude Include="RFGR_Types_Movers.h">
+      <Filter>RFGR Structs</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -73,7 +73,6 @@ void Lua::BindHdrStateBlock(sol::state& LuaState)
 		[](HdrStateBlock& self) { return *self.bloom_new; },
 		[](HdrStateBlock& self, bool value) { *self.bloom_new = value; }
 	));
-
 	Utype.set("EyeAdaptionBase", sol::property(
 		[](HdrStateBlock& self) { return *self.eye_adaption_base; },
 		[](HdrStateBlock& self, float value) { *self.eye_adaption_base = value; }

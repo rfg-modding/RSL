@@ -367,5 +367,19 @@ void Lua::BindApiFunctions(sol::state& LuaStateRef)
             rfg::effects_play(effect_handle, &pos, &Globals::PlayerPtr->Orientation, false, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 1.0f, false, EFFECTS_CATEGORY_NONE);
         }
     );
+
+    RfgTable["CreatePlayerSquad"] = [](string& squadDefName)
+    {
+        if (!Globals::PlayerPtr)
+            return 0xFFFFFFFF;
+
+        squad_definition* squadDef = rfg::squad_definition_from_name(squadDefName.c_str());
+        if(!squadDef)
+        {
+            Logger::Log("Failed to create player squad. Could not find squad definition with name \"{}\".\n", squadDefName);
+            return 0xFFFFFFFF;
+        }
+        return rfg::player_create_player_squad(Globals::PlayerPtr, nullptr, squadDef);
+    };
 #endif
 }

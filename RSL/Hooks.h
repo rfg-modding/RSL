@@ -74,5 +74,7 @@ namespace Hooks
     bool __cdecl can_drop_vehicle_hook(vehicle_info* v_info, rfg::farray<object*, 256> * delete_object_list, vector* position, matrix* orient, unsigned int ignore_object, bool high_priority);
 
     cfile* __cdecl cf_open_hook(const char* filename_in, const char* mode, vlib_platform disk_platform, bool async);
+
+    void __cdecl gem_post_event_hook(event_data& data);
 }
 

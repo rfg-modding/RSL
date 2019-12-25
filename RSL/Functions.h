@@ -821,4 +821,25 @@ extern F_HumanTeleport HumanTeleport;*/
     //.text:00D2FED0 rfg.exe:$37FED0 #37F2D0 <find_local_spawn_region> //object_spawn_region *__cdecl find_local_spawn_region(bool ped_only)
     using F_find_local_spawn_region = object_spawn_region*(__cdecl*)(bool ped_only);
     extern F_find_local_spawn_region find_local_spawn_region;
+
+    //.text:00F20AE0 rfg.exe:$390AE0 #38FEE0 <find_local_building> //rfg_mover *__cdecl find_local_building(vector& pos)
+    using F_find_local_building = rfg_mover*(__cdecl*)(vector& pos);
+    extern F_find_local_building find_local_building;
+
+    //.text:01224C20 rfg.exe:$694C20 #694020 <object_squad::spawn_members> //bool __thiscall object_squad::spawn_members(object_squad *this, bool force_spawn, object_spawn_region *osrp)
+    using F_object_squad_spawn_members = void(__fastcall*)(object_squad* this_ptr, void* edx, bool force_spawn, object_spawn_region* osrp);
+    extern F_object_squad_spawn_members object_squad_spawn_members;
+
+    //.text:012C7C10 rfg.exe:$737C10 #737010 <gem_post_event> //void __cdecl gem_post_event(event_data& data)
+    using F_gem_post_event = void(__cdecl*)(event_data& data);
+    extern F_gem_post_event gem_post_event;
+
+    //.text:00EA8FF0 rfg.exe:$318FF0 #3183F0 <world::create_object<general_mover>>
+    //general_mover *__thiscall world::create_object<general_mover>(world *this, obj_prop_block *pblock, unsigned int parent)
+    using F_world_create_object_general_mover = general_mover*(__fastcall*)(World* this_ptr, void* edx, obj_prop_block* pblock, unsigned int parent);
+    extern F_world_create_object_general_mover world_create_object_general_mover;
+
+    //.text:011C3DD0 rfg.exe:$633DD0 #6331D0 <player::create_a_player_squad> //unsigned int __thiscall player::create_a_player_squad(player *this, squad_definition *squad_def)
+    using F_player_create_player_squad = uint(__fastcall*)(Player * this_ptr, void* edx, squad_definition * squad_def);
+    extern F_player_create_player_squad player_create_player_squad;
 }
