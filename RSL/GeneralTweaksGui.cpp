@@ -34,55 +34,9 @@ void GeneralTweaksGui::Draw()
 	ImGui::Text("General tweaks:");
 	ImGui::PopFont();
 	ImGui::Separator();
-
-    //if(ImGui::Button("Enable penetration on all weapons"))
-    //{
-    //    if(Globals::WeaponInfos.Initialized())
-    //    {
-    //        Logger::Log("WeaponInfos:: Capacity: {}, Length: {}, Size: {}\n", Globals::WeaponInfos.Capacity(), Globals::WeaponInfos.Length(), Globals::WeaponInfos.Size());
-    //        Logger::Log("Applying edits on all weapons (weapon_info test1)\n");
-    //        for(int i = 0; i < Globals::WeaponInfos.Length(); i++)
-    //        {
-    //            weapon_info& Info = Globals::WeaponInfos[i];
-    //            if(Info.name) Logger::Log("\n\nEditing {}, alternative {}\n", Info.name, std::string(Info.name));
-    //            if(Info.icon_name) Logger::Log("icon_name: {}\n", Info.icon_name);
-    //            if(Info.small_icon_name) Logger::Log("small_icon_name: {}\n", Info.small_icon_name);
-    //            if(Info.reticule_name) Logger::Log("reticule_name: {}\n", Info.reticule_name);
-    //            if(Info.fine_aim_reticule_name) Logger::Log("fine_aim_reticule_name: {}\n", Info.fine_aim_reticule_name);
-    //            if(Info.mp_kill_phrase) Logger::Log("mp_kill_phrase: {}\n", Info.mp_kill_phrase);
-    //            Logger::Log("muzzle_flash_effect: {}\n", Info.muzzle_flash_effect);
-    //            Logger::Log("muzzle_smoke_effect: {}\n", Info.muzzle_smoke_effect);
-    //            Logger::Log("special_hit_effect: {}\n", Info.special_hit_effect);
-    //            Logger::Log("special_effect: {}\n", Info.special_effect);
-    //            Logger::Log("secondary_special_effect: {}\n", Info.secondary_special_effect);
-    //            Logger::Log("overheated_effect: {}\n", Info.overheated_effect);
-    //            Logger::Log("tracer_effect: {}\n", Info.tracer_effect);
-    //            Logger::Log("max_range: {}\n", Info.max_range);
-    //            Logger::Log("red_range: {}\n", Info.red_range);
-    //            Logger::Log("aim_assist: {}\n", Info.aim_assist);
-    //            Logger::Log("alert_multiplier: {}\n", Info.alert_multiplier);
-    //            Logger::Log("fire_sound: {}\n", Info.fire_sound);
-    //            Logger::Log("reload_sound: {}\n", Info.reload_sound);
-    //            Info.flags.never_in_cabinet = false;
-    //            Info.flags.armor_piercing = true;
-    //            Info.flags.shatter = true;
-    //            Info.flags.penetrating_bullets = true;
-    //        }
-    //    }
-    //}
-
-    //static float DisplayTime = 10.0f;
-    //static bool UseSecondaryAnim = false;
-    //static bool ForceRedisplay = false;
-    //if(ImGui::Button("Add secondary gui message"))
-    //{
-    //    ui_add_secondary_message(L"Meow meow", DisplayTime, UseSecondaryAnim, ForceRedisplay);
-    //}
     
     static bool Transparent = true;
     static bool PauseBeneath = false;
-    //ImGui::Checkbox("Transparent", &Transparent);
-    //ImGui::Checkbox("Pause beneath", &PauseBeneath);
     if(ImGui::Button("Open weapons locker menu"))
     {
         rfg::GameseqPushState(GS_INGAME_WEAPON_CABINET, Transparent, PauseBeneath);
@@ -272,25 +226,25 @@ void GeneralTweaksGui::Draw()
     ImGui::Separator();
     if(GameClock)
     {
+       
         static uint CurrentTicksMin = 0;
         static uint CurrentTicksMax = std::numeric_limits<uint>::max();
         ImGui::PushItemWidth(230.0f);
-        ImGui::InputScalar("Year", ImGuiDataType_U16, &GameClock->m_year);
-        ImGui::InputScalar("Month", ImGuiDataType_U8, &GameClock->m_month);
-        ImGui::InputScalar("Day", ImGuiDataType_U8, &GameClock->m_day);
-        ImGui::InputScalar("Hour", ImGuiDataType_U8, &GameClock->m_hour);
-        ImGui::InputScalar("Minutes", ImGuiDataType_U8, &GameClock->m_minutes);
-        ImGui::InputScalar("Seconds", ImGuiDataType_U8, &GameClock->m_seconds);
-        ImGui::InputScalar("Day of the week", ImGuiDataType_U8, &GameClock->m_day_of_week);
+        Util::Gui::LabelAndValue("Year", std::to_string(GameClock->m_year));
+        Util::Gui::LabelAndValue("Month", std::to_string(GameClock->m_month));
+        Util::Gui::LabelAndValue("Day", std::to_string(GameClock->m_day));
+        Util::Gui::LabelAndValue("Hour", std::to_string(GameClock->m_hour));
+        Util::Gui::LabelAndValue("Minutes", std::to_string(GameClock->m_minutes));
+        Util::Gui::LabelAndValue("Seconds", std::to_string(GameClock->m_seconds));
+        Util::Gui::LabelAndValue("Day of the week", std::to_string(GameClock->m_day_of_week));
         ImGui::SliderFloat("Time scale", &GameClock->m_time_scale, 0.0f, 1000.0f);
         ImGui::SameLine();
         if(ImGui::Button("Reset##GameClockTimeScale"))
         {
             GameClock->m_time_scale = 48.0f;
         }
-        ImGui::InputScalar("Current day ticks", ImGuiDataType_U32, &GameClock->m_curr_day_ticks);
-        ImGui::PopItemWidth();
         ImGui::SliderScalar("Current day ticks", ImGuiDataType_U32, &GameClock->m_curr_day_ticks, &CurrentTicksMin, &CurrentTicksMax);
+        ImGui::PopItemWidth();
         if(ImGui::Checkbox("Lock time of day change", &LockTodTicksChange))
         {
             if(LockTodTicksChange)
