@@ -8,13 +8,17 @@
 
 #pragma once
 #include "Functions.h"
+#include "GuiReference.h"
 
 #define DebugDrawTestEnabled false
+
+class TextEditorWrapper;
 
 namespace Hooks
 {
     LRESULT __stdcall WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
-    extern LRESULT ProcessInput(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
+    extern LRESULT ProcessInput(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam, const KeyState& keys);
+    extern void ProcessScriptEditorInput(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam, const KeyState& keys, GuiReference<TextEditorWrapper>& textEditor);
 
     extern void UpdateDebugDrawRenderInterfaceValues();
 

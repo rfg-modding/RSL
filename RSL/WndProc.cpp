@@ -40,7 +40,7 @@ LRESULT __stdcall Hooks::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lPar
     {
         return CallWindowProc(Globals::OriginalWndProc, Globals::GameWindowHandle, msg, wParam, lParam);
     }
-    ProcessInput(hWnd, msg, wParam, lParam);
+    ProcessInput(hWnd, msg, wParam, lParam, Keys);
 
     //Todo: Should probably cache this for performance
     static auto Gui = IocContainer->resolve<IGuiManager>();
@@ -116,7 +116,7 @@ void UpdateKeydownStates(const HWND hwnd, const UINT msg, const WPARAM wParam, c
     }
 }
 
-LRESULT Hooks::ProcessInput(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
+LRESULT Hooks::ProcessInput(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam, const KeyState& keys)
 {
     static Timer ExplosionSpawnTimer(true);
     static bool MiddleMouseDown = false;
@@ -295,74 +295,54 @@ LRESULT Hooks::ProcessInput(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
             ExplosionSpawnTimer.Reset();
         }
     }
-    //For whatever reason this causes a crash. Might need to call at a specific time to not piss off havok or something.
-    /*if (Gui.TweaksMenu.MiddleMouseRepairSphereActive)
-    {
-        if (Gui.TweaksMenu.PlayerPtr)
-        {
-            if (Gui.TweaksMenu.RepairPosition == 0)
-            {
-                const float Radius = Gui.TweaksMenu.RepairRadius;
-                const int Duration = Gui.TweaksMenu.RepairDuration;
-                RfgDynRepairSphere(&Gui.TweaksMenu.PlayerPtr->Position, Radius, Duration, Gui.TweaksMenu.PlayerPtr);
-            }
-            else if (Gui.TweaksMenu.RepairPosition == 1)
-            {
-                const float Radius = Gui.TweaksMenu.RepairRadius;
-                const int Duration = Gui.TweaksMenu.RepairDuration;
-                RfgDynRepairSphere(&Gui.TweaksMenu.PlayerPtr->aim_pos, Radius, Duration, Gui.TweaksMenu.PlayerPtr);
-            }
-        }
-    }*/
 
+    if(ScriptEditorGuiRef.IsReady())
+        ProcessScriptEditorInput(hwnd, msg, wParam, lParam, keys, ScriptEditorGuiRef);
+
+    return 0;
+}
+
+void Hooks::ProcessScriptEditorInput(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam, const KeyState& keys, GuiReference<TextEditorWrapper>& textEditor)
+{
     static Timer RunScriptButtonTimer(true);
-    if (ScriptEditorGuiRef.Get().IsVisible() && Globals::OverlayActive)
+    if (textEditor.Get().IsVisible() && Globals::OverlayActive)
     {
-        try
+        if (msg == WM_KEYDOWN)
         {
-            if (GetAsyncKeyState(VK_LCONTROL) && GetAsyncKeyState(0x53)) //Ctrl + S
+            if (keys.ControlDown && wParam == 0x53) //Ctrl + S
             {
-                ScriptEditorGuiRef.Get().SaveScript();
+                try
+                {
+                    textEditor.Get().SaveScript();
+                }
+                catch (const std::exception & Ex)
+                {
+                    Logger::LogFatalError("Exception when using Ctrl+S save script shortcut. Message: {}\n", Ex.what());
+                }
             }
-        }
-        catch (const std::exception& Ex)
-        {
-            Logger::LogFatalError("Exception when using Ctrl+S save script shortcut. Message: {}\n", Ex.what());
-        }
-        if (GetAsyncKeyState(VK_CONTROL) && GetAsyncKeyState(VK_SHIFT) && GetAsyncKeyState(0x53)) //Ctrl + Shift + S
-        {
-            ScriptEditorGuiRef.Get().ShowSaveAsScriptPopup = true;
-        }
-        if (GetAsyncKeyState(VK_LCONTROL) && GetAsyncKeyState(0x4F)) //Ctrl + O
-        {
-            ScriptEditorGuiRef.Get().ShowOpenScriptPopup = true;
-        }
-        if (GetAsyncKeyState(VK_LCONTROL) && GetAsyncKeyState(0x4E)) //Ctrl + N
-        {
-            ScriptEditorGuiRef.Get().ShowNewScriptPopup = true;
-        }
-
-    }
-    if (GetAsyncKeyState(VK_F5)) //Let people use this shortcut even when the ui isn't visible, for convenience.
-    {
-        try
-        {
-            if (ScriptEditorGuiRef.IsReady())
+            else if (keys.ControlDown && keys.ShiftDown && wParam == 0x53) //Ctrl + Shift + S
+                textEditor.Get().ShowSaveAsScriptPopup = true;
+            else if (keys.ControlDown && wParam == 0x4F) //Ctrl + O
+                textEditor.Get().ShowOpenScriptPopup = true;
+            else if (keys.ControlDown && wParam == 0x4E) //Ctrl + N
+                textEditor.Get().ShowNewScriptPopup = true;
+            else if (wParam == VK_F5)
             {
                 if (RunScriptButtonTimer.ElapsedMilliseconds() > 175)
                 {
-                    ScriptEditorGuiRef.Get().RunCurrentScript();
-                    RunScriptButtonTimer.Reset();
+                    try
+                    {
+                        textEditor.Get().RunCurrentScript();
+                        RunScriptButtonTimer.Reset();
+                    }
+                    catch (const std::exception & Ex)
+                    {
+                        Logger::LogFatalError("Exception when using F5 run script shortcut. Message: {}\n", Ex.what());
+                    }
                 }
             }
         }
-        catch (const std::exception& Ex)
-        {
-            Logger::LogFatalError("Exception when using F5 run script shortcut. Message: {}\n", Ex.what());
-        }
     }
-    
-    return 0;
 }
 
 void __cdecl Hooks::InvertDataItemHook(void* Item)
