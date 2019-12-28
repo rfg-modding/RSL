@@ -1,5 +1,5 @@
 #pragma once
-#include <string>
+#include "Path.h"
 
 /* Contains basic information about a script to avoid duplicate calculations.
  * This includes it's full path, folder path, and file name. Currently does
@@ -10,7 +10,8 @@ class Script
 {
 public:
     Script() = default;;
-    Script(std::string FullPath_, std::string FolderPath_, std::string Name_) : FullPath(FullPath_), FolderPath(FolderPath_), Name(Name_) { }
+    Script(const std::filesystem::path& path) : FullPath(path.string()), FolderPath(Path::GetParentDirectory(path)), Name(Path::GetFileName(path))
+    { }
     ~Script() = default;;
 
     std::string FullPath; //Full path with file name.

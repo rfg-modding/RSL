@@ -256,6 +256,7 @@ echo #define RSL_BUILD_DATE %buildTime:~0,8% &gt;&gt; $(ProjectDir)/BuildDate.h<
     <ClCompile Include="ObjectRenderDistanceLua.cpp" />
     <ClCompile Include="ObjectSpawnVehicle.cpp" />
     <ClCompile Include="Object_UpdatePosAndOrient.cpp" />
+    <ClCompile Include="Path.cpp" />
     <ClCompile Include="PegLoadWrapper.cpp" />
     <ClCompile Include="PhysicsGui.cpp" />
     <ClCompile Include="PlayerDoFrame.cpp" />
@@ -363,6 +364,7 @@ echo #define RSL_BUILD_DATE %buildTime:~0,8% &gt;&gt; $(ProjectDir)/BuildDate.h<
     <ClInclude Include="ISnippetManager.h" />
     <ClInclude Include="Launcher.h" />
     <ClInclude Include="LuaGui.h" />
+    <ClInclude Include="Path.h" />
     <ClInclude Include="RFGR_Types_Cfile.h" />
     <ClInclude Include="RFGR_Types_EventData.h" />
     <ClInclude Include="RFGR_Types_Movers.h" />

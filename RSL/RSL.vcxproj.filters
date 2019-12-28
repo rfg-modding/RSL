@@ -507,6 +507,9 @@
     <ClCompile Include="gem_post_event.cpp">
       <Filter>Hooks</Filter>
     </ClCompile>
+    <ClCompile Include="Path.cpp">
+      <Filter>Main\Utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="RFGR_Type_UI.h">
@@ -862,6 +865,9 @@
     </ClInclude>
     <ClInclude Include="RFGR_Types_Movers.h">
       <Filter>RFGR Structs</Filter>
+    </ClInclude>
+    <ClInclude Include="Path.h">
+      <Filter>Main\Utils</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

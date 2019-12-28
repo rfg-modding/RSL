@@ -24,9 +24,9 @@ public:
 
     [[nodiscard]] bool RunScript(const std::string& FullPath) override;
     [[nodiscard]] bool RunScript(const size_t Index) override;
+	ScriptResult RunScript(std::string Buffer, const std::string& Name) override;
 
-	ScriptResult RunStringAsScript(std::string Buffer, const std::string& Name) override;
-    bool RunFunctionSafe(sol::function& Func, const std::string& Name, const sol::table& Args) override;
+    bool RunFunctionSafe(sol::function& Func, const std::string& Name, const sol::table& Args = sol::nil) override;
     [[nodiscard]] std::optional<uint> GetLineFromErrorString(const std::string& ErrorString) const override;
 
     //Todo: Consider moving these out of this class into the Lua namespace to keep things clean
@@ -64,11 +64,8 @@ public:
     std::unordered_map<int, sol::function> MessageBoxCallbacks;
 
 private:
-    [[nodiscard]] std::string GetScriptNameFromPath(const std::string& FullPath) const;
-    [[nodiscard]] std::string GetScriptFolderFromPath(const std::string& FullPath) const;
-    [[nodiscard]] std::string GetScriptExtensionFromPath(const std::string& FullPath) const;
-	[[nodiscard]] bool IsValidScriptExtensionFromPath(const std::string& FullPath) const;
-    [[nodiscard]] bool IsValidScriptExtension(std::string Extension) const;
+	[[nodiscard]] bool IsScriptPath(const fs::path& path) const;
+    [[nodiscard]] bool IsScriptExtension(std::string extension) const;
 	void SetupLua();
 
     std::recursive_mutex Mutex;

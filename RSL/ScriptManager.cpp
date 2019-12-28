@@ -1,4 +1,5 @@
 #include "ScriptManager.h"
+#include "Path.h"
 #include "BaseTypeLua.h"
 #include "VectorLua.h"
 #include "MatrixLua.h"
@@ -257,7 +258,7 @@ void ScriptManager::RegisterEvent(std::string EventTypeName, const sol::function
     {
         if (TypeNameLower == Event.Name)
         {
-            Event.Hooks.emplace_back(EventName, EventFunction);
+            Event.Hooks.push_back(ScriptEventHook(EventName, EventFunction));
             return;
         }
     }
@@ -270,42 +271,37 @@ void ScriptManager::RegisterEvent(std::string EventTypeName, const sol::function
 void ScriptManager::ScanScriptsFolder()
 {
 #if LUA_ENABLED
-	try 
-	{
-		SubFolders.clear();
-		const std::string ScriptFolderPath(Globals::GetEXEPath(false) + "RSL/Scripts/");
-		for (auto& SubFolder : fs::directory_iterator(ScriptFolderPath))
-		{
-            if(SubFolder.is_directory())
+
+    try
+    {
+        SubFolders.clear();
+        const std::string ScriptFolderPath(Globals::GetEXEPath(false) + "RSL/Scripts/");
+        for (auto& SubFolder : fs::directory_iterator(ScriptFolderPath))
+        {
+            if (!SubFolder.is_directory())
+                continue;
+
+            ScriptFolder currentFolder(SubFolder.path());
+            for (auto& File : fs::directory_iterator(SubFolder.path()))
             {
-                SubFolders.emplace_back(SubFolder.path().string(), GetScriptNameFromPath(SubFolder.path().string()));
-                for(auto& File : fs::directory_iterator(SubFolder.path()))
-                {
-                    if (IsValidScriptExtensionFromPath(File.path().string()))
-                    {
-                        const std::string ThisScriptPath = File.path().string();
-                        const std::string ThisScriptFolderPath = GetScriptFolderFromPath(File.path().string());
-                        const std::string ThisScriptName = GetScriptNameFromPath(File.path().string());
-                        SubFolders.back().Scripts.emplace_back(ThisScriptPath, ThisScriptFolderPath, ThisScriptName);
-                    }
-                }
-                if(SubFolders.back().Scripts.empty())
-                {
-                    SubFolders.pop_back(); //Ignore empty sub folders
-                }
+                if (!IsScriptPath(File.path()))
+                    continue;
+
+                currentFolder.Scripts.push_back(Script(File.path()));
             }
-		}
-	}
-	catch(std::exception& Ex)
-	{
-		std::string ExceptionInfo = Ex.what();
-		ExceptionInfo += " \nstd::exception when scanning scripts folder, Additional info: ";
-		ExceptionInfo += "File: ";
-		ExceptionInfo += __FILE__;
-		ExceptionInfo += ", Function: ";
-		ExceptionInfo += __func__;
-		Logger::LogFatalError("{}\n", ExceptionInfo);
-	}
+
+            //Add folder if not empty
+            if(!currentFolder.Scripts.empty())
+                SubFolders.push_back(currentFolder);
+        }
+    }
+    catch (std::exception & Ex)
+    {
+        std::string ExceptionInfo = fmt::format("Exception caught while scanning scripts folder: \"{}\". File: {}, Function: {}\n",
+            Ex.what(), __FILE__, __FUNCSIG__);
+
+        Logger::LogFatalError("{}\n", ExceptionInfo);
+    }
 #endif
 }
 
@@ -339,7 +335,7 @@ bool ScriptManager::RunScript(const std::string& FullPath)
 
     std::string ScriptName = std::filesystem::path(FullPath).filename().string();
     std::string Buffer = Util::General::LoadFileToString(FullPath);
-    auto Result = RunStringAsScript(Buffer, ScriptName);
+    auto Result = RunScript(Buffer, ScriptName);
     return !Result.Failed;
 #else
     return false;
@@ -353,7 +349,7 @@ bool ScriptManager::RunScript(const size_t Index)
 
     auto& Script = SubFolders[Index];
     std::string Buffer = Util::General::LoadFileToString(Script.FullPath);
-    auto Result = RunStringAsScript(Buffer, Script.Name);
+    auto Result = RunScript(Buffer, Script.Name);
     return !Result.Failed;
 #else
     return false;
@@ -365,7 +361,7 @@ bool ScriptManager::RunScript(const size_t Index)
  * for convenience. If an exception occurs an the script should be
  * stopped and the exception should be safely contained and logged.
  */
-ScriptResult ScriptManager::RunStringAsScript(std::string Buffer, const std::string& Name)
+ScriptResult ScriptManager::RunScript(std::string Buffer, const std::string& Name)
 {
 #if LUA_ENABLED
     std::lock_guard<std::recursive_mutex> Lock(Mutex);
@@ -465,31 +461,24 @@ void ScriptManager::TriggerInputEvent(uint Message, uint KeyCode, KeyState& Keys
     ScriptEvent& InputEvents = Events[0];
     InputEvents.Update();
 
-    if (InputEvents.Enabled())
-    {
-        for (auto& EventHook : InputEvents.Hooks)
-        {
-            if (EventHook.Enabled)
-            {
-                sol::table EventData = LuaState->create_table();
-                EventData["KeyDown"] = static_cast<bool>(Message == WM_KEYDOWN);
-                EventData["KeyUp"] = static_cast<bool>(Message == WM_KEYUP);
-                EventData["KeyCode"] = KeyCode;
-                EventData["ControlDown"] = Keys.ControlDown;
-                EventData["ShiftDown"] = Keys.ShiftDown;
-                EventData["AltDown"] = Keys.AltDown;
-                EventData["WindowsDown"] = Keys.WindowsDown;
+    if (!InputEvents.Enabled())
+        return;
 
-                //Todo: Make a function that safely calls sol::functions like this, and wraps it in logging and error reporting code
-                sol::protected_function_result Result = EventHook.Hook(EventData);
-                if (!Result.valid())
-                {
-                    sol::error Error = Result;
-                    std::string What(Error.what());
-                    Logger::LogLua("{} encountered an error! Message: {}", EventHook.HookName, What);
-                }
-            }
-        }
+    for (auto& EventHook : InputEvents.Hooks)
+    {
+        if (!EventHook.Enabled)
+            continue;
+
+        sol::table EventData = LuaState->create_table();
+        EventData["KeyDown"] = static_cast<bool>(Message == WM_KEYDOWN);
+        EventData["KeyUp"] = static_cast<bool>(Message == WM_KEYUP);
+        EventData["KeyCode"] = KeyCode;
+        EventData["ControlDown"] = Keys.ControlDown;
+        EventData["ShiftDown"] = Keys.ShiftDown;
+        EventData["AltDown"] = Keys.AltDown;
+        EventData["WindowsDown"] = Keys.WindowsDown;
+
+        RunFunctionSafe(EventHook.Hook, EventHook.HookName, EventData);
     }
 #endif
 }
@@ -505,34 +494,22 @@ void ScriptManager::TriggerDoFrameEvent()
         return;
 
     ScriptEvent& DoFrameEvents = Events[1];
-    DoFrameEvents.Update();
+    DoFrameEvents.Update(); //Handle resets and deletions
+    if(!DoFrameEvents.Enabled())
+        return;
 
-    if (DoFrameEvents.Enabled())
+    for (auto& EventHook : DoFrameEvents.Hooks)
     {
-        for (auto& EventHook : DoFrameEvents.Hooks)
-        {
-            if (EventHook.Enabled)
-            {
-                sol::table EventData = LuaState->create_table();
-                if(Globals::Frametime)
-                {
-                    EventData["Frametime"] = *Globals::Frametime;
-                }
-                else
-                {
-                    EventData["Frametime"] = 0.0f;
-                }
+        if(!EventHook.Enabled)
+            continue;
 
-                //Todo: Make a function that safely calls sol::functions like this, and wraps it in logging and error reporting code
-                sol::protected_function_result Result = EventHook.Hook(EventData);
-                if (!Result.valid())
-                {
-                    sol::error Error = Result;
-                    std::string What(Error.what());
-                    Logger::LogLua("{} encountered an error! Message: {}", EventHook.HookName, What);
-                }
-            }
-        }
+        sol::table EventData = LuaState->create_table();
+        if (Globals::Frametime)
+            EventData["Frametime"] = *Globals::Frametime;
+        else
+            EventData["Frametime"] = 0.0f;
+
+        RunFunctionSafe(EventHook.Hook, EventHook.HookName, EventData);
     }
 #endif
 }
@@ -541,29 +518,18 @@ void ScriptManager::TriggerInitializedEvent()
 {
 #if LUA_ENABLED
     std::lock_guard<std::recursive_mutex> Lock(Mutex);
-
     if (!LuaState) 
         return;
 
     ScriptEvent& InitializedEvents = Events[2];
     InitializedEvents.Update();
+    if (!InitializedEvents.Enabled())
+        return;
 
-    if (InitializedEvents.Enabled())
+    for (auto& EventHook : InitializedEvents.Hooks)
     {
-        for (auto& EventHook : InitializedEvents.Hooks)
-        {
-            if (EventHook.Enabled)
-            {
-                //Todo: Make a function that safely calls sol::functions like this, and wraps it in logging and error reporting code
-                sol::protected_function_result Result = EventHook.Hook();
-                if (!Result.valid())
-                {
-                    sol::error Error = Result;
-                    std::string What(Error.what());
-                    Logger::LogLua("{} encountered an error! Message: {}", EventHook.HookName, What);
-                }
-            }
-        }
+        if (EventHook.Enabled)
+            RunFunctionSafe(EventHook.Hook, EventHook.HookName);
     }
 #endif
 }
@@ -580,52 +546,44 @@ void ScriptManager::TriggerMouseEvent(uint Message, uint wParam, uint lParam, Ke
 
     ScriptEvent& MouseEvent = Events[3];
     MouseEvent.Update();
+    if (!MouseEvent.Enabled())
+        return;
 
-    if (MouseEvent.Enabled())
+    for (auto& EventHook : MouseEvent.Hooks)
     {
-        for (auto& EventHook : MouseEvent.Hooks)
+        if (!EventHook.Enabled)
+            continue;
+
+        sol::table EventData = LuaState->create_table();
+        if(Message == WM_MOUSEWHEEL)
         {
-            if (EventHook.Enabled)
-            {
-                sol::table EventData = LuaState->create_table();
-                if(Message == WM_MOUSEWHEEL)
-                {
-                    EventData["Scrolled"] = true;
-                    EventData["ScrollDelta"] = GET_WHEEL_DELTA_WPARAM(wParam);
-                }
-                else
-                {
-                    EventData["Scrolled"] = false;
-                    EventData["ScrollDelta"] = 0;
-                }
-                if(Message == WM_MOUSEMOVE)
-                {
-                    EventData["MouseMove"] = true;
-                    EventData["MouseX"] = GET_X_LPARAM(lParam);
-                    EventData["MouseY"] = GET_Y_LPARAM(lParam);
-                }
-                else
-                {
-                    EventData["MouseMove"] = false;
-                    EventData["MouseX"] = 0;
-                    EventData["MouseY"] = 0;
-                }
-
-                EventData["ControlDown"] = Keys.ControlDown;
-                EventData["ShiftDown"] = Keys.ShiftDown;
-                EventData["AltDown"] = Keys.AltDown;
-                EventData["WindowsDown"] = Keys.WindowsDown;
-
-                //Todo: Make a function that safely calls sol::functions like this, and wraps it in logging and error reporting code
-                sol::protected_function_result Result = EventHook.Hook(EventData);
-                if (!Result.valid())
-                {
-                    sol::error Error = Result;
-                    std::string What(Error.what());
-                    Logger::LogLua("{} encountered an error! Message: {}", EventHook.HookName, What);
-                }
-            }
+            EventData["Scrolled"] = true;
+            EventData["ScrollDelta"] = GET_WHEEL_DELTA_WPARAM(wParam);
         }
+        else
+        {
+            EventData["Scrolled"] = false;
+            EventData["ScrollDelta"] = 0;
+        }
+        if(Message == WM_MOUSEMOVE)
+        {
+            EventData["MouseMove"] = true;
+            EventData["MouseX"] = GET_X_LPARAM(lParam);
+            EventData["MouseY"] = GET_Y_LPARAM(lParam);
+        }
+        else
+        {
+            EventData["MouseMove"] = false;
+            EventData["MouseX"] = 0;
+            EventData["MouseY"] = 0;
+        }
+
+        EventData["ControlDown"] = Keys.ControlDown;
+        EventData["ShiftDown"] = Keys.ShiftDown;
+        EventData["AltDown"] = Keys.AltDown;
+        EventData["WindowsDown"] = Keys.WindowsDown;
+
+        RunFunctionSafe(EventHook.Hook, EventHook.HookName, EventData);
     }
 #endif
 }
@@ -634,62 +592,31 @@ void ScriptManager::TriggerLoadEvent()
 {
 #if LUA_ENABLED
     std::lock_guard<std::recursive_mutex> Lock(Mutex);
-
     if (!LuaState) 
         return;
 
     ScriptEvent& LoadEvent = Events[4];
     LoadEvent.Update();
+    if (!LoadEvent.Enabled())
+        return;
 
-    if (LoadEvent.Enabled())
+    for (auto& EventHook : LoadEvent.Hooks)
     {
-        for (auto& EventHook : LoadEvent.Hooks)
-        {
-            if (EventHook.Enabled)
-            {
-                sol::protected_function_result Result = EventHook.Hook();
-                if (!Result.valid())
-                {
-                    sol::error Error = Result;
-                    std::string What(Error.what());
-                    Logger::LogLua("{} encountered an error! Message: {}", EventHook.HookName, What);
-                }
-            }
-        }
+        if (!EventHook.Enabled)
+            RunFunctionSafe(EventHook.Hook, EventHook.HookName);
     }
 #endif
 }
 
-std::string ScriptManager::GetScriptNameFromPath(const std::string& FullPath) const
+bool ScriptManager::IsScriptPath(const fs::path& path) const
 {
-    if (!std::filesystem::path(FullPath).has_filename()) 
-        return {};
-    return std::filesystem::path(FullPath).filename().string();
+    return IsScriptExtension(Path::GetExtension(path.string()));
 }
 
-std::string ScriptManager::GetScriptFolderFromPath(const std::string& FullPath) const
-{
-    if (!std::filesystem::path(FullPath).has_parent_path()) 
-        return {};
-    return std::filesystem::path(FullPath).parent_path().string() + "\\";
-}
-
-std::string ScriptManager::GetScriptExtensionFromPath(const std::string& FullPath) const
-{
-    if (!std::filesystem::path(FullPath).has_extension()) 
-        return {};
-    return std::filesystem::path(FullPath).extension().string();
-}
-
-bool ScriptManager::IsValidScriptExtensionFromPath(const std::string& FullPath) const
-{
-    return IsValidScriptExtension(GetScriptExtensionFromPath(FullPath));
-}
-
-bool ScriptManager::IsValidScriptExtension(std::string Extension) const
+bool ScriptManager::IsScriptExtension(std::string extension) const
 {
     //Transform extension to lowercase only for easy comparison.
-	std::transform(Extension.begin(), Extension.end(), Extension.begin(), ::tolower);
-    return Extension == ".lua";
+	std::transform(extension.begin(), extension.end(), extension.begin(), ::tolower);
+    return extension == ".lua";
 }
 
