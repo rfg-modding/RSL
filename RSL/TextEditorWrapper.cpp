@@ -152,7 +152,7 @@ void TextEditorWrapper::DrawMenuBar()
 
 void TextEditorWrapper::DrawToolbar()
 {
-    auto cpos = Editor.GetCursorPosition();
+    auto cursorPos = Editor.GetCursorPosition();
     static auto DisabledUndoRedoColor = ImVec4(0.165f, 0.29f, 0.47f, 1.0f);
     static auto EnabledUndoRedoColor = ImVec4(0.478f, 0.753f, 1.0f, 1.0f);
     static auto EnabledRunColor = ImVec4(0.556f, 0.823f, 0.541f, 1.0f);
@@ -161,30 +161,46 @@ void TextEditorWrapper::DrawToolbar()
     ImGui::PushStyleColor(ImGuiCol_Button, ImVec4());
     ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4());
     ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4());
-    if (Editor.CanUndo()) { ImGui::PushStyleColor(ImGuiCol_Text, EnabledUndoRedoColor); }
-    else { ImGui::PushStyleColor(ImGuiCol_Text, DisabledUndoRedoColor); }
+    if (Editor.CanUndo())
+    {
+        ImGui::PushStyleColor(ImGuiCol_Text, EnabledUndoRedoColor);
+    }
+    else
+    {
+        ImGui::PushStyleColor(ImGuiCol_Text, DisabledUndoRedoColor);
+    }
+
     if (ImGui::Button(std::string(std::string(ICON_FA_UNDO_ALT) + u8"##ToolbarUndo").c_str()))
     {
         Editor.Undo();
     }
+
     ImGui::SameLine();
-    if (Editor.CanRedo()) { ImGui::PushStyleColor(ImGuiCol_Text, EnabledUndoRedoColor); }
-    else { ImGui::PushStyleColor(ImGuiCol_Text, DisabledUndoRedoColor); }
+    if (Editor.CanRedo())
+    {
+        ImGui::PushStyleColor(ImGuiCol_Text, EnabledUndoRedoColor);
+    }
+    else
+    {
+        ImGui::PushStyleColor(ImGuiCol_Text, DisabledUndoRedoColor);
+    }
+
     if (ImGui::Button(std::string(std::string(ICON_FA_REDO_ALT) + u8"##ToolbarRedo").c_str()))
     {
         Editor.Redo();
     }
+
     ImGui::SameLine();
     ImGui::PushStyleColor(ImGuiCol_Text, EnabledRunColor);
     if (ImGui::Button(std::string(std::string(ICON_FA_PLAY) + u8"##ToolbarRun").c_str()))
     {
         RunCurrentScript();
     }
+
     ImGui::SameLine();
     ImGui::PopStyleColor(6);
     ImGui::PopStyleVar();
-
-    ImGui::Text("| Line %d | Column %d | %d lines | %s | %s", cpos.mLine + 1, cpos.mColumn + 1, Editor.GetTotalLines(),
+    ImGui::Text("| Line %d | Column %d | %d lines | %s | %s", cursorPos.mLine + 1, cursorPos.mColumn + 1, Editor.GetTotalLines(),
         Editor.IsOverwrite() ? "Ovr" : "Ins",
         ScriptName.c_str());
 }
@@ -309,7 +325,7 @@ bool TextEditorWrapper::ScriptBeenEdited() const
 
 void TextEditorWrapper::RunCurrentScript()
 {
-    ScriptResult Result = ScriptManager->RunStringAsScript(Editor.GetText(), ScriptName);
+    ScriptResult Result = ScriptManager->RunScript(Editor.GetText(), ScriptName);
     
     TextEditor::ErrorMarkers Markers;
     if(Result.Failed)
@@ -346,47 +362,12 @@ bool TextEditorWrapper::LoadScript(std::string FullPath, std::string NewScriptNa
 
         InitialScript = ScriptString;
     }
-    catch (std::ios_base::failure& Ex)
-    {
-        Successful = false;
-        std::string ExceptionInfo = Ex.what();
-        ExceptionInfo += " \nstd::ios_base::failure when loading ";
-        ExceptionInfo += FullPath;
-        ExceptionInfo += ", Additional info: ";
-        ExceptionInfo += "Error code: ";
-        ExceptionInfo += Ex.code().message();
-        ExceptionInfo += ", File: ";
-        ExceptionInfo += __FILE__;
-        ExceptionInfo += ", Function: ";
-        ExceptionInfo += __func__;
-        Logger::LogError("{}\n", ExceptionInfo);
-        MessageBoxA(Globals::FindRfgTopWindow(), ExceptionInfo.c_str(), "Failed to load script!", MB_OK);
-    }
     catch (std::exception& Ex)
     {
         Successful = false;
-        std::string ExceptionInfo = Ex.what();
-        ExceptionInfo += " \nstd::exception when loading ";
-        ExceptionInfo += FullPath;
-        ExceptionInfo += ", Additional info: ";
-        ExceptionInfo += "File: ";
-        ExceptionInfo += __FILE__;
-        ExceptionInfo += ", Function: ";
-        ExceptionInfo += __func__;
-        Logger::LogError("{}\n", ExceptionInfo);
-        MessageBoxA(Globals::FindRfgTopWindow(), ExceptionInfo.c_str(), "Failed to load script!", MB_OK);
-    }
-    catch (...)
-    {
-        Successful = false;
-        std::string ExceptionInfo;// = Ex.what();
-        ExceptionInfo += " \nDefault exception when loading ";
-        ExceptionInfo += FullPath;
-        ExceptionInfo += ", Additional info: ";
-        ExceptionInfo += "File: ";
-        ExceptionInfo += __FILE__;
-        ExceptionInfo += ", Function: ";
-        ExceptionInfo += __func__;
+        std::string ExceptionInfo = fmt::format("Exception caught while loading script: \"{}\". Path: \"{}\". File: {}, Function: {}\n",
+            Ex.what(), FullPath, __FILE__, __FUNCSIG__);
+
         Logger::LogError("{}\n", ExceptionInfo);
         MessageBoxA(Globals::FindRfgTopWindow(), ExceptionInfo.c_str(), "Failed to load script!", MB_OK);
     }
@@ -417,47 +398,12 @@ bool TextEditorWrapper::SaveScript()
 
         InitialScript = ScriptString;
     }
-    catch (std::ios_base::failure& Ex)
-    {
-        Successful = false;
-        std::string ExceptionInfo = Ex.what();
-        ExceptionInfo += " \nstd::ios_base::failure when saving ";
-        ExceptionInfo += ScriptPath;
-        ExceptionInfo += ", Additional info: ";
-        ExceptionInfo += "Error code: ";
-        ExceptionInfo += Ex.code().message();
-        ExceptionInfo += ", File: ";
-        ExceptionInfo += __FILE__;
-        ExceptionInfo += ", Function: ";
-        ExceptionInfo += __func__;
-        Logger::LogError("{}\n", ExceptionInfo);
-        MessageBoxA(Globals::FindRfgTopWindow(), ExceptionInfo.c_str(), "Failed to save script!", MB_OK);
-    }
     catch (std::exception& Ex)
     {
         Successful = false;
-        std::string ExceptionInfo = Ex.what();
-        ExceptionInfo += " \nstd::exception when saving ";
-        ExceptionInfo += ScriptPath;
-        ExceptionInfo += ", Additional info: ";
-        ExceptionInfo += "File: ";
-        ExceptionInfo += __FILE__;
-        ExceptionInfo += ", Function: ";
-        ExceptionInfo += __func__;
-        Logger::LogError("{}\n", ExceptionInfo);
-        MessageBoxA(Globals::FindRfgTopWindow(), ExceptionInfo.c_str(), "Failed to save script!", MB_OK);
-    }
-    catch (...)
-    {
-        Successful = false;
-        std::string ExceptionInfo;// = Ex.what();
-        ExceptionInfo += " \nDefault exception when saving ";
-        ExceptionInfo += ScriptPath;
-        ExceptionInfo += ", Additional info: ";
-        ExceptionInfo += "File: ";
-        ExceptionInfo += __FILE__;
-        ExceptionInfo += ", Function: ";
-        ExceptionInfo += __func__;
+        std::string ExceptionInfo = fmt::format("Exception caught while saving script: \"{}\". Path: \"{}\". File: {}, Function: {}\n", 
+            Ex.what(), ScriptPath, __FILE__, __FUNCSIG__);
+
         Logger::LogError("{}\n", ExceptionInfo);
         MessageBoxA(Globals::FindRfgTopWindow(), ExceptionInfo.c_str(), "Failed to save script!", MB_OK);
     }
