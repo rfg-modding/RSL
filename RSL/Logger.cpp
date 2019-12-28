@@ -3,8 +3,8 @@
 #include <map>
 
 // Instantiate static variables
-std::map <std::string, LogFile> Logger::LogFileMap;
-std::vector <LogEntry> Logger::LogData;
+std::map<std::string, LogFile> Logger::LogFiles;
+std::deque<LogEntry> Logger::LogCache;
 int Logger::ConsoleLogFlags = LogAll;
 std::string Logger::DefaultLogPath;
 unsigned int Logger::MaximumLogCount;
@@ -22,16 +22,8 @@ void Logger::OpenLogFile(std::string FileName, int LogFlags, std::ios_base::open
 {
 	try
 	{
-		std::string Path;
-		if (CustomFilePath == "DEFAULT")
-		{
-			Path = DefaultLogPath;
-		}
-		else
-		{
-			Path = CustomFilePath;
-		}
-		for (auto& i : LogFileMap)
+        std::string path = CustomFilePath == "DEFAULT" ? DefaultLogPath : CustomFilePath;
+	    for (auto& i : LogFiles)
 		{
 			if (i.first == FileName)
 			{
@@ -39,195 +31,107 @@ void Logger::OpenLogFile(std::string FileName, int LogFlags, std::ios_base::open
 				return;
 			}
 		}
-		LogFileMap.insert_or_assign(FileName, LogFile(Path + FileName, LogFlags, Mode));
-		LogFileMap[FileName].File.exceptions(std::ios::failbit | std::ios::badbit);
-		LogFileMap[FileName].File.open(Path + FileName, Mode);
-		LogFileMap[FileName].File << GetTimeString(false) << "[Info] " << "Start of " << FileName << "\n";
-		LogFileMap[FileName].File << std::flush;
-	}
-	catch(std::ios_base::failure& Ex)
-	{
-		std::string ExceptionInfo = Ex.what();
-		ExceptionInfo += " \nstd::ios_base::failure when opening ";
-		ExceptionInfo += FileName;
-		ExceptionInfo += ", Additional info: ";
-		ExceptionInfo += "Error code: ";
-		ExceptionInfo += Ex.code().message();
-		ExceptionInfo += ", File: ";
-		ExceptionInfo += __FILE__;
-		ExceptionInfo += ", Function: ";
-		ExceptionInfo += __func__;
-		throw(std::exception(ExceptionInfo.c_str()));
+		std::ofstream& outStream = LogFiles.insert_or_assign(FileName, LogFile(path + FileName, LogFlags, Mode)).first->second.File;
+		outStream.exceptions(std::ios::failbit | std::ios::badbit);
+		outStream.open(path + FileName, Mode);
+		outStream << GetTimeString(false) << "[Info] " << "Start of " << FileName << "\n";
+		outStream << std::flush;
 	}
 	catch (std::exception& Ex)
 	{
-		std::string ExceptionInfo = Ex.what();
-		ExceptionInfo += " \nstd::exception when opening ";
-		ExceptionInfo += FileName;
-		ExceptionInfo += ", Additional info: ";
-		ExceptionInfo += "File: ";
-		ExceptionInfo += __FILE__;
-		ExceptionInfo += ", Function: ";
-		ExceptionInfo += __func__;
-		throw(std::exception(ExceptionInfo.c_str()));
-	}
-	catch (...)
-	{
-		std::string ExceptionInfo;// = Ex.what();
-		ExceptionInfo += " \nDefault exception when opening ";
-		ExceptionInfo += FileName;
-		ExceptionInfo += ", Additional info: ";
-		ExceptionInfo += "File: ";
-		ExceptionInfo += __FILE__;
-		ExceptionInfo += ", Function: ";
-		ExceptionInfo += __func__;
+		std::string ExceptionInfo = fmt::format("Exception caught while opening {}: \"{}\". File: {}, Function: {}\n",
+			FileName, Ex.what(), __FILE__, __FUNCSIG__);
+
 		throw std::exception(ExceptionInfo.c_str());
 	}
 }
 
 void Logger::CloseLogFile(const const std::string& FileName)
 {
-	LogFileMap[FileName].File.close();
-	LogFileMap.erase(FileName);
+	LogFiles[FileName].File.close();
+	LogFiles.erase(FileName);
 }
 
 void Logger::CloseAllLogFiles()
 {
-	for (auto& i : LogFileMap)
-	{
-		i.second.File.close();
-	}
-	LogFileMap.erase(LogFileMap.begin(), LogFileMap.end());
+	for (auto& i : LogFiles)
+        i.second.File.close();
+
+    LogFiles.erase(LogFiles.begin(), LogFiles.end());
 }
 
-void Logger::LogInternal(std::string Message, int LogFlags, bool LogTime, bool NewLine)
+void Logger::LogInternal(string Message, int LogFlags, bool LogTime, bool NewLine)
 {
-	std::string TimeString = GetTimeString(false);
-	std::string FlagString = GetFlagString(LogFlags);
-	LogData.insert(LogData.begin(), LogEntry(FlagString, Message, LogFlags));
-	if (ConsoleLogFlags & LogFlags)
+	std::string timeString = GetTimeString(false);
+	std::string flagString = GetFlagString(LogFlags);
+	//Add message to front of log cache
+	LogCache.insert(LogCache.begin(), LogEntry(flagString, Message, LogFlags));
+
+	//Write to console
+	WriteToConsoleInternal(Message, LogFlags, LogTime, NewLine, timeString);
+	//Write to log files
+	WriteToLogFilesInternal(Message, LogFlags, LogTime, NewLine, timeString, flagString);
+
+	//Remove entry from end of cache if it's full
+	if (LogCache.size() > MaximumLogCount && MaximumLogCount > 0)
+        LogCache.pop_back();
+}
+
+void Logger::WriteToConsoleInternal(string& Message, int LogFlags, bool LogTime, bool NewLine, string& timeString)
+{
+	if (!(ConsoleLogFlags & LogFlags))
+        return;
+
+    try
+    {
+        LogFlagWithColor(LogFlags);
+        if (LogTime)
+            std::cout << timeString;
+
+        std::cout << " ";
+        std::cout << Message;
+        if (NewLine)
+            std::cout << "\n";
+    }
+    catch (std::exception & Ex)
+    {
+        std::string ExceptionInfo = fmt::format("Exception caught while logging to external console: \"{}\". File: {}, Function: {}\n",
+                                                Ex.what(), __FILE__, __FUNCSIG__);
+
+        LogError("{}\n", ExceptionInfo);
+        MessageBoxA(Globals::FindRfgTopWindow(), ExceptionInfo.c_str(), "Failed to log to external console!", MB_OK);
+    }
+}
+
+void Logger::WriteToLogFilesInternal(string& Message, int LogFlags, bool LogTime, bool NewLine, string& timeString, string& flagString)
+{
+	for (auto& i : LogFiles)
 	{
+		if (!(i.second.LogFlags & LogFlags))
+			continue;
+
 		try
 		{
-			LogFlagWithColor(LogFlags);
+			i.second.File << flagString;
 			if (LogTime)
-			{
-				std::cout << TimeString;
-			}
-			std::cout << " ";
-			std::cout << Message;
+				i.second.File << timeString;
+
+			i.second.File << " ";
+			i.second.File << Message;
 			if (NewLine)
-			{
-				std::cout << "\n";
-			}
+				i.second.File << "\n";
+
+			i.second.File << std::flush;
 		}
-		catch (std::exception& Ex)
+		catch (std::exception & Ex)
 		{
-			std::string ExceptionInfo = Ex.what();
-			ExceptionInfo += " \nstd::exception caught while logging to external console!";
-			ExceptionInfo += " Additional info: ";
-			ExceptionInfo += "File: ";
-			ExceptionInfo += __FILE__;
-			ExceptionInfo += ", Function: ";
-			ExceptionInfo += __func__;
+			std::string ExceptionInfo = fmt::format("Exception caught while logging to {}: \"{}\". File: {}, Function: {}\n",
+				i.second.FilePath, Ex.what(), __FILE__, __FUNCSIG__);
+
 			LogError("{}\n", ExceptionInfo);
-			MessageBoxA(Globals::FindRfgTopWindow(), ExceptionInfo.c_str(), "Failed to log to external console!", MB_OK);
-		}
-		catch (...)
-		{
-			std::string ExceptionInfo = "Default exception caught while logging to external console!";
-			ExceptionInfo += " Additional info: ";
-			ExceptionInfo += "File: ";
-			ExceptionInfo += __FILE__;
-			ExceptionInfo += ", Function: ";
-			ExceptionInfo += __func__;
-            LogError("{}\n", ExceptionInfo);
-			MessageBoxA(Globals::FindRfgTopWindow(), ExceptionInfo.c_str(), "Failed to log to external console!", MB_OK);
-		}
-	}
-	for (auto& i : LogFileMap)
-	{
-		try
-		{
-			if (i.second.LogFlags & LogFlags)
-			{
-				i.second.File << FlagString;
-				if (LogTime)
-				{
-					i.second.File << TimeString;
-				}
-				i.second.File << " ";
-				i.second.File << Message;
-				if (NewLine)
-				{
-					i.second.File << "\n";
-				}
-				i.second.File << std::flush;
-			}
-		}
-		catch (std::ios_base::failure& Ex)
-		{
-			std::string ExceptionInfo = Ex.what();
-			ExceptionInfo += " \nstd::ios_base::failure exception caught while logging to ";
-			ExceptionInfo += i.second.FilePath;
-			ExceptionInfo += ", Additional info: ";
-			ExceptionInfo += "Error code: ";
-			ExceptionInfo += Ex.code().message();
-			ExceptionInfo += "File: ";
-			ExceptionInfo += __FILE__;
-			ExceptionInfo += ", Function: ";
-			ExceptionInfo += __func__;
-            LogError("{}\n", ExceptionInfo);
-			MessageBoxA(Globals::FindRfgTopWindow(), ExceptionInfo.c_str(), "Failed to log to file!", MB_OK);
-		}	
-		catch (std::exception& Ex)
-		{
-			std::string ExceptionInfo = Ex.what();
-			ExceptionInfo += " \nstd::exception caught while logging to ";
-			ExceptionInfo += i.second.FilePath;
-			ExceptionInfo += ", Additional info: ";
-			ExceptionInfo += "File: ";
-			ExceptionInfo += __FILE__;
-			ExceptionInfo += ", Function: ";
-			ExceptionInfo += __func__;
-            LogError("{}\n", ExceptionInfo);
-			MessageBoxA(Globals::FindRfgTopWindow(), ExceptionInfo.c_str(), "Failed to log to file!", MB_OK);
-		}
-		catch (...)
-		{
-			std::string ExceptionInfo = "Default exception caught while logging to ";
-			ExceptionInfo += i.second.FilePath;
-			ExceptionInfo += ", Additional info: ";
-			ExceptionInfo += "File: ";
-			ExceptionInfo += __FILE__;
-			ExceptionInfo += ", Function: ";
-			ExceptionInfo += __func__;
-            LogError("{}\n", ExceptionInfo);
 			MessageBoxA(Globals::FindRfgTopWindow(), ExceptionInfo.c_str(), "Failed to log to file!", MB_OK);
 		}
 	}
-	if (LogData.size() > MaximumLogCount && MaximumLogCount > 0)
-	{
-		LogData.pop_back();
-	}
-	
-	/*if (LogData.size() >= 500)
-	{
-		std::cout << "LogData.size(): " << LogData.size() << "\n";
-		int TotalMessageSize = 0;
-		for (auto i = LogData.begin(); i != LogData.end(); i++)
-		{
-			TotalMessageSize += i->Message.length();
-			TotalMessageSize += i->FlagString.length();
-			TotalMessageSize += sizeof(i->Flags);
-		}
-		int VectorSize = sizeof(std::vector<std::string>);
-		std::cout << "Size of vector: " << VectorSize << " Bytes\n";
-		std::cout << "Size of all strings" << TotalMessageSize << " Bytes\n";
-		TotalMessageSize += VectorSize;
-		std::cout << "Total size of both: " << TotalMessageSize << " Bytes | " << TotalMessageSize / 1000 << " KiloBytes\n";
-	}*/
-	//std::cout << "sizeof std::string vector with 10000 values: " << (sizeof(std::vector<std::string>) + (sizeof(std::string) * 10000)) / 1000 << "kB\n";
 }
 
 void Logger::LogFlagWithColor(const int LogFlags)
@@ -274,51 +178,32 @@ void Logger::LogFlagWithColor(const int LogFlags)
 std::string Logger::GetFlagString(const int LogFlags)
 {
 	if (LogFlags & LogType::LogInfo)
-	{
-		return "[Info]";
-	}
-	else if (LogFlags & LogType::LogWarning)
-	{
-		return "[Warning]";
-	}
-	else if (LogFlags & LogType::LogLua)
-	{
-		return "[Lua]";
-	}
-	else if (LogFlags & LogType::LogJson)
-	{
-		return "[Json]";
-	}
-	else if (LogFlags & LogType::LogError)
-	{
-		return "[Error]";
-	}
-	else if (LogFlags & LogType::LogFatalError)
-	{
-		return "[Fatal Error]";
-	}
+        return "[Info]";
+    if (LogFlags & LogType::LogWarning)
+        return "[Warning]";
+    if (LogFlags & LogType::LogLua)
+        return "[Lua]";
+    if (LogFlags & LogType::LogJson)
+        return "[Json]";
+    if (LogFlags & LogType::LogError)
+        return "[Error]";
+    if (LogFlags & LogType::LogFatalError)
+        return "[Fatal Error]";
 	else
-	{
-		return "";
-	}
+        return "";
 }
 
 void Logger::LogToFile(const std::string& FileName, const std::string& Message, const int LogFlags, const bool LogTime, const bool BypassFlagCheck)
 {
-	if (!BypassFlagCheck) //Allows things such as using LogInfo for the first message in an error log.
-	{
-		if (!(LogFileMap[FileName].LogFlags & LogFlags))
-		{
-			return;
-		}
-	}
-	LogFileMap[FileName].File << GetFlagString(LogFlags);
+	if (!BypassFlagCheck && !(LogFiles[FileName].LogFlags & LogFlags)) //Allows things such as using LogInfo for the first message in an error log.
+        return;
+
+	std::ofstream& outStream = LogFiles[FileName].File;
+	outStream << GetFlagString(LogFlags);
 	if (LogTime)
-	{
-		LogFileMap[FileName].File << GetTimeString(false);
-	}
-	LogFileMap[FileName].File << " ";
-	LogFileMap[FileName].File << Message << "\n";
+		outStream << GetTimeString(false);
+
+	outStream << " " << Message << "\n";
 }
 
 std::string Logger::GetTimeString(const bool MilitaryTime)
@@ -335,14 +220,11 @@ std::string Logger::GetTimeString(const bool MilitaryTime)
 	std::string Minutes = std::to_string(now.tm_min);
 
 	if (Minutes.size() == 1) //Changes values such as 1:6 to 1:06
-	{
-		Minutes.insert(0, 1, '0');
-	}
-	if (MilitaryTime)
-	{
-		Hour = std::to_string(now.tm_hour);
-	}
-	else
+        Minutes.insert(0, 1, '0');
+
+    if (MilitaryTime)
+        Hour = std::to_string(now.tm_hour);
+    else
 	{
 		if (now.tm_hour > 11) //PM
 		{

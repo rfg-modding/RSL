@@ -51,7 +51,9 @@ public:
 	static void CloseLogFile(const std::string& FileName);
 	static void CloseAllLogFiles();
 	
-	static void LogInternal(std::string Message, int LogFlags = LogType::LogInfo, bool LogTime = false, bool NewLine = false);
+	static void LogInternal(string Message, int LogFlags = LogType::LogInfo, bool LogTime = false, bool NewLine = false);
+	static void WriteToConsoleInternal(string& Message, int LogFlags, bool LogTime, bool NewLine, string& timeString);
+	static void WriteToLogFilesInternal(string& Message, int LogFlags, bool LogTime, bool NewLine, string& timeString, string& flagString);
 
     template <typename... Args>
     static void Log(std::string fmt, const Args&... args)
@@ -107,8 +109,8 @@ public:
 
 	static std::string GetTimeString(bool MilitaryTime);
 
-	static std::map <std::string, LogFile> LogFileMap;
-	static std::vector <LogEntry> LogData;
+	static std::map<std::string, LogFile> LogFiles;
+	static std::deque<LogEntry> LogCache;
 
 	static int ConsoleLogFlags;
 	static std::string DefaultLogPath;

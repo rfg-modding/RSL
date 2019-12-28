@@ -89,47 +89,47 @@ void LogWindow::Draw()
 
 	BufferCount = 0;
 	int i = BufferDisplayLength - 1;
-	if (i >= Logger::LogData.size())
+	if (i >= Logger::LogCache.size())
 	{
-		i = Logger::LogData.size() - 1;
+		i = Logger::LogCache.size() - 1;
 	}
 	while (i >= 0 && BufferCount < BufferDisplayLength)
 	{
-		if (Logger::LogData[i].Flags & ConsoleLogType)
+		if (Logger::LogCache[i].Flags & ConsoleLogType)
 		{
 			ImGui::TextUnformatted("[");
 			ImGui::SameLine();
-			if (Logger::LogData[i].Flags & LogInfo)
+			if (Logger::LogCache[i].Flags & LogInfo)
 			{
 				ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.945f, 0.945f, 0.945f, 1.0f));
 				ImGui::TextUnformatted("Info");
 				ImGui::PopStyleColor();
 			}
-			else if (Logger::LogData[i].Flags & LogWarning)
+			else if (Logger::LogCache[i].Flags & LogWarning)
 			{
 				ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.756f, 0.611f, 0.000f, 1.0f));
 				ImGui::TextUnformatted("Warning");
 				ImGui::PopStyleColor();
 			}
-			else if (Logger::LogData[i].Flags & LogLua)
+			else if (Logger::LogCache[i].Flags & LogLua)
 			{
 				ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.231f, 0.470f, 1.000f, 1.0f));
 				ImGui::TextUnformatted("Lua");
 				ImGui::PopStyleColor();
 			}
-			else if (Logger::LogData[i].Flags & LogJson)
+			else if (Logger::LogCache[i].Flags & LogJson)
 			{
 				ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.000f, 0.415f, 0.000f, 1.0f));
 				ImGui::TextUnformatted("Json");
 				ImGui::PopStyleColor();
 			}
-			else if (Logger::LogData[i].Flags & LogError)
+			else if (Logger::LogCache[i].Flags & LogError)
 			{
 				ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.772f, 0.058f, 0.121f, 1.0f));
 				ImGui::TextUnformatted("Error");
 				ImGui::PopStyleColor();
 			}
-			else if (Logger::LogData[i].Flags & LogFatalError)
+			else if (Logger::LogCache[i].Flags & LogFatalError)
 			{
 				ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.772f, 0.058f, 0.121f, 1.0f));
 				ImGui::TextUnformatted("Fatal Error");
@@ -145,7 +145,7 @@ void LogWindow::Draw()
 			ImGui::TextUnformatted("] ");
 			ImGui::SameLine();
 			ImGui::SetNextItemWidth(ImGui::GetWindowSize().x - 20.0f);
-			ImGui::TextWrapped(Logger::LogData[i].Message.c_str());
+			ImGui::TextWrapped(Logger::LogCache[i].Message.c_str());
 			BufferCount++;
 		}
 		i--;

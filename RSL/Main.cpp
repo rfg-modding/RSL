@@ -108,7 +108,7 @@ void InitLogger()
 {
     try
     {
-        Logger::Init(LogAll, Globals::GetEXEPath(false) + "RSL/Logs/", 2500);
+        Logger::Init(LogAll, Globals::GetEXEPath(false) + "RSL/Logs/", 1000);
         Logger::OpenLogFile("Load Log.log", LogAll, std::ios_base::trunc);
         Logger::OpenLogFile("Master Log.log", LogAll, std::ios_base::trunc);
         Logger::Log("RSL started. Activating.\n");
