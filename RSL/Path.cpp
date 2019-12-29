@@ -38,4 +38,10 @@ namespace Path
 
         return std::filesystem::path(FullPath).extension().string();
     }
+
+    void CreatePath(const std::string& fullPath)
+    {
+        if (!std::filesystem::exists(fullPath))
+            std::filesystem::create_directories(fullPath);
+    }
 }

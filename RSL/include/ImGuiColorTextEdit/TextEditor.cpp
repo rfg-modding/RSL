@@ -76,6 +76,9 @@ void TextEditor::SetPalette(const Palette & aValue)
 
 std::string TextEditor::GetText(const Coordinates & aStart, const Coordinates & aEnd) const
 {
+	if (aStart.mLine > mLines.size() || aEnd.mLine > mLines.size())
+		return "";
+
 	std::string result;
 
 	auto lstart = aStart.mLine;

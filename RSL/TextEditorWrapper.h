@@ -83,7 +83,7 @@ public:
 
     bool LoadScript(std::string FullPath, std::string NewScriptName);
     bool SaveScript();
-    std::string FixScriptExtension(std::string CurrentScriptName);
+    std::string FixScriptExtension(std::string CurrentScriptName) const;
     void ClearScript();
 
     void ProcessPopups();
