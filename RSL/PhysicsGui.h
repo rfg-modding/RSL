@@ -9,9 +9,6 @@ public:
 
 	void Draw() override;
 
-	bool UseCustomPhysicsTimestepMultiplier = false;
-	float CustomPhysicsTimeStepMultiplier = 1.0f;
-
 	hkVector4f* CurrentGravity = nullptr;
 	hkVector4f CustomGravityVector{ 0.0f, 0.0f, 0.0f,  0.0f};
 	hkVector4f DefaultGravityVector{0.0f, 0.0f, 0.0f,  0.0f};

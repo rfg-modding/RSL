@@ -3,10 +3,9 @@
 void PhysicsGui::Draw()
 {
 	if (!Visible)
-	{
-		return;
-	}
-	ImGui::SetNextWindowSize(ImVec2(600.0f, 700.0f), ImGuiCond_FirstUseEver);
+        return;
+
+    ImGui::SetNextWindowSize(ImVec2(600.0f, 700.0f), ImGuiCond_FirstUseEver);
 	if (!ImGui::Begin(Title.c_str(), &Visible))
 	{
 		ImGui::End();
@@ -25,18 +24,9 @@ void PhysicsGui::Draw()
 		ImGui::PopStyleColor();
 		ImGui::Separator();
 
-		//ImGui::SetNextItemWidth(230.0f);
-		//ImGui::InputFloat("Custom physics timestep multiplier", &CustomPhysicsTimeStepMultiplier, 0.01, 0.5, 3);
-		//ImGui::SameLine();
-		//ImGui::Checkbox("Use", &UseCustomPhysicsTimestepMultiplier);
-		//ImGui::SameLine();
-		//Util::Gui::ShowHelpMarker("1.0 = Normal speed. Less than 1.0 = Slow motion physics. More than 1.0 = High speed physics");
-		//ImGui::Separator();
-
 		if (!CurrentGravity)
 		{
 			CurrentGravity = rfg::hkpWorldGetGravity(Globals::hkpWorldPtr, NULL);
-
 			if (CurrentGravity)
 			{
 				CustomGravityVector.m_quad.m128_f32[0] = CurrentGravity->m_quad.m128_f32[0];
@@ -60,11 +50,9 @@ void PhysicsGui::Draw()
 				+ std::to_string(CurrentGravity->m_quad.m128_f32[3]) + std::string(")")).c_str());
 		}
 		else
-		{
-			ImGui::Text("Can't print current gravity. Null pointer to value");
-		}
+            ImGui::Text("Can't print current gravity. Null pointer to value");
 
-		ImGui::Text("Default gravity vector: ");
+        ImGui::Text("Default gravity vector: ");
 		ImGui::SameLine();
 		ImGui::TextColored(Globals::SecondaryTextColor, std::string(std::string("(") + std::to_string(DefaultGravityVector.m_quad.m128_f32[0]) + std::string(", ")
 			+ std::to_string(DefaultGravityVector.m_quad.m128_f32[1]) + std::string(", ")
@@ -73,16 +61,13 @@ void PhysicsGui::Draw()
 		ImGui::InputFloat4("Gravity", CustomGravityVector.m_quad.m128_f32, 3);
 		ImGui::SameLine();
 		if (ImGui::Button("Set##GravitySetButton"))
-		{
             rfg::hkpWorldSetGravity(Globals::hkpWorldPtr, NULL, &CustomGravityVector);
-		}
-		ImGui::SameLine();
-		if (ImGui::Button("Reset##GravityResetButton"))
-		{
-            rfg::hkpWorldSetGravity(Globals::hkpWorldPtr, NULL, &DefaultGravityVector);
-		}
 
-		ImGui::Separator();
+        ImGui::SameLine();
+		if (ImGui::Button("Reset##GravityResetButton"))
+            rfg::hkpWorldSetGravity(Globals::hkpWorldPtr, NULL, &DefaultGravityVector);
+
+        ImGui::Separator();
 		ImGui::PushFont(Globals::FontBig);
 		ImGui::Text("Solver settings:");
 		ImGui::PopFont();
@@ -105,127 +90,94 @@ void PhysicsGui::Draw()
 
 		if (SolverPtr)
 		{
-			//ImGui::InputFloat("Padding", &SolverPtr->m_padding, 0.01, 0.1, 3);
+			ImGui::SetNextItemWidth(230.0f);
 			ImGui::InputFloat("Tau", &SolverPtr->m_tau, 0.01, 0.1, 3);
 			ImGui::SameLine();
 			if (ImGui::Button("Reset##Tau"))
-			{
-				SolverPtr->m_tau = 0.600f;
-			}
-			ImGui::InputFloat("Damping", &SolverPtr->m_damping, 0.01, 0.1, 3);
+                SolverPtr->m_tau = 0.600f;
+
+			ImGui::SetNextItemWidth(230.0f);
+		    ImGui::InputFloat("Damping", &SolverPtr->m_damping, 0.01, 0.1, 3);
 			ImGui::SameLine();
 			if (ImGui::Button("Reset##Damping"))
-			{
-				SolverPtr->m_damping = 1.000f;
-			}
-			ImGui::InputFloat("Friction tau", &SolverPtr->m_frictionTau, 0.01, 0.1, 3);
+                SolverPtr->m_damping = 1.000f;
+
+			ImGui::SetNextItemWidth(230.0f);
+		    ImGui::InputFloat("Friction tau", &SolverPtr->m_frictionTau, 0.01, 0.1, 3);
 			ImGui::SameLine();
 			if (ImGui::Button("Reset##FrictionTau"))
-			{
-				SolverPtr->m_frictionTau = 0.300f;
-			}
-			///hkVector4f m_globalAccelerationPerSubStep;
-			///hkVector4f m_globalAccelerationPerStep;
-			///hkVector4f m_integrateVelocityFactor;
-			///hkVector4f m_invIntegrateVelocityFactor;
+                SolverPtr->m_frictionTau = 0.300f;
+
+			ImGui::SetNextItemWidth(230.0f);
 			ImGui::InputFloat("Damp div tau", &SolverPtr->m_dampDivTau, 0.01, 0.1, 3);
 			ImGui::SameLine();
 			if (ImGui::Button("Reset##DampDivTau"))
-			{
-				SolverPtr->m_dampDivTau = 1.667f;
-			}
-			ImGui::InputFloat("Tau div damp", &SolverPtr->m_tauDivDamp, 0.01, 0.1, 3);
+                SolverPtr->m_dampDivTau = 1.667f;
+
+			ImGui::SetNextItemWidth(230.0f);
+		    ImGui::InputFloat("Tau div damp", &SolverPtr->m_tauDivDamp, 0.01, 0.1, 3);
 			ImGui::SameLine();
 			if (ImGui::Button("Reset##TauDivDamp"))
-			{
-				SolverPtr->m_tauDivDamp = 0.600f;
-			}
-			ImGui::SetNextItemWidth(230.0f);
+                SolverPtr->m_tauDivDamp = 0.600f;
+
+		    ImGui::SetNextItemWidth(230.0f);
 			ImGui::InputFloat("Damp div friction tau", &SolverPtr->m_dampDivFrictionTau, 0.01, 0.1, 3);
 			ImGui::SameLine();
 			if (ImGui::Button("Reset##DampDivFrictionTau"))
-			{
-				SolverPtr->m_dampDivFrictionTau = 3.333f;
-			}
-			ImGui::SetNextItemWidth(230.0f);
+                SolverPtr->m_dampDivFrictionTau = 3.333f;
+
+		    ImGui::SetNextItemWidth(230.0f);
 			ImGui::InputFloat("Friction tau div damp", &SolverPtr->m_frictionTauDivDamp, 0.01, 0.1, 3);
 			ImGui::SameLine();
 			if (ImGui::Button("Reset##FrictionTauDivDamp"))
-			{
-				SolverPtr->m_frictionTauDivDamp = 0.300f;
-			}
-			ImGui::SetNextItemWidth(230.0f);
+                SolverPtr->m_frictionTauDivDamp = 0.300f;
+
+		    ImGui::SetNextItemWidth(230.0f);
 			ImGui::InputFloat("Contact resting velocity", &SolverPtr->m_contactRestingVelocity, 0.01, 0.1, 3);
 			ImGui::SameLine();
 			if (ImGui::Button("Reset##ContactRestingVelocity"))
-			{
-				SolverPtr->m_contactRestingVelocity = 0.200f;
-			}
-			///hkpSolverInfo_DeactivationInfo m_deactivationInfo[6];
-			ImGui::Text("Delta time: ");
-			ImGui::SameLine();
-			ImGui::TextColored(Globals::SecondaryTextColor, std::to_string(SolverPtr->m_deltaTime).c_str());
-			//ImGui::InputFloat("Delta time", &, 0.01, 0.1, 3);
-			//ImGui::InputFloat("Inverse delta time", &SolverPtr->m_invDeltaTime, 0.01, 0.1, 3);
+                SolverPtr->m_contactRestingVelocity = 0.200f;
+
+			Util::Gui::LabelAndValue("Delta time: ", std::to_string(SolverPtr->m_deltaTime));
+			ImGui::SetNextItemWidth(230.0f);
 			ImGui::InputInt("Num steps", &SolverPtr->m_numSteps);
 			ImGui::SameLine();
 			if (ImGui::Button("Reset##NumSteps"))
-			{
-				SolverPtr->m_numSteps = 4;
-			}
-			ImGui::SetNextItemWidth(230.0f);
+                SolverPtr->m_numSteps = 4;
+
+		    ImGui::SetNextItemWidth(230.0f);
 			ImGui::InputInt("Num micro steps", &SolverPtr->m_numMicroSteps);
 			ImGui::SameLine();
 			if (ImGui::Button("Reset##NumMicroSteps"))
-			{
-				SolverPtr->m_numMicroSteps = 1;
-			}
-			//
-			//ImGui::InputFloat("Inverse num micro steps", &SolverPtr->m_invNumMicroSteps, 0.01, 0.1, 3);
-			//ImGui::InputFloat("Inverse num steps", &SolverPtr->m_invNumSteps, 0.01, 0.1, 3);
+                SolverPtr->m_numMicroSteps = 1;
+
 			ImGui::Checkbox("Force coherent constraint ordering in solver", (bool*)&SolverPtr->m_forceCoherentConstraintOrderingInSolver.m_bool);
-			///char m_deactivationNumInactiveFramesSelectFlag[2];
-			///char m_deactivationIntegrateCounter;
-			//ImGui::InputFloat("Max constraint violation squared", &SolverPtr->m_maxConstraintViolationSqrd, 0.01, 0.1, 3);
 		}
 		else
-		{
-			ImGui::Text("Havok solver pointer invalid. Can't display solver gui.");
-		}
+            ImGui::Text("Havok solver pointer invalid. Can't display solver gui.");
 
-		ImGui::Separator();
+        ImGui::Separator();
 		ImGui::PushFont(Globals::FontBig);
 		ImGui::Text("Physics info:");
 		ImGui::PopFont();
 		ImGui::Separator();
-
 		ImGui::Text("Simulation type: ");
 		ImGui::SameLine();
+
 		int SimType = Globals::hkpWorldPtr->m_simulationType.m_storage;
 		if (SimType == SIMULATION_TYPE_INVALID)
-		{
-			ImGui::TextColored(Globals::SecondaryTextColor, "Invalid");
-		}
-		else if (SimType == SIMULATION_TYPE_DISCRETE)
-		{
-			ImGui::TextColored(Globals::SecondaryTextColor, "Discrete");
-		}
-		else if (SimType == SIMULATION_TYPE_CONTINUOUS)
-		{
-			ImGui::TextColored(Globals::SecondaryTextColor, "Continuous");
-		}
-		else if (SimType == SIMULATION_TYPE_MULTITHREADED)
-		{
-			ImGui::TextColored(Globals::SecondaryTextColor, "Multi-threaded");
-		}
-		else
-		{
-			ImGui::TextColored(Globals::SecondaryTextColor, "Unknown");
-		}
-	}
+            ImGui::TextColored(Globals::SecondaryTextColor, "Invalid");
+        else if (SimType == SIMULATION_TYPE_DISCRETE)
+            ImGui::TextColored(Globals::SecondaryTextColor, "Discrete");
+        else if (SimType == SIMULATION_TYPE_CONTINUOUS)
+            ImGui::TextColored(Globals::SecondaryTextColor, "Continuous");
+        else if (SimType == SIMULATION_TYPE_MULTITHREADED)
+            ImGui::TextColored(Globals::SecondaryTextColor, "Multi-threaded");
+        else
+            ImGui::TextColored(Globals::SecondaryTextColor, "Unknown");
+    }
 	else
-	{
-		ImGui::Text("Havok world pointer invalid. Can't display physics gui.");
-	}
-	ImGui::End();
+        ImGui::Text("Havok world pointer invalid. Can't display physics gui.");
+
+    ImGui::End();
 }

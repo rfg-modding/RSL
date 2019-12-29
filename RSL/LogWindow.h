@@ -9,13 +9,9 @@ public:
 
 	void Draw() override;
 
-	ImGuiWindowFlags WindowFlags = 0;
+private:
 	int ConsoleLogType = LogAll;
 	int BufferDisplayLength = 1000;
 	bool AutoScroll = true;
-
-private:
-	int BufferEnd = 0;
-	int BufferCount = 0;
 };
 

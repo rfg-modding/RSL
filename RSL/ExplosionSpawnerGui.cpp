@@ -9,10 +9,7 @@ ExplosionSpawnerGui::ExplosionSpawnerGui(std::string Title_)
 void ExplosionSpawnerGui::Draw()
 {
     if (!Visible)
-    {
         return;
-    }
-
     ImGui::SetNextWindowSize(ImVec2(850.0f, 600.0f), ImGuiCond_FirstUseEver);
     if (!ImGui::Begin(Title.c_str(), &Visible))
     {
@@ -20,25 +17,12 @@ void ExplosionSpawnerGui::Draw()
         return;
     }
 
-    if(!DrawnOnce)
+    if (!DrawnOnce)
     {
-        
-        Globals::NumExplosionInfos = reinterpret_cast<uint*>(Globals::ModuleBase + 0x19EE490);
-        auto ExplosionInfosPtr = reinterpret_cast<explosion_info*>(reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x19E6CD8));
-        Globals::ExplosionInfos.Init(ExplosionInfosPtr, 80, *Globals::NumExplosionInfos, "ExplosionInfos");
-
-        Globals::NumMaterialEffectInfos = reinterpret_cast<uint*>(reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x19EE4C4));
-        auto MaterialEffectInfosPtr = reinterpret_cast<material_effect_info*>(reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x19EB6F0));
-        Globals::MaterialEffectInfos.Init(MaterialEffectInfosPtr, *Globals::NumMaterialEffectInfos, *Globals::NumMaterialEffectInfos, "MaterialEffectInfos");
-
-        Globals::NumEffectInfos = reinterpret_cast<uint*>(reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x1D82DF0));
-        auto EffectInfosPtr = reinterpret_cast<effect_info*>(reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x1D82E60));
-        Globals::EffectInfos.Init(EffectInfosPtr, *Globals::NumEffectInfos, *Globals::NumEffectInfos, "EffectInfos");
         std::optional<explosion_info*> NewInfo = Globals::GetExplosionInfo("mine"); //Set default values to the land mine
-        if(NewInfo)
-        {
+        if (NewInfo)
             CustomExplosionInfo = *NewInfo.value();
-        }
+
         DrawnOnce = true;
     }
 
@@ -47,42 +31,17 @@ void ExplosionSpawnerGui::Draw()
     ImGui::PopFont();
     ImGui::Separator();
 
-    if (ImGui::Button("Reload this gui"))
-    {
-        Globals::NumExplosionInfos = reinterpret_cast<uint*>(Globals::ModuleBase + 0x19EE490);
-        auto ExplosionInfosPtr = reinterpret_cast<explosion_info*>(reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x19E6CD8));
-        Globals::ExplosionInfos.Init(ExplosionInfosPtr, 80, *Globals::NumExplosionInfos, "ExplosionInfos");
-
-        Globals::NumMaterialEffectInfos = reinterpret_cast<uint*>(reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x19EE4C4));
-        auto MaterialEffectInfosPtr = reinterpret_cast<material_effect_info*>(reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x19EB6F0));
-        Globals::MaterialEffectInfos.Init(MaterialEffectInfosPtr, *Globals::NumMaterialEffectInfos, *Globals::NumMaterialEffectInfos, "MaterialEffectInfos");
-
-        Globals::NumEffectInfos = reinterpret_cast<uint*>(reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x1D82DF0));
-        auto EffectInfosPtr = reinterpret_cast<effect_info*>(reinterpret_cast<DWORD*>(Globals::ModuleBase + 0x1D82E60));
-        Globals::EffectInfos.Init(EffectInfosPtr, *Globals::NumEffectInfos, *Globals::NumEffectInfos, "EffectInfos");
-        std::optional<explosion_info*> NewInfo = Globals::GetExplosionInfo("mine"); //Set default values to the land mine
-        if (NewInfo)
-        {
-            CustomExplosionInfo = *NewInfo.value();
-        }
-        DrawnOnce = true;
-    }
-    ImGui::SameLine();
-    Util::Gui::ShowHelpMarker("If the explosions preset list or the effects list is empty, try pressing this button. If that doesn't fix it, report this issue to the RSL devs. Tell them your RSL version and give them a copy of your RSL master log, in RSL/Logs/Master Log.log");
-
     ImGui::Checkbox("Spawn explosion with middle mouse?", &MiddleMouseBoomActive);
     ImGui::SetNextItemWidth(230.0f);
     ImGui::InputInt("Middle mouse explosions per second limit", &MiddleMouseExplosionsPerSecond);
     ImGui::SameLine();
     Util::Gui::ShowHelpMarker("Used to prevent lag from 100s of explosions per second since the script loader thread is currently uncapped.");
     if (ImGui::Button("Boom"))
-    {
         rfg::ExplosionCreate(&CustomExplosionInfo, Globals::PlayerPtr, Globals::PlayerPtr, &Globals::PlayerPtr->aim_pos, &Globals::PlayerPtr->Orientation, &Globals::PlayerPtr->aim_pos, NULL, false);
-    }
+
     ImGui::SameLine();
     Util::Gui::ShowHelpMarker("Spawns an explosion with the values entered below where the player is aiming. The middle mouse button option is much more convenient.");
     ImGui::Separator();
-
     if (ImGui::TreeNode("Spawn settings"))
     {
         ImGui::Separator();
@@ -133,7 +92,6 @@ void ExplosionSpawnerGui::Draw()
         ImGui::InputInt("Material effect 5", (int*)& CustomExplosionInfo.m_material_effects[5]);
         ImGui::InputInt("Material effect 6", (int*)& CustomExplosionInfo.m_material_effects[6]);
         ImGui::InputInt("Material effect 7", (int*)& CustomExplosionInfo.m_material_effects[7]);
-        //Material reference array
 
         ImGui::Text("Salvage material type:");
         ImGui::RadioButton("Invalid Material", (int*)& CustomExplosionInfo.salvage_material, INVALID_SALVAGE_MATERIAL);
@@ -158,55 +116,50 @@ void ExplosionSpawnerGui::Draw()
         ImGui::TreePop();
     }
 
-    if(ImGui::TreeNode("Preset explosions"))
+    if(Globals::ExplosionInfos.Initialized() && ImGui::TreeNode("Preset explosions"))
     {
-        if(Globals::ExplosionInfos.Initialized())
+        ImGui::Columns(2);
+        ImGui::SetColumnWidth(0, 260.0f);
+        for(int i = 0; i < Globals::ExplosionInfos.Size(); i++)
         {
-            ImGui::Columns(2);
-            ImGui::SetColumnWidth(0, 260.0f);
-            for(int i = 0; i < Globals::ExplosionInfos.Size(); i++)
+            ImGui::BulletText("%s", Globals::CharArrayToString(Globals::ExplosionInfos[i].m_name, 32).c_str());
+            ImGui::SameLine();
+            ImGui::NextColumn();
+            ImGui::SetColumnWidth(1, 180.0f);
+
+            if(ImGui::Button(fmt::format("Copy values##{}", i)))
+                CustomExplosionInfo = Globals::ExplosionInfos[i];
+
+            if(Globals::CharArrayToString(Globals::ExplosionInfos[i].m_name, 32) == "edf_power_core")
             {
-                ImGui::BulletText("%s", Globals::CharArrayToString(Globals::ExplosionInfos[i].m_name, 32).c_str());
                 ImGui::SameLine();
-                ImGui::NextColumn();
-                ImGui::SetColumnWidth(1, 180.0f);
-                if(ImGui::Button(std::string("Copy values##" + std::to_string(i)).c_str()))
-                {
-                    CustomExplosionInfo = Globals::ExplosionInfos[i];
-                }
-                if(Globals::CharArrayToString(Globals::ExplosionInfos[i].m_name, 32) == "edf_power_core")
-                {
-                    ImGui::SameLine();
-                    Util::Gui::ShowHelpMarker("Note that this explosion has no visual effect unless you've entered the free fire zone, and is not guaranteed to work outside of it. It still damages the environment, just does not have a vfx.", "(Bug note)");
-                }
-                ImGui::NextColumn();
+                Util::Gui::ShowHelpMarker("Note that this explosion has no visual effect unless you've entered \
+                    the free fire zone, and is not guaranteed to work outside of it. It still damages the environment, \
+                    just does not have a vfx.", "(Bug note)");
             }
+            ImGui::NextColumn();
         }
         ImGui::TreePop();
     }
     ImGui::Columns(1);
 
-    if (ImGui::TreeNode("Effects"))
+    if (Globals::EffectInfos.Initialized() && ImGui::TreeNode("Effects"))
     {
-        if(Globals::EffectInfos.Initialized())
+        ImGui::Columns(2);
+        ImGui::SetColumnWidth(0, 350.0f);
+        for(int i = 0; i < Globals::EffectInfos.Size(); i++)
         {
-            ImGui::Columns(2);
-            ImGui::SetColumnWidth(0, 350.0f);
-            for(int i = 0; i < Globals::EffectInfos.Size(); i++)
-            {
-                ImGui::BulletText("%s, ID: %i", Globals::CharArrayToString(Globals::EffectInfos[i].name, 65).c_str(), i); ImGui::SameLine();
-                ImGui::NextColumn();
-                ImGui::SetColumnWidth(1, 500.0f);
-                if (ImGui::Button(fmt::format("Effect 0##{}", i))) { CustomExplosionInfo.m_effects[0] = i; } ImGui::SameLine();
-                if (ImGui::Button(fmt::format("Effect 1##{}", i))) { CustomExplosionInfo.m_effects[1] = i; } ImGui::SameLine();
-                if (ImGui::Button(fmt::format("Effect 2##{}", i))) { CustomExplosionInfo.m_effects[2] = i; } ImGui::SameLine();
-                if (ImGui::Button(fmt::format("Effect 3##{}", i))) { CustomExplosionInfo.m_effects[3] = i; }
-                ImGui::NextColumn();
-            }
+            ImGui::BulletText("%s, ID: %i", Globals::CharArrayToString(Globals::EffectInfos[i].name, 65).c_str(), i); ImGui::SameLine();
+            ImGui::NextColumn();
+            ImGui::SetColumnWidth(1, 500.0f);
+            if (ImGui::Button(fmt::format("Effect 0##{}", i))) { CustomExplosionInfo.m_effects[0] = i; } ImGui::SameLine();
+            if (ImGui::Button(fmt::format("Effect 1##{}", i))) { CustomExplosionInfo.m_effects[1] = i; } ImGui::SameLine();
+            if (ImGui::Button(fmt::format("Effect 2##{}", i))) { CustomExplosionInfo.m_effects[2] = i; } ImGui::SameLine();
+            if (ImGui::Button(fmt::format("Effect 3##{}", i))) { CustomExplosionInfo.m_effects[3] = i; }
+            ImGui::NextColumn();
         }
         ImGui::TreePop();
     }
     ImGui::Columns(1);
-
     ImGui::End();
 }

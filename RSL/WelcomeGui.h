@@ -10,10 +10,7 @@ public:
 
 	void Draw() override;
 
-	ImGuiWindowFlags MainOverlayWindowFlags = 0;
-	ImGuiWindowFlags MainOverlayPopupFlags = 0;
-	ImGuiInputTextFlags MainOverlayTeleportEditTextFlags = 0;
-
 private:
+	ImGuiWindowFlags WindowFlags = 0;
     std::shared_ptr<IGuiManager> GuiManager = nullptr;
 };

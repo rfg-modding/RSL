@@ -37,14 +37,6 @@ void __fastcall Hooks::hkpWorld_stepDeltaTime_hook(hkpWorld* This, void* edx, fl
         InitCustomGravityVector = true;
     }
 
-    if (PhysicsMenuRef.IsReady())
-    {
-        if (PhysicsMenuRef.Get().UseCustomPhysicsTimestepMultiplier)
-        {
-            PhysicsDeltaTime *= PhysicsMenuRef.Get().CustomPhysicsTimeStepMultiplier;
-        }
-    }
-
     return rfg::hkpWorldStepDeltaTime(This, edx, PhysicsDeltaTime);
 }
 

@@ -8,9 +8,7 @@ GraphicsTweaksGui::GraphicsTweaksGui(std::string Title_)
 void GraphicsTweaksGui::Draw()
 {
     if (!Visible)
-    {
         return;
-    }
 
     ImGui::SetNextWindowSize(ImVec2(850.0f, 600.0f), ImGuiCond_FirstUseEver);
     if (!ImGui::Begin(Title.c_str(), &Visible))
@@ -23,7 +21,6 @@ void GraphicsTweaksGui::Draw()
     ImGui::Text("Graphics tweaks:");
     ImGui::PopFont();
     ImGui::Separator();
-
     if (ImGui::CollapsingHeader("HDR State"))
     {
         if(Globals::GraphicsState.Ready())
@@ -73,9 +70,7 @@ void GraphicsTweaksGui::Draw()
             ImGui::PopItemWidth();
         }
         else
-        {
             ImGui::Text("Globals::GraphicsState has not been initialized! Cannot display hdr state.");
-        }
     }
 
     if(ImGui::CollapsingHeader("Shadows"))
@@ -88,9 +83,7 @@ void GraphicsTweaksGui::Draw()
             Util::Gui::ShowHelpMarker("The quickest way to get the shadow res to update is to go in the display settings and toggle something like depth of field, apply it, and unpause the game. Then you can change it back if you want.");
         }
         else
-        {
             ImGui::Text("Globals::ShadowMapSizes has not been initialized! Cannot display shadow state.");
-        }
     }
 
     //Todo: Add AO settings, values such as g_Intensity and g_edgeSharpness

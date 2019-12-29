@@ -10,8 +10,6 @@ public:
 
     void Draw() override;
 
-    ImGuiWindowFlags WindowFlags = 0;
-
 private:
     std::shared_ptr<IScriptManager> ScriptManager = nullptr;
 };

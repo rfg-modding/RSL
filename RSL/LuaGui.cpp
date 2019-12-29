@@ -15,7 +15,6 @@ void LuaGui::Draw()
         DrawFunc = NewDrawFunc;
         NewDrawFunc = sol::nil;
     }
-
     if(DrawFunc == sol::nil)
         return;
 

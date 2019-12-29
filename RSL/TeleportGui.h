@@ -19,15 +19,12 @@ public:
 	/*Changes an existing teleport location in the provided json object.*/
 	bool ChangeTeleportLocation(std::string CurrentName, std::string NewName, float NewX, float NewY, float NewZ, std::string NewDescription);
 
+private:
 	nlohmann::json TeleportLocations;
-
 	bool TeleportEditPopupOpen = false;
 	std::string NewTeleportName{};
 	vector NewTeleportPosition{ 0.0f };
 	std::string NewTeleportDescription{};
-
 	vector PlayerPositionTarget = { 0.0f };
-
-	ImGuiWindowFlags WindowFlags = 0;
 	ImGuiWindowFlags ModalFlags = ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse;
 };

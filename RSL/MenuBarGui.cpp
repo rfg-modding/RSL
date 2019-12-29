@@ -12,9 +12,6 @@ MenuBarGui::MenuBarGui(std::string Title_)
 	WindowFlags |= ImGuiWindowFlags_NoMove;
 	WindowFlags |= ImGuiWindowFlags_NoResize;
 	WindowFlags |= ImGuiWindowFlags_NoCollapse;
-	//WindowFlags |= ImGuiWindowFlags_NoNav;
-	//WindowFlags |= ImGuiWindowFlags_NoBackground;
-	//WindowFlags |= ImGuiWindowFlags_NoBringToFrontOnFocus;
 
     SnippetManager = IocContainer->resolve<ISnippetManager>();
     ScriptManager = IocContainer->resolve<IScriptManager>();
@@ -26,10 +23,9 @@ void MenuBarGui::Draw()
 	static bool ShowDeactivationConfirmationPopup = false;
     static bool ShowLockoutModeConfirmationPopup = false;
 	if (!Visible)
-	{
-		return;
-	}
+        return;
 
+	//Todo: Figure out a better way of registering guis. This is dumb and doesn't work well with Lua based guis
     static auto GeneralTweaksGuiRef = GuiManager->GetGuiReference<BaseGui>("General tweaks").value();
     static auto LuaConsoleRef = GuiManager->GetGuiReference<BaseGui>("Lua console").value();
     static auto ScriptSelectRef = GuiManager->GetGuiReference<BaseGui>("Scripts").value();
@@ -52,30 +48,24 @@ void MenuBarGui::Draw()
 		{
             static ImVec4 DeactivateScriptLoaderButtonColor = Util::NormalizeColor(204.0f, 0.0f, 0.0f);
 			ImGui::PushStyleColor(ImGuiCol_Text, DeactivateScriptLoaderButtonColor); //Push red color for deactivation button
-			if (ImGui::MenuItem(std::string(std::string(ICON_FA_POWER_OFF) + u8" Deactivate script loader").c_str(), "Hold F3")) 
-			{
-				ShowDeactivationConfirmationPopup = true;
-			}
-			ImGui::PopStyleColor(); //Pop deactivation button color
+			if (ImGui::MenuItem(std::string(std::string(ICON_FA_POWER_OFF) + u8" Deactivate script loader").c_str(), "Hold F3"))
+                ShowDeactivationConfirmationPopup = true;
 
+		    ImGui::PopStyleColor(); //Pop deactivation button color
             static ImVec4 ResetLuaStateButtonColor = Util::NormalizeColor(0.0f, 122.0f, 204.0f); //Light blue color
             ImGui::PushStyleColor(ImGuiCol_Text, ResetLuaStateButtonColor);
             if(ImGui::MenuItem(std::string(std::string(ICON_FA_SYNC) + u8" Reset core lua state").c_str()))
-            {
                 ScriptManager->Reset();
-            }
-            ImGui::PopStyleColor(); //Pop reset button color
 
+		    ImGui::PopStyleColor(); //Pop reset button color
             static ImVec4 LockoutButtonColor = Util::NormalizeColor(204.0f, 119.0f, 0.0f); //Orange color
             ImGui::PushStyleColor(ImGuiCol_Text, LockoutButtonColor); 
             if (ImGui::MenuItem(std::string(std::string(ICON_FA_LOCK) + u8" Activate lockout mode").c_str()))
-            {
                 ShowLockoutModeConfirmationPopup = true;
-            }
-            ImGui::PopStyleColor();
+
+		    ImGui::PopStyleColor();
             ImGui::SameLine();
             Util::Gui::ShowHelpMarker("Disables the overlay and all keybinds until the game is restarted.");
-
 			ImGui::EndMenu();
 		}
 		if (ImGui::BeginMenu("Tweaks"))
@@ -107,9 +97,8 @@ void MenuBarGui::Draw()
         if(ImGui::BeginMenu("Misc options"))
         {
             if (ImGui::MenuItem("Log game menu info"))
-            {
                 Globals::LogGameMenuInfo();
-            }
+
             ImGui::SameLine();
             Util::Gui::ShowHelpMarker("Logs information about the currently loaded game menus. Does not have much use currently. Mainly a debug feature I decided to leave in. Check the logger window or the master log for the output.");
             ImGui::EndMenu();
@@ -137,13 +126,9 @@ void MenuBarGui::Draw()
     ConfirmLockoutModeActivation();
 
 	if (GuiManager->ShowAppMetrics)
-	{
-		ImGui::ShowMetricsWindow(&GuiManager->ShowAppMetrics);
-	}
-	if (GuiManager->ShowAppAbout)
-	{
-		ShowAboutWindow(&GuiManager->ShowAppAbout);
-	}
+        ImGui::ShowMetricsWindow(&GuiManager->ShowAppMetrics);
+    if (GuiManager->ShowAppAbout)
+        ShowAboutWindow(&GuiManager->ShowAppAbout);
 }
 
 void MenuBarGui::ConfirmScriptLoaderDeactivation() const
@@ -160,10 +145,9 @@ void MenuBarGui::ConfirmScriptLoaderDeactivation() const
 		ImGui::PopStyleColor();
 		ImGui::SameLine();
 		if (ImGui::Button("Cancel"))
-		{
-			ImGui::CloseCurrentPopup();
-		}
-		ImGui::EndPopup();
+            ImGui::CloseCurrentPopup();
+
+	    ImGui::EndPopup();
 	}
 }
 
@@ -180,12 +164,12 @@ void MenuBarGui::ConfirmLockoutModeActivation()
             ActivateLockoutMode();
             ImGui::CloseCurrentPopup();
         }
+
         ImGui::PopStyleColor();
         ImGui::SameLine();
         if (ImGui::Button("Cancel"))
-        {
             ImGui::CloseCurrentPopup();
-        }
+
         ImGui::EndPopup();
     }
 }
@@ -244,56 +228,8 @@ void MenuBarGui::ShowAboutWindow(bool* p_open) const
 		ImGui::Separator();
 		ImGui::Text("sizeof(size_t): %d, sizeof(ImDrawIdx): %d, sizeof(ImDrawVert): %d", (int)sizeof(size_t), (int)sizeof(ImDrawIdx), (int)sizeof(ImDrawVert));
 		ImGui::Text("define: __cplusplus=%d", (int)__cplusplus);
-#ifdef IMGUI_DISABLE_OBSOLETE_FUNCTIONS
-		ImGui::Text("define: IMGUI_DISABLE_OBSOLETE_FUNCTIONS");
-#endif
-#ifdef IMGUI_DISABLE_WIN32_DEFAULT_CLIPBOARD_FUNCTIONS
-		ImGui::Text("define: IMGUI_DISABLE_WIN32_DEFAULT_CLIPBOARD_FUNCTIONS");
-#endif
-#ifdef IMGUI_DISABLE_WIN32_DEFAULT_IME_FUNCTIONS
-		ImGui::Text("define: IMGUI_DISABLE_WIN32_DEFAULT_IME_FUNCTIONS");
-#endif
-#ifdef IMGUI_DISABLE_WIN32_FUNCTIONS
-		ImGui::Text("define: IMGUI_DISABLE_WIN32_FUNCTIONS");
-#endif
-#ifdef IMGUI_DISABLE_FORMAT_STRING_FUNCTIONS
-		ImGui::Text("define: IMGUI_DISABLE_FORMAT_STRING_FUNCTIONS");
-#endif
-#ifdef IMGUI_DISABLE_MATH_FUNCTIONS
-		ImGui::Text("define: IMGUI_DISABLE_MATH_FUNCTIONS");
-#endif
-#ifdef IMGUI_DISABLE_DEFAULT_ALLOCATORS
-		ImGui::Text("define: IMGUI_DISABLE_DEFAULT_ALLOCATORS");
-#endif
-#ifdef IMGUI_USE_BGRA_PACKED_COLOR
-		ImGui::Text("define: IMGUI_USE_BGRA_PACKED_COLOR");
-#endif
-#ifdef _WIN32
-		ImGui::Text("define: _WIN32");
-#endif
-#ifdef _WIN64
-		ImGui::Text("define: _WIN64");
-#endif
-#ifdef __linux__
-		ImGui::Text("define: __linux__");
-#endif
-#ifdef __APPLE__
-		ImGui::Text("define: __APPLE__");
-#endif
 #ifdef _MSC_VER
 		ImGui::Text("define: _MSC_VER=%d", _MSC_VER);
-#endif
-#ifdef __MINGW32__
-		ImGui::Text("define: __MINGW32__");
-#endif
-#ifdef __MINGW64__
-		ImGui::Text("define: __MINGW64__");
-#endif
-#ifdef __GNUC__
-		ImGui::Text("define: __GNUC__=%d", (int)__GNUC__);
-#endif
-#ifdef __clang_version__
-		ImGui::Text("define: __clang_version__=%s", __clang_version__);
 #endif
 		ImGui::Separator();
 		ImGui::Text("io.BackendPlatformName: %s", io.BackendPlatformName ? io.BackendPlatformName : "NULL");

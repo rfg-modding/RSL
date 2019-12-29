@@ -10,8 +10,6 @@ public:
 	void Draw() override;
 	void DrawPlayerIntrospectionGui(const char* Title);
 
-	ImGuiWindowFlags WindowFlags = 0;
-
     uint SavedTargetObjectHandle = 0;
 };
 

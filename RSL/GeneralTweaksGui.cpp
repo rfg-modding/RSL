@@ -15,10 +15,9 @@ GeneralTweaksGui::GeneralTweaksGui(std::string Title_)
 void GeneralTweaksGui::Draw()
 {
 	if (!Visible)
-	{
-		return;
-	}
-	ImGui::SetNextWindowSize(ImVec2(600.0f, 700.0f), ImGuiCond_FirstUseEver);
+        return;
+
+    ImGui::SetNextWindowSize(ImVec2(600.0f, 700.0f), ImGuiCond_FirstUseEver);
 	if (!ImGui::Begin(Title.c_str(), &Visible))
 	{
 		ImGui::End();
@@ -38,47 +37,30 @@ void GeneralTweaksGui::Draw()
     static bool Transparent = true;
     static bool PauseBeneath = false;
     if(ImGui::Button("Open weapons locker menu"))
-    {
         rfg::GameseqPushState(GS_INGAME_WEAPON_CABINET, Transparent, PauseBeneath);
-    }
     if (ImGui::Button("Open upgrades menu"))
-    {
         rfg::GameseqPushState(GS_INGAME_UPGRADES_HUD, Transparent, PauseBeneath);
-    }
-	if (ImGui::Button("Toggle Hud"))
-	{
+    if (ImGui::Button("Toggle Hud"))
         rfg::ToggleHud();
-	}
-	if (ImGui::Button("Toggle Fog"))
-	{
+    if (ImGui::Button("Toggle Fog"))
         rfg::ToggleFog();
-	}
-	ImGui::Separator();
-	
+
+    ImGui::Separator();
 	ImGui::Text("Alert level: ");
 	ImGui::SameLine();
 	gfm_alert_levels AlertCheck = rfg::GsmGetAlertLevel();
 	if (AlertCheck == ALERT_LEVEL_GREEN)
-	{
-		ImGui::TextColored(Globals::ColorGreen, std::string(std::string(ICON_FA_SMILE_BEAM) + u8" Green").c_str());
-	}
-	else if (AlertCheck == ALERT_LEVEL_YELLOW)
-	{
-		ImGui::TextColored(Globals::ColorYellow, std::string(std::string(ICON_FA_MEH) + u8" Yellow").c_str());
-	}
-	else if (AlertCheck == ALERT_LEVEL_ORANGE)
-	{
-		ImGui::TextColored(Globals::ColorOrange, std::string(std::string(ICON_FA_FROWN) + u8" Orange").c_str());
-	}
-	else if (AlertCheck == ALERT_LEVEL_RED)
-	{
-		ImGui::TextColored(Globals::ColorRed, std::string(std::string(ICON_FA_DUMPSTER_FIRE) + u8" Red").c_str());
-	}
-	else
-	{
-		ImGui::TextColored(Globals::SecondaryTextColor, std::string(std::string(ICON_FA_QUESTION) + u8" Invalid").c_str());
-	}
-	ImGui::RadioButton("Green", reinterpret_cast<int*>(&CustomAlertLevel), ALERT_LEVEL_GREEN);
+        ImGui::TextColored(Globals::ColorGreen, std::string(std::string(ICON_FA_SMILE_BEAM) + u8" Green").c_str());
+    else if (AlertCheck == ALERT_LEVEL_YELLOW)
+        ImGui::TextColored(Globals::ColorYellow, std::string(std::string(ICON_FA_MEH) + u8" Yellow").c_str());
+    else if (AlertCheck == ALERT_LEVEL_ORANGE)
+        ImGui::TextColored(Globals::ColorOrange, std::string(std::string(ICON_FA_FROWN) + u8" Orange").c_str());
+    else if (AlertCheck == ALERT_LEVEL_RED)
+        ImGui::TextColored(Globals::ColorRed, std::string(std::string(ICON_FA_DUMPSTER_FIRE) + u8" Red").c_str());
+    else
+        ImGui::TextColored(Globals::SecondaryTextColor, std::string(std::string(ICON_FA_QUESTION) + u8" Invalid").c_str());
+
+    ImGui::RadioButton("Green", reinterpret_cast<int*>(&CustomAlertLevel), ALERT_LEVEL_GREEN);
 	ImGui::SameLine();
 	ImGui::RadioButton("Yellow", reinterpret_cast<int*>(&CustomAlertLevel), ALERT_LEVEL_YELLOW);
 	ImGui::SameLine();
@@ -87,13 +69,11 @@ void GeneralTweaksGui::Draw()
 	ImGui::RadioButton("Red", reinterpret_cast<int*>(&CustomAlertLevel), ALERT_LEVEL_RED);
 	ImGui::SameLine();
 	if (ImGui::Button("Set alert level"))
-	{
         rfg::GsmSetAlertLevel(CustomAlertLevel);
-	}
-	ImGui::SameLine();
+
+    ImGui::SameLine();
 	ImGui::Checkbox("Lock", &LockAlertLevel);
 	ImGui::Separator();
-
 	ImGui::Text("Xray Effect Mode: ");
 	ImGui::SameLine(); ImGui::RadioButton("Backpack", &XrayEffectMode, 0);
 	ImGui::SameLine(); ImGui::RadioButton("Rail Driver", &XrayEffectMode, 1);
@@ -128,18 +108,14 @@ void GeneralTweaksGui::Draw()
 			}
 		}
 	}
-    ImGui::Separator();
 
+    ImGui::Separator();
 	ImGui::Checkbox("Infinite jetpack", &Globals::InfiniteJetpack);
 	if (ImGui::Checkbox("Invulnerability", &Invulnerable))
-	{
         Globals::PlayerPtr->HitPoints = Globals::PlayerPtr->MaxHitPoints;
-	}
-	if (!Invulnerable)
-	{
+    if (!Invulnerable)
         Globals::PlayerPtr->Flags.invulnerable = false;
-	}
-	if (ImGui::Checkbox("Ignored by AI", &AiIgnore))
+    if (ImGui::Checkbox("Ignored by AI", &AiIgnore))
 	{
 		//Have to manually set rather than sticking in checkbox call because bitfields addresses can't be captured.
         Globals::PlayerPtr->Flags.ai_ignore = !Globals::PlayerPtr->Flags.ai_ignore;
@@ -155,35 +131,29 @@ void GeneralTweaksGui::Draw()
     ImGui::SetNextItemWidth(230.0f);
 	ImGui::InputFloat("Custom player jump height", &CustomJumpHeight, 0.5f, 2.0f, 3); ImGui::SameLine();
 	ImGui::Checkbox("##Custom Player Jump Height", &NeedCustomJumpHeightSet);
-
     ImGui::SetNextItemWidth(230.0f);
 	ImGui::InputFloat("Player move speed override", Globals::PlayerMaxMovementSpeedOverride, 1.0f, 5.0f, 3);
 	ImGui::SameLine();
     if(ImGui::Button("Reset##ResetPlayerMaxMoveSpeedOverride"))
-    {
         *Globals::PlayerMaxMovementSpeedOverride = 0.0f;
-    }
+
     ImGui::SameLine();
     Util::Gui::ShowHelpMarker("If this is set to 0.0, you'll move at the vanilla speed. If you set it to any other value, you'll move at that speed.");
-	
     ImGui::SetNextItemWidth(230.0f);
 	ImGui::InputFloat("Player max speed", &Globals::PlayerPtr->MaxSpeed, 1.0f, 5.0f, 3);
 	ImGui::SameLine();
 	if(ImGui::Button("Reset##PlayerMaxSpeedCustomReset"))
-	{
         Globals::PlayerPtr->MaxSpeed = 0.0f;
-	}
-	ImGui::Separator();
 
+    ImGui::Separator();
     if (Globals::SpeedScale)
     {
         ImGui::SetNextItemWidth(230.0f);
         ImGui::InputFloat("Game speed scale", Globals::SpeedScale);
         ImGui::SameLine();
         if (ImGui::Button("Reset##ResetButtonSpeedScale"))
-        {
             *Globals::SpeedScale = 1.0f;
-        }
+
         ImGui::SameLine();
         Util::Gui::ShowHelpMarker("1.0 = vanilla, # < 1.0 = slo-mo, # > 1.0 = \"fast-mo\"");
     }
@@ -197,9 +167,8 @@ void GeneralTweaksGui::Draw()
     ImGui::InputFloat("Max vehicle speed", Globals::VehicleMaxSpeed);
     ImGui::SameLine();
     if(ImGui::Button("Reset"))
-    {
         *Globals::VehicleMaxSpeed = 40.233601f;
-    }
+
     ImGui::SetNextItemWidth(230.0f);
     ImGui::InputInt("Charge explosion delay", Globals::ChargeExplosionDelay);
     ImGui::SameLine();
@@ -211,7 +180,6 @@ void GeneralTweaksGui::Draw()
     Util::Gui::ShowHelpMarker("The default value might be lower than your current amount. Just set it to whatever value you want, and it'll override your upgrade level.");
 
     ImGui::Separator();
-
     ImGui::SetNextItemWidth(230.0f);
     ImGui::InputInt("Salvage", &Globals::PlayerPtr->Metadata.Salvage);
     ImGui::SetNextItemWidth(230.0f);
@@ -219,14 +187,12 @@ void GeneralTweaksGui::Draw()
     ImGui::SetNextItemWidth(230.0f);
     ImGui::InputInt("Supply crate count", &Globals::PlayerPtr->Metadata.SupplyCrateCount);
     ImGui::Separator();
-
     ImGui::PushFont(Globals::FontBig);
     ImGui::Text("Game clock:");
     ImGui::PopFont();
     ImGui::Separator();
     if(GameClock)
     {
-       
         static uint CurrentTicksMin = 0;
         static uint CurrentTicksMax = std::numeric_limits<uint>::max();
         ImGui::PushItemWidth(230.0f);
@@ -240,9 +206,8 @@ void GeneralTweaksGui::Draw()
         ImGui::SliderFloat("Time scale", &GameClock->m_time_scale, 0.0f, 1000.0f);
         ImGui::SameLine();
         if(ImGui::Button("Reset##GameClockTimeScale"))
-        {
             GameClock->m_time_scale = 48.0f;
-        }
+
         ImGui::SliderScalar("Current day ticks", ImGuiDataType_U32, &GameClock->m_curr_day_ticks, &CurrentTicksMin, &CurrentTicksMax);
         ImGui::PopItemWidth();
         if(ImGui::Checkbox("Lock time of day change", &LockTodTicksChange))
@@ -253,17 +218,13 @@ void GeneralTweaksGui::Draw()
                 GameClock->m_time_scale = 0.0f;
             }
             else
-            {
                 GameClock->m_time_scale = PreTodPauseTimescale;
-            }
         }
     }
     else
-    {
         ImGui::Text("GameClock == nullptr, cannot display settings");
-    }
-    ImGui::Separator();
 
+    ImGui::Separator();
     if (!UseCustomLevelAmbientLight)
     {
         CustomLevelAmbientLight.x = Globals::RfgWorldPtr->level_ambient.x;
