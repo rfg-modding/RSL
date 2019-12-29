@@ -35,10 +35,12 @@
 #include <ShellScalingAPI.h>
 #include <wrl.h>
 #include <d3d11_1.h>
-#include <DirectXMath.h>
+#include <DXGI.h>
+#include <d3d11.h>
+#include <d3dcompiler.h>
 
-#include <Shlwapi.h>
-#pragma comment(lib, "Shlwapi.lib")
+#pragma comment(lib, "d3d11.lib")
+#pragma comment(lib, "d3dcompiler.lib")
 
 #include <filesystem>
 #include <nlohmann/json.hpp>
@@ -51,17 +53,6 @@
 #include "imgui_impl_dx11.h"
 #include <IconsFontAwesome5.h>
 #include "imgui_stdlib.h"
-
-#include <DXGI.h>
-#include <d3d11.h>
-#include <d3dcompiler.h>
-#define DIRECTINPUT_VERSION 0x0800
-#include <dinput.h>
-
-#pragma comment(lib, "d3d11.lib")
-#pragma comment(lib, "d3dcompiler.lib")
-#pragma comment(lib, "Shcore")
-#pragma comment(lib, "dxguid")
 
 #include <tchar.h>
 #include <thread>

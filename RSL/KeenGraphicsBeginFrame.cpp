@@ -6,11 +6,6 @@ void InitImGuiD3D11();
 
 keen::GraphicsCommandBuffer* Hooks::KeenGraphicsBeginFrameHook(keen::GraphicsSystem* pGraphicsSystem, keen::RenderSwapChain* pSwapChain)
 {
-    //static std::once_flag KeenGraphicsBeginFrameHookInitialCall;
-    //std::call_once(KeenGraphicsBeginFrameHookInitialCall, [&]()
-    //{
-    //    Globals::KeenGraphicsSystemPtr = pGraphicsSystem;
-    //});
     if (Globals::KeenGraphicsSystemPtr != pGraphicsSystem)
     {
         Logger::LogWarning("Globals::KeenGraphicsSystemPtr changed!\n");
