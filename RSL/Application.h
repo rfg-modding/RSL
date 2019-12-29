@@ -25,11 +25,7 @@ private:
     std::shared_ptr<IGuiManager> GuiManager = nullptr;
     Bootstrapper RslBootstrapper;
 
-    /* Used to ensure proper opening/closing of the debug console. Mainly used to make sure
-       multiple consoles aren't opened when repeatedly injecting the script loader during dev.*/
-    bool PreExistingConsole = true;
     bool AutorunScriptsRun = false;
-
     const std::vector<GameState> DisabledGameStates = {
                                 GS_WRECKING_CREW_MAIN_MENU, GS_WRECKING_CREW_CHARACTER_SELECT,
                                 GS_WRECKING_CREW_SCOREBOARD, GS_WC_INIT, GS_WC_SHUTDOWN,

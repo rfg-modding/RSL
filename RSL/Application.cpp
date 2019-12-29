@@ -119,22 +119,14 @@ void Application::OpenConsole()
 
     FILE* pFile = nullptr;
     if (AttachConsole(Globals::PID) == 0)
-    {
-        PreExistingConsole = false;
         AllocConsole();
-    }
-    else
-    {
-        PreExistingConsole = true;
-    }
-    freopen_s(&pFile, "CONOUT$", "r+", stdout);
 
+    freopen_s(&pFile, "CONOUT$", "r+", stdout);
     Globals::ConsoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
     Globals::SetConsoleAttributes(Globals::ConsoleDefaultTextAttributes);
 }
 
 void Application::CloseConsole() const
 {
-    if (PreExistingConsole)
-        FreeConsole();
+    FreeConsole();
 }
