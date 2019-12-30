@@ -19,7 +19,7 @@ public:
         List = List_;
         Ready = true;
     }
-    T& Get()
+    T& Get() //Todo: Make a better way of doing this. If nothing exists at that index you're in trouble
     {
         return *reinterpret_cast<T*>(List->at(Index));
     }
@@ -38,9 +38,8 @@ public:
     GuiReference& operator=(const GuiReference& other)
     {
         if (this == &other)
-        {
             return *this;
-        }
+
         Index = other.Index;
         List = other.List;
         Ready = other.Ready;

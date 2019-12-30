@@ -5,9 +5,7 @@ int __cdecl Hooks::LuaDoBufferHook(lua_State* L, const char* buff, unsigned int 
 {
     static std::string TempBuffer;
     if (Globals::RfgVintLuaState != L)
-    {
         Globals::RfgVintLuaState = L;
-    }
     if (!L)
     {
         Logger::LogWarning("RFG lua_state pointer null\n");

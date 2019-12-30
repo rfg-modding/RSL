@@ -5,10 +5,8 @@
 void __cdecl Hooks::gamestate_gp_process_hook()
 {
     static auto ScriptManager = IocContainer->resolve<IScriptManager>();
-
     if (ScriptManager->Ready())
-    {
         ScriptManager->TriggerDoFrameEvent();
-    }
+
     return rfg::gamestate_gp_process();
 }

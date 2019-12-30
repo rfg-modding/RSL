@@ -21,9 +21,7 @@ void __fastcall Hooks::world_do_frame_hook(World* This, void* edx, bool HardLoad
             ScriptManager->UpdateRfgPointers();
     }
     if (!Gui)
-    {
         return rfg::WorldDoFrame(This, edx, HardLoad);
-    }
 
     static GuiReference<GeneralTweaksGui> TweaksMenuRef = Gui->GetGuiReference<GeneralTweaksGui>("General tweaks").value();
     if (TweaksMenuRef.Get().UseCustomLevelAmbientLight)

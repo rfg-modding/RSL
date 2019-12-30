@@ -17,15 +17,10 @@ spawn_status_result __cdecl Hooks::object_spawn_vehicle_hook(vehicle_spawn_param
 #if DEBUG
     Globals::VehicleSpawnCache = spawn_param;
     Logger::Log("Caching vehicle spawn params");
-
     if(spawn_param.veh_info->name)
-    {
         Logger::Log("object_spawn_vehicle called! Vehicle name: {}\n", spawn_param.veh_info->name);
-    }
     else
-    {
         Logger::Log("object_spawn_vehicle called!\n");
-    }
 #endif
 
     return rfg::object_spawn_vehicle(spawn_param);

@@ -20,8 +20,8 @@ public:
     void SetLuaConsole(std::string Name) override;
 
 private:
-    std::once_flag InitialDrawCheck;
-    bool DrawPassedOnce = false;
+    void ProcessDeletions();
+
     bool LuaConsoleActive = false;
     bool Initialized = false;
 };

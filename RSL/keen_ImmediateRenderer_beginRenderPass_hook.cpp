@@ -9,6 +9,5 @@ void __fastcall Hooks::keen_ImmediateRenderer_beginRenderPass_hook(keen::Immedia
         Globals::ImmediateRenderer = this_ptr;
     }
 
-
     return rfg::keen_ImmediateRenderer_beginRenderPass(this_ptr, edx, pRenderTarget, pCamera);
 }

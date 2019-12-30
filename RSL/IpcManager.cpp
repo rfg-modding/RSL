@@ -19,8 +19,8 @@ void IpcManager::StartIpcThread()
         Logger::LogWarning("Attempted to start more than one IPC thread!\n");
         return;
     }
-    PipesThreadCount++;
 
+    PipesThreadCount++;
     IpcThread = std::thread(&IpcManager::Run, this);
 }
 
@@ -46,8 +46,7 @@ void IpcManager::Run()
     }
 
     Logger::Log("Waiting for a client to connect to RSLMainPipe.\n");
-    bool ConnectResult = ConnectNamedPipe(RslMainPipe, nullptr);
-    if(!ConnectResult)
+    if(!ConnectNamedPipe(RslMainPipe, nullptr))
     {
         Logger::LogError("RSLMainPipe failed to make a connection with a client. Last win32 error: {0}\n", Globals::GetLastWin32ErrorAsString());
         CloseHandle(RslMainPipe);
@@ -64,29 +63,26 @@ void IpcManager::Run()
             &NumBytesRead,
             nullptr);
 
-        if(ReadResult)
+        if(!ReadResult)
+            continue;
+
+        vector pos { InputBuffer[0], InputBuffer[1], InputBuffer[2] };
+        Logger::Log("Read data from pipe!\n");
+        Logger::Log("Num bytes read: {0}\n", NumBytesRead);
+        Logger::Log("Data:: x: {0}, y: {1}, z: {2} ... Attempting to teleport the player to that location.\n",
+                    InputBuffer[0], InputBuffer[1], InputBuffer[2]);
+
+        if(Globals::PlayerPtr)
         {
-            vector pos { InputBuffer[0], InputBuffer[1], InputBuffer[2] };
-
-            Logger::Log("Read data from pipe!\n");
-            Logger::Log("Num bytes read: {0}\n", NumBytesRead);
-            Logger::Log("Data:: x: {0}, y: {1}, z: {2} ... Attempting to teleport the player to that location.\n",
-                InputBuffer[0], InputBuffer[1], InputBuffer[2]);
-
-            if(Globals::PlayerPtr)
-            {
-                //Todo: Make a function to check for valid/reasonable positions
-                //Todo: Make some kind of event system/class to avoid needing to do this and having tons of globals laying around
-                Globals::PlayerTeleportPos = pos;
-                Globals::PlayerNeedsTeleport = true;
-                //HumanTeleportUnsafe(Globals::PlayerPtr, pos, Globals::PlayerPtr->Orientation);
-                Logger::Log("Teleported player to {0}", pos.GetDataString(false, true));
-            }
-            else
-            {
-                Logger::LogError("Cannot teleport the player as the player ptr is null. Ensure that you have a save loaded.\n");
-            }
+            //Todo: Make a function to check for valid/reasonable positions
+            //Todo: Make some kind of event system/class to avoid needing to do this and having tons of globals laying around
+            Globals::PlayerTeleportPos = pos;
+            Globals::PlayerNeedsTeleport = true;
+            //HumanTeleportUnsafe(Globals::PlayerPtr, pos, Globals::PlayerPtr->Orientation);
+            Logger::Log("Teleported player to {0}", pos.GetDataString(false, true));
         }
+        else
+            Logger::LogError("Cannot teleport the player as the player ptr is null. Ensure that you have a save loaded.\n");
     }
     //Todo: Add exit condition for loop. Though the thread dying when the game closes might be enough for this.
     CloseHandle(RslMainPipe);

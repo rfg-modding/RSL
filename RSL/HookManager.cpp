@@ -43,36 +43,29 @@ bool HookManager::DisableHook(const std::string& HookName)
         Logger::LogFatalError("Failed to disable {} hook. RSL deactivating.\n", HookName);
 		return false;
 	}
-	return false;
+	return true;
 }
 
 /* Enables all hooks.*/
 void HookManager::EnableAllHooks()
 {
 	for (auto& i : HookMap)
-	{
-		EnableHook(i.first);
-	}
+        EnableHook(i.first);
 }
 
 /* Disabled all hooks.*/
 void HookManager::DisableAllHooks()
 {
 	for (auto& i : HookMap)
-	{
-		DisableHook(i.first);
-	}
+        DisableHook(i.first);
 }
 
 /* Takes a std::string as input. Returns a hook with that name exists, and false if it doesn't.*/
 bool HookManager::HookExists(const const std::string& HookName) const
 {
 	for (const auto& i : HookMap)
-	{
-		if (i.first == HookName)
-		{
-			return true;
-		}
-	}
-	return false;
+        if (i.first == HookName)
+            return true;
+
+    return false;
 }

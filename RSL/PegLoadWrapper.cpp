@@ -41,10 +41,8 @@ bool __cdecl Hooks::peg_load_wrapper_hook(const char* filename, unsigned srid, c
 
         //Todo: Figure out if it's necessary to call delete on the games char array to avoid a memory leak.
         Logger::Log("Found texture file \"{}\". Replacing...\n", "./RSL/Overrides/Textures/" + std::string(filename));
-
         const int cpu_file_size = fs::file_size("RSL/Overrides/Textures/" + std::string(filename));
         char* TempCpuBuffer = new char[cpu_file_size];
-
         std::ifstream("RSL/Overrides/Textures/" + std::string(filename), std::ios::binary).read(TempCpuBuffer, cpu_file_size);
 
         if (Extension == ".cpeg_pc")
@@ -58,10 +56,7 @@ bool __cdecl Hooks::peg_load_wrapper_hook(const char* filename, unsigned srid, c
 
                 return rfg::peg_load_wrapper(filename, srid, TempCpuBuffer, cpu_file_size, TempGpuBuffer, gpu_file_size);
             }
-            else
-            {
-                Logger::Log("Failed to find the matching gpeg_pc file for \"{}\". Using default texture instead.\n", "./RSL/Overrides/Textures/" + std::string(filename));
-            }
+            Logger::Log("Failed to find the matching gpeg_pc file for \"{}\". Using default texture instead.\n", "./RSL/Overrides/Textures/" + std::string(filename));
         }
         else if (Extension == ".cvbm_pc")
         {
@@ -74,10 +69,7 @@ bool __cdecl Hooks::peg_load_wrapper_hook(const char* filename, unsigned srid, c
 
                 return rfg::peg_load_wrapper(filename, srid, TempCpuBuffer, cpu_file_size, TempGpuBuffer, gpu_file_size);
             }
-            else
-            {
-                Logger::Log("Failed to find the matching gpeg_pc file for \"{}\". Using default texture instead.\n", "./RSL/Overrides/Textures/" + std::string(filename));
-            }
+            Logger::Log("Failed to find the matching gpeg_pc file for \"{}\". Using default texture instead.\n", "./RSL/Overrides/Textures/" + std::string(filename));
         }
     }
 

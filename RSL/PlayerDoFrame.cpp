@@ -22,9 +22,7 @@ void __fastcall Hooks::PlayerDoFrameHook(Player* PlayerPtr)
                 InitEventTriggered = true;
             }
             else
-            {
                 TimesCalled++;
-            }
         }
         if (Globals::CanTriggerOnLoadEvent)
         {
@@ -35,9 +33,7 @@ void __fastcall Hooks::PlayerDoFrameHook(Player* PlayerPtr)
                 OnLoadCounter = 0;
             }
             else
-            {
                 OnLoadCounter++;
-            }
         }
     }
     if (Globals::PlayerPtr != PlayerPtr)
@@ -49,19 +45,15 @@ void __fastcall Hooks::PlayerDoFrameHook(Player* PlayerPtr)
     }
 
     if (!Gui)
-    {
         return rfg::PlayerDoFrame(PlayerPtr);
-    }
+
     static GuiReference<GeneralTweaksGui> TweaksMenuRef = Gui->GetGuiReference<GeneralTweaksGui>("General tweaks").value();
     static GuiReference<FreeCamGui> FreeCamMenuRef = Gui->GetGuiReference<FreeCamGui>("Camera settings").value();
-
     auto Camera = IocContainer->resolve<ICameraManager>();
     if (Camera)
     {
         if (Camera->IsFreeCameraActive())
-        {
             PlayerPtr->Flags.ai_ignore = true;
-        }
         if (Camera->IsFreeCameraActive() && FreeCamMenuRef.Get().PlayerFollowCam)
         {
             Camera->UpdateFreeView();
@@ -71,9 +63,8 @@ void __fastcall Hooks::PlayerDoFrameHook(Player* PlayerPtr)
         if (!Camera->IsFreeCameraActive() && Camera->NeedPostDeactivationCleanup)
         {
             if (FreeCamMenuRef.Get().ReturnPlayerToOriginalPosition)
-            {
                 rfg::HumanTeleportUnsafe(PlayerPtr, Camera->OriginalCameraPosition, PlayerPtr->Orientation);
-            }
+
             Camera->NeedPostDeactivationCleanup = false;
         }
         if (Camera->IsFirstPersonCameraActive())
@@ -81,9 +72,7 @@ void __fastcall Hooks::PlayerDoFrameHook(Player* PlayerPtr)
             if (Camera->UseThirdPersonForVehicles)
             {
                 if (PlayerPtr->VehicleHandle != 0xFFFFFFFF)
-                {
                     Camera->PauseFirstPersonCamera();
-                }
                 else
                 {
                     Camera->UnpauseFirstPersonCamera();
@@ -93,9 +82,8 @@ void __fastcall Hooks::PlayerDoFrameHook(Player* PlayerPtr)
             else
             {
                 if (Camera->IsFirstPersonCameraPaused())
-                {
                     Camera->UnpauseFirstPersonCamera();
-                }
+
                 Camera->UpdateFirstPersonView();
             }
         }
@@ -106,26 +94,22 @@ void __fastcall Hooks::PlayerDoFrameHook(Player* PlayerPtr)
         }
     }
 
-
-    if (Globals::InfiniteJetpack)
-    {
-        PlayerPtr->JetpackFuelPercent = 1.0f;
-    }
     if (TweaksMenuRef.Get().Invulnerable)
     {
         PlayerPtr->Flags.invulnerable = true;
         PlayerPtr->HitPoints = 2147483647.0f;
     }
-    if (TweaksMenuRef.Get().NeedCustomJumpHeightSet)
-    {
-        PlayerPtr->CodeDrivenJumpHeight = TweaksMenuRef.Get().CustomJumpHeight;
-    }
     if (TweaksMenuRef.Get().LockAlertLevel)
     {
         rfg::GsmSetAlertLevel(TweaksMenuRef.Get().CustomAlertLevel);
     }
+    if (TweaksMenuRef.Get().NeedCustomJumpHeightSet)
+        PlayerPtr->CodeDrivenJumpHeight = TweaksMenuRef.Get().CustomJumpHeight;
+    if (Globals::InfiniteJetpack)
+        PlayerPtr->JetpackFuelPercent = 1.0f;
 
     //Todo: Make some kind of event system/class to avoid needing to do this and having tons of globals laying around
+    //Todo: Alternatively move all features to lua which can use event hooks for many things
     //This is done to avoid problems when a thread spawned by the RSL tries teleporting the player at an unsafe time for doing so.
     if (Globals::PlayerNeedsTeleport)
     {

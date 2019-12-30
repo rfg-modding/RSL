@@ -25,9 +25,7 @@ HRESULT __stdcall Hooks::D3D11_ResizeBuffersHook(IDXGISwapChain* pSwapChain, UIN
         ID3D11Texture2D* BackBuffer;
         Result = Globals::D3D11SwapchainPtr->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<LPVOID*>(&BackBuffer));
         if (Result != S_OK)
-        {
             Logger::LogFatalError("GetBuffer() failed, return value: {}\n", Result);
-        }
 
         D3D11_RENDER_TARGET_VIEW_DESC desc = {};
         memset(&desc, 0, sizeof(desc));
@@ -35,11 +33,9 @@ HRESULT __stdcall Hooks::D3D11_ResizeBuffersHook(IDXGISwapChain* pSwapChain, UIN
         desc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
         Result = Globals::D3D11Device->CreateRenderTargetView(BackBuffer, &desc, &Globals::MainRenderTargetView);
         if (Result != S_OK)
-        {
             Logger::LogFatalError("CreateRenderTargetView() failed, return value: {}\n", Result);
-        }
+
         BackBuffer->Release();
     }
-
     return Result;
 }

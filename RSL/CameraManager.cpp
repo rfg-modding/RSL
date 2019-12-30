@@ -42,45 +42,39 @@ void CameraManager::Initialize()
 
 void CameraManager::MoveFreeCamera(CameraDirection Direction)
 {
-    if (FreeCameraActive)
+    if (!FreeCameraActive)
+        return;
+
+    if (Direction == FORWARD)
     {
-        if (Direction == FORWARD)
-        {
-            *RealX += (*RealDirectionX) * MaxSpeed;
-            *RealY += (*RealDirectionY) * MaxSpeed;
-            *RealZ += (*RealDirectionZ) * MaxSpeed;
-        }
-        else if (Direction == BACKWARD)
-        {
-            *RealX += -1.0f * (*RealDirectionX) * MaxSpeed;
-            *RealY += -1.0f * (*RealDirectionY) * MaxSpeed;
-            *RealZ += -1.0f * (*RealDirectionZ) * MaxSpeed;
-        }
-        else if (Direction == LEFT)
-        {
-            *RealX += -1.0f * (*RealRightX) * MaxSpeed;
-            *RealY += -1.0f * (*RealRightY) * MaxSpeed;
-            *RealZ += -1.0f * (*RealRightZ) * MaxSpeed;
-        }
-        else if (Direction == RIGHT)
-        {
-            *RealX += (*RealRightX) * MaxSpeed;
-            *RealY += (*RealRightY) * MaxSpeed;
-            *RealZ += (*RealRightZ) * MaxSpeed;
-        }
-        else if (Direction == UP)
-        {
-            *RealY += MaxSpeed;
-        }
-        else if (Direction == DOWN)
-        {
-            *RealY -= MaxSpeed;
-        }
-        else
-        {
-            Logger::LogError("Invalid camera direction passed to MoveFreeCamera()\n");
-        }
+        *RealX += (*RealDirectionX) * MaxSpeed;
+        *RealY += (*RealDirectionY) * MaxSpeed;
+        *RealZ += (*RealDirectionZ) * MaxSpeed;
     }
+    else if (Direction == BACKWARD)
+    {
+        *RealX += -1.0f * (*RealDirectionX) * MaxSpeed;
+        *RealY += -1.0f * (*RealDirectionY) * MaxSpeed;
+        *RealZ += -1.0f * (*RealDirectionZ) * MaxSpeed;
+    }
+    else if (Direction == LEFT)
+    {
+        *RealX += -1.0f * (*RealRightX) * MaxSpeed;
+        *RealY += -1.0f * (*RealRightY) * MaxSpeed;
+        *RealZ += -1.0f * (*RealRightZ) * MaxSpeed;
+    }
+    else if (Direction == RIGHT)
+    {
+        *RealX += (*RealRightX) * MaxSpeed;
+        *RealY += (*RealRightY) * MaxSpeed;
+        *RealZ += (*RealRightZ) * MaxSpeed;
+    }
+    else if (Direction == UP)
+        *RealY += MaxSpeed;
+    else if (Direction == DOWN)
+        *RealY -= MaxSpeed;
+    else
+        Logger::LogError("Invalid camera direction passed to MoveFreeCamera()\n");
 }
 
 bool CameraManager::IsFreeCameraActive()
@@ -112,9 +106,7 @@ void CameraManager::DeactivateFreeCamera(bool Shutdown)
 
     FreeCameraActive = false;
     if (!Shutdown) //Don't want the player thrown in the air when they deactivate the script loader.
-    {
         NeedPostDeactivationCleanup = true;
-    }
     if (Globals::PlayerPtr)
     {
         Globals::PlayerPtr->HitPoints = Globals::PlayerPtr->MaxHitPoints;
@@ -125,21 +117,12 @@ void CameraManager::DeactivateFreeCamera(bool Shutdown)
 
 void CameraManager::ToggleFreeCamera()
 {
-    if (FreeCameraActive)
-    {
+    if (FreeCameraActive) //Deactivate if active
         DeactivateFreeCamera(false);
-    }
-    else
-    {
-        if (!FirstPersonCameraActive)
-        {
-            ActivateFreeCamera();
-        }
-        else
-        {
-            Logger::LogError("Failed to activate free camera. First person cam already active.\n");
-        }
-    }
+    else if (FirstPersonCameraActive) //Don't activate if first person camera active
+        Logger::LogError("Failed to activate free camera. First person cam already active.\n");
+    else //If not active and first person cam not active, then activate
+        ActivateFreeCamera();
 }
 
 void CameraManager::UpdateFreeView()
@@ -149,21 +132,12 @@ void CameraManager::UpdateFreeView()
 
 void CameraManager::ToggleFirstPersonCamera()
 {
-    if (FirstPersonCameraActive)
-    {
+    if (FirstPersonCameraActive) //Deactivate if active
         DeactivateFirstPersonCamera();
-    }
-    else
-    {
-        if (!FreeCameraActive)
-        {
-            ActivateFirstPersonCamera();
-        }
-        else
-        {
-            Logger::LogError("Failed to activate first person camera. Free cam already active.\n");
-        }
-    }
+    else if (FreeCameraActive) //Don't activate if free cam already active
+        Logger::LogError("Failed to activate first person camera. Free cam already active.\n");
+    else //If not active, and free cam not active, then activate
+        ActivateFirstPersonCamera();
 }
 
 void CameraManager::ActivateFirstPersonCamera()
@@ -206,9 +180,7 @@ void CameraManager::PauseFirstPersonCamera()
         }
     }
     else
-    {
         Logger::LogWarning("Failed to pause the first person camera because it is not active!\n");
-    }
 }
 
 void CameraManager::UnpauseFirstPersonCamera()
@@ -223,9 +195,7 @@ void CameraManager::UnpauseFirstPersonCamera()
         }
     }
     else
-    {
         Logger::LogWarning("Failed to unpause the first person camera because it is not active!\n");
-    }
 }
 
 bool CameraManager::IsFirstPersonCameraActive()
@@ -241,34 +211,23 @@ void CameraManager::UpdateFirstPersonView()
     }
     vector HeadVector(0.0f);
     matrix HeadMatrix(0.0f);
-
     rfg::human_get_head_pos_orient(Globals::PlayerPtr, HeadVector, HeadMatrix);
+    vector NewPos = HeadVector + FirstPersonCameraOffset;
 
-    vector NewPos = GameData->real_pos;
-
-
-    NewPos = HeadVector + FirstPersonCameraOffset;
     CurrentSpeed = Globals::PlayerPtr->Velocity.Magnitude(); //Note: Not sure what the point of this line is... For broken smooth cam?
     if (UseFirstPersonDirectionOffset)
     {
         vector TempVec = Globals::PlayerPtr->Orientation.fvec;
         NewPos += TempVec.Scale(FirstPersonDirectionOffsetMultiplier);
     }
-
     if (FirstPersonSmoothingEnabled) //Doesn't really seem to help vehicle shakiness much. 
     {
+        vector TempVec = NewPos;
         if (UseMidpointSmoothing)
-        {
-            vector TempVec = NewPos;
             NewPos = LastFirstPersonPosition.Midpoint(TempVec);
-        }
         else
-        {
-            vector TempVec = NewPos;
             NewPos = LastFirstPersonPosition.Lerp(TempVec, LerpParameter);
-        }
     }
-
     if (UseFirstPersonAutoPlayerDirection)
     {
         vector2 CamFvec{ GameData->real_orient.fvec.x, GameData->real_orient.fvec.z };
@@ -277,17 +236,14 @@ void CameraManager::UpdateFirstPersonView()
         float MagProduct = CamFvec.Magnitude() * PlayerFvec.Magnitude();
         float AngleRadians = acos(DotProduct / MagProduct);
         //CamFvec = CamFvec.Rotate(FirstPersonAutoPlayerDirectionAngleOffset);
-
         float Angle2 = atan2((PlayerFvec.x * CamFvec.y) - (PlayerFvec.y * CamFvec.x), (PlayerFvec.x * CamFvec.x) - (PlayerFvec.y * CamFvec.y));
 
         if (abs(Globals::FloatConvertRadiansToDegrees(AngleRadians)) > MinAngleDifferenceForRotation)
         {
             vector YAxis = { 0.0f, 1.0f, 0.0f };
-
             if (Angle2 > 0.0f)
-            {
                 AngleRadians *= -1.0f;
-            }
+
             rfg::matrix_rotate_around_local_vector(&Globals::PlayerPtr->Orientation, nullptr, YAxis, AngleRadians);
         }
     }
