@@ -138,7 +138,7 @@ void PhysicsGui::Draw()
 			if (ImGui::Button("Reset##ContactRestingVelocity"))
                 SolverPtr->m_contactRestingVelocity = 0.200f;
 
-			Util::Gui::LabelAndValue("Delta time: ", std::to_string(SolverPtr->m_deltaTime));
+			Gui::LabelAndValue("Delta time: ", std::to_string(SolverPtr->m_deltaTime));
 			ImGui::SetNextItemWidth(230.0f);
 			ImGui::InputInt("Num steps", &SolverPtr->m_numSteps);
 			ImGui::SameLine();

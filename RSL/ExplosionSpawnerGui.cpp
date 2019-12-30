@@ -35,12 +35,12 @@ void ExplosionSpawnerGui::Draw()
     ImGui::SetNextItemWidth(230.0f);
     ImGui::InputInt("Middle mouse explosions per second limit", &MiddleMouseExplosionsPerSecond);
     ImGui::SameLine();
-    Util::Gui::ShowHelpMarker("Used to prevent lag from 100s of explosions per second since the script loader thread is currently uncapped.");
+    Gui::ShowHelpMarker("Used to prevent lag from 100s of explosions per second since the script loader thread is currently uncapped.");
     if (ImGui::Button("Boom"))
         rfg::ExplosionCreate(&CustomExplosionInfo, Globals::PlayerPtr, Globals::PlayerPtr, &Globals::PlayerPtr->aim_pos, &Globals::PlayerPtr->Orientation, &Globals::PlayerPtr->aim_pos, NULL, false);
 
     ImGui::SameLine();
-    Util::Gui::ShowHelpMarker("Spawns an explosion with the values entered below where the player is aiming. The middle mouse button option is much more convenient.");
+    Gui::ShowHelpMarker("Spawns an explosion with the values entered below where the player is aiming. The middle mouse button option is much more convenient.");
     ImGui::Separator();
     if (ImGui::TreeNode("Spawn settings"))
     {
@@ -55,10 +55,12 @@ void ExplosionSpawnerGui::Draw()
         ImGui::InputText("Name", (char*)&CustomExplosionInfo.m_name, 32);
         ImGui::InputInt("Unique ID", &CustomExplosionInfo.m_unique_id);
         ImGui::SameLine();
-        Util::Gui::ShowHelpMarker("Make sure that you use a unique value for the unique id variable or you might get behavior not matching the variables you've set. I believe that all of the games explosions use the lower unique id values. So if you just use a value larger than 1000 you shouldn't have an issue.");
+        Gui::ShowHelpMarker("Make sure that you use a unique value for the unique id variable or you might get behavior not matching \
+the variables you've set. I believe that all of the games explosions use the lower unique id values. So if you just use a value larger than \
+1000 you shouldn't have an issue.");
         ImGui::InputInt("Name CRC", (int*)&CustomExplosionInfo.m_name_crc_str); //Todo: Need to switch these to use the proper types with ImGui::InputScalar
         ImGui::SameLine();
-        Util::Gui::ShowHelpMarker("You also need to be careful that this value is unique. Currently there's no easy way to check that, but the default value never seems to have issues.");
+        Gui::ShowHelpMarker("You also need to be careful that this value is unique. Currently there's no easy way to check that, but the default value never seems to have issues.");
         ImGui::InputFloat("Radius", &CustomExplosionInfo.m_radius);
         ImGui::InputFloat("Secondary radius", &CustomExplosionInfo.m_secondary_radius);
         ImGui::InputFloat("Knockdown radius", &CustomExplosionInfo.m_knockdown_radius);
@@ -79,7 +81,7 @@ void ExplosionSpawnerGui::Draw()
         ImGui::InputInt("Number of effects", (int*)& CustomExplosionInfo.m_num_effects);
         ImGui::InputInt("Effect 0", (int*)& CustomExplosionInfo.m_effects[0]);
         ImGui::SameLine();
-        Util::Gui::ShowHelpMarker("Try some of the values up in the hundreds. You can try checking the values in EffectsInfo.txt, but they don't seem to match up with these values. I'll try to figure out a better way to choose an explosion effect other than guessing.");
+        Gui::ShowHelpMarker("Try some of the values up in the hundreds. You can try checking the values in EffectsInfo.txt, but they don't seem to match up with these values. I'll try to figure out a better way to choose an explosion effect other than guessing.");
         ImGui::InputInt("Effect 1", (int*)& CustomExplosionInfo.m_effects[1]);
         ImGui::InputInt("Effect 2", (int*)& CustomExplosionInfo.m_effects[2]);
         ImGui::InputInt("Effect 3", (int*)& CustomExplosionInfo.m_effects[3]);
@@ -133,7 +135,7 @@ void ExplosionSpawnerGui::Draw()
             if(Globals::CharArrayToString(Globals::ExplosionInfos[i].m_name, 32) == "edf_power_core")
             {
                 ImGui::SameLine();
-                Util::Gui::ShowHelpMarker("Note that this explosion has no visual effect unless you've entered \
+                Gui::ShowHelpMarker("Note that this explosion has no visual effect unless you've entered \
                     the free fire zone, and is not guaranteed to work outside of it. It still damages the environment, \
                     just does not have a vfx.", "(Bug note)");
             }

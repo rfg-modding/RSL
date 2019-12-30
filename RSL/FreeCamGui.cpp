@@ -45,10 +45,10 @@ void FreeCamGui::Draw()
 
     ImGui::Checkbox("Return player to original position?", &ReturnPlayerToOriginalPosition);
 	ImGui::SameLine();
-	Util::Gui::ShowHelpMarker("If this is on the player will be teleported back to their original position after the free cam is disabled. If it's off then the player will be dropped wherever the free cam deactivates. So be careful.");
+	Gui::ShowHelpMarker("If this is on the player will be teleported back to their original position after the free cam is disabled. If it's off then the player will be dropped wherever the free cam deactivates. So be careful.");
     ImGui::Checkbox("Use wasd movement", &Camera->FreeCamUseWasdMovement);
     ImGui::SameLine();
-    Util::Gui::ShowHelpMarker("If unchecked, uses arrow keys for movement");
+    Gui::ShowHelpMarker("If unchecked, uses arrow keys for movement");
 
     ImGui::SetNextItemWidth(230.0f);
     ImGui::InputFloat("Max speed", &Camera->MaxSpeed, 0.1, 5.0, 3);

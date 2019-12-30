@@ -80,7 +80,7 @@ void GraphicsTweaksGui::Draw()
             ImGui::SetNextItemWidth(300.0f);
             ImGui::InputInt4("Shadow map sizes", Globals::ShadowMapSizes.GetRawPointer());
             ImGui::SameLine();
-            Util::Gui::ShowHelpMarker("The quickest way to get the shadow res to update is to go in the display settings and toggle something like depth of field, apply it, and unpause the game. Then you can change it back if you want.");
+            Gui::ShowHelpMarker("The quickest way to get the shadow res to update is to go in the display settings and toggle something like depth of field, apply it, and unpause the game. Then you can change it back if you want.");
         }
         else
             ImGui::Text("Globals::ShadowMapSizes has not been initialized! Cannot display shadow state.");

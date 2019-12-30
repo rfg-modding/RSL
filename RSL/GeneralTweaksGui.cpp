@@ -138,7 +138,7 @@ void GeneralTweaksGui::Draw()
         *Globals::PlayerMaxMovementSpeedOverride = 0.0f;
 
     ImGui::SameLine();
-    Util::Gui::ShowHelpMarker("If this is set to 0.0, you'll move at the vanilla speed. If you set it to any other value, you'll move at that speed.");
+    Gui::ShowHelpMarker("If this is set to 0.0, you'll move at the vanilla speed. If you set it to any other value, you'll move at that speed.");
     ImGui::SetNextItemWidth(230.0f);
 	ImGui::InputFloat("Player max speed", &Globals::PlayerPtr->MaxSpeed, 1.0f, 5.0f, 3);
 	ImGui::SameLine();
@@ -155,14 +155,14 @@ void GeneralTweaksGui::Draw()
             *Globals::SpeedScale = 1.0f;
 
         ImGui::SameLine();
-        Util::Gui::ShowHelpMarker("1.0 = vanilla, # < 1.0 = slo-mo, # > 1.0 = \"fast-mo\"");
+        Gui::ShowHelpMarker("1.0 = vanilla, # < 1.0 = slo-mo, # > 1.0 = \"fast-mo\"");
     }
 
     ImGui::Checkbox("Unlimited ammo", Globals::UnlimitedAmmo);
     ImGui::Checkbox("Unlimited magazine ammo", Globals::UnlimitedMagazineAmmo);
     ImGui::Checkbox("Unlimited AI thrown weapons", Globals::UnlimitedAiThrownWeapons); 
     ImGui::SameLine();
-    Util::Gui::ShowHelpMarker("Unsure what exactly this does. Added it in case anyone figures it out.");
+    Gui::ShowHelpMarker("Unsure what exactly this does. Added it in case anyone figures it out.");
     ImGui::SetNextItemWidth(230.0f);
     ImGui::InputFloat("Max vehicle speed", Globals::VehicleMaxSpeed);
     ImGui::SameLine();
@@ -172,12 +172,12 @@ void GeneralTweaksGui::Draw()
     ImGui::SetNextItemWidth(230.0f);
     ImGui::InputInt("Charge explosion delay", Globals::ChargeExplosionDelay);
     ImGui::SameLine();
-    Util::Gui::ShowHelpMarker("Delay between each remote charge being detonated, in milliseconds (1000ms = 1s). Default is 250ms.");
+    Gui::ShowHelpMarker("Delay between each remote charge being detonated, in milliseconds (1000ms = 1s). Default is 250ms.");
     ImGui::Checkbox("SSAO Vision", Globals::SsaoVisionEnabled);
     ImGui::SetNextItemWidth(230.0f);
     ImGui::InputInt("Max remote charges placed", Globals::RfgMaxCharges);
     ImGui::SameLine();
-    Util::Gui::ShowHelpMarker("The default value might be lower than your current amount. Just set it to whatever value you want, and it'll override your upgrade level.");
+    Gui::ShowHelpMarker("The default value might be lower than your current amount. Just set it to whatever value you want, and it'll override your upgrade level.");
 
     ImGui::Separator();
     ImGui::SetNextItemWidth(230.0f);
@@ -196,13 +196,13 @@ void GeneralTweaksGui::Draw()
         static uint CurrentTicksMin = 0;
         static uint CurrentTicksMax = std::numeric_limits<uint>::max();
         ImGui::PushItemWidth(230.0f);
-        Util::Gui::LabelAndValue("Year", std::to_string(GameClock->m_year));
-        Util::Gui::LabelAndValue("Month", std::to_string(GameClock->m_month));
-        Util::Gui::LabelAndValue("Day", std::to_string(GameClock->m_day));
-        Util::Gui::LabelAndValue("Hour", std::to_string(GameClock->m_hour));
-        Util::Gui::LabelAndValue("Minutes", std::to_string(GameClock->m_minutes));
-        Util::Gui::LabelAndValue("Seconds", std::to_string(GameClock->m_seconds));
-        Util::Gui::LabelAndValue("Day of the week", std::to_string(GameClock->m_day_of_week));
+        Gui::LabelAndValue("Year", std::to_string(GameClock->m_year));
+        Gui::LabelAndValue("Month", std::to_string(GameClock->m_month));
+        Gui::LabelAndValue("Day", std::to_string(GameClock->m_day));
+        Gui::LabelAndValue("Hour", std::to_string(GameClock->m_hour));
+        Gui::LabelAndValue("Minutes", std::to_string(GameClock->m_minutes));
+        Gui::LabelAndValue("Seconds", std::to_string(GameClock->m_seconds));
+        Gui::LabelAndValue("Day of the week", std::to_string(GameClock->m_day_of_week));
         ImGui::SliderFloat("Time scale", &GameClock->m_time_scale, 0.0f, 1000.0f);
         ImGui::SameLine();
         if(ImGui::Button("Reset##GameClockTimeScale"))
@@ -263,12 +263,12 @@ void GeneralTweaksGui::Draw()
 
     ImGui::Checkbox("Disable debris deletion", &Globals::DisableDebrisDeletion);
     ImGui::SameLine();
-    Util::Gui::ShowHelpMarker("Disables the deleting of debris. Doesn't work 100% of the time. When it does you'll note that at some point, additional debris will stop spawning. This is due to some internal limit of debris being hit (believed to be ~500 pieces of debris). This likely won't be easy to raise. Note that this may have other unintended effects which are currently not known, which is why this is marked as experimental.");
+    Gui::ShowHelpMarker("Disables the deleting of debris. Doesn't work 100% of the time. When it does you'll note that at some point, additional debris will stop spawning. This is due to some internal limit of debris being hit (believed to be ~500 pieces of debris). This likely won't be easy to raise. Note that this may have other unintended effects which are currently not known, which is why this is marked as experimental.");
     ImGui::Checkbox("find_gm override", &Globals::FindGmOverride);
     ImGui::SameLine();
     ImGui::Checkbox("Use override", &Globals::UseFindGmOverride);
     ImGui::SameLine();
-    Util::Gui::ShowHelpMarker("NOTE: DOES NOT DO ANYTHING IF DEBRIS DELETION IS DISABLED. Specify an override to the find_gm value passed to rfgl_find_and_delete_object_mover. The effect of this is unknown, and this has been included in case anyone finds a specific effect of it.");
+    Gui::ShowHelpMarker("NOTE: DOES NOT DO ANYTHING IF DEBRIS DELETION IS DISABLED. Specify an override to the find_gm value passed to rfgl_find_and_delete_object_mover. The effect of this is unknown, and this has been included in case anyone finds a specific effect of it.");
 
 	ImGui::End();
 }

@@ -56,13 +56,19 @@ void Lua::BindApiFunctions(sol::state& LuaStateRef)
         [](Human* Target, vector Position, matrix Orientation)
         {
             if (!Target) throw std::exception("[TeleportHuman]: The target passed to TeleportHuman is nil!");
-            if (Target->ObjectType != OT_HUMAN) throw std::exception(fmt::format("The target passed to TeleportHuman is not a human object! It's a {} object.", Util::RFG::GetObjectTypeString(Target->ObjectType)).c_str());
+            if (Target->ObjectType != OT_HUMAN) 
+                throw std::exception(fmt::format("The target passed to TeleportHuman is not a human object! It's a {} object.", 
+                Rfg::GetObjectTypeString(Target->ObjectType)).c_str());
+
             rfg::HumanTeleportUnsafe(Target, Position, Orientation);
         },
         [](Human* Target, vector Position)
         {
             if (!Target) throw std::exception("[TeleportHuman]: The target passed to TeleportHuman is nil!");
-            if (Target->ObjectType != OT_HUMAN) throw std::exception(fmt::format("The target passed to TeleportHuman is not a human object! It's a {} object.", Util::RFG::GetObjectTypeString(Target->ObjectType)).c_str());
+            if (Target->ObjectType != OT_HUMAN) 
+                throw std::exception(fmt::format("The target passed to TeleportHuman is not a human object! It's a {} object.", 
+                Rfg::GetObjectTypeString(Target->ObjectType)).c_str());
+
             rfg::HumanTeleportUnsafe(Target, Position, Target->Orientation);
         }
     ));
@@ -118,26 +124,26 @@ void Lua::BindApiFunctions(sol::state& LuaStateRef)
     RfgTable.set_function("AddUiMessage", sol::overload(
         [](const char* Message, float DisplayTime, bool UseSecondaryAnim, bool ForceRedisplay)
         {
-            rfg::ui_add_secondary_message(Util::Widen(Message).c_str(), DisplayTime, UseSecondaryAnim, ForceRedisplay);
+            rfg::ui_add_secondary_message(String::Widen(Message).c_str(), DisplayTime, UseSecondaryAnim, ForceRedisplay);
         },
         [](const char* Message, float DisplayTime, bool UseSecondaryAnim)
         {
-            rfg::ui_add_secondary_message(Util::Widen(Message).c_str(), DisplayTime, UseSecondaryAnim, false);
+            rfg::ui_add_secondary_message(String::Widen(Message).c_str(), DisplayTime, UseSecondaryAnim, false);
         },
         [](const char* Message, float DisplayTime)
         {
-            rfg::ui_add_secondary_message(Util::Widen(Message).c_str(), DisplayTime, false, false);
+            rfg::ui_add_secondary_message(String::Widen(Message).c_str(), DisplayTime, false, false);
         },
         [](const char* Message)
         {
-            rfg::ui_add_secondary_message(Util::Widen(Message).c_str(), 3.0f, false, false);
+            rfg::ui_add_secondary_message(String::Widen(Message).c_str(), 3.0f, false, false);
         }
     ));
 
     RfgTable.set_function("AddUserMessage", sol::overload(
         [](std::string Text, float PosX, float PosY, bool Outlined, float Lifespan, hud_user_message_types Type)->hud_message_handle
         {
-            return rfg::ui_add_user_message(Util::Widen(Text).c_str(), Type, PosX, PosY, Outlined, Lifespan);
+            return rfg::ui_add_user_message(String::Widen(Text).c_str(), Type, PosX, PosY, Outlined, Lifespan);
         }
     ));
     RfgTable.set_function("ChangeUserMessage", sol::overload(
@@ -155,14 +161,14 @@ void Lua::BindApiFunctions(sol::state& LuaStateRef)
     RfgTable.set_function("AddMessageBox", sol::overload(
         [](msgbox_type Type, const char* Title, const char* Description)->int
         {
-            if (Util::ContainsChar(Title, { '[', ']' })) { throw std::exception("The game does not allow the use '[' or ']' in message box titles."); }
-            if (Util::ContainsChar(Description, { '[', ']' })) { throw std::exception("The game does not allow the use '[' or ']' in message box descriptions."); }
+            if (String::ContainsChar(Title, { '[', ']' })) { throw std::exception("The game does not allow the use '[' or ']' in message box titles."); }
+            if (String::ContainsChar(Description, { '[', ']' })) { throw std::exception("The game does not allow the use '[' or ']' in message box descriptions."); }
             return rfg::ui_add_msgbox(Type, Title, Description, nullptr, false, false, nullptr, nullptr, false);
         },
         [&](msgbox_type Type, const char* Title, const char* Description, sol::function CallbackFunc)->int
         {
-            if (Util::ContainsChar(Title, { '[', ']' })) { throw std::exception("The game does not allow the use '[' or ']' in message box titles."); }
-            if (Util::ContainsChar(Description, { '[', ']' })) { throw std::exception("The game does not allow the use '[' or ']' in message box descriptions."); }
+            if (String::ContainsChar(Title, { '[', ']' })) { throw std::exception("The game does not allow the use '[' or ']' in message box titles."); }
+            if (String::ContainsChar(Description, { '[', ']' })) { throw std::exception("The game does not allow the use '[' or ']' in message box descriptions."); }
 
             int Handle = rfg::ui_add_msgbox(Type, Title, Description, Lua::RfgMessageBoxCallbackFunction, false, false, nullptr, nullptr, false);
             ScriptManager->GetMessageBoxCallbacks().insert_or_assign(Handle, CallbackFunc);
@@ -170,8 +176,8 @@ void Lua::BindApiFunctions(sol::state& LuaStateRef)
         },
         [&](msgbox_type Type, const char* Title, const char* Description, sol::function CallbackFunc, const char* Button1Override, const char* Button2Override)->int
         {
-            if (Util::ContainsChar(Title, { '[', ']' })) { throw std::exception("The game does not allow the use '[' or ']' in message box titles."); }
-            if (Util::ContainsChar(Description, { '[', ']' })) { throw std::exception("The game does not allow the use '[' or ']' in message box descriptions."); }
+            if (String::ContainsChar(Title, { '[', ']' })) { throw std::exception("The game does not allow the use '[' or ']' in message box titles."); }
+            if (String::ContainsChar(Description, { '[', ']' })) { throw std::exception("The game does not allow the use '[' or ']' in message box descriptions."); }
 
             int Handle = rfg::ui_add_msgbox(Type, Title, Description, Lua::RfgMessageBoxCallbackFunction, false, false, Button1Override, Button2Override, false);
             ScriptManager->GetMessageBoxCallbacks().insert_or_assign(Handle, CallbackFunc);
@@ -371,7 +377,7 @@ void Lua::BindApiFunctions(sol::state& LuaStateRef)
     RfgTable["SpawnSquad"] = [](string& squadName)
     {
         squad_definition* squadDef = rfg::squad_definition_from_name(squadName.c_str());
-        if(!squadDef)
+        if (!squadDef)
         {
             Logger::LogError("\"{}\" not found in squads.xtbl!", squadName);
             return;
@@ -387,7 +393,7 @@ void Lua::BindApiFunctions(sol::state& LuaStateRef)
         spawnParams.orders.orders_type = GFM_ORDERS_TYPE_PATROL;
 
         rfg_mover* localBuilding = rfg::find_local_building(startingPos);
-        if(localBuilding)
+        if (localBuilding)
         {
             Logger::Log("Found local building at {}. Continuing squad creation.\n", localBuilding->Position.GetDataString(false, true));
             startingPos.y += 5;
@@ -426,7 +432,7 @@ void Lua::BindApiFunctions(sol::state& LuaStateRef)
             spawnParams.orders.location_target = startingPos;
 
             object_squad* createdSquadObject = rfg::squad_spawn_parameters_create_squad(&spawnParams, nullptr);
-            if(createdSquadObject)
+            if (createdSquadObject)
             {
                 rfg::object_squad_spawn_members(createdSquadObject, nullptr, true, nullptr);
                 Logger::Log("Created squad and spawned members. Position is {}.\n", createdSquadObject->Position.GetDataString(false, true));
@@ -446,7 +452,7 @@ void Lua::BindApiFunctions(sol::state& LuaStateRef)
             return 0xFFFFFFFF;
 
         squad_definition* squadDef = rfg::squad_definition_from_name(squadDefName.c_str());
-        if(!squadDef)
+        if (!squadDef)
         {
             Logger::Log("Failed to create player squad. Could not find squad definition with name \"{}\".\n", squadDefName);
             return 0xFFFFFFFF;

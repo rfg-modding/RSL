@@ -2,7 +2,7 @@
 #include "ISnippetManager.h"
 #include "SnippetManager.h"
 
-namespace Util::Json
+namespace Json
 {
     void SetFloat4(nlohmann::json& JsonObject, const char* FirstKey, const char* SecondKey, float r, float g, float b, float a)
     {
@@ -31,7 +31,7 @@ namespace Util::Json
     }
 }
 
-namespace Util::Gui
+namespace Gui
 {
     /* Creates a tooltip with the given description and font on the previous ImGui element
      * created. The font argument is optional. If you leave it blank it'll use the current
@@ -95,19 +95,9 @@ namespace Util::Gui
     }
 }
 
-// Wrapper for the windows function "Beep". Runs Beep in it's own thread 
-// to avoid pausing execution in the current thread for the duration of the sound.
-// Still causes a slight pause, likely due to the overhead of starting a new thread, 
-// but it's better than running Beep in the same thread.
-void Util::General::ThreadedBeep(ulong Frequency, ulong Duration)
-{
-    std::thread BeepThread([&] {Beep(Frequency, Duration); });
-    BeepThread.detach();
-}
-
 // Loads a file into a string and returns that string.
 // Got this from here: https://stackoverflow.com/a/2602060
-std::string Util::General::LoadFileToString(const std::string& FullPath)
+std::string File::LoadFileToString(const std::string& FullPath)
 {
     std::ifstream t(FullPath);
     std::string str;
@@ -123,14 +113,14 @@ std::string Util::General::LoadFileToString(const std::string& FullPath)
 }
 
 // Takes a string as input and returns it's fully lowercase equivalent. This function might crash if non ascii characters are passed in.
-std::string Util::General::ToLower(std::string& String)
+std::string String::ToLower(std::string& String)
 {
     std::string Copy = String; //Copy the string since we want to leave the original string intact
     std::transform(Copy.begin(), Copy.end(), Copy.begin(), [](unsigned char c) { return std::tolower(c); });
     return Copy;
 }
 
-std::string Util::RFG::GetObjectTypeString(char ObjectType)
+std::string Rfg::GetObjectTypeString(char ObjectType)
 {
     switch (ObjectType)
     {
@@ -247,7 +237,7 @@ std::string Util::RFG::GetObjectTypeString(char ObjectType)
     }
 }
 
-std::string Util::RFG::GetObjectSubTypeString(char ObjectSubType)
+std::string Rfg::GetObjectSubTypeString(char ObjectSubType)
 {
     switch (ObjectSubType)
     {
@@ -282,12 +272,12 @@ std::string Util::RFG::GetObjectSubTypeString(char ObjectSubType)
     }
 }
 
-ImVec4 Util::NormalizeColor(float red, float green, float blue, float alpha)
+ImVec4 Color::NormalizeColor(float red, float green, float blue, float alpha)
 {
     return ImVec4(red / 255.0f, green / 255.0f, blue / 255.0f, alpha / 255.0f);
 }
 
-std::wstring Util::Widen(const std::string& str)
+std::wstring String::Widen(const std::string& str)
 {
     std::wostringstream wstm;
     const std::ctype<wchar_t>& ctfacet = std::use_facet<std::ctype<wchar_t> >(wstm.getloc());
@@ -298,7 +288,7 @@ std::wstring Util::Widen(const std::string& str)
     return wstm.str();
 }
 
-bool Util::ContainsChar(const std::string& str, std::initializer_list<char> Filter)
+bool String::ContainsChar(const std::string& str, std::initializer_list<char> Filter)
 {
     for(auto& Char : str)
     {
@@ -313,12 +303,12 @@ bool Util::ContainsChar(const std::string& str, std::initializer_list<char> Filt
     return false;
 }
 
-bool Util::CharIsDigit(const char Character)
+bool String::CharIsDigit(const char Character)
 {
     return Character >= '0' && Character <= '9';
 }
 
-void Util::Patching::LockGameMain()
+void Patching::LockGameMain()
 {
     auto SnippetManager = IocContainer->resolve<ISnippetManager>();
     //.text:019D0E80 rfg.exe:$810E80 #810280 <WinMain>
@@ -328,7 +318,7 @@ void Util::Patching::LockGameMain()
     SnippetManager->ReplaceSnippet("RFG WinMain", RFGWinMainAddress, NewOpcodes);
 }
 
-void Util::Patching::UnlockGameMain()
+void Patching::UnlockGameMain()
 {
     auto SnippetManager = IocContainer->resolve<ISnippetManager>();
     SnippetManager->RestoreSnippet("RFG WinMain", true);

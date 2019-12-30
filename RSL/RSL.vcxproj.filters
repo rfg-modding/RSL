@@ -124,9 +124,6 @@
     <Filter Include="Gui\Misc\Teleporter">
       <UniqueIdentifier>{15ed214d-7c49-4d60-84a4-539ccad5436d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Gui\Misc\Theme editor">
-      <UniqueIdentifier>{2cc10f8b-7f7b-4124-85d2-753dae000c16}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Gui\Misc\Script editor">
       <UniqueIdentifier>{4137cd07-ad5f-4425-b06e-e45b8719c670}</UniqueIdentifier>
     </Filter>
@@ -363,9 +360,6 @@
     <ClCompile Include="include\ImGuiColorTextEdit\TextEditor.cpp">
       <Filter>Gui\Misc\Script editor</Filter>
     </ClCompile>
-    <ClCompile Include="ThemeEditorGui.cpp">
-      <Filter>Gui\Misc\Theme editor</Filter>
-    </ClCompile>
     <ClCompile Include="TeleportGui.cpp">
       <Filter>Gui\Misc\Teleporter</Filter>
     </ClCompile>
@@ -406,9 +400,6 @@
       <Filter>Main\Utils</Filter>
     </ClCompile>
     <ClCompile Include="Timer.cpp">
-      <Filter>Main\Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="Util.cpp">
       <Filter>Main\Utils</Filter>
     </ClCompile>
     <ClCompile Include="Includes.cpp">
@@ -508,6 +499,9 @@
       <Filter>Hooks</Filter>
     </ClCompile>
     <ClCompile Include="Path.cpp">
+      <Filter>Main\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Util.cpp">
       <Filter>Main\Utils</Filter>
     </ClCompile>
   </ItemGroup>
@@ -650,9 +644,6 @@
     <ClInclude Include="ImGuiColorTextEdit\TextEditor.h">
       <Filter>Gui\Misc\Script editor</Filter>
     </ClInclude>
-    <ClInclude Include="ThemeEditorGui.h">
-      <Filter>Gui\Misc\Theme editor</Filter>
-    </ClInclude>
     <ClInclude Include="TeleportGui.h">
       <Filter>Gui\Misc\Teleporter</Filter>
     </ClInclude>
@@ -688,9 +679,6 @@
     </ClInclude>
     <ClInclude Include="MenuBarGui.h">
       <Filter>Gui\Misc\Main menu bar</Filter>
-    </ClInclude>
-    <ClInclude Include="Util.h">
-      <Filter>Main\Utils</Filter>
     </ClInclude>
     <ClInclude Include="Timer.h">
       <Filter>Main\Utils</Filter>
@@ -867,6 +855,9 @@
       <Filter>RFGR Structs</Filter>
     </ClInclude>
     <ClInclude Include="Path.h">
+      <Filter>Main\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Util.h">
       <Filter>Main\Utils</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,15 +1,20 @@
 #pragma once
 #include "GraphicsStateWrapper.h"
 
-namespace Util
+namespace String
 {
-    ImVec4 NormalizeColor(float red, float green, float blue, float alpha = 255.0f);
     std::wstring Widen(const std::string& str);
     [[nodiscard]] bool ContainsChar(const std::string& str, std::initializer_list<char> Filter);
     [[nodiscard]] bool CharIsDigit(const char Character);
+    std::string ToLower(std::string& String);
 }
 
-namespace Util::Json
+namespace Color
+{
+    ImVec4 NormalizeColor(float red, float green, float blue, float alpha = 255.0f);
+}
+
+namespace Json
 {
     void SetFloat4(nlohmann::json& Json, const char* FirstKey, const char* SecondKey, float r, float g, float b, float a);
     void SetFloat4(nlohmann::json& Json, const char* FirstKey, const char* SecondKey, ImVec4 Color);
@@ -17,7 +22,7 @@ namespace Util::Json
     ImVec4 GetFloat4(nlohmann::json& Json, const char* FirstKey, const char* SecondKey);
 }
 
-namespace Util::Gui
+namespace Gui
 {
     void TooltipOnPrevious(std::string& Description, ImFont* Font = nullptr);
     void TooltipOnPrevious(const char* Description, ImFont* Font = nullptr);
@@ -25,20 +30,18 @@ namespace Util::Gui
     void LabelAndValue(const std::string& Label, const std::string& Value);
 }
 
-namespace Util::General
+namespace File
 {
-    void ThreadedBeep(ulong Frequency, ulong Duration);
     std::string LoadFileToString(const std::string& FullPath);
-    std::string ToLower(std::string& String);
 }
 
-namespace Util::RFG
+namespace Rfg
 {
     std::string GetObjectTypeString(char ObjectType);
     std::string GetObjectSubTypeString(char ObjectSubType);
 }
 
-namespace Util::Patching
+namespace Patching
 {
     void LockGameMain();
     void UnlockGameMain();

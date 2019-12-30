@@ -6,7 +6,6 @@
 #include "ScriptSelectGui.h"
 #include "FreeCamGui.h"
 #include "WelcomeGui.h"
-#include "ThemeEditorGui.h"
 #include "TeleportGui.h"
 #include "ExplosionSpawnerGui.h"
 #include "GraphicsTweaksGui.h"
@@ -61,7 +60,7 @@ void Bootstrapper::InitRSL()
         if(Globals::Launcher::LauncherRan)
         {
             Logger::Log("Unpatching rfg main.\n");
-            Util::Patching::UnlockGameMain();
+            Patching::UnlockGameMain();
             Logger::Log("Resuming game threads.\n");
             Globals::ResumeAllThreads();
             Logger::Log("Rfg should now resume, unpatched main and resumed it's threads.\n");
@@ -332,7 +331,6 @@ void Bootstrapper::InitOverlays()
     GuiManager->AddChildGui(new TextEditorWrapper("Script editor"));
     GuiManager->AddChildGui(new LogWindow("Logger"));
     GuiManager->AddChildGui(new WelcomeGui("Welcome"), true);
-    GuiManager->AddChildGui(new ThemeEditorGui("Theme editor"));
     GuiManager->AddChildGui(new PhysicsGui("Physics settings"));
     GuiManager->AddChildGui(new TeleportGui("Teleport"));
     GuiManager->AddChildGui(new IntrospectionGui("Object introspection"));

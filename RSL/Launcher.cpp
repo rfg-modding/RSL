@@ -1,12 +1,8 @@
 #include "Launcher.h"
-#include <iostream>
-#include <processthreadsapi.h>
-#include <tlhelp32.h>
-#include <handleapi.h>
 
 void Launcher::Run()
 {
-    Util::Patching::LockGameMain();
+    Patching::LockGameMain();
     Globals::SuspendAllThreadsExceptLauncher(LauncherThreadHandle);
 
     MainLoop();

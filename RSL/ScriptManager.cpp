@@ -253,7 +253,7 @@ void ScriptManager::RegisterEvent(std::string EventTypeName, const sol::function
 void ScriptManager::RegisterEvent(std::string EventTypeName, const sol::function& EventFunction, const std::string& EventName)
 {
 #if LUA_ENABLED
-    const std::string TypeNameLower = Util::General::ToLower(EventTypeName); //Don't want case to matter for event names
+    const std::string TypeNameLower = String::ToLower(EventTypeName); //Don't want case to matter for event names
     for (auto& Event : Events)
     {
         if (TypeNameLower == Event.Name)
@@ -314,7 +314,7 @@ void ScriptManager::RunStartupScripts()
     {
         for(auto& Script : Folder.Scripts)
         {
-            if(Util::General::ToLower(Script.Name) == "main.lua")
+            if(String::ToLower(Script.Name) == "main.lua")
             {
                 if (!RunScript(Script.FullPath))
                     failedCount++;
@@ -334,7 +334,7 @@ bool ScriptManager::RunScript(const std::string& FullPath)
         return false;
 
     std::string ScriptName = std::filesystem::path(FullPath).filename().string();
-    std::string Buffer = Util::General::LoadFileToString(FullPath);
+    std::string Buffer = File::LoadFileToString(FullPath);
     auto Result = RunScript(Buffer, ScriptName);
     return !Result.Failed;
 #else
@@ -348,7 +348,7 @@ bool ScriptManager::RunScript(const size_t Index)
     std::lock_guard<std::recursive_mutex> Lock(Mutex);
 
     auto& Script = SubFolders[Index];
-    std::string Buffer = Util::General::LoadFileToString(Script.FullPath);
+    std::string Buffer = File::LoadFileToString(Script.FullPath);
     auto Result = RunScript(Buffer, Script.Name);
     return !Result.Failed;
 #else
@@ -429,7 +429,7 @@ std::optional<uint> ScriptManager::GetLineFromErrorString(const std::string& Err
 
             if (CurrentChar == ':')
             {
-                if(Util::CharIsDigit(NextChar))
+                if(String::CharIsDigit(NextChar))
                 {
                     int NumberStartIndex = i + 1;
                     int Index = i;
@@ -438,7 +438,7 @@ std::optional<uint> ScriptManager::GetLineFromErrorString(const std::string& Err
                         Index++;
                         CurrentChar = ErrorString[Index];
                     } 
-                    while (Util::CharIsDigit(CurrentChar) && i < ErrorString.length());
+                    while (String::CharIsDigit(CurrentChar) && i < ErrorString.length());
 
                     return std::stoi(ErrorString.substr(NumberStartIndex, Index - NumberStartIndex));
                 }

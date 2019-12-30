@@ -55,7 +55,7 @@ void TeleportGui::DrawMenuHeader()
     if (ImGui::Button("Teleport##PPT"))
         rfg::HumanTeleportUnsafe(Globals::PlayerPtr, PlayerPositionTarget, Globals::PlayerPtr->Orientation);
 
-    Util::Gui::TooltipOnPrevious("This will teleport the player to the value's you've typed, even if they are out of bounds. When setting TP points for later, try to set the y value a bit higher. If the game doesn't load quick enough your player will fall through the map. Usually the game will pull them back up, but sometimes it fails.");
+    Gui::TooltipOnPrevious("This will teleport the player to the value's you've typed, even if they are out of bounds. When setting TP points for later, try to set the y value a bit higher. If the game doesn't load quick enough your player will fall through the map. Usually the game will pull them back up, but sometimes it fails.");
     ImGui::SameLine();
     if (ImGui::Button("Save as new##PPT"))
     {
@@ -89,7 +89,7 @@ void TeleportGui::DrawLocationList()
 					    Globals::PlayerPtr->Orientation);
             }
 
-            Util::Gui::TooltipOnPrevious(fmt::format("{} Position: ({}, {}, {})",
+            Gui::TooltipOnPrevious(fmt::format("{} Position: ({}, {}, {})",
                 location["TooltipDescription"].get<std::string>(),
                 Globals::to_string_precise(location["Position"][0].get<float>()),
                 Globals::to_string_precise(location["Position"][1].get<float>()),
@@ -139,7 +139,7 @@ void TeleportGui::DrawLocationList()
         Logger::LogFatalError("Unknown exception while drawing teleport menu!\n");
     }
 
-    Util::Gui::TooltipOnPrevious("Manual and preset teleport controls for the player. Works in vehicles.");
+    Gui::TooltipOnPrevious("Manual and preset teleport controls for the player. Works in vehicles.");
 }
 
 void TeleportGui::DrawSavePopup()

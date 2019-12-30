@@ -268,9 +268,9 @@ void IntrospectionGui::DrawPlayerIntrospectionGui(const char* Title)
     ImGui::Text("SubtypeIndex:"); ImGui::SameLine();
     ImGui::TextColored(Globals::SecondaryTextColor, std::to_string(TargetObject->SubtypeIndex).c_str());
     ImGui::Text("ObjectType:"); ImGui::SameLine();
-    ImGui::TextColored(Globals::SecondaryTextColor, std::string(std::to_string(TargetObject->ObjectType) + " (" + Util::RFG::GetObjectTypeString(TargetObject->ObjectType) + ")").c_str());
+    ImGui::TextColored(Globals::SecondaryTextColor, std::string(std::to_string(TargetObject->ObjectType) + " (" + Rfg::GetObjectTypeString(TargetObject->ObjectType) + ")").c_str());
     ImGui::Text("Subtype:"); ImGui::SameLine();
-    ImGui::TextColored(Globals::SecondaryTextColor, std::string(std::to_string(TargetObject->SubType) + " (" + Util::RFG::GetObjectSubTypeString(TargetObject->SubType) + ")").c_str());
+    ImGui::TextColored(Globals::SecondaryTextColor, std::string(std::to_string(TargetObject->SubType) + " (" + Rfg::GetObjectSubTypeString(TargetObject->SubType) + ")").c_str());
     ImGui::Text("LastKnownBMin:"); ImGui::SameLine();
     ImGui::TextColored(Globals::SecondaryTextColor, TargetObject->LastKnownBMin.GetDataString(false, false).c_str());
     ImGui::Text("LastKnownBMax:"); ImGui::SameLine();

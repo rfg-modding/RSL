@@ -33,7 +33,6 @@ void MenuBarGui::Draw()
     static auto ScriptEditorRef = GuiManager->GetGuiReference<BaseGui>("Script editor").value();
     static auto LoggerRef = GuiManager->GetGuiReference<BaseGui>("Logger").value();
     static auto WelcomeRef = GuiManager->GetGuiReference<BaseGui>("Welcome").value();
-    static auto ThemeEditorRef = GuiManager->GetGuiReference<BaseGui>("Theme editor").value();
     static auto PhysicsSettingsRef = GuiManager->GetGuiReference<BaseGui>("Physics settings").value();
     static auto TeleportGuiRef = GuiManager->GetGuiReference<BaseGui>("Teleport").value();
     static auto IntrospectionGuiRef = GuiManager->GetGuiReference<BaseGui>("Object introspection").value();
@@ -46,26 +45,26 @@ void MenuBarGui::Draw()
 	{
 		if (ImGui::BeginMenu("System"))
 		{
-            static ImVec4 DeactivateScriptLoaderButtonColor = Util::NormalizeColor(204.0f, 0.0f, 0.0f);
+            static ImVec4 DeactivateScriptLoaderButtonColor = Color::NormalizeColor(204.0f, 0.0f, 0.0f);
 			ImGui::PushStyleColor(ImGuiCol_Text, DeactivateScriptLoaderButtonColor); //Push red color for deactivation button
 			if (ImGui::MenuItem(std::string(std::string(ICON_FA_POWER_OFF) + u8" Deactivate script loader").c_str(), "Hold F3"))
                 ShowDeactivationConfirmationPopup = true;
 
 		    ImGui::PopStyleColor(); //Pop deactivation button color
-            static ImVec4 ResetLuaStateButtonColor = Util::NormalizeColor(0.0f, 122.0f, 204.0f); //Light blue color
+            static ImVec4 ResetLuaStateButtonColor = Color::NormalizeColor(0.0f, 122.0f, 204.0f); //Light blue color
             ImGui::PushStyleColor(ImGuiCol_Text, ResetLuaStateButtonColor);
             if(ImGui::MenuItem(std::string(std::string(ICON_FA_SYNC) + u8" Reset core lua state").c_str()))
                 ScriptManager->Reset();
 
 		    ImGui::PopStyleColor(); //Pop reset button color
-            static ImVec4 LockoutButtonColor = Util::NormalizeColor(204.0f, 119.0f, 0.0f); //Orange color
+            static ImVec4 LockoutButtonColor = Color::NormalizeColor(204.0f, 119.0f, 0.0f); //Orange color
             ImGui::PushStyleColor(ImGuiCol_Text, LockoutButtonColor); 
             if (ImGui::MenuItem(std::string(std::string(ICON_FA_LOCK) + u8" Activate lockout mode").c_str()))
                 ShowLockoutModeConfirmationPopup = true;
 
 		    ImGui::PopStyleColor();
             ImGui::SameLine();
-            Util::Gui::ShowHelpMarker("Disables the overlay and all keybinds until the game is restarted.");
+            Gui::ShowHelpMarker("Disables the overlay and all keybinds until the game is restarted.");
 			ImGui::EndMenu();
 		}
 		if (ImGui::BeginMenu("Tweaks"))
@@ -83,7 +82,6 @@ void MenuBarGui::Draw()
             if (ImGui::MenuItem(std::string(std::string(ICON_FA_BOMB) + u8" Explosion spawner").c_str(), nullptr, &ExplosionSpawnerGuiRef.Get().Visible)) {}
             if (ImGui::MenuItem(std::string(std::string(ICON_FA_SEARCH) + u8" Object introspection").c_str(), nullptr, &IntrospectionGuiRef.Get().Visible)) {}
             if (ImGui::MenuItem(std::string(std::string(ICON_FA_LIST) + u8" Logger").c_str(), nullptr, &LoggerRef.Get().Visible)) {}
-            if (ImGui::MenuItem(std::string(std::string(ICON_FA_PALETTE) + u8" Theme editor").c_str(), nullptr, &ThemeEditorRef.Get().Visible)) {}
             ImGui::EndMenu();
         }
         if (ImGui::BeginMenu("Scripting"))
@@ -100,7 +98,7 @@ void MenuBarGui::Draw()
                 Globals::LogGameMenuInfo();
 
             ImGui::SameLine();
-            Util::Gui::ShowHelpMarker("Logs information about the currently loaded game menus. Does not have much use currently. Mainly a debug feature I decided to leave in. Check the logger window or the master log for the output.");
+            Gui::ShowHelpMarker("Logs information about the currently loaded game menus. Does not have much use currently. Mainly a debug feature I decided to leave in. Check the logger window or the master log for the output.");
             ImGui::EndMenu();
         }
 		if (ImGui::BeginMenu("Help"))

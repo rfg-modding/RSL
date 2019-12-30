@@ -4,7 +4,7 @@
 class ScriptEvent
 {
 public:
-    ScriptEvent(std::string _Name) : Name(Util::General::ToLower(_Name)) {}
+    ScriptEvent(std::string _Name) : Name(String::ToLower(_Name)) {}
     ScriptEvent() = default;
     ~ScriptEvent() = default;
 
@@ -22,17 +22,15 @@ public:
     void Update()
     {
         if (MarkedForReset())
-        {
             Reset();
-        }
 
         //Remove hooks that were marked for deletion. Can't delete immediately since it might not be thread safe. Do it this way for safety
         Hooks.erase(std::remove_if(Hooks.begin(), Hooks.end(),
-            [](ScriptEventHook& Hook)
-            {
-                return Hook.DeleteOnNextUpdate;
-            }),
-            Hooks.end());
+        [](ScriptEventHook& Hook)
+        {
+            return Hook.DeleteOnNextUpdate;
+        }),
+        Hooks.end());
     }
 
     std::string Name;

@@ -4,7 +4,6 @@
 #include "IGuiManager.h"
 #include "LuaGui.h"
 
-
 void Lua::BindImVec2(sol::state& LuaStateRef)
 {
 #if LUA_ENABLED
@@ -868,16 +867,16 @@ void Lua::BindGuiFunctions(sol::state& LuaStateRef)
         if (!Globals::FontNormal)
             return;
 
-        Util::Gui::TooltipOnPrevious(tooltip, Globals::FontNormal);
+        Gui::TooltipOnPrevious(tooltip, Globals::FontNormal);
     };
     GuiTable["ShowHelpMarker"] = sol::overload(
         [](std::string& Description)
         {
-            Util::Gui::ShowHelpMarker(Description.c_str());
+            Gui::ShowHelpMarker(Description.c_str());
         },
         [](std::string& Description, std::string& Label)
         {
-            Util::Gui::ShowHelpMarker(Description.c_str(), Label.c_str());
+            Gui::ShowHelpMarker(Description.c_str(), Label.c_str());
         }
     );
     GuiTable["BeginTooltip"] = ImGui::BeginTooltip;
@@ -1103,7 +1102,7 @@ void Lua::BindGuiFunctions(sol::state& LuaStateRef)
         }
     );
 
-    GuiTable["LabelAndValue"] = Util::Gui::LabelAndValue;
+    GuiTable["LabelAndValue"] = Gui::LabelAndValue;
 
 
     GuiTable["MakeGui"] = [](std::string& GuiName, const sol::function& DrawFunc)

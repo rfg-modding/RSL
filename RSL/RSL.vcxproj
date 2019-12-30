@@ -287,7 +287,6 @@ echo #define RSL_BUILD_DATE %buildTime:~0,8% &gt;&gt; $(ProjectDir)/BuildDate.h<
     <ClCompile Include="ScriptSelectGui.cpp" />
     <ClCompile Include="SnippetManager.cpp" />
     <ClCompile Include="TeleportGui.cpp" />
-    <ClCompile Include="ThemeEditorGui.cpp" />
     <ClCompile Include="Util.cpp" />
     <ClCompile Include="WndProc.cpp" />
     <ClCompile Include="WorldLua.cpp" />
@@ -411,7 +410,6 @@ echo #define RSL_BUILD_DATE %buildTime:~0,8% &gt;&gt; $(ProjectDir)/BuildDate.h<
     <ClInclude Include="OverlayConsole.h" />
     <ClInclude Include="ScriptSelectGui.h" />
     <ClInclude Include="TeleportGui.h" />
-    <ClInclude Include="ThemeEditorGui.h" />
     <ClInclude Include="Util.h" />
     <ClInclude Include="RFGR_Types.h" />
     <ClInclude Include="RFGR_Types_Player.h" />
