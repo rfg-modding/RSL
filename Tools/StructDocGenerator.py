@@ -141,7 +141,7 @@ with open("./" + Struct.Name + ".rst", 'w') as Out:
     # Write out variables. Currently doesn't detect functions separately
     for Member in Struct.Members:
         Out.write(f"**{Member.Name}** (`{Member.Type}`_)\n")
-        Out.write(f"    Unknown value.\n\n") # The default description for unknown stuff. Can be left blank or filled in.
+        Out.write(f"    Needs description.\n\n") # The default description for unknown stuff. Can be left blank or filled in.
     
     # Write out links at the bottom for type pages. Assumes page has same name as type
     for Type in Struct.Types:

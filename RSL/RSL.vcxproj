@@ -192,6 +192,7 @@ echo #define RSL_BUILD_DATE %buildTime:~0,8% &gt;&gt; $(ProjectDir)/BuildDate.h<
     <ClCompile Include="cf_open.cpp" />
     <ClCompile Include="D3D11Present.cpp" />
     <ClCompile Include="D3D11_ResizeBuffers.cpp" />
+    <ClCompile Include="DofStateBlockLua.cpp" />
     <ClCompile Include="EventViewerGui.cpp" />
     <ClCompile Include="ExplosionCreate.cpp" />
     <ClCompile Include="ExplosionInfoLua.cpp" />
@@ -243,6 +244,7 @@ echo #define RSL_BUILD_DATE %buildTime:~0,8% &gt;&gt; $(ProjectDir)/BuildDate.h<
     <ClCompile Include="KeenGraphicsResizeRenderSwapchain.cpp" />
     <ClCompile Include="keen_ImmediateRenderer_beginRenderPass_hook.cpp" />
     <ClCompile Include="Launcher.cpp" />
+    <ClCompile Include="LightingStateBlock.cpp" />
     <ClCompile Include="Logger.cpp" />
     <ClCompile Include="LogWindow.cpp" />
     <ClCompile Include="LuaFunctions.cpp" />
@@ -251,6 +253,7 @@ echo #define RSL_BUILD_DATE %buildTime:~0,8% &gt;&gt; $(ProjectDir)/BuildDate.h<
     <ClCompile Include="Matrix43Lua.cpp" />
     <ClCompile Include="MatrixLua.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="MiscStateBlockLua.cpp" />
     <ClCompile Include="ObjectFlagsLua.cpp" />
     <ClCompile Include="ObjectLua.cpp" />
     <ClCompile Include="ObjectRenderDistanceLua.cpp" />
@@ -265,7 +268,11 @@ echo #define RSL_BUILD_DATE %buildTime:~0,8% &gt;&gt; $(ProjectDir)/BuildDate.h<
     <ClCompile Include="rfgl_hooks.cpp" />
     <ClCompile Include="rfg_init_stage_2.cpp" />
     <ClCompile Include="RlCamera_RenderBegin.cpp" />
+    <ClCompile Include="ShadowStateBlockLua.cpp" />
+    <ClCompile Include="SsaoStateBlockLua.cpp" />
     <ClCompile Include="StreamGrid_DoFrame.cpp" />
+    <ClCompile Include="SunShaftsStateBlockLua.cpp" />
+    <ClCompile Include="TerrainStateBlockLua.cpp" />
     <ClCompile Include="TextEditorWrapper.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="TimerLua.cpp" />
@@ -303,12 +310,14 @@ echo #define RSL_BUILD_DATE %buildTime:~0,8% &gt;&gt; $(ProjectDir)/BuildDate.h<
     <ClInclude Include="BuildDate.h" />
     <ClInclude Include="CameraDirection.h" />
     <ClInclude Include="CameraManager.h" />
+    <ClInclude Include="DofStateBlock.h" />
     <ClInclude Include="EventViewerGui.h" />
     <ClInclude Include="ExplosionInfoLua.h" />
     <ClInclude Include="ExplosionSpawnerGui.h" />
     <ClInclude Include="FixedArrayWrapper.h" />
     <ClInclude Include="FlyerLua.h" />
     <ClInclude Include="GraphicsFunctions.h" />
+    <ClInclude Include="GraphicsStatesLua.h" />
     <ClInclude Include="GraphicsStateWrapper.h" />
     <ClInclude Include="GraphicsTweaksGui.h" />
     <ClInclude Include="GuiConstants.h" />
@@ -316,7 +325,7 @@ echo #define RSL_BUILD_DATE %buildTime:~0,8% &gt;&gt; $(ProjectDir)/BuildDate.h<
     <ClInclude Include="GuiLua.h" />
     <ClInclude Include="GuiManager.h" />
     <ClInclude Include="GuiReference.h" />
-    <ClInclude Include="HdrStateBlockLua.h" />
+    <ClInclude Include="HdrStateBlock.h" />
     <ClInclude Include="HkpRigidBodyLua.h" />
     <ClInclude Include="CharacterInstanceLua.h" />
     <ClInclude Include="ContactNodeLua.h" />
@@ -362,7 +371,9 @@ echo #define RSL_BUILD_DATE %buildTime:~0,8% &gt;&gt; $(ProjectDir)/BuildDate.h<
     <ClInclude Include="IScriptManager.h" />
     <ClInclude Include="ISnippetManager.h" />
     <ClInclude Include="Launcher.h" />
+    <ClInclude Include="LightingStateBlock.h" />
     <ClInclude Include="LuaGui.h" />
+    <ClInclude Include="MiscStateBlock.h" />
     <ClInclude Include="Path.h" />
     <ClInclude Include="RFGR_Types_Cfile.h" />
     <ClInclude Include="RFGR_Types_EventData.h" />
@@ -377,6 +388,10 @@ echo #define RSL_BUILD_DATE %buildTime:~0,8% &gt;&gt; $(ProjectDir)/BuildDate.h<
     <ClInclude Include="ScriptEventHook.h" />
     <ClInclude Include="ScriptFolder.h" />
     <ClInclude Include="ScriptResult.h" />
+    <ClInclude Include="ShadowStateBlock.h" />
+    <ClInclude Include="SsaoStateBlock.h" />
+    <ClInclude Include="SunShaftsStateBlock.h" />
+    <ClInclude Include="TerrainStateBlock.h" />
     <ClInclude Include="TextEditorWrapper.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="TimerLua.h" />

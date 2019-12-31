@@ -1,4 +1,4 @@
-#include "HdrStateBlockLua.h"
+#include "GraphicsStatesLua.h"
 #include "Globals.h"
 #include "GraphicsStateWrapper.h"
 

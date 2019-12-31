@@ -31,7 +31,7 @@
 #include "GuiLua.h"
 #include "GuiConstants.h"
 #include "GraphicsFunctions.h"
-#include "HdrStateBlockLua.h"
+#include "GraphicsStatesLua.h"
 
 ScriptManager::~ScriptManager()
 {
@@ -204,6 +204,13 @@ void ScriptManager::SetupLua()
     //Bind graphics types
     Lua::BindGraphicsFunctions(LuaStateRef);
     Lua::BindHdrStateBlock(LuaStateRef);
+    Lua::BindShadowStateBlock(LuaStateRef);
+    Lua::BindSsaoStateBlock(LuaStateRef);
+    Lua::BindTerrainStateBlock(LuaStateRef);
+    Lua::BindSunShaftsStateBlock(LuaStateRef);
+    Lua::BindLightingStateBlock(LuaStateRef);
+    Lua::BindDofStateBlock(LuaStateRef);
+    Lua::BindMiscStateBlock(LuaStateRef);
 
 	#pragma warning(pop) 
 
@@ -234,7 +241,16 @@ void ScriptManager::UpdateRfgPointers()
     RfgTable["WeaponInfos"] = Globals::WeaponInfos;
     RfgTable["PlayerMaxMovementSpeedOverride"] = Globals::PlayerMaxMovementSpeedOverride;
     RfgTable["VehicleInfos"] = Globals::VehicleInfos;
+
+    //Graphics state
     RfgTable["Hdr"] = Globals::GraphicsState.HdrState;
+    RfgTable["Shadows"] = Globals::GraphicsState.ShadowState;
+    RfgTable["Ssao"] = Globals::GraphicsState.SsaoState;
+    RfgTable["Terrain"] = Globals::GraphicsState.TerrainState;
+    RfgTable["SunShafts"] = Globals::GraphicsState.SunShaftsState;
+    RfgTable["Lighting"] = Globals::GraphicsState.LightingState;
+    RfgTable["Dof"] = Globals::GraphicsState.DofState;
+    RfgTable["Misc"] = Globals::GraphicsState.MiscState;
 
     LuaStateRef["Player"] = Globals::PlayerPtr;
 	LuaStateRef["World"] = Globals::RfgWorldPtr;

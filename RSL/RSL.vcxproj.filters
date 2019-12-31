@@ -178,6 +178,12 @@
     <Filter Include="Lua Binding\Usertypes\Graphics">
       <UniqueIdentifier>{e822013d-2d50-4fe0-87a5-62ec4d4708d3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Main\Types">
+      <UniqueIdentifier>{4cf993ec-1c87-4346-9e3c-afcf13d1105a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Main\Types\Graphics">
+      <UniqueIdentifier>{1ed5aa6f-a32d-43cb-9ac1-402e3c168234}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="include\fmt\format.cc">
@@ -396,9 +402,6 @@
     <ClCompile Include="MenuBarGui.cpp">
       <Filter>Gui\Misc\Main menu bar</Filter>
     </ClCompile>
-    <ClCompile Include="GraphicsStateWrapper.cpp">
-      <Filter>Main\Utils</Filter>
-    </ClCompile>
     <ClCompile Include="Timer.cpp">
       <Filter>Main\Utils</Filter>
     </ClCompile>
@@ -503,6 +506,30 @@
     </ClCompile>
     <ClCompile Include="Util.cpp">
       <Filter>Main\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="GraphicsStateWrapper.cpp">
+      <Filter>Main\Types\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="SsaoStateBlockLua.cpp">
+      <Filter>Lua Binding\Usertypes\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="TerrainStateBlockLua.cpp">
+      <Filter>Lua Binding\Usertypes\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="SunShaftsStateBlockLua.cpp">
+      <Filter>Lua Binding\Usertypes\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="LightingStateBlock.cpp">
+      <Filter>Lua Binding\Usertypes\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="DofStateBlockLua.cpp">
+      <Filter>Lua Binding\Usertypes\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="MiscStateBlockLua.cpp">
+      <Filter>Lua Binding\Usertypes\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="ShadowStateBlockLua.cpp">
+      <Filter>Lua Binding\Usertypes\Graphics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -686,9 +713,6 @@
     <ClInclude Include="ItsyBitsy.h">
       <Filter>Main\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="GraphicsStateWrapper.h">
-      <Filter>Main\Utils</Filter>
-    </ClInclude>
     <ClInclude Include="FixedArrayWrapper.h">
       <Filter>Main\Utils</Filter>
     </ClInclude>
@@ -842,9 +866,6 @@
     <ClInclude Include="GuiConstants.h">
       <Filter>Lua Binding\Usertypes\Gui</Filter>
     </ClInclude>
-    <ClInclude Include="HdrStateBlockLua.h">
-      <Filter>Lua Binding\Usertypes\Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="GraphicsFunctions.h">
       <Filter>Lua Binding\Functions</Filter>
     </ClInclude>
@@ -859,6 +880,36 @@
     </ClInclude>
     <ClInclude Include="Util.h">
       <Filter>Main\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="GraphicsStateWrapper.h">
+      <Filter>Main\Types\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="HdrStateBlock.h">
+      <Filter>Main\Types\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="ShadowStateBlock.h">
+      <Filter>Main\Types\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="SsaoStateBlock.h">
+      <Filter>Main\Types\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="TerrainStateBlock.h">
+      <Filter>Main\Types\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="DofStateBlock.h">
+      <Filter>Main\Types\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="SunShaftsStateBlock.h">
+      <Filter>Main\Types\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="LightingStateBlock.h">
+      <Filter>Main\Types\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="MiscStateBlock.h">
+      <Filter>Main\Types\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="GraphicsStatesLua.h">
+      <Filter>Lua Binding\Usertypes\Graphics</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
