@@ -24,7 +24,8 @@ void IntrospectionGui::DrawPlayerIntrospectionGui(const char* Title)
 	ImGui::Separator();
     
     ImGui::SetNextItemWidth(300.0f);
-    ImGui::TextWrapped("Aim at an object and press numpad 4 to view it's info in this menu. Alternatively, search for an object using one of the following criteria. You can only search by one criteria at a time.");
+    ImGui::TextWrapped("Aim at an object and press numpad 4 to view it's info in this menu. Alternatively, \
+search for an object using one of the following criteria. You can only search by one criteria at a time.");
     ImGui::Separator();
 
     static std::string NameSearchBuffer;
@@ -57,12 +58,11 @@ void IntrospectionGui::DrawPlayerIntrospectionGui(const char* Title)
         if(Globals::RfgWorldPtr && IndexSearchBuffer < Globals::RfgWorldPtr->all_objects.Size())
             SavedTargetObjectHandle = Globals::RfgWorldPtr->all_objects[IndexSearchBuffer]->Handle;
     }
-    ImGui::Separator();
 
+    ImGui::Separator();
     ImGui::Text("Saved target object handle:");
     ImGui::SameLine();
     ImGui::Text(std::to_string(SavedTargetObjectHandle).c_str());
-
     if(!Globals::RfgWorldPtr)
     {
         ImGui::SetNextItemWidth(300.0f);
@@ -80,43 +80,30 @@ void IntrospectionGui::DrawPlayerIntrospectionGui(const char* Title)
         return;
     }
 
-    ImGui::Text("Name:"); ImGui::SameLine();
-    ImGui::TextColored(Globals::SecondaryTextColor, rfg::WorldGetObjectName(Globals::RfgWorldPtr, NULL, TargetObject));
-    ImGui::Text("Position:"); ImGui::SameLine();
-    ImGui::TextColored(Globals::SecondaryTextColor, TargetObject->Position.GetDataString(false, false).c_str());
-
+    Gui::LabelAndValue("Name:", rfg::WorldGetObjectName(Globals::RfgWorldPtr, nullptr, TargetObject));
+    Gui::LabelAndValue("Position:", TargetObject->Position.GetDataString(false, false));
     if (ImGui::TreeNode("Orientation matrix"))
     {
-        ImGui::Text("Right vector:"); ImGui::SameLine(); 
-        ImGui::TextColored(Globals::SecondaryTextColor, TargetObject->Orientation.rvec.GetDataString(false, false).c_str());
-        ImGui::Text("Up vector:"); ImGui::SameLine();
-        ImGui::TextColored(Globals::SecondaryTextColor, TargetObject->Orientation.uvec.GetDataString(false, false).c_str());
-        ImGui::Text("Forward vector:"); ImGui::SameLine();
-        ImGui::TextColored(Globals::SecondaryTextColor, TargetObject->Orientation.fvec.GetDataString(false, false).c_str());
-
+        Gui::LabelAndValue("Right vector:", TargetObject->Orientation.rvec.GetDataString(false, false));
+        Gui::LabelAndValue("Up vector:", TargetObject->Orientation.uvec.GetDataString(false, false));
+        Gui::LabelAndValue("Forward vector:", TargetObject->Orientation.fvec.GetDataString(false, false));
         ImGui::TreePop();
     }
 
-    ImGui::Text("ChildPtr address:"); ImGui::SameLine();
-    ImGui::TextColored(Globals::SecondaryTextColor, TargetObject->ChildPtr ? std::to_string((DWORD)TargetObject->ChildPtr).c_str() : "nullptr");
-    ImGui::Text("ChildNext address:"); ImGui::SameLine();
-    ImGui::TextColored(Globals::SecondaryTextColor, TargetObject->ChildNext ? std::to_string((DWORD)TargetObject->ChildNext).c_str() : "nullptr");
-    ImGui::Text("ChildPrevious address:"); ImGui::SameLine();
-    ImGui::TextColored(Globals::SecondaryTextColor, TargetObject->ChildPrevious ? std::to_string((DWORD)TargetObject->ChildPrevious).c_str() : "nullptr");
+    Gui::LabelAndValue("ChildPtr*", TargetObject->ChildPtr ? std::to_string((DWORD)TargetObject->ChildPtr) : "nullptr");
+    Gui::LabelAndValue("ChildNext*", TargetObject->ChildNext ? std::to_string((DWORD)TargetObject->ChildNext) : "nullptr");
+    Gui::LabelAndValue("ChildPrevious*", TargetObject->ChildPrevious ? std::to_string((DWORD)TargetObject->ChildPrevious) : "nullptr");
     //ChildConstraintPtr
     //HostConstraintPtr
-
     const std::string AttachInfoStatus = TargetObject->AttachInfo ? " (Valid)" : " (nullptr)";
-    if (ImGui::TreeNode(std::string(std::string("AttachInfo") + AttachInfoStatus).c_str()))
+    if (ImGui::TreeNode(fmt::format("AttachInfo{}", AttachInfoStatus).c_str()))
     {
         if (TargetObject->AttachInfo != nullptr)
         {
-            ImGui::Text("Parent handle:"); ImGui::SameLine();
-            ImGui::TextColored(Globals::SecondaryTextColor, std::to_string(TargetObject->AttachInfo->parent_handle).c_str());
-            ImGui::Text("Parent prop point:"); ImGui::SameLine();
-            ImGui::TextColored(Globals::SecondaryTextColor, std::to_string(TargetObject->AttachInfo->parent_prop_point).c_str());
-            ImGui::Text("Child prop point:"); ImGui::SameLine();
-            ImGui::TextColored(Globals::SecondaryTextColor, std::to_string(TargetObject->AttachInfo->child_prop_point).c_str());
+            Gui::LabelAndValue("Parent handle", std::to_string(TargetObject->AttachInfo->parent_handle));
+            Gui::LabelAndValue("Parent prop point", std::to_string(TargetObject->AttachInfo->parent_prop_point));
+            Gui::LabelAndValue("Child prop point", std::to_string(TargetObject->AttachInfo->child_prop_point));
+
             if (ImGui::CollapsingHeader("Transform matrix"))
             {
                 ImGui::Text("Rotation:");
@@ -126,157 +113,101 @@ void IntrospectionGui::DrawPlayerIntrospectionGui(const char* Title)
                 ImGui::TextColored(Globals::SecondaryTextColor, TargetObject->AttachInfo->relative_transform.m_rotation.uvec.GetDataString(false, false).c_str());
                 ImGui::Text("    "); ImGui::SameLine(); 
                 ImGui::TextColored(Globals::SecondaryTextColor, TargetObject->AttachInfo->relative_transform.m_rotation.fvec.GetDataString(false, false).c_str());
-                ImGui::Text("Translation:");
-                ImGui::TextColored(Globals::SecondaryTextColor, TargetObject->AttachInfo->relative_transform.m_translation.GetDataString(false, false).c_str());
+                Gui::LabelAndValue("Translation:", TargetObject->AttachInfo->relative_transform.m_translation.GetDataString(false, false));
             }
 
-            ImGui::Text("Use relative transform:"); ImGui::SameLine();
-            ImGui::TextColored(Globals::SecondaryTextColor, std::to_string(TargetObject->AttachInfo->use_relative_transform).c_str());
-            ImGui::Text("Update physics:"); ImGui::SameLine();
-            ImGui::TextColored(Globals::SecondaryTextColor, std::to_string(TargetObject->AttachInfo->update_physics).c_str());
-            ImGui::Text("Updated:"); ImGui::SameLine();
-            ImGui::TextColored(Globals::SecondaryTextColor, std::to_string(TargetObject->AttachInfo->updated).c_str());
+            Gui::LabelAndValue("Use relative transform:", std::to_string(TargetObject->AttachInfo->use_relative_transform));
+            Gui::LabelAndValue("Update physics:", std::to_string(TargetObject->AttachInfo->update_physics));
+            Gui::LabelAndValue("Updated:", std::to_string(TargetObject->AttachInfo->updated));
         }
         else
-        {
             ImGui::Text("\tAttach info is a null pointer. Cannot view");
-        }
+
         ImGui::TreePop();
     }
 
-    ImGui::Text("HavokHandle:"); ImGui::SameLine();
-    ImGui::Text(std::to_string(TargetObject->HavokHandle).c_str());
-
+    Gui::LabelAndValue("Havok handle:", std::to_string(TargetObject->HavokHandle));
     const std::string ContactInfoStatus = TargetObject->ContactInfo.m_contact_list ? " (Valid)" : " (nullptr)";
-    if (ImGui::TreeNode(std::string(std::string("ContactInfo") + ContactInfoStatus).c_str()))
+    if (ImGui::TreeNode(fmt::format("Contact info{}", ContactInfoStatus).c_str()))
     {
         if (TargetObject->ContactInfo.m_contact_list != nullptr)
         {
-            ImGui::Text("Contact node:##Player.Object.ContactInfo");
-            ImGui::Text("Contacted objects:"); ImGui::SameLine();
-            ImGui::TextColored(Globals::SecondaryTextColor, std::to_string(TargetObject->ContactInfo.m_contact_list->m_contacted_object).c_str());
-            ImGui::Text("Number of contacts:"); ImGui::SameLine();
-            ImGui::TextColored(Globals::SecondaryTextColor, std::to_string(TargetObject->ContactInfo.m_contact_list->m_num_contacts).c_str());
+            ImGui::Text("Contact node:");
+            Gui::LabelAndValue("Contacted objects", std::to_string(TargetObject->ContactInfo.m_contact_list->m_contacted_object));
+            Gui::LabelAndValue("Number of contacts:", std::to_string(TargetObject->ContactInfo.m_contact_list->m_num_contacts));
             //Todo: Iterate through linked list, give the user control over how far to do so. Note that it is a linked list to the user.
             //prev
             //next
         }
         else
-        {
             ImGui::Text("\tContact info is a null pointer. Cannot view.");
-        }
+
         ImGui::TreePop();
     }
 
     if (ImGui::TreeNode("Object flags"))
     {
-        ImGui::Text("FlaggedListState:"); ImGui::SameLine();
-        ImGui::TextColored(Globals::SecondaryTextColor, std::to_string(TargetObject->ObjFlags.flagged_list_state).c_str());
-        ImGui::Text("LightingSetOnce:"); ImGui::SameLine();
-        ImGui::TextColored(Globals::SecondaryTextColor, std::to_string(TargetObject->ObjFlags.lighting_set_once).c_str());
-        ImGui::Text("Destroyed:"); ImGui::SameLine();
-        ImGui::TextColored(Globals::SecondaryTextColor, std::to_string(TargetObject->ObjFlags.destroyed).c_str());
-        ImGui::Text("NoSave:"); ImGui::SameLine();
-        ImGui::TextColored(Globals::SecondaryTextColor, std::to_string(TargetObject->ObjFlags.no_save).c_str());
-        ImGui::Text("ForceFullSave:"); ImGui::SameLine();
-        ImGui::TextColored(Globals::SecondaryTextColor, std::to_string(TargetObject->ObjFlags.force_full_save).c_str());
-        ImGui::Text("DestroyOnStream:"); ImGui::SameLine();
-        ImGui::TextColored(Globals::SecondaryTextColor, std::to_string(TargetObject->ObjFlags.destroy_on_stream).c_str());
-        ImGui::Text("CreatedByMissionOrActivity:"); ImGui::SameLine();
-        ImGui::TextColored(Globals::SecondaryTextColor, std::to_string(TargetObject->ObjFlags.created_by_mission_or_activity).c_str());
-        ImGui::Text("DontTransform:"); ImGui::SameLine();
-        ImGui::TextColored(Globals::SecondaryTextColor, std::to_string(TargetObject->ObjFlags.dont_transform).c_str());
-        ImGui::Text("WorldFree:"); ImGui::SameLine();
-        ImGui::TextColored(Globals::SecondaryTextColor, std::to_string(TargetObject->ObjFlags.world_free).c_str());
-        ImGui::Text("Streaming:"); ImGui::SameLine();
-        ImGui::TextColored(Globals::SecondaryTextColor, std::to_string(TargetObject->ObjFlags.streaming).c_str());
-        ImGui::Text("Streamed:"); ImGui::SameLine();
-        ImGui::TextColored(Globals::SecondaryTextColor, std::to_string(TargetObject->ObjFlags.streamed).c_str());
-        ImGui::Text("Persistent:"); ImGui::SameLine();
-        ImGui::TextColored(Globals::SecondaryTextColor, std::to_string(TargetObject->ObjFlags.persistent).c_str());
-        ImGui::Text("Original:"); ImGui::SameLine();
-        ImGui::TextColored(Globals::SecondaryTextColor, std::to_string(TargetObject->ObjFlags.original).c_str());
-        ImGui::Text("Stub:"); ImGui::SameLine();
-        ImGui::TextColored(Globals::SecondaryTextColor, std::to_string(TargetObject->ObjFlags.stub).c_str());
-        ImGui::Text("PreserveHandle:"); ImGui::SameLine();
-        ImGui::TextColored(Globals::SecondaryTextColor, std::to_string(TargetObject->ObjFlags.preserve_handle).c_str());
-        ImGui::Text("BpoIndex:"); ImGui::SameLine();
-        ImGui::TextColored(Globals::SecondaryTextColor, std::to_string(TargetObject->ObjFlags.bpo_index).c_str());
-        ImGui::Text("IsDependent:"); ImGui::SameLine();
-        ImGui::TextColored(Globals::SecondaryTextColor, std::to_string(TargetObject->ObjFlags.is_dependent).c_str());
-        ImGui::Text("Visited:"); ImGui::SameLine();
-        ImGui::TextColored(Globals::SecondaryTextColor, std::to_string(TargetObject->ObjFlags.visited).c_str());
-        ImGui::Text("SpecialLifetime:"); ImGui::SameLine();
-        ImGui::TextColored(Globals::SecondaryTextColor, std::to_string(TargetObject->ObjFlags.special_lifetime).c_str());
-        ImGui::Text("SerializeProtected:"); ImGui::SameLine();
-        ImGui::TextColored(Globals::SecondaryTextColor, std::to_string(TargetObject->ObjFlags.serialize_protected).c_str());
-        ImGui::Text("DontUseMe:"); ImGui::SameLine();
-        ImGui::TextColored(Globals::SecondaryTextColor, std::to_string(TargetObject->ObjFlags._dont_use_me).c_str());
-        ImGui::Text("StreamingFixed:"); ImGui::SameLine();
-        ImGui::TextColored(Globals::SecondaryTextColor, std::to_string(TargetObject->ObjFlags.streaming_fixed).c_str());
-        ImGui::Text("RenderFlags:"); ImGui::SameLine();
-        ImGui::TextColored(Globals::SecondaryTextColor, std::to_string(TargetObject->ObjFlags.render_flags).c_str());
+        Gui::LabelAndValue("FlaggedListState:", std::to_string(TargetObject->ObjFlags.flagged_list_state));
+        Gui::LabelAndValue("LightingSetOnce:", std::to_string(TargetObject->ObjFlags.lighting_set_once));
+        Gui::LabelAndValue("Destroyed:", std::to_string(TargetObject->ObjFlags.destroyed));
+        Gui::LabelAndValue("NoSave:", std::to_string(TargetObject->ObjFlags.no_save));
+        Gui::LabelAndValue("ForceFullSave:", std::to_string(TargetObject->ObjFlags.force_full_save));
+        Gui::LabelAndValue("DestroyOnStream:", std::to_string(TargetObject->ObjFlags.destroy_on_stream));
+        Gui::LabelAndValue("CreatedByMissionOrActivity:", std::to_string(TargetObject->ObjFlags.created_by_mission_or_activity));
+        Gui::LabelAndValue("DontTransform:", std::to_string(TargetObject->ObjFlags.dont_transform));
+        Gui::LabelAndValue("WorldFree:", std::to_string(TargetObject->ObjFlags.world_free));
+        Gui::LabelAndValue("Streaming:", std::to_string(TargetObject->ObjFlags.streaming));
+        Gui::LabelAndValue("Streamed:", std::to_string(TargetObject->ObjFlags.streamed));
+        Gui::LabelAndValue("Persistent:", std::to_string(TargetObject->ObjFlags.persistent));
+        Gui::LabelAndValue("Original:", std::to_string(TargetObject->ObjFlags.original));
+        Gui::LabelAndValue("Stub:", std::to_string(TargetObject->ObjFlags.stub));
+        Gui::LabelAndValue("PreserveHandle:", std::to_string(TargetObject->ObjFlags.preserve_handle));
+        Gui::LabelAndValue("BpoIndex:", std::to_string(TargetObject->ObjFlags.bpo_index));
+        Gui::LabelAndValue("IsDependent:", std::to_string(TargetObject->ObjFlags.is_dependent));
+        Gui::LabelAndValue("Visited:", std::to_string(TargetObject->ObjFlags.visited));
+        Gui::LabelAndValue("SpecialLifetime:", std::to_string(TargetObject->ObjFlags.special_lifetime));
+        Gui::LabelAndValue("SerializeProtected:", std::to_string(TargetObject->ObjFlags.serialize_protected));
+        Gui::LabelAndValue("DontUseMe:", std::to_string(TargetObject->ObjFlags._dont_use_me));
+        Gui::LabelAndValue("StreamingFixed:", std::to_string(TargetObject->ObjFlags.streaming_fixed));
+        Gui::LabelAndValue("RenderFlags:", std::to_string(TargetObject->ObjFlags.render_flags));
         ImGui::TreePop();
     }
     //RemoteObjFlags //Currently not bound to lua or displayed here since it seems to be for MP
     //MPDcmoIndex
-    ImGui::Text("CheckingReset:"); ImGui::SameLine();
-    ImGui::TextColored(Globals::SecondaryTextColor, std::to_string(TargetObject->CheckingReset).c_str());
-    ImGui::Text("NameIndex:"); ImGui::SameLine();
-    ImGui::TextColored(Globals::SecondaryTextColor, std::to_string(TargetObject->NameIndex).c_str());
-    ImGui::Text("FlaggedNext address:"); ImGui::SameLine();
-    ImGui::TextColored(Globals::SecondaryTextColor, TargetObject->FlaggedNext ? std::to_string((DWORD)TargetObject->FlaggedNext).c_str() : "nullptr");
-    ImGui::Text("FlaggedPrevious address:"); ImGui::SameLine();
-    ImGui::TextColored(Globals::SecondaryTextColor, TargetObject->FlaggedPrevious ? std::to_string((DWORD)TargetObject->FlaggedPrevious).c_str() : "nullptr");
-    ImGui::Text("Handle:"); ImGui::SameLine();
-    ImGui::TextColored(Globals::SecondaryTextColor, std::to_string(TargetObject->Handle).c_str());
-    ImGui::Text("Parent Handle:"); ImGui::SameLine();
-    ImGui::TextColored(Globals::SecondaryTextColor, std::to_string(TargetObject->Parent).c_str());
-
+    
+    Gui::LabelAndValue("Checking reset:", std::to_string(TargetObject->CheckingReset));
+    Gui::LabelAndValue("Name index:", std::to_string(TargetObject->NameIndex));
+    Gui::LabelAndValue("FlaggedNext*", TargetObject->FlaggedNext ? std::to_string((DWORD)TargetObject->FlaggedNext) : "nullptr");
+    Gui::LabelAndValue("FlaggedPrevious*", TargetObject->FlaggedPrevious ? std::to_string((DWORD)TargetObject->FlaggedPrevious) : "nullptr");
+    Gui::LabelAndValue("Handle", std::to_string(TargetObject->Handle));
+    Gui::LabelAndValue("Parent handle", std::to_string(TargetObject->Parent));
     const std::string BpoHandleStatus = TargetObject->BPOHandle ? " (Valid)" : " (nullptr)";
     if (ImGui::TreeNode(std::string(std::string("BpoHandle") + BpoHandleStatus).c_str()))
     {
         if (TargetObject->BPOHandle != nullptr)
         {
-            ImGui::Text("Flags:"); ImGui::SameLine();
-            ImGui::TextColored(Globals::SecondaryTextColor, std::to_string(TargetObject->BPOHandle->flags).c_str());
-            ImGui::Text("State:"); ImGui::SameLine();
-            ImGui::TextColored(Globals::SecondaryTextColor, std::to_string(TargetObject->BPOHandle->state).c_str());
-            ImGui::Text("BPO Index:"); ImGui::SameLine();
-            ImGui::TextColored(Globals::SecondaryTextColor, std::to_string(TargetObject->BPOHandle->bpo_index).c_str());
-            ImGui::Text("State Index:"); ImGui::SameLine();
-            ImGui::TextColored(Globals::SecondaryTextColor, std::to_string(TargetObject->BPOHandle->state_index).c_str());
-            ImGui::Text("Owner:"); ImGui::SameLine();
-            ImGui::TextColored(Globals::SecondaryTextColor, std::to_string(TargetObject->BPOHandle->owner).c_str());
-            ImGui::Text("Next:"); ImGui::SameLine();
-            ImGui::TextColored(Globals::SecondaryTextColor, std::to_string(TargetObject->BPOHandle->next).c_str());
-            ImGui::Text("Previous:"); ImGui::SameLine();
-            ImGui::TextColored(Globals::SecondaryTextColor, std::to_string(TargetObject->BPOHandle->prev).c_str());
+            Gui::LabelAndValue("Flags:", std::to_string(TargetObject->BPOHandle->flags));
+            Gui::LabelAndValue("State:", std::to_string(TargetObject->BPOHandle->state));
+            Gui::LabelAndValue("BPO index:", std::to_string(TargetObject->BPOHandle->bpo_index));
+            Gui::LabelAndValue("State index:", std::to_string(TargetObject->BPOHandle->state_index));
+            Gui::LabelAndValue("Owner:", std::to_string(TargetObject->BPOHandle->owner));
+            Gui::LabelAndValue("Next", std::to_string(TargetObject->BPOHandle->next));
+            Gui::LabelAndValue("Previous", std::to_string(TargetObject->BPOHandle->prev));
             //void* user_data
         }
         else
-        {
             ImGui::Text("\tBpoHandle is a null pointer. Cannot view.");
-        }
+
         ImGui::TreePop();
     }
 
-    ImGui::Text("AllIndex:"); ImGui::SameLine();
-    ImGui::TextColored(Globals::SecondaryTextColor, std::string(std::to_string(TargetObject->AllIndex) + " (Index of this object in rfg.ActiveWorld.AllObjects)").c_str());
-    ImGui::Text("TypeIndex:"); ImGui::SameLine();
-    ImGui::TextColored(Globals::SecondaryTextColor, std::to_string(TargetObject->TypeIndex).c_str());
-    ImGui::Text("SubtypeIndex:"); ImGui::SameLine();
-    ImGui::TextColored(Globals::SecondaryTextColor, std::to_string(TargetObject->SubtypeIndex).c_str());
-    ImGui::Text("ObjectType:"); ImGui::SameLine();
-    ImGui::TextColored(Globals::SecondaryTextColor, std::string(std::to_string(TargetObject->ObjectType) + " (" + Rfg::GetObjectTypeString(TargetObject->ObjectType) + ")").c_str());
-    ImGui::Text("Subtype:"); ImGui::SameLine();
-    ImGui::TextColored(Globals::SecondaryTextColor, std::string(std::to_string(TargetObject->SubType) + " (" + Rfg::GetObjectSubTypeString(TargetObject->SubType) + ")").c_str());
-    ImGui::Text("LastKnownBMin:"); ImGui::SameLine();
-    ImGui::TextColored(Globals::SecondaryTextColor, TargetObject->LastKnownBMin.GetDataString(false, false).c_str());
-    ImGui::Text("LastKnownBMax:"); ImGui::SameLine();
-    ImGui::TextColored(Globals::SecondaryTextColor, TargetObject->LastKnownBMax.GetDataString(false, false).c_str());
-    ImGui::Text("SRID:");ImGui::SameLine();
-    ImGui::TextColored(Globals::SecondaryTextColor, std::to_string(TargetObject->SRID).c_str());
-
+    Gui::LabelAndValue("All index", fmt::format("{} (Index of this object in rfg.ActiveWorld.AllObjects)", std::to_string(TargetObject->AllIndex)));
+    Gui::LabelAndValue("Type index", std::to_string(TargetObject->TypeIndex));
+    Gui::LabelAndValue("Subtype index", std::to_string(TargetObject->SubtypeIndex));
+    Gui::LabelAndValue("Object type", fmt::format("{} ({})", std::to_string(TargetObject->ObjectType), Rfg::GetObjectTypeString(TargetObject->ObjectType)));
+    Gui::LabelAndValue("Object subtype", fmt::format("{} ({})", std::to_string(TargetObject->SubType), Rfg::GetObjectSubTypeString(TargetObject->SubType)));
+    Gui::LabelAndValue("Last known bmin", TargetObject->LastKnownBMin.GetDataString(false, false));
+    Gui::LabelAndValue("Last known bmax", TargetObject->LastKnownBMax.GetDataString(false, false));
+    Gui::LabelAndValue("SRID", std::to_string(TargetObject->SRID));
     ImGui::End();
 }
