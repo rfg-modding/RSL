@@ -11,7 +11,7 @@
 
 /*RSL*/
 #define USE_LAUNCHER true
-#define LOG_CF_OPEN_CALLS false //If true logs hooks to cf_open via it's hook. This function is called a majority of the games files so it's disabled by default for performance.
+#define LOG_CF_OPEN_CALLS false //If true logs calls to cf_open via it's hook. This function is called for a majority of the games files so it's disabled by default for performance.
 #define LUA_ENABLED true
 
 //using json = nlohmann::json;

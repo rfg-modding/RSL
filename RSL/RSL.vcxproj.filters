@@ -531,6 +531,12 @@
     <ClCompile Include="ShadowStateBlockLua.cpp">
       <Filter>Lua Binding\Usertypes\Graphics</Filter>
     </ClCompile>
+    <ClCompile Include="Patching.cpp">
+      <Filter>Main\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="object_debris_create_havok_body_hook.cpp">
+      <Filter>Hooks</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="RFGR_Type_UI.h">
@@ -910,6 +916,9 @@
     </ClInclude>
     <ClInclude Include="GraphicsStatesLua.h">
       <Filter>Lua Binding\Usertypes\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Patching.h">
+      <Filter>Main\Utils</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

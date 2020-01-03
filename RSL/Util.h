@@ -40,9 +40,3 @@ namespace Rfg
     std::string GetObjectTypeString(char ObjectType);
     std::string GetObjectSubTypeString(char ObjectSubType);
 }
-
-namespace Patching
-{
-    void LockGameMain();
-    void UnlockGameMain();
-}

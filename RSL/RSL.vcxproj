@@ -258,7 +258,9 @@ echo #define RSL_BUILD_DATE %buildTime:~0,8% &gt;&gt; $(ProjectDir)/BuildDate.h<
     <ClCompile Include="ObjectLua.cpp" />
     <ClCompile Include="ObjectRenderDistanceLua.cpp" />
     <ClCompile Include="ObjectSpawnVehicle.cpp" />
+    <ClCompile Include="object_debris_create_havok_body_hook.cpp" />
     <ClCompile Include="Object_UpdatePosAndOrient.cpp" />
+    <ClCompile Include="Patching.cpp" />
     <ClCompile Include="Path.cpp" />
     <ClCompile Include="PegLoadWrapper.cpp" />
     <ClCompile Include="PhysicsGui.cpp" />
@@ -374,6 +376,7 @@ echo #define RSL_BUILD_DATE %buildTime:~0,8% &gt;&gt; $(ProjectDir)/BuildDate.h<
     <ClInclude Include="LightingStateBlock.h" />
     <ClInclude Include="LuaGui.h" />
     <ClInclude Include="MiscStateBlock.h" />
+    <ClInclude Include="Patching.h" />
     <ClInclude Include="Path.h" />
     <ClInclude Include="RFGR_Types_Cfile.h" />
     <ClInclude Include="RFGR_Types_EventData.h" />

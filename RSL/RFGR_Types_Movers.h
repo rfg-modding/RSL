@@ -263,3 +263,147 @@ struct  general_mover : object_mover
     unsigned int original_object;
     timestamp last_damaged_timer;
 };
+
+struct  mesh_tag
+{
+    unsigned int m_name_crc;
+    matrix43 m_transform;
+};
+
+struct mesh_tags
+{
+    int m_num_tags;
+    rfg::et_sized_native_pointer<mesh_tag> m_tags;
+};
+
+struct rl_vertex_buffer_data_runtime
+{
+    int num_verts;
+    char vert_stride_0;
+    char vertex_format;
+    char num_uv_channels;
+    char vert_stride_1;
+    char* verts;
+};
+
+struct rl_index_buffer_data_runtime
+{
+    unsigned int num_indices;
+    char* indices;
+    char index_size;
+    char prim_type;
+    unsigned __int16 num_blocks;
+};
+
+struct rl_mesh_data_runtime
+{
+    int num_sub_meshes;
+    rl_submesh_data* sub_meshes;
+    rl_vertex_buffer_data_runtime vertex_buffer;
+    rl_index_buffer_data_runtime index_buffer;
+};
+
+namespace keen
+{
+    struct RenderGeometry
+    {
+        keen::VertexFormat* pVertexFormat;
+        ID3D11Buffer* pVertexBuffer;
+        unsigned int vertexCount;
+        ID3D11Buffer* pIndexBuffer;
+        unsigned int indexCount;
+        void* pSkinGeometry;//keen::SoftwareSkinGeometry* pSkinGeometry;
+        unsigned int skinningBufferOffset;
+        const char* pDebugName;
+        unsigned int indexFormat;
+        unsigned int primitiveTopology;
+        void* pMorphData; //keen::SoftwareMorphData* pMorphData;
+    };
+}
+
+
+const struct __declspec(align(8)) rl_mesh : rl_renderable
+{
+    bool m_data_set;
+    rl_mesh_data_runtime m_data;
+    rl_render_block* m_base_render_block;
+    unsigned int m_max_material_index;
+    unsigned int m_uid;
+    keen::RenderGeometry m_geometry;
+};
+
+struct mesh_header_shared
+{
+    unsigned int m_signature;
+    unsigned int m_version;
+    rfg::et_sized_native_pointer<rl_mesh> m_mesh;
+    rfg::et_sized_native_pointer<rl_material_map> m_material_map;
+    rfg::et_sized_native_pointer<rfg::et_sized_native_pointer<rl_material> > m_materials;
+    unsigned int m_num_materials;
+    rfg::et_sized_native_pointer<char const > m_texture_names;
+};
+
+struct __declspec(align(8)) static_mesh
+{
+    mesh_header_shared m_shared_header;
+    unsigned int m_num_lods;
+    rfg::et_sized_native_pointer<int> m_lod_submesh_id;
+    rfg::et_sized_native_pointer<mesh_tags> m_tags_offset;
+    mesh_tags m_tags;
+    unsigned int m_cm_index;
+};
+
+struct debris_create_info
+{
+    vector m_position;
+    matrix m_orientation;
+    float m_mass;
+    float m_friction;
+    float m_restitution;
+    float m_linear_damp;
+    float m_angular_damp;
+    char m_physical_material;
+    char m_effect_material;
+    unsigned int m_mesh_srid;
+    rl_renderable_instance* m_renderable_instance_p;
+    static_mesh* m_mesh;
+    int m_submesh_id;
+    unsigned int m_num_lod_infos;
+    lod_info* m_lod_info;
+    unsigned int m_collision_type;
+    unsigned int m_cm_index;
+    hkpShape* m_shape;
+    int m_impact_foley_id;
+    unsigned int m_delay_before_first_impact_foley;
+    unsigned int m_vehicle_handle;
+    unsigned int m_component_index;
+    bool m_is_persistent;
+    bool m_is_retrievable;
+    int m_retrievable_material_type;
+    int m_deformed_morph_target;
+    bool m_has_precalc_inertia;
+    matrix m_precalc_tensor;
+    vector m_precalc_center_of_mass;
+};
+
+struct  object_debris : object
+{
+    int debris_flags;
+    timestamp m_min_existance_time;
+    bool m_is_persistent;
+    timestamp m_retrievable_delay;
+    int m_retrievable_material_type;
+    int fade_ms;
+    timestamp m_fade_stamp;
+    bool fading_from_nano;
+    unsigned int m_num_lod_infos;
+    lod_info* m_lod_info;
+    int m_impact_foley_id;
+    timestamp m_impact_foley_delay;
+    timestamp m_effect_end;
+    unsigned int m_effect_instance;
+    debris_create_info m_create_info;
+    rl_renderable_instance* m_renderable_instance_p;
+    static_mesh* m_mesh;
+    int m_submesh_id;
+};

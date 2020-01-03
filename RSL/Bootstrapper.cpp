@@ -15,6 +15,7 @@
 #include "IntrospectionGui.h"
 #include "TextEditorWrapper.h"
 #include "OverlayConsole.h"
+#include "Patching.h"
 
 Bootstrapper::Bootstrapper()
 {

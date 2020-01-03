@@ -250,10 +250,13 @@ void FunctionManager::RegisterFunctions()
     RegisterFunction(rfg::object_squad_spawn_members, 0x694C20);
 
     RegisterFunction(rfg::gem_post_event, 0x737C10);
-
     RegisterFunction(rfg::world_create_object_general_mover, 0x318FF0);
-
     RegisterFunction(rfg::player_create_player_squad, 0x633DD0);
-
     RegisterFunction(rfg::rfg_snap_to_ground, 0x6EB8D0);
+    RegisterFunction(rfg::automobile_honk_horn, 0x775F50);
+
+    RegisterFunction(rfg::chunk_get_base_by_name, 0x528A00);
+    RegisterFunction(rfg::object_mover_create_from_chunk, 0x65FA00);
+
+    RegisterFunction(rfg::object_debris_create_havok_body, 0x6172F0);
 }

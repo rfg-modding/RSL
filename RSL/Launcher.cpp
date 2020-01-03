@@ -1,4 +1,5 @@
 #include "Launcher.h"
+#include "Patching.h"
 
 void Launcher::Run()
 {

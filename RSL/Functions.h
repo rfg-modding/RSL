@@ -1,4 +1,3 @@
-
 /* Functions.h/.cpp contain function pointers for many of rfg's functions. They can be used
  * to call rfg's functions for our own use, and also to hook these functions and expand their
  * behavior. These function pointers are initialized in FunctionManager.cpp. The declarations
@@ -854,4 +853,21 @@ extern F_HumanTeleport HumanTeleport;*/
     //.text:0127B8D0 rfg.exe:$6EB8D0 #6EACD0 <rfg_snap_to_ground> //bool __cdecl rfg_snap_to_ground(vector& pos)
     using F_rfg_snap_to_ground = bool(__cdecl*)(vector& data);
     extern F_rfg_snap_to_ground rfg_snap_to_ground;
+
+    //.text:01775F50 rfg.exe:$775F50 #775350 <automobile_honk_horn> //void __cdecl automobile_honk_horn(unsigned int a_handle)
+    using F_automobile_honk_horn = void(__cdecl*)(uint a_handle);
+    extern F_automobile_honk_horn automobile_honk_horn;
+
+    //.text:009A8A00 rfg.exe:$528A00 #527E00 <chunk_get_base_by_name> //c_chunk_base *__cdecl chunk_get_base_by_name(const char *name)
+    //using F_chunk_get_base_by_name = c_chunk_base*(__cdecl*)(uint a_handle);
+    using F_chunk_get_base_by_name = void*(__cdecl*)(const char* name); //Todo: Bind c_chunk_base and make the return type proper
+    extern F_chunk_get_base_by_name chunk_get_base_by_name;
+
+    //.text:00ADFA00 rfg.exe:$65FA00 #65EE00 <object_mover_create_from_chunk> //object_mover *__cdecl object_mover_create_from_chunk(vector& pos, matrix& orient, c_chunk_base *base, unsigned int parent_handle)
+    using F_object_mover_create_from_chunk = object_mover*(__cdecl*)(vector& pos, matrix & orient, void* base, uint parent_handle); //Todo: Bind c_chunk_base and base type proper
+    extern F_object_mover_create_from_chunk object_mover_create_from_chunk;
+
+    //.text:006872F0 rfg.exe:$6172F0 #6166F0 <object_debris::create_havok_body> //void __thiscall object_debris::create_havok_body(object_debris *this, debris_create_info *dci)
+    using F_object_debris_create_havok_body = void(__fastcall*)(object_debris* this_ptr, void* edx, debris_create_info* dci);
+    extern F_object_debris_create_havok_body object_debris_create_havok_body;
 }

@@ -356,10 +356,13 @@ namespace rfg
     F_object_squad_spawn_members object_squad_spawn_members;
 
     F_gem_post_event gem_post_event;
-
     F_world_create_object_general_mover world_create_object_general_mover;
-
     F_player_create_player_squad player_create_player_squad;
-
     F_rfg_snap_to_ground rfg_snap_to_ground;
+    F_automobile_honk_horn automobile_honk_horn;
+
+    F_chunk_get_base_by_name chunk_get_base_by_name;
+    F_object_mover_create_from_chunk object_mover_create_from_chunk;
+
+    F_object_debris_create_havok_body object_debris_create_havok_body;
 }

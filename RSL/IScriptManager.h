@@ -31,7 +31,6 @@ public:
     virtual bool RunFunctionSafe(sol::function& Func, const std::string& Name, const sol::table& Args = sol::nil) = 0;
     [[nodiscard]] virtual std::optional<uint> GetLineFromErrorString(const std::string& ErrorString) const = 0;
 
-    //Todo: See if this can be done with a single function without using strings
     virtual void TriggerInputEvent(uint Message, uint KeyCode, KeyState& Keys) = 0;
     virtual void TriggerDoFrameEvent() = 0;
     virtual void TriggerInitializedEvent() = 0;
