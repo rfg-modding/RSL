@@ -534,9 +534,6 @@
     <ClCompile Include="Patching.cpp">
       <Filter>Main\Utils</Filter>
     </ClCompile>
-    <ClCompile Include="object_debris_create_havok_body_hook.cpp">
-      <Filter>Hooks</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="RFGR_Type_UI.h">

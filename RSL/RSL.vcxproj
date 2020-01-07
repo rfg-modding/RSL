@@ -258,7 +258,6 @@ echo #define RSL_BUILD_DATE %buildTime:~0,8% &gt;&gt; $(ProjectDir)/BuildDate.h<
     <ClCompile Include="ObjectLua.cpp" />
     <ClCompile Include="ObjectRenderDistanceLua.cpp" />
     <ClCompile Include="ObjectSpawnVehicle.cpp" />
-    <ClCompile Include="object_debris_create_havok_body_hook.cpp" />
     <ClCompile Include="Object_UpdatePosAndOrient.cpp" />
     <ClCompile Include="Patching.cpp" />
     <ClCompile Include="Path.cpp" />
