@@ -137,6 +137,21 @@ namespace Lua
         return nullptr;
 	}
 
+    vehicle_info* GetVehicleInfo(string Name)
+    {
+        if (!Globals::VehicleInfos)
+            return nullptr;
+
+        for (int i = 0; i < Globals::VehicleInfos->Size(); i++)
+        {
+            string IndexName(Globals::VehicleInfos->data[i].name);
+            if (IndexName == Name)
+                return &Globals::VehicleInfos->data[i];
+        }
+
+        return nullptr;
+    }
+
     //Tries to find the specified effect_info handle in
     //Globals::EffectInfos. Ruturns 0xFFFFFFFF if not found.
     uint GetEffectHandle(string Name)

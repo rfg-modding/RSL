@@ -120,6 +120,7 @@ void Lua::BindApiFunctions(sol::state& LuaStateRef)
         }
     ));
     RfgTable["GetExplosionInfo"] = Lua::GetExplosionInfo;
+    RfgTable["GetVehicleInfo"] = Lua::GetVehicleInfo;
 
     RfgTable.set_function("AddUiMessage", sol::overload(
         [](const char* Message, float DisplayTime, bool UseSecondaryAnim, bool ForceRedisplay)

@@ -19,6 +19,7 @@ namespace Lua
 
     extern explosion_info* GetExplosionInfo(std::string Name);
     extern effect_info* GetEffectInfo(string Name);
+    extern vehicle_info* GetVehicleInfo(string Name);
     extern uint GetEffectHandle(string Name);
 
     extern std::vector<fmt::basic_format_arg<fmt::format_context>> GenerateFmtListFromSolVariadicArgs(const sol::variadic_args& Args);
