@@ -52,8 +52,11 @@ void ScriptManager::Reset()
         Event.Reset(); //Todo: See if there's a cleaner way to do this while also being thread safe. This is a bit obtuse.
     }
 
+    //Todo: Figure out a way for this to rerun scripts which rely on the Initialized event
+    //Todo: User messages should be a class so they auto remove themselves when it's destructed
     Initialize();
     UpdateRfgPointers();
+    ScanScriptsFolder();
     RunStartupScripts();
 #endif
 }
