@@ -1,5 +1,5 @@
 #include "Hooks.h"
-#include "Application.h"
+#include "IGuiManager.h"
 
 HRESULT __stdcall Hooks::D3D11PresentHook(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT Flags)
 {

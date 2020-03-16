@@ -1,5 +1,4 @@
 #include "Hooks.h"
-#include "Application.h"
 
 bool __cdecl Hooks::peg_load_wrapper_hook(const char* filename, unsigned srid, char* cpu_preload, int cpu_size, char* gpu_preload, int gpu_size)
 {

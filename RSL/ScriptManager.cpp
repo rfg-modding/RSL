@@ -1,5 +1,6 @@
 #include "ScriptManager.h"
 #include "Path.h"
+#if LUA_ENABLED
 #include "BaseTypeLua.h"
 #include "VectorLua.h"
 #include "MatrixLua.h"
@@ -32,6 +33,7 @@
 #include "GuiConstants.h"
 #include "GraphicsFunctions.h"
 #include "GraphicsStatesLua.h"
+#endif
 
 ScriptManager::~ScriptManager()
 {

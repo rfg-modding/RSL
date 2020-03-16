@@ -1,5 +1,4 @@
 #include "Hooks.h"
-#include "Application.h"
 
 spawn_status_result __cdecl Hooks::object_spawn_vehicle_hook(vehicle_spawn_params& spawn_param)
 {

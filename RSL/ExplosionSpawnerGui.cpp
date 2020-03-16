@@ -1,5 +1,4 @@
 #include "ExplosionSpawnerGui.h"
-#include "Application.h"
 
 ExplosionSpawnerGui::ExplosionSpawnerGui(std::string Title_)
 {

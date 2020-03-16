@@ -1,5 +1,4 @@
 #include "Hooks.h"
-#include "Application.h"
 
 bool __cdecl Hooks::can_drop_vehicle_hook(vehicle_info* v_info, rfg::farray<object*, 256> * delete_object_list, vector* position, matrix* orient, unsigned int ignore_object, bool high_priority)
 {

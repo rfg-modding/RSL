@@ -1,7 +1,8 @@
 #include "Hooks.h"
-#include "Application.h"
 #include "FreeCamGui.h"
 #include "GeneralTweaksGui.h"
+#include "IScriptManager.h"
+#include "IGuiManager.h"
 
 void __fastcall Hooks::PlayerDoFrameHook(Player* PlayerPtr)
 {

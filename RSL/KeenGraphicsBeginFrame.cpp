@@ -1,5 +1,4 @@
 #include "Hooks.h"
-#include "Application.h"
 
 bool ReadyForD3D11Init(keen::GraphicsSystem* pGraphicsSystem);
 void InitImGuiD3D11();

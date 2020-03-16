@@ -1,5 +1,4 @@
 #include "Hooks.h"
-#include "Application.h"
 
 void __cdecl Hooks::rfg_init_stage_2_done_hook(void* pSoundSystem)
 {

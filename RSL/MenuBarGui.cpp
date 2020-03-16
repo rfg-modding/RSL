@@ -1,5 +1,4 @@
 #include "MenuBarGui.h"
-#include "Application.h"
 
 MenuBarGui::MenuBarGui(std::string Title_)
 {

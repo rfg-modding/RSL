@@ -1,6 +1,7 @@
 #include "Hooks.h"
-#include "Application.h"
 #include "GeneralTweaksGui.h"
+#include "IScriptManager.h"
+#include "IGuiManager.h"
 
 void __fastcall Hooks::world_do_frame_hook(World* This, void* edx, bool HardLoad)
 {

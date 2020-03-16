@@ -1,5 +1,4 @@
 #include "Hooks.h"
-#include "Application.h"
 
 void __fastcall Hooks::rl_camera_render_begin_hook(rl_camera* This, void* edx, rl_renderer* Renderer) //.text:01027660 rfg.exe:$137660 #136A60 <rl_camera::render_begin>
 {

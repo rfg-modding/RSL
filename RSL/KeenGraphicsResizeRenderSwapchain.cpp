@@ -1,5 +1,4 @@
 #include "Hooks.h"
-#include "Application.h"
 
 bool __cdecl Hooks::KeenGraphicsResizeRenderSwapchainHook(keen::RenderSwapChain* KeenSwapchain, unsigned int NewWidth, unsigned int NewHeight)
 {

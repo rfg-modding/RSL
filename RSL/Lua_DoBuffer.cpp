@@ -1,5 +1,4 @@
 #include "Hooks.h"
-#include "Application.h"
 
 int __cdecl Hooks::LuaDoBufferHook(lua_State* L, const char* buff, unsigned int size, const char* name)
 {

@@ -1,8 +1,10 @@
 #include "Hooks.h"
-#include "Application.h"
 #include "IntrospectionGui.h"
 #include "ExplosionSpawnerGui.h"
 #include "TextEditorWrapper.h"
+#include "ISnippetManager.h"
+#include "ICameraManager.h"
+#include "IGuiManager.h"
 
 class TextEditorWrapper;
 

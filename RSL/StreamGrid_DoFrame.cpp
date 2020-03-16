@@ -1,5 +1,4 @@
 #include "Hooks.h"
-#include "Application.h"
 
 void __fastcall Hooks::StreamGridDoFrameHook(stream_grid* This, void* edx, vector* StreamPos, bool SingleZoneMode)
 {

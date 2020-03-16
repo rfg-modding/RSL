@@ -1,5 +1,4 @@
 #include "Hooks.h"
-#include "Application.h"
 
 HRESULT __stdcall Hooks::D3D11_ResizeBuffersHook(IDXGISwapChain* pSwapChain, UINT BufferCount, UINT Width, UINT Height, DXGI_FORMAT NewFormat, UINT SwapChainFlags)
 {

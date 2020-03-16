@@ -1,6 +1,7 @@
 #include "Hooks.h"
-#include "Application.h"
 #include "PhysicsGui.h"
+#include "IScriptManager.h"
+#include "IGuiManager.h"
 
 void __fastcall Hooks::hkpWorld_stepDeltaTime_hook(hkpWorld* This, void* edx, float PhysicsDeltaTime) //0x9E1A70
 {

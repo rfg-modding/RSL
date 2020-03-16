@@ -1,6 +1,4 @@
 #pragma once
-#include <sol_forward.hpp>
-#include "String.h"
 
 class ScriptEventHook
 {

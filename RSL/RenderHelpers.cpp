@@ -1,5 +1,4 @@
 #include "Hooks.h"
-#include "Application.h"
 
 void Hooks::UpdateDebugDrawRenderInterfaceValues()
 {
