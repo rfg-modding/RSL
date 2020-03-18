@@ -870,4 +870,54 @@ extern F_HumanTeleport HumanTeleport;*/
     //.text:006872F0 rfg.exe:$6172F0 #6166F0 <object_debris::create_havok_body> //void __thiscall object_debris::create_havok_body(object_debris *this, debris_create_info *dci)
     using F_object_debris_create_havok_body = void(__fastcall*)(object_debris* this_ptr, void* edx, debris_create_info* dci);
     extern F_object_debris_create_havok_body object_debris_create_havok_body;
+
+    //Functions needed:
+    //obj_prop_block::obj_prop_block(object_prop_block* this, vector* pos, matrix* orient, char* name (can be null))
+        //void __thiscall obj_prop_block::obj_prop_block(obj_prop_block *this, vector *pos, matrix *orient, const char *name)
+    //obj_prop* rfg_prop_block::set_internal(rfg_prop_block* this, prop_name* prop_name, int sizeInBytes, int type)
+        // obj_prop *__thiscall rfg_prop_block::set_internal(rfg_prop_block *this, prop_name *name, int size, int type)
+    //object *__thiscall world::create_object_internal(world *this, unsigned int classname_hash, obj_prop_block *pblock, world_zone *origin_zone, unsigned int parent)
+    //Todo: Get all X_PROP_TYPE Addresses so we don't need to make them ourselves.
+
+
+    //.text:01618B00 rfg.exe:$638B00 #637F00 <obj_prop_block::obj_prop_block>
+    //void __thiscall obj_prop_block::obj_prop_block(obj_prop_block *this, vector& pos, matrix& orient, const char *name)
+    using F_obj_prop_block_constructor = void(__fastcall*)(obj_prop_block* this_ptr, void* edx, vector& pos, matrix& orient, const char* name);
+    extern F_obj_prop_block_constructor obj_prop_block_constructor;
+
+    //.text:014FA6E0 rfg.exe:$51A6E0 #519AE0 <rfg_prop_block::set_internal>
+    // obj_prop *__thiscall rfg_prop_block::set_internal(rfg_prop_block *this, prop_name& name, int size, int type)
+    using F_rfg_prop_block_set_internal = obj_prop*(__fastcall*)(rfg_prop_block* this_ptr, void* edx, prop_name& name, int size, int type);
+    extern F_rfg_prop_block_set_internal rfg_prop_block_set_internal;
+
+    //.text:0151E6B0 rfg.exe:$53E6B0 #53DAB0 <world::create_object_internal>
+    //object *__thiscall world::create_object_internal(world *this, unsigned int classname_hash, obj_prop_block& pblock, world_zone *origin_zone, unsigned int parent)
+    using F_world_create_object_internal = object*(__fastcall*)(World* this_ptr, void* edx, unsigned int classname_hash, obj_prop_block& pblock, world_zone* origin_zone, unsigned int parent);
+    extern F_world_create_object_internal world_create_object_internal;
+
+    extern object* CreateObjectFromZoneObjectBinary(std::string path, vector& pos, matrix& orient, const char* name);
+
+    //.text:01348CC0 rfg.exe:$368CC0 #3680C0 <obj_auto_props::obj_auto_props>
+    //void __thiscall obj_auto_props::obj_auto_props(obj_auto_props *this, int type_index, vector *pos, matrix *orient, bool pos_at_ground)
+    using F_obj_auto_props_constructor = void(__fastcall*)(obj_auto_props* this_ptr, void* edx, int type_index, vector& pos, matrix& orient, bool pos_at_ground);
+    extern F_obj_auto_props_constructor obj_auto_props_constructor;
+
+    //.text:011E58C0 rfg.exe:$2058C0 #204CC0 <obj_projectile_props::obj_projectile_props>
+    //void __thiscall obj_projectile_props::obj_projectile_props(obj_projectile_props *this, unsigned int owner_handle, item_info *info, obj_item_flags *flags, weapon_info *w_info, vector *pos, matrix *orient, vector *velocity, vector *target, const unsigned int create_id)
+    using F_obj_projectile_props_constructor = void(__fastcall*)(obj_projectile_props* this_ptr, void* edx, uint owner_handle, item_info* info, obj_item_flags& flags, weapon_info* w_info, vector& pos, matrix& orient, vector& velocity, vector& target, uint create_id);
+    extern F_obj_projectile_props_constructor obj_projectile_props_constructor;
+    //Todo: Get Item_infos list
+    //Todo: Start moving class member funcs into relevant classes by having normal funcs wrapping the function ptr. Make sure still works with hooked funcs
+
+    //uint __cdecl str_hash_string(const char *str) //.text:011737D0 rfg.exe:$1937D0 #192BD0 <str_hash_string>
+    using F_str_hash_string = uint(__cdecl*)(const char* str);
+    extern F_str_hash_string str_hash_string;
+
+    //item *__cdecl amb_prop_create(ambient_prop_info *amb_prop_info, vector& pos, matrix& orient, unsigned int parent_handle) //.text:01726DB0 rfg.exe:$746DB0 #7461B0 <amb_prop_create>
+    using F_amb_prop_create = item*(__cdecl*)(ambient_prop_info* amb_prop_info, vector& pos, matrix& orient, unsigned int parent_handle);
+    extern F_amb_prop_create amb_prop_create;
+
+    //.text:017CB270 rfg.exe:$7EB270 #7EA670 <weapon::fire> //void __thiscall weapon::fire(weapon *this, vector aim_override)
+    using F_weapon_fire = void(__fastcall*)(weapon* this_ptr, void* edx, vector aim_override);
+    extern F_weapon_fire weapon_fire;
 }

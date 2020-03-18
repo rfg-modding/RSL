@@ -16,6 +16,7 @@
 #include "TextEditorWrapper.h"
 #include "OverlayConsole.h"
 #include "Patching.h"
+#include "VehicleSpawnerGui.h"
 
 Bootstrapper::Bootstrapper()
 {
@@ -338,7 +339,7 @@ void Bootstrapper::InitOverlays()
     GuiManager->AddChildGui(new ExplosionSpawnerGui("Explosion spawner"));
     GuiManager->AddChildGui(new GraphicsTweaksGui("Graphics tweaks"));
     GuiManager->AddChildGui(new EventViewerGui("Event viewer"));
-    //Gui.AddChildGui(new VehicleSpawnerGui("Vehicle spawner")); //Disabled since it doesn't work
+    GuiManager->AddChildGui(new VehicleSpawnerGui("Vehicle spawner")); //Disabled since it doesn't work
 }
 
 //Note: This function is an over-redundant hack to make sure that a few memory offsets are properly set since they kept not being set and causing bugs. Will improve later on.
@@ -349,11 +350,13 @@ void Bootstrapper::TrySetMemoryLocations()
     SetMemoryLocations();
     for (int i = 0; i < 30; i++)
     {
-        if (*Globals::NumExplosionInfos == 0 || *Globals::NumWeaponInfos == 0 || !Globals::WeaponInfos.Initialized() || Globals::WeaponInfos.Length() == 0)
+        if (*Globals::NumExplosionInfos == 0 || *Globals::NumWeaponInfos == 0 || !Globals::WeaponInfos.Initialized() || Globals::WeaponInfos.Length() == 0
+            || !Globals::ItemInfos.Initialized() || Globals::ItemInfos.Length() == 0)
         {
             Logger::LogWarning("Trying to set memory locations...\n");
             SetMemoryLocations();
-            if (*Globals::NumExplosionInfos == 0 || *Globals::NumWeaponInfos == 0 || !Globals::WeaponInfos.Initialized() || Globals::WeaponInfos.Length() == 0)
+            if (*Globals::NumExplosionInfos == 0 || *Globals::NumWeaponInfos == 0 || !Globals::WeaponInfos.Initialized() || Globals::WeaponInfos.Length() == 0
+                || !Globals::ItemInfos.Initialized() || Globals::ItemInfos.Length() == 0)
             {
                 Logger::Log("NumExplosionInfos = {}\n", *Globals::NumExplosionInfos);
                 Logger::Log("Num material effect infos = {}\n", *Globals::NumMaterialEffectInfos);
@@ -368,9 +371,9 @@ void Bootstrapper::TrySetMemoryLocations()
         }
         else
         {
-            Logger::LogWarning("Successfully set memory locations! NumExplosionInfos: {}, {}, NumWeaponInfos: {}, WeaponInfosLength: {}\n",
+            Logger::LogWarning("Successfully set memory locations! NumExplosionInfos: {}, {}, NumWeaponInfos: {}, WeaponInfosLength: {}, ItemInfosLength: {}\n",
                 *Globals::NumExplosionInfos, Globals::ExplosionInfos.Initialized() ? "Exp list initialized" : "Exp list not initialized",
-                *Globals::NumWeaponInfos, Globals::WeaponInfos.Length());
+                *Globals::NumWeaponInfos, Globals::WeaponInfos.Length(), Globals::ItemInfos.Length());
 
             Globals::NumExplosionInfos = OffsetPtr<uint*>(0x19EE490);
             auto ExplosionInfosPtr = OffsetPtr<explosion_info*>(0x19E6CD8);
@@ -387,6 +390,12 @@ void Bootstrapper::TrySetMemoryLocations()
             Globals::NumWeaponInfos = OffsetPtr<uint*>(0x3482C94);
             auto WeaponInfosPtr = OffsetPtr<weapon_info**>(0x3482C9C);
             Globals::WeaponInfos.Init(*WeaponInfosPtr, *Globals::NumWeaponInfos, *Globals::NumWeaponInfos, "WeaponInfos");
+
+            Globals::NumItemInfos = OffsetPtr<int*>(0x2C17C5C);
+            Globals::MaxItemInfos = OffsetPtr<int*>(0x2C2F144);
+            auto ItemInfosPtr = OffsetPtr<item_info**>(0x2C2F148);
+            Globals::ItemInfos.Init(*ItemInfosPtr, *Globals::MaxItemInfos, *Globals::NumItemInfos, "ItemInfos");
+
             break;
         }
     }
@@ -431,7 +440,6 @@ void Bootstrapper::SetMemoryLocations()
         std::cout << "MP detected. Shutting down!\n";
     }
 
-
     Globals::NumExplosionInfos = OffsetPtr<uint*>(0x19EE490);
     auto ExplosionInfosPtr = OffsetPtr<explosion_info*>(0x19E6CD8);
     Globals::ExplosionInfos.Init(ExplosionInfosPtr, 80, *Globals::NumExplosionInfos, "ExplosionInfos");
@@ -447,6 +455,11 @@ void Bootstrapper::SetMemoryLocations()
     Globals::NumWeaponInfos = OffsetPtr<uint*>(0x3482C94);
     auto WeaponInfosPtr = OffsetPtr<weapon_info**>(0x3482C9C);
     Globals::WeaponInfos.Init(*WeaponInfosPtr, *Globals::NumWeaponInfos, *Globals::NumWeaponInfos, "WeaponInfos");
+
+    Globals::NumItemInfos = OffsetPtr<int*>(0x2C17C5C);
+    Globals::MaxItemInfos = OffsetPtr<int*>(0x2C2F144);
+    auto ItemInfosPtr = OffsetPtr<item_info**>(0x2C2F148);
+    Globals::ItemInfos.Init(*ItemInfosPtr, *Globals::MaxItemInfos, *Globals::NumItemInfos, "ItemInfos");
 
     Globals::VehicleInfos = OffsetPtr<rfg::farray<vehicle_info, 163>*>(0x12BA5F8);
 

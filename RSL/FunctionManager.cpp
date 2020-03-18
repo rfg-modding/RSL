@@ -259,4 +259,15 @@ void FunctionManager::RegisterFunctions()
     RegisterFunction(rfg::object_mover_create_from_chunk, 0x65FA00);
 
     RegisterFunction(rfg::object_debris_create_havok_body, 0x6172F0);
+
+    RegisterFunction(rfg::obj_prop_block_constructor, 0x638B00);
+    RegisterFunction(rfg::rfg_prop_block_set_internal, 0x51A6E0);
+    RegisterFunction(rfg::world_create_object_internal, 0x53E6B0);
+
+
+    RegisterFunction(rfg::obj_auto_props_constructor, 0x368CC0);
+    RegisterFunction(rfg::obj_projectile_props_constructor, 0x2058C0);
+    RegisterFunction(rfg::str_hash_string, 0x1937D0);
+    RegisterFunction(rfg::amb_prop_create, 0x746DB0);
+    RegisterFunction(rfg::weapon_fire, 0x7EB270);
 }

@@ -222,7 +222,15 @@ struct rfg_mover : object_mover
     timestamp damage_sound_propagate_timer;
 };
 
-struct  rfg_prop_block
+struct obj_prop
+{
+    unsigned __int16 type;
+    unsigned __int16 size;
+    unsigned int name_crc;
+    char data[];
+};
+
+struct rfg_prop_block
 {
     unsigned __int16 num_props;
     unsigned __int16 owner;
@@ -231,9 +239,73 @@ struct  rfg_prop_block
     char* prop_list;
 };
 
-struct  obj_prop_block : rfg_prop_block
+struct obj_prop_block : rfg_prop_block
 {
 
+};
+
+struct prop_name
+{
+    const char* str;
+    unsigned int crc;
+};
+
+struct obj_auto_props : obj_prop_block
+{
+};
+
+struct obj_item_props : obj_prop_block
+{
+};
+
+struct obj_projectile_props : obj_item_props
+{
+};
+
+struct obj_weapon_props : obj_item_props
+{
+};
+
+/* 5204 */
+struct $2C5C31389D845770D898EFDFE506A801
+{
+    unsigned __int32 delete_on_exit : 1;
+};
+
+using animation_action = AnimationAction;
+/* 5201 */
+struct $05B30DA556A417BB98EF16C60783726B
+{
+    unsigned __int32 loop_effect : 1;
+    unsigned __int32 attach_effct : 1;
+};
+
+/* 5202 */
+const struct  ambient_prop_effect_info
+{
+    animation_state anim_state;
+    animation_action anim_action;
+    unsigned int effect_handle;
+    const char* attach_point_name;
+    int start_tag_id;
+    int end_tag_id;
+    $05B30DA556A417BB98EF16C60783726B effect_flags;
+};
+
+/* 5205 */
+const struct  ambient_prop_info
+{
+    item_info* prop_item_info;
+    const char* human_attach_point_name;
+    const char* child_attach_point_name;
+    int prop_walk_state;
+    int prop_stand_state;
+    animation_action prop_exit_anim;
+    int exit_anim_trigger_id;
+    unsigned int perm_effect_handle;
+    const char* perm_effect_attach_name;
+    rfg::farray<ambient_prop_effect_info const*, 3> effect_info_list;
+    $2C5C31389D845770D898EFDFE506A801 prop_flags;
 };
 
 struct general_mover__resource_dependent_data

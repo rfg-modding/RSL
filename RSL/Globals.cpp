@@ -145,6 +145,10 @@ namespace Globals
     FixedArrayWrapper<weapon_info> WeaponInfos;
     uint* NumWeaponInfos = nullptr;
 
+	FixedArrayWrapper<item_info> ItemInfos;
+	int* NumItemInfos = nullptr;
+	int* MaxItemInfos = nullptr;
+
     float* SpeedScale = nullptr;
     float* Frametime;
     float* PlayerMaxMovementSpeedOverride;

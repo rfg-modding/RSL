@@ -365,4 +365,41 @@ namespace rfg
     F_object_mover_create_from_chunk object_mover_create_from_chunk;
 
     F_object_debris_create_havok_body object_debris_create_havok_body;
+
+    F_obj_prop_block_constructor obj_prop_block_constructor;
+    F_rfg_prop_block_set_internal rfg_prop_block_set_internal;
+    F_world_create_object_internal world_create_object_internal;
+
+    object* CreateObjectFromZoneObjectBinary(std::string path, vector& pos, matrix& orient, const char* name)
+    {
+        std::ifstream in(path);
+
+        //get length of file
+        in.seekg(0, std::ios::end);
+        size_t length = in.tellg();
+        in.seekg(0, std::ios::beg);
+
+        //Read file into byte array
+        char* buffer = new char[length];
+        in.read(buffer, length);
+
+        //Create obj_prop_block based on zone object values
+        auto zoneObjCast = reinterpret_cast<zone_object_extended*>(buffer);
+        obj_prop_block propBlock;
+        obj_prop_block_constructor(&propBlock, nullptr, pos, orient, name);
+        propBlock.num_props = zoneObjCast->num_props;
+        propBlock.buf_pos = zoneObjCast->prop_list_size;
+        propBlock.prop_list = &zoneObjCast->prop_list;
+        propBlock.buf_size = propBlock.buf_pos;
+
+        //Attempt to create the object.
+        object* resultingObject = world_create_object_internal(Globals::RfgWorldPtr, nullptr, zoneObjCast->classname_hash, propBlock, nullptr, 0xFFFFFFFF);
+        return resultingObject;
+    }
+
+    F_obj_auto_props_constructor obj_auto_props_constructor;
+    F_obj_projectile_props_constructor obj_projectile_props_constructor;
+    F_str_hash_string str_hash_string;
+    F_amb_prop_create amb_prop_create;
+    F_weapon_fire weapon_fire;
 }

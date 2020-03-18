@@ -171,6 +171,10 @@ namespace Globals
     extern FixedArrayWrapper<weapon_info> WeaponInfos; //.data:037C2C9C rfg.exe:$3482C9C #0 <Weapon_infos>
     extern uint* NumWeaponInfos; //.data:037C2C94 rfg.exe:$3482C94 #0 <Num_weapon_infos>
 
+	extern FixedArrayWrapper<item_info> ItemInfos; //.data:03C0F148 rfg.exe:$2C2F148 #0 <Item_infos>
+	extern int* NumItemInfos; //.data:03BF7C5C rfg.exe:$2C17C5C #0 <Num_item_infos>
+	extern int* MaxItemInfos; //.data:03C0F144 rfg.exe:$2C2F144 #0 <Max_item_infos>
+
     extern float* SpeedScale;
     extern float* Frametime; //.data:022B9560 rfg.exe:$1119560 #1117F60 <Frametime>
     extern float* PlayerMaxMovementSpeedOverride; //.data:03DCF0B4 rfg.exe:$2C2F0B4 #0 <Player_max_movement_speed_override>
