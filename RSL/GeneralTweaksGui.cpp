@@ -33,7 +33,97 @@ void GeneralTweaksGui::Draw()
 	ImGui::Text("General tweaks:");
 	ImGui::PopFont();
 	ImGui::Separator();
-    
+
+    static std::string zoneInFilename = "ParkerPropaneTank2.zoneobj";
+    static std::string newObjectName = "";
+    static bool useNewObjectName = false;
+    ImGui::InputText("Zone object filename", &zoneInFilename);
+    ImGui::InputText("New object name", &newObjectName);
+    ImGui::Checkbox("Use new object name", &useNewObjectName);
+    //ImGui::SameLine();
+    if(ImGui::Button("Create object"))
+    {
+        std::string inputPath = fmt::format("{}//RSL//ZoneObjects//{}", Globals::GetEXEPath(false), zoneInFilename);
+        Logger::Log("Attempting to create custom object from zone object binary at path: \"{}\"\n", inputPath);
+        vector pos = Globals::PlayerPtr->Position;
+        pos.y += 10.0f;
+        matrix orient = Globals::PlayerPtr->Orientation;
+
+        object* result = nullptr;
+        if (useNewObjectName)
+            result = rfg::CreateObjectFromZoneObjectBinary(inputPath, pos, orient, newObjectName.c_str());
+        else
+            result = rfg::CreateObjectFromZoneObjectBinary(inputPath, pos, orient, nullptr);
+
+        if(result)
+            Logger::Log("Successfully created custom zone object at pos {}\n", result->Position.GetDataString(true, false));
+        else
+            Logger::LogError("Failed to create custom object from zone object binary!\n");
+    }
+
+    static vector weaponFireOverride = { 0.0 };
+    ImGui::InputFloat3("Weapon fire override", (float*)&weaponFireOverride);
+    ImGui::SameLine();
+    if(ImGui::Button("Player pos##weaponFireOverride"))
+    {
+        weaponFireOverride = Globals::PlayerPtr->Position;
+    }
+    if(ImGui::Button("Fire all weapons"))
+    {
+        for(int i = 0; i < Globals::RfgWorldPtr->all_objects.Length(); i++)
+        {
+            object* curObject = Globals::RfgWorldPtr->all_objects[i];
+            if (!curObject)
+                continue;
+            if (curObject->ObjectType != OT_ITEM || curObject->SubType != OT_SUB_ITEM_WEAPON)
+                continue;
+
+            weapon* objCast = static_cast<weapon*>(curObject);
+            if (objCast->w_info->ammo_type == weapon_ammo_type::WEAPON_AMMO_TYPE_BULLET
+                && objCast->w_info->magazine_size != 0 && objCast->w_info->magazine_size != 1)
+            {
+                rfg::weapon_fire(objCast, nullptr, weaponFireOverride);
+            }
+        }
+    }
+    if (ImGui::Button("Fire all weapons -- alt1"))
+    {
+        for (int i = 0; i < Globals::RfgWorldPtr->all_objects.Length(); i++)
+        {
+            object* curObject = Globals::RfgWorldPtr->all_objects[i];
+            if (!curObject)
+                continue;
+            if (curObject->ObjectType != OT_ITEM || curObject->SubType != OT_SUB_ITEM_WEAPON)
+                continue;
+
+            weapon* objCast = static_cast<weapon*>(curObject);
+            if (objCast->w_info->flyby_sound != -1 && objCast->w_info->ammo_type == weapon_ammo_type::WEAPON_AMMO_TYPE_BULLET
+                && objCast->w_info->magazine_size != 0 && objCast->w_info->magazine_size != 1)
+            {
+                rfg::weapon_fire(objCast, nullptr, weaponFireOverride);
+            }
+        }
+    }
+    if (ImGui::Button("Fire all weapons -- alt2"))
+    {
+        for (int i = 0; i < Globals::RfgWorldPtr->all_objects.Length(); i++)
+        {
+            object* curObject = Globals::RfgWorldPtr->all_objects[i];
+            if (!curObject)
+                continue;
+            if (curObject->ObjectType != OT_ITEM || curObject->SubType != OT_SUB_ITEM_WEAPON)
+                continue;
+
+            weapon* objCast = static_cast<weapon*>(curObject);
+            if (objCast->w_info->ammo_type == weapon_ammo_type::WEAPON_AMMO_TYPE_BULLET)
+            {
+                rfg::weapon_fire(objCast, nullptr, weaponFireOverride);
+            }
+        }
+    }
+
+    ImGui::Separator();
+
     static bool Transparent = true;
     static bool PauseBeneath = false;
     if(ImGui::Button("Open weapons locker menu"))

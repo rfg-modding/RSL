@@ -338,7 +338,7 @@ void Bootstrapper::InitOverlays()
     GuiManager->AddChildGui(new ExplosionSpawnerGui("Explosion spawner"));
     GuiManager->AddChildGui(new GraphicsTweaksGui("Graphics tweaks"));
     GuiManager->AddChildGui(new EventViewerGui("Event viewer"));
-    //Gui.AddChildGui(new VehicleSpawnerGui("Vehicle spawner")); //Disabled since it doesn't work
+    GuiManager->AddChildGui(new VehicleSpawnerGui("Vehicle spawner")); //Disabled since it doesn't work
 }
 
 //Note: This function is an over-redundant hack to make sure that a few memory offsets are properly set since they kept not being set and causing bugs. Will improve later on.

@@ -20,6 +20,9 @@ VehicleSpawnerGui::VehicleSpawnerGui(std::string Title_)
     //CustomVehicleSpawnParams.vflags = ;
     //CustomVehicleSpawnParams.veh_spawn_flags = ;
     CustomVehicleSpawnParams.vp = nullptr;
+
+    uint temp = (uint)0 & 4294729732 | 24580;
+    projItemFlags = *(obj_item_flags*)&temp;
 }
 
 void VehicleSpawnerGui::Draw()
@@ -127,7 +130,7 @@ void VehicleSpawnerGui::Draw()
     {
         if (Globals::VehicleInfos)
         {
-            ImGui::Columns(2);
+            ImGui::Columns(3);
             ImGui::SetColumnWidth(0, 260.0f);
             for (int i = 0; i < Globals::VehicleInfos->Size(); i++)
             {
@@ -221,6 +224,20 @@ void VehicleSpawnerGui::Draw()
                     auto c = 2;
                     auto d = 3;
                 }
+                ImGui::SameLine();
+                ImGui::NextColumn();
+                ImGui::SetColumnWidth(2, 250.0f);
+                if(ImGui::Button(std::string("Alt spawn (obj_auto_prop)##" + std::to_string(i)).c_str()))
+                {
+                    obj_auto_props auto_props;
+                    rfg::obj_auto_props_constructor(&auto_props, nullptr, i, CustomVehicleSpawnParams.spawn_pos, Globals::PlayerPtr->Orientation, ForceToGround);
+                    object* result = rfg::world_create_object_internal(Globals::RfgWorldPtr, nullptr, rfg::str_hash_string("automobile"), auto_props, nullptr, 0xFFFFFFFF);
+                    if (result)
+                        Logger::Log("Successfully created custom vehicle object at pos {}\n", result->Position.GetDataString(true, false));
+                    else
+                        Logger::LogError("Failed to create custom object from zone object binary!\n");
+                }
+
                 //if (ImGui::Button(std::string("Copy values##" + std::to_string(i)).c_str()))
                 //{
                 //    CustomVehicleInfo = (*Globals::VehicleInfos)[i];
@@ -232,5 +249,166 @@ void VehicleSpawnerGui::Draw()
     }
     ImGui::Columns(1);
 
+    ImGui::Separator();
+    ImGui::Separator();
+
+    ImGui::Text("Projectile spawning");
+
+    //Todo: pos, orient, velocity, target, create_id, owner_handle, obj_item_flags
+    static bool offsetPosFromPlayer = true;
+    static bool usePlayerAimAsTarget = false;
+
+    Gui::LabelAndValue("Weapon info name", projWeaponInfo ? (projWeaponInfo->name ? projWeaponInfo->name : "not set") : "no weapon_info chosen");
+    Gui::LabelAndValue("Item info name", projItemInfo ? (projItemInfo->name ? projItemInfo->name : "not set") : "no item_info chosen");
+
+    ImGui::InputFloat3("Projectile pos/offset", (float*)&projPos);
+    ImGui::InputFloat3("Projectile velocity", (float*)&projVelocity);
+    ImGui::InputFloat3("Projectile target", (float*)&projTarget);
+    ImGui::InputScalar("Create ID", ImGuiDataType_U32, &projCreateId);
+    ImGui::InputScalar("Owner handle", ImGuiDataType_U32, &projOwnerHandle);
+    ImGui::Separator();
+    ImGui::Checkbox("Projectile pos is offset from player", &offsetPosFromPlayer);
+    ImGui::Checkbox("Use player aim as target", &usePlayerAimAsTarget);
+
+    DrawProjItemFlagsGui();
+
+    //weapon_info list
+    if (ImGui::TreeNode("Weapon infos"))
+    {
+        if (Globals::WeaponInfos.Initialized())
+        {
+            ImGui::Columns(2);
+            ImGui::SetColumnWidth(0, 260.0f);
+            for (int i = 0; i < Globals::WeaponInfos.Length(); i++)
+            {
+                ImGui::BulletText("%s", Globals::WeaponInfos[i].name);
+                ImGui::SameLine();
+                ImGui::NextColumn();
+                ImGui::SetColumnWidth(1, 250.0f);
+                if (ImGui::Button(std::string("Set weapon info##" + std::to_string(i)).c_str()))
+                {
+                    projWeaponInfo = &Globals::WeaponInfos[i];
+                }
+                ImGui::NextColumn();
+            }
+        }
+        ImGui::TreePop();
+    }
+
+    //item_info list
+    if (ImGui::TreeNode("Item infos"))
+    {
+        if (Globals::ItemInfos.Initialized())
+        {
+            ImGui::Columns(2);
+            ImGui::SetColumnWidth(0, 260.0f);
+            for (int i = 0; i < Globals::ItemInfos.Length(); i++)
+            {
+                ImGui::BulletText("%s", Globals::ItemInfos[i].name);
+                ImGui::SameLine();
+                ImGui::NextColumn();
+                ImGui::SetColumnWidth(1, 250.0f);
+                if (ImGui::Button(std::string("Set item info##" + std::to_string(i)).c_str()))
+                {
+                    projItemInfo = &Globals::ItemInfos[i];
+                }
+                ImGui::NextColumn();
+            }
+        }
+        ImGui::TreePop();
+    }
+
+    if(ImGui::Button("Spawn projectile"))
+    {
+        bool canProceed = true;
+        if (!projWeaponInfo)
+            canProceed = false;
+        if (!projItemInfo)
+            canProceed = false;
+
+        if(canProceed)
+        {
+            vector finalPos = offsetPosFromPlayer ? Globals::PlayerPtr->Position + projPos : projPos;
+            vector finalTarget = usePlayerAimAsTarget ? Globals::PlayerPtr->aim_pos : projTarget;
+
+            obj_projectile_props projProps;
+            rfg::obj_projectile_props_constructor(&projProps, nullptr, projOwnerHandle, projItemInfo, projItemFlags,
+                projWeaponInfo, finalPos, projOrient, projVelocity, finalTarget, projCreateId);
+
+            const uint projClassnameHash = rfg::str_hash_string("projectile");
+            object* result = rfg::world_create_object_internal(Globals::RfgWorldPtr, nullptr, projClassnameHash, projProps, nullptr, 0xFFFFFFFF);
+
+            if (result)
+                Logger::Log("Successfully created projectile at pos {}\n", result->Position.GetDataString(true, false));
+            else
+                Logger::LogError("Failed to create custom projectile!\n");
+        }
+        else
+        {
+            Logger::LogError("Failed to create custom projectile! projWeaponInfo or projItemInfo is a nullptr!\n");
+        }
+    }
+
     ImGui::End();
+}
+
+void VehicleSpawnerGui::DrawProjItemFlagsGui()
+{
+    static bool respawn = projItemFlags.respawn;
+    static bool no_physics = projItemFlags.no_physics;
+    static bool simulate = projItemFlags.simulate;
+    static bool props_created = projItemFlags.props_created;
+    static bool item_held = projItemFlags.item_held;
+    static bool no_save = projItemFlags.no_save;
+    static bool preplaced = projItemFlags.preplaced;
+    static bool update_attach_point = projItemFlags.update_attach_point;
+    static bool dropped_by_player = projItemFlags.dropped_by_player;
+    static bool touched_last_frame = projItemFlags.touched_last_frame;
+    static bool character_prop = projItemFlags.character_prop;
+    static bool attached_cloth_sim = projItemFlags.attached_cloth_sim;
+    static bool doing_errode = projItemFlags.doing_errode;
+    static bool cast_shadows = projItemFlags.cast_shadows;
+    static bool cast_drop_shadows = projItemFlags.cast_drop_shadows;
+    static bool xray_visible = projItemFlags.xray_visible;
+    static bool dont_dampen_impulse = projItemFlags.dont_dampen_impulse;
+    static bool shield_initialized = projItemFlags.shield_initialized;
+
+    ImGui::Text("Projectile item flags");
+    ImGui::Checkbox("respawn", &respawn);
+    ImGui::Checkbox("no_physics", &no_physics);
+    ImGui::Checkbox("simulate", &simulate);
+    ImGui::Checkbox("props_created", &props_created);
+    ImGui::Checkbox("item_held", &item_held);
+    ImGui::Checkbox("no_save", &no_save);
+    ImGui::Checkbox("preplaced", &preplaced);
+    ImGui::Checkbox("update_attach_point", &update_attach_point);
+    ImGui::Checkbox("dropped_by_player", &dropped_by_player);
+    ImGui::Checkbox("touched_last_frame", &touched_last_frame);
+    ImGui::Checkbox("character_prop", &character_prop);
+    ImGui::Checkbox("attached_cloth_sim", &attached_cloth_sim);
+    ImGui::Checkbox("doing_errode", &doing_errode);
+    ImGui::Checkbox("cast_shadows", &cast_shadows);
+    ImGui::Checkbox("cast_drop_shadows", &cast_drop_shadows);
+    ImGui::Checkbox("xray_visible", &xray_visible);
+    ImGui::Checkbox("dont_dampen_impulse", &dont_dampen_impulse);
+    ImGui::Checkbox("shield_initialized", &shield_initialized);
+
+    projItemFlags.respawn = respawn;
+    projItemFlags.no_physics = no_physics;
+    projItemFlags.simulate = simulate;
+    projItemFlags.props_created = props_created;
+    projItemFlags.item_held = item_held;
+    projItemFlags.no_save = no_save;
+    projItemFlags.preplaced = preplaced;
+    projItemFlags.update_attach_point = update_attach_point;
+    projItemFlags.dropped_by_player = dropped_by_player;
+    projItemFlags.touched_last_frame = touched_last_frame;
+    projItemFlags.character_prop = character_prop;
+    projItemFlags.attached_cloth_sim = attached_cloth_sim;
+    projItemFlags.doing_errode = doing_errode;
+    projItemFlags.cast_shadows = cast_shadows;
+    projItemFlags.cast_drop_shadows = cast_drop_shadows;
+    projItemFlags.xray_visible = xray_visible;
+    projItemFlags.dont_dampen_impulse = dont_dampen_impulse;
+    projItemFlags.shield_initialized = shield_initialized;
 }

@@ -1,4 +1,5 @@
 #include "MenuBarGui.h"
+#include "VehicleSpawnerGui.h"
 
 MenuBarGui::MenuBarGui(std::string Title_)
 {
@@ -38,7 +39,7 @@ void MenuBarGui::Draw()
     static auto ExplosionSpawnerGuiRef = GuiManager->GetGuiReference<BaseGui>("Explosion spawner").value();
     static auto GraphicsTweaksGuiRef = GuiManager->GetGuiReference<BaseGui>("Graphics tweaks").value();
     static auto EventViewerGuiRef = GuiManager->GetGuiReference<BaseGui>("Event viewer").value();
-    //static auto VehicleSpawnerGuiRef = GuiManager->GetGuiReference<VehicleSpawnerGui>("Vehicle spawner").value();
+    static auto VehicleSpawnerGuiRef = GuiManager->GetGuiReference<BaseGui>("Vehicle spawner").value();
 
 	if (ImGui::BeginMainMenuBar())
 	{
@@ -73,7 +74,7 @@ void MenuBarGui::Draw()
 			if (ImGui::MenuItem(std::string(std::string(ICON_FA_MAP_MARKED) + u8" Teleport").c_str(), nullptr, &TeleportGuiRef.Get().Visible)) {}
 			if (ImGui::MenuItem(std::string(std::string(ICON_FA_CAMERA) + u8" Camera settings").c_str(), nullptr, &CameraSettingsRef.Get().Visible)) {}
 			if (ImGui::MenuItem(std::string(std::string(ICON_FA_VIAL) + u8" Physics settings").c_str(), nullptr, &PhysicsSettingsRef.Get().Visible)) {}
-			//if (ImGui::MenuItem(std::string(std::string(ICON_FA_CAR) + u8" Vehicle spawner").c_str(), nullptr, &VehicleSpawnerGuiRef.Get().Visible)) {}
+			if (ImGui::MenuItem(std::string(std::string(ICON_FA_CAR) + u8" Vehicle spawner").c_str(), nullptr, &VehicleSpawnerGuiRef.Get().Visible)) {}
 			ImGui::EndMenu();
 		}
         if(ImGui::BeginMenu("Tools"))

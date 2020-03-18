@@ -870,4 +870,6 @@ extern F_HumanTeleport HumanTeleport;*/
     //.text:006872F0 rfg.exe:$6172F0 #6166F0 <object_debris::create_havok_body> //void __thiscall object_debris::create_havok_body(object_debris *this, debris_create_info *dci)
     using F_object_debris_create_havok_body = void(__fastcall*)(object_debris* this_ptr, void* edx, debris_create_info* dci);
     extern F_object_debris_create_havok_body object_debris_create_havok_body;
+
+    extern object* CreateObjectFromZoneObjectBinary(std::string path, vector& pos, matrix& orient, const char* name);
 }
