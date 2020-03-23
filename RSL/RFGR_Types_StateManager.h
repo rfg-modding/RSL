@@ -129,6 +129,83 @@ struct mempool : static_mempool_base
 	volatile unsigned int end_pos;
 };
 
+namespace keen
+{
+    /* 26 */
+    enum VertexAttributeId
+    {
+        VertexAttributeId_Position = 0x0,
+        VertexAttributeId_Normal = 0x1,
+        VertexAttributeId_Tangent = 0x2,
+        VertexAttributeId_BiTangent = 0x3,
+        VertexAttributeId_Color0 = 0x4,
+        VertexAttributeId_Color1 = 0x5,
+        VertexAttributeId_Color2 = 0x6,
+        VertexAttributeId_TexCoord0 = 0x7,
+        VertexAttributeId_TexCoord1 = 0x8,
+        VertexAttributeId_TexCoord2 = 0x9,
+        VertexAttributeId_TexCoord3 = 0xA,
+        VertexAttributeId_TexCoord4 = 0xB,
+        VertexAttributeId_TexCoord5 = 0xC,
+        VertexAttributeId_TexCoord6 = 0xD,
+        VertexAttributeId_TexCoord7 = 0xE,
+        VertexAttributeId_BoneIndex = 0xF,
+        VertexAttributeId_BoneWeight = 0x10,
+        VertexAttributeId_Count = 0x11,
+        VertexAttributeId_Invalid = 0xFF,
+    };
+
+    /* 28 */
+    enum VertexAttributeFormat
+    {
+        VertexAttributeFormat_x32_float = 0x0,
+        VertexAttributeFormat_x32y32_float = 0x1,
+        VertexAttributeFormat_x32y32z32_float = 0x2,
+        VertexAttributeFormat_x32y32z32w32_float = 0x3,
+        VertexAttributeFormat_x16y16z16w16_float = 0x4,
+        VertexAttributeFormat_x16y16z16w16_sint = 0x5,
+        VertexAttributeFormat_x16y16z16w16_uint = 0x6,
+        VertexAttributeFormat_x16y16z16w16_snorm = 0x7,
+        VertexAttributeFormat_x16y16z16w16_unorm = 0x8,
+        VertexAttributeFormat_x8y8z8w8_unorm = 0x9,
+        VertexAttributeFormat_x8y8z8w8_uint = 0xA,
+        VertexAttributeFormat_x8y8z8w8_snorm = 0xB,
+        VertexAttributeFormat_x8y8z8w8_sint = 0xC,
+        VertexAttributeFormat_x16y16_float = 0xD,
+        VertexAttributeFormat_x16y16_sint = 0xE,
+        VertexAttributeFormat_x16y16_snorm = 0xF,
+        VertexAttributeFormat_x16y16_uint = 0x10,
+        VertexAttributeFormat_x16y16_unorm = 0x11,
+        VertexAttributeFormat_x10y10z10_snorm = 0x12,
+        VertexAttributeFormat_x10y10z10w2_snorm = 0x13,
+        VertexAttributeFormat_x11y11z10_snorm = 0x14,
+        VertexAttributeFormat_z8y8x8w8_unorm = 0x15,
+        VertexAttributeFormat_D3dColor = 0x16,
+        VertexAttributeFormat_x16y16z16_snorm = 0x17,
+        VertexAttributeFormat_x8y8z8_snorm = 0x18,
+        VertexAttributeFormat_Count = 0x19,
+        //VertexAttributeFormat_Default_Position3d = 0x2,
+        //VertexAttributeFormat_Default_Normal = 0x2,
+        //VertexAttributeFormat_Default_TangentFlip = 0x3,
+        //VertexAttributeFormat_Default_TexCoord2d = 0xD,
+        //VertexAttributeFormat_Default_Color = 0x9,
+        //VertexAttributeFormat_Invalid = 0xFF,
+    };
+}
+
+/* 1608 */
+enum $8229491407A0F1FB035BE2A880EADB46
+{
+    VertexAttributeId_Position0 = 0x0,
+    VertexAttributeId_Position1 = 0xB,
+    VertexAttributeId_Position2 = 0xC,
+    VertexAttributeId_Position3 = 0xD,
+    VertexAttributeId_Position4 = 0xE,
+    VertexAttributeId_Normal0 = 0x1,
+    VertexAttributeId_Normal1 = 0x3,
+    VertexAttributeId_PointSize = 0xE,
+};
+
 struct rl_state_manager
 {
 	unsigned int m_flags;

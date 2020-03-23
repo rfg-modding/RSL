@@ -1,4 +1,4 @@
-﻿#include "Launcher.h"
+#include "Launcher.h"
 #include "IpcManager.h"
 #include "CameraManager.h"
 #include "FunctionManager.h"

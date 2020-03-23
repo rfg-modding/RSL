@@ -270,5 +270,173 @@ void GeneralTweaksGui::Draw()
     ImGui::SameLine();
     Gui::ShowHelpMarker("NOTE: DOES NOT DO ANYTHING IF DEBRIS DELETION IS DISABLED. Specify an override to the find_gm value passed to rfgl_find_and_delete_object_mover. The effect of this is unknown, and this has been included in case anyone finds a specific effect of it.");
 
+    static std::array<std::string, 50> vertexFormatNames = 
+    {
+        "rlvf_pixlit_vtx_desc_2",
+        "No name set",
+        "No name set",
+        "No name set",
+        "rlvf_unlit_desc_5",
+        "rlvf_particle_pointsprite_desc_4",
+        "rlvf_particle_billboard_desc_9",
+        "rlvf_particle_radial_desc_8",
+        "rlvf_particle_drop_desc_8",
+        "rlvf_particle_ribbon_desc_9",
+        "rlvf_particle_oriented_desc_9",
+        "rlvf_primitive_3d_desc_3",
+        "rlvf_primitive_2d_desc_3",
+        "No name set",
+        "rlvf_height_mesh_desc_2",
+        "rlvf_height_mesh_low_lod_desc_1",
+        "rlvf_particle_parametric_desc_7",
+        "rlvf_compositor_desc_2",
+        "No name set",
+        "rlvf_clone_nmap_desc_4",
+        "rlvf_clone_clr_desc_8",
+        "rlvf_2d_spline_desc_1",
+        "rlvf_particle_corona_desc_11",
+        "rlvf_particle_ribbon_parametric_desc_6",
+        "No name set",
+        "rlvf_terrain_road_desc_8",
+        "rlvf_height_mesh_landmark_lod_desc_3",
+        "rlvf_star_field_point_elements_1",
+        "rlvf_star_field_billboard_elements_2",
+        "rlvf_meteor_shower_line_elements_3",
+        "rlvf_pixlit_vtx_desc_2",
+        "rlvf_pixlit_vtx_desc_10",
+        "rlvf_pixlit_ca_vtx_desc_11",
+        "rlvf_pixlit_nmap_vtx_desc_11",
+        "rlvf_pixlit_nmap_ca_vtx_desc_12",
+        "rlvf_pixlit_vtx_desc_11",
+        "rlvf_pixlit_ca_vtx_desc_12",
+        "rlvf_pixlit_nmap_vtx_desc_12",
+        "rlvf_pixlit_nmap_ca_vtx_desc_13",
+        "rlvf_pixlit_vtx_desc_12",
+        "rlvf_pixlit_ca_vtx_desc_13",
+        "rlvf_pixlit_nmap_vtx_desc_13",
+        "rlvf_pixlit_nmap_ca_vtx_desc_14",
+        "rlvf_pixlit_vtx_desc_13", //rlvf_pixlit_vtx_desc
+        "rlvf_pixlit_ca_vtx_desc_14",
+        "rlvf_pixlit_nmap_vtx_desc_14",
+        "rlvf_pixlit_nmap_ca_vtx_desc_15",
+        "rlvf_clone_uvs_desc_3",
+        "rlvf_clone_uvs_desc_4",
+        "rlvf_uncompressed_morph_vtx_des_2",
+    };
+
+    if(ImGui::Button("Vertex formats"))
+    {
+        if(Globals::RlRenderLibPtr)
+        {
+            Logger::Log("Writing vertex format list...\n");
+
+            for(int i = 0; i < 50; i++)
+            {
+                keen::VertexFormat* format = Globals::RlRenderLibPtr->m_vertex_formats_p[i];
+                Logger::Log("\n\nFormat {}: {}, stride0: {}\n", i, vertexFormatNames[i], format ? format->streamStride[0] : 0);
+                if(format)
+                {
+                    Logger::Log("    attributeCount: {}\n", format->attributeCount);
+                    Logger::Log("    instanceDataStreamIndex: {}\n", format->instanceDataStreamIndex);
+                    //Write attributes
+                    Logger::Log("    attributes:\n");
+                    for(int j = 0; j < format->attributeCount; j++)
+                    {
+                        auto& attribute = format->attributes[j];
+
+                        keen::VertexAttributeId idVal = (keen::VertexAttributeId)attribute.id;
+                        keen::VertexAttributeFormat formatVal = (keen::VertexAttributeFormat)attribute.format;
+                        auto attributeIdTemp = magic_enum::enum_name(idVal);
+                        auto attributeFormatTemp = magic_enum::enum_name(formatVal);
+                        std::string attributeIdString = attributeIdTemp.data();
+                        std::string attributeFormatString = attributeFormatTemp.data();
+
+                        Logger::Log("\n        {}:\n", j);
+                        Logger::Log("            id: {}\n", (uint)attribute.id);
+                        Logger::Log("            format: {}\n", (uint)attribute.format);
+                        Logger::Log("            idString: {}\n", attributeIdString);
+                        Logger::Log("            formatString: {}\n", attributeFormatString);
+                        Logger::Log("            inputStreamIndex: {}\n", (uint)attribute.inputStreamIndex);
+                        Logger::Log("            instanceStepRate: {}\n", (uint)attribute.instanceStepRate);
+                    }
+                    //Write attribute offsets, indices, and stream stride values
+                    Logger::Log("\n    attributeOffsets:\n");
+                    for(int j = 0; j < 17; j++)
+                        Logger::Log("        {},\n", format->attributeOffsets[j]);
+
+                    Logger::Log("\n    attributeIndices:\n");
+                    for (int j = 0; j < 17; j++)
+                        Logger::Log("        {},\n", format->attributeIndices[j]);
+
+                    Logger::Log("\n    streamStride:\n");
+                    for (int j = 0; j < 6; j++)
+                        Logger::Log("        {},\n", format->streamStride[j]);
+                }
+                else
+                {
+                    Logger::Log("    nullptr\n");
+                }
+            }
+
+            //for (int i = 0; i < 50; i++)
+            //{
+            //    keen::VertexFormat* format = Globals::RlRenderLibPtr->m_vertex_formats_p[i];
+            //    nlohmann::json formatObject = formatArray.object();
+            //    if (format)
+            //    {
+            //        //Todo: Make array of names of format indices and add to json
+            //        jsonFile[i]["attributes"]["attributeCount"] = format->attributeCount;
+            //        jsonFile[i]["attributes"]["instanceDataStreamIndex"] = format->instanceDataStreamIndex;
+            //        //Write attributes
+            //        for (int j = 0; j < format->attributeCount; j++)
+            //        {
+            //            auto& attribute = format->attributes[j];
+
+            //            keen::VertexAttributeId idVal = (keen::VertexAttributeId)attribute.id;
+            //            keen::VertexAttributeFormat formatVal = (keen::VertexAttributeFormat)attribute.format;
+            //            auto attributeIdTemp = magic_enum::enum_name(idVal);
+            //            auto attributeFormatTemp = magic_enum::enum_name(formatVal);
+            //            std::string attributeIdString = attributeIdTemp.data();
+            //            std::string attributeFormatString = attributeFormatTemp.data();
+
+            //            jsonFile[i]["attributes"][j]["id"] = attribute.id;
+            //            jsonFile[i]["attributes"][j]["format"] = attribute.format;
+            //            jsonFile[i]["attributes"][j]["idString"] = attributeIdString;
+            //            jsonFile[i]["attributes"][j]["formatString"] = attributeFormatString;
+            //            jsonFile[i]["attributes"][j]["inputStreamIndex"] = attribute.inputStreamIndex;
+            //            jsonFile[i]["attributes"][j]["instanceStepRate"] = attribute.instanceStepRate;
+            //        }
+            //        //Write attribute offsets, indices, and stream stride values
+            //        for (int j = 0; j < 17; j++)
+            //        {
+            //            jsonFile[i]["attributes"]["attributeOffsets"][j] = format->attributeOffsets[j];
+            //        }
+            //        for (int j = 0; j < 17; j++)
+            //        {
+            //            jsonFile[i]["attributes"]["attributeIndices"][j] = format->attributeIndices[j];
+            //        }
+            //        for (int j = 0; j < 6; j++)
+            //        {
+            //            jsonFile[i]["attributes"]["streamStride"][j] = format->streamStride[j];
+            //        }
+            //    }
+            //    else
+            //    {
+            //        jsonFile[i]["name"] = vertexFormatNames[i];
+            //        jsonFile[i]["value"] = "nullptr";
+            //    }
+            //}
+            //
+            //
+            //std::ofstream ConfigOutput(ExePath + "RSL/VertexFormats.json");
+            //ConfigOutput << std::setw(4) << jsonFile << "\n";
+            //ConfigOutput.close();
+        }
+        else
+        {
+            Logger::LogError("Can't dump vertex formats, RlRenderLibPtr = nullptr\n");
+        }
+    }
+
 	ImGui::End();
 }
