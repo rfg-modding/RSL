@@ -1,3 +1,5 @@
+Note: Development for RSL1 has ended. A rewrite has started development: [RSL2](https://github.com/rsl-dev/RSL2)
+
 [![Build status](https://ci.appveyor.com/api/projects/status/pe6ee7xn6rgqn2pm/branch/master?svg=true)](https://ci.appveyor.com/project/Moneyl/rsl/branch/master)
 
 # Re-mars-tered Script Loader
