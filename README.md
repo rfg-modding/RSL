@@ -1,6 +1,4 @@
-Note: Development for RSL1 has ended. A rewrite has started development: [RSL2](https://github.com/rsl-dev/RSL2)
-
-[![Build status](https://ci.appveyor.com/api/projects/status/pe6ee7xn6rgqn2pm/branch/master?svg=true)](https://ci.appveyor.com/project/Moneyl/rsl/branch/master)
+Note: Development for RSL1 has ended due to architectural flaws in the codebase that made development very slow and difficult. A [rewrite](https://github.com/rsl-dev/RSL2) has started development. See the RSL2 readme for a more detailed explanation of mistakes made with RSL1 and how to rewrite intends on fixing them. The original RSL1 readme is preserved below.
 
 # Re-mars-tered Script Loader
 RSL is a lua scripting interface and modding tool for Red Faction Guerrilla Re-mars-tered. The main goal of this project is to greatly expand what mods can do to the game, and what they can change, and to improve the mod development experience. Please see the [docs](https://rsl.readthedocs.io/en/latest/) for much more info about the project, the features it provides, and how to contribute to it.
